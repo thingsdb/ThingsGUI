@@ -1,0 +1,51 @@
+{
+  "name": "oshttp",
+  "version": "0.0.1-alpha1",
+  "description": "Oversight HTTP",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/transceptor-technology/oshttp"
+  },
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "./node_modules/.bin/eslint './**/*.js' --color",
+    "analyze": "NODE_ENV='analyze' ./node_modules/.bin/webpack -p --progress --profile --colors",
+    "build:dev": "./node_modules/.bin/webpack -d --progress --profile --colors --watch",
+    "build:prod": "NODE_ENV='production' ./node_modules/.bin/webpack -p"
+  },
+  "author": "",
+  "dependencies": {
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.2.2",
+    "@babel/plugin-proposal-class-properties": "7.2.3",
+    "@babel/plugin-syntax-dynamic-import": "7.2.0",
+    "@babel/plugin-transform-object-assign": "7.2.0",
+    "@babel/plugin-transform-runtime": "7.2.0",
+    "@babel/polyfill": "7.2.5",
+    "@babel/preset-env": "7.2.3",
+    "@babel/preset-react": "7.0.0",
+    "@babel/register": "7.0.0",
+    "@babel/runtime": "7.2.0",
+    "@material-ui/core": "3.9.1",
+    "@material-ui/icons": "3.0.2",
+    "babel-loader": "8.0.5",
+    "es6-mixins": "1.0.2",
+    "prop-types": "15.6.2",
+    "react": "16.7.0",
+    "react-dom": "16.7.0",
+    "socket.io": "2.2.0",
+    "socket.io-client": "2.2.0",
+    "uglifyjs-webpack-plugin": "2.1.1",
+    "vlow": "1.1.4",
+    "webpack": "4.28.3",
+    "webpack-cli": "3.2.1",
+    "webpack-bundle-analyzer": "3.0.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "10.0.1",
+    "eslint": "5.12.0",
+    "eslint-plugin-react": "7.12.3"
+  }
+}

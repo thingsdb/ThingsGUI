@@ -1,0 +1,16 @@
+aiogcd==0.10.0
+aiohttp==3.5.1
+aiohttp_session[aioredis]==2.7.0
+aiopg==0.15.0
+aioredis==1.2.0
+async-timeout==3.0.1
+colorlog==4.0.2
+msgpack-python==0.5.6
+peewee-async==0.6.0a0
+peewee==3.8.1
+psycopg2-binary==2.7.6.1
+python-engineio==3.2.0
+python-socketio==3.1.0
+setproctitle==1.1.10
+siridb-connector==2.0.5
+trender==1.0.8
