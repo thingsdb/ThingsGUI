@@ -102,3 +102,13 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Compiled React
+src/node_modules/
+static/js/*.html
+static/js/*-bundle-*.js
+static/js/*-bundle-*.min.js
+
+# NPM
+src/npm-debug.log
+src/package-lock.json

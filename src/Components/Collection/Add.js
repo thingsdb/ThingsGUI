@@ -7,34 +7,65 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
 import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore.js';
 
 const withStores = withVlow({
     store: ApplicationStore,
-    keys: ['loaded', 'connected', 'connErr'],
+    keys: ['match'],
 });
 
+const styles = theme => ({
+    button: {
+        margin: theme.spacing.unit,
+    },
+});
 
-class AddCollection extends React.Component {
-    state = {
-        name: '',
+class Add extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            show: false,
+            name: 'a',
+        };
+    }
+
+    handleOnChange = (e) => {
+        this.setState({[e.target.id]: e.target.value});
     };
+
+    handleClickOk = () => {
+        const {name} = this.state;
+        ApplicationActions.addCollection(name);
+        this.setState({show: false});
+    }
+
+    handleClickOpen = () => {
+        this.setState({show: true});
+    }
+
+    handleClickClose = () => {
+        this.setState({show: false});
+    }
 
     handleOnChange = (e) => {
         this.setState({[e.target.id]: e.target.value});
     };
 
     render() {
-        const {onAdd} = this.props;
-        const {name} = this.state;
+        const {classes} = this.props;
+        const {show, name} = this.state;
 
         return (
-            <div>
+            <React.Fragment>
+                <Button className={classes.button} variant="contained" onClick={this.handleClickOpen}>
+                    {'Add'}
+                </Button>
                 <Dialog
-                    open={true}
-                    onClose={() => null}
+                    open={show}
+                    onClose={this.handleClickClose}
                     aria-labelledby="form-dialog-title"
                 >
                     <DialogTitle id="form-dialog-title">
@@ -57,19 +88,23 @@ class AddCollection extends React.Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => onAdd(name)} color="primary">
-                            {'Create'}
+                        <Button onClick={this.handleClickClose} color="primary">
+                            {'Cancel'}
+                        </Button>
+                        <Button onClick={this.handleClickOk} color="primary">
+                            {'Ok'}
                         </Button>
                     </DialogActions>
                 </Dialog>
-            </div>
+            </React.Fragment>
         );
     }
 }
 
-AddCollection.propTypes = {
+Add.propTypes = {
+    classes: PropTypes.object.isRequired,
     // connErr: ApplicationStore.types.connErr.isRequired,
-    onAdd: PropTypes.func.isRequired,
+    // match: ApplicationStore.types.match.isRequired,
 };
 
-export default withStores(AddCollection);
+export default withStores(withStyles(styles)(Add));

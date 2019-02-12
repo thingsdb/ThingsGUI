@@ -1,11 +1,11 @@
 {
   "name": "oshttp",
   "version": "0.0.1-alpha1",
-  "description": "Oversight HTTP",
+  "description": "ThingsGUI",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/transceptor-technology/oshttp"
+    "url": "https://github.com/thingsdb/ThingsGUI.git"
   },
   "license": "UNLICENSED",
   "scripts": {
