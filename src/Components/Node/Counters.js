@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 // import Table from '@material-ui/core/Table';
@@ -6,73 +7,31 @@ import React from 'react';
 // import TableHead from '@material-ui/core/TableHead';
 // import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import {withVlow} from 'vlow';
 
-import {ApplicationStore} from '../../Stores/ApplicationStore.js';
-
-const withStores = withVlow({
-    store: ApplicationStore,
-    keys: ['counters'],
-});
 
 class Counters extends React.Component {
-    
-    // render() {
-    //     const {counters} = this.props;
-        
-    //     const rows = counters ? Object.entries(counters) : [];
-        
-    //     return (
-    //         <React.Fragment>
-    //             <Table>
-    //                 <TableHead>
-    //                     <TableRow>
-    //                         <TableCell>
-    //                             {'Counter'}
-    //                         </TableCell>
-    //                         <TableCell align="right">
-    //                             {'Value'}
-    //                         </TableCell>
-    //                     </TableRow>
-    //                 </TableHead>
-    //                 <TableBody>
-    //                     {rows.map(([k, v]) => (
-    //                         <TableRow key={k}>
-    //                             <TableCell component="th" scope="row">
-    //                                 {k}
-    //                             </TableCell>
-    //                             <TableCell align="right">
-    //                                 {v}
-    //                             </TableCell>
-    //                         </TableRow>
-    //                     ))}
-    //                 </TableBody>
-    //             </Table>
-    //         </React.Fragment>
-    //     );
-    // }
 
     render() {
         const {counters} = this.props;
-
+        
         const header = [
-            {kiey: 'queries_received', label: 'Queries received'},
-            {kiey: 'events_with_gap', label: 'Events with gap'},
-            {kiey: 'events_skipped', label: 'Events skipped'},
-            {kiey: 'events_failed', label: 'Events failed'},
-            {kiey: 'events_killed', label: 'Events killed'},
-            {kiey: 'events_committed', label: 'Events committed'},
-            {kiey: 'events_quorum_lost', label: 'Events quorumlost'},
-            {kiey: 'events_unaligned', label: 'Events unaligned'},
-            {kiey: 'garbage_collected', label: 'Garbage collected'},
-            {kiey: 'longest_event_duration', label: 'Longest eventduration'},
-            {kiey: 'average_event_duration', label: 'Average event duration'},
+            {ky: 'queries_received', label: 'Queries received'},
+            {ky: 'events_with_gap', label: 'Events with gap'},
+            {ky: 'events_skipped', label: 'Events skipped'},
+            {ky: 'events_failed', label: 'Events failed'},
+            {ky: 'events_killed', label: 'Events killed'},
+            {ky: 'events_committed', label: 'Events committed'},
+            {ky: 'events_quorum_lost', label: 'Events quorumlost'},
+            {ky: 'events_unaligned', label: 'Events unaligned'},
+            {ky: 'garbage_collected', label: 'Garbage collected'},
+            {ky: 'longest_event_duration', label: 'Longest eventduration'},
+            {ky: 'average_event_duration', label: 'Average event duration'},
         ];
         
         return (
             <Grid container spacing={0}>
                 {header.map((h) => (
-                    <React.Fragment key={h.kiey}>
+                    <React.Fragment key={h.ky}>
                         <Grid item xs={3}>
                             <Typography>
                                 {h.label}
@@ -80,7 +39,7 @@ class Counters extends React.Component {
                         </Grid>
                         <Grid item xs={9}>
                             <Typography>
-                                {counters[h.kiey]}
+                                {counters[h.ky]}
                             </Typography>
                         </Grid>
                     </React.Fragment>
@@ -91,7 +50,7 @@ class Counters extends React.Component {
 }
 
 Counters.propTypes = {
-    counters: ApplicationStore.types.counters.isRequired
+    counters: PropTypes.object.isRequired
 };
 
-export default withStores(Counters);
+export default Counters;

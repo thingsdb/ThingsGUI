@@ -6,14 +6,21 @@ const ApplicationActions = Vlow.createActions([
     'connect',
     'disconnect',
     'navigate',
+    
     'addCollection',
     'removeCollection',
     'renameCollection',
+    
     'addUser',
     'removeUser',
     'renameUser',
+    'password',
     'grant',
     'revoke',
+
+    'node',
+    'loglevel',
+    'zone',
     'resetCounters',
     'shutdown',
 ]);
@@ -29,11 +36,11 @@ class ApplicationStore extends BaseStore {
         nodes: PropTypes.arrayOf(PropTypes.object),
         users: PropTypes.arrayOf(PropTypes.object),
         node: PropTypes.object,
-        counters: PropTypes.object,
+        nodesLookup: PropTypes.object,
     }
 
     static defaults = {
-        loaded: false,
+        loaded: true,
         connected: false,
         connErr: '',
         match: {},
@@ -42,32 +49,40 @@ class ApplicationStore extends BaseStore {
         nodes: [],
         users: [],
         node: {},
-        counters: {},
+        nodesLookup: {},
     };
 
     constructor() {
         super(ApplicationActions);
         this.state = ApplicationStore.defaults;
 
-        this._fetch();
+        // this._fetch();
     }
 
     onNavigate(match) {
         this.setState({match});
     }
 
-    onShutdown() {
-        this.emit('/shutdown')
-            .done(() => {
+    _onDisconnect() {
+        this.setState({
+            connected: false,
+            connErr: '',
+            path: '',
+            collections: [],
+            nodes: [],
+            users: [],
+            node: {},
+            nodesLookup: {},
+        });
+    }
+
+    _fetch() {
+        this.emit('/connected')
+            .done((data) => {
+                window.console.log(data);
                 this.setState({
-                    connected: false,
-                    connErr: '',
-                    path: '',
-                    collections: [],
-                    nodes: [],
-                    users: [],
-                    node: {},
-                    counters: {},
+                    loaded: true,
+                    ...data
                 });
             });
     }
@@ -88,16 +103,7 @@ class ApplicationStore extends BaseStore {
     onDisconnect() {
         this.emit('/disconnect')
             .done(() => {
-                this.setState({
-                    connected: false,
-                    connErr: '',
-                    path: '',
-                    collections: [],
-                    nodes: [],
-                    users: [],
-                    node: {},
-                    counters: {},
-                });
+                this._onDisconnect();
             });
     }
 
@@ -164,6 +170,16 @@ class ApplicationStore extends BaseStore {
             });
     }
 
+    onPassword(user, password) {
+        this.emit('/user/password', {
+            user,
+            password,
+        })
+            .done(() => {
+                this._fetch();
+            });
+    }
+
     onGrant(collection, user, access) {
         this.emit('/grant', {
             collection,
@@ -186,24 +202,59 @@ class ApplicationStore extends BaseStore {
             });
     }
 
-    onResetCounters() {
-        this.emit('/counters/reset')
-            .done(() => {
-                this._fetch();
+    onNode(node) {
+        this.emit('/node/get', {
+            node,
+        })
+            .done((data) => {
+                const {nodesLookup} = this.state;
+                nodesLookup[node.node_id] = data;
+                this.setState({nodesLookup});
             });
     }
 
-    
-    
-
-    _fetch() {
-        this.emit('/connected')
+    onLoglevel(node, level) {
+        this.emit('/node/loglevel', {
+            node, 
+            level,
+        })
             .done((data) => {
-                window.console.log(data);
-                this.setState({
-                    loaded: true,
-                    ...data
-                });
+                const {nodesLookup} = this.state;
+                nodesLookup[node.node_id].node = data.node;
+                this.setState({nodesLookup});
+            });
+    }
+
+    onZone(node, zone) {
+        this.emit('/node/zone', {
+            node, 
+            zone,
+        })
+            .done((data) => {
+                const {nodesLookup} = this.state;
+                nodesLookup[node.node_id].node = data.node;
+                this.setState({nodesLookup});
+            });
+    }
+
+    onResetCounters(node) {
+        this.emit('/node/counters/reset', {
+            node,
+        })
+            .done((data) => {
+                const {nodesLookup} = this.state;
+                nodesLookup[node.node_id].counters = data.counters;
+                this.setState({nodesLookup});
+            });
+    }
+
+    onShutdown(node) {
+        this.emit('/node/shutdown', {
+            node,
+        })
+            .done(() => {
+                //TODOK
+                this._onDisconnect();
             });
     }
 }

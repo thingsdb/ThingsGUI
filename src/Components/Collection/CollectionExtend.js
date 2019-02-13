@@ -33,9 +33,9 @@ class Collection extends React.Component {
                 {/* <Typography>
                     {collection.name}
                 </Typography> */}
-                <RemoveCollection collection={collection} />
-                <RenameCollection collection={collection} />
                 <ViewCollection collection={collection} />
+                <RenameCollection collection={collection} />
+                <RemoveCollection collection={collection} />
             </React.Fragment>
         );
     }

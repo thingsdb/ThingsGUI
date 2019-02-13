@@ -33,7 +33,7 @@ class Shutdown extends React.Component {
 
     handleClickOk = () => {
         const {node} = this.props;
-        ApplicationActions.shutdown(node.name);
+        ApplicationActions.shutdown(node);
         this.setState({show: false});
     }
 

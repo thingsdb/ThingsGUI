@@ -6,12 +6,15 @@ import {withVlow} from 'vlow';
 
 import Counters from './Counters';
 import CountersReset from './CountersReset';
+import Loglevel from './Loglevel';
+import Info from './Info';
+import Zone from './Zone';
 import Shutdown from './Shutdown';
-import {ApplicationStore} from '../../Stores/ApplicationStore';
+import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 
 const withStores = withVlow({
     store: ApplicationStore,
-    keys: ['match'],
+    keys: ['match', 'nodesLookup'],
 });
 
 const styles = theme => ({
@@ -22,33 +25,45 @@ const styles = theme => ({
     },
 });
 
-class User extends React.Component {
+class Node extends React.Component {
+
+    constructor(props) {
+        super(props);
+        ApplicationActions.node(props.node);
+    }
     
     render() {
-        const {node} = this.props;
+        const {node, nodesLookup} = this.props;
+        const nodeInfo = nodesLookup[node.node_id];
         
-        return (
+        return nodeInfo ? (
             <React.Fragment>
                 {/* <Typography>
                     {node.name}
                 </Typography> */}
 
+                
+                {<Info node={nodeInfo.node} />}
                 <Typography variant="h6" >
                     {'Counters'}
                 </Typography>
-                <Counters node={node} />
-                <CountersReset node={node} />
-                <Shutdown node={node} />
+                {<Counters counters={nodeInfo.counters} />}
+                
+                <CountersReset node={nodeInfo.node} />
+                <Loglevel node={nodeInfo.node} />
+                <Zone node={nodeInfo.node} />
+                <Shutdown node={nodeInfo.node} />
                 
             </React.Fragment>
-        );
+        ) : null;
     }
 }
 
-User.propTypes = {
+Node.propTypes = {
     // classes: PropTypes.object.isRequired,
     node: PropTypes.object.isRequired,
+    nodesLookup: ApplicationStore.types.nodesLookup.isRequired,
     // match: ApplicationStore.types.match.isRequired,
 };
 
-export default withStores(withStyles(styles)(User));
+export default withStores(withStyles(styles)(Node));

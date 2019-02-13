@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
+import PasswordUser from './Password';
 import RemoveUser from './Remove';
 import RenameUser from './Rename';
 import GrantUser from './Grant';
@@ -35,8 +36,9 @@ class User extends React.Component {
                     {user.name}
                 </Typography> */}
 
-                <RemoveUser user={user} />
+                <PasswordUser user={user} />
                 <RenameUser user={user} />
+                <RemoveUser user={user} />
                 
                 <Typography variant="h6" >
                     {'Access'}

@@ -49,9 +49,8 @@ class _SocketRequest {
 
             this._alwaysCb(status, data);
             if (status === 0) {
-                if (window.debugMode) {
-                    window.console.debug(`Socket response ("${event}"):`, data);
-                }
+                window.console.debug(`Socket response ("${event}"):`, data);
+                
                 this._doneCb(data);
             } else if (status === 125) {
                 ConnectionActions.triggerSessionError();

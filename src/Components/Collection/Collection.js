@@ -32,8 +32,8 @@ class Collection extends React.Component {
         return (
             <React.Fragment>
                 <Things />
-                <RemoveCollection collection={match.collection} />
                 <RenameCollection collection={match.collection} />
+                <RemoveCollection collection={match.collection} />
             </React.Fragment>
         );
     }

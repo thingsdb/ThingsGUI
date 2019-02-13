@@ -3,6 +3,7 @@ import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
+import AddCollection from './Add';
 import CollectionExtend from './CollectionExtend';
 import Table from '../Util/Table2';
 import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
@@ -44,6 +45,7 @@ class Collections extends React.Component {
         return (
             <React.Fragment>
                 <Table header={header} rows={rows} rowClick={rowClick} rowExtend={rowExtend} />
+                <AddCollection />
             </React.Fragment>
         );
     }
