@@ -92,14 +92,14 @@ class App(Router, Application):
             self.loop.run_until_complete(srv.wait_closed())
             self.loop.run_until_complete(self.shutdown())
             self.loop.run_until_complete(self.cleanup())
-            
-            for client in self.clients:
+
+            for client in self.clients.values():
                 client.close()
 
         # from engineio v10 raises error at shutdown because
         # AsyncServer._service_task() still running
 
-        self.loop.close()
+        #TODOK self.loop.close()
         logging.info('Bye!')
 
     def stop(self, signame):

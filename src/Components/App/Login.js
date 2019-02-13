@@ -18,7 +18,7 @@ const withStores = withVlow({
 
 class Login extends React.Component {
     state = {
-        host: '192.168.56.102:9200',
+        host: 'localhost:9200',
         user: 'iris',
         password: 'siri',
     };

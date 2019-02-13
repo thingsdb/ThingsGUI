@@ -9,7 +9,7 @@ class UserHandler(BaseHandler):
         q = r'''new_user('{name}', '{password}');'''.format_map(data)
         result = await client.query(q)
         return cls.socket_response(data=result)
-    
+
     @classmethod
     @BaseHandler.socket_handler
     async def del_user(cls, client, data):
@@ -34,13 +34,15 @@ class UserHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def grant(cls, client, data):
-        q = r'''grant('{collection}', '{user}', {access});'''.format_map(data)
+        q = r'''grant('{collection}', '{user}', ({access}));'''.format_map(
+            data)
         result = await client.query(q)
         return cls.socket_response(data=result)
 
     @classmethod
     @BaseHandler.socket_handler
     async def revoke(cls, client, data):
-        q = r'''revoke('{collection}', '{user}', {access});'''.format_map(data)
+        q = r'''revoke('{collection}', '{user}', ({access}));'''.format_map(
+            data)
         result = await client.query(q)
         return cls.socket_response(data=result)

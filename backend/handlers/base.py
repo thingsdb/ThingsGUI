@@ -1,8 +1,8 @@
 import logging
+from thingsdb.client import Client
 from aiohttp import web
 from ..message import Message
 from ..exceptions import HandlerException
-from ..thingsdb.client import Client
 
 
 class BaseHandler:
@@ -26,7 +26,7 @@ class BaseHandler:
         cls.sio.on(
             event='disconnect',
             handler=cls.disconnect)
-        
+
     @classmethod
     async def connect(cls, sid, environ):
         logging.info('Socket connection: {} (Remote address: {})'.format(

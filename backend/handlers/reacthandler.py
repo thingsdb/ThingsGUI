@@ -1,8 +1,8 @@
+from thingsdb.client import Client
+from thingsdb.exceptions import ThingsDBError
 from trender.aiohttp_template import template
 from .base import BaseHandler
 from ..version import __version__
-from ..thingsdb.client import Client
-from ..thingsdb.exceptions import ThingsDBError
 
 
 class ReactHandler(BaseHandler):
@@ -75,7 +75,7 @@ class ReactHandler(BaseHandler):
                 'connected': False,
                 'connErr': 'auth error: {}'.format(str(e)),
             })
-    
+
         resp = {
             'connected': True,
             'connErr': '',
