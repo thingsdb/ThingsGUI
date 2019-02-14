@@ -6,6 +6,7 @@ import {withVlow} from 'vlow';
 import Things from './Things';
 import RemoveCollection from './Remove';
 import RenameCollection from './Rename';
+import SetQuotas from './Quotas';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {CollectionStore} from '../../Stores/CollectionStore';
 
@@ -34,6 +35,7 @@ class Collection extends React.Component {
                 <Things />
                 <RenameCollection collection={match.collection} />
                 <RemoveCollection collection={match.collection} />
+                <SetQuotas collection={match.collection} />
             </React.Fragment>
         );
     }

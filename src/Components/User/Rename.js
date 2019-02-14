@@ -14,7 +14,7 @@ import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStor
 
 const withStores = withVlow({
     store: ApplicationStore,
-    keys: ['match'],
+    keys: ['match', 'users'],
 });
 
 const styles = theme => ({
@@ -28,23 +28,37 @@ class Rename extends React.Component {
         super(props);
         this.state = {
             show: false,
-            name: props.user.name,
+            errors: {},
+            form: {},
         };
     }
 
+    validation = {
+        name: (o, {users}) => o.name.length>0&&users.every((u) => u.name!==o.name),
+    }
+
     handleOnChange = (e) => {
-        this.setState({[e.target.id]: e.target.value});
+        const {form, errors} = this.state;
+        form[e.target.id] = e.target.value;
+        errors[e.target.id] = !this.validation[e.target.id](form, this.props);
+        this.setState({form, errors});
     };
 
     handleClickOk = () => {
         const {user} = this.props;
-        const {name} = this.state;
-        ApplicationActions.renameUser(user.name, name);
-        this.setState({show: false});
+        const {form} = this.state;
+        const errors = Object.keys(this.validation).reduce((d, ky) => { d[ky] = !this.validation[ky](form, this.props);  return d; }, {});
+        this.setState({errors});
+        if (!Object.values(errors).some(d => d)) {
+            ApplicationActions.renameUser(user.name, form.name);
+            this.setState({show: false});
+        }
     }
 
     handleClickOpen = () => {
-        this.setState({show: true});
+        const {user} = this.props;
+        const form = {name: user.name};
+        this.setState({show: true, errors: {}, form});
     }
 
     handleClickClose = () => {
@@ -52,7 +66,7 @@ class Rename extends React.Component {
     }
 
     render() {
-        const {show, name} = this.state;
+        const {show, errors, form} = this.state;
 
         return (
             <React.Fragment>
@@ -77,17 +91,18 @@ class Rename extends React.Component {
                             id="name"
                             label="Name"
                             type="text"
-                            value={name}
+                            value={form.name}
                             spellCheck={false}
                             onChange={this.handleOnChange}
                             fullWidth
+                            error={errors.name}
                         />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClickClose} color="primary">
                             {'Cancel'}
                         </Button>
-                        <Button onClick={this.handleClickOk} color="primary">
+                        <Button onClick={this.handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
                             {'Ok'}
                         </Button>
                     </DialogActions>
@@ -98,8 +113,7 @@ class Rename extends React.Component {
 }
 
 Rename.propTypes = {
-    // connErr: ApplicationStore.types.connErr.isRequired,
-    // match: ApplicationStore.types.match.isRequired,
+    users: ApplicationStore.types.users.isRequired, // eslint-disable-line react/no-unused-prop-types
     user: PropTypes.object.isRequired,
 };
 

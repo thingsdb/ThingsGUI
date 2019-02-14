@@ -23,36 +23,40 @@ const styles = theme => ({
     },
 });
 
+const loglevels = [
+    'DEBUG',
+    'INFO',
+    'WARNING',
+    'ERROR',
+    'CRITICAL',
+];
+
 class Loglevel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             show: false,
-            level: 0,
+            form: {},
         };
     }
 
     handleOnChange = (e) => {
-        this.setState({[e.target.id]: e.target.value});
+        const {form} = this.state;
+        form[e.target.id] = e.target.value;
+        this.setState({form});
     };
 
     handleClickOk = () => {
         const {node} = this.props;
-        const {level} = this.state;
-        ApplicationActions.loglevel(node, level);
+        const {form} = this.state;
+        ApplicationActions.loglevel(node, form.level);
         this.setState({show: false});
     }
 
     handleClickOpen = () => {
         const {node} = this.props;
-        const level = {
-            DEBUG: 0,
-            INFO: 1,
-            WARNING: 2,
-            ERROR: 3,
-            CRITICAL: 4,
-        }[node.loglevel];
-        this.setState({show: true, level});
+        const form = {level: node.loglevel};
+        this.setState({show: true, form});
     }
 
     handleClickClose = () => {
@@ -60,7 +64,7 @@ class Loglevel extends React.Component {
     }
 
     render() {
-        const {show, level} = this.state;
+        const {show, form} = this.state;
 
         return (
             <React.Fragment>
@@ -84,12 +88,18 @@ class Loglevel extends React.Component {
                             margin="dense"
                             id="level"
                             label="Loglevel"
-                            type="number"
-                            value={level}
-                            spellCheck={false}
+                            value={form.level}
                             onChange={this.handleOnChange}
                             fullWidth
-                        />
+                            select
+                            SelectProps={{native: true}}
+                        >
+                            {loglevels.map(p => (
+                                <option key={p} value={p}>
+                                    {p.toLowerCase()}
+                                </option>
+                            ))}
+                        </TextField>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClickClose} color="primary">

@@ -14,7 +14,7 @@ import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStor
 
 const withStores = withVlow({
     store: ApplicationStore,
-    keys: ['match'],
+    keys: ['match', 'users'],
 });
 
 const styles = theme => ({
@@ -28,36 +28,48 @@ class AddUser extends React.Component {
         super(props);
         this.state = {
             show: false,
-            name: 'a',
-            password: 'a',
+            errors: {},
+            form: {},
         };
     }
 
+    validation = {
+        name: (o, {users}) => o.name.length>0&&users.every((u) => u.name!==o.name),
+        password: (o) => o.password.length>0,
+    }
+
     handleOnChange = (e) => {
-        this.setState({[e.target.id]: e.target.value});
+        const {form, errors} = this.state;
+        form[e.target.id] = e.target.value;
+        errors[e.target.id] = !this.validation[e.target.id](form, this.props);
+        this.setState({form, errors});
     };
 
     handleClickOk = () => {
-        const {name, password} = this.state;
-        ApplicationActions.addUser(name, password);
-        this.setState({show: false});
+        const {form} = this.state;
+        const errors = Object.keys(this.validation).reduce((d, ky) => { d[ky] = !this.validation[ky](form, this.props);  return d; }, {});
+        this.setState({errors});
+        if (!Object.values(errors).some(d => d)) {
+            ApplicationActions.addUser(form.name, form.password);
+            this.setState({show: false});
+        }
     }
 
     handleClickOpen = () => {
-        this.setState({show: true});
+        const form = {
+            name: '',
+            password: '',
+        };
+        this.setState({show: true, errors: {}, form});
     }
 
     handleClickClose = () => {
         this.setState({show: false});
     }
 
-    handleOnChange = (e) => {
-        this.setState({[e.target.id]: e.target.value});
-    };
-
     render() {
         const {classes} = this.props;
-        const {show, name, password} = this.state;
+        const {show, errors, form} = this.state;
 
         return (
             <React.Fragment>
@@ -82,27 +94,30 @@ class AddUser extends React.Component {
                             id="name"
                             label="Name"
                             type="text"
-                            value={name}
+                            value={form.name}
                             spellCheck={false}
                             onChange={this.handleOnChange}
                             fullWidth
+                            error={errors.name}
+                            // helperText={users.some((u) => u.name===form.name)?'already exists':null}
                         />
                         <TextField
                             margin="dense"
                             id="password"
                             label="Password"
                             type="text"
-                            value={password}
+                            value={form.password}
                             spellCheck={false}
                             onChange={this.handleOnChange}
                             fullWidth
+                            error={errors.password}
                         />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClickClose} color="primary">
                             {'Cancel'}
                         </Button>
-                        <Button onClick={this.handleClickOk} color="primary">
+                        <Button onClick={this.handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
                             {'Ok'}
                         </Button>
                     </DialogActions>
@@ -114,8 +129,7 @@ class AddUser extends React.Component {
 
 AddUser.propTypes = {
     classes: PropTypes.object.isRequired,
-    // connErr: ApplicationStore.types.connErr.isRequired,
-    // match: ApplicationStore.types.match.isRequired,
+    users: ApplicationStore.types.users.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 
 export default withStores(withStyles(styles)(AddUser));

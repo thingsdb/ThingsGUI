@@ -23,30 +23,38 @@ const styles = theme => ({
     },
 });
 
+const zones = [
+    0,
+    1,
+    //TODOK
+];
+
 class Zone extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             show: false,
-            zone: 0,
+            form: {},
         };
     }
 
     handleOnChange = (e) => {
-        this.setState({[e.target.id]: e.target.value});
+        const {form} = this.state;
+        form[e.target.id] = e.target.value;
+        this.setState({form});
     };
 
     handleClickOk = () => {
         const {node} = this.props;
-        const {zone} = this.state;
-        ApplicationActions.zone(node, zone);
+        const {form} = this.state;
+        ApplicationActions.zone(node, form.zone);
         this.setState({show: false});
     }
 
     handleClickOpen = () => {
         const {node} = this.props;
-        const zone = node.zone;
-        this.setState({show: true, zone});
+        const form = {level: node.zone};
+        this.setState({show: true, form});
     }
 
     handleClickClose = () => {
@@ -54,7 +62,7 @@ class Zone extends React.Component {
     }
 
     render() {
-        const {show, zone} = this.state;
+        const {show, form} = this.state;
 
         return (
             <React.Fragment>
@@ -78,12 +86,18 @@ class Zone extends React.Component {
                             margin="dense"
                             id="zone"
                             label="Zone"
-                            type="number"
-                            value={zone}
-                            spellCheck={false}
+                            value={form.zone}
                             onChange={this.handleOnChange}
                             fullWidth
-                        />
+                            select
+                            SelectProps={{native: true}}
+                        >
+                            {zones.map(p => (
+                                <option key={p} value={p}>
+                                    {p}
+                                </option>
+                            ))}
+                        </TextField>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClickClose} color="primary">

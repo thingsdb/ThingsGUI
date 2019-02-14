@@ -14,7 +14,7 @@ import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStor
 
 const withStores = withVlow({
     store: ApplicationStore,
-    keys: ['match'],
+    keys: ['match', 'collections'],
 });
 
 const styles = theme => ({
@@ -28,35 +28,44 @@ class Add extends React.Component {
         super(props);
         this.state = {
             show: false,
-            name: 'a',
+            errors: {},
+            form: {},
         };
     }
 
+    validation = {
+        name: (o, {collections}) => o.name.length>0&&collections.every((u) => u.name!==o.name),
+    }
+
     handleOnChange = (e) => {
-        this.setState({[e.target.id]: e.target.value});
+        const {form, errors} = this.state;
+        form[e.target.id] = e.target.value;
+        errors[e.target.id] = !this.validation[e.target.id](form, this.props);
+        this.setState({form, errors});
     };
 
     handleClickOk = () => {
-        const {name} = this.state;
-        ApplicationActions.addCollection(name);
-        this.setState({show: false});
+        const {form} = this.state;
+        const errors = Object.keys(this.validation).reduce((d, ky) => { d[ky] = !this.validation[ky](form, this.props);  return d; }, {});
+        this.setState({errors});
+        if (!Object.values(errors).some(d => d)) {
+            ApplicationActions.addCollection(form.name);
+            this.setState({show: false});
+        }
     }
 
     handleClickOpen = () => {
-        this.setState({show: true});
+        const form = {name: ''};
+        this.setState({show: true, errors: {}, form});
     }
 
     handleClickClose = () => {
         this.setState({show: false});
     }
 
-    handleOnChange = (e) => {
-        this.setState({[e.target.id]: e.target.value});
-    };
-
     render() {
         const {classes} = this.props;
-        const {show, name} = this.state;
+        const {show, errors, form} = this.state;
 
         return (
             <React.Fragment>
@@ -81,17 +90,18 @@ class Add extends React.Component {
                             id="name"
                             label="Name"
                             type="text"
-                            value={name}
+                            value={form.name}
                             spellCheck={false}
                             onChange={this.handleOnChange}
                             fullWidth
+                            error={errors.name}
                         />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClickClose} color="primary">
                             {'Cancel'}
                         </Button>
-                        <Button onClick={this.handleClickOk} color="primary">
+                        <Button onClick={this.handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
                             {'Ok'}
                         </Button>
                     </DialogActions>
@@ -103,8 +113,7 @@ class Add extends React.Component {
 
 Add.propTypes = {
     classes: PropTypes.object.isRequired,
-    // connErr: ApplicationStore.types.connErr.isRequired,
-    // match: ApplicationStore.types.match.isRequired,
+    collections: ApplicationStore.types.users.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 
 export default withStores(withStyles(styles)(Add));

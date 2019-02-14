@@ -28,23 +28,36 @@ class Password extends React.Component {
         super(props);
         this.state = {
             show: false,
-            password: '',
+            errors: {},
+            form: {},
         };
     }
 
+    validation = {
+        password: (o) => o.password.length>0,
+    }
+
     handleOnChange = (e) => {
-        this.setState({[e.target.id]: e.target.value});
+        const {form, errors} = this.state;
+        form[e.target.id] = e.target.value;
+        errors[e.target.id] = !this.validation[e.target.id](form, this.props);
+        this.setState({form, errors});
     };
 
     handleClickOk = () => {
         const {user} = this.props;
-        const {password} = this.state;
-        ApplicationActions.password(user.name, password);
-        this.setState({show: false});
+        const {form} = this.state;
+        const errors = Object.keys(this.validation).reduce((d, ky) => { d[ky] = !this.validation[ky](form, this.props);  return d; }, {});
+        this.setState({errors});
+        if (!Object.values(errors).some(d => d)) {
+            ApplicationActions.password(user.name, form.password);
+            this.setState({show: false});
+        }
     }
 
     handleClickOpen = () => {
-        this.setState({show: true});
+        const form = {password: ''};
+        this.setState({show: true, errors: {}, form});
     }
 
     handleClickClose = () => {
@@ -52,7 +65,7 @@ class Password extends React.Component {
     }
 
     render() {
-        const {show, password} = this.state;
+        const {show, errors, form} = this.state;
 
         return (
             <React.Fragment>
@@ -77,17 +90,18 @@ class Password extends React.Component {
                             id="password"
                             label="Password"
                             type="text"
-                            value={password}
+                            value={form.password}
                             spellCheck={false}
                             onChange={this.handleOnChange}
                             fullWidth
+                            error={errors.password}
                         />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClickClose} color="primary">
                             {'Cancel'}
                         </Button>
-                        <Button onClick={this.handleClickOk} color="primary">
+                        <Button onClick={this.handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
                             {'Ok'}
                         </Button>
                     </DialogActions>
@@ -98,8 +112,6 @@ class Password extends React.Component {
 }
 
 Password.propTypes = {
-    // connErr: ApplicationStore.types.connErr.isRequired,
-    // match: ApplicationStore.types.match.isRequired,
     user: PropTypes.object.isRequired,
 };
 

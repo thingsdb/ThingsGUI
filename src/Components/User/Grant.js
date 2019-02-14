@@ -14,7 +14,7 @@ import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStor
 
 const withStores = withVlow({
     store: ApplicationStore,
-    keys: ['match'],
+    keys: ['match', 'collections'],
 });
 
 const styles = theme => ({
@@ -23,29 +23,52 @@ const styles = theme => ({
     },
 });
 
+const privileges = [
+    'READ',
+    'MODIFY',
+    'WATCH',
+    'GRANT',
+    'FULL',
+];
+
 class Grant extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             show: false,
-            collection: 'test',
-            privileges: 1,
+            errors: {},
+            form: {},
         };
+    }
+
+    validation = {
+        collection: (o) => o.collection.length>0,
     }
     
     handleOnChange = (e) => {
-        this.setState({[e.target.id]: e.target.value});
+        const {form, errors} = this.state;
+        form[e.target.id] = e.target.value;
+        errors[e.target.id] = !this.validation[e.target.id](form, this.props);
+        this.setState({form, errors});
     };
 
     handleClickOk = () => {
         const {user} = this.props;
-        const {collection, privileges} = this.state;
-        ApplicationActions.grant(collection, user.name, privileges);
-        this.setState({show: false});
+        const {form} = this.state;
+        const errors = Object.keys(this.validation).reduce((d, ky) => { d[ky] = !this.validation[ky](form, this.props);  return d; }, {});
+        this.setState({errors});
+        if (!Object.values(errors).some(d => d)) {
+            ApplicationActions.grant(form.collection, user.name, form.privilege);
+            this.setState({show: false});
+        }
     }
 
     handleClickOpen = () => {
-        this.setState({show: true});
+        const form = {
+            collection: '',
+            privilege: 'READ',
+        };
+        this.setState({show: true, errors: {}, form});
     }
 
     handleClickClose = () => {
@@ -53,7 +76,8 @@ class Grant extends React.Component {
     }
 
     render() {
-        const {show, collection, privileges} = this.state;
+        const {collections} = this.props;
+        const {show, errors, form} = this.state;
 
         return (
             <React.Fragment>
@@ -77,28 +101,43 @@ class Grant extends React.Component {
                             margin="dense"
                             id="collection"
                             label="Collection"
-                            type="text"
-                            value={collection}
-                            spellCheck={false}
+                            value={form.collection}
                             onChange={this.handleOnChange}
                             fullWidth
-                        />
+                            error={errors.collection}
+                            helperText={errors.collection?'Select a collection':null}
+                            select
+                            SelectProps={{native: true}}
+                        >
+                            <option value="" disabled="disabled" />
+                            {collections.map(c => (
+                                <option key={c.collection_id} value={c.name}>
+                                    {c.name}
+                                </option>
+                            ))}
+                        </TextField>
                         <TextField
                             margin="dense"
-                            id="privileges"
-                            label="Privileges"
-                            type="text"
-                            value={privileges}
-                            spellCheck={false}
+                            id="privilege"
+                            label="Privilege"
+                            value={form.privilege}
                             onChange={this.handleOnChange}
                             fullWidth
-                        />
+                            select
+                            SelectProps={{native: true}}
+                        >
+                            {privileges.map(p => (
+                                <option key={p} value={p}>
+                                    {p.toLowerCase()}
+                                </option>
+                            ))}
+                        </TextField>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClickClose} color="primary">
                             {'Cancel'}
                         </Button>
-                        <Button onClick={this.handleClickOk} color="primary">
+                        <Button onClick={this.handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
                             {'Ok'}
                         </Button>
                     </DialogActions>
@@ -109,9 +148,7 @@ class Grant extends React.Component {
 }
 
 Grant.propTypes = {
-    // classes: PropTypes.object.isRequired,
-    // connErr: ApplicationStore.types.connErr.isRequired,
-    // match: ApplicationStore.types.match.isRequired,
+    collections: ApplicationStore.types.collections.isRequired,
     user: PropTypes.object.isRequired,
 };
 
