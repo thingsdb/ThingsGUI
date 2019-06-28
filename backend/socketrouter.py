@@ -39,6 +39,10 @@ class SocketRouter:
             handler=CollectionHandler.rename_collection)
 
         sio.on(
+            event='/collection/setquota',
+            handler=CollectionHandler.set_quota)
+
+        sio.on(
             event='/user/add',
             handler=UserHandler.new_user)
         

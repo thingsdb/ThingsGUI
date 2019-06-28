@@ -1,5 +1,6 @@
 from thingsdb.client import Client
 from thingsdb.exceptions import ThingsDBError
+from thingsdb import scope
 from trender.aiohttp_template import template
 from .base import BaseHandler
 from ..version import __version__
@@ -15,24 +16,18 @@ class ReactHandler(BaseHandler):
 
     @staticmethod
     async def collections(client):
-        result = await client.query(r'''
-
-            /* del_collection('test2'); */
-            /* node(); */
-            /* nodes(); */
-            /* new_node('secret', '127.0.0.1', 9221); */
-            /* new_collection('test'); */
-
-            collections();
-            nodes();
-            users();
-            node();
-        ''')
+        collections = await client.collections()
+        users = await client.users()
+        nodes = await client.nodes()
+        node = await client.node()
+        counters = await client.counters()
+        
         return {
-            'collections': result[0],
-            'nodes': result[1],
-            'users': result[2],
-            'node': result[3],
+            'collections': collections,
+            'users': users,
+            'nodes': nodes,
+            'node': node,
+            'counters': counters,
         }
 
     @classmethod
@@ -87,6 +82,7 @@ class ReactHandler(BaseHandler):
     @BaseHandler.socket_handler
     async def disconnect(cls, client, data):
         client.close()
+        print(client.is_connected())
 
         resp = {
             'connected': False,
@@ -101,9 +97,9 @@ class ReactHandler(BaseHandler):
         thing_id = data.get('thingId')
 
         if thing_id:
-            q = r'''thing({});'''.format(thing_id)
+            q = r'''t({});'''.format(thing_id)
         else:
-            q = r'''thing(id());'''
+            q = r'''t(id());'''
         resp = await client.query(q, target=collection_id)
 
         return cls.socket_response(data=resp)

@@ -2,7 +2,6 @@
 
 const webpack = require('webpack');
 const path = require('path');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const VERSION = require(path.resolve(__dirname, './package.json')).version;
@@ -38,15 +37,6 @@ const config = {
         })
     ],
     optimization: {
-        minimizer: [
-            new UglifyJSPlugin({
-                uglifyOptions: {
-                    compress: {
-                        warnings: false
-                    }
-                }
-            })
-        ],
         splitChunks: {
             cacheGroups: {
                 vendors: {

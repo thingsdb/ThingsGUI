@@ -1,21 +1,18 @@
 /* global process */
-import React from 'react';  // eslint-disable-line
-import {MessageActions} from '../Stores/MessageStore.js';
+import PropTypes from 'prop-types';
+import React, { createContext, useReducer, useContext } from 'react';
 import io from 'socket.io-client';
-import Vlow from 'vlow';
-
-
-const ConnectionActions = Vlow.createActions([
-    'triggerSessionError'
-]);
+import {appInitialState} from './ApplicationStore';
+import {nodesInitialState} from './NodesStore';
+import {collectionInitialState} from './CollectionStore';
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
     reconnection: true,
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
-    reconnectionAttempts: Infinity
+    reconnectionAttempts: Infinity,
+    transports: ['websocket']
 });
-
 
 class _SocketRequest {
 
@@ -31,29 +28,24 @@ class _SocketRequest {
 
     constructor(event, ...data) {
         window.console.debug(`Socket request: "${event}"`, data);
-        if (process.env.NODE_ENV === 'production') {
-            window.console.trace();
-        }
 
-        const timer = 3;
         var warnOnLong = setTimeout(() => {
-            window.console.warn(`No result for request "${event}" within ${timer} seconds.`);
-        }, timer * 1000);
+            window.console.warn(`No result for request "${event}" within 3 seconds.`);
+        }, 3000);
 
         socket.emit(event, ...data, (status, data, message) => {
             clearTimeout(warnOnLong);
 
             if (message !== undefined && message !== null) {
-                MessageActions.add(message);
+                // MessageActions.add(message);
             }
 
             this._alwaysCb(status, data);
             if (status === 0) {
                 window.console.debug(`Socket response ("${event}"):`, data);
-                
                 this._doneCb(data);
             } else if (status === 125) {
-                ConnectionActions.triggerSessionError();
+                // ConnectionActions.triggerSessionError();
             } else {
                 this._failCb(event, status, data);
             }
@@ -76,113 +68,41 @@ class _SocketRequest {
     }
 }
 
-class _JsonRequest {
+export const emit = (event, data) => new _SocketRequest(event, data);
 
-    constructor(type, url, data) {
+// TODOK
+const initialState = {
+    ...appInitialState,
+    ...nodesInitialState,
+    ...collectionInitialState,
+};
 
-        this.doneCb = function (data) { };          // eslint-disable-line
-        this.failCb = function (xhr, data) { };   // eslint-disable-line
+export const StoreContext = createContext(initialState);
 
-        const xhr = new XMLHttpRequest();
-        xhr.open(type, url, true);
-        xhr.setRequestHeader('Content-type', 'application/json');
 
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState != XMLHttpRequest.DONE) {
-                return;
-            }
+const reducer = (state, action) => {
+    const update = action(state);
+    return { ...state, ...update };
+};
 
-            if (xhr.status == 200) {
-                const data = JSON.parse(xhr.responseText);
-                this.doneCb(data);
-            } else {
-                let data;
-                try {
-                    data = JSON.parse(xhr.responseText);
-                } catch (e) {
-                    data = null;
-                }
-                this.failCb(xhr, data);
-            }
-        };
+export const StoreProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    return (
+        <StoreContext.Provider value={{ state, dispatch }}>
+            {children}
+        </StoreContext.Provider>
+    );
+};
 
-        xhr.send((!data) ? null : JSON.stringify(data));
-    }
+StoreProvider.propTypes = {
+    children: PropTypes.node
+};
 
-    done(doneCb) {
-        this.doneCb = doneCb;
-        return this;
-    }
+StoreProvider.defaultProps = {
+    children: null,
+};
 
-    fail(failCb) {
-        this.failCb = failCb;
-        return this;
-    }
-}
-
-class BaseStore extends Vlow.Store {
-
-    getSocketObj() {
-        return socket;
-    }
-
-    emit(name, data) {
-        return new _SocketRequest(name, data);
-    }
-
-    post(url, data) {
-        return new _JsonRequest('POST', url, data);
-    }
-}
-
-class ConnectionStore extends BaseStore {
-
-    constructor() {
-        super(ConnectionActions);
-        this.state = {
-            connectionLost: false,
-            connectionStatus: null,
-            reconnectAttempt: 0,
-        };
-
-        this.getSocketObj().on('reconnect', () => {
-            this.setState({
-                connectionStatus: 'Succesful reconnected!'
-            });
-            setTimeout(() => {
-                this.setState({
-                    connectionLost: false,
-                    connectionStatus: null
-                });
-            }, 2000);
-        });
-
-        this.getSocketObj().on('connect_failed', function () {
-            // return this.getSocketObj().connect();
-        });
-
-        this.getSocketObj().on('connect', () => {
-        });
-
-        this.getSocketObj().on('reconnecting', (attempt) => {
-            if (attempt >= 2) {
-                this.setState({
-                    connectionLost: true,
-                    connectionStatus: `Connection lost, trying to reconnect... (attempt ${attempt})`
-                });
-            }
-        });
-    }
-
-    onTriggerSessionError() {
-        this.setState({
-            connectionLost: true,
-            connectionStatus: 'User session has expired, redirecting to login...'
-        });
-        setTimeout(() => {
-            location.reload();
-        }, 3000);
-    }
-}
-
-export {BaseStore, ConnectionStore};
+export const useStore = () => {
+    const { state, dispatch } = useContext(StoreContext);
+    return [state, dispatch];
+};

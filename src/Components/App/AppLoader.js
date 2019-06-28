@@ -1,16 +1,10 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import {withVlow} from 'vlow';
+import {useStore} from '../../Stores/ApplicationStore';
 
-import {ApplicationStore} from '../../Stores/ApplicationStore.js';
+const AppLoader = () => {
+    const [store] = useStore();
+    const {loaded} = store;
 
-
-const withStores = withVlow({
-    store: ApplicationStore,
-    keys: ['loaded']
-});
-
-const AppLoader = ({loaded}) => {
     if (!loaded) {
         return (
             <div>
@@ -21,8 +15,4 @@ const AppLoader = ({loaded}) => {
     return null;
 };
 
-AppLoader.propTypes = {
-    loaded: PropTypes.bool.isRequired,
-};
-
-export default withStores(AppLoader);
+export default AppLoader;

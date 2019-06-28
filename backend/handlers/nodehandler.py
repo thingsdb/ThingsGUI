@@ -1,5 +1,6 @@
 from thingsdb.client import Client
 from thingsdb.exceptions import ThingsDBError
+from thingsdb import scope
 from .base import BaseHandler
 
 
@@ -28,7 +29,7 @@ class NodeHandler(BaseHandler):
             }
             result = await cls._other_node(client, other_node, q)
         else:
-            result = await client.query(q)
+            result = await client.query(q, target=scope.node, all_=True)
 
         resp = {
             'counters': result[0],
@@ -44,10 +45,10 @@ class NodeHandler(BaseHandler):
         if data.get('node'):
             result = await cls._other_node(client, data.get('node'), q)
         else:
-            result = await client.query(q)
+            result = await client.query(q, target=scope.node)
 
         resp = {
-            'counters': result[1],
+            'counters': result,
         }
         return cls.socket_response(data=resp)
 
@@ -59,10 +60,10 @@ class NodeHandler(BaseHandler):
         if data.get('node'):
             result = await cls._other_node(client, data.get('node'), q)
         else:
-            result = await client.query(q)
+            result = await client.query(q, target=scope.node)
 
         resp = {
-            'node': result[1],
+            'node': result,
         }
         return cls.socket_response(data=resp)
 
@@ -74,10 +75,10 @@ class NodeHandler(BaseHandler):
         if data.get('node'):
             result = await cls._other_node(client, data.get('node'), q)
         else:
-            result = await client.query(q)
+            result = await client.query(q, target=scope.node)
 
         resp = {
-            'node': result[1],
+            'node': result,
         }
         return cls.socket_response(data=resp)
 
@@ -89,10 +90,10 @@ class NodeHandler(BaseHandler):
         if data.get('node'):
             result = await cls._other_node(client, data.get('node'), q)
         else:
-            result = await client.query(q)
+            result = await client.query(q, target=scope.node)
             client.close()
 
         resp = {
-            'node': result[1],
+            'node': result,
         }
         return cls.socket_response(data=resp)

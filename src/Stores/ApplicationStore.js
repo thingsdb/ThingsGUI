@@ -1,262 +1,167 @@
-import PropTypes from 'prop-types';
-import Vlow from 'vlow';
-import {BaseStore} from './BaseStore.js';
+/* eslint-disable no-unused-vars */
+import React from 'react';
+import {emit, useStore} from './BaseStore';
 
-const ApplicationActions = Vlow.createActions([
-    'connect',
-    'disconnect',
-    'navigate',
+const appInitialState = {
+    loaded: true,
+    connected: false,
+    connErr: '',
+    match: {},
+
+    collections: [],
+    nodes: [],
+    users: [],
+    node: {},
+    counters: [],
+    nodesLookup: {},
+
+    collection: null,
+};
+
+const AppActions = {
+    connect: (dispatch, {host, user, password}) => () => {
+        emit('/connect', {
+            host, 
+            user, 
+            password,
+        }).done((data) => dispatch((state) => {
+            // window.console.log('...', state, data);
+            // data.match = {path: 'collection', collection: data.collections[0]}
+            // data.match = {path: 'nodes', node: data.nodes[0]}
+            return data;
+        }));
+    },
+    disconnect: (dispatch) => () => {
+        emit('/disconnect', {
     
-    'addCollection',
-    'removeCollection',
-    'renameCollection',
-    
-    'addUser',
-    'removeUser',
-    'renameUser',
-    'password',
-    'grant',
-    'revoke',
-
-    'node',
-    'loglevel',
-    'zone',
-    'resetCounters',
-    'shutdown',
-]);
-
-class ApplicationStore extends BaseStore {
-
-    static types = {
-        loaded: PropTypes.bool,
-        connected: PropTypes.bool,
-        connErr: PropTypes.string,
-        match: PropTypes.object,
-        collections: PropTypes.arrayOf(PropTypes.object),
-        nodes: PropTypes.arrayOf(PropTypes.object),
-        users: PropTypes.arrayOf(PropTypes.object),
-        node: PropTypes.object,
-        nodesLookup: PropTypes.object,
-    }
-
-    static defaults = {
-        loaded: true,
-        connected: false,
-        connErr: '',
-        match: {},
-
-        collections: [],
-        nodes: [],
-        users: [],
-        node: {},
-        nodesLookup: {},
-    };
-
-    constructor() {
-        super(ApplicationActions);
-        this.state = ApplicationStore.defaults;
-
-        // this._fetch();
-    }
-
-    onNavigate(match) {
-        this.setState({match});
-    }
-
-    _onDisconnect() {
-        this.setState({
-            connected: false,
-            connErr: '',
-            path: '',
-            collections: [],
-            nodes: [],
-            users: [],
-            node: {},
-            nodesLookup: {},
+        }).done((data) => dispatch((state) => {
+            // window.console.log('...', state, data);
+            return {
+                connected: false,
+                connErr: '',
+                match: {},
+                collections: [],
+                nodes: [],
+                users: [],
+                node: {},
+                nodesLookup: {},
+            };
+        }));
+    },
+    navigate: (dispatch, {path}) => () => {
+        dispatch((state) => {
+            // window.console.log('...', state);
+            return {match: {path}};
         });
-    }
+    },
 
-    _fetch() {
-        this.emit('/connected')
-            .done((data) => {
-                window.console.log(data);
-                this.setState({
-                    loaded: true,
-                    ...data
-                });
-            });
-    }
 
-    onConnect(host, user, password) {
-        this.emit('/connect', {
-            host,
-            user,
-            password,
-        })
-            .done((data) => {
-                this.setState({
-                    ...data
-                });
-            });
-    }
-
-    onDisconnect() {
-        this.emit('/disconnect')
-            .done(() => {
-                this._onDisconnect();
-            });
-    }
-
-    onAddCollection(name) {
-        this.emit('/collection/add', {
-            name
-        })
-            .done(() => {
-                this._fetch();
-            });
-    }
-
-    onRemoveCollection(name) {
-        this.emit('/collection/remove', {
-            name
-        })
-            .done(() => {
-                this._fetch();
-                // this.setState(prev => ({
-                //     collections: prev.collections.filter((d) => d.name!==name)
-                // }));
-            });
-    }
-
-    onRenameCollection(collection, name) {
-        this.emit('/collection/rename', {
+    addCollection: (dispatch, name) => () => {
+        emit('/collection/add', {
+            name,
+        }).done((data) => dispatch((state) => {
+            // window.console.log('...', state, data);
+            state.collections.push({collection_id: data, name});
+            return state;
+        }));
+    },
+    renameCollection: (dispatch, collection, name) => () => {
+        emit('/collection/rename', {
             collection,
             name,
-        })
-            .done(() => {
-                // const {match} = this.state;
-                // match.collection.name = name;
-                // this.setState({match});
-                this._fetch();
-            });
-    }
+        }).done((data) => dispatch((state) => {
+            // window.console.log('...', state, data);
+            const updated = state.collections.find((c) => c.name === collection);
+            updated.name = name;
+            return state;
+        }));
+    },
+    removeCollection: (dispatch, collection) => () => {
+        emit('/collection/remove', {
+            collection,
+        }).done((data) => dispatch((state) => {
+            // window.console.log('...', state, data);
+            state.collections = state.collections.filter((c) => c.name !== collection);
+            return state;
+        }));
+    },
+    setQuota: (dispatch, collection, quotaType, quota) => () => {
+        emit('/collection/setquota', {
+            collection,
+            quotaType,
+            quota,
+        }).done((data) => dispatch((state) => {
+            window.console.log('...', state, data);
+            const updated = state.collections.find((c) => c.name === collection);
+            updated[`quota_${quotaType}`] = quota;
+            return state;
+        }));
+    },
 
-    onAddUser(name, password) {
-        this.emit('/user/add', {
+    addUser: (dispatch, name, password) => () => {
+        emit('/user/add', {
             name,
             password,
         })
             .done(() => {
-                this._fetch();
+                state.users.push({user_id: data, name}); // TODOK privileges
+                return state;
             });
-    }
-
-    onRemoveUser(name) {
-        this.emit('/user/remove', {
+    },
+    removeUser: (dispatch, user) => () => {
+        emit('/user/remove', {
             name
-        })
-            .done(() => {
-                this._fetch();
-            });
-    }
-
-    onRenameUser(user, name) {
-        this.emit('/user/rename', {
+        }).done((data) => dispatch((state) => {
+            // TODOK this._fetch();
+            state.users = state.users.filter((u) => u.name !== user);
+            return state;
+        }));
+    },
+    renameUser: (dispatch, user, name) => () => {
+        emit('/user/rename', {
             user,
             name,
-        })
-            .done(() => {
-                this._fetch();
-            });
-    }
-
-    onPassword(user, password) {
-        this.emit('/user/password', {
+        }).done((data) => dispatch((state) => {
+            const updated = state.users.find((u) => u.name === user);
+            updated.name = name;
+            return state;
+        }));
+    },
+    password: (dispatch, user, password) => () => {
+        emit('/user/password', {
             user,
             password,
-        })
-            .done(() => {
-                this._fetch();
-            });
-    }
-
-    onGrant(collection, user, access) {
-        this.emit('/grant', {
+        }).done((data) => dispatch((state) => {
+            // TODOK this._fetch();
+        }));
+    },
+    grant: (dispatch, user, collection, access) => () => {
+        emit('/grant', {
             collection,
             user,
             access,
-        })
-            .done(() => {
-                this._fetch();
-            });
-    }
-
-    onRevoke(collection, user, access) {
-        this.emit('/revoke', {
+        }).done((data) => dispatch((state) => {
+            const updated = state.users.find((u) => u.name === user);
+            const updateda = updated.access.find((a) => a.target === collection);
+            if (updateda) {
+                updateda.privileges = access;
+            } else {
+                updated.access.push({target: collection, privileges: access});
+            }
+            return state;
+        }));
+    },
+    revoke: (dispatch, user, collection, access) => () => {
+        emit('/revoke', {
             collection,
             user,
             access,
-        })
-            .done(() => {
-                this._fetch();
-            });
+        }).done((data) => dispatch((state) => {
+            const updated = state.users.find((u) => u.name === user);
+            updated.access = updated.access.filter((a) => a.target !== collection);
+            return state;
+        }));
     }
+};
 
-    onNode(node) {
-        this.emit('/node/get', {
-            node,
-        })
-            .done((data) => {
-                const {nodesLookup} = this.state;
-                nodesLookup[node.node_id] = data;
-                this.setState({nodesLookup});
-            });
-    }
-
-    onLoglevel(node, level) {
-        this.emit('/node/loglevel', {
-            node, 
-            level,
-        })
-            .done((data) => {
-                const {nodesLookup} = this.state;
-                nodesLookup[node.node_id].node = data.node;
-                this.setState({nodesLookup});
-            });
-    }
-
-    onZone(node, zone) {
-        this.emit('/node/zone', {
-            node, 
-            zone,
-        })
-            .done((data) => {
-                const {nodesLookup} = this.state;
-                nodesLookup[node.node_id].node = data.node;
-                this.setState({nodesLookup});
-            });
-    }
-
-    onResetCounters(node) {
-        this.emit('/node/counters/reset', {
-            node,
-        })
-            .done((data) => {
-                const {nodesLookup} = this.state;
-                nodesLookup[node.node_id].counters = data.counters;
-                this.setState({nodesLookup});
-            });
-    }
-
-    onShutdown(node) {
-        this.emit('/node/shutdown', {
-            node,
-        })
-            .done(() => {
-                //TODOK
-                this._onDisconnect();
-            });
-    }
-}
-
-export {ApplicationStore, ApplicationActions};
+export {AppActions, appInitialState, useStore};

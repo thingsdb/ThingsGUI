@@ -1,3 +1,4 @@
+import React, {useCallback} from 'react';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Divider from '@material-ui/core/Divider';
@@ -7,63 +8,65 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 // import ListSubheader from '@material-ui/core/ListSubheader';
 import PeopleIcon from '@material-ui/icons/People';
-import React from 'react';
-import {withVlow} from 'vlow';
+import {useStore, AppActions} from '../../Stores/ApplicationStore';
 
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+const Menu = () => {
+    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
+    
+    const disconnect = useCallback(AppActions.disconnect(dispatch), [dispatch]);
 
-const withStores = withVlow({
-    store: ApplicationStore,
-    keys: [],
-});
+    const handleClickLogout = () => {
+        disconnect();
+    };
 
-class Menu extends React.Component {
-    handleClickLogout = () => {
-        ApplicationActions.disconnect();
-    }
+    const handleClickCollections = () => {
+        dispatch(() => ({match: {path: 'collections'}}));
+    };
 
-    handleClickNavigate = (path) => () => {
-        ApplicationActions.navigate({path});
-    }
+    const handleClickNodes = () => {
+        dispatch(() => ({match: {path: 'nodes'}}));
+    };
 
-    render() {
-        return (
-            <React.Fragment>
-                <List>
-                    <ListItem button onClick={this.handleClickNavigate('collections')}>
-                        <ListItemIcon>
-                            <DashboardIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Collections" />
-                    </ListItem>
-                    <ListItem button onClick={this.handleClickNavigate('nodes')}>
-                        <ListItemIcon>
-                            <DashboardIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Nodes" />
-                    </ListItem>
-                    <ListItem button onClick={this.handleClickNavigate('users')}>
-                        <ListItemIcon>
-                            <PeopleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Users" />
-                    </ListItem>
-                </List>
-                <Divider />
-                <List>
-                    {/* <ListSubheader inset>
-                        {'Submenu'}
-                    </ListSubheader> */}
-                    <ListItem button>
-                        <ListItemIcon>
-                            <ExitToAppIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Logout" onClick={this.handleClickLogout} />
-                    </ListItem>
-                </List>
-            </React.Fragment>
-        );
-    }
-}
+    const handleClickUsers = () => {
+        dispatch(() => ({match: {path: 'users'}}));
+    };
 
-export default withStores(Menu);
+    return (
+        <React.Fragment>
+            <List>
+                <ListItem button onClick={handleClickCollections}>
+                    <ListItemIcon>
+                        <DashboardIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Collections" />
+                </ListItem>
+                <ListItem button onClick={handleClickNodes}>
+                    <ListItemIcon>
+                        <DashboardIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Nodes" />
+                </ListItem>
+                <ListItem button onClick={handleClickUsers}>
+                    <ListItemIcon>
+                        <PeopleIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Users" />
+                </ListItem>
+            </List>
+            <Divider />
+            <List>
+                {/* <ListSubheader inset>
+                    {'Submenu'}
+                </ListSubheader> */}
+                <ListItem button>
+                    <ListItemIcon>
+                        <ExitToAppIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" onClick={handleClickLogout} />
+                </ListItem>
+            </List>
+        </React.Fragment>
+    );
+};
+
+export default Menu;

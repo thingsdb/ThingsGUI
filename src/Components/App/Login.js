@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -10,128 +10,114 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {withVlow} from 'vlow';
+import {useStore, AppActions} from '../../Stores/ApplicationStore';
 
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore.js';
+const initialState = {
+    showPassword: false,
+    errors: {},
+    form: {
+        host: '192.168.56.102:9200',
+        user: 'admin',
+        password: 'pass',
+    },
+};
 
-const withStores = withVlow({
-    store: ApplicationStore,
-    keys: ['loaded', 'connected', 'connErr'],
-});
+const validation = {
+    host: (o) => o.host.length>0,
+    user: (o) => o.user.length>0,
+    password: (o) => o.password.length>0,
+};
 
-class Login extends React.Component {
+const Login = () => {
+    const [store, dispatch] = useStore();
+    const {loaded, connected, connErr} = store;
+    const [state, setState] = useState(initialState);
+    const {showPassword, errors, form} = state;
+
+    const connect = useCallback(AppActions.connect(dispatch, form));
     
-    static propTypes = {
-        loaded: ApplicationStore.types.connected.isRequired,
-        connected: ApplicationStore.types.connected.isRequired,
-        connErr: ApplicationStore.types.connErr.isRequired,
-    };
-
-    state = {
-        showPassword: false,
-        errors: {},
-        form: {
-            host: '',
-            user: '',
-            password: '',
-        },
-    };
-
-    validation = {
-        host: (o) => o.host.length>0,
-        user: (o) => o.user.length>0,
-        password: (o) => o.password.length>0,
-    };
-
-    handleOnChange = (e) => {
-        const {form, errors} = this.state;
+    const handleOnChange = (e) => {
         form[e.target.id] = e.target.value;
-        errors[e.target.id] = !this.validation[e.target.id](form, this.props);
-        this.setState({form, errors});
+        errors[e.target.id] = !validation[e.target.id](form);
+        setState({...state, form, errors});
     };
 
-    handleClickOk = () => {
-        const {form} = this.state;
-        const errors = Object.keys(this.validation).reduce((d, ky) => { d[ky] = !this.validation[ky](form, this.props);  return d; }, {});
-        this.setState({errors});
+    const handleClickOk = () => {
+        const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
+        setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connect(form.host, form.user, form.password);
+            connect();
         }
-    }
-
-    handleClickShowPassword = () => {
-        this.setState(state => ({showPassword: !state.showPassword}));
     };
 
-    render() {
-        const {loaded, connected, connErr} = this.props;
-        const {showPassword, errors, form} = this.state;
+    const handleClickShowPassword = () => {
+        setState({...state, showPassword: !showPassword});
+    };
+    
+    return (
+        <Dialog
+            open={loaded && !connected}
+            onClose={() => null}
+            aria-labelledby="form-dialog-title"
+        >
+            <DialogTitle id="form-dialog-title">
+                {'Login'}
+            </DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    {connErr}
+                </DialogContentText>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="host"
+                    label="Host"
+                    type="text"
+                    value={form.host}
+                    spellCheck={false}
+                    onChange={handleOnChange}
+                    fullWidth
+                    error={errors.host}
+                />
+                <TextField
+                    margin="dense"
+                    id="user"
+                    label="User"
+                    type="text"
+                    value={form.user}
+                    spellCheck={false}
+                    onChange={handleOnChange}
+                    fullWidth
+                    error={errors.user}
+                />
+                <TextField
+                    margin="dense"
+                    id="password"
+                    label="Password"
+                    type={showPassword?'text':'password'}
+                    value={form.password}
+                    spellCheck={false}
+                    onChange={handleOnChange}
+                    fullWidth
+                    error={errors.password}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={handleClickShowPassword}>
+                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
+                    {'Connect'}
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
 
-        return (
-            <Dialog
-                open={loaded && !connected}
-                onClose={() => null}
-                aria-labelledby="form-dialog-title"
-            >
-                <DialogTitle id="form-dialog-title">
-                    {'Login'}
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        {connErr}
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="host"
-                        label="Host"
-                        type="text"
-                        value={form.host}
-                        spellCheck={false}
-                        onChange={this.handleOnChange}
-                        fullWidth
-                        error={errors.host}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="user"
-                        label="User"
-                        type="text"
-                        value={form.user}
-                        spellCheck={false}
-                        onChange={this.handleOnChange}
-                        fullWidth
-                        error={errors.user}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="password"
-                        label="Password"
-                        type={showPassword?'text':'password'}
-                        value={form.password}
-                        spellCheck={false}
-                        onChange={this.handleOnChange}
-                        fullWidth
-                        error={errors.password}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={this.handleClickShowPassword}>
-                                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
-                        {'Connect'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
-}
-
-export default withStores(Login);
+export default Login;
