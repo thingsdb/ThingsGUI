@@ -3,7 +3,7 @@ import React from 'react';
 import {emit, useStore} from './BaseStore';
 
 const appInitialState = {
-    loaded: true,
+    loaded: false,
     connected: false,
     connErr: '',
     match: {},
@@ -19,6 +19,12 @@ const appInitialState = {
 };
 
 const AppActions = {
+    connected: (dispatch) => () => {
+        emit('/connected', {
+        }).done((data) => dispatch((state) => {
+            return data;
+        }));
+    },
     connect: (dispatch, {host, user, password}) => () => {
         emit('/connect', {
             host,

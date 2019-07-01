@@ -21,7 +21,7 @@ class ReactHandler(BaseHandler):
         nodes = await client.nodes()
         node = await client.node()
         counters = await client.counters()
-        
+
         return {
             'collections': collections,
             'users': users,
@@ -35,11 +35,13 @@ class ReactHandler(BaseHandler):
     async def connected(cls, client, data):
         if client.is_connected():
             resp = {
+                'loaded': True,
                 'connected': True,
             }
             resp.update(await cls.collections(client))
         else:
             resp = {
+                'loaded': True,
                 'connected': False,
             }
         return cls.socket_response(data=resp)
@@ -82,7 +84,7 @@ class ReactHandler(BaseHandler):
     @BaseHandler.socket_handler
     async def disconnect(cls, client, data):
         client.close()
-        print(client.is_connected())
+        await client.wait_closed()
 
         resp = {
             'connected': False,

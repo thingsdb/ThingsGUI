@@ -39,6 +39,7 @@ class BaseHandler:
         client = cls.clients.get(sid)
         if client:
             client.close()
+            await client.wait_closed()
             cls.clients.pop(sid)
         logging.info('Socket disconnect: {}'.format(sid))
 

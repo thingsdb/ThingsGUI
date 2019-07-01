@@ -1,18 +1,21 @@
 import React from 'react';
-import {useStore} from '../../Stores/ApplicationStore';
+import {useStore, AppActions} from '../../Stores/ApplicationStore';
 
 const AppLoader = () => {
-    const [store] = useStore();
+    const [store, dispatch] = useStore();
     const {loaded} = store;
 
-    if (!loaded) {
-        return (
-            <div>
-                {'Loading...'}
-            </div>
-        );
-    }
-    return null;
+    const fetch = React.useCallback(AppActions.connected(dispatch), [dispatch]);
+
+    React.useEffect(() => {
+        fetch();
+    }, [loaded]);
+
+    return (
+        <div>
+            {'Loading...'}
+        </div>
+    );
 };
 
 export default AppLoader;
