@@ -7,14 +7,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {withStyles} from '@material-ui/core/styles';
 import {useStore, AppActions} from '../../Stores/ApplicationStore';
 
-const styles = theme => ({
-    button: {
-        margin: theme.spacing.unit,
-    },
-});
 
 const privileges = [
     'READ',
@@ -35,18 +29,18 @@ const Grant = ({user}) => {
     const {collections} = store;
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
-    
+
     const grant = React.useCallback(AppActions.grant(dispatch, user.name, form.target, form.privileges));
 
     const validation = {
         target: () => form.target.length>0,
         privileges: () => form.privileges.length>0,
     };
-    
+
     const handleClickOpen = () => {
         setState({
-            show: true, 
-            errors: {}, 
+            show: true,
+            errors: {},
             form: {
                 target: user.access.length?user.access[0].target:'', // TODOK
                 privileges: user.access.length?user.access[0].privileges:'',
@@ -57,7 +51,7 @@ const Grant = ({user}) => {
     const handleClickClose = () => {
         setState({...state, show: false});
     };
-    
+
     const handleOnChange = (e) => {
         form[e.target.id] = e.target.value;
         errors[e.target.id] = !validation[e.target.id]();
@@ -147,4 +141,4 @@ Grant.propTypes = {
     user: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Grant);
+export default Grant;

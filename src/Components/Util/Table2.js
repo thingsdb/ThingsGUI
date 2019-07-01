@@ -13,69 +13,61 @@ import {withStyles} from '@material-ui/core/styles';
 
 const styles = theme => ({
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
     },
 });
 
-class Tabel extends React.Component {
-    state = {
-        selected: null,
-    }
+const Tabel = ({header, rows, rowExtend}) => {
+    const [selected, setSelected] = React.useState(null);
 
-    handleClickRow = (ri) => () => {
-        // ApplicationActions.navigate({path: 'user', user});
-        this.setState(prev => ({selected: ri!==prev.selected?ri:null}));
-    }
+    const handleClickRow = (ri) => () => {
+        setSelected(ri!==selected?ri:null);
+    };
 
-    render() {
-        const {header, rows, rowExtend} = this.props;
-        const {selected} = this.state;
-        
-        return (
-            <React.Fragment>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            {header.map((h, i) => (
-                                <TableCell key={h.ky} align={i?'right':'left'}>
-                                    {h.label}
-                                </TableCell>
-                            ))}
-                            <TableCell />
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row, ri) => {
-                            const isopen = selected===ri;
-                            return (
-                                <React.Fragment key={ri}>
-                                    <TableRow onClick={this.handleClickRow(ri)}>
-                                        {header.map((h, i) => (
-                                            <TableCell key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
-                                                {row[h.ky]}
-                                            </TableCell>
-                                        ))}
-                                        <TableCell align="right" style={{borderBottom: isopen?'none':null}}>
-                                            {isopen ? <ExpandLess /> : <ExpandMore />}
+    return (
+        <React.Fragment>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        {header.map((h, i) => (
+                            <TableCell key={h.ky} align={i?'right':'left'}>
+                                {h.label}
+                            </TableCell>
+                        ))}
+                        <TableCell />
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows.map((row, ri) => {
+                        const isopen = selected===ri;
+                        return (
+                            <React.Fragment key={ri}>
+                                <TableRow onClick={handleClickRow(ri)}>
+                                    {header.map((h, i) => (
+                                        <TableCell key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
+                                            {row[h.ky]}
                                         </TableCell>
-                                    </TableRow>
-                                    {isopen &&
-                                    <TableRow style={{display: isopen?null:'none', borderBottom: 'none'}}>
-                                        <TableCell colSpan={12}>
-                                            <Collapse hidden={!isopen} in={isopen}>
-                                                {rowExtend(row)}
-                                            </Collapse>
-                                        </TableCell>
-                                    </TableRow>}
-                                </React.Fragment>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
-            </React.Fragment>
-        );
-    }
-}
+                                    ))}
+                                    <TableCell align="right" style={{borderBottom: isopen?'none':null}}>
+                                        {isopen ? <ExpandLess /> : <ExpandMore />}
+                                    </TableCell>
+                                </TableRow>
+                                {isopen &&
+                                <TableRow style={{display: isopen?null:'none', borderBottom: 'none'}}>
+                                    <TableCell colSpan={12}>
+                                        <Collapse hidden={!isopen} in={isopen}>
+                                            {rowExtend(row)}
+                                        </Collapse>
+                                    </TableCell>
+                                </TableRow>}
+                            </React.Fragment>
+                        );
+                    })}
+                </TableBody>
+            </Table>
+        </React.Fragment>
+    );
+};
 
 Tabel.propTypes = {
     header: PropTypes.arrayOf(PropTypes.object).isRequired,

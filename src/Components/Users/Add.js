@@ -12,7 +12,7 @@ import {useStore, AppActions} from '../../Stores/ApplicationStore';
 
 const styles = theme => ({
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
     },
 });
 
@@ -27,7 +27,7 @@ const AddUser = ({classes}) => {
     const {users} = store;
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
-    
+
     const add = React.useCallback(AppActions.addUser(dispatch, form.name, form.password));
 
     const validation = {

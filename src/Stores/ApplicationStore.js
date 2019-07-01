@@ -21,8 +21,8 @@ const appInitialState = {
 const AppActions = {
     connect: (dispatch, {host, user, password}) => () => {
         emit('/connect', {
-            host, 
-            user, 
+            host,
+            user,
             password,
         }).done((data) => dispatch((state) => {
             // window.console.log('...', state, data);
@@ -33,7 +33,7 @@ const AppActions = {
     },
     disconnect: (dispatch) => () => {
         emit('/disconnect', {
-    
+
         }).done((data) => dispatch((state) => {
             // window.console.log('...', state, data);
             return {
@@ -102,11 +102,10 @@ const AppActions = {
         emit('/user/add', {
             name,
             password,
-        })
-            .done(() => {
-                state.users.push({user_id: data, name}); // TODOK privileges
-                return state;
-            });
+        }).done((data) => dispatch((state) => {
+            state.users.push({user_id: data, name}); // TODOK privileges
+            return state;
+        }));
     },
     removeUser: (dispatch, user) => () => {
         emit('/user/remove', {

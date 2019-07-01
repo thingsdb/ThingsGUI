@@ -7,21 +7,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {withStyles} from '@material-ui/core/styles';
 import {useStore, AppActions} from '../../Stores/ApplicationStore';
 
-const styles = theme => ({
-    button: {
-        margin: theme.spacing.unit,
-    },
-});
 
 const Remove = ({collection}) => {
     const [store, dispatch] = useStore(); // eslint-disable-line
     const [show, setShow] = React.useState(false);
-    
+
     const remove = React.useCallback(AppActions.removeCollection(dispatch, collection.name));
-    
+
     const handleClickOpen = () => {
         setShow(true);
     };
@@ -67,10 +61,7 @@ const Remove = ({collection}) => {
 };
 
 Remove.propTypes = {
-    // classes: PropTypes.object.isRequired,
-    // connErr: ApplicationStore.types.connErr.isRequired,
-    // match: ApplicationStore.types.match.isRequired,
     collection: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Remove);
+export default Remove;

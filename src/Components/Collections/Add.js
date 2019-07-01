@@ -12,7 +12,7 @@ import {useStore, AppActions} from '../../Stores/ApplicationStore';
 
 const styles = theme => ({
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
     },
 });
 
@@ -27,7 +27,7 @@ const Add = ({classes}) => {
     const {collections} = store;
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
-    
+
     const add = React.useCallback(AppActions.addCollection(dispatch, form.name));
 
     const validation = {

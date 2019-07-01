@@ -16,7 +16,7 @@ const initialState = {
     showPassword: false,
     errors: {},
     form: {
-        host: '192.168.56.102:9200',
+        host: 'localhost:9200',
         user: 'admin',
         password: 'pass',
     },
@@ -35,7 +35,7 @@ const Login = () => {
     const {showPassword, errors, form} = state;
 
     const connect = useCallback(AppActions.connect(dispatch, form));
-    
+
     const handleOnChange = (e) => {
         form[e.target.id] = e.target.value;
         errors[e.target.id] = !validation[e.target.id](form);
@@ -53,7 +53,7 @@ const Login = () => {
     const handleClickShowPassword = () => {
         setState({...state, showPassword: !showPassword});
     };
-    
+
     return (
         <Dialog
             open={loaded && !connected}

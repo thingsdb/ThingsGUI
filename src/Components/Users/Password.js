@@ -7,14 +7,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {withStyles} from '@material-ui/core/styles';
 import {useStore, AppActions} from '../../Stores/ApplicationStore';
 
-const styles = theme => ({
-    button: {
-        margin: theme.spacing.unit,
-    },
-});
 
 const initialState = {
     show: false,
@@ -104,4 +98,4 @@ Password.propTypes = {
     user: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Password);
+export default Password;

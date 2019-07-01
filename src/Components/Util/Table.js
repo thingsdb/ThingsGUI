@@ -7,53 +7,46 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import {withStyles} from '@material-ui/core/styles';
 
-import AddCollection from '../Collection/Add';
 
 const styles = theme => ({
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
     },
 });
 
-class Tabel extends React.Component {
+const Tabel = ({header, rows, rowClick}) => {
 
-    handleClickRow = (row) => () => {
-        const {rowClick} = this.props;
+    const handleClickRow = (row) => () => {
         rowClick(row);
-    }
+    };
 
-    render() {
-        const {header, rows} = this.props;
-        
-        return (
-            <React.Fragment>
-                <Table>
-                    <TableHead>
-                        <TableRow>
+    return (
+        <React.Fragment>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        {header.map((h, i) => (
+                            <TableCell key={h.ky} align={i?'right':'left'}>
+                                {h.label}
+                            </TableCell>
+                        ))}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows.map((row, ri) => (
+                        <TableRow key={ri} onClick={handleClickRow(row)}>
                             {header.map((h, i) => (
                                 <TableCell key={h.ky} align={i?'right':'left'}>
-                                    {h.label}
+                                    {row[h.ky]}
                                 </TableCell>
                             ))}
                         </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row, ri) => (
-                            <TableRow key={ri} onClick={this.handleClickRow(row)}>
-                                {header.map((h, i) => (
-                                    <TableCell key={h.ky} align={i?'right':'left'}>
-                                        {row[h.ky]}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-                <AddCollection />
-            </React.Fragment>
-        );
-    }
-}
+                    ))}
+                </TableBody>
+            </Table>
+        </React.Fragment>
+    );
+};
 
 Tabel.propTypes = {
     header: PropTypes.arrayOf(PropTypes.object).isRequired,

@@ -7,14 +7,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {withStyles} from '@material-ui/core/styles';
 import {useStore, NodesActions} from '../../Stores/NodesStore';
 
-const styles = theme => ({
-    button: {
-        margin: theme.spacing.unit,
-    },
-});
 
 const loglevels = [
     'DEBUG',
@@ -105,4 +99,4 @@ Loglevel.propTypes = {
     node: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Loglevel);
+export default Loglevel;

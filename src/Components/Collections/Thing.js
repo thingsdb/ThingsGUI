@@ -15,7 +15,7 @@ import {useStore, CollectionActions} from '../../Stores/CollectionStore';
 
 const styles = theme => ({
     nested: {
-        paddingLeft: theme.spacing.unit * 4,
+        paddingLeft: theme.spacing(4),
     },
 });
 
@@ -25,7 +25,7 @@ const Thing = ({classes, name, thing}) => {
     const [show, setShow] = React.useState(false);
 
     const queryThing = React.useCallback(CollectionActions.queryThing(dispatch, match.collection, thing));
-    
+
     const renderThing = ([k, v]) => {
         return k === '#' ? null : (
             <div key={k} className={classes.nested}>

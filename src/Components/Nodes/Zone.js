@@ -7,20 +7,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {withStyles} from '@material-ui/core/styles';
 import {NodesActions, useStore} from '../../Stores/NodesStore';
 
-const styles = theme => ({
-    button: {
-        margin: theme.spacing.unit,
-    },
-});
 
-const zones = [
-    0,
-    1,
-    //TODOK
-];
+const zones = [...Array(128).keys()];
 
 const initialState = {
     show: false,
@@ -103,4 +93,4 @@ Zone.propTypes = {
     node: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Zone);
+export default Zone;
