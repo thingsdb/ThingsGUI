@@ -7,7 +7,7 @@ const collectionInitialState = {
 };
 
 const CollectionActions = {
-    
+
     query: (dispatch, collection) => () => {
         emit('/collection/query', {
             collectionId: collection.collection_id,

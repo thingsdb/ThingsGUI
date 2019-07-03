@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {useStore, UsersActions} from '../../Stores/UsersStore';
 
 
 const Remove = ({user}) => {
     const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
 
-    const remove = React.useCallback(AppActions.removeUser(dispatch, user.name));
+    const remove = React.useCallback(UsersActions.removeUser(dispatch, user.name));
 
     const handleClickOk = () => {
         remove();

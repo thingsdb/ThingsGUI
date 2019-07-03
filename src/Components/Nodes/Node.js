@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
+import Connect from './Connect';
 import Counters from './Counters';
 import CountersReset from './CountersReset';
 import Loglevel from './Loglevel';
@@ -13,34 +14,33 @@ import {NodesActions, useStore} from '../../Stores/NodesStore';
 
 const Node = ({node}) => {
     const [store, dispatch] = useStore();
-    // const {nodesLookup} = store;
-    // const fetch = React.useCallback(NodeActions.node(dispatch, node.node_id), [dispatch]);
+    const fetch = React.useCallback(NodesActions.getNode(dispatch, node.node_id), [dispatch]);
 
-    // React.useEffect(() => {
-    //     fetch();
-    // }, [node]);
+    React.useEffect(() => {
+        fetch();
+    }, [node.node_id]);
 
-    const nodeInfo = store; // TODOK nodesLookup[node.node_id];
-
-    return nodeInfo ? (
+    return store.node && store.node.node_id === node.node_id ? (
         <React.Fragment>
             {/* <Typography>
                 {node.name}
             </Typography> */}
 
 
-            {<Info node={nodeInfo.node} />}
+            {<Info node={store.node} />}
             <Typography variant="h6" >
                 {'Counters'}
             </Typography>
-            {<Counters counters={nodeInfo.counters} />}
+            {<Counters counters={store.counters} />}
 
-            <CountersReset node={nodeInfo.node} />
-            <Loglevel node={nodeInfo.node} />
-            <Zone node={nodeInfo.node} />
-            <Shutdown node={nodeInfo.node} />
+            <CountersReset node={store.node} />
+            <Loglevel node={store.node} />
+            <Zone node={store.node} />
+            <Shutdown node={store.node} />
 
         </React.Fragment>
+    ) : store.node ? (
+        <Connect node={node} />
     ) : null;
 };
 

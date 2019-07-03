@@ -7,12 +7,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
 
 const quotaTypes = [
-    'things', 
-    'properties', 
-    'array_size', 
+    'things',
+    'properties',
+    'array_size',
     'raw_size',
 ];
 
@@ -26,14 +26,14 @@ const Quotas = ({collection}) => {
     const [state, setState] = React.useState(initialState);
     const {show, form} = state;
 
-    const setQuotas = React.useCallback(AppActions.setQuota(dispatch, collection.name, form.quotaType, form.quota));
+    const setQuotas = React.useCallback(CollectionsActions.setQuota(dispatch, collection.name, form.quotaType, form.quota));
 
     const _getQuota = (quotaType) => collection[`quota_${quotaType}`]||'';
 
     const handleClickOpen = () => {
         setState({
-            show: true, 
-            errors: {}, 
+            show: true,
+            errors: {},
             form: {
                 quotaType: 'things',
                 quota: _getQuota('things'),

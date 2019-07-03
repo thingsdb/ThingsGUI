@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
 
 const initialState = {
     show: false,
@@ -20,14 +20,14 @@ const Rename = ({collection}) => {
     const {collections} = store;
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
-    
-    const rename = React.useCallback(AppActions.renameCollection(dispatch, collection.name, form.name));
+
+    const rename = React.useCallback(CollectionsActions.renameCollection(dispatch, collection.name, form.name));
 
     const handleClickOpen = () => {
         setState({
             show: true,
             errors: {},
-            form: {...collection}, 
+            form: {...collection},
         });
     };
 
@@ -53,7 +53,7 @@ const Rename = ({collection}) => {
             setState({...state, show: false});
         }
     };
-  
+
     return (
         <React.Fragment>
             <Button variant="contained" onClick={handleClickOpen}>

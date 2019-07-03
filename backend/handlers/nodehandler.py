@@ -19,7 +19,7 @@ class NodeHandler(BaseHandler):
 
     @classmethod
     @BaseHandler.socket_handler
-    async def counters(cls, client, data):
+    async def get_node(cls, client, data):
         q = r'''counters(); node();'''
 
         if data.get('node'):
@@ -29,11 +29,12 @@ class NodeHandler(BaseHandler):
             }
             result = await cls._other_node(client, other_node, q)
         else:
-            result = await client.query(q, target=scope.node, all_=True)
+            counters = await client.counters();
+            node = await client.node();
 
         resp = {
-            'counters': result[0],
-            'node': result[1],
+            'counters': counters,
+            'node': node,
         }
         return cls.socket_response(data=resp)
 

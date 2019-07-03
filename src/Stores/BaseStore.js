@@ -1,10 +1,6 @@
-/* global process */
 import PropTypes from 'prop-types';
 import React, { createContext, useReducer, useContext } from 'react';
 import io from 'socket.io-client';
-import {appInitialState} from './ApplicationStore';
-import {nodesInitialState} from './NodesStore';
-import {collectionInitialState} from './CollectionStore';
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
     reconnection: true,
@@ -72,9 +68,18 @@ export const emit = (event, data) => new _SocketRequest(event, data);
 
 // TODOK
 const initialState = {
-    ...appInitialState,
-    ...nodesInitialState,
-    ...collectionInitialState,
+    loaded: false,
+    connected: false,
+    connErr: '',
+    match: {},
+
+    collections: [],
+    nodes: [],
+    users: [],
+    node: null,
+    counters: null,
+    collection: null,
+    things: {},
 };
 
 export const StoreContext = createContext(initialState);

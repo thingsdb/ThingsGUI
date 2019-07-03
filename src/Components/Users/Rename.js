@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {useStore, UsersActions} from '../../Stores/UsersStore';
 
 
 const initialState = {
@@ -22,7 +22,7 @@ const Rename = ({user}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
-    const rename = React.useCallback(AppActions.renameUser(dispatch, user.name, form.name));
+    const rename = React.useCallback(UsersActions.renameUser(dispatch, user.name, form.name));
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),

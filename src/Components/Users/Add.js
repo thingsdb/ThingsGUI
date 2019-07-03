@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {withStyles} from '@material-ui/core/styles';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {useStore, UsersActions} from '../../Stores/UsersStore';
 
 const styles = theme => ({
     button: {
@@ -28,7 +28,7 @@ const AddUser = ({classes}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
-    const add = React.useCallback(AppActions.addUser(dispatch, form.name, form.password));
+    const add = React.useCallback(UsersActions.addUser(dispatch, form.name, form.password));
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),

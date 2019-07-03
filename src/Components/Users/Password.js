@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {useStore, UsersActions} from '../../Stores/UsersStore';
 
 
 const initialState = {
@@ -21,7 +21,7 @@ const Password = ({user}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
-    const setPassword = React.useCallback(AppActions.password(dispatch, user.name, form.password));
+    const setPassword = React.useCallback(UsersActions.password(dispatch, user.name, form.password));
 
     const validation = {
         password: () => form.password.length>0,

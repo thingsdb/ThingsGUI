@@ -15,19 +15,19 @@ class ReactHandler(BaseHandler):
         }
 
     @staticmethod
-    async def collections(client):
+    async def on_connected(client):
         collections = await client.collections()
         users = await client.users()
         nodes = await client.nodes()
-        node = await client.node()
-        counters = await client.counters()
+        # node = await client.node()
+        # counters = await client.counters()
 
         return {
             'collections': collections,
             'users': users,
             'nodes': nodes,
-            'node': node,
-            'counters': counters,
+            # 'node': node,
+            # 'counters': counters,
         }
 
     @classmethod
@@ -38,7 +38,7 @@ class ReactHandler(BaseHandler):
                 'loaded': True,
                 'connected': True,
             }
-            resp.update(await cls.collections(client))
+            resp.update(await cls.on_connected(client))
         else:
             resp = {
                 'loaded': True,
@@ -47,37 +47,56 @@ class ReactHandler(BaseHandler):
         return cls.socket_response(data=resp)
 
     @classmethod
-    @BaseHandler.socket_handler
-    async def connect(cls, client, data):
+    async def _connect(cls, client, address, user, password):
         try:
-            host, port = data['host'].split(':', 1)
+            host, port = address.split(':', 1)
+            port = int(port)
         except:
-            return cls.socket_response(data={
+            return {
                 'connected': False,
                 'connErr': 'invalid address',
-            })
+            }
 
         try:
-            await client.connect(host, int(port))
+            await client.connect(host, port)
         except OSError as e:
-            return cls.socket_response(data={
+            return {
                 'connected': False,
                 'connErr': 'connection error: {}'.format(str(e)),
-            })
+            }
 
         try:
-            await client.authenticate(data['user'], data['password'])
+            await client.authenticate(user, password)
         except ThingsDBError as e:
-            return cls.socket_response(data={
+            return {
                 'connected': False,
                 'connErr': 'auth error: {}'.format(str(e)),
-            })
+            }
 
         resp = {
             'connected': True,
             'connErr': '',
         }
-        resp.update(await cls.collections(client))
+        resp.update(await cls.on_connected(client))
+        return resp
+
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def connect(cls, client, data):
+        resp = await cls._connect(client, data['host'], data['user'], data['password'])
+        return cls.socket_response(data=resp)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def connect_other(cls, client, data):
+        user = client._username
+        password = client._password
+
+        client.close()
+        await client.wait_closed()
+
+        resp = await cls._connect(client, data['host'], user, password)
         return cls.socket_response(data=resp)
 
     @classmethod

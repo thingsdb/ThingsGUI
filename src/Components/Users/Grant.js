@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {useStore, UsersActions} from '../../Stores/UsersStore';
 
 
 const privileges = [
@@ -30,7 +30,13 @@ const Grant = ({user}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
-    const grant = React.useCallback(AppActions.grant(dispatch, user.name, form.target, form.privileges));
+    const grant = React.useCallback(UsersActions.grant(dispatch, user.name, form.target, form.privileges));
+
+    const targets = [
+        {name: 'ThingsDB', value: ':thingsdb'},
+        {name: 'Node', value: ':node'},
+        ...collections.map((c) => ({name: c.name, value: c.name}))
+    ];
 
     const validation = {
         target: () => form.target.length>0,
@@ -42,8 +48,8 @@ const Grant = ({user}) => {
             show: true,
             errors: {},
             form: {
-                target: user.access.length?user.access[0].target:'', // TODOK
-                privileges: user.access.length?user.access[0].privileges:'',
+                target: user.access.length?user.access[0].target:':thingsdb',
+                privileges: user.access.length?user.access[0].privileges:'READ',
             },
         });
     };
@@ -97,9 +103,8 @@ const Grant = ({user}) => {
                         select
                         SelectProps={{native: true}}
                     >
-                        <option value="" disabled="disabled" />
-                        {collections.map(c => (
-                            <option key={c.collection_id} value={c.name}>
+                        {targets.map(c => (
+                            <option key={c.value} value={c.value}>
                                 {c.name}
                             </option>
                         ))}
@@ -116,7 +121,6 @@ const Grant = ({user}) => {
                         select
                         SelectProps={{native: true}}
                     >
-                        <option value="" disabled="disabled" />
                         {privileges.map(p => (
                             <option key={p} value={p}>
                                 {p.toLowerCase()}

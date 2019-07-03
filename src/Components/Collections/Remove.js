@@ -1,20 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-// import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
 
 
 const Remove = ({collection}) => {
     const [store, dispatch] = useStore(); // eslint-disable-line
     const [show, setShow] = React.useState(false);
 
-    const remove = React.useCallback(AppActions.removeCollection(dispatch, collection.name));
+    const remove = React.useCallback(CollectionsActions.removeCollection(dispatch, collection.name));
 
     const handleClickOpen = () => {
         setShow(true);

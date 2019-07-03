@@ -19,6 +19,10 @@ class SocketRouter:
             handler=ReactHandler.connect)
 
         sio.on(
+            event='/connect/other',
+            handler=ReactHandler.connect_other)
+
+        sio.on(
             event='/disconnect',
             handler=ReactHandler.disconnect)
 
@@ -29,7 +33,7 @@ class SocketRouter:
         sio.on(
             event='/collection/add',
             handler=CollectionHandler.new_collection)
-        
+
         sio.on(
             event='/collection/remove',
             handler=CollectionHandler.del_collection)
@@ -45,7 +49,7 @@ class SocketRouter:
         sio.on(
             event='/user/add',
             handler=UserHandler.new_user)
-        
+
         sio.on(
             event='/user/remove',
             handler=UserHandler.del_user)
@@ -68,16 +72,16 @@ class SocketRouter:
 
         sio.on(
             event='/node/get',
-            handler=NodeHandler.counters)
+            handler=NodeHandler.get_node)
 
         sio.on(
             event='/node/loglevel',
             handler=NodeHandler.set_loglevel)
-        
+
         sio.on(
             event='/node/zone',
             handler=NodeHandler.set_zone)
-        
+
         sio.on(
             event='/node/counters/reset',
             handler=NodeHandler.reset_counters)
@@ -85,4 +89,3 @@ class SocketRouter:
         sio.on(
             event='/node/shutdown',
             handler=NodeHandler.shutdown)
-        
