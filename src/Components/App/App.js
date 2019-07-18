@@ -12,6 +12,9 @@ import Nodes from '../Nodes/Nodes';
 // import User from '../User/User';
 import Users from '../Users/Users';
 import {useStore} from '../../Stores/ApplicationStore';
+import {CollectionsProvider} from '../../Stores/CollectionsStore';
+import {NodesProvider} from '../../Stores/NodesStore';
+import {UsersProvider} from '../../Stores/UsersStore';
 
 
 const styles = theme => ({
@@ -31,11 +34,29 @@ const styles = theme => ({
 
 const pages = {
     // things: <Things />,
-    collection: <Collection />,
-    collections: <Collections />,
-    nodes: <Nodes />,
+    collection: (
+        <CollectionsProvider>
+            <Collection />
+        </CollectionsProvider>
+    ),
+    collections: (
+        <CollectionsProvider>
+            <Collections />
+        </CollectionsProvider>
+    ),
+    nodes: (
+        <NodesProvider>
+            <Nodes />
+        </NodesProvider>
+    ),
     // user: <User />,
-    users: <Users />,
+    users: (
+        <CollectionsProvider>
+            <UsersProvider>
+                <Users />
+            </UsersProvider>
+        </CollectionsProvider>
+    ),
 };
 
 const App = ({classes}) => {

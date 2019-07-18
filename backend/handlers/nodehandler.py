@@ -12,7 +12,7 @@ class NodeHandler(BaseHandler):
         port = other_node['client_port']
         client_ = Client()
         await client_.connect(host, port)
-        await client_.authenticate(client._username, client._password)
+        await client_.authenticate(auth=[client._username, client._password])
         result = await client_.query(q)
         client_.close()
         return result
@@ -20,7 +20,7 @@ class NodeHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def get_node(cls, client, data):
-        q = r'''counters(); node();'''
+        q = r'''counters(); node_info();'''
 
         if data.get('node'):
             other_node = {
@@ -30,13 +30,20 @@ class NodeHandler(BaseHandler):
             result = await cls._other_node(client, other_node, q)
         else:
             counters = await client.counters();
-            node = await client.node();
+            node = await client.node_info();
 
         resp = {
             'counters': counters,
             'node': node,
         }
         return cls.socket_response(data=resp)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def nodes(cls, client, data):
+        q = r'''nodes_info();'''
+        result = await client.query(q, target=scope.node)
+        return cls.socket_response(data=result)
 
     @classmethod
     @BaseHandler.socket_handler
@@ -56,7 +63,7 @@ class NodeHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def set_loglevel(cls, client, data):
-        q = r'''set_loglevel({level}); node();'''.format_map(data)
+        q = r'''set_log_level({level}); node_info();'''.format_map(data)
 
         if data.get('node'):
             result = await cls._other_node(client, data.get('node'), q)
@@ -71,7 +78,7 @@ class NodeHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def set_zone(cls, client, data):
-        q = r'''set_zone({zone}); node();'''.format_map(data)
+        q = r'''set_zone({zone}); node_info();'''.format_map(data)
 
         if data.get('node'):
             result = await cls._other_node(client, data.get('node'), q)
@@ -86,7 +93,7 @@ class NodeHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def shutdown(cls, client, data):
-        q = r'''shutdown(); node();'''
+        q = r'''shutdown(); node_info();'''
 
         if data.get('node'):
             result = await cls._other_node(client, data.get('node'), q)

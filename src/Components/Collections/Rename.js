@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
+import {useCollections, CollectionsActions} from '../../Stores/CollectionsStore';
 
 const initialState = {
     show: false,
@@ -16,7 +16,7 @@ const initialState = {
 };
 
 const Rename = ({collection}) => {
-    const [store, dispatch] = useStore();
+    const [store, dispatch] = useCollections();
     const {collections} = store;
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;

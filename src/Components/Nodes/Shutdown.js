@@ -1,15 +1,20 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import {NodesActions, useStore} from '../../Stores/NodesStore';
+import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {useNodes, NodesActions} from '../../Stores/NodesStore';
 
 
-const CountersReset = ({node}) => {
+const Shutdown = ({node}) => {
     const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
-    const resetCounters = React.useCallback(NodesActions.shutdown(dispatch, node), [dispatch]);
+    const [nodesStore, nodesDispatch] = useNodes(); // eslint-disable-line no-unused-vars
+
+    const disconnect = React.useCallback(AppActions.disconnect(dispatch), [dispatch]);
+    const shutdown = React.useCallback(NodesActions.shutdown(nodesDispatch, node), [dispatch]);
 
     const handleClickOk = () => {
-        resetCounters();
+        shutdown();
+        disconnect();
     };
 
     return (
@@ -21,8 +26,8 @@ const CountersReset = ({node}) => {
     );
 };
 
-CountersReset.propTypes = {
+Shutdown.propTypes = {
     node: PropTypes.object.isRequired,
 };
 
-export default CountersReset;
+export default Shutdown;

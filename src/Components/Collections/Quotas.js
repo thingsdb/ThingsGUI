@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
+import {useCollections, CollectionsActions} from '../../Stores/CollectionsStore';
 
 const quotaTypes = [
     'things',
@@ -22,7 +22,7 @@ const initialState = {
 };
 
 const Quotas = ({collection}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line
+    const [store, dispatch] = useCollections(); // eslint-disable-line
     const [state, setState] = React.useState(initialState);
     const {show, form} = state;
 

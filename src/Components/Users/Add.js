@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {withStyles} from '@material-ui/core/styles';
-import {useStore, UsersActions} from '../../Stores/UsersStore';
+import {useUsers, UsersActions} from '../../Stores/UsersStore';
 
 const styles = theme => ({
     button: {
@@ -23,16 +23,15 @@ const initialState = {
 };
 
 const AddUser = ({classes}) => {
-    const [store, dispatch] = useStore();
+    const [store, dispatch] = useUsers();
     const {users} = store;
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
-    const add = React.useCallback(UsersActions.addUser(dispatch, form.name, form.password));
+    const add = React.useCallback(UsersActions.addUser(dispatch, form.name));
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),
-        password: () => form.password.length>0,
     };
 
     const handleClickOpen = () => {
@@ -41,7 +40,6 @@ const AddUser = ({classes}) => {
             errors: {},
             form: {
                 name: '',
-                password: '',
             },
         });
     };
@@ -94,17 +92,6 @@ const AddUser = ({classes}) => {
                         fullWidth
                         error={errors.name}
                         // helperText={users.some((u) => u.name===form.name)?'already exists':null}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="password"
-                        label="Password"
-                        type="text"
-                        value={form.password}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        error={errors.password}
                     />
                 </DialogContent>
                 <DialogActions>

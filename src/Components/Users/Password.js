@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, UsersActions} from '../../Stores/UsersStore';
+import {useUsers, UsersActions} from '../../Stores/UsersStore';
 
 
 const initialState = {
@@ -17,7 +17,7 @@ const initialState = {
 };
 
 const Password = ({user}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
+    const [store, dispatch] = useUsers(); // eslint-disable-line no-unused-vars
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 

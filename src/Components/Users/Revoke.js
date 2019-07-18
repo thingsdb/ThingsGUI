@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import  {useStore, UsersActions} from '../../Stores/UsersStore';
+import  {useUsers, UsersActions} from '../../Stores/UsersStore';
 
 
 const Revoke = ({user, target, privileges}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
+    const [store, dispatch] = useUsers(); // eslint-disable-line no-unused-vars
 
     const revoke = React.useCallback(UsersActions.revoke(dispatch, user.name, target, privileges));
 

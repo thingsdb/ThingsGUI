@@ -3,7 +3,9 @@ import List from '@material-ui/core/List';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {useStore} from '../../Stores/CollectionStore';
+import {useStore} from '../../Stores/ApplicationStore';
+import {useCollections} from '../../Stores/CollectionsStore';
+
 
 import Thing from './Thing';
 
@@ -16,9 +18,9 @@ const styles = theme => ({
 });
 
 const ThingRoot = ({classes}) => {
-    const [store] = useStore();
-    const {match, things} = store;
-    
+    const [{match}] = useStore();
+    const [{things}] = useCollections();
+
     return (
         <React.Fragment>
             <List

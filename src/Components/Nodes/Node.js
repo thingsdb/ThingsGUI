@@ -7,13 +7,12 @@ import Counters from './Counters';
 import CountersReset from './CountersReset';
 import Loglevel from './Loglevel';
 import Info from './Info';
-import Zone from './Zone';
 import Shutdown from './Shutdown';
-import {NodesActions, useStore} from '../../Stores/NodesStore';
+import {useNodes, NodesActions} from '../../Stores/NodesStore';
 
 
 const Node = ({node}) => {
-    const [store, dispatch] = useStore();
+    const [store, dispatch] = useNodes();
     const fetch = React.useCallback(NodesActions.getNode(dispatch, node.node_id), [dispatch]);
 
     React.useEffect(() => {
@@ -35,7 +34,6 @@ const Node = ({node}) => {
 
             <CountersReset node={store.node} />
             <Loglevel node={store.node} />
-            <Zone node={store.node} />
             <Shutdown node={store.node} />
 
         </React.Fragment>

@@ -7,9 +7,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, UsersActions} from '../../Stores/UsersStore';
+import {useCollections} from '../../Stores/CollectionsStore';
+import {useUsers, UsersActions} from '../../Stores/UsersStore';
 
 
+const defaultTargets = [
+    {name: 'ThingsDB', value: '.thingsdb'},
+    {name: 'Node', value: '.node'},
+];
 const privileges = [
     'READ',
     'MODIFY',
@@ -25,16 +30,15 @@ const initialState = {
 };
 
 const Grant = ({user}) => {
-    const [store, dispatch] = useStore();
-    const {collections} = store;
+    const [{collections}] = useCollections();
+    const [store, dispatch] = useUsers(); // eslint-disable-line no-unused-vars
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
     const grant = React.useCallback(UsersActions.grant(dispatch, user.name, form.target, form.privileges));
 
     const targets = [
-        {name: 'ThingsDB', value: ':thingsdb'},
-        {name: 'Node', value: ':node'},
+        ...defaultTargets,
         ...collections.map((c) => ({name: c.name, value: c.name}))
     ];
 
@@ -48,8 +52,8 @@ const Grant = ({user}) => {
             show: true,
             errors: {},
             form: {
-                target: user.access.length?user.access[0].target:':thingsdb',
-                privileges: user.access.length?user.access[0].privileges:'READ',
+                target: user.access.length?user.access[0].target:'ThingsDB',
+                privileges: user.access.length?user.access[0].privileges:privileges[0],
             },
         });
     };

@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, NodesActions} from '../../Stores/NodesStore';
+import {useNodes, NodesActions} from '../../Stores/NodesStore';
 
 
 const loglevels = [
@@ -24,7 +24,7 @@ const initialState = {
 };
 
 const Loglevel = ({node}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
+    const [store, dispatch] = useNodes(); // eslint-disable-line no-unused-vars
     const [state, setState] = React.useState(initialState);
     const {show, form} = state;
     const setLoglevel = React.useCallback(NodesActions.setLoglevel(dispatch, node, form.log_level));

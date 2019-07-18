@@ -58,6 +58,7 @@ module.exports = {
         "react/jsx-sort-props": [0],
         "react/jsx-uses-vars": [2],
         "react/no-array-index-key": [0],
+        "react/no-multi-comp": [0],
         "react/no-set-state": [0],
         "react/prefer-stateless-function": [0],
         "react/require-optimization": [0],

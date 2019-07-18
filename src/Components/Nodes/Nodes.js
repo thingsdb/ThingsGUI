@@ -3,14 +3,19 @@ import React from 'react';
 
 import Node from './Node';
 import Tabel from '../Util/Table2';
-import {useStore} from '../../Stores/NodesStore';
+import {useStore} from '../../Stores/ApplicationStore';
+import {useNodes, NodesActions} from '../../Stores/NodesStore';
 
 
 const Nodes = () => {
-    const [store] = useStore();
-    const {nodes} = store;
+    const [{match}] = useStore();
+    const [{nodes}, nodesDispatch] = useNodes();
 
-    const rows = nodes;
+    const fetch = React.useCallback(NodesActions.nodes(nodesDispatch), [match]);
+    React.useEffect(() => {
+        fetch();
+    }, [match]);
+
     const header = [{
         ky: 'address',
         label: 'Address',
@@ -25,7 +30,7 @@ const Nodes = () => {
 
     return (
         <React.Fragment>
-            <Tabel header={header} rows={rows} rowExtend={rowExtend} />
+            <Tabel header={header} rows={nodes} rowExtend={rowExtend} />
         </React.Fragment>
     );
 };

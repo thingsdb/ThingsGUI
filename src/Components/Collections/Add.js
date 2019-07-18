@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {withStyles} from '@material-ui/core/styles';
-import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
+import {CollectionsActions, useCollections} from '../../Stores/CollectionsStore';
 
 const styles = theme => ({
     button: {
@@ -23,7 +23,7 @@ const initialState = {
 };
 
 const Add = ({classes}) => {
-    const [store, dispatch] = useStore();
+    const [store, dispatch] = useCollections();
     const {collections, connErr} = store;
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;

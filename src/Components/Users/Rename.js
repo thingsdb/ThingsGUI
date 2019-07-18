@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, UsersActions} from '../../Stores/UsersStore';
+import {useUsers, UsersActions} from '../../Stores/UsersStore';
 
 
 const initialState = {
@@ -17,7 +17,7 @@ const initialState = {
 };
 
 const Rename = ({user}) => {
-    const [store, dispatch] = useStore();
+    const [store, dispatch] = useUsers();
     const {users} = store;
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;

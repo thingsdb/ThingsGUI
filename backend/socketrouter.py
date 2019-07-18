@@ -8,6 +8,7 @@ from .handlers.userhandler import UserHandler
 # (self.router.add_route\()(\n[\s]+)('.*?',)(\n[\s]+)('.*?'),(\n[\s]+)(.*?)\)
 # replace: sio.on(event =$5, handler =$7)
 
+
 class SocketRouter:
     def __init__(self, sio):
         sio.on(
@@ -31,6 +32,10 @@ class SocketRouter:
             handler=ReactHandler.query)
 
         sio.on(
+            event='/collections',
+            handler=CollectionHandler.collections)
+
+        sio.on(
             event='/collection/add',
             handler=CollectionHandler.new_collection)
 
@@ -45,6 +50,10 @@ class SocketRouter:
         sio.on(
             event='/collection/setquota',
             handler=CollectionHandler.set_quota)
+
+        sio.on(
+            event='/users',
+            handler=UserHandler.users)
 
         sio.on(
             event='/user/add',
@@ -69,6 +78,10 @@ class SocketRouter:
         sio.on(
             event='/revoke',
             handler=UserHandler.revoke)
+
+        sio.on(
+            event='/nodes',
+            handler=NodeHandler.nodes)
 
         sio.on(
             event='/node/get',

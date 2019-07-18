@@ -11,7 +11,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {useStore, CollectionActions} from '../../Stores/CollectionStore';
+import {useStore} from '../../Stores/ApplicationStore';
+import {useCollections, CollectionsActions} from '../../Stores/CollectionsStore';
 
 const styles = theme => ({
     nested: {
@@ -20,11 +21,11 @@ const styles = theme => ({
 });
 
 const Thing = ({classes, name, thing}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
-    const {match, things} = store;
+    const [{match}] = useStore();
+    const [{things}, dispatch] = useCollections();
     const [show, setShow] = React.useState(false);
 
-    const queryThing = React.useCallback(CollectionActions.queryThing(dispatch, match.collection, thing));
+    const queryThing = React.useCallback(CollectionsActions.queryThing(dispatch, match.collection, thing));
 
     const renderThing = ([k, v]) => {
         return k === '#' ? null : (

@@ -6,11 +6,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
+import {useCollections, CollectionsActions} from '../../Stores/CollectionsStore';
 
 
 const Remove = ({collection}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line
+    const [store, dispatch] = useCollections(); // eslint-disable-line
     const [show, setShow] = React.useState(false);
 
     const remove = React.useCallback(CollectionsActions.removeCollection(dispatch, collection.name));
