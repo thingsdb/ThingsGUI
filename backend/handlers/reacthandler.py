@@ -16,18 +16,14 @@ class ReactHandler(BaseHandler):
 
     @staticmethod
     async def on_connected(client):
-        collections = await client.collections()
-        users = await client.users()
-        nodes = await client.nodes()
-        # node = await client.node()
-        # counters = await client.counters()
+        collections = await client.collections_info()
+        users = await client.users_info()
+        nodes = await client.nodes_info()
 
         return {
             'collections': collections,
             'users': users,
             'nodes': nodes,
-            # 'node': node,
-            # 'counters': counters,
         }
 
     @classmethod
@@ -66,7 +62,7 @@ class ReactHandler(BaseHandler):
             }
 
         try:
-            await client.authenticate(user, password)
+            await client.authenticate(auth=[user, password])
         except ThingsDBError as e:
             return {
                 'connected': False,
