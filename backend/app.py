@@ -1,17 +1,17 @@
 import os
+import anja
 import signal
 import functools
 import logging
+import socketio
 from configparser import ConfigParser
 from aiohttp import web
 from aiohttp.web import Application
-from .message import Message
 from .handlers.base import BaseHandler
 from .router import Router
 from .handlers import setup_templates
 from .version import __version__
 from .socketrouter import SocketRouter
-import socketio
 
 
 class App(Router, Application):

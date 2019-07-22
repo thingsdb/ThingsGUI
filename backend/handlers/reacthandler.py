@@ -1,6 +1,4 @@
-from thingsdb.client import Client
 from thingsdb.exceptions import ThingsDBError
-from thingsdb import scope
 from trender.aiohttp_template import template
 from .base import BaseHandler
 from ..version import __version__
@@ -16,9 +14,9 @@ class ReactHandler(BaseHandler):
 
     @staticmethod
     async def on_connected(client):
-        collections = await client.collections()
-        users = await client.users()
-        nodes = await client.nodes()
+        collections = await client.collections_info()
+        users = await client.users_info()
+        nodes = await client.nodes_info()
         # node = await client.node()
         # counters = await client.counters()
 
@@ -66,8 +64,10 @@ class ReactHandler(BaseHandler):
             }
 
         try:
-            await client.authenticate(user, password)
+            print(user, password, '\n')
+            await client.authenticate([user, password])
         except ThingsDBError as e:
+            print('authentication error \n')
             return {
                 'connected': False,
                 'connErr': 'auth error: {}'.format(str(e)),
@@ -79,7 +79,6 @@ class ReactHandler(BaseHandler):
         }
         resp.update(await cls.on_connected(client))
         return resp
-
 
     @classmethod
     @BaseHandler.socket_handler

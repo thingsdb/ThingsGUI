@@ -25,12 +25,12 @@ class NodeHandler(BaseHandler):
         if data.get('node'):
             other_node = {
                 'hostname': data['node']['address'],
-                'client_port': data['node']['port']-20, #TODOK
+                'client_port': data['node']['port']-20,  # TODOK
             }
             result = await cls._other_node(client, other_node, q)
         else:
-            counters = await client.counters();
-            node = await client.node();
+            counters = await client.counters()
+            node = await client.node_info()
 
         resp = {
             'counters': counters,
