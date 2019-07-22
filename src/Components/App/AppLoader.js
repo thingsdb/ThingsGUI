@@ -1,14 +1,17 @@
 import React from 'react';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {withVlow} from 'vlow';
+import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 
-const AppLoader = () => {
-    const [store, dispatch] = useStore();
-    const {loaded} = store;
 
-    const fetch = React.useCallback(AppActions.connected(dispatch), [dispatch]);
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['loaded'],
+}]);
+
+const AppLoader = ({loaded}) => {
 
     React.useEffect(() => {
-        fetch();
+        ApplicationActions.connected();
     }, [loaded]);
 
     return (
@@ -18,4 +21,8 @@ const AppLoader = () => {
     );
 };
 
-export default AppLoader;
+AppLoader.propTypes = {
+    loaded: ApplicationStore.types.loaded.isRequired,
+};
+
+export default withStores(AppLoader);

@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -10,7 +10,16 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {withVlow} from 'vlow';
+import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+
+
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['loaded', 'connected', 'connErr']
+}]);
+
+
 
 const initialState = {
     showPassword: false,
@@ -28,13 +37,9 @@ const validation = {
     password: (o) => o.password.length>0,
 };
 
-const Login = () => {
-    const [store, dispatch] = useStore();
-    const {loaded, connected, connErr} = store;
+const Login = ({loaded, connected, connErr}) => {
     const [state, setState] = useState(initialState);
     const {showPassword, errors, form} = state;
-
-    const connect = useCallback(AppActions.connect(dispatch, form));
 
     const handleOnChange = (e) => {
         form[e.target.id] = e.target.value;
@@ -46,7 +51,7 @@ const Login = () => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            connect();
+            ApplicationActions.connect(form);
         }
     };
 
@@ -120,4 +125,10 @@ const Login = () => {
     );
 };
 
-export default Login;
+Login.propTypes = {
+    loaded: ApplicationStore.types.loaded.isRequired,
+    connected: ApplicationStore.types.connected.isRequired,
+    connErr: ApplicationStore.types.connErr.isRequired,
+};
+
+export default withStores(Login);

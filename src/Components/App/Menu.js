@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Divider from '@material-ui/core/Divider';
@@ -8,27 +8,23 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 // import ListSubheader from '@material-ui/core/ListSubheader';
 import PeopleIcon from '@material-ui/icons/People';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {ApplicationActions} from '../../Stores/ApplicationStore';
 
 const Menu = () => {
-    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
-    
-    const disconnect = useCallback(AppActions.disconnect(dispatch), [dispatch]);
-
     const handleClickLogout = () => {
-        disconnect();
+        ApplicationActions.disconnect();
     };
 
     const handleClickCollections = () => {
-        dispatch(() => ({match: {path: 'collections'}}));
+        ApplicationActions.navigate({path: 'collections'});
     };
 
     const handleClickNodes = () => {
-        dispatch(() => ({match: {path: 'nodes'}}));
+        ApplicationActions.navigate({path: 'nodes'});
     };
 
     const handleClickUsers = () => {
-        dispatch(() => ({match: {path: 'users'}}));
+        ApplicationActions.navigate({path: 'users'});
     };
 
     return (
