@@ -55,7 +55,6 @@ class App(Router, Application):
         BaseHandler.setup_base(self.config, self.sio, self.clients)
 
         if self.debug_mode:
-            logger = logging.getLogger('peewee')
             logger.setLevel(logging.DEBUG)
 
         setup_templates()

@@ -17,15 +17,11 @@ class ReactHandler(BaseHandler):
         collections = await client.collections_info()
         users = await client.users_info()
         nodes = await client.nodes_info()
-        # node = await client.node()
-        # counters = await client.counters()
 
         return {
             'collections': collections,
             'users': users,
             'nodes': nodes,
-            # 'node': node,
-            # 'counters': counters,
         }
 
     @classmethod
@@ -64,8 +60,7 @@ class ReactHandler(BaseHandler):
             }
 
         try:
-            print(user, password, '\n')
-            await client.authenticate([user, password])
+            await client.authenticate(auth=[user, password])
         except ThingsDBError as e:
             print('authentication error \n')
             return {
