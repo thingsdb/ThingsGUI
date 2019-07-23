@@ -1,7 +1,23 @@
+import datetime
 from .base import BaseHandler
 
 
 class UserHandler(BaseHandler):
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def get_users(cls, client, data):
+        resp = await client.users_info()
+        return cls.socket_response(data=resp)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def get_user(cls, client, data):
+        if data.get('name'):
+            resp = await client.user_info(data.get('name'))
+        else:
+            resp = await client.user_info()
+        return cls.socket_response(data=resp)
 
     @classmethod
     @BaseHandler.socket_handler
@@ -22,7 +38,7 @@ class UserHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def rename_user(cls, client, data):
-        q = r'''rename_user('{user}', '{name}');
+        q = r'''rename_user('{oldname}', '{newname}');
             users_info();'''.format_map(data)
         result = await client.query(q)
         return cls.socket_response(data=result)
@@ -30,7 +46,7 @@ class UserHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def set_password(cls, client, data):
-        q = r'''set_password('{user}', '{password}');
+        q = r'''set_password('{name}', '{password}');
             users_info();'''.format_map(data)
         result = await client.query(q)
         return cls.socket_response(data=result)
@@ -38,7 +54,7 @@ class UserHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def grant(cls, client, data):
-        q = r'''grant('{collection}', '{user}', ({access}));
+        q = r'''grant('{collection}', '{name}', ({access}));
             users_info();'''.format_map(
             data)
         result = await client.query(q)
@@ -47,7 +63,44 @@ class UserHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def revoke(cls, client, data):
-        q = r'''revoke('{collection}', '{user}', ({access}));
+        q = r'''revoke('{collection}', '{name}', ({access}));
+            users_info();'''.format_map(data)
+        result = await client.query(q)
+        return cls.socket_response(data=result)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def new_token(cls, client, data):
+        name = data.get['name']
+
+        if data.get('endtime'):
+            expiration_time = int(datetime.datetime.timestamp(
+                data.get('endtime')))
+        else:
+            expiration_time = 'nil'
+
+        if data.get('description'):
+            description = data.get('description')
+        else:
+            description = ''
+
+        q = r'''new_token('{}', {}, '{}');
+            users_info();'''.format(name, expiration_time, description)
+        result = await client.query(q)
+        return cls.socket_response(data=result)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def del_token(cls, client, data):
+        q = r'''del_token('{key}');
+            users_info();'''.format_map(data)
+        result = await client.query(q)
+        return cls.socket_response(data=result)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def del_expired(cls, client, data):
+        q = r'''del_exired();
             users_info();'''.format_map(data)
         result = await client.query(q)
         return cls.socket_response(data=result)

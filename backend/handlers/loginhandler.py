@@ -4,7 +4,7 @@ from .base import BaseHandler
 from ..version import __version__
 
 
-class ReactHandler(BaseHandler):
+class LoginHandler(BaseHandler):
     @classmethod
     @template('app.html')
     async def index(cls, request):
@@ -16,12 +16,16 @@ class ReactHandler(BaseHandler):
     async def on_connected(client):
         collections = await client.collections_info()
         users = await client.users_info()
+        user = await client.user_info()
         nodes = await client.nodes_info()
+        node = await client.node_info()
 
         return {
             'collections': collections,
             'users': users,
+            'user': user,
             'nodes': nodes,
+            'node': node,
         }
 
     @classmethod
@@ -103,18 +107,4 @@ class ReactHandler(BaseHandler):
             'connected': False,
             'connErr': '',
         }
-        return cls.socket_response(data=resp)
-
-    @classmethod
-    @BaseHandler.socket_handler
-    async def query(cls, client, data):
-        collection_id = data.get('collectionId')
-        thing_id = data.get('thingId')
-
-        if thing_id:
-            q = r'''t({});'''.format(thing_id)
-        else:
-            q = r'''t(id());'''
-        resp = await client.query(q, target=collection_id)
-
         return cls.socket_response(data=resp)

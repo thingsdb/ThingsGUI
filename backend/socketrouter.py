@@ -1,6 +1,7 @@
 from .handlers.collectionhandler import CollectionHandler
+from .handlers.thingsdbhandler import ThingsDBHandler
 from .handlers.nodehandler import NodeHandler
-from .handlers.reacthandler import ReactHandler
+from .handlers.loginhandler import LoginHandler
 from .handlers.userhandler import UserHandler
 
 # regex
@@ -8,43 +9,60 @@ from .handlers.userhandler import UserHandler
 # (self.router.add_route\()(\n[\s]+)('.*?',)(\n[\s]+)('.*?'),(\n[\s]+)(.*?)\)
 # replace: sio.on(event =$5, handler =$7)
 
+
 class SocketRouter:
     def __init__(self, sio):
         sio.on(
             event='/connected',
-            handler=ReactHandler.connected)
+            handler=LoginHandler.connected)
 
         sio.on(
             event='/connect',
-            handler=ReactHandler.connect)
+            handler=LoginHandler.connect)
 
         sio.on(
             event='/connect/other',
-            handler=ReactHandler.connect_other)
+            handler=LoginHandler.connect_other)
 
         sio.on(
             event='/disconnect',
-            handler=ReactHandler.disconnect)
+            handler=LoginHandler.disconnect)
 
         sio.on(
             event='/collection/query',
-            handler=ReactHandler.query)
+            handler=CollectionHandler.query)
+
+        sio.on(
+            event='/collection/getcollections',
+            handler=ThingsDBHandler.get_collections)
+
+        sio.on(
+            event='/collection/get',
+            handler=ThingsDBHandler.get_collection)
 
         sio.on(
             event='/collection/add',
-            handler=CollectionHandler.new_collection)
+            handler=ThingsDBHandler.new_collection)
 
         sio.on(
             event='/collection/remove',
-            handler=CollectionHandler.del_collection)
+            handler=ThingsDBHandler.del_collection)
 
         sio.on(
             event='/collection/rename',
-            handler=CollectionHandler.rename_collection)
+            handler=ThingsDBHandler.rename_collection)
 
         sio.on(
             event='/collection/setquota',
-            handler=CollectionHandler.set_quota)
+            handler=ThingsDBHandler.set_quota)
+
+        sio.on(
+            event='/user/getusers',
+            handler=UserHandler.get_users)
+
+        sio.on(
+            event='/user/get',
+            handler=UserHandler.get_user)
 
         sio.on(
             event='/user/add',
@@ -60,15 +78,31 @@ class SocketRouter:
 
         sio.on(
             event='/user/password',
-            handler=UserHandler.set_password)
+            handler=UserHandler.set_password)     
 
         sio.on(
-            event='/grant',
+            event='user/grant',
             handler=UserHandler.grant)
 
         sio.on(
-            event='/revoke',
+            event='user/revoke',
             handler=UserHandler.revoke)
+
+        sio.on(
+            event='/user/newtoken',
+            handler=UserHandler.new_token)
+
+        sio.on(
+            event='/user/deltoken',
+            handler=UserHandler.del_token)
+        
+        sio.on(
+            event='/user/delexpired',
+            handler=UserHandler.del_expired)
+        
+        sio.on(
+            event='/node/getnodes',
+            handler=NodeHandler.get_nodes)
 
         sio.on(
             event='/node/get',
@@ -89,3 +123,15 @@ class SocketRouter:
         sio.on(
             event='/node/shutdown',
             handler=NodeHandler.shutdown)
+
+        sio.on(
+            event='/node/add',
+            handler=NodeHandler.new_node)
+
+        sio.on(
+            event='/node/pop',
+            handler=NodeHandler.pop_node)
+
+        sio.on(
+            event='/node/replace',
+            handler=NodeHandler.replace_node)

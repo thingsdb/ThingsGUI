@@ -1,6 +1,6 @@
 import logging
 from os.path import exists, abspath
-from .handlers.reacthandler import ReactHandler
+from .handlers.loginhandler import LoginHandler
 
 
 def _static_factory(route, path):
@@ -30,5 +30,5 @@ class Router:
         self.router.add_route(
             'GET',
             '/',
-            ReactHandler.index)
+            LoginHandler.index)
             

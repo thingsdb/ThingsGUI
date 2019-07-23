@@ -1,58 +1,149 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
-import {emit, useStore} from './BaseStore';
+import PropTypes from 'prop-types';
+import Vlow from 'vlow';
+import BaseStore from './BaseStore';
 
+const UsersActions = Vlow.createActions([
+    'getUsers',
+    'getUser',
+    'addUser',
+    'removeUser',
+    'renameUser',
+    'password',
+    'grant',
+    'revoke',
+    'newToken',
+    'delToken',
+    'delExpired',
+]);
 
-const UsersActions = {
-    addUser: (dispatch, name, password) => () => {
-        emit('/user/add', {
-            name,
-            password,
-        }).done((data) => dispatch((state) => {
-            return {users: data};
-        }));
-    },
-    removeUser: (dispatch, user) => () => {
-        emit('/user/remove', {
-            name
-        }).done((data) => dispatch((state) => {
-            return {users: data};
-        }));
-    },
-    renameUser: (dispatch, user, name) => () => {
-        emit('/user/rename', {
-            user,
-            name,
-        }).done((data) => dispatch((state) => {
-            return {users: data};
-        }));
-    },
-    password: (dispatch, user, password) => () => {
-        emit('/user/password', {
-            user,
-            password,
-        }).done((data) => dispatch((state) => {
-            return {users: data};
-        }));
-    },
-    grant: (dispatch, user, collection, access) => () => {
-        emit('/grant', {
-            collection,
-            user,
-            access,
-        }).done((data) => dispatch((state) => {
-            return {users: data};
-        }));
-    },
-    revoke: (dispatch, user, collection, access) => () => {
-        emit('/revoke', {
-            collection,
-            user,
-            access,
-        }).done((data) => dispatch((state) => {
-            return {users: data};
-        }));
+class UsersStore extends BaseStore {
+
+    static types = {
+        users: PropTypes.arrayOf(PropTypes.object),
+        user: PropTypes.object,
     }
-};
 
-export {UsersActions, useStore};
+    static defaults = {
+        users: [],
+        user: {},
+    }
+
+    constructor() {
+        super(UsersActions);
+        this.state = UsersStore.defaults;
+    }
+
+    onGetUsers(){
+        this.emit('/user/getusers').done((data) => {
+            this.setState({
+                users: data
+            });
+        });
+    }
+
+    onGetUser({name}){
+        this.emit('/user/get', {
+            name,
+        }).done((data) => {
+            this.setState({
+                user: data
+            });
+        });
+    }
+
+    onAddUser({name, password}){
+        this.emit('/user/add', {
+            name,
+            password,
+        }).done((data) => {
+            this.setState({
+                users: data
+            });
+        });
+    }
+
+    onRemoveUser({name}) {
+        this.emit('/user/remove', {
+            name
+        }).done((data) => {
+            this.setState({
+                users: data
+            });
+        });
+    }
+
+
+    onRenameUser({oldname, newname}) {
+        this.emit('/user/rename', {
+            oldname,
+            newname,
+        }).done((data) => {
+            this.setState({
+                users: data
+            });
+        });
+    }
+
+    onPassword({name, password}) {
+        emit('/user/password', {
+            name,
+            password,
+        }).done((data) => {
+            this.setState({
+                users: data
+            });
+        });
+    }
+
+    onGrant({name, collection, access}) {
+        emit('/user/grant', {
+            collection,
+            name,
+            access,
+        }).done((data) => {
+            this.setState({
+                users: data
+            });
+        });
+    }
+
+    onRevoke({name, collection, access}) {
+        emit('/user/revoke', {
+            collection,
+            name,
+            access,
+        }).done((data) => {
+            this.setState({
+                users: data
+            });
+        });
+    }
+
+    onNewToken(config){ // name [, endtime] [, description]
+        emit('/user/newtoken', config).done((data) => {
+            this.setState({
+                users: data
+            });
+        });
+    }
+
+    onDelToken({key}){
+        emit('/user/deltoken', {
+            key,
+        }).done((data) => {
+            this.setState({
+                users: data
+            });
+        });
+    }
+
+    onDelExpired(){
+        emit('/user/delexpired').done((data) => {
+            this.setState({
+                users: data
+            });
+        });
+    }
+}
+
+export {UsersActions, UsersStore};

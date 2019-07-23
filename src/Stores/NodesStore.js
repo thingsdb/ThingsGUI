@@ -1,9 +1,35 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
-import {emit, useStore} from './BaseStore';
+import PropTypes from 'prop-types';
+import Vlow from 'vlow';
+import BaseStore from './BaseStore';
+
+const NodesActions = Vlow.createActions([
+    'getNode',
+    'setLoglevel',
+    'setZone',
+    'resetCounters',
+    'shutdown',
+]);
+
+class NodesStore extends BaseStore {
+
+    static types = {
+        counters:
+        nodes: PropTypes.arrayOf(PropTypes.object),
+        node: PropTypes.object,
+    }
+
+    static defaults = {
+        counters: 
+        nodes: [],
+        node: {},
+    }
+
+    constructor() {
+        super(NodesActions);
+        this.state = NodesStore.defaults;
+    }
 
 
-const NodesActions = {
 
     getNode: (dispatch, node) => () => {
         emit('/node/get', {

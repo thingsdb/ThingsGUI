@@ -5,33 +5,14 @@ class CollectionHandler(BaseHandler):
 
     @classmethod
     @BaseHandler.socket_handler
-    async def new_collection(cls, client, data):
-        q = r'''new_collection('{name}');
-            collections_info();'''.format_map(data)
-        result = await client.query(q)
-        return cls.socket_response(data=result)
+    async def query(cls, client, data):
+        collection_id = data.get('collectionId')
+        thing_id = data.get('thingId')
 
-    @classmethod
-    @BaseHandler.socket_handler
-    async def del_collection(cls, client, data):
-        q = r'''del_collection('{collection}');
-            collections_info();'''.format_map(data)
-        result = await client.query(q)
-        return cls.socket_response(data=result)
+        if thing_id:
+            q = r'''t({});'''.format(thing_id)
+        else:
+            q = r'''t(id());'''
+        resp = await client.query(q, target=collection_id)
 
-    @classmethod
-    @BaseHandler.socket_handler
-    async def rename_collection(cls, client, data):
-        q = r'''rename_collection('{collection}', '{name}');
-            collections_info();'''.format_map(data)
-        result = await client.query(q)
-        return cls.socket_response(data=result)
-
-    @classmethod
-    @BaseHandler.socket_handler
-    async def set_quota(cls, client, data):
-        q = r'''set_quota('{collection}', '{quotaType}', {quota});
-            collections_info();'''.format_map(data)
-        result = await client.query(q)
-        return cls.socket_response(data=result)
-        
+        return cls.socket_response(data=resp)

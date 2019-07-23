@@ -18,7 +18,9 @@ class ApplicationStore extends BaseStore {
         match: PropTypes.shape({match: PropTypes.string}),
         collections: PropTypes.arrayOf(PropTypes.object),
         nodes: PropTypes.arrayOf(PropTypes.object),
+        node: PropTypes.object,
         users: PropTypes.arrayOf(PropTypes.object),
+        user: PropTypes.object,
     }
 
     static defaults = {
@@ -26,9 +28,6 @@ class ApplicationStore extends BaseStore {
         connected: false,
         connErr: '',
         match: {},
-        collections: [],
-        nodes: [],
-        users: [],
     }
 
     constructor() {
@@ -50,9 +49,6 @@ class ApplicationStore extends BaseStore {
             this.setState({
                 connErr: data.connErr,
                 connected: data.connected,
-                collections: data.collections,
-                nodes: data.nodes,
-                users: data.users,
             });
         });
     }
@@ -63,9 +59,6 @@ class ApplicationStore extends BaseStore {
                 connected: false,
                 connErr: '',
                 match: {},
-                collections: [],
-                nodes: [],
-                users: [],
             });
         });
     }

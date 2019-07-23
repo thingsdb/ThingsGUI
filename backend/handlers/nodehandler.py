@@ -19,6 +19,12 @@ class NodeHandler(BaseHandler):
 
     @classmethod
     @BaseHandler.socket_handler
+    async def get_nodes(cls, client, data):
+        resp = await client.nodes_info()
+        return cls.socket_response(data=resp)
+
+    @classmethod
+    @BaseHandler.socket_handler
     async def get_node(cls, client, data):
         q = r'''[counters(), node_info()]'''
 
@@ -93,3 +99,35 @@ class NodeHandler(BaseHandler):
             'node': result,
         }
         return cls.socket_response(data=resp)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def new_node(cls, client, data):  # TODOS check ipadress?
+        if data.get('port'):
+            q = r'''new_node('{secret}', '{ip_adress}', {port});
+                nodes_info();'''.format_map(data)
+        else:
+            q = r'''new_node('{secret}', '{ip_adress}');
+                nodes_info();'''.format_map(data)
+        result = await client.query(q)
+        return cls.socket_response(data=result)
+    
+    @classmethod
+    @BaseHandler.socket_handler
+    async def pop_node(cls, client, data):  # TODOS check query
+        q = r'''pop_node();
+            nodes_info();'''.format_map(data)
+        result = await client.query(q)
+        return cls.socket_response(data=result)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def replace_node(cls, client, data):  # TODOS check ipadress?
+        if data.get('port'):
+            q = r'''replace_node({node_id}, '{secret}', {port});
+                nodes_info();'''.format_map(data)
+        else:
+            q = r'''replace_node({node_id}, '{secret}');
+                nodes_info();'''.format_map(data)
+        result = await client.query(q)
+        return cls.socket_response(data=result)
