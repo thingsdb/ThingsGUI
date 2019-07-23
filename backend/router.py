@@ -31,3 +31,4 @@ class Router:
             'GET',
             '/',
             ReactHandler.index)
+            

@@ -1,5 +1,4 @@
 import os
-import anja
 import signal
 import functools
 import logging
