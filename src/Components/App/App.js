@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
 
 import Loader from './AppLoader';
 import Login from './Login';
@@ -11,7 +12,13 @@ import Nodes from '../Nodes/Nodes';
 // import Things from '../Collection/Things';
 // import User from '../User/User';
 import Users from '../Users/Users';
-import {useStore} from '../../Stores/ApplicationStore';
+import {ApplicationStore} from '../../Stores/ApplicationStore';
+
+
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['loaded', 'connected', 'match']
+}]);
 
 
 const styles = theme => ({
@@ -38,9 +45,7 @@ const pages = {
     users: <Users />,
 };
 
-const App = ({classes}) => {
-    const [store] = useStore();
-    const {loaded, connected, match} = store;
+const App = ({classes, loaded, connected, match}) => {
 
     return loaded ? connected ? (
         <div className={classes.root}>
@@ -56,6 +61,9 @@ const App = ({classes}) => {
 
 App.propTypes = {
     classes: PropTypes.object.isRequired,
+    loaded: ApplicationStore.types.loaded.isRequired,
+    connected: ApplicationStore.types.connected.isRequired,
+    match: ApplicationStore.types.match.isRequired,
 };
 
-export default withStyles(styles)(App);
+export default withStores(withStyles(styles)(App));
