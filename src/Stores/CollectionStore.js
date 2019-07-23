@@ -1,39 +1,60 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
-import {emit, useStore} from './BaseStore';
+import PropTypes from 'prop-types';
+import Vlow from 'vlow';
+import BaseStore from './BaseStore';
 
-const collectionInitialState = {
-    things: {},
-};
+const CollectionActions = Vlow.createActions([
+    'query',
+    'queryThing',
+]);
 
-const CollectionActions = {
+class CollectionStore extends BaseStore {
 
-    query: (dispatch, collection) => () => {
-        emit('/collection/query', {
+    static types = {
+        collectionId: PropTypes.string, 
+        collectionName: PropTypes.string,
+        things: PropTypes.object,
+    }
+
+    static defaults = {
+        collectionId: '', 
+        collectionName: '',
+        things: {},
+    }
+
+    constructor() {
+        super(CollectionActions);
+        this.state = CollectionStore.defaults;
+    }
+
+    onQuery(collection) {
+        this.emit('/collection/query', {
             collectionId: collection.collection_id,
-        }).done((data) => dispatch((state) => {
-            window.console.log(data, collection);
-            const {things} = state;
-            things[collection.collection_id] = data;
-            return {
-                collectionId: collection.collection_id,
-                collectionName: collection.name,
-                things,
-            };
-        }));
-    },
-    queryThing: (dispatch, collection, thing) => () => {
-        emit('/collection/query', {
+        }).done((data) => {
+            this.setState(prevState => {
+                window.console.log(data, collection);
+                const things = Object.assign({}, prevState.things, {[collection.collection_id]: data});
+                return {
+                    collectionId: collection.collection_id,
+                    collectionName: collection.name,
+                    things,
+                };
+            });
+        });
+    }
+
+    onQueryThing(collection, thing) {
+        this.emit('/collection/query', {
             collectionId: collection.collection_id,
             thingId: thing['#'],
-        }).done((data) => dispatch((state) => {
-            window.console.log(data);
-            const {things} = state;
-            things[thing['#']] = data;
-            return {things};
-        }));
-    },
+        }).done((data) => {
+            this.setState(prevState => {
+                window.console.log(data);
+                const things = Object.assign({}, prevState.things, {[thing['#']]: data});
+                return {things};
+            });
+        });
+    }
 
-};
+}
 
-export {CollectionActions, collectionInitialState, useStore};
+export {CollectionActions, CollectionStore};

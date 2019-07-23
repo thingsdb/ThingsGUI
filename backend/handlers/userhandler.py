@@ -104,4 +104,3 @@ class UserHandler(BaseHandler):
             users_info();'''.format_map(data)
         result = await client.query(q)
         return cls.socket_response(data=result)
-        

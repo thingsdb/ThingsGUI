@@ -110,7 +110,11 @@ class NodeHandler(BaseHandler):
             q = r'''new_node('{secret}', '{ip_adress}');
                 nodes_info();'''.format_map(data)
         result = await client.query(q)
-        return cls.socket_response(data=result)
+        
+        resp = {
+            'nodes': result,
+        }
+        return cls.socket_response(data=resp)
     
     @classmethod
     @BaseHandler.socket_handler
@@ -118,7 +122,11 @@ class NodeHandler(BaseHandler):
         q = r'''pop_node();
             nodes_info();'''.format_map(data)
         result = await client.query(q)
-        return cls.socket_response(data=result)
+
+        resp = {
+            'nodes': result,
+        }
+        return cls.socket_response(data=resp)
 
     @classmethod
     @BaseHandler.socket_handler
@@ -130,4 +138,8 @@ class NodeHandler(BaseHandler):
             q = r'''replace_node({node_id}, '{secret}');
                 nodes_info();'''.format_map(data)
         result = await client.query(q)
-        return cls.socket_response(data=result)
+
+        resp = {
+            'nodes': result,
+        }
+        return cls.socket_response(data=resp)

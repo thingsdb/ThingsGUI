@@ -3,23 +3,27 @@ import Vlow from 'vlow';
 import BaseStore from './BaseStore';
 
 const NodesActions = Vlow.createActions([
+    'getNodes',
     'getNode',
     'setLoglevel',
     'setZone',
     'resetCounters',
     'shutdown',
+    'addNode',
+    'popNode',
+    'replaceNode',
 ]);
 
 class NodesStore extends BaseStore {
 
     static types = {
-        counters:
+        counters: PropTypes.object,
         nodes: PropTypes.arrayOf(PropTypes.object),
         node: PropTypes.object,
     }
 
     static defaults = {
-        counters: 
+        counters: {}, 
         nodes: [],
         node: {},
     }
@@ -29,46 +33,75 @@ class NodesStore extends BaseStore {
         this.state = NodesStore.defaults;
     }
 
+    onGetNodes(){
+        this.emit('/user/getnodes').done((data) => {
+            this.setState({
+                nodes: data.nodes
+            });
+        });
+    }
 
-
-    getNode: (dispatch, node) => () => {
-        emit('/node/get', {
+    onGetNode(node) {
+        this.emit('/node/get', {
             node,
-        }).done((data) => dispatch((state) => {
-            return data;
-        }));
-    },
-    setLoglevel: (dispatch, node, level) => () => {
-        emit('/node/loglevel', {
+        }).done((data) => {
+            this.setState({
+                node: data.node
+            });
+        });
+    }
+
+    onSetLoglevel(node, level) {
+        this.emit('/node/loglevel', {
             node: node.node_id,
             level,
-        }).done((data) => dispatch((state) => {
-            return data;
-        }));
-    },
-    setZone: (dispatch, node, zone) => () => {
-        emit('/node/zone', {
+        }).done((data) => {
+            this.setState({
+                node: data.node
+            });
+        });
+    }
+
+    setZone(node, zone) {
+        this.emit('/node/zone', {
             node: node.node_id,
             zone,
-        }).done((data) => dispatch((state) => {
-            return data;
-        }));
-    },
-    resetCounters: (dispatch, node) => () => {
+        }).done((data) => {
+            this.setState({
+                node: data.node
+            });
+        });
+    }
+
+    resetCounters(node) {
         emit('/node/counters/reset', {
             node: node.node_id,
-        }).done((data) => dispatch((state) => {
-            return data;
-        }));
-    },
-    shutdown: (dispatch, node) => () => {
+        }).done((data) => {
+            this.setState({
+                node: data.counters
+            });
+        });
+    }
+
+    shutdown(node) {
         emit('/node/shutdown', {
             node: node.node_id,
-        }).done((data) => dispatch((state) => {
-            //TODOK
-        }));
-    },
+        }).done((data) => {
+            this.setState({
+                node: data.node
+            });
+        });
+    }
 
+
+
+
+
+
+
+
+
+    
 };
 
-export {NodesActions, useStore};
+export {NodesActions, NodesStore};

@@ -15,10 +15,12 @@ class CollectionsStore extends BaseStore {
 
     static types = {
         collections: PropTypes.arrayOf(PropTypes.object),
+        collection: PropTypes.object,
     }
 
     static defaults = {
         collections: [],
+        collection: {},
     }
 
     constructor() {
