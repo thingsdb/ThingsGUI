@@ -16,6 +16,7 @@ const UsersActions = Vlow.createActions([
     'delExpired',
 ]);
 
+// TODO: CALLBACKS
 class UsersStore extends BaseStore {
 
     static types = {
@@ -33,25 +34,25 @@ class UsersStore extends BaseStore {
         this.state = UsersStore.defaults;
     }
 
-    onGetUsers(){
+    onGetUsers(onError){
         this.emit('/user/getusers').done((data) => {
             this.setState({
                 users: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onGetUser({name}){
+    onGetUser(name, onError){
         this.emit('/user/get', {
             name,
         }).done((data) => {
             this.setState({
                 user: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onAddUser({name, password}){
+    onAddUser(name, password, onError){
         this.emit('/user/add', {
             name,
             password,
@@ -59,21 +60,21 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onRemoveUser({name}) {
+    onRemoveUser(name, onError) {
         this.emit('/user/remove', {
             name
         }).done((data) => {
             this.setState({
                 users: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
 
-    onRenameUser({oldname, newname}) {
+    onRenameUser(oldname, newname, onError) {
         this.emit('/user/rename', {
             oldname,
             newname,
@@ -81,10 +82,10 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onPassword({name, password}) {
+    onPassword(name, password, onError) {
         emit('/user/password', {
             name,
             password,
@@ -92,10 +93,10 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onGrant({name, collection, access}) {
+    onGrant(name, collection, access, onError) {
         emit('/user/grant', {
             collection,
             name,
@@ -104,10 +105,10 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onRevoke({name, collection, access}) {
+    onRevoke(name, collection, access, onError) {
         emit('/user/revoke', {
             collection,
             name,
@@ -116,33 +117,33 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onNewToken(config){ // name [, endtime] [, description]
+    onNewToken(config, onError){ // name [, expirationTime] [, description]
         emit('/user/newtoken', config).done((data) => {
             this.setState({
                 users: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onDelToken({key}){
+    onDelToken(key, onError){
         emit('/user/deltoken', {
             key,
         }).done((data) => {
             this.setState({
                 users: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onDelExpired(){
+    onDelExpired(onError){
         emit('/user/delexpired').done((data) => {
             this.setState({
                 users: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 }
 

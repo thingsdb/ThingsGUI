@@ -14,6 +14,7 @@ const NodesActions = Vlow.createActions([
     'replaceNode',
 ]);
 
+// TODO: CALLBACKS
 class NodesStore extends BaseStore {
 
     static types = {
@@ -33,25 +34,25 @@ class NodesStore extends BaseStore {
         this.state = NodesStore.defaults;
     }
 
-    onGetNodes(){
+    onGetNodes(onError){
         this.emit('/user/getnodes').done((data) => {
             this.setState({
                 nodes: data.nodes
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onGetNode(node) {
+    onGetNode(node, onError) {
         this.emit('/node/get', {
             node,
         }).done((data) => {
             this.setState({
                 node: data.node
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onSetLoglevel(node, level) {
+    onSetLoglevel(node, level, onError) {
         this.emit('/node/loglevel', {
             node: node.node_id,
             level,
@@ -59,10 +60,10 @@ class NodesStore extends BaseStore {
             this.setState({
                 node: data.node
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    setZone(node, zone) {
+    onSetZone(node, zone, onError) {
         this.emit('/node/zone', {
             node: node.node_id,
             zone,
@@ -70,27 +71,51 @@ class NodesStore extends BaseStore {
             this.setState({
                 node: data.node
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    resetCounters(node) {
+    onResetCounters(node, onError) {
         emit('/node/counters/reset', {
             node: node.node_id,
         }).done((data) => {
             this.setState({
                 node: data.counters
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    shutdown(node) {
+    onShutdown(node, onError) {
         emit('/node/shutdown', {
             node: node.node_id,
         }).done((data) => {
             this.setState({
                 node: data.node
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
+    }
+
+    onNewNode(config, onError) { // secret , ipAdress [, port]
+        emit('/node/add', config).done((data) => {
+            this.setState({
+                nodes: data.nodes
+            });
+        }).fail((_xhr, {error}) => onError(error));
+    }
+
+    onPopNode(onError) {
+        emit('/node/pop').done((data) => {
+            this.setState({
+                nodes: data.nodes
+            });
+        }).fail((_xhr, {error}) => onError(error));
+    }
+
+    onReplaceNode(config, onError) { // nodeId , secret [, port]
+        emit('/node/replace', config).done((data) => {
+            this.setState({
+                nodes: data.nodes
+            });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
 

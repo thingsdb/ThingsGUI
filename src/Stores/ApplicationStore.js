@@ -9,6 +9,7 @@ const ApplicationActions = Vlow.createActions([
     'navigate',
 ]);
 
+// TODO: CALLBACKS
 class ApplicationStore extends BaseStore {
 
     static types = {
@@ -16,11 +17,6 @@ class ApplicationStore extends BaseStore {
         connected: PropTypes.bool,
         connErr: PropTypes.string,
         match: PropTypes.shape({match: PropTypes.string}),
-        collections: PropTypes.arrayOf(PropTypes.object),
-        nodes: PropTypes.arrayOf(PropTypes.object),
-        node: PropTypes.object,
-        users: PropTypes.arrayOf(PropTypes.object),
-        user: PropTypes.object,
     }
 
     static defaults = {
@@ -35,32 +31,32 @@ class ApplicationStore extends BaseStore {
         this.state = ApplicationStore.defaults;
     }
 
-    onConnected() {
+    onConnected(onError) {
         this.emit('/connected').done((data) => {
             this.setState({
                 loaded: data.loaded,
                 connected: data.connected,
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onConnect({host, user, password}) {
+    onConnect(host, user, password, onError) {
         this.emit('/connect', {host, user, password}).done((data) => {
             this.setState({
                 connErr: data.connErr,
                 connected: data.connected,
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onDisconnect() {
+    onDisconnect(onError) {
         this.emit('/disconnect').done(() => {
             this.setState({
                 connected: false,
                 connErr: '',
                 match: {},
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
     onNavigate(match) {

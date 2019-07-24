@@ -7,6 +7,7 @@ const CollectionActions = Vlow.createActions([
     'queryThing',
 ]);
 
+// TODO: CALLBACKS
 class CollectionStore extends BaseStore {
 
     static types = {
@@ -26,7 +27,7 @@ class CollectionStore extends BaseStore {
         this.state = CollectionStore.defaults;
     }
 
-    onQuery(collection) {
+    onQuery(collection, onError) {
         this.emit('/collection/query', {
             collectionId: collection.collection_id,
         }).done((data) => {
@@ -39,10 +40,10 @@ class CollectionStore extends BaseStore {
                     things,
                 };
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onQueryThing(collection, thing) {
+    onQueryThing(collection, thing, onError) {
         this.emit('/collection/query', {
             collectionId: collection.collection_id,
             thingId: thing['#'],
@@ -52,7 +53,7 @@ class CollectionStore extends BaseStore {
                 const things = Object.assign({}, prevState.things, {[thing['#']]: data});
                 return {things};
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
 }

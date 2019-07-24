@@ -104,10 +104,10 @@ class NodeHandler(BaseHandler):
     @BaseHandler.socket_handler
     async def new_node(cls, client, data):  # TODOS check ipadress?
         if data.get('port'):
-            q = r'''new_node('{secret}', '{ip_adress}', {port});
+            q = r'''new_node('{secret}', '{ipAdress}', {port});
                 nodes_info();'''.format_map(data)
         else:
-            q = r'''new_node('{secret}', '{ip_adress}');
+            q = r'''new_node('{secret}', '{ipAdress}');
                 nodes_info();'''.format_map(data)
         result = await client.query(q)
         
@@ -132,10 +132,10 @@ class NodeHandler(BaseHandler):
     @BaseHandler.socket_handler
     async def replace_node(cls, client, data):  # TODOS check ipadress?
         if data.get('port'):
-            q = r'''replace_node({node_id}, '{secret}', {port});
+            q = r'''replace_node({nodeId}, '{secret}', {port});
                 nodes_info();'''.format_map(data)
         else:
-            q = r'''replace_node({node_id}, '{secret}');
+            q = r'''replace_node({nodeId}, '{secret}');
                 nodes_info();'''.format_map(data)
         result = await client.query(q)
 

@@ -11,6 +11,7 @@ const CollectionsActions = Vlow.createActions([
     'setQuota',
 ]);
 
+// TODO: CALLBACKS
 class CollectionsStore extends BaseStore {
 
     static types = {
@@ -28,35 +29,35 @@ class CollectionsStore extends BaseStore {
         this.state = CollectionsStore.defaults;
     }
 
-    onGetCollections() {
+    onGetCollections(onError) {
         this.emit('/collection/getcollections').done((data) => {
             this.setState({
                 collections: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onGetCollection({name}) {
+    onGetCollection(name, onError) {
         this.emit('/collection/get', {
             name,
         }).done((data) => {
             this.setState({
                 collection: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
    
-    onAddCollection({name}) {
+    onAddCollection(name, onError) {
         this.emit('/collection/add', {
             name,
         }).done((data) => {
             this.setState({
                 collections: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
     
-    onRenameCollection({oldname, newname}) {
+    onRenameCollection(oldname, newname, onError) {
         this.emit('/collection/rename', {
             oldname,
             newname,
@@ -64,20 +65,20 @@ class CollectionsStore extends BaseStore {
             this.setState({
                 collections: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onRemoveCollection({name}) {
+    onRemoveCollection(name, onError) {
         this.emit('/collection/remove', {
             collection,
         }).done((data) => {
             this.setState({
                 collections: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 
-    onSetQuota({name, quotaType, quota}) {
+    onSetQuota(name, quotaType, quota, onError) {
         emit('/collection/setquota', {
             name,
             quotaType,
@@ -86,7 +87,7 @@ class CollectionsStore extends BaseStore {
             this.setState({
                 collections: data
             });
-        });
+        }).fail((_xhr, {error}) => onError(error));
     }
 }
 

@@ -73,7 +73,7 @@ class UserHandler(BaseHandler):
     async def new_token(cls, client, data):
         name = data.get['name']
 
-        if data.get('endtime'):
+        if data.get('expirationTime'):
             expiration_time = int(datetime.datetime.timestamp(
                 data.get('endtime')))
         else:

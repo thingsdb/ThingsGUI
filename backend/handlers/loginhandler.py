@@ -12,22 +12,6 @@ class LoginHandler(BaseHandler):
             'version': __version__
         }
 
-    @staticmethod
-    async def on_connected(client):
-        collections = await client.collections_info()
-        users = await client.users_info()
-        user = await client.user_info()
-        nodes = await client.nodes_info()
-        node = await client.node_info()
-
-        return {
-            'collections': collections,
-            'users': users,
-            'user': user,
-            'nodes': nodes,
-            'node': node,
-        }
-
     @classmethod
     @BaseHandler.socket_handler
     async def connected(cls, client, data):
@@ -35,8 +19,7 @@ class LoginHandler(BaseHandler):
             resp = {
                 'loaded': True,
                 'connected': True,
-            }
-            resp.update(await cls.on_connected(client))
+            }        
         else:
             resp = {
                 'loaded': True,
@@ -76,13 +59,16 @@ class LoginHandler(BaseHandler):
             'connected': True,
             'connErr': '',
         }
-        resp.update(await cls.on_connected(client))
         return resp
 
     @classmethod
     @BaseHandler.socket_handler
     async def connect(cls, client, data):
-        resp = await cls._connect(client, data['host'], data['user'], data['password'])
+        resp = await cls._connect(
+            client,
+            data['host'],
+            data['user'],
+            data['password'])
         return cls.socket_response(data=resp)
 
     @classmethod
