@@ -64,6 +64,7 @@ class LoginHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def connect(cls, client, data):
+        print(data)
         resp = await cls._connect(
             client,
             data['host'],

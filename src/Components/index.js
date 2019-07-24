@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import '@babel/polyfill';
 /* fixes issues on ie */
-import App from './App/App';
+import Root from './App/Root';
 
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<Root />, document.getElementById('app'));

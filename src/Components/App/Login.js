@@ -24,6 +24,7 @@ const withStores = withVlow([{
 const initialState = {
     showPassword: false,
     errors: {},
+    serverError: '',
     form: {
         host: 'localhost:9200',
         user: 'admin',
@@ -39,7 +40,7 @@ const validation = {
 
 const Login = ({loaded, connected, connErr}) => {
     const [state, setState] = useState(initialState);
-    const {showPassword, errors, form} = state;
+    const {showPassword, errors, form, serverError} = state;
 
     const handleOnChange = (e) => {
         form[e.target.id] = e.target.value;
@@ -51,7 +52,7 @@ const Login = ({loaded, connected, connErr}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connect(form);
+            ApplicationActions.connect(form, (serverError) => setState({serverError}));
         }
     };
 
@@ -70,7 +71,7 @@ const Login = ({loaded, connected, connErr}) => {
             </DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    {connErr}
+                    {connErr || serverError}
                 </DialogContentText>
                 <TextField
                     autoFocus

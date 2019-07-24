@@ -31,16 +31,16 @@ class ApplicationStore extends BaseStore {
         this.state = ApplicationStore.defaults;
     }
 
-    onConnected(onError) {
+    onConnected() {
         this.emit('/connected').done((data) => {
             this.setState({
                 loaded: data.loaded,
                 connected: data.connected,
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }); //.fail((_xhr, {error}) => onError(error));
     }
 
-    onConnect(host, user, password, onError) {
+    onConnect({host, user, password}, onError) {
         this.emit('/connect', {host, user, password}).done((data) => {
             this.setState({
                 connErr: data.connErr,
@@ -49,14 +49,14 @@ class ApplicationStore extends BaseStore {
         }).fail((_xhr, {error}) => onError(error));
     }
 
-    onDisconnect(onError) {
+    onDisconnect() {
         this.emit('/disconnect').done(() => {
             this.setState({
                 connected: false,
                 connErr: '',
                 match: {},
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }); //.fail((_xhr, {error}) => onError(error));
     }
 
     onNavigate(match) {

@@ -3,8 +3,6 @@ import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
-import Loader from './AppLoader';
-import Login from './Login';
 import Collection from '../Collections/Collection';
 import Collections from '../Collections/Collections';
 import Menu from './Menu';
@@ -13,11 +11,12 @@ import Nodes from '../Nodes/Nodes';
 // import User from '../User/User';
 import Users from '../Users/Users';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
+import TopMenu from '../TopMenu';
 
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['loaded', 'connected', 'match']
+    keys: ['match']
 }]);
 
 
@@ -45,9 +44,9 @@ const pages = {
     users: <Users />,
 };
 
-const App = ({classes, loaded, connected, match}) => {
-
-    return loaded ? connected ? (
+const App = ({classes, match}) => (
+    <React.Fragment>
+        <TopMenu />
         <div className={classes.root}>
             <div className={classes.menu}>
                 <Menu />
@@ -56,13 +55,11 @@ const App = ({classes, loaded, connected, match}) => {
                 {pages[match.path]}
             </div>
         </div>
-    ) : <Login /> : <Loader />;
-};
+    </React.Fragment>
+);
 
 App.propTypes = {
     classes: PropTypes.object.isRequired,
-    loaded: ApplicationStore.types.loaded.isRequired,
-    connected: ApplicationStore.types.connected.isRequired,
     match: ApplicationStore.types.match.isRequired,
 };
 
