@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import {useStore} from '../../Stores/ApplicationStore';
+import {ApplicationActions} from '../../Stores/ApplicationStore';
 
-const ViewCollection = ({collection}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line
+const ViewCollection = () => {
 
     const handleClickView = () => {
-        dispatch(() => ({match: {path: 'collection', collection}}));
+        ApplicationActions.navigate({path: 'collection'});
     };
 
     return (
@@ -17,10 +16,6 @@ const ViewCollection = ({collection}) => {
             </Button>
         </React.Fragment>
     );
-};
-
-ViewCollection.propTypes = {
-    collection: PropTypes.object.isRequired,
 };
 
 export default ViewCollection;

@@ -1,15 +1,20 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
+import {withVlow} from 'vlow';
 
 import AddCollection from './Add';
 import CollectionExtend from './CollectionExtend';
 import Table from '../Util/Table2';
-import {useStore} from '../../Stores/ApplicationStore';
+import {ApplicationActions} from '../../Stores/ApplicationStore';
+import {CollectionsStore} from '../../Stores/CollectionsStore';
 
 
-const Collections = () => {
-    const [store, dispatch] = useStore();
-    const {collections} = store;
+const withStores = withVlow([{
+    store: CollectionsStore,
+    keys: ['collections']
+}]);
+
+const Collections = ({collections}) => {
     
     const rows = collections;
     const header = [{
@@ -19,9 +24,10 @@ const Collections = () => {
         ky: 'things',
         label: '# Things',
     }];
-    const rowClick = (collection) => {
-        dispatch(() => ({match: {path: 'collection', collection}}));
+    const rowClick = () => {
+        ApplicationActions.navigate({path: 'collection'});
     };
+
     const rowExtend = (collection) => <CollectionExtend collection={collection} />;
         
     return (
@@ -32,4 +38,9 @@ const Collections = () => {
     );
 };
 
-export default Collections;
+Collections.propTypes = {
+    /* Collections properties */
+    collections: CollectionsStore.types.collections.isRequired,
+};
+
+export default withStores(Collections);

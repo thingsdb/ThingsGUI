@@ -3,9 +3,21 @@ import List from '@material-ui/core/List';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {useStore} from '../../Stores/CollectionStore';
+import {withVlow} from 'vlow';
+
+import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 
 import Thing from './Thing';
+
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['match']
+}, {
+    store: CollectionStore,
+    keys: ['things']
+}]);
+
 
 const styles = theme => ({
     root: {
@@ -15,9 +27,7 @@ const styles = theme => ({
     },
 });
 
-const ThingRoot = ({classes}) => {
-    const [store] = useStore();
-    const {match, things} = store;
+const ThingRoot = ({classes, match, things}) => {
     
     return (
         <React.Fragment>
@@ -34,7 +44,13 @@ const ThingRoot = ({classes}) => {
 };
 
 ThingRoot.propTypes = {
+    /* styles proeperties */ 
     classes: PropTypes.object.isRequired,
+
+    /* application properties */
+    match: ApplicationStore.types.match.isRequired,
+    /* collection properties */
+    things: CollectionStore.types.things.isRequired,
 };
 
-export default withStyles(styles)(ThingRoot);
+export default withStyles(styles)(withStores(ThingRoot));

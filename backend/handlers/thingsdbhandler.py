@@ -6,13 +6,13 @@ class ThingsDBHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def get_collections(cls, client, data):
-        resp = await client.users_info()
+        resp = await client.collections_info()
         return cls.socket_response(data=resp)
 
     @classmethod
     @BaseHandler.socket_handler
     async def get_collection(cls, client, data):
-        resp = await client.user_info(data.get('name'))
+        resp = await client.collection_info(data.get('name'))
         return cls.socket_response(data=resp)
 
     @classmethod

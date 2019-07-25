@@ -10,8 +10,21 @@ import ListItemText from '@material-ui/core/ListItemText';
 // import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import React from 'react';
+import {withVlow} from 'vlow';
+
 import {withStyles} from '@material-ui/core/styles';
-import {useStore, CollectionActions} from '../../Stores/CollectionStore';
+import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
+import ServerError from '../Util/ServerError';
+
+
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['match']
+}, {
+    store: CollectionStore,
+    keys: ['things']
+}]);
 
 const styles = theme => ({
     nested: {
@@ -19,12 +32,23 @@ const styles = theme => ({
     },
 });
 
-const Thing = ({classes, name, thing}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
-    const {match, things} = store;
-    const [show, setShow] = React.useState(false);
+const initialState = {
+    show: false,
+    serverError: '',
+};
 
-    const queryThing = React.useCallback(CollectionActions.queryThing(dispatch, match.collection, thing));
+const Thing = ({classes, name, thing, match, things}) => {
+    const [state, setState] = React.useState(initialState);
+    const {show, serverError} = state;
+
+    const queryThing = React.useCallback(
+        () => {
+            const onError = (err) => setState({...state, serverError: err});
+            CollectionActions.queryThing(match.collection, thing, onError);
+        },
+        [match.collection, thing],
+    );    
+        
 
     const renderThing = ([k, v]) => {
         return k === '#' ? null : (
@@ -43,7 +67,7 @@ const Thing = ({classes, name, thing}) => {
     };
 
     const handleClick = () => {
-        setShow(!show);
+        setState({...state, show: !show}); // QUEST: work with prevstate?
         if (thing && thing['#'] && !things[thing['#']]) {
             queryThing();
         }
@@ -69,11 +93,16 @@ const Thing = ({classes, name, thing}) => {
 };
 
 Thing.propTypes = {
-    classes: PropTypes.object.isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     name: PropTypes.string.isRequired,
+
+    /* styles proeperties */ 
+    classes: PropTypes.object.isRequired,
+
+    /* application properties */
+    match: ApplicationStore.types.match.isRequired,
+    /* collection properties */
+    things: CollectionStore.types.things.isRequired,
 };
 
-const ThingWrapped = withStyles(styles)(Thing);
-
-export default ThingWrapped;
+export default withStyles(styles)(withStores(Thing));

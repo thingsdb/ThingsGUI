@@ -6,26 +6,38 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
 
+import {CollectionsActions} from '../../Stores/CollectionsStore';
+import ServerError from '../Util/ServerError';
+
+const initialState = {
+    show: false,
+    serverError: '',
+};
 
 const Remove = ({collection}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line
-    const [show, setShow] = React.useState(false);
+    const [state, setState] = React.useState(initialState);
+    const {show, serverError} = state;
 
-    const remove = React.useCallback(CollectionsActions.removeCollection(dispatch, collection.name));
+    const remove = React.useCallback(
+        () => {
+            const onError = (err) => setState({...state, serverError: err});
+            CollectionsActions.removeCollection(collection.name, onError);
+        },
+        [collection.name],
+    );
 
     const handleClickOpen = () => {
-        setShow(true);
+        setState({...state, show: true});
     };
 
     const handleClickClose = () => {
-        setShow(false);
+        setState({...state, show: false});
     };
 
     const handleClickOk = () => {
         remove();
-        setShow(false);
+        setState({...state, show: false});
     };
 
     return (
@@ -60,6 +72,7 @@ const Remove = ({collection}) => {
 };
 
 Remove.propTypes = {
+    /* collections properties */
     collection: PropTypes.object.isRequired,
 };
 

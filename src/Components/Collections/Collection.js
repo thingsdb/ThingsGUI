@@ -1,17 +1,33 @@
-import React from 'react';
+import {React, useState} from 'react';
+import {withVlow} from 'vlow';
 
 import ThingRoot from './Things';
 import RemoveCollection from './Remove';
 import RenameCollection from './Rename';
 import SetQuotas from './Quotas';
-import {useStore, CollectionActions} from '../../Stores/CollectionStore';
+import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
+import ServerError from '../Util/ServerError';
 
-const Collection = () => {
-    const [store, dispatch] = useStore();
-    const {match, things} = store;
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['match']
+}, {
+    store: CollectionStore,
+    keys: ['things']
+}]);
 
+const Collection = ({match, things}) => {
+    const [serverError, setServerError] = useState('');
     const fetched = Boolean(things[match.collection.collection_id]);
-    const fetch = React.useCallback(CollectionActions.query(dispatch, match.collection), [match]);
+    const fetch = React.useCallback(
+        () => {
+            const onError = (err) => setServerError(err);
+            CollectionActions.query(match.collection, onError);
+        },
+        [match],
+    );    
+    
     React.useEffect(() => {
         fetch();
     }, [match]);
@@ -26,4 +42,11 @@ const Collection = () => {
     );
 };
 
-export default Collection;
+Collection.propTypes = {
+    /* application properties */
+    match: ApplicationStore.types.match.isRequired,
+    /* collection properties */
+    things: CollectionStore.types.things.isRequired,
+};
+
+export default withStores(Collection);

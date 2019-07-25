@@ -52,7 +52,7 @@ const Login = ({loaded, connected, connErr}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connect(form, (serverError) => setState({serverError}));
+            ApplicationActions.connect(form, (serverError) => setState({...state, serverError}));
         }
     };
 

@@ -7,27 +7,41 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
+import {withVlow} from 'vlow';
+
+import {CollectionsStore, CollectionsActions} from '../../Stores/CollectionsStore';
+import ServerError from '../Util/ServerError';
+
+const withStores = withVlow([{
+    store: CollectionsStore,
+    keys: ['collections']
+}]);
 
 const initialState = {
     show: false,
-    form: {},
     errors: {},
+    form: {},
+    serverError: '',
 };
 
 const Rename = ({collection}) => {
-    const [store, dispatch] = useStore();
-    const {collections} = store;
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {show, errors, form, serverError} = state;
 
-    const rename = React.useCallback(CollectionsActions.renameCollection(dispatch, collection.name, form.name));
+    const rename = React.useCallback(
+        () => {
+            const onError = (err) => setState({...state, serverError: err});
+            CollectionsActions.renameCollection(collection.name, form.name, onError);
+        },
+        [collection.name, form.name],
+    );
 
     const handleClickOpen = () => {
         setState({
             show: true,
             errors: {},
             form: {...collection},
+            serverError: '',
         });
     };
 
@@ -101,4 +115,4 @@ Rename.propTypes = {
     collection: PropTypes.object.isRequired,
 };
 
-export default Rename;
+export default withStores(Rename);

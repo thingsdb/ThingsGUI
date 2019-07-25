@@ -8,7 +8,19 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {withStyles} from '@material-ui/core/styles';
-import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
+import {withVlow} from 'vlow';
+
+import {ApplicationStore} from '../../Stores/ApplicationStore';
+import {CollectionsActions, CollectionsStore} from '../../Stores/CollectionsStore';
+import ServerError from '../Util/ServerError';
+
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['connErr']
+}, {
+    store: CollectionsStore,
+    keys: ['collections']
+}]);
 
 const styles = theme => ({
     button: {
@@ -20,15 +32,20 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
+    serverError: '',
 };
 
-const Add = ({classes}) => {
-    const [store, dispatch] = useStore();
-    const {collections, connErr} = store;
+const Add = ({classes, connErr, collections}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {show, errors, form, serverError} = state;
 
-    const add = React.useCallback(CollectionsActions.addCollection(dispatch, form.name));
+    const add = React.useCallback( // QUEST: reason for  useCallback?
+        () => {
+            const onError = (err) => setState({...state, serverError: err});
+            CollectionsActions.addCollection(form.name, onError);
+        },
+        [form.name],
+    ); 
 
     const validation = {
         name: () => form.name.length>0&&collections.every((c) => c.name!==form.name),
@@ -41,6 +58,7 @@ const Add = ({classes}) => {
             form: {
                 name: '',
             },
+            serverError: '',
         });
     };
 
@@ -107,7 +125,13 @@ const Add = ({classes}) => {
 };
 
 Add.propTypes = {
+    /* styles properties */
     classes: PropTypes.object.isRequired,
+
+    /* application properties */
+    connErr: ApplicationStore.types.connErr.isRequired,
+    /* collections properties */
+    collections: CollectionsStore.types.collections.isRequired,
 };
 
-export default withStyles(styles)(Add);
+export default withStyles(styles)(withStores(Add));

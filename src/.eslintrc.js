@@ -20,7 +20,8 @@ module.exports = {
     },
     "parser": "babel-eslint",
     "plugins": [
-        "react"
+        "react",
+        "react-hooks"
     ],
     "settings": {
         "react": {
@@ -62,5 +63,7 @@ module.exports = {
         "react/prefer-stateless-function": [0],
         "react/require-optimization": [0],
         "react/sort-prop-types": [0],
+        "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+        "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
     }
 };

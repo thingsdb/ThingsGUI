@@ -7,7 +7,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, CollectionsActions} from '../../Stores/CollectionsStore';
+
+import {CollectionsActions} from '../../Stores/CollectionsStore';
+import ServerError from '../Util/ServerError';
 
 const quotaTypes = [
     'things',
@@ -19,14 +21,20 @@ const quotaTypes = [
 const initialState = {
     show: false,
     form: {},
+    serverError: '',
 };
 
 const Quotas = ({collection}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line
     const [state, setState] = React.useState(initialState);
-    const {show, form} = state;
+    const {show, form, serverError} = state;
 
-    const setQuotas = React.useCallback(CollectionsActions.setQuota(dispatch, collection.name, form.quotaType, form.quota));
+    const setQuotas = React.useCallback(
+        () => {
+            const onError = (err) => setState({...state, serverError: err});
+            CollectionsActions.setQuota(collection.name, form.quotaType, form.quota, onError);
+        },
+        [collection.name, form.quotaType, form.quota],
+    );
 
     const _getQuota = (quotaType) => collection[`quota_${quotaType}`]||'';
 
@@ -38,6 +46,7 @@ const Quotas = ({collection}) => {
                 quotaType: 'things',
                 quota: _getQuota('things'),
             },
+            serverError: '',
         });
     };
 
@@ -121,6 +130,7 @@ const Quotas = ({collection}) => {
 };
 
 Quotas.propTypes = {
+    /* collections properties */
     collection: PropTypes.object.isRequired,
 };
 

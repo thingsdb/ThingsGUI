@@ -32,14 +32,13 @@ class NodesStore extends BaseStore {
     constructor() {
         super(NodesActions);
         this.state = NodesStore.defaults;
+        this.onGetNodes();
     }
 
-    onGetNodes(onError){
+    onGetNodes(){
         this.emit('/user/getnodes').done((data) => {
-            this.setState({
-                nodes: data.nodes
-            });
-        }).fail((_xhr, {error}) => onError(error));
+            this.setState({nodes: data.nodes});
+        });
     }
 
     onGetNode(node, onError) {

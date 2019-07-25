@@ -3,7 +3,7 @@ import Vlow from 'vlow';
 import BaseStore from './BaseStore';
 
 const CollectionsActions = Vlow.createActions([
-    'getColections',
+    'getCollections',
     'getCollection',
     'addCollection',
     'renameCollection',
@@ -27,14 +27,13 @@ class CollectionsStore extends BaseStore {
     constructor() {
         super(CollectionsActions);
         this.state = CollectionsStore.defaults;
+        this.onGetCollections();
     }
 
-    onGetCollections(onError) {
+    onGetCollections() {
         this.emit('/collection/getcollections').done((data) => {
-            this.setState({
-                collections: data
-            });
-        }).fail((_xhr, {error}) => onError(error));
+            this.setState({collections: data});
+        });
     }
 
     onGetCollection(name, onError) {
@@ -44,6 +43,7 @@ class CollectionsStore extends BaseStore {
             this.setState({
                 collection: data
             });
+            // onError('')
         }).fail((_xhr, {error}) => onError(error));
     }
    
@@ -68,7 +68,7 @@ class CollectionsStore extends BaseStore {
         }).fail((_xhr, {error}) => onError(error));
     }
 
-    onRemoveCollection(name, onError) {
+    onRemoveCollection(collection, onError) {
         this.emit('/collection/remove', {
             collection,
         }).done((data) => {
