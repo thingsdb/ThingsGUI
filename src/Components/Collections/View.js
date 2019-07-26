@@ -3,10 +3,10 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
 
-const ViewCollection = () => {
+const ViewCollection = ({collection}) => {
 
     const handleClickView = () => {
-        ApplicationActions.navigate({path: 'collection'});
+        ApplicationActions.navigate({path: 'collection', collection: collection});
     };
 
     return (
@@ -17,5 +17,10 @@ const ViewCollection = () => {
         </React.Fragment>
     );
 };
+
+ViewCollection.propTypes = {
+    collection: PropTypes.object.isRequired,
+};
+
 
 export default ViewCollection;

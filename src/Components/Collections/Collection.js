@@ -1,52 +1,50 @@
-import {React, useState} from 'react';
+import React, {useState} from 'react';
+import PropTypes from 'prop-types';
 import {withVlow} from 'vlow';
 
 import ThingRoot from './Things';
 import RemoveCollection from './Remove';
 import RenameCollection from './Rename';
 import SetQuotas from './Quotas';
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import ServerError from '../Util/ServerError';
 
 const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}, {
     store: CollectionStore,
     keys: ['things']
 }]);
 
-const Collection = ({match, things}) => {
+const Collection = ({things, collection}) => {
     const [serverError, setServerError] = useState('');
-    const fetched = Boolean(things[match.collection.collection_id]);
+    const fetched = things.hasOwnProperty(collection.collection_id);
     const fetch = React.useCallback(
         () => {
             const onError = (err) => setServerError(err);
-            CollectionActions.query(match.collection, onError);
+            CollectionActions.query(collection, onError);
         },
-        [match],
+        [collection],
     );    
     
     React.useEffect(() => {
         fetch();
-    }, [match]);
-        
+    }, [collection]);
+    console.log(things.hasOwnProperty('#'), fetched, things)
     return fetched && (
         <React.Fragment>
-            <ThingRoot />
-            <RenameCollection collection={match.collection} />
-            <RemoveCollection collection={match.collection} />
-            <SetQuotas collection={match.collection} />
+            <ThingRoot collection={collection} />
+            <RenameCollection collection={collection} />
+            <RemoveCollection collection={collection} />
+            <SetQuotas collection={collection} />
         </React.Fragment>
     );
 };
 
 Collection.propTypes = {
-    /* application properties */
-    match: ApplicationStore.types.match.isRequired,
+    collection: PropTypes.object.isRequired,
+
     /* collection properties */
     things: CollectionStore.types.things.isRequired,
 };
+
 
 export default withStores(Collection);

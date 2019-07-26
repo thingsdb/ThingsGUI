@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import Button from '@material-ui/core/Button';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -25,6 +27,25 @@ const withStores = withVlow([{
 const styles = theme => ({
     button: {
         margin: theme.spacing(1),
+    },
+    buttonBase: {
+        width: '100%',
+        height: '100%',
+        padding: 0,
+        justifyContent: 'left',
+        paddingLeft: theme.spacing(4),
+        paddingRight: theme.spacing(2),
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        '&:hover': {
+            backgroundColor: '#eeeeee',
+        },
+        text: 'italic',
+    },
+    icon: {
+        marginTop: theme.spacing(0.5),
+        marginBottom: theme.spacing(0.5),
+        color: '#757575',
     },
 });
 
@@ -83,9 +104,13 @@ const Add = ({classes, connErr, collections}) => {
 
     return (
         <React.Fragment>
-            <Button className={classes.button} variant="contained" onClick={handleClickOpen}>
+            {/* <Button className={classes.button} variant="contained" onClick={handleClickOpen}>
+                <AddBoxIcon />
                 {'Add'}
-            </Button>
+            </Button> */}
+            <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
+                <AddBoxIcon className={classes.icon}/>
+            </ButtonBase>
             <Dialog
                 open={show}
                 onClose={handleClickClose}

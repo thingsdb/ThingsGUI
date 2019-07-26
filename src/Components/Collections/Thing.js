@@ -13,15 +13,11 @@ import React from 'react';
 import {withVlow} from 'vlow';
 
 import {withStyles} from '@material-ui/core/styles';
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import ServerError from '../Util/ServerError';
 
 
 const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}, {
     store: CollectionStore,
     keys: ['things']
 }]);
@@ -37,23 +33,24 @@ const initialState = {
     serverError: '',
 };
 
-const Thing = ({classes, name, thing, match, things}) => {
+
+const Thing = ({classes, name, thing, collection, things}) => {
     const [state, setState] = React.useState(initialState);
     const {show, serverError} = state;
 
     const queryThing = React.useCallback(
         () => {
             const onError = (err) => setState({...state, serverError: err});
-            CollectionActions.queryThing(match.collection, thing, onError);
+            CollectionActions.queryThing(collection, thing, onError);
         },
-        [match.collection, thing],
+        [collection, thing],
     );    
         
 
-    const renderThing = ([k, v]) => {
+    const renderThing = ([k, v]) => { // QUEST: ???
         return k === '#' ? null : (
             <div key={k} className={classes.nested}>
-                <ThingWrapped thing={v} name={k} />
+                <Thing classes={classes} thing={v} name={k} collection={collection} things={things} /> 
             </div>
         );
     };
@@ -95,12 +92,11 @@ const Thing = ({classes, name, thing, match, things}) => {
 Thing.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     name: PropTypes.string.isRequired,
+    collection: PropTypes.object.isRequired,
 
     /* styles proeperties */ 
     classes: PropTypes.object.isRequired,
 
-    /* application properties */
-    match: ApplicationStore.types.match.isRequired,
     /* collection properties */
     things: CollectionStore.types.things.isRequired,
 };

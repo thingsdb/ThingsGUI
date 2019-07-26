@@ -11,9 +11,6 @@ import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import Thing from './Thing';
 
 const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}, {
     store: CollectionStore,
     keys: ['things']
 }]);
@@ -27,7 +24,7 @@ const styles = theme => ({
     },
 });
 
-const ThingRoot = ({classes, match, things}) => {
+const ThingRoot = ({classes, things, collection}) => {
     
     return (
         <React.Fragment>
@@ -35,8 +32,8 @@ const ThingRoot = ({classes, match, things}) => {
                 component="nav"
                 className={classes.root}
             >
-                {Object.entries(things[match.collection.collection_id]).map(([k, v]) => k === '#' ? null : (
-                    <Thing key={k} thing={v} name={k} />
+                {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
+                    <Thing key={k} thing={v} name={k} collection={collection} />
                 ))}
             </List>
         </React.Fragment>
@@ -44,13 +41,14 @@ const ThingRoot = ({classes, match, things}) => {
 };
 
 ThingRoot.propTypes = {
+    collection: PropTypes.object.isRequired, 
+
     /* styles proeperties */ 
     classes: PropTypes.object.isRequired,
 
-    /* application properties */
-    match: ApplicationStore.types.match.isRequired,
     /* collection properties */
     things: CollectionStore.types.things.isRequired,
 };
+
 
 export default withStyles(styles)(withStores(ThingRoot));
