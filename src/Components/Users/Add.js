@@ -8,7 +8,15 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {withStyles} from '@material-ui/core/styles';
-import {useStore, UsersActions} from '../../Stores/UsersStore';
+import {withVlow} from 'vlow';
+
+import {UsersActions, UsersActions} from '../../Stores/UsersStore';
+import ServerError from '../Util/ServerError';
+
+const withStores = withVlow([{
+    store: UsersStore,
+    keys: ['users']
+}]);
 
 const styles = theme => ({
     button: {
@@ -20,15 +28,21 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
+    serverError: '',
 };
 
-const AddUser = ({classes}) => {
-    const [store, dispatch] = useStore();
-    const {users} = store;
+const AddUser = ({classes, users}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
-    const add = React.useCallback(UsersActions.addUser(dispatch, form.name, form.password));
+    const add = React.useCallback(
+        () => {
+            const onError = (err) => setState({...state, serverError: err});
+            UsersActions.addUser(form.name, form.password, onError);
+        },
+        [form.name, form.password],
+    );
+
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),
@@ -43,6 +57,7 @@ const AddUser = ({classes}) => {
                 name: '',
                 password: '',
             },
+            serverError: '',
         });
     };
 
@@ -80,7 +95,7 @@ const AddUser = ({classes}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {/* {connErr} */}
+                        {serverError}
                     </DialogContentText>
                     <TextField
                         autoFocus
@@ -121,7 +136,12 @@ const AddUser = ({classes}) => {
 };
 
 AddUser.propTypes = {
+    /* styles properties */
     classes: PropTypes.object.isRequired,
+
+    /* application properties */
+    users: UsersStore.types.users.isRequired,
+    
 };
 
-export default withStyles(styles)(AddUser);
+export default withStyles(styles)(withStores(AddUser)); // QUEST: volgorde goed zo?

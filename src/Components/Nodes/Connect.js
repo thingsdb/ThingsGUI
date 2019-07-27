@@ -6,7 +6,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, AppActions} from '../../Stores/ApplicationStore';
+import {withVlow} from 'vlow';
+
+import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+import ServerError from '../Util/ServerError';
+
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['connErr']
+}]);
 
 const initialState = {
     show: false,
@@ -14,16 +22,22 @@ const initialState = {
     form: {
         host: 'localhost:9200',
     },
+    serverError: '', 
 };
 
 
-const Login = () => {
-    const [store, dispatch] = useStore();
-    const {connErr} = store;
+const Connect = ({connErr}) => {
     const [state, setState] = useState(initialState);
-    const {show, errors, form} = state;
+    const {show, errors, form, serverError} = state;
 
-    const connect = useCallback(AppActions.connectOther(dispatch, form));
+    const connect = useCallback(
+        () => {
+            const onError = (err) => setState({...state, serverError: err});
+            ApplicationActions.connectOther(form, onError);
+        },
+        [form],
+    ); 
+    
 
     const validation = {
         host: () => form.host.length>0,
@@ -64,7 +78,7 @@ const Login = () => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {connErr}
+                        {connErr || serverError}
                     </DialogContentText>
                     <TextField
                         autoFocus
@@ -90,4 +104,10 @@ const Login = () => {
     );
 };
 
-export default Login;
+Connect.propTypes = {
+
+    /* application properties */
+    connErr: ApplicationStore.types.connErr.isRequired,
+};
+
+export default withStores(Connect);

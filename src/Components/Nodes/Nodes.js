@@ -1,13 +1,17 @@
 import React from 'react';
+import {withVlow} from 'vlow';
 
 import Node from './Node';
 import Tabel from '../Util/Table2';
-import {useStore} from '../../Stores/NodesStore';
+import {NodesStore} from '../../Stores/NodesStore';
 
 
-const Nodes = () => {
-    const [store] = useStore();
-    const {nodes} = store;
+const withStores = withVlow([{
+    store: NodesStore,
+    keys: ['nodes']
+}]);
+
+const Nodes = ({nodes}) => {
 
     const rows = nodes;
     const header = [{
@@ -29,4 +33,9 @@ const Nodes = () => {
     );
 };
 
-export default Nodes;
+Nodes.propTypes = {
+    /* nodes properties */
+    nodes: NodesStore.types.node.isRequired,
+};
+
+export default withStores(Nodes);

@@ -116,15 +116,6 @@ class NodesStore extends BaseStore {
             });
         }).fail((_xhr, {error}) => onError(error));
     }
-
-
-
-
-
-
-
-
-
     
 };
 

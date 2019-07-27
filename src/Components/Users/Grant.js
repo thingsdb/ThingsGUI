@@ -7,8 +7,17 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, UsersActions} from '../../Stores/UsersStore';
+import {withVlow} from 'vlow';
 
+import {UsersActions} from '../../Stores/UsersStore';
+import {CollectionsStore, UsersActions} from '../../Stores/UsersStore';
+import ServerError from '../Util/ServerError';
+
+
+const withStores = withVlow([{
+    store: CollectionsStore,
+    keys: ['collections']
+}]);
 
 const privileges = [
     'READ',
@@ -22,15 +31,21 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
+    serverError: '',
 };
 
-const Grant = ({user}) => {
-    const [store, dispatch] = useStore();
-    const {collections} = store;
+const Grant = ({user, collections}) => {
+
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
-    const grant = React.useCallback(UsersActions.grant(dispatch, user.name, form.target, form.privileges));
+    const grant = React.useCallback(
+        () => {
+            const onError = (err) => setState({...state, serverError: err});
+            UsersActions.grant(user.name, form.target, form.privileges, onError);
+        },
+        [user.name, form.target, form.privileges],
+    );    
 
     const targets = [
         {name: 'ThingsDB', value: ':thingsdb'},
@@ -51,6 +66,7 @@ const Grant = ({user}) => {
                 target: user.access.length?user.access[0].target:':thingsdb',
                 privileges: user.access.length?user.access[0].privileges:'READ',
             },
+            serverError: '',
         });
     };
 
@@ -88,7 +104,7 @@ const Grant = ({user}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {/* {connErr} */}
+                        {serverError}
                     </DialogContentText>
                     <TextField
                         autoFocus
@@ -143,6 +159,9 @@ const Grant = ({user}) => {
 
 Grant.propTypes = {
     user: PropTypes.object.isRequired,
+
+    /* collections properties */
+    collections: CollectionsStore.types.collections.isRequired,
 };
 
-export default Grant;
+export default withStores(Grant);

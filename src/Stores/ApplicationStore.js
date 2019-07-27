@@ -5,6 +5,7 @@ import BaseStore from './BaseStore';
 const ApplicationActions = Vlow.createActions([
     'connected',
     'connect',
+    'connectOther',
     'disconnect',
     'navigate',
 ]);
@@ -44,6 +45,15 @@ class ApplicationStore extends BaseStore {
         this.emit('/connect', {host, user, password}).done((data) => {
             this.setState({
                 connErr: data.connErr,
+                connected: data.connected,
+            });
+        }).fail((_xhr, {error}) => onError(error));
+    }
+
+    onConnectOther({host}, onError) {
+        this.emit('/connect/other', {host}).done((data) => {
+            this.setState({
+                connErr: data.connErr, // QUEST: vangt deze alle errors af? 
                 connected: data.connected,
             });
         }).fail((_xhr, {error}) => onError(error));

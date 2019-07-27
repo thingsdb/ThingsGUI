@@ -1,12 +1,20 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import {NodesActions, useStore} from '../../Stores/NodesStore';
+import {NodesActions} from '../../Stores/NodesStore';
+import ServerError from '../Util/ServerError';
 
 
 const CountersReset = ({node}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
-    const resetCounters = React.useCallback(NodesActions.resetCounters(dispatch, node));
+    const [serverError, setServerError] = useState('');
+
+    const resetCounters = React.useCallback(
+        () => {
+            const onError = (err) => setServerError(err);
+            NodesActions.resetCounters(node, onError)
+        },
+        [node],
+    );
 
     const handleClickOk = () => {
         resetCounters();

@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {NodesActions, useStore} from '../../Stores/NodesStore';
+import {NodesActions} from '../../Stores/NodesStore';
 
 
 const zones = [...Array(128).keys()];
@@ -15,16 +15,23 @@ const zones = [...Array(128).keys()];
 const initialState = {
     show: false,
     form: {},
+    serverError: '',
 };
 
 const Zone = ({node}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
     const [state, setState] = React.useState(initialState);
     const {show, form} = state;
-    const setZone = React.useCallback(NodesActions.setZone(dispatch, node, form.zone));
+
+    const setZone = React.useCallback(
+        () => {
+            const onError = (err) => setState({...state, serverError: err});
+            NodesActions.setZone(node, form.zone, onError);
+        },
+        [node, form.zone],
+     );
 
     const handleClickOpen = () => {
-        setState({show: true, form: {...node}});
+        setState({show: true, form: {...node}, serverError: ''});
     };
 
     const handleClickClose = () => {

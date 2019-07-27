@@ -24,7 +24,7 @@ const initialState = {
     serverError: '',
 };
 
-const Rename = ({collection}) => {
+const Rename = ({collection, collections}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
 
@@ -113,6 +113,9 @@ const Rename = ({collection}) => {
 
 Rename.propTypes = {
     collection: PropTypes.object.isRequired,
+
+    /* collections properties */
+    collections: CollectionsStore.types.collections.isRequired,
 };
 
 export default withStores(Rename);

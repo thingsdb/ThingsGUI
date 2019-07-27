@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, NodesActions} from '../../Stores/NodesStore';
+import {NodesActions} from '../../Stores/NodesStore';
 
 
 const loglevels = [
@@ -21,16 +21,22 @@ const loglevels = [
 const initialState = {
     show: false,
     form: {},
+    serverError: '',
 };
 
 const Loglevel = ({node}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
     const [state, setState] = React.useState(initialState);
     const {show, form} = state;
-    const setLoglevel = React.useCallback(NodesActions.setLoglevel(dispatch, node, form.log_level));
+    const setLoglevel = React.useCallback(
+        () => {
+            const onError = (err) => setState({...state, serverError: err});
+            NodesActions.setLoglevel(node, form.log_level, onError);
+        },
+        [node, form.log_level],
+    );
 
     const handleClickOpen = () => {
-        setState({show: true, form: {...node}});
+        setState({show: true, form: {...node}, serverError: ''});
     };
 
     const handleClickClose = () => {
@@ -62,7 +68,7 @@ const Loglevel = ({node}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {/* {connErr} */}
+                        {serverError}
                     </DialogContentText>
                     <TextField
                         autoFocus
