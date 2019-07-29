@@ -8,6 +8,7 @@ class NodeHandler(BaseHandler):
 
     @staticmethod
     async def _other_node(client, other_node, q):
+
         host = other_node['hostname']
         port = other_node['client_port']
         client_ = Client()
@@ -20,7 +21,10 @@ class NodeHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def get_nodes(cls, client, data):
-        resp = await client.nodes_info()
+        result = await client.nodes_info()
+        resp = {
+            'nodes': result,
+        }
         return cls.socket_response(data=resp)
 
     @classmethod
@@ -29,10 +33,7 @@ class NodeHandler(BaseHandler):
         q = r'''[counters(), node_info()]'''
 
         # TODOK connectie andere node (cls._other_node)
-        if data.get('node'):
-            result = await cls._other_node(client, data.get('node'), q)
-        else:
-            result = await client.query(q, target=scope.node)
+        result = await client.query(q, target=scope.node)
         resp = {
             'counters': result[0],
             'node': result[1],
@@ -57,7 +58,7 @@ class NodeHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def set_loglevel(cls, client, data):
-        q = r'''set_loglevel({level}); node_info();'''.format_map(data)
+        q = r'''set_log_level({level}); node_info();'''.format_map(data)
 
         if data.get('node'):
             result = await cls._other_node(client, data.get('node'), q)
@@ -71,7 +72,7 @@ class NodeHandler(BaseHandler):
 
     @classmethod
     @BaseHandler.socket_handler
-    async def set_zone(cls, client, data):
+    async def set_zone(cls, client, data): # TODOs: werkt nog niet
         q = r'''set_zone({zone}); node_info();'''.format_map(data)
 
         if data.get('node'):

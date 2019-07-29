@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -29,16 +29,7 @@ const initialState = {
 const Connect = ({connErr}) => {
     const [state, setState] = useState(initialState);
     const {show, errors, form, serverError} = state;
-
-    const connect = useCallback(
-        () => {
-            const onError = (err) => setState({...state, serverError: err});
-            ApplicationActions.connectOther(form, onError);
-        },
-        [form],
-    ); 
-    
-
+   
     const validation = {
         host: () => form.host.length>0,
     };
@@ -54,8 +45,11 @@ const Connect = ({connErr}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            connect();
-            setState({...state, show: false});
+            ApplicationActions.connectOther(form, (err) => setState({...state, serverError: err}));
+            
+            if(!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 

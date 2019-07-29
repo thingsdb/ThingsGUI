@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {withVlow} from 'vlow';
 
 import {UsersActions} from '../../Stores/UsersStore';
-import {CollectionsStore, UsersActions} from '../../Stores/UsersStore';
+import {CollectionsStore} from '../../Stores/CollectionsStore';
 import ServerError from '../Util/ServerError';
 
 
@@ -37,19 +37,11 @@ const initialState = {
 const Grant = ({user, collections}) => {
 
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
-
-    const grant = React.useCallback(
-        () => {
-            const onError = (err) => setState({...state, serverError: err});
-            UsersActions.grant(user.name, form.target, form.privileges, onError);
-        },
-        [user.name, form.target, form.privileges],
-    );    
+    const {show, errors, form, serverError} = state;
 
     const targets = [
-        {name: 'ThingsDB', value: ':thingsdb'},
-        {name: 'Node', value: ':node'},
+        {name: 'ThingsDB', value: '.thingsdb'},
+        {name: 'Node', value: '.node'},
         ...collections.map((c) => ({name: c.name, value: c.name}))
     ];
 
@@ -58,12 +50,13 @@ const Grant = ({user, collections}) => {
         privileges: () => form.privileges.length>0,
     };
 
+
     const handleClickOpen = () => {
         setState({
             show: true,
             errors: {},
             form: {
-                target: user.access.length?user.access[0].target:':thingsdb',
+                target: user.access.length?user.access[0].target:'.thingsdb',
                 privileges: user.access.length?user.access[0].privileges:'READ',
             },
             serverError: '',
@@ -83,9 +76,17 @@ const Grant = ({user, collections}) => {
     const handleClickOk = () => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
-        if (!Object.values(errors).some(d => d)) {
-            grant();
-            setState({...state, show: false});
+        if (!Object.values(errors).some(d => d)) {          
+            UsersActions.grant(
+                user.name, 
+                form.target, 
+                form.privileges, 
+                (err) => setState({...state, serverError: err})
+            );
+
+            if (!state.serverError){
+                setState({...state, show: false});
+            }
         }
     };
 

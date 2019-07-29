@@ -22,7 +22,7 @@ class UserHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def new_user(cls, client, data):
-        q = r'''new_user('{name}', '{password}');
+        q = r'''new_user('{name}');
             users_info();'''.format_map(data)
         result = await client.query(q)
         return cls.socket_response(data=result)
@@ -55,8 +55,7 @@ class UserHandler(BaseHandler):
     @BaseHandler.socket_handler
     async def grant(cls, client, data):
         q = r'''grant('{collection}', '{name}', ({access}));
-            users_info();'''.format_map(
-            data)
+            users_info();'''.format_map(data)
         result = await client.query(q)
         return cls.socket_response(data=result)
 

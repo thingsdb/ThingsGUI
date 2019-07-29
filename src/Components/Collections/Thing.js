@@ -37,16 +37,7 @@ const initialState = {
 const Thing = ({classes, name, thing, collection, things}) => {
     const [state, setState] = React.useState(initialState);
     const {show, serverError} = state;
-
-    const queryThing = React.useCallback(
-        () => {
-            const onError = (err) => setState({...state, serverError: err});
-            CollectionActions.queryThing(collection, thing, onError);
-        },
-        [collection, thing],
-    );    
-        
-
+   
     const renderThing = ([k, v]) => { // QUEST: ???
         return k === '#' ? null : (
             <div key={k} className={classes.nested}>
@@ -66,7 +57,7 @@ const Thing = ({classes, name, thing, collection, things}) => {
     const handleClick = () => {
         setState({...state, show: !show}); // QUEST: work with prevstate?
         if (thing && thing['#'] && !things[thing['#']]) {
-            queryThing();
+            CollectionActions.queryThing(collection, thing, (err) => setState({...state, serverError: err}));
         }
     };
 

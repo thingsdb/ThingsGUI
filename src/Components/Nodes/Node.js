@@ -19,22 +19,14 @@ const withStores = withVlow([{
     keys: ['node', 'counters']
 }]);
 
-const Node = ({nodeLocal, node, counters}) => {
-    const [serverError, setServerError] = useState('');
-
-    const fetch = React.useCallback(
-        () => {
-            const onError = (err) => setServerError(err);
-            NodesActions.getNode(nodeLocal, onError)
-        },
-        [nodeLocal],
-    ); 
+const Node = ({local, node, counters}) => {
+    const [serverError, setServerError] = React.useState('');
 
     React.useEffect(() => {
-        fetch();
-    }, [nodeLocal.node_id]);
+        NodesActions.getNode((err) => setServerError(err))
+    }, [local.node_id]);
 
-    return node && node.node_id === node.node_id ? (
+    return node && local.node_id === node.node_id ? (
         <React.Fragment>
             {/* <Typography>
                 {node.name}
@@ -59,7 +51,7 @@ const Node = ({nodeLocal, node, counters}) => {
 };
 
 Node.propTypes = {
-    node: PropTypes.object.isRequired,
+    local: PropTypes.object.isRequired,
 
     /* nodes properties */
     node: NodesStore.types.node.isRequired,

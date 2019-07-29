@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
-import {UsersActions, UsersActions} from '../../Stores/UsersStore';
+import {UsersActions, UsersStore} from '../../Stores/UsersStore';
 import ServerError from '../Util/ServerError';
 
 const withStores = withVlow([{
@@ -33,20 +33,11 @@ const initialState = {
 
 const AddUser = ({classes, users}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
-
-    const add = React.useCallback(
-        () => {
-            const onError = (err) => setState({...state, serverError: err});
-            UsersActions.addUser(form.name, form.password, onError);
-        },
-        [form.name, form.password],
-    );
-
+    const {show, errors, form, serverError} = state;
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),
-        password: () => form.password.length>0,
+        //password: () => form.password.length>0,
     };
 
     const handleClickOpen = () => {
@@ -55,7 +46,6 @@ const AddUser = ({classes, users}) => {
             errors: {},
             form: {
                 name: '',
-                password: '',
             },
             serverError: '',
         });
@@ -75,8 +65,11 @@ const AddUser = ({classes, users}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            add();
-            setState({...state, show: false});
+            UsersActions.addUser(form.name, (err) => setState({...state, serverError: err}));
+
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 
@@ -110,17 +103,6 @@ const AddUser = ({classes, users}) => {
                         error={errors.name}
                         // helperText={users.some((u) => u.name===form.name)?'already exists':null}
                     />
-                    <TextField
-                        margin="dense"
-                        id="password"
-                        label="Password"
-                        type="text"
-                        value={form.password}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        error={errors.password}
-                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClickClose} color="primary">
@@ -140,8 +122,7 @@ AddUser.propTypes = {
     classes: PropTypes.object.isRequired,
 
     /* application properties */
-    users: UsersStore.types.users.isRequired,
-    
+    users: UsersStore.types.users.isRequired,    
 };
 
 export default withStyles(styles)(withStores(AddUser)); // QUEST: volgorde goed zo?

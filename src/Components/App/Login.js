@@ -52,13 +52,14 @@ const Login = ({loaded, connected, connErr}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connect(form, (serverError) => setState({...state, serverError}));
+            ApplicationActions.connect(form, (err) => setState({...state, serverError: err.text}));
         }
     };
 
     const handleClickShowPassword = () => {
         setState({...state, showPassword: !showPassword});
     };
+    console.log(serverError);
 
     return (
         <Dialog
@@ -71,7 +72,7 @@ const Login = ({loaded, connected, connErr}) => {
             </DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    {connErr || serverError}
+                    {serverError}
                 </DialogContentText>
                 <TextField
                     autoFocus

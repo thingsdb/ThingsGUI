@@ -19,14 +19,6 @@ const Remove = ({collection}) => {
     const [state, setState] = React.useState(initialState);
     const {show, serverError} = state;
 
-    const remove = React.useCallback(
-        () => {
-            const onError = (err) => setState({...state, serverError: err});
-            CollectionsActions.removeCollection(collection.name, onError);
-        },
-        [collection.name],
-    );
-
     const handleClickOpen = () => {
         setState({...state, show: true});
     };
@@ -36,8 +28,11 @@ const Remove = ({collection}) => {
     };
 
     const handleClickOk = () => {
-        remove();
-        setState({...state, show: false});
+        CollectionsActions.removeCollection(collection.name, (err) => setState({...state, serverError: err}));
+        
+        if (!state.serverError) {
+            setState({...state, show: false});
+        }
     };
 
     return (

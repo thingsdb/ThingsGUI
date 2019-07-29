@@ -36,19 +36,17 @@ class NodesStore extends BaseStore {
     }
 
     onGetNodes(){
-        this.emit('/user/getnodes').done((data) => {
+        this.emit('/node/getnodes').done((data) => {
             this.setState({nodes: data.nodes});
         });
     }
 
-    onGetNode(node, onError) {
-        this.emit('/node/get', {
-            node,
-        }).done((data) => {
+    onGetNode(onError) {
+        this.emit('/node/get').done((data) => {
             this.setState({
                 node: data.node
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onSetLoglevel(node, level, onError) {
@@ -59,7 +57,7 @@ class NodesStore extends BaseStore {
             this.setState({
                 node: data.node
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onSetZone(node, zone, onError) {
@@ -70,51 +68,51 @@ class NodesStore extends BaseStore {
             this.setState({
                 node: data.node
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onResetCounters(node, onError) {
-        emit('/node/counters/reset', {
+        this.emit('/node/counters/reset', {
             node: node.node_id,
         }).done((data) => {
             this.setState({
                 node: data.counters
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onShutdown(node, onError) {
-        emit('/node/shutdown', {
+        this.emit('/node/shutdown', {
             node: node.node_id,
         }).done((data) => {
             this.setState({
                 node: data.node
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
-    onNewNode(config, onError) { // secret , ipAdress [, port]
-        emit('/node/add', config).done((data) => {
+    onAddNode(config, onError) { // secret , ipAdress [, port]
+        this.emit('/node/add', config).done((data) => {
             this.setState({
                 nodes: data.nodes
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onPopNode(onError) {
-        emit('/node/pop').done((data) => {
+        this.emit('/node/pop').done((data) => {
             this.setState({
                 nodes: data.nodes
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onReplaceNode(config, onError) { // nodeId , secret [, port]
-        emit('/node/replace', config).done((data) => {
+        this.emit('/node/replace', config).done((data) => {
             this.setState({
                 nodes: data.nodes
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
     
 };

@@ -7,28 +7,28 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, UsersActions} from '../../Stores/UsersStore';
+import {UsersActions} from '../../Stores/UsersStore';
+import ServerError from '../Util/ServerError';
 
 
 const initialState = {
     show: false,
     errors: {},
     form: {},
+    serverError: '', 
 };
 
 const Password = ({user}) => {
-    const [store, dispatch] = useStore(); // eslint-disable-line no-unused-vars
-    const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
 
-    const setPassword = React.useCallback(UsersActions.password(dispatch, user.name, form.password));
+    const [state, setState] = React.useState(initialState);
+    const {show, errors, form, serverError} = state;
 
     const validation = {
         password: () => form.password.length>0,
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, errors: {}, form: {...user, password: ''}});
+        setState({...state, show: true, errors: {}, form: {...user, password: ''}, serverError: ''});
     };
 
     const handleClickClose = () => {
@@ -46,8 +46,15 @@ const Password = ({user}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            setPassword();
-            setState({...state, show: false});
+            UsersActions.password(
+                user.name, 
+                form.password, 
+                (err) => setState({...state, serverError: err})
+            );
+
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 
@@ -66,7 +73,7 @@ const Password = ({user}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {/* {connErr} */}
+                        {serverError}
                     </DialogContentText>
                     <TextField
                         autoFocus

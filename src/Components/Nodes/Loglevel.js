@@ -26,14 +26,7 @@ const initialState = {
 
 const Loglevel = ({node}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, form} = state;
-    const setLoglevel = React.useCallback(
-        () => {
-            const onError = (err) => setState({...state, serverError: err});
-            NodesActions.setLoglevel(node, form.log_level, onError);
-        },
-        [node, form.log_level],
-    );
+    const {show, form, serverError} = state;
 
     const handleClickOpen = () => {
         setState({show: true, form: {...node}, serverError: ''});
@@ -49,8 +42,14 @@ const Loglevel = ({node}) => {
     };
 
     const handleClickOk = () => {
-        setLoglevel();
-        setState({...state, show: false});
+        NodesActions.setLoglevel(
+            node, 
+            form.log_level, 
+            (err) => setState({...state, serverError: err})
+        );
+        if (!state.serverError) {
+            setState({...state, show: false});
+        }
     };
 
     return (

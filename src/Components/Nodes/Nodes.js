@@ -12,7 +12,7 @@ const withStores = withVlow([{
 }]);
 
 const Nodes = ({nodes}) => {
-
+    console.log(nodes);
     const rows = nodes;
     const header = [{
         ky: 'address',
@@ -24,7 +24,8 @@ const Nodes = ({nodes}) => {
         ky: 'status',
         label: 'Status',
     }];
-    const rowExtend = (node) => <Node node={node} />;
+    const rowExtend = (node) => <Node local={node} />;
+
 
     return (
         <React.Fragment>
@@ -35,7 +36,7 @@ const Nodes = ({nodes}) => {
 
 Nodes.propTypes = {
     /* nodes properties */
-    nodes: NodesStore.types.node.isRequired,
+    nodes: NodesStore.types.nodes.isRequired,
 };
 
 export default withStores(Nodes);

@@ -17,18 +17,12 @@ const withStores = withVlow([{
 const Collection = ({things, collection}) => {
     const [serverError, setServerError] = useState('');
     const fetched = things.hasOwnProperty(collection.collection_id);
-    const fetch = React.useCallback(
-        () => {
-            const onError = (err) => setServerError(err);
-            CollectionActions.query(collection, onError);
-        },
-        [collection],
-    );    
     
     React.useEffect(() => {
-        fetch();
-    }, [collection]);
-    console.log(things.hasOwnProperty('#'), fetched, things)
+        CollectionActions.query(collection, (err) => setServerError(err));
+    }, [collection.collection_id]);
+
+
     return fetched && (
         <React.Fragment>
             <ThingRoot collection={collection} />

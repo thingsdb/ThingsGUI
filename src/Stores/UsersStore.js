@@ -48,18 +48,17 @@ class UsersStore extends BaseStore {
             this.setState({
                 user: data
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
-    onAddUser(name, password, onError){
+    onAddUser(name, onError){
         this.emit('/user/add', {
             name,
-            password,
         }).done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onRemoveUser(name, onError) {
@@ -69,7 +68,7 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
 
@@ -81,22 +80,23 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onPassword(name, password, onError) {
-        emit('/user/password', {
+        this.emit('/user/password', {
             name,
             password,
         }).done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onGrant(name, collection, access, onError) {
-        emit('/user/grant', {
+        console.log(name, collection, access);
+        this.emit('/user/grant', {
             collection,
             name,
             access,
@@ -104,11 +104,11 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onRevoke(name, collection, access, onError) {
-        emit('/user/revoke', {
+        this.emit('/user/revoke', {
             collection,
             name,
             access,
@@ -116,33 +116,33 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onNewToken(config, onError){ // name [, expirationTime] [, description]
-        emit('/user/newtoken', config).done((data) => {
+        this.emit('/user/newtoken', config).done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onDelToken(key, onError){
-        emit('/user/deltoken', {
+        this.emit('/user/deltoken', {
             key,
         }).done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onDelExpired(onError){
-        emit('/user/delexpired').done((data) => {
+        this.emit('/user/delexpired').done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 }
 

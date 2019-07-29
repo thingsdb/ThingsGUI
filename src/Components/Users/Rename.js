@@ -7,29 +7,33 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {useStore, UsersActions} from '../../Stores/UsersStore';
+import {withVlow} from 'vlow';
 
+import {UsersActions, UsersStore} from '../../Stores/UsersStore';
+import ServerError from '../Util/ServerError';
+
+const withStores = withVlow([{
+    store: UsersStore,
+    keys: ['users']
+}]);
 
 const initialState = {
     show: false,
     errors: {},
     form: {},
+    serverError: '',
 };
 
-const Rename = ({user}) => {
-    const [store, dispatch] = useStore();
-    const {users} = store;
+const Rename = ({user, users}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
-
-    const rename = React.useCallback(UsersActions.renameUser(dispatch, user.name, form.name));
+    const {show, errors, form, serverError} = state;
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),
     };
 
     const handleClickOpen = () => {
-        setState({show: true, errors: {}, form: {...user}});
+        setState({show: true, errors: {}, form: {...user}, serverError: ''});
     };
 
     const handleClickClose = () => {
@@ -46,8 +50,15 @@ const Rename = ({user}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            rename();
-            setState({...state, show: false});
+            UsersActions.renameUser(
+                user.name, 
+                form.name, 
+                (err) => setState({...state, serverError: err})
+            );
+
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 
@@ -66,7 +77,7 @@ const Rename = ({user}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {/* {connErr} */}
+                        {serverError}
                     </DialogContentText>
                     <TextField
                         autoFocus
@@ -96,6 +107,9 @@ const Rename = ({user}) => {
 
 Rename.propTypes = {
     user: PropTypes.object.isRequired,
+
+    /* application properties */
+    users: UsersStore.types.users.isRequired,    
 };
 
-export default Rename;
+export default withStores(Rename);

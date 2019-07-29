@@ -38,16 +38,17 @@ class ApplicationStore extends BaseStore {
                 loaded: data.loaded,
                 connected: data.connected,
             });
-        }); //.fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onConnect({host, user, password}, onError) {
+        console.log(host, user, password);
         this.emit('/connect', {host, user, password}).done((data) => {
             this.setState({
                 connErr: data.connErr,
                 connected: data.connected,
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onConnectOther({host}, onError) {
@@ -56,10 +57,11 @@ class ApplicationStore extends BaseStore {
                 connErr: data.connErr, // QUEST: vangt deze alle errors af? 
                 connected: data.connected,
             });
-        }).fail((_xhr, {error}) => onError(error));
+        }).fail((event, status, message) => onError(message));
     }
 
     onDisconnect() {
+        console.log('disconnect')
         this.emit('/disconnect').done(() => {
             this.setState({
                 connected: false,

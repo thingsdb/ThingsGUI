@@ -6,18 +6,10 @@ import ServerError from '../Util/ServerError';
 
 
 const CountersReset = ({node}) => {
-    const [serverError, setServerError] = useState('');
-
-    const resetCounters = React.useCallback(
-        () => {
-            const onError = (err) => setServerError(err);
-            NodesActions.shutdown(node, onError);
-        },
-        [node],
-     );  
+    const [serverError, setServerError] = React.useState('');
 
     const handleClickOk = () => {
-        resetCounters();
+        NodesActions.shutdown(node, (err) => setServerError(err));
     };
 
     return (

@@ -1,15 +1,20 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
-
 import Tabel from '../Util/Table2';
 import AddUser from './Add';
 import User from './User';
-import {useStore} from '../../Stores/ApplicationStore';
+import {withVlow} from 'vlow';
+
+import {UsersStore} from '../../Stores/UsersStore';
+import ServerError from '../Util/ServerError';
+
+const withStores = withVlow([{
+    store: UsersStore,
+    keys: ['users']
+}]);
 
 
-const Users = () => {
-    const [store] = useStore();
-    const {users} = store;
+const Users = ({users}) => {
 
     const rows = users;
     const header = [{
@@ -26,4 +31,10 @@ const Users = () => {
     );
 };
 
-export default Users;
+Users.propTypes = {
+
+    /* application properties */
+    users: UsersStore.types.users.isRequired,    
+};
+
+export default withStores(Users);

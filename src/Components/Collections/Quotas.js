@@ -28,13 +28,6 @@ const Quotas = ({collection}) => {
     const [state, setState] = React.useState(initialState);
     const {show, form, serverError} = state;
 
-    const setQuotas = React.useCallback(
-        () => {
-            const onError = (err) => setState({...state, serverError: err});
-            CollectionsActions.setQuota(collection.name, form.quotaType, form.quota, onError);
-        },
-        [collection.name, form.quotaType, form.quota],
-    );
 
     const _getQuota = (quotaType) => collection[`quota_${quotaType}`]||'';
 
@@ -66,8 +59,16 @@ const Quotas = ({collection}) => {
     };
 
     const handleClickOk = () => {
-        setQuotas();
-        setState({...state, show: false});
+        CollectionsActions.setQuota(
+            collection.name, 
+            form.quotaType, 
+            form.quota, 
+            (err) => setState({...state, serverError: err})
+        );
+
+        if (!state.serverError) {
+            setState({...state, show: false});
+        }
     };
 
     return (

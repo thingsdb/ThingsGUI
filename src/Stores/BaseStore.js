@@ -16,8 +16,8 @@ class _SocketRequest {
     _doneCb() {
     }
 
-    _failCb(event, status, data) {
-        window.console.error(event, status, data);
+    _failCb(event, status, message) {
+        window.console.error(event, status, message);
     }
 
     _alwaysCb() {
@@ -38,13 +38,18 @@ class _SocketRequest {
             }
 
             this._alwaysCb(status, data);
+            
+            console.log(status, data, message);
             if (status === 0) {
+                console.log('done');
                 window.console.debug(`Socket response ("${event}"):`, data);
                 this._doneCb(data);
             } else if (status === 125) {
+                console.log('status: 125');
                 // ConnectionActions.triggerSessionError();
             } else {
-                this._failCb(event, status, data);
+                console.log('fail');
+                this._failCb(event, status, message);
             }
         });
     }

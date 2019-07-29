@@ -1,6 +1,7 @@
 from thingsdb.exceptions import ThingsDBError
 from trender.aiohttp_template import template
 from .base import BaseHandler
+from ..message import Message
 from ..version import __version__
 
 
@@ -47,7 +48,10 @@ class LoginHandler(BaseHandler):
             }
 
         try:
-            await client.authenticate(auth=[user, password])
+            print('test auth')
+            print(user, password)
+            a = await client.authenticate(auth=[user, password])
+            print(a)
         except ThingsDBError as e:
             print('authentication error \n')
             return {
@@ -64,17 +68,28 @@ class LoginHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def connect(cls, client, data):
-        print(data)
+        print('data:  ', data)
         resp = await cls._connect(
             client,
             data['host'],
             data['user'],
             data['password'])
-        return cls.socket_response(data=resp)
+        print('resp:  ', resp)
+
+        if (resp['connected']):
+            response = cls.socket_response(data=resp)
+        else:
+            response = cls.socket_response(data=None, message=Message(
+                text=resp['connErr'],
+                status=500,
+                log=resp['connErr']))
+
+        return response
 
     @classmethod
     @BaseHandler.socket_handler
     async def connect_other(cls, client, data):
+        print(client)
         user = client._username
         password = client._password
 

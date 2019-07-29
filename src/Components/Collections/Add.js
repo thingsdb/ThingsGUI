@@ -60,14 +60,6 @@ const Add = ({classes, connErr, collections}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
 
-    const add = React.useCallback( // QUEST: reason for  useCallback?
-        () => {
-            const onError = (err) => setState({...state, serverError: err});
-            CollectionsActions.addCollection(form.name, onError);
-        },
-        [form.name],
-    ); 
-
     const validation = {
         name: () => form.name.length>0&&collections.every((c) => c.name!==form.name),
     };
@@ -97,8 +89,11 @@ const Add = ({classes, connErr, collections}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            add();
-            setState({...state, show: false});
+            CollectionsActions.addCollection(form.name, (err) => setState({...state, serverError: err}));
+
+            if(!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 

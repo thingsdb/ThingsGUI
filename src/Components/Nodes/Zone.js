@@ -20,15 +20,7 @@ const initialState = {
 
 const Zone = ({node}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, form} = state;
-
-    const setZone = React.useCallback(
-        () => {
-            const onError = (err) => setState({...state, serverError: err});
-            NodesActions.setZone(node, form.zone, onError);
-        },
-        [node, form.zone],
-     );
+    const {show, form, serverError} = state;
 
     const handleClickOpen = () => {
         setState({show: true, form: {...node}, serverError: ''});
@@ -44,8 +36,14 @@ const Zone = ({node}) => {
     };
 
     const handleClickOk = () => {
-        setZone();
-        setState({...state, show: false});
+        NodesActions.setZone(
+            node, 
+            form.zone, 
+            (err) => setState({...state, serverError: err})
+        );
+        if (!state.serverError) {
+            setState({...state, show: false});
+        }
     };
 
     return (

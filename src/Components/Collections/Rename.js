@@ -28,14 +28,6 @@ const Rename = ({collection, collections}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
 
-    const rename = React.useCallback(
-        () => {
-            const onError = (err) => setState({...state, serverError: err});
-            CollectionsActions.renameCollection(collection.name, form.name, onError);
-        },
-        [collection.name, form.name],
-    );
-
     const handleClickOpen = () => {
         setState({
             show: true,
@@ -63,8 +55,15 @@ const Rename = ({collection, collections}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            rename();
-            setState({...state, show: false});
+            CollectionsActions.renameCollection(
+                collection.name, 
+                form.name, 
+                (err) => setState({...state, serverError: err})
+            );
+
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 

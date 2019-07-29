@@ -78,14 +78,14 @@ class SocketRouter:
 
         sio.on(
             event='/user/password',
-            handler=UserHandler.set_password)     
+            handler=UserHandler.set_password)
 
         sio.on(
-            event='user/grant',
+            event='/user/grant',
             handler=UserHandler.grant)
 
         sio.on(
-            event='user/revoke',
+            event='/user/revoke',
             handler=UserHandler.revoke)
 
         sio.on(
