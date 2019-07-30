@@ -1,5 +1,8 @@
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
@@ -22,16 +25,21 @@ const withStores = withVlow([{
 
 const styles = theme => ({
     root: {
+        minWidth: 1200,
         display: 'flex',
     },
     menu: {
-        paddingTop: theme.spacing(1),
+        width: '20%',
     },
     content: {
-        flexGrow: 1,
+        width: '55%',
         padding: theme.spacing(1),
         // height: '100vh',
         // overflow: 'auto',
+    },
+    sidebar: {
+        width: '25%',
+        padding: theme.spacing(1),
     },
 });
 
@@ -60,7 +68,19 @@ const App = ({classes, match}) => {
                     <Menu onClickCollection={handleClickCollection}/>
                 </div>
                 <div className={classes.content}>
-                    {pages[match.path]}
+                    <Card>
+                        {pages[match.path]}
+                    </Card>    
+                </div>
+                <div className={classes.sidebar}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant={'h5'}> 
+                                {'nodes'}
+                            </Typography>
+                         </CardContent>
+                        <Nodes />
+                    </Card>
                 </div>
             </div>
         </React.Fragment>

@@ -95,7 +95,6 @@ class UsersStore extends BaseStore {
     }
 
     onGrant(name, collection, access, onError) {
-        console.log(name, collection, access);
         this.emit('/user/grant', {
             collection,
             name,

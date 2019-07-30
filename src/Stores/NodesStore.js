@@ -44,7 +44,8 @@ class NodesStore extends BaseStore {
     onGetNode(onError) {
         this.emit('/node/get').done((data) => {
             this.setState({
-                node: data.node
+                node: data.node,
+                counters: data.counters
             });
         }).fail((event, status, message) => onError(message));
     }
@@ -76,7 +77,7 @@ class NodesStore extends BaseStore {
             node: node.node_id,
         }).done((data) => {
             this.setState({
-                node: data.counters
+                counters: data.counters
             });
         }).fail((event, status, message) => onError(message));
     }

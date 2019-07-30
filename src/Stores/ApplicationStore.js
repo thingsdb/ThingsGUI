@@ -42,7 +42,6 @@ class ApplicationStore extends BaseStore {
     }
 
     onConnect({host, user, password}, onError) {
-        console.log(host, user, password);
         this.emit('/connect', {host, user, password}).done((data) => {
             this.setState({
                 connErr: data.connErr,
@@ -61,7 +60,6 @@ class ApplicationStore extends BaseStore {
     }
 
     onDisconnect() {
-        console.log('disconnect')
         this.emit('/disconnect').done(() => {
             this.setState({
                 connected: false,

@@ -11,7 +11,7 @@ const ViewCollection = ({collection}) => {
 
     return (
         <React.Fragment>
-            <Button variant="contained" onClick={handleClickView}>
+            <Button variant="outlined" onClick={handleClickView}>
                 {'View'}
             </Button>
         </React.Fragment>

@@ -12,7 +12,6 @@ const withStores = withVlow([{
 }]);
 
 const Nodes = ({nodes}) => {
-    console.log(nodes);
     const rows = nodes;
     const header = [{
         ky: 'address',

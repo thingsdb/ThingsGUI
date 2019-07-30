@@ -64,7 +64,7 @@ const Rename = ({user, users}) => {
 
     return (
         <React.Fragment>
-            <Button variant="contained" onClick={handleClickOpen}>
+            <Button variant="outlined" onClick={handleClickOpen}>
                 {'Rename'}
             </Button>
             <Dialog

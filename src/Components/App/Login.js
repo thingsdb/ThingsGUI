@@ -59,7 +59,6 @@ const Login = ({loaded, connected, connErr}) => {
     const handleClickShowPassword = () => {
         setState({...state, showPassword: !showPassword});
     };
-    console.log(serverError);
 
     return (
         <Dialog

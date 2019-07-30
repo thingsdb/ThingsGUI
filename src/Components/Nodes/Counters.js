@@ -12,7 +12,6 @@ import Typography from '@material-ui/core/Typography';
 const Counters = ({counters}) => {
     
     const header = [
-        {ky: 'queries_received', label: 'Queries received'},
         {ky: 'events_with_gap', label: 'Events with gap'},
         {ky: 'events_skipped', label: 'Events skipped'},
         {ky: 'events_failed', label: 'Events failed'},
@@ -21,21 +20,23 @@ const Counters = ({counters}) => {
         {ky: 'events_quorum_lost', label: 'Events quorumlost'},
         {ky: 'events_unaligned', label: 'Events unaligned'},
         {ky: 'garbage_collected', label: 'Garbage collected'},
-        {ky: 'longest_event_duration', label: 'Longest eventduration'},
+        {ky: 'longest_event_duration', label: 'Longest event duration'},
         {ky: 'average_event_duration', label: 'Average event duration'},
+        {ky: 'queries_success', label: 'Succesfull queries'},
+        {ky: 'queries_with_error', label: 'Queries with error'},
     ];
     
     return (
         <Grid container spacing={0}>
             {header.map((h) => (
                 <React.Fragment key={h.ky}>
-                    <Grid item xs={3}>
-                        <Typography>
-                            {h.label}
+                    <Grid item xs={6}>
+                        <Typography variant={'caption'}>
+                            {h.label + ':'}
                         </Typography>
                     </Grid>
-                    <Grid item xs={9}>
-                        <Typography>
+                    <Grid item xs={6}>
+                        <Typography variant={'subtitle2'}>
                             {counters[h.ky]}
                         </Typography>
                     </Grid>

@@ -37,7 +37,7 @@ const Remove = ({collection}) => {
 
     return (
         <React.Fragment>
-            <Button variant="contained" onClick={handleClickOpen}>
+            <Button variant="outlined" onClick={handleClickOpen}>
                 {'Remove'}
             </Button>
             <Dialog

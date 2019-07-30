@@ -15,9 +15,37 @@ const styles = theme => ({
     button: {
         margin: theme.spacing(1),
     },
+    row: {
+        backgroundColor: 'rgba(0, 0, 0, .03)',
+        borderBottom: '1px solid rgba(0, 0, 0, .125)',
+        marginBottom: -1,
+        minHeight: 56,
+        '&$expanded': {
+            minHeight: 56,
+        },
+    },
+        content: {
+        '&$expanded': {
+            margin: '12px 0',
+        },
+    },
+    collapse: {
+        backgroundColor: '#191D1F',
+        border: '1px solid rgba(0, 0, 0, .125)',
+        boxShadow: 'none',
+        '&:not(:last-child)': {
+          borderBottom: 0,
+        },
+        '&:before': {
+          display: 'none',
+        },
+        '&$expanded': {
+          margin: 'auto',
+        },
+    },
 });
 
-const Tabel = ({header, rows, rowExtend}) => {
+const Tabel = ({classes, header, rows, rowExtend}) => {
     const [selected, setSelected] = React.useState(null);
 
     const handleClickRow = (ri) => () => {
@@ -42,7 +70,7 @@ const Tabel = ({header, rows, rowExtend}) => {
                         const isopen = selected===ri;
                         return (
                             <React.Fragment key={ri}>
-                                <TableRow onClick={handleClickRow(ri)}>
+                                <TableRow className={classes.row} onClick={handleClickRow(ri)}>
                                     {header.map((h, i) => (
                                         <TableCell key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
                                             {row[h.ky]}
@@ -53,7 +81,7 @@ const Tabel = ({header, rows, rowExtend}) => {
                                     </TableCell>
                                 </TableRow>
                                 {isopen &&
-                                <TableRow style={{display: isopen?null:'none', borderBottom: 'none'}}>
+                                <TableRow className={classes.collapse} style={{display: isopen?null:'none', borderBottom: 'none'}}>
                                     <TableCell colSpan={12}>
                                         <Collapse hidden={!isopen} in={isopen}>
                                             {rowExtend(row)}
@@ -70,6 +98,9 @@ const Tabel = ({header, rows, rowExtend}) => {
 };
 
 Tabel.propTypes = {
+    /* styles properties */
+    classes: PropTypes.object.isRequired,
+
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     rowExtend: PropTypes.func.isRequired,

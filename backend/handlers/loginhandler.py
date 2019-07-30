@@ -48,10 +48,7 @@ class LoginHandler(BaseHandler):
             }
 
         try:
-            print('test auth')
-            print(user, password)
-            a = await client.authenticate(auth=[user, password])
-            print(a)
+            a = await client.authenticate(auth=[user, password])  # TODOs auth not working correctly 
         except ThingsDBError as e:
             print('authentication error \n')
             return {
@@ -68,13 +65,11 @@ class LoginHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def connect(cls, client, data):
-        print('data:  ', data)
         resp = await cls._connect(
             client,
             data['host'],
             data['user'],
             data['password'])
-        print('resp:  ', resp)
 
         if (resp['connected']):
             response = cls.socket_response(data=resp)
@@ -89,7 +84,6 @@ class LoginHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def connect_other(cls, client, data):
-        print(client)
         user = client._username
         password = client._password
 

@@ -18,7 +18,7 @@ const Revoke = ({user, target, privileges}) => {
 
     return (
         <React.Fragment>
-            <Button variant="contained" onClick={handleClickOk}>
+            <Button variant="outlined" onClick={handleClickOk}>
                 {'Revoke'}
             </Button>
         </React.Fragment>

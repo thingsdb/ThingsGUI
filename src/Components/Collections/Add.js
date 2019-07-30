@@ -38,14 +38,14 @@ const styles = theme => ({
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
         '&:hover': {
-            backgroundColor: '#eeeeee',
+            backgroundColor: '#303030',
         },
         text: 'italic',
     },
     icon: {
         marginTop: theme.spacing(0.5),
         marginBottom: theme.spacing(0.5),
-        color: '#757575',
+        color: '#eee',
     },
 });
 
@@ -99,7 +99,7 @@ const Add = ({classes, connErr, collections}) => {
 
     return (
         <React.Fragment>
-            {/* <Button className={classes.button} variant="contained" onClick={handleClickOpen}>
+            {/* <Button className={classes.button} variant="outlined" onClick={handleClickOpen}>
                 <AddBoxIcon />
                 {'Add'}
             </Button> */}

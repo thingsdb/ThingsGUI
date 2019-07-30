@@ -48,7 +48,7 @@ const Zone = ({node}) => {
 
     return (
         <React.Fragment>
-            <Button variant="contained" onClick={handleClickOpen}>
+            <Button variant="outlined" onClick={handleClickOpen}>
                 {'Zone'}
             </Button>
             <Dialog

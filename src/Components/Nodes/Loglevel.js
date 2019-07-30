@@ -54,7 +54,7 @@ const Loglevel = ({node}) => {
 
     return (
         <React.Fragment>
-            <Button variant="contained" onClick={handleClickOpen}>
+            <Button variant="outlined" onClick={handleClickOpen}>
                 {'Loglevel'}
             </Button>
             <Dialog

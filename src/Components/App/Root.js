@@ -11,24 +11,27 @@ import {ApplicationStore} from '../../Stores/ApplicationStore';
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
     palette: {
-        type: 'light',
-        // primary: {
-        //     main: '#16113d',
-            
-        // },
-        // secondary: {
-            // main: '#e6293f'
-        // },
-        // background: {
-            // default: '#eee',
-            // default: '#ddd',
-            // paper: '#fff'
-        // },
+        type: 'dark',
+        primary: {
+            main: 'rgba(0, 55, 123, 0.3)',   
+        },
+        secondary: {
+            main: 'rgba(85, 161, 255, 0.51)'
+        },
+        background: {
+            default: '#2E3336',
+            paper: '#1E2224'
+        },
         typography: {
             useNextVariants: true,
         },
+        text: {
+            primary: '#eee',
+            secondary: "#00000"
+      } 
     },
 });
+
 
 const withStores = withVlow([{
     store: ApplicationStore,

@@ -60,7 +60,7 @@ const Password = ({user}) => {
 
     return (
         <React.Fragment>
-            <Button variant="contained" onClick={handleClickOpen}>
+            <Button variant="outlined" onClick={handleClickOpen}>
                 {'Password'}
             </Button>
             <Dialog

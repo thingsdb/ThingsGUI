@@ -69,7 +69,7 @@ const Rename = ({collection, collections}) => {
 
     return (
         <React.Fragment>
-            <Button variant="contained" onClick={handleClickOpen}>
+            <Button variant="outlined" onClick={handleClickOpen}>
                 {'Rename'}
             </Button>
             <Dialog

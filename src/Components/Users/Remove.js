@@ -14,7 +14,7 @@ const Remove = ({user}) => {
 
     return (
         <React.Fragment>
-            <Button variant="contained" onClick={handleClickOk}>
+            <Button variant="outlined" onClick={handleClickOk}>
                 {'Remove'}
             </Button>
         </React.Fragment>

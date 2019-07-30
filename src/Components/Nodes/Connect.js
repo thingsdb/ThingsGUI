@@ -59,7 +59,7 @@ const Connect = ({connErr}) => {
 
     return (
         <React.Fragment>
-            <Button variant="contained" onClick={handleClickConnect}>
+            <Button variant="outlined" onClick={handleClickConnect}>
                 {'Connect'}
             </Button>
             <Dialog

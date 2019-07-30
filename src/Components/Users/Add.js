@@ -75,7 +75,7 @@ const AddUser = ({classes, users}) => {
 
     return (
         <React.Fragment>
-            <Button className={classes.button} variant="contained" onClick={handleClickOpen}>
+            <Button className={classes.button} variant="outlined" onClick={handleClickOpen}>
                 {'Add'}
             </Button>
             <Dialog

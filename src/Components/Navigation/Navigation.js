@@ -25,6 +25,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {withStyles} from '@material-ui/core';
 
 import {ApplicationActions} from '../../Stores/ApplicationStore';
+import Nodes from '../Nodes/Nodes';
 // import packageJson from '../../'; TODO does not find package.json
 
 const drawerWidth = '25%';
@@ -201,6 +202,7 @@ class Navigation extends React.Component {
                         </IconButton>
                     </div>
                     <Divider />
+                    <Nodes />
                 </Drawer>
             </React.Fragment>
         );
