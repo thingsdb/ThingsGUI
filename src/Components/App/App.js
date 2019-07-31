@@ -6,20 +6,26 @@ import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
-import Collection from '../Collections/Collection';
+import NodeButtons from '../Nodes/NodeButtons';
 import Collections from '../Collections/Collections';
-import Menu from '../Navigation/Menu';
+import CollectionsMenu from '../Navigation/CollectionsMenu';
+import UsersMenu from '../Navigation/UsersMenu';
 import Nodes from '../Nodes/Nodes';
-// import Things from '../Collection/Things';
-// import User from '../User/User';
 import Users from '../Users/Users';
+import TopBar from '../Navigation/TopBar';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
-import Navigation from '../Navigation/Navigation';
-
+import {CollectionsStore} from '../../Stores/CollectionsStore';
+import {UsersStore} from '../../Stores/UsersStore';
 
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['match']
+}, {
+    store: CollectionsStore,
+    keys: ['collections']
+}, {
+    store: UsersStore,
+    keys: ['user']
 }]);
 
 
@@ -29,57 +35,82 @@ const styles = theme => ({
         display: 'flex',
     },
     menu: {
-        width: '20%',
+        width: '15%',
+        minWidth: 220,
+        padding: theme.spacing(1),
+    },
+    submenu: {
+        paddingBottom: theme.spacing(1),
     },
     content: {
-        width: '55%',
+        width: '60%',
         padding: theme.spacing(1),
         // height: '100vh',
         // overflow: 'auto',
     },
+    contentShrinked: {
+        width: '0%',
+    },
     sidebar: {
         width: '25%',
+        minWidth: 380,
+        padding: theme.spacing(1),
+    },
+    sidebarExpanded: {
+        width: '85%',
+        minWidth: 380,
         padding: theme.spacing(1),
     },
 });
 
 
-const App = ({classes, match}) => {
-    const [collection, setCollection] = useState({})
+const App = ({classes, collections, match, user}) => {
+    const [index, setIndex] = useState(0)
+    
+    const findCollection = (index) => collections.length ? (index+1 > collections.length ? findCollection(index-1) : collections[index]) : {};
+    
+    const collection = findCollection(index);
+
     const pages = {
-        // things: <Things />,
-        collection: <Collection collection={collection}/>,
         collections: <Collections collection={collection}/>,
-        nodes: <Nodes />,
-        // user: <User />,
         users: <Users />,
     };
 
-
-    const handleClickCollection = (collection) => {
-        setCollection(collection);
+    const handleClickCollection = (i) => {
+        setIndex(i);
     }
+    console.log(pages[match.path]);
 
     return(
         <React.Fragment>
-            <Navigation />
+            <TopBar user={user} />
             <div className={classes.root}>
                 <div className={classes.menu}>
-                    <Menu onClickCollection={handleClickCollection}/>
+                    <div className={classes.submenu}>
+                        <Card>
+                            <CollectionsMenu collections={collections} onClickCollection={handleClickCollection}/>
+                        </Card>
+                    </div>
+                    <div className={classes.submenu}>
+                        <Card>
+                            <UsersMenu />
+                        </Card>  
+                    </div>   
                 </div>
-                <div className={classes.content}>
+                <div className={pages[match.path] ? classes.content : classes.contentShrinked}>
                     <Card>
                         {pages[match.path]}
                     </Card>    
                 </div>
-                <div className={classes.sidebar}>
+                <div className={pages[match.path] ? classes.sidebar : classes.sidebarExpanded}>
                     <Card>
                         <CardContent>
-                            <Typography variant={'h5'}> 
-                                {'nodes'}
+                            <Typography variant={'h6'}> 
+                                {'NODES'}
                             </Typography>
                          </CardContent>
                         <Nodes />
+                        <NodeButtons />
                     </Card>
                 </div>
             </div>
@@ -89,7 +120,15 @@ const App = ({classes, match}) => {
 
 App.propTypes = {
     classes: PropTypes.object.isRequired,
+
+    /* Application properties */
     match: ApplicationStore.types.match.isRequired,
+
+    /* Collections properties */
+    collections: CollectionsStore.types.collections.isRequired,
+
+    /* Users properties */
+    user: UsersStore.types.user.isRequired,
 };
 
 export default withStyles(styles)(withStores(App));

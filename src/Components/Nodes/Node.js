@@ -46,7 +46,7 @@ const Node = ({classes, local, node, counters}) => {
     }, [local.node_id]);
 
     const handleChangeTab = (_event, newValue) => setState({...state, tabIndex: newValue}); 
-    console.log(node);
+
     return node && local.node_id === node.node_id ? (
         <React.Fragment>
             <StyledTabs value={tabIndex} onChange={handleChangeTab} aria-label="styled tabs example">

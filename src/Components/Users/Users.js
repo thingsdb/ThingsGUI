@@ -19,7 +19,7 @@ const Users = ({users}) => {
     const rows = users;
     const header = [{
         ky: 'name',
-        label: 'User',
+        label: 'USER',
     }];
     const rowExtend = (row) => <User user={row} />;
 

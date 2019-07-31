@@ -2,11 +2,12 @@
 import List from '@material-ui/core/List';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
+import ServerError from '../Util/ServerError';
 
 import Thing from './Thing';
 
@@ -25,17 +26,30 @@ const styles = theme => ({
 });
 
 const ThingRoot = ({classes, things, collection}) => {
+
+    const [serverError, setServerError] = React.useState('');
+    const fetched = things.hasOwnProperty(collection.collection_id);
+    
+    React.useEffect(() => {
+        CollectionActions.query(collection, (err) => setServerError(err));
+    }, [collection.collection_id]);
     
     return (
         <React.Fragment>
-            <List
-                component="nav"
-                className={classes.root}
-            >
-                {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
-                    <Thing key={k} thing={v} name={k} collection={collection} />
-                ))}
-            </List>
+            {fetched ? (
+                <List
+                    component="nav"
+                    className={classes.root}
+                >
+                    {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
+                        <Thing key={k} thing={v} name={k} collection={collection} />
+                    ))}
+                </List>
+            ) : (
+                <Typography variant={'caption'}>
+                    {'This collections does not have anything stored yet.'}
+                </Typography>
+            )}
         </React.Fragment>
     );
 };

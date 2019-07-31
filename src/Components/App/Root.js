@@ -13,10 +13,10 @@ const theme = createMuiTheme({
     palette: {
         type: 'dark',
         primary: {
-            main: 'rgba(0, 55, 123, 0.3)',   
+            main: 'rgba(85, 161, 255, 0.51)',
         },
         secondary: {
-            main: 'rgba(85, 161, 255, 0.51)'
+            main: 'rgba(0, 55, 123, 0.3)',  
         },
         background: {
             default: '#2E3336',

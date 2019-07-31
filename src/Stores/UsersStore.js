@@ -33,6 +33,7 @@ class UsersStore extends BaseStore {
         super(UsersActions);
         this.state = UsersStore.defaults;
         this.onGetUsers();
+        this.onGetUser();
     }
 
     onGetUsers(){
@@ -41,14 +42,14 @@ class UsersStore extends BaseStore {
         });
     }
 
-    onGetUser(name, onError){
+    onGetUser(config=null){
         this.emit('/user/get', {
-            name,
+            config,
         }).done((data) => {
             this.setState({
                 user: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
     onAddUser(name, onError){

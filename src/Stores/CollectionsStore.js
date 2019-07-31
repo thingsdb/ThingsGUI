@@ -68,9 +68,9 @@ class CollectionsStore extends BaseStore {
         }).fail((event, status, message) => onError(message));
     }
 
-    onRemoveCollection(collection, onError) {
+    onRemoveCollection(name, onError) {
         this.emit('/collection/remove', {
-            collection,
+            name,
         }).done((data) => {
             this.setState({
                 collections: data

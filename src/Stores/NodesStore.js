@@ -92,7 +92,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => onError(message));
     }
 
-    onAddNode(config, onError) { // secret , ipAdress [, port]
+    onAddNode(config, onError) { // secret , ipAddress [, port]
         this.emit('/node/add', config).done((data) => {
             this.setState({
                 nodes: data.nodes

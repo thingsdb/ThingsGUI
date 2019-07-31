@@ -58,6 +58,19 @@ const Quotas = ({collection}) => {
         setState({...state, form});
     };
 
+    const handleUnset = () => {
+        CollectionsActions.setQuota(
+            collection.name, 
+            form.quotaType, 
+            "nil", 
+            (err) => setState({...state, serverError: err})
+        );
+
+        if (!state.serverError) {
+            setState({...state, show: false});
+        }
+    }
+
     const handleClickOk = () => {
         CollectionsActions.setQuota(
             collection.name, 
@@ -109,6 +122,7 @@ const Quotas = ({collection}) => {
                         autoFocus
                         margin="dense"
                         id="quota"
+                        inputProps={{min: "1"}}
                         label="Quota"
                         type="number"
                         value={form.quota}  // TODOK placeholder
@@ -118,6 +132,9 @@ const Quotas = ({collection}) => {
                     />
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={handleUnset} color="primary">
+                        {'Unset quota'}
+                    </Button>
                     <Button onClick={handleClickClose} color="primary">
                         {'Cancel'}
                     </Button>
