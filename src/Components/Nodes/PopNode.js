@@ -1,28 +1,69 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import {NodesActions} from '../../Stores/NodesStore';
 import ServerError from '../Util/ServerError';
 
+const initialState = {
+    show: false,
+    serverError: '', 
+};
 
-const PopNode = ({node}) => {
-    const [serverError, setServerError] = React.useState('');
+const PopNode = () => {
+    const [state, setState] = React.useState(initialState);
+    const {show, serverError} = state;
+
+    const handleClickOpen = () => {
+        setState({...state, show: true, serverError: ''});
+    };
+
+    const handleClickClose = () => {
+        setState({...state, show: false});
+    };
 
     const handleClickOk = () => {
-        NodesActions.popNode((err) => setServerError(err));
+        NodesActions.popNode((err) => setState({...state, serverError: err}));
+        if (!state.serverError) {
+            setState({...state, show: false});
+        }
     };
 
     return (
         <React.Fragment>
-            <Button variant="outlined" onClick={handleClickOk}>
+            <Button variant="outlined" onClick={handleClickOpen}>
                 {'Pop Node'}
             </Button>
+            <Dialog
+                open={show}
+                onClose={handleClickClose}
+                aria-labelledby="form-dialog-title"
+            >
+                <DialogTitle id="form-dialog-title">
+                    {'CAUTION:'}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {'Are you sure you want to remove the latest node?'}
+                    </DialogContentText>
+                    <DialogContentText>
+                        {serverError}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClickClose} color="primary">
+                        {'Cancel'}
+                    </Button>
+                    <Button onClick={handleClickOk} color="primary">
+                        {'Yes'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
-};
-
-PopNode.propTypes = {
-    node: PropTypes.object.isRequired,
 };
 
 export default PopNode;

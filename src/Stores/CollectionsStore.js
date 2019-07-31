@@ -44,7 +44,7 @@ class CollectionsStore extends BaseStore {
                 collection: data
             });
             // onError('')
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
    
     onAddCollection(name, onError) {
@@ -54,7 +54,7 @@ class CollectionsStore extends BaseStore {
             this.setState({
                 collections: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
     
     onRenameCollection(oldname, newname, onError) {
@@ -65,7 +65,7 @@ class CollectionsStore extends BaseStore {
             this.setState({
                 collections: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 
     onRemoveCollection(name, onError) {
@@ -75,7 +75,7 @@ class CollectionsStore extends BaseStore {
             this.setState({
                 collections: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 
     onSetQuota(name, quotaType, quota, onError) {
@@ -87,7 +87,7 @@ class CollectionsStore extends BaseStore {
             this.setState({
                 collections: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 }
 

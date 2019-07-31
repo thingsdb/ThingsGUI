@@ -15,7 +15,7 @@ const styles = theme => ({
 });
 
 
-const NodeButtons = ({classes, node}) => {
+const NodeButtons = ({classes}) => {
 
     return (
         <React.Fragment>
@@ -35,16 +35,12 @@ const NodeButtons = ({classes, node}) => {
                             <PopNode />
                         </Grid>
                         <Grid item>
-                            <ReplaceNode node={node} />
+                            <ReplaceNode />
                         </Grid>
                     </Grid>
                 </Grid>
         </React.Fragment>
     );
-};
-
-NodeButtons.propTypes = {
-    node: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(NodeButtons);

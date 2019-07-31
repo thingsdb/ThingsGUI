@@ -59,7 +59,7 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 
     onRemoveUser(name, onError) {
@@ -69,7 +69,7 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 
 
@@ -81,7 +81,7 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 
     onPassword(name, password, onError) {
@@ -92,7 +92,7 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 
     onGrant(name, collection, access, onError) {
@@ -104,7 +104,7 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 
     onRevoke(name, collection, access, onError) {
@@ -116,7 +116,7 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 
     onNewToken(config, onError){ // name [, expirationTime] [, description]
@@ -124,7 +124,7 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 
     onDelToken(key, onError){
@@ -134,7 +134,7 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 
     onDelExpired(onError){
@@ -142,7 +142,7 @@ class UsersStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => onError(message.log));
     }
 }
 

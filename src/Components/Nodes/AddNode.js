@@ -1,6 +1,11 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import {NodesActions} from '../../Stores/NodesStore';
 import ServerError from '../Util/ServerError';
 
@@ -18,6 +23,7 @@ const AddNode = () => {
     const validation = {
         secret: () => form.secret.length>0,
         ipAddress: () => form.ipAddress.length>0, // TODOs validate regex
+        port: () => true,
     };
 
     const handleClickOpen = () => {
@@ -41,7 +47,7 @@ const AddNode = () => {
         if (!Object.values(errors).some(d => d)) {
             NodesActions.addNode(
                 form,
-                (err) => setServerError(err)
+                (err) => setState({...state, serverError: err})
             );
             if (!state.serverError) {
                 setState({...state, show: false});
@@ -79,7 +85,6 @@ const AddNode = () => {
                         error={errors.secret}
                     />
                     <TextField
-                        autoFocus
                         margin="dense"
                         id="ipAddress"
                         label="IP address"
@@ -91,14 +96,13 @@ const AddNode = () => {
                         error={errors.ipAddress}
                     />
                     <TextField
-                        autoFocus
                         margin="dense"
                         id="port"
                         label="Port"
                         type="text"
                         value={form.port}
                         spellCheck={false}
-                        onChange={handleOnChange} // NOT REQUIRED
+                        onChange={handleOnChange} 
                         fullWidth
                         error={errors.port}
                     />
