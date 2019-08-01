@@ -7,11 +7,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
 import {UsersActions, UsersStore} from '../../Stores/UsersStore';
-import ServerError from '../Util/ServerError';
 
 const withStores = withVlow([{
     store: UsersStore,
@@ -88,7 +88,9 @@ const AddUser = ({classes, users}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {serverError}
+                        <Typography variant={'caption'} color={'error'}>
+                            {serverError}
+                        </Typography>   
                     </DialogContentText>
                     <TextField
                         autoFocus

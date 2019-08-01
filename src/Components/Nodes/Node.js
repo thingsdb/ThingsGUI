@@ -55,11 +55,9 @@ const Node = ({classes, local, node, counters}) => {
             </StyledTabs>
             {tabIndex === 0 && 
                 <Grid
-                    alignItems="stretch"
                     className={classes.info}
                     container
                     direction="column"
-                    justify="center"
                     spacing={3}
                 >
                     <Grid item xs={12}>
@@ -80,20 +78,16 @@ const Node = ({classes, local, node, counters}) => {
             }
             {tabIndex === 1 && 
                 <Grid
-                    alignItems="stretch"
                     className={classes.counters}
                     container
                     direction="column"
-                    justify="center"
-                    spacing={3}
+                    spacing={0}
                 >
                     <Grid item xs={12}>
                         <Counters counters={counters} />
                     </Grid>
-                    <Grid item container xs={12} spacing={1} >
-                        <Grid item>
-                            <CountersReset node={node} />
-                        </Grid>
+                    <Grid item xs={12}>
+                        <CountersReset node={node} />
                     </Grid>
                 </Grid>
             }

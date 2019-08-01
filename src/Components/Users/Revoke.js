@@ -4,15 +4,14 @@ import Button from '@material-ui/core/Button';
 import  {UsersActions} from '../../Stores/UsersStore';
 
 
-const Revoke = ({user, target, privileges}) => {
-    const [serverError, setServerError] = React.useState('');
+const Revoke = ({user, target, privileges, onServerError}) => {
 
     const handleClickOk = () => {
         UsersActions.revoke(
             user.name, 
             target, 
             privileges, 
-            (err) => setServerError(err)
+            (err) => onServerError(err)
         );
     };
 
@@ -29,6 +28,7 @@ Revoke.propTypes = {
     user: PropTypes.object.isRequired,
     target: PropTypes.string.isRequired,
     privileges: PropTypes.string.isRequired, // TODOK
+    onServerError: PropTypes.func.isRequired, 
 };
 
 export default Revoke;

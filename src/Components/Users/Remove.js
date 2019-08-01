@@ -2,14 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import {UsersActions} from '../../Stores/UsersStore';
-import ServerError from '../Util/ServerError';
 
-
-const Remove = ({user}) => {
-    const [serverError, setServerError] = React.useState('');
+const Remove = ({user, onServerError}) => { // TODO dialog are u sure?
 
     const handleClickOk = () => {
-        UsersActions.removeUser(user.name, (err) => setServerError(err));
+        UsersActions.removeUser(user.name, (err) => onServerError(err));
     };
 
     return (
@@ -23,6 +20,7 @@ const Remove = ({user}) => {
 
 Remove.propTypes = {
     user: PropTypes.object.isRequired,
+    onServerError: PropTypes.func.isRequired, 
 };
 
 export default Remove;

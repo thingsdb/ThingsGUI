@@ -20,11 +20,9 @@ const NodeButtons = ({classes}) => {
     return (
         <React.Fragment>
                 <Grid
-                    alignItems="stretch"
                     className={classes.buttons}
                     container
                     direction="column"
-                    justify="center"
                     spacing={3}
                 >
                     <Grid item container xs={12} spacing={1} >
