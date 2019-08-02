@@ -42,7 +42,7 @@ const CollectionsMenu = ({classes, collections, onClickCollection}) => {
     };
     const handleClickCollection = (collection) => () => {
         onClickCollection(collection);
-        ApplicationActions.navigate({path: 'collections'});
+        ApplicationActions.navigate({path: 'collection'});
     } 
 
     return (

@@ -9,9 +9,9 @@ import {withVlow} from 'vlow';
 import NodeButtons from '../Nodes/NodeButtons';
 import Collection from '../Collections/Collection';
 import CollectionsMenu from '../Navigation/CollectionsMenu';
+import User from '../Users/User';
 import UsersMenu from '../Navigation/UsersMenu';
 import Nodes from '../Nodes/Nodes';
-import Users from '../Users/Users';
 import TopBar from '../Navigation/TopBar';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {CollectionsStore} from '../../Stores/CollectionsStore';
@@ -65,23 +65,31 @@ const styles = theme => ({
 
 
 const App = ({classes, collections, match, user, users}) => {
-    const [index, setIndex] = React.useState(0)
+    const [indexCollection, setIndexCollection] = React.useState(0)
+    const [indexUser, setIndexUser] = React.useState(0)
 
     React.useEffect(() => {
             UsersActions.getUsers(); 
+            console.log('useeffect');
         },
         [collections.length],
     );
     
-    const findCollection = (index) => collections.length ? (index+1 > collections.length ? findCollection(index-1) : collections[index]) : {};
-    const collection = findCollection(index);
+    const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
+    const selectedCollection = findItem(indexCollection, collections);
+    const selectedUser = findItem(indexUser, users)
+    
     const pages = {
-        collections: <Collection collection={collection}/>,
-        users: <Users users={users} />,
+        collection: <Collection collection={selectedCollection}/>,
+        user: <User user={selectedUser} collections={collections} />,
     };
 
     const handleClickCollection = (i) => {
-        setIndex(i);
+        setIndexCollection(i);
+    }
+
+    const handleClickUser = (i) => {
+        setIndexUser(i);
     }
 
     return(
@@ -96,7 +104,7 @@ const App = ({classes, collections, match, user, users}) => {
                     </div>
                     <div className={classes.submenu}>
                         <Card>
-                            <UsersMenu />
+                            <UsersMenu users={users} onClickUser={handleClickUser}/>
                         </Card>  
                     </div>   
                 </div>

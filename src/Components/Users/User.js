@@ -2,21 +2,31 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+
 
 import PasswordUser from './Password';
 import RemoveUser from './Remove';
 import RenameUser from './Rename';
 import ServerError from '../Util/ServerError';
 import Checkbox from '@material-ui/core/Checkbox';
-import {withVlow} from 'vlow';
-
 import {UsersActions} from '../../Stores/UsersStore';
-import {CollectionsStore} from '../../Stores/CollectionsStore';
 
-const withStores = withVlow([{
-    store: CollectionsStore,
-    keys: ['collections']
-}]);
+const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+    },
+    user: {
+        padding: theme.spacing(2),
+    },
+    divider: {
+        padding: theme.spacing(0.1),
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(3),
+        backgroundColor: theme.palette.primary.main,
+    },
+}));
 
 const privileges = [
     {
@@ -52,6 +62,7 @@ const initialState = {
 };
 
 const User = ({user, collections}) => {
+    const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {switches, serverError} = state;
 
@@ -138,59 +149,78 @@ const User = ({user, collections}) => {
     const switchesKeys = Object.keys(switches);
 
     return (
-        <React.Fragment>
+        <div className={classes.root}>
             <ServerError open={openError} onClose={handleCloseError} error={serverError} />
-            <PasswordUser user={user} />
-            <RenameUser user={user} />
-            <RemoveUser user={user} onServerError={handleServerError} />
-
-            <Typography variant="h6" >
-                {'Access'}
-            </Typography>
-            <Grid container spacing={1}>
-                <Grid item container xs={12} spacing={2} >
-                    <Grid item xs={3} />
-                    <Grid item container xs={9} >
-                        <Grid item container xs={12} >
-                            {privileges.map(({ky, label}) => (
-                                <Grid item xs={2} key={ky} container justify={'center'} >
-                                    <Typography variant={'caption'} align={'center'} >
-                                        {label}
-                                    </Typography>
-                                </Grid>
-                            ))}
-                         </Grid>   
-                    </Grid>
-                </Grid>
-                {switchesKeys.map((key, i) => (
-                    <React.Fragment key={i}>
-                        <Grid item container xs={12} spacing={2}>
-                            <Grid item xs={3} container alignItems={'center'} >
-                                <Typography>
-                                    {key}
-                                </Typography>
-                            </Grid>
+            <Grid
+                className={classes.user}
+                container
+                direction="column"
+                spacing={3}
+            >
+                <Grid item xs={12}>
+                    <Typography variant="h6" >
+                        {'Access rules of: '}
+                    </Typography>
+                    <Typography variant="h4" color='primary'>
+                        {user.name}
+                    </Typography>
+                    <Divider className={classes.divider} />
+                    <Grid container spacing={1}>
+                        <Grid item container xs={12} spacing={2} >
+                            <Grid item xs={3} />
                             <Grid item container xs={9} >
                                 <Grid item container xs={12} >
                                     {privileges.map(({ky, label}) => (
                                         <Grid item xs={2} key={ky} container justify={'center'} >
-                                            <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary"/>
+                                            <Typography variant={'caption'} align={'center'} >
+                                                {label}
+                                            </Typography>
                                         </Grid>
                                     ))}
                                 </Grid>   
                             </Grid>
                         </Grid>
-                    </React.Fragment>
-                ))}
+                        {switchesKeys.map((key, i) => (
+                            <React.Fragment key={i}>
+                                <Grid item container xs={12} spacing={2}>
+                                    <Grid item xs={3} container alignItems={'center'} >
+                                        <Typography>
+                                            {key}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item container xs={9} >
+                                        <Grid item container xs={12} >
+                                            {privileges.map(({ky, label}) => (
+                                                <Grid item xs={2} key={ky} container justify={'center'} >
+                                                    <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary"/>
+                                                </Grid>
+                                            ))}
+                                        </Grid>   
+                                    </Grid>
+                                </Grid>
+                            </React.Fragment>
+                        ))}
+                    </Grid>
+                </Grid>
+                <Grid item container xs={12} spacing={1} >
+                    <Grid item>
+                        <PasswordUser user={user} />
+                    </Grid>
+                    <Grid item>
+                        <RenameUser user={user} />
+                    </Grid>
+                    <Grid item>
+                        <RemoveUser user={user} onServerError={handleServerError} />
+                    </Grid>
+                </Grid>
             </Grid>
-        </React.Fragment>
+        </div>    
     );
 };
 
 User.propTypes = {
     user: PropTypes.object.isRequired,
-    /* collections properties */
-    collections: CollectionsStore.types.collections.isRequired,
+    collections: PropTypes.array.isRequired,
 };
 
-export default withStores(User);
+export default User;

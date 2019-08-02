@@ -1,12 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import Collapse from '@material-ui/core/Collapse';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Divider from '@material-ui/core/Divider';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import PeopleIcon from '@material-ui/icons/People';
-import PropTypes from 'prop-types';
+import PersonIcon from '@material-ui/icons/Person';
 import { withStyles } from '@material-ui/core/styles';
 
+import AddUser from '../Users/Add';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
 
 const styles = theme => ({
@@ -15,30 +20,65 @@ const styles = theme => ({
       maxWidth: 360,
       backgroundColor: theme.palette.background.paper,
     },
+    nested: {
+        paddingLeft: theme.spacing(4),
+    },
+    nestedAdd: {
+        padding: 0,
+    },
+    iconMenu: {
+        backgroundColor: theme.palette.background.paper,
+    },
 });
 
 
-const UsersMenu = ({classes}) => {
+const UsersMenu = ({classes, users, onClickUser}) => {
+    const [open, setOpen] = React.useState(true);
 
     const handleClickUsers = () => {
-        ApplicationActions.navigate({path: 'users'});
+        setOpen(!open);
     };
+    const handleClickUser = (user) => () => {
+        onClickUser(user);
+        ApplicationActions.navigate({path: 'user'});
+    } 
 
     return (
         <React.Fragment>
             <List className={classes.root}>
                 <ListItem button onClick={handleClickUsers}>
                     <ListItemIcon>
-                        <PeopleIcon />
+                        {open ? <ExpandMore /> : <ChevronRightIcon />}
                     </ListItemIcon>
                     <ListItemText primary="USERS" />
                 </ListItem>
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        {users.length && users.map((user, i) => {
+                            return(
+                                <ListItem key={i} button className={classes.nested} onClick={handleClickUser(i)}>
+                                    <ListItemIcon>
+                                        <PersonIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={user.name} />
+                                </ListItem>
+                            );
+                        })}   
+                        <Divider />
+                        <ListItem className={classes.nestedAdd} >
+                            <AddUser />
+                        </ListItem>
+                    </List>
+                </Collapse>   
             </List>
         </React.Fragment>
     );
 };
 
 UsersMenu.propTypes = {
+    users: PropTypes.array.isRequired,
+    onClickUser: PropTypes.func.isRequired,
+
     /* styles properties */
     classes: PropTypes.object.isRequired,
 

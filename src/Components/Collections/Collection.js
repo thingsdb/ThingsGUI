@@ -31,66 +31,64 @@ const Collection = ({collection}) => {
     
     return (
         <div className={classes.root}>
-            <div >
-                <StyledTabs value={tabIndex} onChange={handleChange} aria-label="styled tabs example">
-                    <StyledTab label="Collection Info" />
-                    <StyledTab label="Things" />
-                    <StyledTab label="Query" />
-                </StyledTabs>
-                {tabIndex === 0 && 
-                    <Grid
-                        alignItems="stretch"
-                        className={classes.info}
-                        container
-                        direction="column"
-                        justify="center"
-                        spacing={3}
-                    >
-                        <Grid item xs={12}>
-                            <CollectionInfo collection={collection} />
+            <StyledTabs value={tabIndex} onChange={handleChange} aria-label="styled tabs example">
+                <StyledTab label="Collection Info" />
+                <StyledTab label="Things" />
+                <StyledTab label="Query" />
+            </StyledTabs>
+            {tabIndex === 0 && 
+                <Grid
+                    alignItems="stretch"
+                    className={classes.info}
+                    container
+                    direction="column"
+                    justify="center"
+                    spacing={3}
+                >
+                    <Grid item xs={12}>
+                        <CollectionInfo collection={collection} />
+                    </Grid>
+                    <Grid item container xs={12} spacing={1} >
+                        <Grid item>
+                            <RenameCollection collection={collection} />
                         </Grid>
-                        <Grid item container xs={12} spacing={1} >
-                            <Grid item>
-                                <RenameCollection collection={collection} />
-                            </Grid>
-                            <Grid item>
-                                <RemoveCollection collection={collection} />
-                            </Grid>
-                            <Grid item>
-                                <SetQuotas collection={collection} />
-                            </Grid>
+                        <Grid item>
+                            <RemoveCollection collection={collection} />
+                        </Grid>
+                        <Grid item>
+                            <SetQuotas collection={collection} />
                         </Grid>
                     </Grid>
-                }
-                {tabIndex === 1 && 
-                    <Grid
-                        alignItems="stretch"
-                        className={classes.things}
-                        container
-                        direction="column"
-                        justify="center"
-                        spacing={3}
-                    >
-                        <Grid item xs={12}>
-                            <Things collection={collection} />
-                        </Grid>
+                </Grid>
+            }
+            {tabIndex === 1 && 
+                <Grid
+                    alignItems="stretch"
+                    className={classes.things}
+                    container
+                    direction="column"
+                    justify="center"
+                    spacing={3}
+                >
+                    <Grid item xs={12}>
+                        <Things collection={collection} />
                     </Grid>
-                }
-                {tabIndex === 2 && 
-                    <Grid
-                        alignItems="stretch"
-                        className={classes.things}
-                        container
-                        direction="column"
-                        justify="center"
-                        spacing={3}
-                    >
-                        <Grid item xs={12}>
-                            <Query collection={collection} />
-                        </Grid>
+                </Grid>
+            }
+            {tabIndex === 2 && 
+                <Grid
+                    alignItems="stretch"
+                    className={classes.things}
+                    container
+                    direction="column"
+                    justify="center"
+                    spacing={3}
+                >
+                    <Grid item xs={12}>
+                        <Query collection={collection} />
                     </Grid>
-                }
-            </div>
+                </Grid>
+            }
         </div>
     );
 };
