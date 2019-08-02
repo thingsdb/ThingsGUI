@@ -49,7 +49,7 @@ const Password = ({user}) => {
             UsersActions.password(
                 user.name, 
                 form.password, 
-                (err) => setState({...state, serverError: err})
+                (err) => setState({...state, serverError: err.log})
             );
 
             if (!state.serverError) {

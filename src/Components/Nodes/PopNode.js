@@ -5,8 +5,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
+
 import {NodesActions} from '../../Stores/NodesStore';
-import ServerError from '../Util/ServerError';
 
 const initialState = {
     show: false,
@@ -26,7 +27,7 @@ const PopNode = () => {
     };
 
     const handleClickOk = () => {
-        NodesActions.popNode((err) => setState({...state, serverError: err}));
+        NodesActions.popNode((err) => setState({...state, serverError: err.log}));
         if (!state.serverError) {
             setState({...state, show: false});
         }
@@ -50,7 +51,9 @@ const PopNode = () => {
                         {'Are you sure you want to remove the latest node?'}
                     </DialogContentText>
                     <DialogContentText>
-                        {serverError}
+                        <Typography variant={'caption'} color={'error'}>
+                            {serverError}
+                        </Typography>  
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

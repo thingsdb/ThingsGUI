@@ -2,12 +2,9 @@
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-// import FolderIcon from '@material-ui/icons/Folder';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-// import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-// import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {withVlow} from 'vlow';
@@ -57,7 +54,7 @@ const Thing = ({classes, name, thing, collection, things}) => {
     const handleClick = () => {
         setState({...state, show: !show}); // QUEST: work with prevstate?
         if (thing && thing['#'] && !things[thing['#']]) {
-            CollectionActions.queryThing(collection, thing, (err) => setState({...state, serverError: err}));
+            CollectionActions.queryThing(collection, thing, (err) => setState({...state, serverError: err.log}));
         }
     };
 

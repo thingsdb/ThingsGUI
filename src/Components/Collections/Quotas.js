@@ -7,6 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 
 import {CollectionsActions} from '../../Stores/CollectionsStore';
 import ServerError from '../Util/ServerError';
@@ -63,7 +64,7 @@ const Quotas = ({collection}) => {
             collection.name, 
             form.quotaType, 
             "nil", 
-            (err) => setState({...state, serverError: err})
+            (err) => setState({...state, serverError: err.log})
         );
 
         if (!state.serverError) {
@@ -76,7 +77,7 @@ const Quotas = ({collection}) => {
             collection.name, 
             form.quotaType, 
             form.quota, 
-            (err) => setState({...state, serverError: err})
+            (err) => setState({...state, serverError: err.log})
         );
 
         if (!state.serverError) {
@@ -99,7 +100,9 @@ const Quotas = ({collection}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {/* {connErr} */}
+                        <Typography variant={'caption'} color={'error'}>
+                            {serverError}
+                        </Typography>
                     </DialogContentText>
                     <TextField
                         autoFocus

@@ -10,6 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import {withVlow} from 'vlow';
 import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 
@@ -52,7 +53,7 @@ const Login = ({loaded, connected, connErr}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connect(form, (err) => setState({...state, serverError: err.text}));
+            ApplicationActions.connect(form, (err) => setState({...state, serverError: err.log}));
         }
     };
 
@@ -71,7 +72,9 @@ const Login = ({loaded, connected, connErr}) => {
             </DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    {serverError}
+                    <Typography variant={'caption'} color={'error'}>
+                        {connErr || serverError}
+                    </Typography>
                 </DialogContentText>
                 <TextField
                     autoFocus

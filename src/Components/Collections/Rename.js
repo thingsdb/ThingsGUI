@@ -7,6 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import {withVlow} from 'vlow';
 
 import {CollectionsStore, CollectionsActions} from '../../Stores/CollectionsStore';
@@ -58,7 +59,7 @@ const Rename = ({collection, collections}) => {
             CollectionsActions.renameCollection(
                 collection.name, 
                 form.name, 
-                (err) => setState({...state, serverError: err})
+                (err) => setState({...state, serverError: err.log})
             );
 
             if (!state.serverError) {
@@ -82,7 +83,9 @@ const Rename = ({collection, collections}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {/* {connErr} */}
+                        <Typography variant={'caption'} color={'error'}>
+                            {serverError}
+                        </Typography>  
                     </DialogContentText>
                     <TextField
                         autoFocus

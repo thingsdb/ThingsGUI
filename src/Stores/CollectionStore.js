@@ -40,7 +40,7 @@ class CollectionStore extends BaseStore {
                     things,
                 };
             });
-        }).fail((event, status, message) => onError(message.log));
+        }).fail((event, status, message) => onError(message));
     }
 
     onQueryThing(collection, thing, onError) {
@@ -53,7 +53,7 @@ class CollectionStore extends BaseStore {
                 const things = Object.assign({}, prevState.things, {[thing['#']]: data});
                 return {things};
             });
-        }).fail((event, status, message) => onError(message.log));
+        }).fail((event, status, message) => onError(message));
     }
 
 }

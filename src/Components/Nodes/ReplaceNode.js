@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -58,7 +59,7 @@ const ReplaceNode = ({nodes}) => {
         if (!Object.values(errors).some(d => d)) {
             NodesActions.replaceNode(
                 form,
-                (err) => setState({...state, serverError: err})
+                (err) => setState({...state, serverError: err.log})
             );
             if (!state.serverError) {
                 setState({...state, show: false});
@@ -81,7 +82,9 @@ const ReplaceNode = ({nodes}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {serverError}
+                        <Typography variant={'caption'} color={'error'}>
+                            {serverError}
+                        </Typography>
                     </DialogContentText>
                     <TextField
                         autoFocus

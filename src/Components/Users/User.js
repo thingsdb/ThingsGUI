@@ -121,7 +121,7 @@ const User = ({user, collections}) => {
                 value, 
                 (err) => {
                     switches[key][value] = !checked;
-                    setState({switches: switches, serverError: err})
+                    setState({switches: switches, serverError: err.log})
                 }
             );
         } else {
@@ -131,15 +131,11 @@ const User = ({user, collections}) => {
                 value, 
                 (err) => {
                     switches[key][value] = !checked;
-                    setState({switches: switches, serverError: err})
+                    setState({switches: switches, serverError: err.log})
                 }
             );
         }
     };
-
-    const handleServerError = (err) => {
-        setState({...state, serverError: err});
-    }
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});;
@@ -210,7 +206,7 @@ const User = ({user, collections}) => {
                         <RenameUser user={user} />
                     </Grid>
                     <Grid item>
-                        <RemoveUser user={user} onServerError={handleServerError} />
+                        <RemoveUser user={user} />
                     </Grid>
                 </Grid>
             </Grid>

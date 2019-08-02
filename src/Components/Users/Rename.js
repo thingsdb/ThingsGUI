@@ -53,7 +53,7 @@ const Rename = ({user, users}) => {
             UsersActions.renameUser(
                 user.name, 
                 form.name, 
-                (err) => setState({...state, serverError: err})
+                (err) => setState({...state, serverError: err.log})
             );
 
             if (!state.serverError) {

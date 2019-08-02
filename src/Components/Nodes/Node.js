@@ -42,13 +42,23 @@ const Node = ({classes, local, node, counters}) => {
     const {tabIndex, serverError} = state; 
 
     React.useEffect(() => {
-        NodesActions.getNode((err) => setState({...state, serverError: err})) // QUEST: en bij status update?
+        NodesActions.getNode((err) => setState({...state, serverError: err.log})) // QUEST: en bij status update?
     }, [local.node_id]);
 
     const handleChangeTab = (_event, newValue) => setState({...state, tabIndex: newValue}); 
 
+    const handleServerError = (err) => {
+        setState({...state, serverError: err.log});
+    }
+
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
+    }
+    const openError = Boolean(serverError); 
+
     return node && local.node_id === node.node_id ? (
         <React.Fragment>
+            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
             <StyledTabs value={tabIndex} onChange={handleChangeTab} aria-label="styled tabs example">
                 <StyledTab label="Node Info" />
                 <StyledTab label="Counters" />
@@ -87,7 +97,7 @@ const Node = ({classes, local, node, counters}) => {
                         <Counters counters={counters} />
                     </Grid>
                     <Grid item xs={12}>
-                        <CountersReset node={node} />
+                        <CountersReset node={node} onServerError={handleServerError}/>
                     </Grid>
                 </Grid>
             }

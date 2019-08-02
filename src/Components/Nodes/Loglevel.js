@@ -7,6 +7,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
+
 import {NodesActions} from '../../Stores/NodesStore';
 
 
@@ -45,7 +47,7 @@ const Loglevel = ({node}) => {
         NodesActions.setLoglevel(
             node, 
             form.log_level, 
-            (err) => setState({...state, serverError: err})
+            (err) => setState({...state, serverError: err.log})
         );
         if (!state.serverError) {
             setState({...state, show: false});
@@ -67,7 +69,9 @@ const Loglevel = ({node}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {serverError}
+                        <Typography variant={'caption'} color={'error'}>
+                            {serverError}
+                        </Typography>  
                     </DialogContentText>
                     <TextField
                         autoFocus

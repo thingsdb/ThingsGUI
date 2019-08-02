@@ -9,12 +9,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {CollectionsActions, CollectionsStore} from '../../Stores/CollectionsStore';
-import ServerError from '../Util/ServerError';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -89,7 +89,7 @@ const Add = ({classes, connErr, collections}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            CollectionsActions.addCollection(form.name, (err) => setState({...state, serverError: err}));
+            CollectionsActions.addCollection(form.name, (err) => setState({...state, serverError: err.log}));
 
             if(!state.serverError) {
                 setState({...state, show: false});
@@ -116,7 +116,9 @@ const Add = ({classes, connErr, collections}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {connErr}
+                        <Typography variant={'caption'} color={'error'}>
+                            {connErr || serverError}
+                        </Typography>
                     </DialogContentText>
                     <TextField
                         autoFocus

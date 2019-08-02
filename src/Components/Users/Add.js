@@ -86,8 +86,8 @@ const AddUser = ({classes, users}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            UsersActions.addUser(form.name, (err) => setState({...state, serverError: err}));
-
+            UsersActions.addUser(form.name, (err) => setState({...state, serverError: err.log}));
+            
             if (!state.serverError) {
                 setState({...state, show: false});
             }

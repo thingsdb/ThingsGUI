@@ -6,9 +6,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 
 import {CollectionsActions} from '../../Stores/CollectionsStore';
-import ServerError from '../Util/ServerError';
 
 const initialState = {
     show: false,
@@ -28,7 +28,7 @@ const Remove = ({collection}) => {
     };
 
     const handleClickOk = () => {
-        CollectionsActions.removeCollection(collection.name, (err) => setState({...state, serverError: err}));
+        CollectionsActions.removeCollection(collection.name, (err) => setState({...state, serverError: err.log}));
         
         if (!state.serverError) {
             setState({...state, show: false});
@@ -46,11 +46,13 @@ const Remove = ({collection}) => {
                 aria-labelledby="form-dialog-title"
             >
                 <DialogTitle id="form-dialog-title">
-                    {'Remove collection'}
+                    {`Remove collection ${collection.name}?`}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {/* {connErr} */}
+                        <Typography variant={'caption'} color={'error'}>
+                            {serverError}
+                        </Typography>  
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

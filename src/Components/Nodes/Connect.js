@@ -6,10 +6,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import {withVlow} from 'vlow';
 
 import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
-import ServerError from '../Util/ServerError';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -45,7 +45,7 @@ const Connect = ({connErr}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connectOther(form, (err) => setState({...state, serverError: err}));
+            ApplicationActions.connectOther(form, (err) => setState({...state, serverError: err.log}));
             
             if(!state.serverError) {
                 setState({...state, show: false});
@@ -72,7 +72,9 @@ const Connect = ({connErr}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {connErr || serverError}
+                        <Typography variant={'caption'} color={'error'}>
+                            {connErr || serverError}
+                        </Typography>    
                     </DialogContentText>
                     <TextField
                         autoFocus
