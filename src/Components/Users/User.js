@@ -11,7 +11,7 @@ import RevokeUser from './Revoke';
 import ServerError from '../Util/ServerError';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import Checkbox from '@material-ui/core/Checkbox';
 import {withVlow} from 'vlow';
 
 import {UsersActions} from '../../Stores/UsersStore';
@@ -23,17 +23,41 @@ const withStores = withVlow([{
 }]);
 
 const privileges = [
-    'READ',
-    'MODIFY',
-    'GRANT',
-    'WATCH',
-    'CALL',
-    'FULL',
+    {
+        ky: 'read',
+        label: 'READ',
+    },
+    {
+        ky: 'modify',
+        label: 'MODIFY',
+    },
+    {
+        ky: 'grant',
+        label: 'GRANT',
+    },
+    {
+        ky: 'watch',
+        label: 'WATCH',
+    },
+    {
+        ky: 'call',
+        label: 'CALL',
+    },
+
+    {
+        ky: 'full',
+        label: 'FULL',
+    },
 ];
 
+const initialState = {
+    switches: {},
+    serverError: '',
+};
+
 const User = ({user, collections}) => {
-    const [serverError, setServerError] = React.useState('');
-    const [switches, setSwitches] = React.useState({});
+    const [state, setState] = React.useState(initialState);
+    const {switches, serverError} = state;
 
     const getSwitches = (target, privileges) => {     
         let s = {
@@ -44,8 +68,8 @@ const User = ({user, collections}) => {
             watch: false,
             call: false,
         }
-        s.full = privileges.includes('FULL');
 
+        s.full = privileges.includes('FULL');
         if (!s.full) {
             s.read = privileges.includes('READ'); 
             s.modify = privileges.includes('MODIFY');
@@ -64,48 +88,54 @@ const User = ({user, collections}) => {
     ];
 
     React.useEffect(() => {
-        let switches = {};
-        targets.map(({name, value}) => {
-            switches = Object.assign({}, switches, getSwitches(value, ''));
-        });
-        user.access.map(({target, privileges}) => {
-            switches = Object.assign({}, switches, getSwitches(target, privileges));
-        });
-        setSwitches(switches);
-        console.log(switches)
-      },
-      [user.name]
+            let switches = {};
+            targets.map(({name, value}) => {
+                switches = Object.assign({}, switches, getSwitches(value, ''));
+            });
+            user.access.map(({target, privileges}) => {
+                switches = Object.assign({}, switches, getSwitches(target, privileges));
+            });
+            setState({...state, switches:switches});
+            console.log('useEffect called');
+        },
+        [user, collections.length]
     );
 
 
-    const handleOnChangeSwitch = (target) => (e) => {
-        
-        switches[target][e.target.value]= e.target.checked;
-        setSwitches(switches);
+    const handleOnChangeSwitch = (key) => ({target}) => {
+        const {value, checked} = target;
+        switches[key][value]= checked;
+        setState({...state, switches: switches});
    
-        if (e.target.checked) {
+        if (checked) {
             UsersActions.grant(
                 user.name, 
-                target, 
-                e.target.value.toUpperCase(), 
-                (err) => setState({...state, serverError: err})
+                key, 
+                value, 
+                (err) => {
+                    switches[key][value] = !checked;
+                    setState({switches: switches, serverError: err})
+                }
             );
         } else {
             UsersActions.revoke(
                 user.name, 
-                target, 
-                e.target.value.toUpperCase(), 
-                (err) => onServerError(err)
+                key, 
+                value, 
+                (err) => {
+                    switches[key][value] = !checked;
+                    setState({switches: switches, serverError: err})
+                }
             );
         }
     };
 
     const handleServerError = (err) => {
-        setServerError(err);
+        setState({...state, serverError: err});
     }
 
     const handleCloseError = () => {
-        setServerError('');
+        setState({...state, serverError: ''});;
     }
 
     const openError = Boolean(serverError); 
@@ -121,54 +151,37 @@ const User = ({user, collections}) => {
             <Typography variant="h6" >
                 {'Access'}
             </Typography>
-            <Grid container spacing={0}>
-                {switchesKeys.map((key) => (
-                    <React.Fragment key={key}>
+            <Grid container spacing={1}>
+                <Grid item container xs={12} spacing={2} >
+                    <Grid item xs={3} />
+                    <Grid item container xs={9} >
                         <Grid item container xs={12} >
-                            <Grid item xs={3}>
+                            {privileges.map(({ky, label}) => (
+                                <Grid item xs={2} key={ky} container justify={'center'} >
+                                    <Typography variant={'caption'} align={'center'} >
+                                        {label}
+                                    </Typography>
+                                </Grid>
+                            ))}
+                         </Grid>   
+                    </Grid>
+                </Grid>
+                {switchesKeys.map((key, i) => (
+                    <React.Fragment key={i}>
+                        <Grid item container xs={12} spacing={2}>
+                            <Grid item xs={3} container alignItems={'center'} >
                                 <Typography>
                                     {key}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={9}>
-                                <FormGroup row>
-                                    <FormControlLabel
-                                        control={
-                                            <Switch size={'small'} checked={switches[key].read} onChange={handleOnChangeSwitch(key)} value="read" color="primary"/>
-                                        }
-                                        label="READ"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Switch size={'small'} checked={switches[key].modify} onChange={handleOnChangeSwitch(key)} value="modify" color="primary"/>
-                                        }
-                                        label="MODIFY"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Switch size={'small'} checked={switches[key].grant} onChange={handleOnChangeSwitch(key)} value="grant" color="primary"/>
-                                        }
-                                        label="GRANT"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Switch size={'small'} checked={switches[key].call} onChange={handleOnChangeSwitch(key)} value="call" color="primary"/>
-                                        }
-                                        label="CALL"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Switch size={'small'} checked={switches[key].watch} onChange={handleOnChangeSwitch(key)} value="watch" color="primary"/>
-                                        }
-                                        label="WATCH"
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Switch size={'small'} checked={switches[key].full} onChange={handleOnChangeSwitch(key)} value="full" color="primary"/>
-                                        }
-                                        label="FULL"
-                                    />                      
-                                </FormGroup>
+                            <Grid item container xs={9} >
+                                <Grid item container xs={12} >
+                                    {privileges.map(({ky, label}) => (
+                                        <Grid item xs={2} key={ky} container justify={'center'} >
+                                            <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary"/>
+                                        </Grid>
+                                    ))}
+                                </Grid>   
                             </Grid>
                         </Grid>
                     </React.Fragment>

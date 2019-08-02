@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Collections = ({collection}) => {
+const Collection = ({collection}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
   
@@ -95,8 +95,8 @@ const Collections = ({collection}) => {
     );
 };
 
-Collections.propTypes = {
+Collection.propTypes = {
     collection: PropTypes.object.isRequired,
 };
 
-export default Collections;
+export default Collection;

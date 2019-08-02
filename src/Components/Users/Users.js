@@ -1,17 +1,11 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import Tabel from '../Util/Table2';
 import AddUser from './Add';
 import User from './User';
-import {withVlow} from 'vlow';
-
-import {UsersStore} from '../../Stores/UsersStore';
 import ServerError from '../Util/ServerError';
-
-const withStores = withVlow([{
-    store: UsersStore,
-    keys: ['users']
-}]);
 
 
 const Users = ({users}) => {
@@ -21,6 +15,7 @@ const Users = ({users}) => {
         ky: 'name',
         label: 'USER',
     }];
+   
     const rowExtend = (row) => <User user={row} />;
 
     return (
@@ -32,9 +27,7 @@ const Users = ({users}) => {
 };
 
 Users.propTypes = {
-
-    /* application properties */
-    users: UsersStore.types.users.isRequired,    
+    users: PropTypes.array.isRequired,
 };
 
-export default withStores(Users);
+export default Users;

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
+import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -7,7 +7,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
 import NodeButtons from '../Nodes/NodeButtons';
-import Collections from '../Collections/Collections';
+import Collection from '../Collections/Collection';
 import CollectionsMenu from '../Navigation/CollectionsMenu';
 import UsersMenu from '../Navigation/UsersMenu';
 import Nodes from '../Nodes/Nodes';
@@ -15,7 +15,7 @@ import Users from '../Users/Users';
 import TopBar from '../Navigation/TopBar';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {CollectionsStore} from '../../Stores/CollectionsStore';
-import {UsersStore} from '../../Stores/UsersStore';
+import {UsersActions, UsersStore} from '../../Stores/UsersStore';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -25,7 +25,7 @@ const withStores = withVlow([{
     keys: ['collections']
 }, {
     store: UsersStore,
-    keys: ['user']
+    keys: ['user', 'users']
 }]);
 
 
@@ -64,22 +64,25 @@ const styles = theme => ({
 });
 
 
-const App = ({classes, collections, match, user}) => {
-    const [index, setIndex] = useState(0)
+const App = ({classes, collections, match, user, users}) => {
+    const [index, setIndex] = React.useState(0)
+
+    React.useEffect(() => {
+            UsersActions.getUsers(); 
+        },
+        [collections.length],
+    );
     
     const findCollection = (index) => collections.length ? (index+1 > collections.length ? findCollection(index-1) : collections[index]) : {};
-    
     const collection = findCollection(index);
-
     const pages = {
-        collections: <Collections collection={collection}/>,
-        users: <Users />,
+        collections: <Collection collection={collection}/>,
+        users: <Users users={users} />,
     };
 
     const handleClickCollection = (i) => {
         setIndex(i);
     }
-    console.log(pages[match.path]);
 
     return(
         <React.Fragment>
@@ -129,6 +132,7 @@ App.propTypes = {
 
     /* Users properties */
     user: UsersStore.types.user.isRequired,
+    users: UsersStore.types.users.isRequired,
 };
 
 export default withStyles(styles)(withStores(App));
