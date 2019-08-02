@@ -6,11 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import PasswordUser from './Password';
 import RemoveUser from './Remove';
 import RenameUser from './Rename';
-import GrantUser from './Grant';
-import RevokeUser from './Revoke';
 import ServerError from '../Util/ServerError';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import {withVlow} from 'vlow';
 
