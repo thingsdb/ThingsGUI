@@ -42,6 +42,8 @@ const Remove = ({user}) => { // TODO dialog are u sure?
                 open={show}
                 onClose={handleClickClose}
                 aria-labelledby="form-dialog-title"
+                fullWidth
+                maxWidth="xs"
             >
                 <DialogTitle id="form-dialog-title">
                     {`Remove user ${user.name}?`}

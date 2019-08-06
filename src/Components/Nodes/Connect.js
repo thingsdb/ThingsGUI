@@ -66,6 +66,8 @@ const Connect = ({connErr}) => {
                 open={show}
                 onClose={() => null}
                 aria-labelledby="form-dialog-title"
+                fullWidth
+                maxWidth="xs"
             >
                 <DialogTitle id="form-dialog-title">
                     {'Connect to other node'}

@@ -70,11 +70,12 @@ class UserHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def new_token(cls, client, data):
-        name = data.get['name']
+        print(data)
+
+        name = data.get('name')
 
         if data.get('expirationTime'):
-            expiration_time = int(datetime.datetime.timestamp(
-                data.get('endtime')))
+            expiration_time = data.get('expirationTime')
         else:
             expiration_time = 'nil'
 
@@ -82,9 +83,10 @@ class UserHandler(BaseHandler):
             description = data.get('description')
         else:
             description = ''
-
         q = r'''new_token('{}', {}, '{}');
             users_info();'''.format(name, expiration_time, description)
+        print(q)
+
         result = await client.query(q)
         return cls.socket_response(data=result)
 
@@ -99,7 +101,7 @@ class UserHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def del_expired(cls, client, data):
-        q = r'''del_exired();
+        q = r'''del_expired();
             users_info();'''.format_map(data)
         result = await client.query(q)
         return cls.socket_response(data=result)

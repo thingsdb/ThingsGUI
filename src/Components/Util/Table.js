@@ -14,7 +14,7 @@ const styles = theme => ({
     },
 });
 
-const Tabel = ({header, rows, rowClick}) => {
+const Tabel = ({header, rows, rowClick, buttons}) => {
 
     const handleClickRow = (row) => () => {
         rowClick(row);
@@ -40,6 +40,9 @@ const Tabel = ({header, rows, rowClick}) => {
                                     {row[h.ky]}
                                 </TableCell>
                             ))}
+                            <TableCell>
+                                {buttons(row)}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

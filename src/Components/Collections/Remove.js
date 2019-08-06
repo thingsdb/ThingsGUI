@@ -44,6 +44,8 @@ const Remove = ({collection}) => {
                 open={show}
                 onClose={handleClickClose}
                 aria-labelledby="form-dialog-title"
+                fullWidth
+                maxWidth="xs"
             >
                 <DialogTitle id="form-dialog-title">
                     {`Remove collection ${collection.name}?`}

@@ -71,6 +71,8 @@ const Rename = ({user, users}) => {
                 open={show}
                 onClose={handleClickClose}
                 aria-labelledby="form-dialog-title"
+                fullWidth
+                maxWidth="xs"
             >
                 <DialogTitle id="form-dialog-title">
                     {'Rename user'}

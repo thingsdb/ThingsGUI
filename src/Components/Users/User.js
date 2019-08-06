@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 
@@ -10,7 +11,7 @@ import PasswordUser from './Password';
 import RemoveUser from './Remove';
 import RenameUser from './Rename';
 import ServerError from '../Util/ServerError';
-import Checkbox from '@material-ui/core/Checkbox';
+import Tokens from './Tokens';
 import {UsersActions} from '../../Stores/UsersStore';
 
 const useStyles = makeStyles(theme => ({
@@ -207,6 +208,9 @@ const User = ({user, collections}) => {
                     </Grid>
                     <Grid item>
                         <RemoveUser user={user} />
+                    </Grid>
+                    <Grid item>
+                        <Tokens user={user} />
                     </Grid>
                 </Grid>
             </Grid>
