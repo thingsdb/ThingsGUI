@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
+import Things2 from './_Things';
 import Things from './Things';
 import CollectionInfo from './CollectionInfo';
 import RemoveCollection from './Remove';
@@ -34,7 +35,8 @@ const Collection = ({collection}) => {
             <StyledTabs value={tabIndex} onChange={handleChange} aria-label="styled tabs example">
                 <StyledTab label="Collection Info" />
                 <StyledTab label="Things" />
-                <StyledTab label="Query" />
+                <StyledTab label="Search by Property" />
+                <StyledTab label="Custom" />
             </StyledTabs>
             {tabIndex === 0 && 
                 <Grid
@@ -76,6 +78,20 @@ const Collection = ({collection}) => {
                 </Grid>
             }
             {tabIndex === 2 && 
+                <Grid
+                    alignItems="stretch"
+                    className={classes.things}
+                    container
+                    direction="column"
+                    justify="center"
+                    spacing={3}
+                >
+                    <Grid item xs={12}>
+                        <Things2 collection={collection} />
+                    </Grid>
+                </Grid>
+            }
+            {tabIndex === 3 && 
                 <Grid
                     alignItems="stretch"
                     className={classes.things}

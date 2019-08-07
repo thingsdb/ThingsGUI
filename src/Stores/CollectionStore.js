@@ -5,21 +5,21 @@ import BaseStore from './BaseStore';
 const CollectionActions = Vlow.createActions([
     'query',
     'queryThing',
+    'property',
+    'propertyThing'
 ]);
 
 // TODO: CALLBACKS
 class CollectionStore extends BaseStore {
 
     static types = {
-        collectionId: PropTypes.string, 
-        collectionName: PropTypes.string,
         things: PropTypes.object,
+        thingsByProp: PropTypes.object,
     }
 
     static defaults = {
-        collectionId: '', 
-        collectionName: '',
         things: {},
+        thingsByProp: {},
     }
 
     constructor() {
@@ -27,35 +27,58 @@ class CollectionStore extends BaseStore {
         this.state = CollectionStore.defaults;
     }
 
-    onQuery(collection, onError) {
+    onQuery(collection, onError, depth=1) {
         this.emit('/collection/query', {
             collectionId: collection.collection_id,
+            depth: depth
         }).done((data) => {
             this.setState(prevState => {
-                window.console.log(data, collection);
                 const things = Object.assign({}, prevState.things, {[collection.collection_id]: data});
-                return {
-                    collectionId: collection.collection_id,
-                    collectionName: collection.name,
-                    things,
-                };
+                return {things};
             });
         }).fail((event, status, message) => onError(message));
     }
 
-    onQueryThing(collection, thing, onError) {
+    onQueryThing(collection, thing, onError, depth=1) {
         this.emit('/collection/query', {
             collectionId: collection.collection_id,
             thingId: thing['#'],
+            depth: depth
         }).done((data) => {
             this.setState(prevState => {
-                window.console.log(data);
                 const things = Object.assign({}, prevState.things, {[thing['#']]: data});
                 return {things};
             });
         }).fail((event, status, message) => onError(message));
     }
 
+    onProperty(collection, thingId, search, onError, depth=1) {
+        this.emit('/collection/returnproperty', {
+            collectionId: collection.collection_id,
+            thingId: thingId,
+            search: search,
+            depth: depth
+        }).done((data) => {
+            this.setState(prevState => {
+                const thingsByProp = Object.assign({}, prevState.thingsByProp, {[collection.collection_id]: data});
+                return {thingsByProp};
+            });
+        }).fail((event, status, message) => onError(message));
+    }
+
+    onPropertyThing(collection, thing, search, onError, depth=1) {
+        this.emit('/collection/returnproperty', {
+            collectionId: collection.collection_id,
+            thingId: thing['#'],
+            search: search,
+            depth: depth
+        }).done((data) => {
+            this.setState(prevState => {
+                const thingsByProp = Object.assign({}, prevState.thingsByProp, {[thing['#']]: data});
+                return {thingsByProp};
+            });
+        }).fail((event, status, message) => onError(message));
+    }
 }
 
 export {CollectionActions, CollectionStore};

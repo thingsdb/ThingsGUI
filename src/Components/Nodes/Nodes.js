@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {withVlow} from 'vlow';
 
 import Node from './Node';
@@ -34,8 +35,7 @@ const Nodes = ({nodes}) => {
 };
 
 Nodes.propTypes = {
-    /* nodes properties */
-    nodes: NodesStore.types.nodes.isRequired,
+    nodes: PropTypes.array.isRequired,
 };
 
 export default withStores(Nodes);

@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
+import AppLoader from '../App/AppLoader';
 import NodeButtons from '../Nodes/NodeButtons';
 import Collection from '../Collections/Collection';
 import CollectionsMenu from '../Navigation/CollectionsMenu';
@@ -16,6 +17,7 @@ import TopBar from '../Navigation/TopBar';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {CollectionsStore} from '../../Stores/CollectionsStore';
 import {UsersActions, UsersStore} from '../../Stores/UsersStore';
+import {NodesStore} from '../../Stores/NodesStore';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -26,6 +28,9 @@ const withStores = withVlow([{
 }, {
     store: UsersStore,
     keys: ['user', 'users']
+}, {
+    store: NodesStore,
+    keys: ['nodes']
 }]);
 
 
@@ -64,7 +69,7 @@ const styles = theme => ({
 });
 
 
-const App = ({classes, collections, match, user, users}) => {
+const App = ({classes, collections, match, user, users, nodes}) => {
     const [indexCollection, setIndexCollection] = React.useState(0)
     const [indexUser, setIndexUser] = React.useState(0)
 
@@ -95,36 +100,40 @@ const App = ({classes, collections, match, user, users}) => {
     return(
         <React.Fragment>
             <TopBar user={user} />
-            <div className={classes.root}>
-                <div className={classes.menu}>
-                    <div className={classes.submenu}>
+            {/* {nodes.length ? ( */}
+                <div className={classes.root}>
+                    <div className={classes.menu}>
+                        <div className={classes.submenu}>
+                            <Card>
+                                <CollectionsMenu collections={collections} onClickCollection={handleClickCollection}/>
+                            </Card>
+                        </div>
+                        <div className={classes.submenu}>
+                            <Card>
+                                <UsersMenu users={users} onClickUser={handleClickUser}/>
+                            </Card>  
+                        </div>   
+                    </div>
+                    <div className={pages[match.path] ? classes.content : classes.contentShrinked}>
                         <Card>
-                            <CollectionsMenu collections={collections} onClickCollection={handleClickCollection}/>
+                            {pages[match.path]}
+                        </Card>    
+                    </div>
+                    <div className={pages[match.path] ? classes.sidebar : classes.sidebarExpanded}>
+                        <Card>
+                            <CardContent>
+                                <Typography variant={'h6'}> 
+                                    {'NODES'}
+                                </Typography>
+                            </CardContent>
+                            <Nodes nodes={nodes} />
+                            <NodeButtons />
                         </Card>
                     </div>
-                    <div className={classes.submenu}>
-                        <Card>
-                            <UsersMenu users={users} onClickUser={handleClickUser}/>
-                        </Card>  
-                    </div>   
                 </div>
-                <div className={pages[match.path] ? classes.content : classes.contentShrinked}>
-                    <Card>
-                        {pages[match.path]}
-                    </Card>    
-                </div>
-                <div className={pages[match.path] ? classes.sidebar : classes.sidebarExpanded}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant={'h6'}> 
-                                {'NODES'}
-                            </Typography>
-                         </CardContent>
-                        <Nodes />
-                        <NodeButtons />
-                    </Card>
-                </div>
-            </div>
+            {/* ) : (
+                null// <AppLoader />
+            )} */}
         </React.Fragment>
     );
 }
@@ -141,6 +150,9 @@ App.propTypes = {
     /* Users properties */
     user: UsersStore.types.user.isRequired,
     users: UsersStore.types.users.isRequired,
+
+    /* nodes properties */
+    nodes: NodesStore.types.nodes.isRequired,
 };
 
 export default withStyles(styles)(withStores(App));

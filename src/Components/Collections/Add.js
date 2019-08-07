@@ -99,10 +99,6 @@ const Add = ({classes, connErr, collections}) => {
 
     return (
         <React.Fragment>
-            {/* <Button className={classes.button} variant="outlined" onClick={handleClickOpen}>
-                <AddBoxIcon />
-                {'Add'}
-            </Button> */}
             <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
                 <AddBoxIcon className={classes.icon}/>
             </ButtonBase>

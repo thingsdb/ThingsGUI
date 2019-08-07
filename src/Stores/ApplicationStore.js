@@ -34,10 +34,12 @@ class ApplicationStore extends BaseStore {
 
     onConnected() {
         this.emit('/connected').done((data) => {
-            this.setState({
-                loaded: data.loaded,
-                connected: data.connected,
-            });
+            setTimeout(() => {
+                this.setState({
+                    loaded: data.loaded,
+                    connected: data.connected,
+                });
+            }, 1000);
         }).fail((event, status, message) => onError(message));
     }
 

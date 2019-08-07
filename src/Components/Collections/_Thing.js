@@ -14,11 +14,6 @@ import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import ServerError from '../Util/ServerError';
 
 
-const withStores = withVlow([{
-    store: CollectionStore,
-    keys: ['things']
-}]);
-
 const styles = theme => ({
     nested: {
         paddingLeft: theme.spacing(4),
@@ -31,14 +26,14 @@ const initialState = {
 };
 
 
-const Thing = ({classes, name, thing, collection, things}) => {
+const Thing2 = ({classes, name, thing, collection, thingsByProp}) => {
     const [state, setState] = React.useState(initialState);
     const {show, serverError} = state;
-   
+    console.log(thingsByProp, thing['#']);
     const renderThing = ([k, v]) => { // QUEST: ???
         return (
             <div key={k} className={classes.nested}>
-                <Thing classes={classes} thing={v} name={k} collection={collection} things={things} /> 
+                <Thing2 classes={classes} thing={v} name={k} collection={collection} thingsByProp={thingsByProp} /> 
             </div>
         );
     };
@@ -48,19 +43,16 @@ const Thing = ({classes, name, thing, collection, things}) => {
         return isArray ?
             thing.map((t, i) => renderThing([i.toString(), t]))
             :
-            Object.entries(things[thing['#']] || {}).map(renderThing);
+            Object.entries(thingsByProp[thing['#']] || {}).map(renderThing);
     };
 
     const handleClick = () => {
         setState({...state, show: !show}); // QUEST: work with prevstate?
-        if (thing && thing['#'] && !things[thing['#']]) {
-            CollectionActions.queryThing(collection, thing, (err) => setState({...state, serverError: err.log}));
-        }
     };
 
     const canToggle = typeof(thing) === 'object';
     const val = canToggle ? Array.isArray(thing) ? `[${thing.length}]` : '{}' : thing.toString();
-
+    console.log(name, val);
     return (
         <React.Fragment>
             <ListItem button onClick={handleClick}>
@@ -77,16 +69,14 @@ const Thing = ({classes, name, thing, collection, things}) => {
     );
 };
 
-Thing.propTypes = {
+Thing2.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     name: PropTypes.string.isRequired,
     collection: PropTypes.object.isRequired,
+    thingsByProp: PropTypes.object.isRequired,
 
     /* styles proeperties */ 
     classes: PropTypes.object.isRequired,
-
-    /* collection properties */
-    things: CollectionStore.types.things.isRequired,
 };
 
-export default withStyles(styles)(withStores(Thing));
+export default withStyles(styles)(Thing2);

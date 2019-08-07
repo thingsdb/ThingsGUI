@@ -22,7 +22,7 @@ const Tabel = ({header, rows, rowClick, buttons}) => {
 
     return (
         <React.Fragment>
-            <Table>
+            <Table padding={'checkbox'} >
                 <TableHead>
                     <TableRow>
                         {header.map((h, i) => (
@@ -30,6 +30,7 @@ const Tabel = ({header, rows, rowClick, buttons}) => {
                                 {h.label}
                             </TableCell>
                         ))}
+                        <TableCell />
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -40,7 +41,7 @@ const Tabel = ({header, rows, rowClick, buttons}) => {
                                     {row[h.ky]}
                                 </TableCell>
                             ))}
-                            <TableCell>
+                            <TableCell align='right'>
                                 {buttons(row)}
                             </TableCell>
                         </TableRow>
@@ -55,6 +56,7 @@ Tabel.propTypes = {
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     rowClick: PropTypes.func.isRequired,
+    buttons: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Tabel);

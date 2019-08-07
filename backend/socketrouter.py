@@ -30,7 +30,11 @@ class SocketRouter:
 
         sio.on(
             event='/collection/query',
-            handler=CollectionHandler.query)
+            handler=CollectionHandler.query_thing)
+        
+        sio.on(
+            event='/collection/returnproperty',
+            handler=CollectionHandler.return_property)
 
         sio.on(
             event='/collection/getcollections',

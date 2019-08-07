@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import AddToken from './AddToken';
 import RemoveExpired from './RemoveExpired';
+import RemoveToken from './RemoveToken';
 import Table from '../Util/Table';
 import ServerError from '../Util/ServerError';
 
@@ -23,7 +24,7 @@ const Tokens = ({user}) => {
         label: 'Description',
     }, {
         ky: 'expiration_time',
-        label: 'Expiration time',
+        label: 'Expiration UTC time',
     }, {
         ky: 'key',
         label: 'Key',
@@ -32,6 +33,8 @@ const Tokens = ({user}) => {
         label: 'Status',
     }];
     const handleRowClick = () => null;
+
+    const handleButtons = (token) => <RemoveToken token={token} onServerError={handleServerError} />;
    
     const handleClickOpen = () => {
         setShow(true);
@@ -68,7 +71,7 @@ const Tokens = ({user}) => {
                 </DialogTitle>
                 <DialogContent>
                     {user.tokens.length ? (
-                        <Table header={header} rows={rows} rowClick={handleRowClick} />
+                        <Table header={header} rows={rows} rowClick={handleRowClick} buttons={handleButtons} />
                     ) : (
                         <DialogContentText>
                             {'No tokens set.'}

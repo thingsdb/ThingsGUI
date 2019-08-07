@@ -31,17 +31,24 @@ const ThingRoot = ({classes, things, collection}) => {
     const fetched = things.hasOwnProperty(collection.collection_id);
     
     React.useEffect(() => {
-        CollectionActions.query(collection, (err) => setServerError(err));
+        CollectionActions.query(collection, (err) => setServerError(err.log));
     }, [collection.collection_id]);
     
+    const handleCloseError = () => {
+        setServerError('');
+    }
+    const openError = Boolean(serverError);
+
     return (
         <React.Fragment>
+            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
             {fetched ? (
                 <List
                     component="nav"
                     className={classes.root}
+                    dense
                 >
-                    {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
+                    {Object.entries(things[collection.collection_id]).map(([k, v]) => (
                         <Thing key={k} thing={v} name={k} collection={collection} />
                     ))}
                 </List>
