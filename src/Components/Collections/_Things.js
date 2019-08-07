@@ -127,7 +127,7 @@ const Things2 = ({classes, thingsByProp, collection}) => {
                     dense
                 >
                     {Object.entries(thingsByProp[collection.collection_id]).map(([k, v]) => (
-                        <Thing2 key={k} thing={v} name={k} collection={collection} thingsByProp={thingsByProp} />
+                        <Thing2 key={k} thing={v} name={k} collection={collection} />
                     ))}
                 </List>
             ) : null}

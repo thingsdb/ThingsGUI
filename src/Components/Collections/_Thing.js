@@ -26,14 +26,19 @@ const initialState = {
 };
 
 
-const Thing2 = ({classes, name, thing, collection, thingsByProp}) => {
+const Thing2 = ({classes, name, thing, collection}) => {
     const [state, setState] = React.useState(initialState);
     const {show, serverError} = state;
-    console.log(thingsByProp, thing['#']);
+
     const renderThing = ([k, v]) => { // QUEST: ???
         return (
             <div key={k} className={classes.nested}>
-                <Thing2 classes={classes} thing={v} name={k} collection={collection} thingsByProp={thingsByProp} /> 
+                <Thing2 
+                    classes={classes} 
+                    thing={v} 
+                    name={k} 
+                    collection={collection} 
+                /> 
             </div>
         );
     };
@@ -43,7 +48,7 @@ const Thing2 = ({classes, name, thing, collection, thingsByProp}) => {
         return isArray ?
             thing.map((t, i) => renderThing([i.toString(), t]))
             :
-            Object.entries(thingsByProp[thing['#']] || {}).map(renderThing);
+            Object.entries(thing).map(renderThing);
     };
 
     const handleClick = () => {
@@ -52,7 +57,7 @@ const Thing2 = ({classes, name, thing, collection, thingsByProp}) => {
 
     const canToggle = typeof(thing) === 'object';
     const val = canToggle ? Array.isArray(thing) ? `[${thing.length}]` : '{}' : thing.toString();
-    console.log(name, val);
+
     return (
         <React.Fragment>
             <ListItem button onClick={handleClick}>
@@ -73,7 +78,6 @@ Thing2.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     name: PropTypes.string.isRequired,
     collection: PropTypes.object.isRequired,
-    thingsByProp: PropTypes.object.isRequired,
 
     /* styles proeperties */ 
     classes: PropTypes.object.isRequired,
