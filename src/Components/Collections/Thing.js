@@ -2,6 +2,7 @@
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Divider from '@material-ui/core/Divider';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -25,6 +26,14 @@ const withStores = withVlow([{
 const styles = theme => ({
     nested: {
         paddingLeft: theme.spacing(4),
+    },
+    divider: {
+        //padding: theme.spacing(0.1),
+        marginBottom: theme.spacing(1),
+        backgroundColor: theme.palette.primary.main,
+    },
+    listItem: {
+        paddingLeft: theme.spacing(6),
     },
 });
 
@@ -68,16 +77,17 @@ const Thing = ({classes, name, thing, collection, things, onServerError}) => {
                     {canToggle ? show ? <ExpandMore color={'primary'}/> : <ChevronRightIcon color={'primary'}/> : <StopIcon color={'primary'}/>}
                 </ListItemIcon>
                 <ListItemText primary={name} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
+                {canToggle && !Array.isArray(thing) && show ? (
+                    <ListItemIcon>
+                        <AddBoxIcon color={'primary'}/>
+                    </ListItemIcon>
+                ) : null}
             </ListItem>
+            <Divider className={classes.divider} variant={'middle'} />
             {canToggle && 
             <Collapse in={show} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding dense>
                     {renderChildren()}
-                    {/* <ListItem>
-                        <ListItemIcon>
-                            <AddBoxIcon />
-                        </ListItemIcon>
-                    </ListItem> */}
                 </List>
             </Collapse>}
         </React.Fragment>

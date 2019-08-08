@@ -26,6 +26,9 @@ const styles = theme => ({
         // maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
+    thing: {
+        paddingLeft: theme.spacing(6),
+    },
 });
 
 const ThingRoot = ({classes, things, collection}) => {
@@ -57,7 +60,7 @@ const ThingRoot = ({classes, things, collection}) => {
                     dense
                 >
                     {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
-                        <Thing key={k} thing={v} name={k} collection={collection} onServerError={handleServerError} />
+                        <Thing className={classes.thing} key={k} thing={v} name={k} collection={collection} onServerError={handleServerError} />
                     ))}
                 </List>
             ) : (

@@ -132,9 +132,7 @@ class TopBar extends React.Component {
                                 alt="ThingsDB Logo"
                                 src="/static/img/thingsdb-logo.png"
                                 className={classes.avatar}
-                                imgProps={{
-                                    draggable:'false',
-                                }}
+                                draggable='false'                                
                             />
                             {/* </Tooltip> */}
                         </div>
