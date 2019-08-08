@@ -6,7 +6,8 @@ const CollectionActions = Vlow.createActions([
     'query',
     'queryThing',
     'property',
-    'propertyThing'
+    'renameKey',
+    'removeObject',
 ]);
 
 // TODO: CALLBACKS
@@ -53,7 +54,7 @@ class CollectionStore extends BaseStore {
     }
 
     onProperty(collection, thingId, search, onError, depth=1) {
-        this.emit('/collection/returnproperty', {
+        this.emit('/collection/return-property', {
             collectionId: collection.collection_id,
             thingId: thingId,
             search: search,
@@ -66,19 +67,34 @@ class CollectionStore extends BaseStore {
         }).fail((event, status, message) => onError(message));
     }
 
-    onPropertyThing(collection, thing, search, onError, depth=1) {
-        this.emit('/collection/returnproperty', {
+    onRenameKey(collection, thingId, oldname, newname, onError) {
+        this.emit('/collection/rename-key', {
             collectionId: collection.collection_id,
-            thingId: thing['#'],
-            search: search,
-            depth: depth
+            thingId: thingId,
+            oldname: oldname,
+            newname: newname
         }).done((data) => {
             this.setState(prevState => {
-                const thingsByProp = Object.assign({}, prevState.thingsByProp, {[thing['#']]: data});
-                return {thingsByProp};
+                const things = Object.assign({}, prevState.things, {[thingId]: data});
+                return {things};
             });
         }).fail((event, status, message) => onError(message));
     }
+
+    onRemoveObject(collection, thingId, propertyName, onError) {
+        console.log(thingId, propertyName);
+        this.emit('/collection/remove-object', {
+            collectionId: collection.collection_id,
+            thingId: thingId,
+            propertyName: propertyName,
+        }).done((data) => {
+            this.setState(prevState => {
+                const things = Object.assign({}, prevState.thingsByProp, {[collection.collection_id]: data});
+                return {things};
+            });
+        }).fail((event, status, message) => onError(message));
+    }
+
 }
 
 export {CollectionActions, CollectionStore};

@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -6,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
+import RenameProperty from './RenameProperty';
+import RemoveObject from './RemoveObject';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import ServerError from '../Util/ServerError';
 
@@ -37,6 +40,11 @@ const ThingRoot = ({classes, things, collection}) => {
     const handleCloseError = () => {
         setServerError('');
     }
+
+    const handleServerError = (err) => {
+        setServerError(err);
+    }
+
     const openError = Boolean(serverError);
 
     return (
@@ -48,8 +56,8 @@ const ThingRoot = ({classes, things, collection}) => {
                     className={classes.root}
                     dense
                 >
-                    {Object.entries(things[collection.collection_id]).map(([k, v]) => (
-                        <Thing key={k} thing={v} name={k} collection={collection} />
+                    {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
+                        <Thing key={k} thing={v} name={k} collection={collection} onServerError={handleServerError} />
                     ))}
                 </List>
             ) : (
@@ -57,6 +65,14 @@ const ThingRoot = ({classes, things, collection}) => {
                     {'This collections does not have anything stored yet.'}
                 </Typography>
             )}
+            <Grid item container xs={12} spacing={1} >
+                <Grid item>
+                    <RenameProperty collection={collection} things={things} />
+                </Grid>
+                <Grid item>
+                    <RemoveObject collection={collection} things={things} />
+                </Grid>
+            </Grid>
         </React.Fragment>
     );
 };

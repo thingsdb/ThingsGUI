@@ -1,10 +1,12 @@
 /* eslint-disable react/no-multi-comp */
 import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import StopIcon from '@material-ui/icons/Stop';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {withVlow} from 'vlow';
@@ -20,18 +22,11 @@ const styles = theme => ({
     },
 });
 
-const initialState = {
-    show: false,
-    serverError: '',
-};
-
-
 const Thing2 = ({classes, name, thing, collection}) => {
-    const [state, setState] = React.useState(initialState);
-    const {show, serverError} = state;
+    const [show, setShow] = React.useState(false);
 
     const renderThing = ([k, v]) => { // QUEST: ???
-        return (
+        return k === '#' ? null : (
             <div key={k} className={classes.nested}>
                 <Thing2 
                     classes={classes} 
@@ -52,17 +47,21 @@ const Thing2 = ({classes, name, thing, collection}) => {
     };
 
     const handleClick = () => {
-        setState({...state, show: !show}); // QUEST: work with prevstate?
+        setShow(!show); // QUEST: work with prevstate?
     };
 
     const canToggle = typeof(thing) === 'object';
-    const val = canToggle ? Array.isArray(thing) ? `[${thing.length}]` : '{}' : thing.toString();
+    const key = Object.keys(thing)[0]
+    const val = canToggle ? Array.isArray(thing) ? `[${thing.length}]` : `{${key}}` : thing.toString();
+    const header = canToggle ? Array.isArray(thing) ? name : '' : name;
 
     return (
         <React.Fragment>
             <ListItem button onClick={handleClick}>
-                <ListItemText primary={name} secondary={val} />
-                {canToggle ? show ? <ExpandLess /> : <ExpandMore /> : null}
+                <ListItemIcon>
+                    {canToggle ? show ? <ExpandMore color={'primary'}/> : <ChevronRightIcon color={'primary'}/> : <StopIcon color={'primary'}/>}
+                </ListItemIcon>
+                <ListItemText primary={name} primaryTypographyProps={{'variant':'caption', 'color':'primary'}}  secondary={val} />
             </ListItem>
             {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>

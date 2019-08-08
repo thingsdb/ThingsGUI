@@ -21,7 +21,6 @@ class CollectionHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def return_property(cls, client, data):
-        print(data)
         collection_id = data.get('collectionId')
         thing_id = data.get('thingId')
         depth = data.get('depth')
@@ -34,3 +33,34 @@ class CollectionHandler(BaseHandler):
         resp = await client.query(q, target=collection_id)
 
         return cls.socket_response(data=resp)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def rename_key(cls, client, data):
+        collection_id = data.get('collectionId')
+        thing_id = data.get('thingId')
+        oldname = data.get('oldname')
+        newname = data.get('newname')
+
+        q = r'''t({}).rename('{}', '{}'); t({})'''.format(thing_id, oldname, newname, thing_id)
+        resp = await client.query(q, target=collection_id)
+
+        return cls.socket_response(data=resp)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def remove_object(cls, client, data):
+        collection_id = data.get('collectionId')
+        thing_id = data.get('thingId')
+        name = data.get('propertyName')
+
+        q1 = r'''id()'''
+        resp1 = await client.query(q1, target=collection_id)
+
+        if (str(resp1) == thing_id):
+            q2 = r'''del('{}'); t(id())'''.format(name)
+        else:
+            q2 = r'''t({}).del('{}'); t(id())'''.format(thing_id, name)
+        resp2 = await client.query(q2, target=collection_id)
+
+        return cls.socket_response(data=resp2)

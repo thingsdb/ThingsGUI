@@ -33,8 +33,8 @@ const drawerWidth = '25%';
 
 const styles = theme => ({
     avatar: {
-        width: 35,
-        height: 28,
+        // width: 35,
+        height: 35,
     },
     appBar: {
         backgroundColor: theme.palette.secondary.main,
@@ -128,7 +128,7 @@ class TopBar extends React.Component {
                     <Toolbar className={classes.toolbar}>
                         <div className={classes.flex}>
                             {/* <Tooltip disableFocusListener disableTouchListener title={packageJson.version}>                   */}
-                            <Avatar
+                            <img
                                 alt="ThingsDB Logo"
                                 src="/static/img/thingsdb-logo.png"
                                 className={classes.avatar}
