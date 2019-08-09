@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
-import Things2 from './_Things';
-import Things from './Things';
+import Things2 from '../Collection/_Things';
+import Things from '../Collection/Things';
 import CollectionInfo from './CollectionInfo';
 import RemoveCollection from './Remove';
 import RenameCollection from './Rename';
 import SetQuotas from './Quotas';
-import Query from './Query';
+import Query from '../Collection/Query';
 import {StyledTabs, StyledTab} from '../Util/Tabs';
 
 const useStyles = makeStyles(theme => ({

@@ -100,7 +100,7 @@ const App = ({classes, collections, match, user, users, nodes}) => {
     return(
         <React.Fragment>
             <TopBar user={user} />
-            {/* {nodes.length ? ( */}
+            {nodes.length ? (
                 <div className={classes.root}>
                     <div className={classes.menu}>
                         <div className={classes.submenu}>
@@ -131,9 +131,9 @@ const App = ({classes, collections, match, user, users, nodes}) => {
                         </Card>
                     </div>
                 </div>
-            {/* ) : (
-                null// <AppLoader />
-            )} */}
+            ) : (
+                null // <AppLoader /> 
+            )}
         </React.Fragment>
     );
 }

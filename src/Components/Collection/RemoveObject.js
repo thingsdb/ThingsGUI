@@ -18,7 +18,7 @@ const initialState = {
     serverError: '',
 };
 
-const RenameProperty = ({collection, things}) => {
+const RemoveObject = ({collection, things}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
 
@@ -28,8 +28,7 @@ const RenameProperty = ({collection, things}) => {
             errors: {},
             form: {
                 thingId: '',
-                oldname: '',
-                newname: '',
+                propertyName: '',
             },
             serverError: '',
         });
@@ -41,8 +40,7 @@ const RenameProperty = ({collection, things}) => {
 
     const validation = {
         thingId: () => form.thingId.length>0,
-        oldname: () => form.oldname.length>0,
-        newname: () => form.newname.length>0,
+        propertyName: () => form.propertyName.length>0,
     };
 
     const handleOnChange = (e) => {
@@ -55,11 +53,10 @@ const RenameProperty = ({collection, things}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            CollectionActions.renameKey(
-                collection,
+            CollectionActions.removeObject(
+                collection.collection_id,
                 form.thingId, 
-                form.oldname, 
-                form.newname,
+                form.propertyName, 
                 (err) => setState({...state, serverError: err.log})
             );
 
@@ -72,7 +69,7 @@ const RenameProperty = ({collection, things}) => {
     return (
         <React.Fragment>
             <Button variant="outlined" onClick={handleClickOpen}>
-                {'Rename Property'}
+                {'Remove Object'}
             </Button>
             <Dialog
                 open={show}
@@ -82,12 +79,12 @@ const RenameProperty = ({collection, things}) => {
                 maxWidth="xs"
             >
                 <DialogTitle id="form-dialog-title">
-                    {'Rename Property'}
+                    {'Remove Object'}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         <Typography variant={'caption'} color={'error'}>
-                            {serverError}
+                            {serverError || 'Be aware that the object will be permanently removed.'}
                         </Typography>  
                     </DialogContentText>
                     <TextField
@@ -104,25 +101,14 @@ const RenameProperty = ({collection, things}) => {
                     />
                     <TextField
                         margin="dense"
-                        id="oldname"
-                        label="Current Name"
+                        id="propertyName"
+                        label="Property"
                         type="text"
-                        value={form.oldname}
+                        value={form.propertyName}
                         spellCheck={false}
                         onChange={handleOnChange}
                         fullWidth
-                        error={errors.oldname}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="newname"
-                        label="New name"
-                        type="text"
-                        value={form.newname}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        error={errors.newname}
+                        error={errors.propertyName}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -130,7 +116,7 @@ const RenameProperty = ({collection, things}) => {
                         {'Cancel'}
                     </Button>
                     <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
-                        {'Rename'}
+                        {'Remove'}
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -138,9 +124,9 @@ const RenameProperty = ({collection, things}) => {
     );
 };
 
-RenameProperty.propTypes = {
+RemoveObject.propTypes = {
     collection: PropTypes.object.isRequired,
     things: PropTypes.object.isRequired,
 };
 
-export default RenameProperty;
+export default RemoveObject;

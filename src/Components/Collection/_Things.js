@@ -61,7 +61,7 @@ const Things2 = ({classes, thingsByProp, collection}) => {
         const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors});
         if (!Object.values(errors).some(d => d)) {
-            CollectionActions.property(collection, form.thingId, form.property, (err) => setState({...state, serverError: err.log}), form.depth);
+            CollectionActions.property(collection.collection_id, form.thingId, form.property, (err) => setState({...state, serverError: err.log}), form.depth);
         }
     } 
 

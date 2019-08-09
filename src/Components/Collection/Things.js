@@ -1,12 +1,15 @@
 /* eslint-disable react/no-multi-comp */
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
+import AddThings from './AddThings';
 import RenameProperty from './RenameProperty';
 import RemoveObject from './RemoveObject';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
@@ -37,7 +40,7 @@ const ThingRoot = ({classes, things, collection}) => {
     const fetched = things.hasOwnProperty(collection.collection_id);
     
     React.useEffect(() => {
-        CollectionActions.query(collection, (err) => setServerError(err.log));
+        CollectionActions.query(collection.collection_id, (err) => setServerError(err.log));
     }, [collection.collection_id]);
     
     const handleCloseError = () => {
@@ -62,6 +65,11 @@ const ThingRoot = ({classes, things, collection}) => {
                     {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
                         <Thing className={classes.thing} key={k} thing={v} name={k} collection={collection} onServerError={handleServerError} />
                     ))}
+                    <ListItem>
+                        <ListItemIcon>
+                            <AddThings collection={collection} thing={things[collection.collection_id]} />
+                        </ListItemIcon>
+                    </ListItem>
                 </List>
             ) : (
                 <Typography variant={'caption'}>

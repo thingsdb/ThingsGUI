@@ -37,12 +37,16 @@ class SocketRouter:
             handler=CollectionHandler.return_property)
         
         sio.on(
-            event='/collection/rename-key',
-            handler=CollectionHandler.rename_key)
+            event='/collection/rename-property',
+            handler=CollectionHandler.rename_property)
 
         sio.on(
             event='/collection/remove-object',
             handler=CollectionHandler.remove_object)
+
+        sio.on(
+            event='/collection/raw-query',
+            handler=CollectionHandler.raw_query)
 
         sio.on(
             event='/collection/getcollections',

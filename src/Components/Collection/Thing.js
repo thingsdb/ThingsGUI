@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import AddBoxIcon from '@material-ui/icons/AddBox';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Divider from '@material-ui/core/Divider';
@@ -12,8 +12,9 @@ import StopIcon from '@material-ui/icons/Stop';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {withVlow} from 'vlow';
-
 import {withStyles} from '@material-ui/core/styles';
+
+import AddThings from './AddThings';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import ServerError from '../Util/ServerError';
 
@@ -60,7 +61,7 @@ const Thing = ({classes, name, thing, collection, things, onServerError}) => {
     const handleClick = () => {
         setShow(!show); // QUEST: work with prevstate?
         if (thing && thing['#'] && !things[thing['#']]) {
-            CollectionActions.queryThing(collection, thing, (err) => onServerError(err));
+            CollectionActions.query(collection.collection_id, (err) => onServerError(err), thing['#']);
         }
     };
 
@@ -72,14 +73,16 @@ const Thing = ({classes, name, thing, collection, things, onServerError}) => {
 
     return (
         <React.Fragment>
-            <ListItem button onClick={handleClick}>
+            <ListItem >
                 <ListItemIcon>
-                    {canToggle ? show ? <ExpandMore color={'primary'}/> : <ChevronRightIcon color={'primary'}/> : <StopIcon color={'primary'}/>}
+                    <ButtonBase onClick={handleClick} >
+                        {canToggle ? show ? <ExpandMore color={'primary'}/> : <ChevronRightIcon color={'primary'}/> : <StopIcon color={'primary'}/>}
+                    </ButtonBase>
                 </ListItemIcon>
                 <ListItemText primary={name} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
                 {canToggle && !Array.isArray(thing) && show ? (
                     <ListItemIcon>
-                        <AddBoxIcon color={'primary'}/>
+                        <AddThings collection={collection} thing={thing} />
                     </ListItemIcon>
                 ) : null}
             </ListItem>

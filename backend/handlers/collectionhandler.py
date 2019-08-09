@@ -24,28 +24,38 @@ class CollectionHandler(BaseHandler):
         collection_id = data.get('collectionId')
         thing_id = data.get('thingId')
         depth = data.get('depth')
-        search = data.get('search')
+        propertyName = data.get('propertyName')
 
         if thing_id:
-            q = r'''t({}).filter(|thing| thing.contains('{}')) => {}'''.format(thing_id, search, depth)
+            q = r'''t({}).filter(|thing| thing.contains('{}')) => {}'''.format(
+                thing_id, propertyName, depth)
         else:
-            q = r'''t(id()).filter(|thing| thing.contains('{}')) => {}'''.format(search, depth)
+            q = r'''t(id()).filter(|thing| thing.contains('{}')) => {}'''.format(
+                propertyName, depth)
         resp = await client.query(q, target=collection_id)
 
         return cls.socket_response(data=resp)
 
     @classmethod
     @BaseHandler.socket_handler
-    async def rename_key(cls, client, data):
+    async def rename_property(cls, client, data):
         collection_id = data.get('collectionId')
         thing_id = data.get('thingId')
         oldname = data.get('oldname')
         newname = data.get('newname')
 
-        q = r'''t({}).rename('{}', '{}'); t({})'''.format(thing_id, oldname, newname, thing_id)
-        resp = await client.query(q, target=collection_id)
+        q1 = r'''id()'''
+        resp1 = await client.query(q1, target=collection_id)
 
-        return cls.socket_response(data=resp)
+        if (str(resp1) == thing_id):
+            q2 = r'''rename('{}', '{}'); t({})'''.format(
+                oldname, newname, thing_id)
+        else:
+            q2 = r'''t({}).rename('{}', '{}'); t({})'''.format(
+                thing_id, oldname, newname, thing_id)
+        resp2 = await client.query(q2, target=collection_id)
+
+        return cls.socket_response(data=resp2)
 
     @classmethod
     @BaseHandler.socket_handler
@@ -64,3 +74,15 @@ class CollectionHandler(BaseHandler):
         resp2 = await client.query(q2, target=collection_id)
 
         return cls.socket_response(data=resp2)
+
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def raw_query(cls, client, data):
+        collection_id = data.get('collectionId')
+        thing_id = data.get('thingId')
+        query = data.get('query')
+        q = r'''{}; t({})'''.format(query, thing_id)
+        resp = await client.query(q, target=collection_id)
+        return cls.socket_response(data=resp)
+
