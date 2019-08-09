@@ -48,15 +48,20 @@ const Quotas = ({collection}) => {
         setState({...state, show: false});
     };
 
-    const handleOnChangeType = (e) => {
-        form.quotaType = e.target.value;
-        form.quota = _getQuota(e.target.value);
-        setState({...state, form});
+    const handleOnChangeType = ({target}) => {
+        const {value} = target;
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {quotaType: value, quota: _getQuota(value)});
+            return {...prevState, form: updatedForm};
+        });
     };
 
-    const handleOnChange = (e) => {
-        form[e.target.id] = e.target.value?parseInt(e.target.value):'';
-        setState({...state, form});
+    const handleOnChange = ({target}) => {
+        const {id, value} = target;
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
+            return {...prevState, form: updatedForm};
+        });
     };
 
     const handleUnset = () => {

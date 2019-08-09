@@ -34,16 +34,17 @@ const Connect = ({connErr}) => {
         host: () => form.host.length>0,
     };
 
-
-    const handleOnChange = (e) => {
-        form[e.target.id] = e.target.value;
-        errors[e.target.id] = !validation[e.target.id]();
-        setState({...state, form, errors});
+    const handleOnChange = ({target}) => {
+        const {id, value} = target;
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
+            return {...prevState, form: updatedForm};
+        });
     };
 
     const handleClickOk = () => {
-        const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
-        setState({...state, errors});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
+        setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             ApplicationActions.connectOther(form, (err) => setState({...state, serverError: err.log}));
             

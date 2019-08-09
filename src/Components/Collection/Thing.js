@@ -82,7 +82,7 @@ const Thing = ({classes, name, thing, collection, things, onServerError}) => {
                 <ListItemText primary={name} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
                 {canToggle && !Array.isArray(thing) && show ? (
                     <ListItemIcon>
-                        <AddThings collection={collection} thing={thing} />
+                        <AddThings collection={collection} thing={things[thing['#']] || thing} />
                     </ListItemIcon>
                 ) : null}
             </ListItem>

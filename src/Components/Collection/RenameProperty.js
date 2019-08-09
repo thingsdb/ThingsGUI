@@ -18,7 +18,7 @@ const initialState = {
     serverError: '',
 };
 
-const RenameProperty = ({collection, things}) => {
+const RenameProperty = ({collection}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
 
@@ -45,15 +45,17 @@ const RenameProperty = ({collection, things}) => {
         newname: () => form.newname.length>0,
     };
 
-    const handleOnChange = (e) => {
-        form[e.target.id] = e.target.value;
-        errors[e.target.id] = !validation[e.target.id]();
-        setState({...state, form, errors});
+    const handleOnChange = ({target}) => {
+        const {id, value} = target;
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
+            return {...prevState, form: updatedForm};
+        });
     };
 
     const handleClickOk = () => {
-        const errors = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
-        setState({...state, errors});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
+        setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             CollectionActions.renameProperty(
                 collection.collection_id,
@@ -140,7 +142,6 @@ const RenameProperty = ({collection, things}) => {
 
 RenameProperty.propTypes = {
     collection: PropTypes.object.isRequired,
-    things: PropTypes.object.isRequired,
 };
 
 export default RenameProperty;

@@ -63,8 +63,6 @@ const initialState = {
 const AddToken = ({classes, user}) => {
     const [state, setState] = React.useState(initialState);
     const {show, form, switches, serverError} = state;
-    console.log(state);
-
 
     const handleClickOpen = () => {
         setState({
@@ -86,14 +84,20 @@ const AddToken = ({classes, user}) => {
         setState({...state, show: false});
     };
 
-    const handleSwitch = (e) => {
-        switches[e.target.id] = e.target.checked;
-        setState({...state, switches});
-    }
+    const handleSwitch = ({target}) => {
+        const {id, checked} = target;
+        setState(prevState => {
+            const updatedSwitches = Object.assign({}, prevState.switches, {[id]: checked});
+            return {...prevState, switches: updatedSwitches};
+        });
+    };
 
-    const handleOnChange = (e) => {
-        form[e.target.id] = e.target.value;
-        setState({...state, form});
+    const handleOnChange = ({target}) => {
+        const {id, value} = target;
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
+            return {...prevState, form: updatedForm};
+        });
     };
 
     const handleClickOk = () => {

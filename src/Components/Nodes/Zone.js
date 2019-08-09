@@ -32,9 +32,12 @@ const Zone = ({node}) => {
         setState({...state, show: false});
     };
 
-    const handleOnChange = (e) => {
-        form[e.target.id] = e.target.value;
-        setState({...state, form});
+    const handleOnChange = ({target}) => {
+        const {id, value} = target;
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
+            return {...prevState, form: updatedForm};
+        });
     };
 
     const handleClickOk = () => {

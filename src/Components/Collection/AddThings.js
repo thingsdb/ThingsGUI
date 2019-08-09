@@ -32,12 +32,39 @@ const dataTypes = [
     'string',
     'number',
     'array',
+    'object',
     'set',
 ];
 
 const AddThings = ({collection, thing}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, switches, serverError} = state;
+
+    console.log(thing);
+
+    React.useEffect(() => {
+            if (!switches.newProperty) {
+                const thingType = checkType(thing[form.propertyName])
+                setState(prevState => {
+                    const updatedForm = Object.assign({}, prevState.form, { 'dataType': thingType});
+                    return {...prevState, form: updatedForm};
+                });
+            }
+        },
+        [form.propertyName],
+    );
+
+    const checkType = (t) => {
+        let type = typeof(t);
+        if (type === 'object') {
+            type = Array.isArray(t) ? 'array' : 'object'
+            if (type === 'object') {
+                kindOfObject = Object.keys(t)[0];
+                type = kindOfObject === '#' ? 'object' : (kindOfObject === '$' ? 'set' : null )
+            }    
+        }
+        return(type);
+    };
 
     const handleClickOpen = () => {
         setState({
@@ -86,7 +113,6 @@ const AddThings = ({collection, thing}) => {
  
     const handleOnChange = ({target}) => {
         const {id, value} = target;
-
         const q = handleBuildQuery(id, value);
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value, 'queryString': q});
@@ -130,6 +156,37 @@ const AddThings = ({collection, thing}) => {
             }
         }
     };
+
+
+    // const handleDynamicInput = (idName, labelName, idValue, labelValue) => (
+    //     <React.Fragment>
+    //         <ListItem>
+    //             <TextField
+    //                 margin="dense"
+    //                 id={idName}
+    //                 label={labelName}
+    //                 type="text"
+    //                 value={form.value}
+    //                 spellCheck={false}
+    //                 onChange={handleOnChange}
+    //                 fullWidth
+    //             />
+    //         </ListItem>                        
+    //         <ListItem>
+    //             <TextField
+    //                 margin="dense"
+    //                 id={idValue}
+    //                 label={labelValue}
+    //                 type="text"
+    //                 value={form.value}
+    //                 spellCheck={false}
+    //                 onChange={handleOnChange}
+    //                 fullWidth
+    //             />
+    //         </ListItem>
+    //     </React.Fragment>
+    // );
+
     return (
         <React.Fragment>
             <ButtonBase onClick={handleClickOpen} >
@@ -197,7 +254,7 @@ const AddThings = ({collection, thing}) => {
                                     autoFocus
                                     margin="dense"
                                     id="propertyName"
-                                    label="Type"
+                                    label="Existing properties"
                                     value={form.propertyName}
                                     onChange={handleOnChange}
                                     fullWidth
@@ -227,26 +284,26 @@ const AddThings = ({collection, thing}) => {
                                     error={errors.newProperty}
                                 />
                             </ListItem>
-                            <ListItem>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="dataType"
-                                    label="Data type"
-                                    value={form.dataType}
-                                    onChange={handleOnChange}
-                                    fullWidth
-                                    select
-                                    SelectProps={{native: true}}
-                                >
-                                    {dataTypes.map(d => ( 
-                                        <option key={d} value={d}>
-                                            {d}
-                                        </option>
-                                    ))}
-                                </ TextField>
-                            </ListItem>
-                        </Collapse>    
+                        </Collapse>
+                        <ListItem>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="dataType"
+                                label="Data type"
+                                value={form.dataType}
+                                onChange={handleOnChange}
+                                fullWidth
+                                select
+                                SelectProps={{native: true}}
+                            >
+                                {dataTypes.map(d => ( 
+                                    <option key={d} value={d}>
+                                        {d}
+                                    </option>
+                                ))}
+                            </ TextField>
+                        </ListItem>    
                         <ListItem>
                             <TextField
                                 margin="dense"
