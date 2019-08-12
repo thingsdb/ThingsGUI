@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import BlockIcon from '@material-ui/icons/Block';
 import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Divider from '@material-ui/core/Divider';
@@ -54,7 +55,7 @@ const UsersMenu = ({classes, users, onClickUser}) => {
                 </ListItem>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {users.length && users.map((user, i) => {
+                        {users.length ? users.map((user, i) => {
                             return(
                                 <ListItem key={i} button className={classes.nested} onClick={handleClickUser(i)}>
                                     <ListItemIcon>
@@ -63,7 +64,14 @@ const UsersMenu = ({classes, users, onClickUser}) => {
                                     <ListItemText primary={user.name} />
                                 </ListItem>
                             );
-                        })}   
+                        }) : (
+                            <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                    <BlockIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'No user info visible.'} primaryTypographyProps={{'variant':'caption', 'color':'error'}} />
+                            </ListItem>
+                        )}   
                         <Divider />
                         <ListItem className={classes.nestedAdd} >
                             <AddUser />

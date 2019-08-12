@@ -5,7 +5,6 @@ import BaseStore from './BaseStore';
 const CollectionActions = Vlow.createActions([
     'query',
     'property',
-    'renameProperty',
     'removeObject',
     'rawQuery',
 ]);
@@ -54,20 +53,6 @@ class CollectionStore extends BaseStore {
             this.setState(prevState => {
                 const thingsByProp = Object.assign({}, prevState.thingsByProp, {[collectionId]: data});
                 return {thingsByProp};
-            });
-        }).fail((event, status, message) => onError(message));
-    }
-
-    onRenameProperty(collectionId, thingId, oldname, newname, onError) {
-        this.emit('/collection/rename-property', {
-            collectionId: collectionId,
-            thingId: thingId,
-            oldname: oldname,
-            newname: newname
-        }).done((data) => {
-            this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[thingId]: data});
-                return {things};
             });
         }).fail((event, status, message) => onError(message));
     }

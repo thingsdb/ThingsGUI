@@ -35,10 +35,6 @@ class SocketRouter:
         sio.on(
             event='/collection/return-property',
             handler=CollectionHandler.return_property)
-        
-        sio.on(
-            event='/collection/rename-property',
-            handler=CollectionHandler.rename_property)
 
         sio.on(
             event='/collection/remove-object',
@@ -127,10 +123,6 @@ class SocketRouter:
         sio.on(
             event='/node/loglevel',
             handler=NodeHandler.set_loglevel)
-
-        sio.on(
-            event='/node/zone',
-            handler=NodeHandler.set_zone)
 
         sio.on(
             event='/node/counters/reset',

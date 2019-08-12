@@ -27,13 +27,12 @@ class CollectionsStore extends BaseStore {
     constructor() {
         super(CollectionsActions);
         this.state = CollectionsStore.defaults;
-        this.onGetCollections();
     }
 
-    onGetCollections() {
+    onGetCollections(onError) {
         this.emit('/collection/getcollections').done((data) => {
             this.setState({collections: data});
-        });
+        }).fail((event, status, message) => onError(message));
     }
 
     onGetCollection(name, onError) {

@@ -14,7 +14,6 @@ const NodeInfo = ({node}) => {
         {ky: 'ip_support', label: 'IP support'},
         {ky: 'storage_path', label: 'Storage path'},
         {ky: 'uptime', label: 'Uptime'},
-        {ky: 'version', label: 'Version'},
         {ky: 'zone', label: 'Zone'},
 
         {ky: 'client_port', label: 'Client port'},
@@ -27,11 +26,22 @@ const NodeInfo = ({node}) => {
            
         {ky: 'events_in_queue', label: 'Events in queue'},      
         {ky: 'global_committed_event_id', label: 'Global committed event ID'},
-        {ky: 'local_committed_event_id', label: 'Local committed event ID'},
+        {ky: 'global_stored_event_id', label: 'Global stored event ID'},
         {ky: 'db_stored_event_id', label: 'Stored event ID'},
+        {ky: 'local_committed_event_id', label: 'Local committed event ID'},
         {ky: 'local_stored_event_id', label: 'Local stored event ID'},
+        {ky: 'next_event_id', label: 'Next event ID'},
+        {ky: 'next_thing_id', label: 'Next thing ID'},
+
+        {ky: 'version', label: 'Version'},
+        {ky: 'syntax_version', label: 'Syntax version'},
+        {ky: 'libcleri_version', label: 'Libcleri version'},
+        {ky: 'libpcre2_version', label: 'Libpcre2 version'},
+        {ky: 'libqpack_version', label: 'Libqpack version'},
+        {ky: 'libuv_version', label: 'Libuv version'},
+
     ];
-    
+
     return (
         <Grid container spacing={0}>
             {header.map((h) => (

@@ -11,7 +11,6 @@ import Counters from './Counters';
 import CountersReset from './CountersReset';
 import Loglevel from './Loglevel';
 import Info from './Info';
-import Zone from './Zone';
 import Shutdown from './Shutdown';
 import {StyledTabs, StyledTab} from '../Util/Tabs';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
@@ -43,9 +42,11 @@ const Node = ({classes, local, node, counters}) => {
 
     React.useEffect(() => {
         NodesActions.getNode((err) => setState({...state, serverError: err.log})) // QUEST: en bij status update?
-    }, [local.node_id]);
+    }, [tabIndex]);
 
-    const handleChangeTab = (_event, newValue) => setState({...state, tabIndex: newValue}); 
+    const handleChangeTab = (_event, newValue) => {
+        setState({...state, tabIndex: newValue}); 
+    }
 
     const handleServerError = (err) => {
         setState({...state, serverError: err.log});
@@ -76,9 +77,6 @@ const Node = ({classes, local, node, counters}) => {
                     <Grid item container xs={12} spacing={1} >
                         <Grid item>
                             <Loglevel node={node} />
-                        </Grid>
-                        <Grid item>
-                            <Zone node={node} />
                         </Grid>
                         <Grid item>
                             <Shutdown node={node} />

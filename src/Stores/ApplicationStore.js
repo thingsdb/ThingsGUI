@@ -32,7 +32,7 @@ class ApplicationStore extends BaseStore {
         this.state = ApplicationStore.defaults;
     }
 
-    onConnected() {
+    onConnected(onError) {
         this.emit('/connected').done((data) => {
             setTimeout(() => {
                 this.setState({

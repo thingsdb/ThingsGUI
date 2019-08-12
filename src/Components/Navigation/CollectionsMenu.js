@@ -1,4 +1,5 @@
 import React from 'react';
+import BlockIcon from '@material-ui/icons/Block';
 import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -56,7 +57,7 @@ const CollectionsMenu = ({classes, collections, onClickCollection}) => {
                 </ListItem>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {collections.length && collections.map((collection, i) => {
+                        {collections.length ? collections.map((collection, i) => {
                             return(
                                 <ListItem key={i} button className={classes.nested} onClick={handleClickCollection(i)}>
                                     <ListItemIcon>
@@ -65,7 +66,14 @@ const CollectionsMenu = ({classes, collections, onClickCollection}) => {
                                     <ListItemText primary={collection.name} />
                                 </ListItem>
                             );
-                        })}   
+                        }) : (
+                            <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                    <BlockIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'No collection info visible.'} primaryTypographyProps={{'variant':'caption', 'color':'error'}} />
+                            </ListItem>
+                        )}    
                         <Divider />
                         <ListItem className={classes.nestedAdd} >
                             <AddCollection />

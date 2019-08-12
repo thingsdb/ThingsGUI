@@ -16,6 +16,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
+import AddArray from './_AddArray';
 import {CollectionActions} from '../../Stores/CollectionStore';
 
 const initialState = {
@@ -121,20 +122,24 @@ const AddThings = ({collection, thing}) => {
     };
 
     const handleBuildQuery = (key, value) => {
+        console.log(key, value);
         let q = '';
-        const propName = key!='value' ? value : (switches.newProperty ? form.newProperty : form.propertyName);
+        const propName = key=='newProperty' ? value : (switches.newProperty ? form.newProperty : form.propertyName);
         const input = key=='value' ? value : form.value;
-        switch(form.dataType) {
+        const dataType = key=='dataType' ? value : form.dataType;
+        switch(dataType) {
             case 'string':
                 q = `t(${thing['#']}).${propName} = '${input}'`;
               break;
             case 'number':
                 q = `t(${thing['#']}).${propName} = ${input}`;
-              break;
+                break;
             case 'array':
-            break;
+                break;
+            case 'object':
+                break;
             case 'set':
-              break;
+                break;
             default:
         };
         return(q);
@@ -305,17 +310,23 @@ const AddThings = ({collection, thing}) => {
                             </ TextField>
                         </ListItem>    
                         <ListItem>
-                            <TextField
-                                margin="dense"
-                                id="value"
-                                label="Value"
-                                type="text"
-                                value={form.value}
-                                spellCheck={false}
-                                onChange={handleOnChange}
-                                fullWidth
-                                error={errors.value}
-                            />
+                            {dataType == 'number' || dataType == 'string' ? (
+                                <TextField
+                                    margin="dense"
+                                    id="value"
+                                    label="Value"
+                                    type="text"
+                                    value={form.value}
+                                    spellCheck={false}
+                                    onChange={handleOnChange}
+                                    fullWidth
+                                    error={errors.value}
+                                />
+
+                            ) : dataType == 'array' ? (
+                                <AddArray />
+                            ) : null}
+
                         </ListItem>
                     </List>
                 </DialogContent>

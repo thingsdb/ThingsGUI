@@ -91,6 +91,8 @@ class App(Router, Application):
             self.loop.run_until_complete(self.shutdown())
             self.loop.run_until_complete(self.cleanup())
 
+            print('bye')
+
             for client in self.clients.values():
                 client.close()
 

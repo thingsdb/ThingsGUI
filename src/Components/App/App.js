@@ -15,9 +15,10 @@ import UsersMenu from '../Navigation/UsersMenu';
 import Nodes from '../Nodes/Nodes';
 import TopBar from '../Navigation/TopBar';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
-import {CollectionsStore} from '../../Stores/CollectionsStore';
+import {CollectionsActions, CollectionsStore} from '../../Stores/CollectionsStore';
 import {UsersActions, UsersStore} from '../../Stores/UsersStore';
-import {NodesStore} from '../../Stores/NodesStore';
+import {NodesActions, NodesStore} from '../../Stores/NodesStore';
+import ServerError from '../Util/ServerError';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -72,13 +73,24 @@ const styles = theme => ({
 const App = ({classes, collections, match, user, users, nodes}) => {
     const [indexCollection, setIndexCollection] = React.useState(0)
     const [indexUser, setIndexUser] = React.useState(0)
+    const [serverError, setServerError] = React.useState('')
 
     React.useEffect(() => {
-            UsersActions.getUsers(); 
-            console.log('useeffect');
+            UsersActions.getUsers();
+            console.log('useeffect1');
         },
         [collections.length],
     );
+
+    React.useEffect(() => {
+        console.log('useeffect2');
+        UsersActions.getUser(handleServerError);
+        UsersActions.getUsers(handleServerError);
+        CollectionsActions.getCollections(handleServerError); 
+        NodesActions.getNodes(handleServerError);
+    },
+    [],
+);
     
     const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
     const selectedCollection = findItem(indexCollection, collections);
@@ -97,10 +109,20 @@ const App = ({classes, collections, match, user, users, nodes}) => {
         setIndexUser(i);
     }
 
+    const handleServerError = (err) => {
+        setServerError(err.log);
+    }
+
+    const handleCloseError = () => {
+        setServerError('');
+    }
+    const openError = Boolean(serverError); 
+
     return(
         <React.Fragment>
+            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
             <TopBar user={user} />
-            {nodes.length ? (
+            {/* {nodes.length ? ( */}
                 <div className={classes.root}>
                     <div className={classes.menu}>
                         <div className={classes.submenu}>
@@ -131,9 +153,9 @@ const App = ({classes, collections, match, user, users, nodes}) => {
                         </Card>
                     </div>
                 </div>
-            ) : (
+            {/* ) : (
                 null // <AppLoader /> 
-            )}
+            )} */}
         </React.Fragment>
     );
 }

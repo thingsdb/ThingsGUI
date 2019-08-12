@@ -6,7 +6,6 @@ const NodesActions = Vlow.createActions([
     'getNodes',
     'getNode',
     'setLoglevel',
-    'setZone',
     'resetCounters',
     'shutdown',
     'addNode',
@@ -32,13 +31,12 @@ class NodesStore extends BaseStore {
     constructor() {
         super(NodesActions);
         this.state = NodesStore.defaults;
-        this.onGetNodes();
     }
 
-    onGetNodes(cb=() => null){
+    onGetNodes(onError){
         this.emit('/node/getnodes').done((data) => {
             this.setState({nodes: data.nodes});
-        }).always(cb);
+        }).fail((event, status, message) => onError(message));
     }
 
     onGetNode(onError) {
@@ -54,17 +52,6 @@ class NodesStore extends BaseStore {
         this.emit('/node/loglevel', {
             node: node.node_id,
             level,
-        }).done((data) => {
-            this.setState({
-                node: data.node
-            });
-        }).fail((event, status, message) => onError(message));
-    }
-
-    onSetZone(node, zone, onError) {
-        this.emit('/node/zone', {
-            node: node.node_id,
-            zone,
         }).done((data) => {
             this.setState({
                 node: data.node
@@ -94,20 +81,20 @@ class NodesStore extends BaseStore {
 
     onAddNode(config, onError) { // secret , ipAddress [, port]
         this.emit('/node/add', config).done(() => {
-            this.onGetNodes(); 
-        }).fail((event, status, message) => this.onGetNodes(() => onError(message)));
+            this.onGetNodes(onError); 
+        }).fail((event, status, message) => onError(message));
     }
 
     onPopNode(onError) {
         this.emit('/node/pop').done(() => {
-            this.onGetNodes(); 
-        }).fail((event, status, message) => this.onGetNodes(() => onError(message)));
+            this.onGetNodes(onError); 
+        }).fail((event, status, message) => onError(message));
     }
 
     onReplaceNode(config, onError) { // nodeId , secret [, port]
         this.emit('/node/replace', config).done(() => {
-            this.onGetNodes(); 
-        }).fail((event, status, message) => this.onGetNodes(() => onError(message)));
+            this.onGetNodes(onError); 
+        }).fail((event, status, message) => onError(message));
     }
     
 };

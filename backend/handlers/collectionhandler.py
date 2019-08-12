@@ -13,7 +13,7 @@ class CollectionHandler(BaseHandler):
         if thing_id:
             q = r'''t({}) => {}'''.format(thing_id, depth)
         else:
-            q = r'''t(id()) => {}'''.format(depth)
+            q = r'''t(.id()) => {}'''.format(depth)
         resp = await client.query(q, target=collection_id)
 
         return cls.socket_response(data=resp)
@@ -30,32 +30,11 @@ class CollectionHandler(BaseHandler):
             q = r'''t({}).filter(|thing| thing.contains('{}')) => {}'''.format(
                 thing_id, propertyName, depth)
         else:
-            q = r'''t(id()).filter(|thing| thing.contains('{}')) => {}'''.format(
+            q = r'''t(.id()).filter(|thing| thing.contains('{}')) => {}'''.format(
                 propertyName, depth)
         resp = await client.query(q, target=collection_id)
 
         return cls.socket_response(data=resp)
-
-    @classmethod
-    @BaseHandler.socket_handler
-    async def rename_property(cls, client, data):
-        collection_id = data.get('collectionId')
-        thing_id = data.get('thingId')
-        oldname = data.get('oldname')
-        newname = data.get('newname')
-
-        q1 = r'''id()'''
-        resp1 = await client.query(q1, target=collection_id)
-
-        if (str(resp1) == thing_id):
-            q2 = r'''rename('{}', '{}'); t({})'''.format(
-                oldname, newname, thing_id)
-        else:
-            q2 = r'''t({}).rename('{}', '{}'); t({})'''.format(
-                thing_id, oldname, newname, thing_id)
-        resp2 = await client.query(q2, target=collection_id)
-
-        return cls.socket_response(data=resp2)
 
     @classmethod
     @BaseHandler.socket_handler
@@ -64,16 +43,10 @@ class CollectionHandler(BaseHandler):
         thing_id = data.get('thingId')
         name = data.get('propertyName')
 
-        q1 = r'''id()'''
-        resp1 = await client.query(q1, target=collection_id)
+        q = r'''t({}).del('{}'); t(.id())'''.format(thing_id, name)
+        resp = await client.query(q, target=collection_id)
 
-        if (str(resp1) == thing_id):
-            q2 = r'''del('{}'); t(id())'''.format(name)
-        else:
-            q2 = r'''t({}).del('{}'); t(id())'''.format(thing_id, name)
-        resp2 = await client.query(q2, target=collection_id)
-
-        return cls.socket_response(data=resp2)
+        return cls.socket_response(data=resp)
 
 
     @classmethod

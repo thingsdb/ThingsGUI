@@ -4,7 +4,8 @@ import {withVlow} from 'vlow';
 
 import Node from './Node';
 import Tabel from '../Util/Table2';
-import {NodesStore} from '../../Stores/NodesStore';
+import {NodesActions, NodesStore} from '../../Stores/NodesStore';
+import ServerError from '../Util/ServerError';
 
 
 const withStores = withVlow([{
@@ -13,6 +14,13 @@ const withStores = withVlow([{
 }]);
 
 const Nodes = ({nodes}) => {
+    const [serverError, setServerError] = React.useState('')
+
+    React.useEffect(() => {
+        NodesActions.getNodes(handleServerError); // QUEST: en bij status update?
+    }, []);
+
+
     const rows = nodes;
     const header = [{
         ky: 'address',
@@ -26,9 +34,18 @@ const Nodes = ({nodes}) => {
     }];
     const rowExtend = (node) => <Node local={node} />;
 
+    const handleServerError = (err) => {
+        setServerError(err.log);
+    }
 
-    return (
+    const handleCloseError = () => {
+        setServerError('');
+    }
+    const openError = Boolean(serverError); 
+
+    return(
         <React.Fragment>
+            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
             <Tabel header={header} rows={rows} rowExtend={rowExtend} />
         </React.Fragment>
     );

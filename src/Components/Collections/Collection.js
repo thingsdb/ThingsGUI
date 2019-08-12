@@ -5,7 +5,6 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 import Things2 from '../Collection/_Things';
 import Things from '../Collection/Things';
-import RenameProperty from '../Collection/RenameProperty';
 import RemoveObject from '../Collection/RemoveObject';
 import CollectionInfo from './CollectionInfo';
 import RemoveCollection from './Remove';
@@ -13,6 +12,8 @@ import RenameCollection from './Rename';
 import SetQuotas from './Quotas';
 import Query from '../Collection/Query';
 import {StyledTabs, StyledTab} from '../Util/Tabs';
+import {CollectionsActions} from '../../Stores/CollectionsStore';
+import ServerError from '../Util/ServerError';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -29,11 +30,29 @@ const useStyles = makeStyles(theme => ({
 const Collection = ({collection}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
+    const [serverError, setServerError] = React.useState('');
+    
   
-    const handleChange = (_event, newValue) => setTabIndex(newValue);
+    const handleChange = (_event, newValue) => {
+        setTabIndex(newValue);
+
+        if (newValue == 0) {
+            CollectionsActions.getCollections(handleServerError); 
+        }
+    };
+
+    const handleServerError = (err) => {
+        setServerError(err.log);
+    }
+
+    const handleCloseError = () => {
+        setServerError('');
+    }
+    const openError = Boolean(serverError); 
     
     return (
         <div className={classes.root}>
+            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
             <StyledTabs value={tabIndex} onChange={handleChange} aria-label="styled tabs example">
                 <StyledTab label="Collection Info" />
                 <StyledTab label="Things" />
@@ -78,9 +97,6 @@ const Collection = ({collection}) => {
                         <Things collection={collection} />
                     </Grid>
                     <Grid item container xs={12} spacing={1} >
-                        <Grid item>
-                            <RenameProperty collection={collection} />
-                        </Grid>
                         <Grid item>
                             <RemoveObject collection={collection} />
                         </Grid>

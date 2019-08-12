@@ -39,16 +39,19 @@ class LoginHandler(BaseHandler):
                 'connErr': 'invalid address',
             }
 
+        if (not client.is_connected()):
+            try:
+                await client.connect(host, port)
+            except OSError as e:
+                return {
+                    'connected': False,
+                    'connErr': 'connection error: {}'.format(str(e)),
+                }
+        
         try:
-            await client.connect(host, port)
-        except OSError as e:
-            return {
-                'connected': False,
-                'connErr': 'connection error: {}'.format(str(e)),
-            }
-
-        try:
+            print(user, client)
             a = await client.authenticate(auth=[user, password])  # TODOs auth not working correctly 
+            print(a)
         except ThingsDBError as e:
             print('authentication error \n')
             return {
@@ -86,7 +89,7 @@ class LoginHandler(BaseHandler):
     async def connect_other(cls, client, data):
         user = client._username
         password = client._password
-
+        print('close in connect_other')
         client.close()
         await client.wait_closed()
 
@@ -96,6 +99,7 @@ class LoginHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def disconnect(cls, client, data):
+        print("disconnect login handler")
         client.close()
         await client.wait_closed()
 

@@ -32,25 +32,24 @@ class UsersStore extends BaseStore {
     constructor() {
         super(UsersActions);
         this.state = UsersStore.defaults;
-        this.onGetUsers();
-        this.onGetUser();
     }
 
-    onGetUsers(){
+    onGetUsers(onError){
         this.emit('/user/getusers').done((data) => {
             this.setState({users: data});
-        });
+        }).fail((event, status, message) => onError(message));
     }
 
-    onGetUser(config=null){
+    onGetUser(onError, config=null){
         this.emit('/user/get', {
             config,
         }).done((data) => {
             this.setState({
                 user: data
             });
-        });
+        }).fail((event, status, message) => onError(message));
     }
+
 
     onAddUser(name, onError){
         this.emit('/user/add', {

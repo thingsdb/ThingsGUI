@@ -47,13 +47,8 @@ const privileges = [
         label: 'WATCH',
     },
     {
-        ky: 'call',
-        label: 'CALL',
-    },
-
-    {
-        ky: 'full',
-        label: 'FULL',
+        ky: 'run',
+        label: 'RUN',
     },
 ];
 
@@ -74,16 +69,22 @@ const User = ({user, collections}) => {
             modify: false,
             grant: false,
             watch: false,
-            call: false,
+            run: false,
         }
 
         s.full = privileges.includes('FULL');
-        if (!s.full) {
+        if (s.full) {
+            s.read = true; 
+            s.modify = true;
+            s.grant = true;
+            s.watch = true; 
+            s.run = true;
+        } else {
             s.read = privileges.includes('READ'); 
             s.modify = privileges.includes('MODIFY');
             s.grant = privileges.includes('GRANT');
             s.watch = privileges.includes('WATCH'); 
-            s.call = privileges.includes('CALL');
+            s.run = privileges.includes('RUN');
         }
          
         return ({[target]: s})

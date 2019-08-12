@@ -70,20 +70,6 @@ class NodeHandler(BaseHandler):
         }
         return cls.socket_response(data=resp)
 
-    @classmethod
-    @BaseHandler.socket_handler
-    async def set_zone(cls, client, data): # TODOs: werkt nog niet
-        q = r'''set_zone({zone}); node_info();'''.format_map(data)
-
-        if data.get('node'):
-            result = await cls._other_node(client, data.get('node'), q)
-        else:
-            result = await client.query(q, target=scope.node)
-
-        resp = {
-            'node': result,
-        }
-        return cls.socket_response(data=resp)
 
     @classmethod
     @BaseHandler.socket_handler
@@ -94,6 +80,7 @@ class NodeHandler(BaseHandler):
             result = await cls._other_node(client, data.get('node'), q)
         else:
             result = await client.query(q, target=scope.node)
+            print('close in shurdown')
             client.close()
 
         resp = {
