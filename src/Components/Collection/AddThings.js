@@ -35,13 +35,12 @@ const dataTypes = [
     'array',
     'object',
     'set',
+    'closure',
 ];
 
 const AddThings = ({collection, thing}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, switches, serverError} = state;
-
-    console.log(thing);
 
     React.useEffect(() => {
             if (!switches.newProperty) {
@@ -54,18 +53,6 @@ const AddThings = ({collection, thing}) => {
         },
         [form.propertyName],
     );
-
-    const checkType = (t) => {
-        let type = typeof(t);
-        if (type === 'object') {
-            type = Array.isArray(t) ? 'array' : 'object'
-            if (type === 'object') {
-                kindOfObject = Object.keys(t)[0];
-                type = kindOfObject === '#' ? 'object' : (kindOfObject === '$' ? 'set' : null )
-            }    
-        }
-        return(type);
-    };
 
     const handleClickOpen = () => {
         setState({
@@ -90,6 +77,17 @@ const AddThings = ({collection, thing}) => {
     };
 
 
+    const checkType = (t) => {
+        let type = typeof(t);
+        if (type === 'object') {
+            type = Array.isArray(t) ? 'array' : 'object'
+            if (type === 'object') {
+                const kindOfObject = Object.keys(t)[0];
+                type = kindOfObject === '#' ? 'object' : (kindOfObject === '$' ? 'set' : null )
+            }    
+        }
+        return(type);
+    };
     const onlyNums = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;
     const validation = {
         queryString: () => true,
@@ -116,13 +114,21 @@ const AddThings = ({collection, thing}) => {
         const {id, value} = target;
         const q = handleBuildQuery(id, value);
         setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {[id]: value, 'queryString': q});
+            const updatedForm = Object.assign({}, prevState.form, {[id]: value, queryString: q});
             return {...prevState, form: updatedForm};
         });
     };
 
+    const handleArrayItems = (items) => {
+        const value = items.toString();
+        const q = handleBuildQuery('value', value);
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {value: value, queryString: q});
+            return {...prevState, form: updatedForm};
+        });
+    }
+
     const handleBuildQuery = (key, value) => {
-        console.log(key, value);
         let q = '';
         const propName = key=='newProperty' ? value : (switches.newProperty ? form.newProperty : form.propertyName);
         const input = key=='value' ? value : form.value;
@@ -135,6 +141,7 @@ const AddThings = ({collection, thing}) => {
                 q = `t(${thing['#']}).${propName} = ${input}`;
                 break;
             case 'array':
+                q = `t(${thing['#']}).${propName} = [${input}]`
                 break;
             case 'object':
                 break;
@@ -162,36 +169,7 @@ const AddThings = ({collection, thing}) => {
         }
     };
 
-
-    // const handleDynamicInput = (idName, labelName, idValue, labelValue) => (
-    //     <React.Fragment>
-    //         <ListItem>
-    //             <TextField
-    //                 margin="dense"
-    //                 id={idName}
-    //                 label={labelName}
-    //                 type="text"
-    //                 value={form.value}
-    //                 spellCheck={false}
-    //                 onChange={handleOnChange}
-    //                 fullWidth
-    //             />
-    //         </ListItem>                        
-    //         <ListItem>
-    //             <TextField
-    //                 margin="dense"
-    //                 id={idValue}
-    //                 label={labelValue}
-    //                 type="text"
-    //                 value={form.value}
-    //                 spellCheck={false}
-    //                 onChange={handleOnChange}
-    //                 fullWidth
-    //             />
-    //         </ListItem>
-    //     </React.Fragment>
-    // );
-
+    console.log(collection, thing[form.propertyName]);
     return (
         <React.Fragment>
             <ButtonBase onClick={handleClickOpen} >
@@ -309,8 +287,9 @@ const AddThings = ({collection, thing}) => {
                                 ))}
                             </ TextField>
                         </ListItem>    
-                        <ListItem>
-                            {dataType == 'number' || dataType == 'string' ? (
+                        
+                        {form.dataType == 'number' || form.dataType == 'string' ? (
+                            <ListItem>
                                 <TextField
                                     margin="dense"
                                     id="value"
@@ -322,12 +301,11 @@ const AddThings = ({collection, thing}) => {
                                     fullWidth
                                     error={errors.value}
                                 />
+                            </ListItem>
 
-                            ) : dataType == 'array' ? (
-                                <AddArray />
-                            ) : null}
-
-                        </ListItem>
+                        ) : form.dataType == 'array' ? (
+                            <AddArray items={switches.newProperty ? [] : thing[form.propertyName]} cb={handleArrayItems}/>
+                        ) : null}              
                     </List>
                 </DialogContent>
                 <DialogActions>

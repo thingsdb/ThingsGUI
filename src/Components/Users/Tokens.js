@@ -46,11 +46,11 @@ const Tokens = ({user}) => {
 
     const handleServerError = (err) => {
         setServerError(err.log);
-    }
+    };
 
     const handleCloseError = () => {
         setServerError('');
-    }
+    };
     const openError = Boolean(serverError); 
 
     return (

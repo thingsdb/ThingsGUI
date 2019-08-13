@@ -1,61 +1,89 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import Button from '@material-ui/core/Button';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Collapse from '@material-ui/core/Collapse';
+import Chip from '@material-ui/core/Chip';
+import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
-
-import {CollectionActions} from '../../Stores/CollectionStore';
-
+import { makeStyles } from '@material-ui/core/styles';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 
+const useStyles = makeStyles(theme => ({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        padding: 0,
+    },
+    chip: {
+        padding: theme.spacing(1),
+        margin: theme.spacing(1),
+    },
+    transitionGroup: {
+        paddingTop: theme.spacing(2),
+        paddingBottom: 0,
+        paddingLeft: 0,
+        paddingRight: 0,
+    },
+}));
 
+
+let lastId = -1;
+
+const dataTypes = [
+    'string',
+    'number',
+];
 
 const initialState = {
     contentAdd: "add +",
+    dataType: dataTypes[0],
     width: 100,
     myItems: [],
 };
 
-let lastId = -1;
-
-const AddArray = ({collection, thing}) => {
+const AddArray = ({items, cb}) => {
+    const classes = useStyles();
     const [state, setState] = React.useState(initialState);
-    const {contentAdd, width, myItems} = state;
+    const {contentAdd, dataType, width, myItems} = state;
 
-    const helperspan = useRef(null);
+    const helperspan = React.useRef(null);
+    React.useEffect(() => {
+            let newArray = [];
+            items.map((item, index) => {
+                setState(prevState => {
+                    newArray.push(item);
+                    return {...prevState, myItems: newArray};
+                });	
+            });
+        },
+        [items],
+    ); 
 
     React.useEffect(() => {
-            console.log('did update, content:', helperspan.current.textContent, 'width', helperspan.current.offsetWidth);
             const helperWidth = helperspan.current.offsetWidth;
             setState({ ...state, width: Math.max(50, helperWidth + 1) });
         },
-        [state.contentAdd],
+        [contentAdd],
     ); 
 
-    
-    console.log(lastId);
-
+    React.useEffect(() => {
+            console.log('useEffect addarray')
+            cb(myItems);
+        },
+        [myItems.length],
+    ); 
 
 	const handleFocus = (_event) => {
 		setState({ ...state, contentAdd: "" });
-	}
+	};
 	
 	const handleChange = ({target}) => {
-        const {value} = target;
-		setState({...state, contentAdd: value });
-	}
+        const {id, value} = target;
+        console.log(state);
+		setState({...state, [id]: value });
+	};
 
 	const handleKeypress = (event) => {
         const {key} = event;
@@ -66,102 +94,91 @@ const AddArray = ({collection, thing}) => {
 				return; 
             }
 
+            const contentTypeChecked = dataType == 'string' ? "'"+ currentcontent +"'" : currentcontent;
+
 			let currentWidth = helperspan.current.offsetWidth;
             setState(prevState => {
-
-                const newArray = prevState.myItems.push({
-                    content: currentcontent, 
-                    id: ++lastId, 
-                    itemWidth: currentWidth + 2
-                });
+                const newArray = prevState.myItems;
+                newArray.push(contentTypeChecked);
                 return {...prevState, contentAdd: "", myItems: newArray};
             });		
 		}
-	}
+	};
 
-	const handleBlur = (_event) => {
-		setState({ contentAdd: "add +" });
-	}
-
-	const handleClick = ({target}) => {
-        const {dataset} = target;
-		const idToRemove = Number(dataset["item"]);
-		const newArray = myItems.filter((listitem) => {return listitem.id !== idToRemove});
+	const handleClick = (item) => () => {
+		const newArray = myItems.filter((listitem) => {return listitem !== item});
 		setState({ ...state, myItems: newArray });
-	}
+	};
 	    
 
 	const makeAddedList = () => {
-		
 		const elements =  myItems.map((listitem, index) => (
-			<li
-				key={listitem.id}
-				onClick={handleClick}
-				data-item={listitem.id}
-				style={{
-					width: listitem.itemWidth
-				}}
-			>
-				{listitem.content}
-			</li>
+                <Chip
+                    key={index}
+                    id={listitem}
+                    className={classes.chip}
+                    label={listitem}
+                    onDelete={handleClick(listitem)}
+                    color="primary"
+                />
 		));
         return elements
-    }
+    };
 
 
     return (
-        <div>
-    <TransitionGroup component="ul" className="os-messages">
-    {messages.map((message) => (
-        <CSSTransition
-            key={message.id}
-            classNames="message-animation"
-            timeout={{
-                enter: 300,
-                exit: 500,
-            }}
-        >
-            <Message
-                message={message}
-                onClose={() => this.onClose(message)}
-            />
-        </CSSTransition>
-    ))}
-</TransitionGroup>
-            <CSSTransitionGroup
-                transitionName="item-transition"
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={210}
+        <div className={classes.container} >
+            {makeAddedList()}
+            <TextField
+                className={classes.textField}
+                id="dataType"
+                type="text"
+                name="datatype"
+                autoComplete="off"
+                onChange={handleChange}
+                value={dataType}
+                variant="outlined"
+                select
+                SelectProps={{native: true}}
             >
-                {makeAddedList()}
-
-            </CSSTransitionGroup>   
-            <input
-                id="add"
+                {dataTypes.map(p => (
+                    <option key={p} value={p}>
+                        {p}
+                    </option>
+                ))}
+            </TextField>
+            <TextField
+                className={classes.textField}
+                id="contentAdd"
                 type="text"
                 name="initvalue"
                 autoComplete="off"
-                maxLength="70"
                 onFocus={handleFocus}
                 onChange={handleChange}
                 onKeyPress={handleKeypress}
-                onBlur={handleBlur}
                 value={contentAdd}
                 style={{ width: width }}
+                variant="outlined"
             />
-
-            <span id="helperspan" ref={el => (helperspan)}>
+            <span 
+                id="helperspan" 
+                ref={helperspan}
+                style={{'visibility': 'hidden'}}
+            >
                 {contentAdd}
             </span>
-
         </div>
     );
 	
 };
 
+AddArray.defaultProps = {
+    items: [],
+};
+
 AddArray.propTypes = {
-    collection: PropTypes.object.isRequired,
-    thing: PropTypes.object.isRequired,
+    items: PropTypes.array,
+    cb: PropTypes.func.isRequired,
 };
 
 
