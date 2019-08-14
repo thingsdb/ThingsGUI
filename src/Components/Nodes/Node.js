@@ -12,9 +12,8 @@ import CountersReset from './CountersReset';
 import Loglevel from './Loglevel';
 import Info from './Info';
 import Shutdown from './Shutdown';
-import {StyledTabs, StyledTab} from '../Util/Tabs';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import ServerError from '../Util/ServerError';
+import {ServerError, StyledTabs, StyledTab} from '../Util';
 
 
 const withStores = withVlow([{

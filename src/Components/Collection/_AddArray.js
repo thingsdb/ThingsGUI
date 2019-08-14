@@ -29,47 +29,30 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-let lastId = -1;
-
 const dataTypes = [
     'string',
     'number',
 ];
 
-const initialState = {
-    contentAdd: "add +",
-    dataType: dataTypes[0],
-    width: 100,
-    myItems: [],
-};
-
-const AddArray = ({items, cb}) => {
+const AddArray = ({cb}) => {
     const classes = useStyles();
-    const [state, setState] = React.useState(initialState);
-    const {contentAdd, dataType, width, myItems} = state;
-
     const helperspan = React.useRef(null);
-    React.useEffect(() => {
-            let newArray = [];
-            items.map((item, index) => {
-                setState(prevState => {
-                    newArray.push(item);
-                    return {...prevState, myItems: newArray};
-                });	
-            });
-        },
-        [items],
-    ); 
+    const [state, setState] = React.useState({
+        contentAdd: "add +",
+        dataType: dataTypes[0],
+    });
+    const {contentAdd, dataType} = state;
 
+    const [width, setWidth] = React.useState(100);
     React.useEffect(() => {
             const helperWidth = helperspan.current.offsetWidth;
-            setState({ ...state, width: Math.max(50, helperWidth + 1) });
+            setWidth(Math.max(50, helperWidth + 1));
         },
         [contentAdd],
     ); 
 
+    const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
-            console.log('useEffect addarray')
             cb(myItems);
         },
         [myItems.length],
@@ -81,7 +64,6 @@ const AddArray = ({items, cb}) => {
 	
 	const handleChange = ({target}) => {
         const {id, value} = target;
-        console.log(state);
 		setState({...state, [id]: value });
 	};
 
@@ -95,19 +77,18 @@ const AddArray = ({items, cb}) => {
             }
 
             const contentTypeChecked = dataType == 'string' ? "'"+ currentcontent +"'" : currentcontent;
-
-			let currentWidth = helperspan.current.offsetWidth;
-            setState(prevState => {
-                const newArray = prevState.myItems;
+            setMyItems(prevItems => {
+                const newArray = prevItems;
                 newArray.push(contentTypeChecked);
-                return {...prevState, contentAdd: "", myItems: newArray};
-            });		
+                return newArray;
+            });
+            setState({ ...state, contentAdd: "" });
 		}
 	};
 
 	const handleClick = (item) => () => {
 		const newArray = myItems.filter((listitem) => {return listitem !== item});
-		setState({ ...state, myItems: newArray });
+		setMyItems(newArray);
 	};
 	    
 
@@ -172,12 +153,7 @@ const AddArray = ({items, cb}) => {
 	
 };
 
-AddArray.defaultProps = {
-    items: [],
-};
-
 AddArray.propTypes = {
-    items: PropTypes.array,
     cb: PropTypes.func.isRequired,
 };
 

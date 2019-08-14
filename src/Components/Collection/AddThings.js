@@ -3,31 +3,20 @@ import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
 import AddArray from './_AddArray';
 import {CollectionActions} from '../../Stores/CollectionStore';
+import {checkType, onlyNums} from '../Util';
 
-const initialState = {
-    show: false,
-    errors: {},
-    form: {},
-    switches: {
-        newProperty: false,
-    },
-    serverError: '',
-};
 
 const dataTypes = [
     'string',
@@ -38,21 +27,21 @@ const dataTypes = [
     'closure',
 ];
 
-const AddThings = ({collection, thing}) => {
-    const [state, setState] = React.useState(initialState);
-    const {show, errors, form, switches, serverError} = state;
+const initialState = {
+    show: false,
+    errors: {},
+    form: {
+        queryString: '',
+        newProperty: '',
+        value: '',
+        dataType: dataTypes[0],
+    },
+    serverError: '',
+};
 
-    React.useEffect(() => {
-            if (!switches.newProperty) {
-                const thingType = checkType(thing[form.propertyName])
-                setState(prevState => {
-                    const updatedForm = Object.assign({}, prevState.form, { 'dataType': thingType});
-                    return {...prevState, form: updatedForm};
-                });
-            }
-        },
-        [form.propertyName],
-    );
+const AddThings = ({id, name, type, collection, thing}) => {
+    const [state, setState] = React.useState(initialState);
+    const {show, errors, form, serverError} = state;
 
     const handleClickOpen = () => {
         setState({
@@ -62,33 +51,16 @@ const AddThings = ({collection, thing}) => {
                 queryString: '',
                 newProperty: '',
                 value: '',
-                propertyName: Object.keys(thing)[1],
                 dataType: dataTypes[0],
-            },
-            switches: {
-                newProperty: false,
             },
             serverError: '',
         });
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setState(initialState);
     };
 
-
-    const checkType = (t) => {
-        let type = typeof(t);
-        if (type === 'object') {
-            type = Array.isArray(t) ? 'array' : 'object'
-            if (type === 'object') {
-                const kindOfObject = Object.keys(t)[0];
-                type = kindOfObject === '#' ? 'object' : (kindOfObject === '$' ? 'set' : null )
-            }    
-        }
-        return(type);
-    };
-    const onlyNums = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;
     const validation = {
         queryString: () => true,
         newProperty: () => true,
@@ -100,16 +72,9 @@ const AddThings = ({collection, thing}) => {
             }
             return(bool);
         },
-        propertyName: () => true,
     };
 
-    const handleSwitch = ({target}) => {
-        const {id, checked} = target;
-        switches[id] = checked;
-        setState({...state, switches});
-    }
 
- 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
         const q = handleBuildQuery(id, value);
@@ -130,22 +95,25 @@ const AddThings = ({collection, thing}) => {
 
     const handleBuildQuery = (key, value) => {
         let q = '';
-        const propName = key=='newProperty' ? value : (switches.newProperty ? form.newProperty : form.propertyName);
+        const propName = key=='newProperty' ? value : form.newProperty;
         const input = key=='value' ? value : form.value;
         const dataType = key=='dataType' ? value : form.dataType;
-        switch(dataType) {
-            case 'string':
-                q = `t(${thing['#']}).${propName} = '${input}'`;
-              break;
-            case 'number':
-                q = `t(${thing['#']}).${propName} = ${input}`;
-                break;
+
+        const val = dataType === 'array' ? (type === 'array' ? `${input}` : `[${input}]`) 
+        : dataType === 'object' ? `{${input}}` 
+        : dataType === 'string' ? `'${input}'`
+        : dataType === 'number' ? `${input}` 
+        : ''; 
+  
+        switch(type) {
             case 'array':
-                q = `t(${thing['#']}).${propName} = [${input}]`
+                q = `t(${id}).${name}.push(${val})`;
                 break;
             case 'object':
+                q = `t(${id}).${propName} = ${val}`;
                 break;
             case 'set':
+                q = `t(${id}).${name}.add(${val})`;
                 break;
             default:
         };
@@ -158,7 +126,7 @@ const AddThings = ({collection, thing}) => {
         if (!Object.values(errors).some(d => d)) {
             CollectionActions.rawQuery(
                 collection.collection_id,
-                thing['#'], 
+                id, 
                 form.queryString, 
                 (err) => setState({...state, serverError: err.log})
             );
@@ -168,8 +136,8 @@ const AddThings = ({collection, thing}) => {
             }
         }
     };
+    console.log('THING', id, name, type, thing);
 
-    console.log(collection, thing[form.propertyName]);
     return (
         <React.Fragment>
             <ButtonBase onClick={handleClickOpen} >
@@ -217,57 +185,20 @@ const AddThings = ({collection, thing}) => {
                                     shrink: true,
                                 }}
                             />
-                        </ListItem>
+                        </ListItem> 
                         <ListItem>
-                            <FormControlLabel
-                                control={(
-                                    <Switch
-                                        checked={switches.newProperty}
-                                        color="primary"
-                                        id="newProperty"
-                                        onChange={handleSwitch}
-                                    />
-                                )}
-                                label="Add new property"
+                            <TextField
+                                margin="dense"
+                                id="newProperty"
+                                label="New property"
+                                type="text"
+                                value={form.newProperty}
+                                spellCheck={false}
+                                onChange={handleOnChange}
+                                fullWidth
+                                error={errors.newProperty}
                             />
                         </ListItem>
-                        <Collapse in={!switches.newProperty} timeout="auto" unmountOnExit>
-                            <ListItem>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="propertyName"
-                                    label="Existing properties"
-                                    value={form.propertyName}
-                                    onChange={handleOnChange}
-                                    fullWidth
-                                    select
-                                    SelectProps={{native: true}}
-                                >
-                                    {Object.entries(thing).map(([k, v]) => (
-                                        k == '#' ? null :
-                                        <option key={k} value={k}>
-                                            {k}
-                                        </option>
-                                    ))}
-                                </ TextField>
-                            </ListItem>
-                        </ Collapse>    
-                        <Collapse in={switches.newProperty} timeout="auto" unmountOnExit>
-                            <ListItem>
-                                <TextField
-                                    margin="dense"
-                                    id="newProperty"
-                                    label="New property"
-                                    type="text"
-                                    value={form.newProperty}
-                                    spellCheck={false}
-                                    onChange={handleOnChange}
-                                    fullWidth
-                                    error={errors.newProperty}
-                                />
-                            </ListItem>
-                        </Collapse>
                         <ListItem>
                             <TextField
                                 autoFocus
@@ -304,7 +235,7 @@ const AddThings = ({collection, thing}) => {
                             </ListItem>
 
                         ) : form.dataType == 'array' ? (
-                            <AddArray items={switches.newProperty ? [] : thing[form.propertyName]} cb={handleArrayItems}/>
+                            <AddArray cb={handleArrayItems}/>
                         ) : null}              
                     </List>
                 </DialogContent>
@@ -322,8 +253,11 @@ const AddThings = ({collection, thing}) => {
 };
 
 AddThings.propTypes = {
+    id: PropTypes.any.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
     collection: PropTypes.object.isRequired,
-    thing: PropTypes.object.isRequired,
+    thing: PropTypes.any.isRequired,
 };
 
 export default AddThings;

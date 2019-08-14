@@ -13,7 +13,7 @@ import {withVlow} from 'vlow';
 
 import {withStyles} from '@material-ui/core/styles';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import ServerError from '../Util/ServerError';
+import {ServerError} from '../Util';
 
 
 const styles = theme => ({

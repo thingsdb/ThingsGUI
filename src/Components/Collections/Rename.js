@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import {withVlow} from 'vlow';
 
 import {CollectionsStore, CollectionsActions} from '../../Stores/CollectionsStore';
-import ServerError from '../Util/ServerError';
+import {ServerError} from '../Util';
 
 const withStores = withVlow([{
     store: CollectionsStore,

@@ -10,7 +10,7 @@ import {withVlow} from 'vlow';
 
 import AddThings from './AddThings';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import ServerError from '../Util/ServerError';
+import {ServerError} from '../Util';
 
 import Thing from './Thing';
 
@@ -60,11 +60,13 @@ const ThingRoot = ({classes, things, collection}) => {
                     dense
                 >
                     {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
-                        <Thing className={classes.thing} key={k} thing={v} name={k} collection={collection} onServerError={handleServerError} />
+                        <React.Fragment key={k}>
+                            <Thing className={classes.thing} id={collection.collection_id} thing={v} name={k} collection={collection} onServerError={handleServerError} />
+                        </React.Fragment>
                     ))}
                     <ListItem>
                         <ListItemIcon>
-                            <AddThings collection={collection} thing={things[collection.collection_id]} />
+                            <AddThings collection={collection} id={collection.collection_id} name={''} type={'object'} thing={things[collection.collection_id]} />
                         </ListItemIcon>
                     </ListItem>
                 </List>

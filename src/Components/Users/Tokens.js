@@ -10,8 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import AddToken from './AddToken';
 import RemoveExpired from './RemoveExpired';
 import RemoveToken from './RemoveToken';
-import Table from '../Util/Table';
-import ServerError from '../Util/ServerError';
+import {ServerError, TableWithButtons} from '../Util';
 
 
 const Tokens = ({user}) => {
@@ -71,7 +70,7 @@ const Tokens = ({user}) => {
                 </DialogTitle>
                 <DialogContent>
                     {user.tokens.length ? (
-                        <Table header={header} rows={rows} rowClick={handleRowClick} buttons={handleButtons} />
+                        <TableWithButtons header={header} rows={rows} rowClick={handleRowClick} buttons={handleButtons} />
                     ) : (
                         <DialogContentText>
                             {'No tokens set.'}

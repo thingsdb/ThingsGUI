@@ -11,7 +11,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import ServerError from '../Util/ServerError';
+import {ServerError} from '../Util';
 
 import Thing2 from './_Thing';
 

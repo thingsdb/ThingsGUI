@@ -11,9 +11,8 @@ import RemoveCollection from './Remove';
 import RenameCollection from './Rename';
 import SetQuotas from './Quotas';
 import Query from '../Collection/Query';
-import {StyledTabs, StyledTab} from '../Util/Tabs';
 import {CollectionsActions} from '../../Stores/CollectionsStore';
-import ServerError from '../Util/ServerError';
+import {ServerError, StyledTabs, StyledTab} from '../Util';
 
 const useStyles = makeStyles(theme => ({
     root: {

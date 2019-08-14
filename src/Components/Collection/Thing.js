@@ -1,8 +1,8 @@
-/* eslint-disable react/no-multi-comp */
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import Divider from '@material-ui/core/Divider';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,7 +16,7 @@ import {withStyles} from '@material-ui/core/styles';
 
 import AddThings from './AddThings';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import ServerError from '../Util/ServerError';
+import {ServerError, checkType} from '../Util';
 
 
 const withStores = withVlow([{
@@ -28,24 +28,20 @@ const styles = theme => ({
     nested: {
         paddingLeft: theme.spacing(4),
     },
-    divider: {
-        //padding: theme.spacing(0.1),
-        marginBottom: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main,
-    },
     listItem: {
         paddingLeft: theme.spacing(6),
     },
 });
 
 
-const Thing = ({classes, name, thing, collection, things, onServerError}) => {
+const Thing = ({classes, name, id, thing, collection, things, onServerError}) => {
     const [show, setShow] = React.useState(false);
    
     const renderThing = ([k, v]) => { // QUEST: ???
+        console.log('k, v', k, v)
         return k === '#' ? null : (
             <div key={k} className={classes.nested}>
-                <Thing classes={classes} thing={v} name={k} collection={collection} things={things} onServerError={onServerError}/> 
+                <Thing classes={classes} name={k} id={thing['#'] || id} thing={v} collection={collection} things={things} onServerError={onServerError}/> 
             </div>
         );
     };
@@ -53,24 +49,28 @@ const Thing = ({classes, name, thing, collection, things, onServerError}) => {
     const renderChildren = () => {
         const isArray = Array.isArray(thing);
         return isArray ?
-            thing.map((t, i) => renderThing([i.toString(), t]))
+            thing.map((t, i) => renderThing([`${name}[${i}]`, t]))
             :
             Object.entries(things[thing['#']] || thing || {}).map(renderThing);
     };
 
     const handleClick = () => {
         setShow(!show); // QUEST: work with prevstate?
-        if (thing && thing['#'] && !things[thing['#']]) {
+        if (thing && thing['#']) {
             CollectionActions.query(collection.collection_id, (err) => onServerError(err), thing['#']);
         }
     };
 
-    const canToggle = typeof(thing) === 'object';
+    const type = checkType(thing);
+    const canToggle = type === 'object' || type === 'array' || type === 'set';
+    const objectId = type === 'object' ? thing['#'] : '';
     const key = Object.keys(thing)[0];
-    const id = key === '#' ? thing['#'] : '';
-    const val = canToggle ? Array.isArray(thing) ? `[${thing.length}]` : `{${key}${id}}` : thing.toString();
-    const header = canToggle ? Array.isArray(thing) ? name : '' : name;
-
+    const val = type === 'array' ? `[${thing.length}]` 
+        : type === 'object' || type === 'set' ? `{${key}${objectId}}` 
+        : type === 'string' || type === 'number' ? thing.toString() 
+        : ''; 
+       
+    
     return (
         <React.Fragment>
             <ListItem >
@@ -80,13 +80,18 @@ const Thing = ({classes, name, thing, collection, things, onServerError}) => {
                     </ButtonBase>
                 </ListItemIcon>
                 <ListItemText primary={name} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
-                {canToggle && !Array.isArray(thing) && show ? (
+                {type === 'array' || type === 'object' || type === 'set' ? (
                     <ListItemIcon>
-                        <AddThings collection={collection} thing={things[thing['#']] || thing} />
+                        <AddThings id={thing['#'] || id} name={name} type={type} collection={collection} thing={things[thing['#']] || thing} />
                     </ListItemIcon>
                 ) : null}
+                <ListItemIcon>
+                    <EditIcon />
+                </ListItemIcon>
+                <ListItemIcon>
+                    <DeleteIcon />
+                </ListItemIcon>
             </ListItem>
-            <Divider className={classes.divider} variant={'middle'} />
             {canToggle && 
             <Collapse in={show} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding dense>
@@ -100,6 +105,7 @@ const Thing = ({classes, name, thing, collection, things, onServerError}) => {
 Thing.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     name: PropTypes.string.isRequired,
+    id: PropTypes.any.isRequired,
     collection: PropTypes.object.isRequired,
     onServerError: PropTypes.func.isRequired,
 

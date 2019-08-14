@@ -18,7 +18,7 @@ import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {CollectionsActions, CollectionsStore} from '../../Stores/CollectionsStore';
 import {UsersActions, UsersStore} from '../../Stores/UsersStore';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import ServerError from '../Util/ServerError';
+import {ServerError} from '../Util';
 
 const withStores = withVlow([{
     store: ApplicationStore,

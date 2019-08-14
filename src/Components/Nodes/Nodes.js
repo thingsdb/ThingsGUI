@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import {withVlow} from 'vlow';
 
 import Node from './Node';
-import Tabel from '../Util/Table2';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import ServerError from '../Util/ServerError';
+import {TableWithRowExtend, ServerError} from '../Util';
 
 
 const withStores = withVlow([{
@@ -46,7 +45,7 @@ const Nodes = ({nodes}) => {
     return(
         <React.Fragment>
             <ServerError open={openError} onClose={handleCloseError} error={serverError} />
-            <Tabel header={header} rows={rows} rowExtend={rowExtend} />
+            <TableWithRowExtend header={header} rows={rows} rowExtend={rowExtend} />
         </React.Fragment>
     );
 };

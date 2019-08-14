@@ -11,7 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {withVlow} from 'vlow';
 
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import ServerError from '../Util/ServerError';
+import {ServerError} from '../Util';
 
 const withStores = withVlow([{
     store: NodesStore,

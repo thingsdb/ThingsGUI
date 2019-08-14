@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
-import ServerError from '../Util/ServerError';
+import {ServerError} from '../Util';
 
 const useStyles = makeStyles(theme => ({
     root: {
