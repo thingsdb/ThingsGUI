@@ -104,6 +104,7 @@ venv.bak/
 .mypy_cache/
 
 # Compiled React
+../node_modules/
 src/node_modules/
 static/js/*.html
 static/js/*-bundle-*.js
