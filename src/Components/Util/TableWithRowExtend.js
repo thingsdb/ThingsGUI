@@ -80,14 +80,16 @@ const Tabel = ({classes, header, rows, rowExtend}) => {
                                         {isopen ? <ExpandLess /> : <ExpandMore />}
                                     </TableCell>
                                 </TableRow>
-                                {isopen &&
-                                <TableRow className={classes.collapse} style={{display: isopen?null:'none', borderBottom: 'none'}}>
-                                    <TableCell colSpan={12}>
-                                        <Collapse hidden={!isopen} in={isopen}>
-                                            {rowExtend(row)}
-                                        </Collapse>
-                                    </TableCell>
-                                </TableRow>}
+                                {isopen ? (
+                                    <TableRow className={classes.collapse} style={{display: isopen?null:'none', borderBottom: 'none'}}>
+                                        <TableCell colSpan={12}>
+                                            <Collapse hidden={!isopen} in={isopen}>
+                                                {rowExtend(row)}
+                                            </Collapse>
+                                        </TableCell>
+                                    </TableRow>
+
+                                ) : null}
                             </React.Fragment>
                         );
                     })}

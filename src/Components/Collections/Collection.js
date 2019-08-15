@@ -5,7 +5,6 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 import Things2 from '../Collection/_Things';
 import Things from '../Collection/Things';
-import RemoveObject from '../Collection/RemoveObject';
 import CollectionInfo from './CollectionInfo';
 import RemoveCollection from './Remove';
 import RenameCollection from './Rename';
@@ -94,11 +93,6 @@ const Collection = ({collection}) => {
                 >
                     <Grid item xs={12}>
                         <Things collection={collection} />
-                    </Grid>
-                    <Grid item container xs={12} spacing={1} >
-                        <Grid item>
-                            <RemoveObject collection={collection} />
-                        </Grid>
                     </Grid>
                 </Grid>
             }

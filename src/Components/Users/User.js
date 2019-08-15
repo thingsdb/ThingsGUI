@@ -104,7 +104,6 @@ const User = ({user, collections}) => {
                 switches = Object.assign({}, switches, getSwitches(target, privileges));
             });
             setState({...state, switches:switches});
-            console.log('useEffect called');
         },
         [user, collections.length]
     );

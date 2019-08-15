@@ -77,13 +77,11 @@ const App = ({classes, collections, match, user, users, nodes}) => {
 
     React.useEffect(() => {
             UsersActions.getUsers();
-            console.log('useeffect1');
         },
         [collections.length],
     );
 
     React.useEffect(() => {
-        console.log('useeffect2');
         UsersActions.getUser(handleServerError);
         UsersActions.getUsers(handleServerError);
         CollectionsActions.getCollections(handleServerError); 

@@ -5,7 +5,7 @@ import BaseStore from './BaseStore';
 const CollectionActions = Vlow.createActions([
     'query',
     'property',
-    'removeObject',
+    'removeThing',
     'rawQuery',
 ]);
 
@@ -57,14 +57,10 @@ class CollectionStore extends BaseStore {
         }).fail((event, status, message) => onError(message));
     }
 
-    onRemoveObject(collectionId, thingId, propertyName, onError) {
-        this.emit('/collection/remove-object', {
-            collectionId: collectionId,
-            thingId: thingId,
-            propertyName: propertyName,
-        }).done((data) => {
+    onRemoveThing(config, onError) {
+        this.emit('/collection/remove-thing', config).done((data) => {
             this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[collectionId]: data});
+                const things = Object.assign({}, prevState.things, {[config.thingId]: data})
                 return {things};
             });
         }).fail((event, status, message) => onError(message));

@@ -1,7 +1,6 @@
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
@@ -15,6 +14,7 @@ import {withVlow} from 'vlow';
 import {withStyles} from '@material-ui/core/styles';
 
 import AddThings from './AddThings';
+import RemoveThing from './RemoveThing';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import {ServerError, checkType} from '../Util';
 
@@ -34,14 +34,14 @@ const styles = theme => ({
 });
 
 
-const Thing = ({classes, name, id, thing, collection, things, onServerError}) => {
+const Thing = ({classes, name, id, thing, index, collection, things, onServerError}) => {
     const [show, setShow] = React.useState(false);
    
-    const renderThing = ([k, v]) => { // QUEST: ???
-        console.log('k, v', k, v)
+    const renderThing = ([k, v, i=null]) => { // QUEST: ???
+        console.log(i);
         return k === '#' ? null : (
-            <div key={k} className={classes.nested}>
-                <Thing classes={classes} name={k} id={thing['#'] || id} thing={v} collection={collection} things={things} onServerError={onServerError}/> 
+            <div key={i ? i : k} className={classes.nested}>
+                <Thing classes={classes} name={k} id={thing['#'] || id} thing={v} index={i} collection={collection} things={things} onServerError={onServerError}/> 
             </div>
         );
     };
@@ -49,7 +49,7 @@ const Thing = ({classes, name, id, thing, collection, things, onServerError}) =>
     const renderChildren = () => {
         const isArray = Array.isArray(thing);
         return isArray ?
-            thing.map((t, i) => renderThing([`${name}[${i}]`, t]))
+            thing.map((t, i) => renderThing([`${name}`, t, i]))
             :
             Object.entries(things[thing['#']] || thing || {}).map(renderThing);
     };
@@ -79,17 +79,17 @@ const Thing = ({classes, name, id, thing, collection, things, onServerError}) =>
                         {canToggle ? show ? <ExpandMore color={'primary'}/> : <ChevronRightIcon color={'primary'}/> : <StopIcon color={'primary'}/>}
                     </ButtonBase>
                 </ListItemIcon>
-                <ListItemText primary={name} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
+                <ListItemText primary={index === null ? name : name + `[${index}]`} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
                 {type === 'array' || type === 'object' || type === 'set' ? (
                     <ListItemIcon>
                         <AddThings id={thing['#'] || id} name={name} type={type} collection={collection} thing={things[thing['#']] || thing} />
                     </ListItemIcon>
                 ) : null}
                 <ListItemIcon>
-                    <EditIcon />
+                    <EditIcon color={'primary'}/>
                 </ListItemIcon>
                 <ListItemIcon>
-                    <DeleteIcon />
+                    <RemoveThing collection={collection} thingId={id} propertyName={name} type={type} index={index} />
                 </ListItemIcon>
             </ListItem>
             {canToggle && 
@@ -102,12 +102,17 @@ const Thing = ({classes, name, id, thing, collection, things, onServerError}) =>
     );
 };
 
+Thing.defaultProps = {
+    index: null,
+};
+
 Thing.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     name: PropTypes.string.isRequired,
     id: PropTypes.any.isRequired,
     collection: PropTypes.object.isRequired,
     onServerError: PropTypes.func.isRequired,
+    index: PropTypes.any,
 
     /* styles proeperties */ 
     classes: PropTypes.object.isRequired,

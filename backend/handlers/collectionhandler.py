@@ -38,12 +38,21 @@ class CollectionHandler(BaseHandler):
 
     @classmethod
     @BaseHandler.socket_handler
-    async def remove_object(cls, client, data):
+    async def remove_thing(cls, client, data):
         collection_id = data.get('collectionId')
         thing_id = data.get('thingId')
         name = data.get('propertyName')
+        index = data.get('index')
 
-        q = r'''t({}).del('{}'); t(.id())'''.format(thing_id, name)
+        if (index is not None):
+            q = r'''t({}).{}.splice({}, 1); t({})'''.format(
+                thing_id,
+                name,
+                index,
+                thing_id)
+        else:
+            q = r'''t({}).del('{}'); t({})'''.format(thing_id, name, thing_id)
+        print(q)
         resp = await client.query(q, target=collection_id)
 
         return cls.socket_response(data=resp)

@@ -3,6 +3,7 @@ import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -11,11 +12,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import AddArray from './_AddArray';
 import {CollectionActions} from '../../Stores/CollectionStore';
-import {checkType, onlyNums} from '../Util';
+import {Add1DArray, onlyNums} from '../Util';
 
 
 const dataTypes = [
@@ -23,8 +24,8 @@ const dataTypes = [
     'number',
     'array',
     'object',
-    'set',
-    'closure',
+    '_set',
+    '_closure',
 ];
 
 const initialState = {
@@ -80,7 +81,7 @@ const AddThings = ({id, name, type, collection, thing}) => {
         const q = handleBuildQuery(id, value);
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value, queryString: q});
-            return {...prevState, form: updatedForm};
+            return {...prevState, form: updatedForm, errors: {}};
         });
     };
 
@@ -100,7 +101,7 @@ const AddThings = ({id, name, type, collection, thing}) => {
         const dataType = key=='dataType' ? value : form.dataType;
 
         const val = dataType === 'array' ? (type === 'array' ? `${input}` : `[${input}]`) 
-        : dataType === 'object' ? `{${input}}` 
+        : dataType === 'object' ? `{}` 
         : dataType === 'string' ? `'${input}'`
         : dataType === 'number' ? `${input}` 
         : ''; 
@@ -136,7 +137,7 @@ const AddThings = ({id, name, type, collection, thing}) => {
             }
         }
     };
-    console.log('THING', id, name, type, thing);
+    
 
     return (
         <React.Fragment>
@@ -151,7 +152,7 @@ const AddThings = ({id, name, type, collection, thing}) => {
                 maxWidth="xs"
             >
                 <DialogTitle id="form-dialog-title">
-                    {'Add Property'}
+                    {'Add thing'}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -160,48 +161,53 @@ const AddThings = ({id, name, type, collection, thing}) => {
                         </Typography>  
                     </DialogContentText>
                     <List>
+                        <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
+                            <ListItem>
+                                <TextField
+                                    margin="dense"
+                                    id="queryString"
+                                    label="Query"
+                                    type="text"
+                                    value={form.queryString}
+                                    spellCheck={false}
+                                    onChange={handleOnChange}
+                                    fullWidth
+                                    error={errors.queryString}
+                                    multiline
+                                    InputProps={{
+                                        readOnly: true,
+                                        disableUnderline: true,
+                                    }}
+                                    inputProps={{
+                                        style: {
+                                            fontFamily: 'monospace',
+                                        },
+                                    }}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </ListItem> 
+                        </Collapse>
+                        {type !== 'array' ? (
+                            <ListItem>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="newProperty"
+                                    label="New property"
+                                    type="text"
+                                    value={form.newProperty}
+                                    spellCheck={false}
+                                    onChange={handleOnChange}
+                                    fullWidth
+                                    error={errors.newProperty}
+                                />
+                            </ListItem>
+                        ) : null}
+
                         <ListItem>
                             <TextField
-                                autoFocus
-                                margin="dense"
-                                id="queryString"
-                                label="Query"
-                                type="text"
-                                value={form.queryString}
-                                spellCheck={false}
-                                onChange={handleOnChange}
-                                fullWidth
-                                error={errors.queryString}
-                                InputProps={{
-                                    readOnly: true,
-                                    disableUnderline: true,
-                                }}
-                                inputProps={{
-                                    style: {
-                                        fontFamily: 'monospace',
-                                    },
-                                }}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </ListItem> 
-                        <ListItem>
-                            <TextField
-                                margin="dense"
-                                id="newProperty"
-                                label="New property"
-                                type="text"
-                                value={form.newProperty}
-                                spellCheck={false}
-                                onChange={handleOnChange}
-                                fullWidth
-                                error={errors.newProperty}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <TextField
-                                autoFocus
                                 margin="dense"
                                 id="dataType"
                                 label="Data type"
@@ -235,7 +241,7 @@ const AddThings = ({id, name, type, collection, thing}) => {
                             </ListItem>
 
                         ) : form.dataType == 'array' ? (
-                            <AddArray cb={handleArrayItems}/>
+                            <Add1DArray cb={handleArrayItems}/>
                         ) : null}              
                     </List>
                 </DialogContent>

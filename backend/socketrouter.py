@@ -37,8 +37,8 @@ class SocketRouter:
             handler=CollectionHandler.return_property)
 
         sio.on(
-            event='/collection/remove-object',
-            handler=CollectionHandler.remove_object)
+            event='/collection/remove-thing',
+            handler=CollectionHandler.remove_thing)
 
         sio.on(
             event='/collection/raw-query',

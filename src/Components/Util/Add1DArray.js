@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
-import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import {CSSTransition, TransitionGroup} from 'react-transition-group';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -34,7 +32,7 @@ const dataTypes = [
     'number',
 ];
 
-const AddArray = ({cb}) => {
+const Add1DArray = ({cb}) => {
     const classes = useStyles();
     const helperspan = React.useRef(null);
     const [state, setState] = React.useState({
@@ -78,7 +76,7 @@ const AddArray = ({cb}) => {
 
             const contentTypeChecked = dataType == 'string' ? "'"+ currentcontent +"'" : currentcontent;
             setMyItems(prevItems => {
-                const newArray = prevItems;
+                const newArray = [...prevItems];
                 newArray.push(contentTypeChecked);
                 return newArray;
             });
@@ -86,22 +84,25 @@ const AddArray = ({cb}) => {
 		}
 	};
 
-	const handleClick = (item) => () => {
-		const newArray = myItems.filter((listitem) => {return listitem !== item});
-		setMyItems(newArray);
+	const handleClick = (index) => () => {
+        setMyItems(prevItems => {
+            const newArray = [...prevItems];
+            newArray.splice(index, 1);
+            return newArray;
+        });
 	};
 	    
 
 	const makeAddedList = () => {
 		const elements =  myItems.map((listitem, index) => (
-                <Chip
-                    key={index}
-                    id={listitem}
-                    className={classes.chip}
-                    label={listitem}
-                    onDelete={handleClick(listitem)}
-                    color="primary"
-                />
+            <Chip
+                key={index}
+                id={listitem}
+                className={classes.chip}
+                label={listitem}
+                onDelete={handleClick(index)}
+                color="primary"
+            />
 		));
         return elements
     };
@@ -122,7 +123,7 @@ const AddArray = ({cb}) => {
                 select
                 SelectProps={{native: true}}
             >
-                {dataTypes.map(p => (
+                {dataTypes.map((p) => (
                     <option key={p} value={p}>
                         {p}
                     </option>
@@ -153,11 +154,11 @@ const AddArray = ({cb}) => {
 	
 };
 
-AddArray.propTypes = {
+Add1DArray.propTypes = {
     cb: PropTypes.func.isRequired,
 };
 
 
-export default AddArray;
+export default Add1DArray;
 
 

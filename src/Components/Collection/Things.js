@@ -72,7 +72,7 @@ const ThingRoot = ({classes, things, collection}) => {
                 </List>
             ) : (
                 <Typography variant={'caption'}>
-                    {'This collections does not have anything stored yet.'}
+                    {'Cannot fetch data.'}
                 </Typography>
             )}
         </React.Fragment>

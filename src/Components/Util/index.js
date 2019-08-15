@@ -1,3 +1,4 @@
+import Add1DArray from './Add1DArray';
 import ServerError from './ServerError';
 import TableWithButtons from './TableWithButtons';
 import TableWithRowExtend from './TableWithRowExtend';
@@ -17,6 +18,7 @@ const checkType = (t) => {
 const onlyNums = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;
 
 export {
+    Add1DArray,
     checkType,
     onlyNums,
     ServerError,
