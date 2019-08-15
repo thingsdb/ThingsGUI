@@ -82,7 +82,7 @@ const Thing = ({classes, name, id, thing, index, collection, things, onServerErr
                 <ListItemText primary={index === null ? name : name + `[${index}]`} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
                 {type === 'array' || type === 'object' || type === 'set' ? (
                     <ListItemIcon>
-                        <AddThings id={thing['#'] || id} name={name} type={type} collection={collection} thing={things[thing['#']] || thing} />
+                        <AddThings id={thing['#'] || id} name={index === null ? name : name + `[${index}]`} type={type} collection={collection} thing={things[thing['#']] || thing} />
                     </ListItemIcon>
                 ) : null}
                 <ListItemIcon>

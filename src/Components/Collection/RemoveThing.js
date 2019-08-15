@@ -68,7 +68,7 @@ const RemoveThing = ({collection, thingId, propertyName, type, index}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <Typography variant={'caption'} color={'error'}>
+                        <Typography  color={'error'}>
                             {serverError || 'Are you sure?'}
                         </Typography>  
                     </DialogContentText>

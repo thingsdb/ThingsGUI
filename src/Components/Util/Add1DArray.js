@@ -4,6 +4,8 @@ import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
+import {onlyNums} from '../Util';
+
 const useStyles = makeStyles(theme => ({
     container: {
         display: 'flex',
@@ -38,8 +40,9 @@ const Add1DArray = ({cb}) => {
     const [state, setState] = React.useState({
         contentAdd: "add +",
         dataType: dataTypes[0],
+        errors: {},
     });
-    const {contentAdd, dataType} = state;
+    const {contentAdd, dataType, errors} = state;
 
     const [width, setWidth] = React.useState(100);
     React.useEffect(() => {
@@ -56,31 +59,46 @@ const Add1DArray = ({cb}) => {
         [myItems.length],
     ); 
 
+    const validation = {
+        contentAdd: () => {
+            let errText = contentAdd.length>0 ? '' : 'required';
+            
+            if (!errText && dataType == 'number') {
+                errText = onlyNums(contentAdd) ? '' : 'only numbers';
+            }
+            return(errText);
+        },
+    };
+
 	const handleFocus = (_event) => {
 		setState({ ...state, contentAdd: "" });
 	};
 	
 	const handleChange = ({target}) => {
         const {id, value} = target;
-		setState({...state, [id]: value });
+		setState({...state, [id]: value, errors: {}});
 	};
 
 	const handleKeypress = (event) => {
         const {key} = event;
 		if (key == "Enter") {
+            const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
+            setState({...state, errors: err});
+            if (!Object.values(err).some(d => d)) {
 
-			let currentcontent = contentAdd.trim();
-			if (!currentcontent) {
-				return; 
+                let currentcontent = contentAdd.trim();
+                if (!currentcontent) {
+                    return; 
+                }
+
+                const contentTypeChecked = dataType == 'string' ? "'"+ currentcontent +"'" : currentcontent;
+                setMyItems(prevItems => {
+                    const newArray = [...prevItems];
+                    newArray.push(contentTypeChecked);
+                    return newArray;
+                });
+                setState({ ...state, contentAdd: "" });
             }
-
-            const contentTypeChecked = dataType == 'string' ? "'"+ currentcontent +"'" : currentcontent;
-            setMyItems(prevItems => {
-                const newArray = [...prevItems];
-                newArray.push(contentTypeChecked);
-                return newArray;
-            });
-            setState({ ...state, contentAdd: "" });
 		}
 	};
 
@@ -141,6 +159,8 @@ const Add1DArray = ({cb}) => {
                 value={contentAdd}
                 style={{ width: width }}
                 variant="outlined"
+                helperText={errors.contentAdd}
+                error={Boolean(errors.contentAdd)}
             />
             <span 
                 id="helperspan" 

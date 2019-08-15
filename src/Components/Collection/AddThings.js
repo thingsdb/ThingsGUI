@@ -61,27 +61,26 @@ const AddThings = ({id, name, type, collection, thing}) => {
     const handleClickClose = () => {
         setState(initialState);
     };
-
+    
     const validation = {
-        queryString: () => true,
-        newProperty: () => true,
+        queryString: () => '',
+        newProperty: () => Boolean(thing[form.newProperty]) ? 'Property name already in use' : '',
         value: () => {
-            let bool = form.value.length>0;
+            let errText = form.value.length>0 ? '' : 'required';
             
-            if (bool && form.dataType == 'number') {
-                bool = onlyNums(form.value);
+            if (!errText && form.dataType == 'number') {
+                errText = onlyNums(form.value) ? '' : 'only numbers';
             }
-            return(bool);
+            return(errText);
         },
     };
-
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
         const q = handleBuildQuery(id, value);
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value, queryString: q});
-            return {...prevState, form: updatedForm, errors: {}};
+            return {...prevState, form: updatedForm, errors: {}, serverError: ''};
         });
     };
 
@@ -90,7 +89,7 @@ const AddThings = ({id, name, type, collection, thing}) => {
         const q = handleBuildQuery('value', value);
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {value: value, queryString: q});
-            return {...prevState, form: updatedForm};
+            return {...prevState, form: updatedForm, errors: {}, serverError: ''};
         });
     }
 
@@ -100,7 +99,7 @@ const AddThings = ({id, name, type, collection, thing}) => {
         const input = key=='value' ? value : form.value;
         const dataType = key=='dataType' ? value : form.dataType;
 
-        const val = dataType === 'array' ? (type === 'array' ? `${input}` : `[${input}]`) 
+        const val = dataType === 'array' ? `[${input}]`
         : dataType === 'object' ? `{}` 
         : dataType === 'string' ? `'${input}'`
         : dataType === 'number' ? `${input}` 
@@ -122,9 +121,9 @@ const AddThings = ({id, name, type, collection, thing}) => {
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
         setState({...state, errors: err});
-        if (!Object.values(errors).some(d => d)) {
+        if (!Object.values(err).some(d => d)) {
             CollectionActions.rawQuery(
                 collection.collection_id,
                 id, 
@@ -201,7 +200,8 @@ const AddThings = ({id, name, type, collection, thing}) => {
                                     spellCheck={false}
                                     onChange={handleOnChange}
                                     fullWidth
-                                    error={errors.newProperty}
+                                    helperText={errors.newProperty}
+                                    error={Boolean(errors.newProperty)}
                                 />
                             </ListItem>
                         ) : null}
@@ -236,7 +236,8 @@ const AddThings = ({id, name, type, collection, thing}) => {
                                     spellCheck={false}
                                     onChange={handleOnChange}
                                     fullWidth
-                                    error={errors.value}
+                                    helperText={errors.value}
+                                    error={Boolean(errors.value)}
                                 />
                             </ListItem>
 

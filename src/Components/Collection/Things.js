@@ -2,6 +2,7 @@
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -49,7 +50,7 @@ const ThingRoot = ({classes, things, collection}) => {
     }
 
     const openError = Boolean(serverError);
-
+    fetched&&console.log(Object.entries(things[collection.collection_id]), things[collection.collection_id]);
     return (
         <React.Fragment>
             <ServerError open={openError} onClose={handleCloseError} error={serverError} />
@@ -65,9 +66,12 @@ const ThingRoot = ({classes, things, collection}) => {
                         </React.Fragment>
                     ))}
                     <ListItem>
-                        <ListItemIcon>
+                    <ListItemIcon>
                             <AddThings collection={collection} id={collection.collection_id} name={''} type={'object'} thing={things[collection.collection_id]} />
                         </ListItemIcon>
+                        {Object.entries(things[collection.collection_id]).length<2 ? (
+                            <ListItemText primary={'Tree is still empty. Add your first thing!'} /> 
+                        ) : null}
                     </ListItem>
                 </List>
             ) : (
