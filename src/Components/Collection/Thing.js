@@ -36,7 +36,6 @@ const styles = theme => ({
 
 const Thing = ({classes, name, id, thing, index, collection, things, onServerError}) => {
     const [show, setShow] = React.useState(false);
-    const [hoverOpen, setHoverOpen] = React.useState(false);
    
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
         console.log(i);
