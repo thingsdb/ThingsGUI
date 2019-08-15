@@ -16,7 +16,7 @@ import {withStyles} from '@material-ui/core/styles';
 import AddThings from './AddThings';
 import RemoveThing from './RemoveThing';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import {ServerError, checkType} from '../Util';
+import {Buttons, ServerError, checkType} from '../Util';
 
 
 const withStores = withVlow([{
@@ -36,6 +36,7 @@ const styles = theme => ({
 
 const Thing = ({classes, name, id, thing, index, collection, things, onServerError}) => {
     const [show, setShow] = React.useState(false);
+    const [hoverOpen, setHoverOpen] = React.useState(false);
    
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
         console.log(i);
@@ -73,24 +74,28 @@ const Thing = ({classes, name, id, thing, index, collection, things, onServerErr
     
     return (
         <React.Fragment>
-            <ListItem >
+            <ListItem>
                 <ListItemIcon>
                     <ButtonBase onClick={handleClick} >
                         {canToggle ? show ? <ExpandMore color={'primary'}/> : <ChevronRightIcon color={'primary'}/> : <StopIcon color={'primary'}/>}
                     </ButtonBase>
                 </ListItemIcon>
                 <ListItemText primary={index === null ? name : name + `[${index}]`} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
-                {type === 'array' || type === 'object' || type === 'set' ? (
-                    <ListItemIcon>
-                        <AddThings id={thing['#'] || id} name={index === null ? name : name + `[${index}]`} type={type} collection={collection} thing={things[thing['#']] || thing} />
-                    </ListItemIcon>
-                ) : null}
-                <ListItemIcon>
-                    <EditIcon color={'primary'}/>
-                </ListItemIcon>
-                <ListItemIcon>
-                    <RemoveThing collection={collection} thingId={id} propertyName={name} type={type} index={index} />
-                </ListItemIcon>
+                <Buttons>
+                    <React.Fragment>
+                        {type === 'array' || type === 'object' || type === 'set' ? (
+                            <ListItemIcon>
+                                <AddThings id={thing['#'] || id} name={index === null ? name : name + `[${index}]`} type={type} collection={collection} thing={things[thing['#']] || thing} />
+                            </ListItemIcon>
+                        ) : null}
+                        <ListItemIcon>
+                            <EditIcon color={'primary'}/>
+                        </ListItemIcon>
+                        <ListItemIcon>
+                            <RemoveThing collection={collection} thingId={id} propertyName={name} type={type} index={index} />
+                        </ListItemIcon>
+                    </React.Fragment>
+                </Buttons>
             </ListItem>
             {canToggle && 
             <Collapse in={show} timeout="auto" unmountOnExit>
