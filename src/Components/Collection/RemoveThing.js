@@ -17,11 +17,20 @@ const initialState = {
     serverError: '',
 };
 
-const RemoveThing = ({collection, thingId, propertyName, type, index}) => {
+const RemoveThing = ({collection, thing, info}) => {
     const [state, setState] = React.useState(initialState);
     const {show, serverError} = state;
 
-    console.log(propertyName, index);
+
+    console.log(info);
+
+    const buildQuery = (p, ti, n, i) => {
+        const q = i == null ? `t(${ti}).del('${n}')` 
+            : n == '$' ? `t(${ti}).${p}.remove(t(${ti}).${p}.find(|s| (s.id()==${thing['#']}) ))`
+            : `t(${ti}).${n}.splice(${i}, 1)`;
+        return(q);
+    };
+
 
     const handleClickOpen = () => {
         setState({
@@ -35,14 +44,17 @@ const RemoveThing = ({collection, thingId, propertyName, type, index}) => {
     };
 
     const handleClickOk = () => {
-        CollectionActions.removeThing(
-            {
-                collectionId: collection.collection_id,
-                thingId: thingId, 
-                propertyName: propertyName,
-                type: type,
-                index: index,
-            }, 
+        const queryString = buildQuery(
+            info.hasOwnProperty('parent') ? info.parent : null, 
+            info.id, 
+            info.name, 
+            info.hasOwnProperty('index') ? info.index : null
+        );
+        console.log(queryString);
+        CollectionActions.rawQuery(
+            collection.collection_id,
+            info.id, 
+            queryString, 
             (err) => setState({...state, serverError: err.log})
         );
 
@@ -68,9 +80,7 @@ const RemoveThing = ({collection, thingId, propertyName, type, index}) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <Typography  color={'error'}>
-                            {serverError || 'Are you sure?'}
-                        </Typography>  
+                        {serverError || 'Are you sure?'}
                     </DialogContentText>
                 </DialogContent> 
                 <DialogActions>
@@ -86,16 +96,10 @@ const RemoveThing = ({collection, thingId, propertyName, type, index}) => {
     );
 };
 
-RemoveThing.defaultProps = {
-    index: null,
-};
-
 RemoveThing.propTypes = {
     collection: PropTypes.object.isRequired,
-    thingId: PropTypes.number.isRequired,
-    propertyName: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    index: PropTypes.any,
+    thing: PropTypes.any.isRequired,
+    info: PropTypes.object.isRequired, 
 };
 
 export default RemoveThing;

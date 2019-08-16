@@ -24,8 +24,8 @@ const dataTypes = [
     'number',
     'array',
     'object',
-    '_set',
-    '_closure',
+    'set',
+    'closure',
 ];
 
 const initialState = {
@@ -40,19 +40,22 @@ const initialState = {
     serverError: '',
 };
 
-const AddThings = ({id, name, type, collection, thing}) => {
+const AddThings = ({info, collection, thing}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
+    const {id, name, type} = info;
 
     const handleClickOpen = () => {
+        const t = type == 'set' ?  dataTypes[3] : dataTypes[0];
+        const q = type == 'set' ? buildQuery(id, name, '{}', type): '';
         setState({
             show: true,
             errors: {},
             form: {
-                queryString: '',
+                queryString: q,
                 newProperty: '',
                 value: '',
-                dataType: dataTypes[0],
+                dataType: t,
             },
             serverError: '',
         });
@@ -66,9 +69,10 @@ const AddThings = ({id, name, type, collection, thing}) => {
         queryString: () => '',
         newProperty: () => Boolean(thing[form.newProperty]) ? 'Property name already in use' : '',
         value: () => {
-            let errText = form.value.length>0 ? '' : 'required';
+            let errText;
+            const bool = form.value.length>0;
             
-            if (!errText && form.dataType == 'number') {
+            if (!bool && form.dataType == 'number') {
                 errText = onlyNums(form.value) ? '' : 'only numbers';
             }
             return(errText);
@@ -91,34 +95,42 @@ const AddThings = ({id, name, type, collection, thing}) => {
             const updatedForm = Object.assign({}, prevState.form, {value: value, queryString: q});
             return {...prevState, form: updatedForm, errors: {}, serverError: ''};
         });
-    }
+    };
 
     const handleBuildQuery = (key, value) => {
-        let q = '';
         const propName = key=='newProperty' ? value : form.newProperty;
         const input = key=='value' ? value : form.value;
         const dataType = key=='dataType' ? value : form.dataType;
 
         const val = dataType === 'array' ? `[${input}]`
-        : dataType === 'object' ? `{}` 
-        : dataType === 'string' ? `'${input}'`
-        : dataType === 'number' ? `${input}` 
+        : dataType == 'object' ? `{}` 
+        : dataType == 'string' ? `'${input}'`
+        : dataType == 'number' ? `${input}` 
+        : dataType == 'set' ? `set([])` 
         : ''; 
-  
-        switch(type) {
+
+        const n = type == 'object' ? propName : name;
+        return buildQuery(id, n, val, type);
+        
+    };
+
+    const buildQuery = (i, n, v, t) => {
+        let q = '';
+        switch(t) {
             case 'array':
-                q = `t(${id}).${name}.push(${val})`;
+                q = `t(${i}).${n}.push(${v})`;
                 break;
             case 'object':
-                q = `t(${id}).${propName} = ${val}`;
+                q = `t(${i}).${n} = ${v}`;
                 break;
             case 'set':
-                q = `t(${id}).${name}.add(${val})`;
+                q = `t(${i}).${n}.add(${v})`;
                 break;
             default:
         };
         return(q);
     };
+
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
@@ -137,6 +149,12 @@ const AddThings = ({id, name, type, collection, thing}) => {
         }
     };
     
+    const addNewProperty = !(type == 'array' || type == 'set');
+    const singleInputField = form.dataType == 'number' || form.dataType == 'string';
+    const multiInputField = form.dataType == 'array';
+
+
+    console.log(type);
 
     return (
         <React.Fragment>
@@ -188,7 +206,7 @@ const AddThings = ({id, name, type, collection, thing}) => {
                                 />
                             </ListItem> 
                         </Collapse>
-                        {type !== 'array' ? (
+                        {addNewProperty ? (
                             <ListItem>
                                 <TextField
                                     autoFocus
@@ -218,14 +236,14 @@ const AddThings = ({id, name, type, collection, thing}) => {
                                 SelectProps={{native: true}}
                             >
                                 {dataTypes.map(d => ( 
-                                    <option key={d} value={d}>
+                                    <option key={d} value={d} disabled={type=='set'&&d!='object'} >
                                         {d}
                                     </option>
                                 ))}
                             </ TextField>
                         </ListItem>    
                         
-                        {form.dataType == 'number' || form.dataType == 'string' ? (
+                        {singleInputField ? (
                             <ListItem>
                                 <TextField
                                     margin="dense"
@@ -241,7 +259,7 @@ const AddThings = ({id, name, type, collection, thing}) => {
                                 />
                             </ListItem>
 
-                        ) : form.dataType == 'array' ? (
+                        ) : multiInputField ? (
                             <Add1DArray cb={handleArrayItems}/>
                         ) : null}              
                     </List>
@@ -260,9 +278,7 @@ const AddThings = ({id, name, type, collection, thing}) => {
 };
 
 AddThings.propTypes = {
-    id: PropTypes.any.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+    info: PropTypes.object.isRequired,
     collection: PropTypes.object.isRequired,
     thing: PropTypes.any.isRequired,
 };

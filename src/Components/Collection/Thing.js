@@ -34,22 +34,39 @@ const styles = theme => ({
 });
 
 
-const Thing = ({classes, name, id, thing, index, collection, things, onServerError}) => {
+const Thing = ({classes, thing, collection, things, info, onServerError}) => {
     const [show, setShow] = React.useState(false);
    
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
-        console.log(i);
+        const infoNew = i==null ? {
+            parent: info.name,
+            name: k,
+            id: thing['#'] || info.id,
+        } : {
+            parent: info.name == '$' ? info.parent : info.name,
+            name: k,
+            id: thing['#'] || info.id,
+            index: i
+        }
         return k === '#' ? null : (
             <div key={i ? i : k} className={classes.nested}>
-                <Thing classes={classes} name={k} id={thing['#'] || id} thing={v} index={i} collection={collection} things={things} onServerError={onServerError}/> 
+                <Thing 
+                    classes={classes} 
+                    collection={collection} 
+                    things={things} 
+                    thing={v}
+                    info={infoNew} 
+                    onServerError={onServerError}
+                /> 
             </div>
         );
     };
+    console.log(info);
 
     const renderChildren = () => {
         const isArray = Array.isArray(thing);
         return isArray ?
-            thing.map((t, i) => renderThing([`${name}`, t, i]))
+            thing.map((t, i) => renderThing([`${info.name}`, t, i]))
             :
             Object.entries(things[thing['#']] || thing || {}).map(renderThing);
     };
@@ -69,7 +86,9 @@ const Thing = ({classes, name, id, thing, index, collection, things, onServerErr
         : type === 'object' || type === 'set' ? `{${key}${objectId}}` 
         : type === 'string' || type === 'number' ? thing.toString() 
         : ''; 
-       
+
+    const canAdd = type === 'array' || type === 'object' || type === 'set'
+    const hasButtons = !(type === 'array' && info.name === '$');
     
     return (
         <React.Fragment>
@@ -79,22 +98,36 @@ const Thing = ({classes, name, id, thing, index, collection, things, onServerErr
                         {canToggle ? show ? <ExpandMore color={'primary'}/> : <ChevronRightIcon color={'primary'}/> : <StopIcon color={'primary'}/>}
                     </ButtonBase>
                 </ListItemIcon>
-                <ListItemText primary={index === null ? name : name + `[${index}]`} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
-                <Buttons>
-                    <React.Fragment>
-                        {type === 'array' || type === 'object' || type === 'set' ? (
+                <ListItemText primary={info.hasOwnProperty('index') ? info.name + `[${info.index}]` : info.name } primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
+                {hasButtons ? (
+                    <Buttons>
+                        <React.Fragment>
+                            {canAdd ? (
+                                <ListItemIcon>
+                                    <AddThings 
+                                        info={{
+                                            name: info.hasOwnProperty('index') ? info.name + `[${info.index}]` : info.name,
+                                            id: thing['#'] || info.id,
+                                            type: type
+                                        }} 
+                                        collection={collection} 
+                                        thing={things[thing['#']] || thing} 
+                                    />
+                                </ListItemIcon>
+                            ) : null}
                             <ListItemIcon>
-                                <AddThings id={thing['#'] || id} name={index === null ? name : name + `[${index}]`} type={type} collection={collection} thing={things[thing['#']] || thing} />
+                                <EditIcon color={'primary'}/>
                             </ListItemIcon>
-                        ) : null}
-                        <ListItemIcon>
-                            <EditIcon color={'primary'}/>
-                        </ListItemIcon>
-                        <ListItemIcon>
-                            <RemoveThing collection={collection} thingId={id} propertyName={name} type={type} index={index} />
-                        </ListItemIcon>
-                    </React.Fragment>
-                </Buttons>
+                            <ListItemIcon>
+                                <RemoveThing 
+                                    collection={collection}  
+                                    thing={things[thing['#']] || thing} 
+                                    info={info}  
+                                />
+                            </ListItemIcon>
+                        </React.Fragment>
+                    </Buttons>
+                ) : null}
             </ListItem>
             {canToggle && 
             <Collapse in={show} timeout="auto" unmountOnExit>
@@ -106,17 +139,11 @@ const Thing = ({classes, name, id, thing, index, collection, things, onServerErr
     );
 };
 
-Thing.defaultProps = {
-    index: null,
-};
-
 Thing.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
-    name: PropTypes.string.isRequired,
-    id: PropTypes.any.isRequired,
     collection: PropTypes.object.isRequired,
+    info: PropTypes.object.isRequired,
     onServerError: PropTypes.func.isRequired,
-    index: PropTypes.any,
 
     /* styles proeperties */ 
     classes: PropTypes.object.isRequired,

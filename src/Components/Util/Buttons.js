@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Collapse from '@material-ui/core/Collapse';
 import Zoom from '@material-ui/core/Zoom';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -14,40 +16,32 @@ const useStyles = makeStyles(theme => ({
 
 const Buttons = ({children}) => {
     const classes = useStyles();
-    const [hoverOpen, setHoverOpen] = React.useState(false);
-    const [zoomOpen, setZoomOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [show, setShow] = React.useState(true);
 
     const handleOpenClick = () => {
-        setHoverOpen(true);
-        setZoomOpen(true);
+        setShow(false);
+        setOpen(true);
     };
 
     const handleExited = () => {
-        setHoverOpen(false);
+        setShow(true);
     };
 
-
-    const handleMouseOverCell = () => {
-        setHoverOpen(true);
-        setZoomOpen(true);
-    }
-
     const handleMouseLeaveCell = () => {
-        setZoomOpen(false);
+        setOpen(false);
     }
 
     return (
-        <div className={classes.root} onMouseOver={handleMouseOverCell} onMouseLeave={handleMouseLeaveCell}>
-            {hoverOpen ? (
-                <Zoom in={zoomOpen} onExited={handleExited} >
+        <div className={classes.root} onMouseLeave={handleMouseLeaveCell}>
+                <Collapse in={open} timeout="auto" onExited={handleExited}>
                     {children}
-                </Zoom>
-            ) : null}
-            {!hoverOpen ? (
-                <IconButton onClick={handleOpenClick}>
-                    <MoreVertIcon color="primary" />
-                </IconButton>
-            ) : null}          
+                </Collapse>
+                {show ? (
+                    <IconButton onClick={handleOpenClick}>
+                        <MoreVertIcon color="primary" />
+                    </IconButton>
+                ) : null}
         </div>
     );
 

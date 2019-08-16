@@ -62,12 +62,29 @@ const ThingRoot = ({classes, things, collection}) => {
                 >
                     {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
                         <React.Fragment key={k}>
-                            <Thing className={classes.thing} id={collection.collection_id} thing={v} name={k} collection={collection} onServerError={handleServerError} />
+                            <Thing 
+                                className={classes.thing} 
+                                id={collection.collection_id} 
+                                thing={v} 
+                                collection={collection} 
+                                info={{
+                                    name: k,
+                                    id: collection.collection_id,
+                                }} 
+                                onServerError={handleServerError} 
+                            />
                         </React.Fragment>
                     ))}
                     <ListItem>
                     <ListItemIcon>
-                            <AddThings collection={collection} id={collection.collection_id} name={''} type={'object'} thing={things[collection.collection_id]} />
+                            <AddThings 
+                                info={{
+                                    id: collection.collection_id,
+                                    name: '',
+                                    type: 'object', 
+                                }}
+                                collection={collection} 
+                                thing={things[collection.collection_id]} />
                         </ListItemIcon>
                         {Object.entries(things[collection.collection_id]).length<2 ? (
                             <ListItemText primary={'Tree is still empty. Add your first thing!'} /> 
