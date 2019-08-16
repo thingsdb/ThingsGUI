@@ -1,7 +1,6 @@
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import EditIcon from '@material-ui/icons/Edit';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -14,6 +13,7 @@ import {withVlow} from 'vlow';
 import {withStyles} from '@material-ui/core/styles';
 
 import AddThings from './AddThings';
+import EditThing from './EditThing';
 import RemoveThing from './RemoveThing';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import {Buttons, ServerError, checkType} from '../Util';
@@ -116,7 +116,16 @@ const Thing = ({classes, thing, collection, things, info, onServerError}) => {
                                 </ListItemIcon>
                             ) : null}
                             <ListItemIcon>
-                                <EditIcon color={'primary'}/>
+                                <EditThing
+                                        info={{
+                                            parent: info.parent,
+                                            name: info.hasOwnProperty('index') ? info.name + `[${info.index}]` : info.name,
+                                            id: info.id,
+                                            type: type
+                                        }} 
+                                        collection={collection} 
+                                        thing={things[info.id]} 
+                                />
                             </ListItemIcon>
                             <ListItemIcon>
                                 <RemoveThing 
