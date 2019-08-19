@@ -1,10 +1,5 @@
 import * as monaco from 'monaco-editor';
-// import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js';
 import Language from './Language.js';
-// import Definition from './langdef';
-// import * as jsleri from 'jsleri';
-
-// const grammar = new Definition();
 
 monaco.languages.register({ id: 'mySpecialLanguage' });
 
@@ -14,8 +9,6 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
 
     keywords: [
         'nil', 'true', 'false',
-        // ...scope.node,
-        // ...scope.thingsdb,
         ...Object.keys(Language.noType),
         ...Object.keys(Language.types.array),
         ...Object.keys(Language.types.set),
@@ -158,13 +151,13 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                     documentation: v,
                 }))
             );
-            suggestions.push({
-                label: 'test',
-                kind: monaco.languages.CompletionItemKind.Keyword,
-                insertText: 'test(${1:pattern})',
-                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                documentation: 'Test if a string matches a given regular expression and return true or false.'
-            });
+            // suggestions.push({
+            //     label: 'test',
+            //     kind: monaco.languages.CompletionItemKind.Keyword,
+            //     insertText: 'test(${1:pattern})',
+            //     insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            //     documentation: 'Test if a string matches a given regular expression and return true or false.'
+            // });
         } else {
             suggestions.push(...Object.entries(Language.noType)
                 .map(([k, v]) => ({
