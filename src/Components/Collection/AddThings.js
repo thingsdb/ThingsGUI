@@ -115,20 +115,10 @@ const AddThings = ({info, collection, thing}) => {
     };
 
     const buildQuery = (i, n, v, t) => {
-        let q = '';
-        switch(t) {
-            case 'array':
-                q = `t(${i}).${n}.push(${v})`;
-                break;
-            case 'object':
-                q = `t(${i}).${n} = ${v}`;
-                break;
-            case 'set':
-                q = `t(${i}).${n}.add(${v})`;
-                break;
-            default:
-        };
-        return(q);
+        return t==='array' ? `t(${i}).${n}.push(${v})`
+            : t==='object' ? `t(${i}).${n} = ${v}`
+            : t==='set' ? `t(${i}).${n}.add(${v})`
+            : '';
     };
 
 

@@ -70,6 +70,7 @@ const ThingRoot = ({classes, things, collection}) => {
                                 info={{
                                     name: k,
                                     id: collection.collection_id,
+                                    parentType: 'object',
                                 }} 
                                 onServerError={handleServerError} 
                             />
@@ -87,7 +88,7 @@ const ThingRoot = ({classes, things, collection}) => {
                                 thing={things[collection.collection_id]} />
                         </ListItemIcon>
                         {Object.entries(things[collection.collection_id]).length<2 ? (
-                            <ListItemText primary={'Tree is still empty. Add your first thing!'} /> 
+                            <ListItemText primary={'Add your first thing!'} /> 
                         ) : null}
                     </ListItem>
                 </List>

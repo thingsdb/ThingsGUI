@@ -39,14 +39,16 @@ const Thing = ({classes, thing, collection, things, info, onServerError}) => {
    
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
         const infoNew = i==null ? {
-            parent: info.name,
             name: k,
             id: thing['#'] || info.id,
+            parentName: info.name,
+            parentType: type,
         } : {
-            parent: info.name == '$' ? info.parent : info.name,
             name: k,
             id: thing['#'] || info.id,
-            index: i
+            index: i,
+            parentName: info.name == '$' ? info.parentName : info.name,
+            parentType: type,
         }
         return k === '#' ? null : (
             <div key={i ? i : k} className={classes.nested}>
@@ -87,9 +89,10 @@ const Thing = ({classes, thing, collection, things, info, onServerError}) => {
         : type === 'string' || type === 'number' ? thing.toString() 
         : ''; 
 
-    const canAdd = type === 'array' || type === 'object' || type === 'set'
     const hasButtons = !(type === 'array' && info.name === '$');
-    
+    const canAdd = type === 'array' || type === 'object' || type === 'set'
+    const canEdit = info.name !== '$';
+
     return (
         <React.Fragment>
             <ListItem>
@@ -115,18 +118,20 @@ const Thing = ({classes, thing, collection, things, info, onServerError}) => {
                                     />
                                 </ListItemIcon>
                             ) : null}
-                            <ListItemIcon>
-                                <EditThing
-                                        info={{
-                                            parent: info.parent,
-                                            name: info.hasOwnProperty('index') ? info.name + `[${info.index}]` : info.name,
-                                            id: info.id,
-                                            type: type
-                                        }} 
-                                        collection={collection} 
-                                        thing={things[info.id]} 
-                                />
-                            </ListItemIcon>
+                            {canEdit ? (
+                                <ListItemIcon>
+                                    <EditThing
+                                            info={{
+                                                name: info.name,
+                                                index: info.hasOwnProperty('index') ? info.index : null,
+                                                id: info.id,
+                                                parentType: info.name === '$' ? 'set' : info.parentType
+                                            }} 
+                                            collection={collection} 
+                                            thing={things[info.id]} 
+                                    />
+                                </ListItemIcon>
+                            ) : null}
                             <ListItemIcon>
                                 <RemoveThing 
                                     collection={collection}  

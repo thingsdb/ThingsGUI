@@ -43,11 +43,12 @@ const initialState = {
 const EditThing = ({info, collection, thing}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
-    const {id, name, type, parent} = info;
+    const {id, index, name, parentType} = info;
 
-    console.log(thing);
+    console.log(parentType);
+
     const handleClickOpen = () => {
-        const q = type == 'set' ? buildQuery(id, name, '{}', type): '';
+        const q = parentType == 'set' ? buildQuery(id, name, '{}', parentType): '';
         setState({
             show: true,
             errors: {},
@@ -55,7 +56,7 @@ const EditThing = ({info, collection, thing}) => {
                 queryString: q,
                 newProperty: name,
                 value: '',
-                dataType: type,
+                dataType: dataTypes[0],
             },
             serverError: '',
         });
@@ -98,7 +99,6 @@ const EditThing = ({info, collection, thing}) => {
     };
 
     const handleBuildQuery = (key, value) => {
-        const propName = key=='newProperty' ? value : form.newProperty;
         const input = key=='value' ? value : form.value;
         const dataType = key=='dataType' ? value : form.dataType;
 
@@ -109,30 +109,15 @@ const EditThing = ({info, collection, thing}) => {
         : dataType == 'set' ? `set([])` 
         : ''; 
 
-        const n = type == 'object' ? propName : name;
-
-        console.log(id, n, val, type);
-        return buildQuery(id, n, val, type);
+        return buildQuery(id, name, val, parentType);
         
     };
 
-    const typeThing = checkType(thing);
     const buildQuery = (i, n, v, t) => {
-        let q = '';
-        switch(typeThing) {
-            case 'array':
-                q = `t(${i}).${n}.push(${v})`;
-                break;
-            case 'object':
-                q = `t(${i}).${n} = ${v}`;
-                break;
-            case 'set':
-                q = `t(${i}).${n}.add(${v})`;
-                break;
-            default:
-        };
-        console.log(q);
-        return(q);
+        return t==='array' ? `t(${i}).${n}.splice(${index}, 1, ${v})`
+        : t==='object' ? `t(${i}).${n} = ${v}`
+        : t==='set' ? `t(${i}).${n}.add(${v})`
+        : '';
     };
 
 
@@ -154,12 +139,9 @@ const EditThing = ({info, collection, thing}) => {
         }
     };
     
-    const addNewProperty = !(typeThing == 'array' || typeThing == 'set' || (thing[parent] && checkType(thing[parent]) == 'array') );
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';
 
-
-    console.log(addNewProperty, thing[parent], thing, parent);
 
     return (
         <React.Fragment>
@@ -174,12 +156,12 @@ const EditThing = ({info, collection, thing}) => {
                 maxWidth="xs"
             >
                 <DialogTitle id="form-dialog-title">
-                    {'Add thing'}
+                    {'Edit thing'}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         <Typography variant={'caption'} color={'error'}>
-                            {serverError}
+                            {serverError || 'Be aware that this action will overwrite the existing data within this thing. This action is irreversible!'}
                         </Typography>  
                     </DialogContentText>
                     <List>
@@ -211,24 +193,6 @@ const EditThing = ({info, collection, thing}) => {
                                 />
                             </ListItem> 
                         </Collapse>
-                        {addNewProperty ? (
-                            <ListItem>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="newProperty"
-                                    label="New property"
-                                    type="text"
-                                    value={form.newProperty}
-                                    spellCheck={false}
-                                    onChange={handleOnChange}
-                                    fullWidth
-                                    helperText={errors.newProperty}
-                                    error={Boolean(errors.newProperty)}
-                                />
-                            </ListItem>
-                        ) : null}
-
                         <ListItem>
                             <TextField
                                 margin="dense"
@@ -241,7 +205,7 @@ const EditThing = ({info, collection, thing}) => {
                                 SelectProps={{native: true}}
                             >
                                 {dataTypes.map(d => ( 
-                                    <option key={d} value={d} disabled={type=='set'&&d!='object'} >
+                                    <option key={d} value={d} disabled={parentType=='set'&&d!='object'} >
                                         {d}
                                     </option>
                                 ))}
@@ -274,7 +238,7 @@ const EditThing = ({info, collection, thing}) => {
                         {'Cancel'}
                     </Button>
                     <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
-                        {'Add'}
+                        {'Edit'}
                     </Button>
                 </DialogActions>
             </Dialog>

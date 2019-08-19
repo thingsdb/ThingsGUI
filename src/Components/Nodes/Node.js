@@ -58,7 +58,7 @@ const Node = ({classes, local, node, counters}) => {
 
     return node && local.node_id === node.node_id ? (
         <React.Fragment>
-            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
+            {/* <ServerError open={openError} onClose={handleCloseError} error={serverError} /> */}
             <StyledTabs value={tabIndex} onChange={handleChangeTab} aria-label="styled tabs example">
                 <StyledTab label="Node Info" />
                 <StyledTab label="Counters" />

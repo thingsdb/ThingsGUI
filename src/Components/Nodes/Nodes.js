@@ -44,7 +44,7 @@ const Nodes = ({nodes}) => {
 
     return(
         <React.Fragment>
-            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
+            {/* <ServerError open={openError} onClose={handleCloseError} error={serverError} /> */}
             <TableWithRowExtend header={header} rows={rows} rowExtend={rowExtend} />
         </React.Fragment>
     );

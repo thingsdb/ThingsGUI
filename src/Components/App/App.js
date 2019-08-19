@@ -2,7 +2,18 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Modal from '@material-ui/core/Modal';
+import WarningIcon from '@material-ui/icons/Warning';
 import Typography from '@material-ui/core/Typography';
+import { amber } from '@material-ui/core/colors';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
@@ -40,6 +51,21 @@ const styles = theme => ({
         minWidth: 1200,
         display: 'flex',
     },
+    snackBar:{
+        display: 'flex',
+        alignItems: 'center',
+    },
+    icon: {
+        fontSize: 20,
+    },
+    warning: {
+        backgroundColor: 'transparent',
+        padding: 0,
+    },
+    listItem: {
+        backgroundColor: amber[700],
+        margin: theme.spacing(1),
+    },
     menu: {
         width: '15%',
         minWidth: 220,
@@ -67,21 +93,28 @@ const styles = theme => ({
         minWidth: 380,
         padding: theme.spacing(1),
     },
+    portal: {
+        position: 'absolute',
+        bottom: '20px',
+        right: '20px',
+    }
 });
 
 
 const App = ({classes, collections, match, user, users, nodes}) => {
     const [indexCollection, setIndexCollection] = React.useState(0)
     const [indexUser, setIndexUser] = React.useState(0)
-    const [serverError, setServerError] = React.useState('')
+    const [serverError, setServerError] = React.useState([])
 
     React.useEffect(() => {
-            UsersActions.getUsers();
+            console.log('effect 1');
+            UsersActions.getUsers(handleServerError);
         },
         [collections.length],
     );
 
     React.useEffect(() => {
+        console.log('effect 2');
         UsersActions.getUser(handleServerError);
         UsersActions.getUsers(handleServerError);
         CollectionsActions.getCollections(handleServerError); 
@@ -107,18 +140,48 @@ const App = ({classes, collections, match, user, users, nodes}) => {
         setIndexUser(i);
     }
 
+    
+    const rootRef = React.useRef(null);
+    console.log(rootRef);
+    const ErrorMessage = () => (
+        <div className={classes.portal} ref={rootRef}>
+            <List id="client-snackbar" dense>
+                {serverError.map((e, i) => (
+                    <ListItem key={i} className={classes.listItem}>
+                        <ListItemIcon>
+                            <WarningIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={e} primaryTypographyProps={{variant: 'caption'}}/>
+                        <ListItemIcon>
+                            <IconButton onClick={handleCloseError(i)}>
+                                <CloseIcon /> 
+                            </IconButton>
+                        </ListItemIcon>
+                    </ListItem>
+                ))}
+            </List>
+        </div>
+    );
+
     const handleServerError = (err) => {
-        setServerError(err.log);
+        setServerError(prevErr => {
+            const newArray = [...prevErr];
+            newArray.push(err.log);
+            return newArray;
+        });
     }
 
-    const handleCloseError = () => {
-        setServerError('');
+    const handleCloseError = (i) => () => {
+        setServerError(prevErr => {
+            const newArray = [...prevErr];
+            newArray.splice(i, 1);
+            return newArray;
+        });
     }
-    const openError = Boolean(serverError); 
 
     return(
         <React.Fragment>
-            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
+            {ErrorMessage()}
             <TopBar user={user} />
             {/* {nodes.length ? ( */}
                 <div className={classes.root}>

@@ -25,10 +25,9 @@ const RemoveThing = ({collection, thing, info}) => {
     console.log(info);
 
     const buildQuery = (p, ti, n, i) => {
-        const q = i == null ? `t(${ti}).del('${n}')` 
+        return i == null ? `t(${ti}).del('${n}')` 
             : n == '$' ? `t(${ti}).${p}.remove(t(${ti}).${p}.find(|s| (s.id()==${thing['#']}) ))`
             : `t(${ti}).${n}.splice(${i}, 1)`;
-        return(q);
     };
 
 
@@ -45,7 +44,7 @@ const RemoveThing = ({collection, thing, info}) => {
 
     const handleClickOk = () => {
         const queryString = buildQuery(
-            info.hasOwnProperty('parent') ? info.parent : null, 
+            info.hasOwnProperty('parentName') ? info.parentName : null, 
             info.id, 
             info.name, 
             info.hasOwnProperty('index') ? info.index : null
