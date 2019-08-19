@@ -3,6 +3,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const VERSION = require(path.resolve(__dirname, './package.json')).version;
 const BUILD_DIR = path.resolve(__dirname, '../static/js');
@@ -23,9 +24,13 @@ const config = {
                 cacheDirectory: true
             },
             exclude: /node_modules/
-        }]
+        }, {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader']
+          }]
     },
     plugins: [
+        new MonacoWebpackPlugin(),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new BundleAnalyzerPlugin({
             /* Usage:
