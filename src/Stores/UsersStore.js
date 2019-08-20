@@ -100,9 +100,7 @@ class UsersStore extends BaseStore {
             name,
             access,
         }).done((data) => {
-            this.setState({
-                users: data
-            });
+            this.setState({users: data});
         }).fail((event, status, message) => onError(message));
     }
 
@@ -112,9 +110,7 @@ class UsersStore extends BaseStore {
             name,
             access,
         }).done((data) => {
-            this.setState({
-                users: data
-            });
+            this.setState({users: data});
         }).fail((event, status, message) => onError(message));
     }
 

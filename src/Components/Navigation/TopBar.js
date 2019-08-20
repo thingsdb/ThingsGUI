@@ -84,6 +84,7 @@ class TopBar extends React.Component {
 
     static propTypes = {
         user: PropTypes.object.isRequired,
+        onError: PropTypes.func.isRequired,
 
         /* Styles properties */
         classes: PropTypes.object.isRequired,
@@ -115,7 +116,7 @@ class TopBar extends React.Component {
     }
 
     render() {
-        const {classes, user} = this.props;
+        const {classes, user, onError} = this.props;
         const {anchorEl, open, handleMenuExited} = this.state;
         const isOpen = Boolean(anchorEl);
 
@@ -210,7 +211,7 @@ class TopBar extends React.Component {
                         </IconButton>
                     </div>
                     <Divider />
-                    <Nodes />
+                    <Nodes onError={onError}/>
                 </Drawer>
             </React.Fragment>
         );

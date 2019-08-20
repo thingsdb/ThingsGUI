@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import {withStyles} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 
 import Connect from './Connect';
@@ -13,7 +11,7 @@ import Loglevel from './Loglevel';
 import Info from './Info';
 import Shutdown from './Shutdown';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import {ServerError, StyledTabs, StyledTab} from '../Util';
+import { StyledTabs, StyledTab } from '../Util';
 
 
 const withStores = withVlow([{
@@ -21,44 +19,29 @@ const withStores = withVlow([{
     keys: ['node', 'counters']
 }]);
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     info: {
         padding: theme.spacing(1),
     },
     counters: {
         padding: theme.spacing(1),
     },
-});
+}));
 
-const initialState = {
-    tabIndex: 0, 
-    serverError: "",
-};
-
-const Node = ({classes, local, node, counters}) => {
-    const [state, setState] = React.useState(initialState);
-    const {tabIndex, serverError} = state; 
+const Node = ({local, node, counters, onError}) => {
+    const classes = useStyles();
+    const [tabIndex, setTabIndex] = React.useState(0);
 
     React.useEffect(() => {
-        NodesActions.getNode((err) => setState({...state, serverError: err.log})) // QUEST: en bij status update?
+        NodesActions.getNode(onError) // QUEST: en bij status update?
     }, [tabIndex]);
 
     const handleChangeTab = (_event, newValue) => {
-        setState({...state, tabIndex: newValue}); 
+        setTabIndex(newValue); 
     }
-
-    const handleServerError = (err) => {
-        setState({...state, serverError: err.log});
-    }
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    }
-    const openError = Boolean(serverError); 
 
     return node && local.node_id === node.node_id ? (
         <React.Fragment>
-            {/* <ServerError open={openError} onClose={handleCloseError} error={serverError} /> */}
             <StyledTabs value={tabIndex} onChange={handleChangeTab} aria-label="styled tabs example">
                 <StyledTab label="Node Info" />
                 <StyledTab label="Counters" />
@@ -94,7 +77,7 @@ const Node = ({classes, local, node, counters}) => {
                         <Counters counters={counters} />
                     </Grid>
                     <Grid item xs={12}>
-                        <CountersReset node={node} onServerError={handleServerError}/>
+                        <CountersReset node={node} onServerError={onError}/>
                     </Grid>
                 </Grid>
             }
@@ -105,6 +88,7 @@ const Node = ({classes, local, node, counters}) => {
 };
 
 Node.propTypes = {
+    onError: PropTypes.func.isRequired,
     local: PropTypes.object.isRequired,
 
     /* nodes properties */
@@ -113,4 +97,4 @@ Node.propTypes = {
 
 };
 
-export default withStyles(styles)(withStores(Node));
+export default withStores(Node);

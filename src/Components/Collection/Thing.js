@@ -34,7 +34,7 @@ const styles = theme => ({
 });
 
 
-const Thing = ({classes, thing, collection, things, info, onServerError}) => {
+const Thing = ({classes, thing, collection, things, info, onError}) => {
     const [show, setShow] = React.useState(false);
    
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
@@ -58,7 +58,7 @@ const Thing = ({classes, thing, collection, things, info, onServerError}) => {
                     things={things} 
                     thing={v}
                     info={infoNew} 
-                    onServerError={onServerError}
+                    onError={onError}
                 /> 
             </div>
         );
@@ -76,7 +76,7 @@ const Thing = ({classes, thing, collection, things, info, onServerError}) => {
     const handleClick = () => {
         setShow(!show); // QUEST: work with prevstate?
         if (thing && thing['#']) {
-            CollectionActions.query(collection.collection_id, (err) => onServerError(err), thing['#']);
+            CollectionActions.query(collection.collection_id, onError, thing['#']);
         }
     };
 
@@ -157,7 +157,7 @@ Thing.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     collection: PropTypes.object.isRequired,
     info: PropTypes.object.isRequired,
-    onServerError: PropTypes.func.isRequired,
+    onError: PropTypes.func.isRequired,
 
     /* styles proeperties */ 
     classes: PropTypes.object.isRequired,

@@ -4,12 +4,15 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Chip from '@material-ui/core/Chip';
+import Collapse from '@material-ui/core/Collapse';
+import WarningIcon from '@material-ui/icons/Warning';
+import { amber } from '@material-ui/core/colors';
+import { makeStyles} from '@material-ui/core/styles';
 
 import PasswordUser from './Password';
 import RemoveUser from './Remove';
 import RenameUser from './Rename';
-import {ServerError} from '../Util';
 import Tokens from './Tokens';
 import {UsersActions} from '../../Stores/UsersStore';
 
@@ -25,6 +28,9 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(3),
         backgroundColor: theme.palette.primary.main,
+    },
+    icon: {
+        color: amber[700],
     },
 }));
 
@@ -96,14 +102,14 @@ const User = ({user, collections}) => {
     ];
 
     React.useEffect(() => {
-            let switches = {};
+            let s = {};
             targets.map(({name, value}) => {
-                switches = Object.assign({}, switches, getSwitches(value, ''));
+                s = Object.assign({}, s, getSwitches(value, ''));
             });
             user.access.map(({target, privileges}) => {
-                switches = Object.assign({}, switches, getSwitches(target, privileges));
+                s = Object.assign({}, s, getSwitches(target, privileges));
             });
-            setState({...state, switches:switches});
+            setState({serverError: '', switches:s});
         },
         [user, collections.length]
     );
@@ -111,18 +117,24 @@ const User = ({user, collections}) => {
 
     const handleOnChangeSwitch = (key) => ({target}) => {
         const {value, checked} = target;
-        switches[key][value]= checked;
-        setState({...state, switches: switches});
-   
+        setState((prevState => {
+            let newswitches = JSON.parse(JSON.stringify(prevState.switches));
+            newswitches[key][value] = checked;
+            return {...state, switches: newswitches};
+        }));
+
         if (checked) {
             UsersActions.grant(
                 user.name, 
                 key, 
-                value, 
+                value,
                 (err) => {
-                    switches[key][value] = !checked;
-                    setState({switches: switches, serverError: err.log})
-                }
+                    setState((prevState => {
+                        let newswitches = JSON.parse(JSON.stringify(prevState.switches));
+                        newswitches[key][value] = checked;
+                        return {serverError: err.log, switches: newswitches};
+                    }));
+                } 
             );
         } else {
             UsersActions.revoke(
@@ -130,9 +142,12 @@ const User = ({user, collections}) => {
                 key, 
                 value, 
                 (err) => {
-                    switches[key][value] = !checked;
-                    setState({switches: switches, serverError: err.log})
-                }
+                    setState((prevState => {
+                        let newswitches = JSON.parse(JSON.stringify(prevState.switches));
+                        newswitches[key][value] = checked;
+                        return {serverError: err.log, switches: newswitches};
+                    }));
+                } 
             );
         }
     };
@@ -141,12 +156,10 @@ const User = ({user, collections}) => {
         setState({...state, serverError: ''});;
     }
 
-    const openError = Boolean(serverError); 
     const switchesKeys = Object.keys(switches);
 
     return (
         <div className={classes.root}>
-            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
             <Grid
                 className={classes.user}
                 container
@@ -160,6 +173,11 @@ const User = ({user, collections}) => {
                     <Typography variant="h4" color='primary'>
                         {user.name}
                     </Typography>
+                    <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
+                        <Typography variant={'caption'} color={'error'} >
+                            {serverError}
+                        </Typography>
+                    </Collapse>
                     <Divider className={classes.divider} />
                     <Grid container spacing={1}>
                         <Grid item container xs={12} spacing={2} >
@@ -188,7 +206,7 @@ const User = ({user, collections}) => {
                                         <Grid item container xs={12} >
                                             {privileges.map(({ky, label}) => (
                                                 <Grid item xs={2} key={ky} container justify={'center'} >
-                                                    <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary"/>
+                                                    <Checkbox disabled={Boolean(serverError)} checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary"/>
                                                 </Grid>
                                             ))}
                                         </Grid>   

@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import AddToken from './AddToken';
 import RemoveExpired from './RemoveExpired';
 import RemoveToken from './RemoveToken';
-import {ServerError, TableWithButtons} from '../Util';
+import {TableWithButtons} from '../Util';
 
 
 const Tokens = ({user}) => {
@@ -44,20 +44,14 @@ const Tokens = ({user}) => {
     };
 
     const handleServerError = (err) => {
-        setServerError(err.log);
-    };
-
-    const handleCloseError = () => {
-        setServerError('');
-    };
-    const openError = Boolean(serverError); 
+        setServerError(err.log)
+    }
 
     return (
         <React.Fragment>
             <Button variant="outlined" onClick={handleClickOpen}>
                 {'Tokens'}
             </Button>
-            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
             <Dialog
                 open={show}
                 onClose={handleClickClose}

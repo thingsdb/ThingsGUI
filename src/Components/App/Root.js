@@ -7,6 +7,7 @@ import App from './App';
 import AppLoader from './AppLoader';
 import Login from './Login';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
+import {ErrorToast} from '../Util';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -38,12 +39,24 @@ const withStores = withVlow([{
     keys: ['loaded', 'connected']
 }]);
 
-const Root = ({loaded, connected}) => (
-    <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        {loaded ? connected ? <App /> : <Login /> : <AppLoader />}
-    </MuiThemeProvider>
-);
+const Root = ({loaded, connected}) => {
+    const [serverErrors, setServerErrors] = React.useState([])
+    const handleServerError = (err) => {
+        setServerErrors(prevErr => {
+            const newArray = [...prevErr];
+            newArray.push(err.log);
+            return newArray;
+        });
+    }
+
+    return(
+        <MuiThemeProvider theme={theme}>
+            <CssBaseline />
+            {loaded ? connected ? <App onError={handleServerError} /> : <Login /> : <AppLoader onError={handleServerError}/>}
+            <ErrorToast errors={serverErrors}/>
+        </MuiThemeProvider>
+    );
+};
 
 Root.propTypes = {
     loaded: ApplicationStore.types.loaded.isRequired,

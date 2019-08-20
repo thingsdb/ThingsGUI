@@ -70,7 +70,7 @@ const AddToken = ({classes, user}) => {
             form: {
                 description: '',
                 number: '1',
-                timeUnit: timeUnit[0].label,
+                timeUnit: timeUnit[0].value,
             },
             switches: {
                 description: false,

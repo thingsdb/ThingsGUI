@@ -10,7 +10,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 
 import {CollectionsActions} from '../../Stores/CollectionsStore';
-import {ServerError} from '../Util';
 
 const quotaTypes = [
     'things',

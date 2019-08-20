@@ -6,12 +6,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import {withStyles} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
 import AddThings from './AddThings';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import {ServerError} from '../Util';
 
 import Thing from './Thing';
 
@@ -21,7 +20,7 @@ const withStores = withVlow([{
 }]);
 
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
         // maxWidth: 360,
@@ -30,30 +29,20 @@ const styles = theme => ({
     thing: {
         paddingLeft: theme.spacing(6),
     },
-});
+}));
 
-const ThingRoot = ({classes, things, collection}) => {
-
-    const [serverError, setServerError] = React.useState('');
+const ThingRoot = ({things, collection, onError}) => {
+    const classes = useStyles();
     const fetched = things.hasOwnProperty(collection.collection_id);
     
     React.useEffect(() => {
-        CollectionActions.query(collection.collection_id, (err) => setServerError(err.log));
+        CollectionActions.query(collection.collection_id, onError);
     }, [collection.collection_id]);
     
-    const handleCloseError = () => {
-        setServerError('');
-    }
 
-    const handleServerError = (err) => {
-        setServerError(err);
-    }
-
-    const openError = Boolean(serverError);
     fetched&&console.log(Object.entries(things[collection.collection_id]), things[collection.collection_id]);
     return (
         <React.Fragment>
-            <ServerError open={openError} onClose={handleCloseError} error={serverError} />
             {fetched ? (
                 <List
                     component="nav"
@@ -72,7 +61,7 @@ const ThingRoot = ({classes, things, collection}) => {
                                     id: collection.collection_id,
                                     parentType: 'object',
                                 }} 
-                                onServerError={handleServerError} 
+                                onError={onError} 
                             />
                         </React.Fragment>
                     ))}
@@ -102,14 +91,11 @@ const ThingRoot = ({classes, things, collection}) => {
 };
 
 ThingRoot.propTypes = {
-    collection: PropTypes.object.isRequired, 
-
-    /* styles proeperties */ 
-    classes: PropTypes.object.isRequired,
+    onError: PropTypes.func.isRequired,
 
     /* collection properties */
     things: CollectionStore.types.things.isRequired,
 };
 
 
-export default withStyles(styles)(withStores(ThingRoot));
+export default withStores(ThingRoot);

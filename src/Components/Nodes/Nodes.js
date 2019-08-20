@@ -4,7 +4,7 @@ import {withVlow} from 'vlow';
 
 import Node from './Node';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import {TableWithRowExtend, ServerError} from '../Util';
+import {TableWithRowExtend} from '../Util';
 
 
 const withStores = withVlow([{
@@ -12,11 +12,10 @@ const withStores = withVlow([{
     keys: ['nodes']
 }]);
 
-const Nodes = ({nodes}) => {
-    const [serverError, setServerError] = React.useState('')
+const Nodes = ({onError, nodes}) => {
 
     React.useEffect(() => {
-        NodesActions.getNodes(handleServerError); // QUEST: en bij status update?
+        NodesActions.getNodes(onError); // QUEST: en bij status update?
     }, []);
 
 
@@ -31,26 +30,17 @@ const Nodes = ({nodes}) => {
         ky: 'status',
         label: 'Status',
     }];
-    const rowExtend = (node) => <Node local={node} />;
-
-    const handleServerError = (err) => {
-        setServerError(err.log);
-    }
-
-    const handleCloseError = () => {
-        setServerError('');
-    }
-    const openError = Boolean(serverError); 
+    const rowExtend = (node) => <Node local={node} onError={onError} />;
 
     return(
         <React.Fragment>
-            {/* <ServerError open={openError} onClose={handleCloseError} error={serverError} /> */}
             <TableWithRowExtend header={header} rows={rows} rowExtend={rowExtend} />
         </React.Fragment>
     );
 };
 
 Nodes.propTypes = {
+    onError: PropTypes.func.isRequired,
     nodes: PropTypes.array.isRequired,
 };
 
