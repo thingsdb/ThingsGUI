@@ -13,10 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
-import {UsersActions, UsersStore} from '../../Stores/UsersStore';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
 const withStores = withVlow([{
-    store: UsersStore,
+    store: ThingsdbStore,
     keys: ['users']
 }]);
 
@@ -88,7 +88,7 @@ const AddUser = ({classes, users}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            UsersActions.addUser(form.name, (err) => setState({...state, serverError: err.log}));
+            ThingsdbActions.addUser(form.name, (err) => setState({...state, serverError: err.log}));
             
             if (!state.serverError) {
                 setState({...state, show: false});
@@ -149,7 +149,7 @@ AddUser.propTypes = {
     classes: PropTypes.object.isRequired,
 
     /* application properties */
-    users: UsersStore.types.users.isRequired,    
+    users: ThingsdbStore.types.users.isRequired,    
 };
 
 export default withStyles(styles)(withStores(AddUser)); // QUEST: volgorde goed zo?

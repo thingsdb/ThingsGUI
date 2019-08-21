@@ -14,13 +14,13 @@ import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
 import {ApplicationStore} from '../../Stores/ApplicationStore';
-import {CollectionsActions, CollectionsStore} from '../../Stores/CollectionsStore';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['connErr']
 }, {
-    store: CollectionsStore,
+    store: ThingsdbStore,
     keys: ['collections']
 }]);
 
@@ -91,7 +91,7 @@ const Add = ({classes, connErr, collections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            CollectionsActions.addCollection(form.name, (err) => setState({...state, serverError: err.log}));
+            ThingsdbActions.addCollection(form.name, (err) => setState({...state, serverError: err.log}));
 
             if(!state.serverError) {
                 setState({...state, show: false});
@@ -153,7 +153,7 @@ Add.propTypes = {
     /* application properties */
     connErr: ApplicationStore.types.connErr.isRequired,
     /* collections properties */
-    collections: CollectionsStore.types.collections.isRequired,
+    collections: ThingsdbStore.types.collections.isRequired,
 };
 
 export default withStyles(styles)(withStores(Add));

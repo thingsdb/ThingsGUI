@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import {UsersActions} from '../../Stores/UsersStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
 const RemoveExpired = ({onServerError}) => {
 
     const handleClickOk = () => {
-        UsersActions.delExpired((err) => onServerError(err));
+        ThingsdbActions.delExpired((err) => onServerError(err));
     };
 
     return (

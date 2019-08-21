@@ -12,7 +12,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import {UsersActions} from '../../Stores/UsersStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
 const initialState = {
@@ -52,7 +52,7 @@ const Password = ({user}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            UsersActions.password(
+            ThingsdbActions.password(
                 user.name, 
                 form.password, 
                 (err) => setState({...state, serverError: err.log})

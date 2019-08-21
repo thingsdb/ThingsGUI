@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import {UsersActions} from '../../Stores/UsersStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
 const RemoveToken = ({token, onServerError}) => {
 
     const handleClickOk = () => {
-        UsersActions.delToken(token.key, (err) => onServerError(err));
+        ThingsdbActions.delToken(token.key, (err) => onServerError(err));
     };
 
     return (

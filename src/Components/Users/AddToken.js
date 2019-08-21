@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
-import {UsersActions, UsersStore} from '../../Stores/UsersStore';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
 
 const styles = theme => ({
@@ -101,7 +101,7 @@ const AddToken = ({classes, user}) => {
     };
 
     const handleClickOk = () => {
-        UsersActions.newToken(
+        ThingsdbActions.newToken(
             {
                 name: user.name, 
                 expirationTime: switches.expirationTime ? "(now() + " + form.number + "*" + form.timeUnit + ")" : null, 

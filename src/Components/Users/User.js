@@ -14,7 +14,7 @@ import PasswordUser from './Password';
 import RemoveUser from './Remove';
 import RenameUser from './Rename';
 import Tokens from './Tokens';
-import {UsersActions} from '../../Stores/UsersStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -124,7 +124,7 @@ const User = ({user, collections}) => {
         }));
 
         if (checked) {
-            UsersActions.grant(
+            ThingsdbActions.grant(
                 user.name, 
                 key, 
                 value,
@@ -137,7 +137,7 @@ const User = ({user, collections}) => {
                 } 
             );
         } else {
-            UsersActions.revoke(
+            ThingsdbActions.revoke(
                 user.name, 
                 key, 
                 value, 

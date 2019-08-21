@@ -5,6 +5,20 @@ class ThingsDBHandler(BaseHandler):
 
     @classmethod
     @BaseHandler.socket_handler
+    async def get_dbinfo(cls, client, data):
+        collections = await client.collections_info()
+        users = await client.users_info()
+        user = await client.user_info()
+
+        resp = {
+            'collections': collections,
+            'users': users,
+            'user': user,
+        }
+        return cls.socket_response(data=resp)
+
+    @classmethod
+    @BaseHandler.socket_handler
     async def get_collections(cls, client, data):
         resp = await client.collections_info()
         return cls.socket_response(data=resp)

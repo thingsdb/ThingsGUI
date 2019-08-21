@@ -10,11 +10,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import {withVlow} from 'vlow';
 
-import {CollectionsStore, CollectionsActions} from '../../Stores/CollectionsStore';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 import {ServerError} from '../Util';
 
 const withStores = withVlow([{
-    store: CollectionsStore,
+    store: ThingsdbStore,
     keys: ['collections']
 }]);
 
@@ -58,7 +58,7 @@ const Rename = ({collection, collections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            CollectionsActions.renameCollection(
+            ThingsdbActions.renameCollection(
                 collection.name, 
                 form.name, 
                 (err) => setState({...state, serverError: err.log})
@@ -121,7 +121,7 @@ Rename.propTypes = {
     collection: PropTypes.object.isRequired,
 
     /* collections properties */
-    collections: CollectionsStore.types.collections.isRequired,
+    collections: ThingsdbStore.types.collections.isRequired,
 };
 
 export default withStores(Rename);

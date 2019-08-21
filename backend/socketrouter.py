@@ -29,6 +29,34 @@ class SocketRouter:
             handler=LoginHandler.disconnect)
 
         sio.on(
+            event='/thingsdb/get_info',
+            handler=ThingsDBHandler.get_dbinfo)
+
+        sio.on(
+            event='/thingsdb/getcollections',
+            handler=ThingsDBHandler.get_collections)
+
+        sio.on(
+            event='/thingsdb/getcollection',
+            handler=ThingsDBHandler.get_collection)
+
+        sio.on(
+            event='/thingsdb/add',
+            handler=ThingsDBHandler.new_collection)
+
+        sio.on(
+            event='/thingsdb/remove',
+            handler=ThingsDBHandler.del_collection)
+
+        sio.on(
+            event='/thingsdb/rename',
+            handler=ThingsDBHandler.rename_collection)
+
+        sio.on(
+            event='/thingsdb/setquota',
+            handler=ThingsDBHandler.set_quota)
+
+        sio.on(
             event='/collection/query',
             handler=CollectionHandler.query_thing)
         
@@ -43,30 +71,6 @@ class SocketRouter:
         sio.on(
             event='/collection/raw-query',
             handler=CollectionHandler.raw_query)
-
-        sio.on(
-            event='/collection/getcollections',
-            handler=ThingsDBHandler.get_collections)
-
-        sio.on(
-            event='/collection/get',
-            handler=ThingsDBHandler.get_collection)
-
-        sio.on(
-            event='/collection/add',
-            handler=ThingsDBHandler.new_collection)
-
-        sio.on(
-            event='/collection/remove',
-            handler=ThingsDBHandler.del_collection)
-
-        sio.on(
-            event='/collection/rename',
-            handler=ThingsDBHandler.rename_collection)
-
-        sio.on(
-            event='/collection/setquota',
-            handler=ThingsDBHandler.set_quota)
 
         sio.on(
             event='/user/getusers',

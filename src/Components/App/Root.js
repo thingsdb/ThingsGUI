@@ -42,6 +42,7 @@ const withStores = withVlow([{
 const Root = ({loaded, connected}) => {
     const [serverErrors, setServerErrors] = React.useState([])
     const handleServerError = (err) => {
+        console.log(err);
         setServerErrors(prevErr => {
             const newArray = [...prevErr];
             newArray.push(err.log);

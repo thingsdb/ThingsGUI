@@ -8,7 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 
-import {CollectionsActions} from '../../Stores/CollectionsStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 const initialState = {
     show: false,
@@ -28,7 +28,7 @@ const Remove = ({collection}) => {
     };
 
     const handleClickOk = () => {
-        CollectionsActions.removeCollection(collection.name, (err) => setState({...state, serverError: err.log}));
+        ThingsdbActions.removeCollection(collection.name, (err) => setState({...state, serverError: err.log}));
         
         if (!state.serverError) {
             setState({...state, show: false});

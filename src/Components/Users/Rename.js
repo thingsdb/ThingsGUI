@@ -10,10 +10,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import {withVlow} from 'vlow';
 
-import {UsersActions, UsersStore} from '../../Stores/UsersStore';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
 const withStores = withVlow([{
-    store: UsersStore,
+    store: ThingsdbStore,
     keys: ['users']
 }]);
 
@@ -52,7 +52,7 @@ const Rename = ({user, users}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            UsersActions.renameUser(
+            ThingsdbActions.renameUser(
                 user.name, 
                 form.name, 
                 (err) => setState({...state, serverError: err.log})
@@ -115,7 +115,7 @@ Rename.propTypes = {
     user: PropTypes.object.isRequired,
 
     /* application properties */
-    users: UsersStore.types.users.isRequired,    
+    users: ThingsdbStore.types.users.isRequired,    
 };
 
 export default withStores(Rename);

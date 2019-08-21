@@ -8,7 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 
-import {UsersActions} from '../../Stores/UsersStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 const initialState = {
     show: false,
@@ -27,7 +27,7 @@ const Remove = ({user}) => { // TODO dialog are u sure?
         setState({...state, show: false});
     };
     const handleClickOk = () => {
-        UsersActions.removeUser(user.name, (err) => (err) => setState({...state, serverError: err.log}));
+        ThingsdbActions.removeUser(user.name, (err) => (err) => setState({...state, serverError: err.log}));
         if (!state.serverError) {
             setState({...state, show: false});
         }

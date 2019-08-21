@@ -9,7 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 
-import {CollectionsActions} from '../../Stores/CollectionsStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 const quotaTypes = [
     'things',
@@ -64,7 +64,7 @@ const Quotas = ({collection}) => {
     };
 
     const handleUnset = () => {
-        CollectionsActions.setQuota(
+        ThingsdbActions.setQuota(
             collection.name, 
             form.quotaType, 
             "nil", 
@@ -77,7 +77,7 @@ const Quotas = ({collection}) => {
     }
 
     const handleClickOk = () => {
-        CollectionsActions.setQuota(
+        ThingsdbActions.setQuota(
             collection.name, 
             form.quotaType, 
             form.quota, 
