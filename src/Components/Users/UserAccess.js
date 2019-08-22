@@ -19,8 +19,16 @@ import RenameUser from './Rename';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 const useStyles = makeStyles(theme => ({
+    flex: {
+        display: 'flex',
+    },
+    buttons: {
+        width: '40%',
+    },
     card: {
+        width: '60%',
         padding: theme.spacing(2),
+        marginRight: theme.spacing(1),
     },
     user: {
         padding: theme.spacing(2),
@@ -158,83 +166,98 @@ const UserAccess = ({user, collections}) => {
         setState({...state, serverError: ''});;
     }
 
+    const buttons = [
+        {
+            name: 'password',
+            component: <PasswordUser user={user} />
+        },
+        {
+            name: 'rename',
+            component: <RenameUser user={user} />
+        },
+        {
+            name: 'remove',
+            component: <RemoveUser user={user} />
+        },
+    ]
+
+
     const switchesKeys = Object.keys(switches);
 
     return (
-        <Card className={classes.card}>
-            <Typography className={classes.title} variant="h5" >
-                {'ACCESS RULES'}
-            </Typography>
-            <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
-                <CardHeader
-                    avatar={
-                        <WarningIcon className={classes.warning}/>
-                    }
-                    action={
-                        <IconButton aria-label="settings" onClick={handleCloseError}>
-                            <CloseIcon />
-                        </IconButton>
-                    }
-                    title={serverError}
-                />
-            </Collapse>
-            <Grid
-                className={classes.user}
-                container
-                direction="column"
-                spacing={3}
-            >
-                <Grid item xs={12}>
-                    <Grid container spacing={1}>
-                        <Grid item container xs={12} spacing={2} >
-                            <Grid item xs={3} />
-                            <Grid item container xs={9} >
-                                <Grid item container xs={12} >
-                                    {privileges.map(({ky, label}) => (
-                                        <Grid item xs={2} key={ky} container justify={'center'} >
-                                            <Typography variant={'caption'} align={'center'} >
-                                                {label}
+        <div className={classes.flex}>
+            <Card className={classes.card}>
+                <Typography className={classes.title} variant="h5" >
+                    {'ACCESS RULES'}
+                </Typography>
+                <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
+                    <CardHeader
+                        avatar={
+                            <WarningIcon className={classes.warning}/>
+                        }
+                        action={
+                            <IconButton aria-label="settings" onClick={handleCloseError}>
+                                <CloseIcon />
+                            </IconButton>
+                        }
+                        title={serverError}
+                    />
+                </Collapse>
+                <Grid
+                    className={classes.user}
+                    container
+                    direction="row"
+                    spacing={3}
+                >
+                    <Grid item >
+                        <Grid container spacing={1}>
+                            <Grid item container xs={12} spacing={2} >
+                                <Grid item xs={3} />
+                                <Grid item container xs={9} >
+                                    <Grid item container xs={12} >
+                                        {privileges.map(({ky, label}) => (
+                                            <Grid item xs={2} key={ky} container justify={'center'} >
+                                                <Typography variant={'caption'} align={'center'} >
+                                                    {label}
+                                                </Typography>
+                                            </Grid>
+                                        ))}
+                                    </Grid>   
+                                </Grid>
+                            </Grid>
+                            {switchesKeys.map((key, i) => (
+                                <React.Fragment key={i}>
+                                    <Grid item container xs={12} spacing={2}>
+                                        <Grid item xs={3} container alignItems={'center'} >
+                                            <Typography>
+                                                {key}
                                             </Typography>
                                         </Grid>
-                                    ))}
-                                </Grid>   
-                            </Grid>
+                                        <Grid item container xs={9} >
+                                            <Grid item container xs={12} >
+                                                {privileges.map(({ky, label}) => (
+                                                    <Grid item xs={2} key={ky} container justify={'center'} >
+                                                        <Checkbox disabled={Boolean(serverError)} checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary"/>
+                                                    </Grid>
+                                                ))}
+                                            </Grid>   
+                                        </Grid>
+                                    </Grid>
+                                </React.Fragment>
+                            ))}
                         </Grid>
-                        {switchesKeys.map((key, i) => (
-                            <React.Fragment key={i}>
-                                <Grid item container xs={12} spacing={2}>
-                                    <Grid item xs={3} container alignItems={'center'} >
-                                        <Typography>
-                                            {key}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item container xs={9} >
-                                        <Grid item container xs={12} >
-                                            {privileges.map(({ky, label}) => (
-                                                <Grid item xs={2} key={ky} container justify={'center'} >
-                                                    <Checkbox disabled={Boolean(serverError)} checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary"/>
-                                                </Grid>
-                                            ))}
-                                        </Grid>   
-                                    </Grid>
-                                </Grid>
-                            </React.Fragment>
-                        ))}
                     </Grid>
                 </Grid>
-                <Grid item container xs={12} spacing={1} >
-                    <Grid item>
-                        <PasswordUser user={user} />
+            </Card> 
+            <Grid className={classes.buttons} container spacing={1} direction={'row'} justify={'center'} alignItems={'center'} >
+                {buttons.map(button => (
+                    <Grid key={button.name} item>
+                        {button.component}
                     </Grid>
-                    <Grid item>
-                        <RenameUser user={user} />
-                    </Grid>
-                    <Grid item>
-                        <RemoveUser user={user} />
-                    </Grid>
-                </Grid>
+                ))}
             </Grid>
-        </Card>    
+        </div>    
+           
     );
 };
 

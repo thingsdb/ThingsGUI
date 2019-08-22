@@ -24,14 +24,15 @@ const withStores = withVlow([{
     keys: ['things']
 }]);
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     nested: {
         paddingLeft: theme.spacing(4),
     },
     listItem: {
         paddingLeft: theme.spacing(6),
     },
-});
+}));
+
 
 
 const Thing = ({thing, collection, things, info, onError}) => {

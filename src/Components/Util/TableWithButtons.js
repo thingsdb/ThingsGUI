@@ -22,7 +22,7 @@ const Tabel = ({header, rows, rowClick, buttons}) => {
 
     return (
         <React.Fragment>
-            <Table padding={'checkbox'} >
+            <Table >
                 <TableHead>
                     <TableRow>
                         {header.map((h, i) => (

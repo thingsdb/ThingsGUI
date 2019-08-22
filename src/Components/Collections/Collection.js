@@ -11,22 +11,18 @@ const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
     },
-    flex: {
-        flexGrow: 1,
-        display: 'flex',
-    },
     card: {
         marginBottom: theme.spacing(1),
         padding: theme.spacing(2),
         width: '100%'
     },
     config: {
-        marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
         minWidth: '450px',
-        width: '40%',
+        width: '100%',
     },
     query: {
-        width: '60%',
+        width: '100%',
     },
 }));
 
@@ -46,7 +42,7 @@ const Collection = ({collection}) => {
                     </Typography>
                 </Card>
             </div>
-            <div className={classes.flex}>
+            <div>
                 <div className={classes.config}>
                     <CollectionConfig collection={collection} />
                 </div>
