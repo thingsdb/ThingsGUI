@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import QueryInput from '../Util/QueryInput';
 
 
 const Query = ({collection}) => {
@@ -14,7 +15,7 @@ const Query = ({collection}) => {
 
     return (
         <Grid container spacing={0}>
-            <Grid item xs={6}>
+            {/* <Grid item xs={6}>
                 <Typography variant={'caption'} >
                     {"Query:"}
                 </Typography>
@@ -44,7 +45,8 @@ const Query = ({collection}) => {
                     shrink: true,
                 }}
             />
-            </Grid>
+            </Grid> */}
+            <QueryInput />
         </Grid>
     );
 };
