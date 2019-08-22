@@ -10,7 +10,7 @@ import StopIcon from '@material-ui/icons/Stop';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {withVlow} from 'vlow';
-import {withStyles} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 
 import AddThings from './AddThings';
 import EditThing from './EditThing';
@@ -34,7 +34,8 @@ const styles = theme => ({
 });
 
 
-const Thing = ({classes, thing, collection, things, info, onError}) => {
+const Thing = ({thing, collection, things, info, onError}) => {
+    const classes = useStyles();
     const [show, setShow] = React.useState(false);
    
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
@@ -159,11 +160,8 @@ Thing.propTypes = {
     info: PropTypes.object.isRequired,
     onError: PropTypes.func.isRequired,
 
-    /* styles proeperties */ 
-    classes: PropTypes.object.isRequired,
-
     /* collection properties */
     things: CollectionStore.types.things.isRequired,
 };
 
-export default withStyles(styles)(withStores(Thing));
+export default withStores(Thing);

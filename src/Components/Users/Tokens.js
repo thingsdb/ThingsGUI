@@ -1,20 +1,37 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import CloseIcon from '@material-ui/icons/Close';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import WarningIcon from '@material-ui/icons/Warning';
+import { amber } from '@material-ui/core/colors';
+import { makeStyles} from '@material-ui/core/styles';
 
 import AddToken from './AddToken';
 import RemoveExpired from './RemoveExpired';
 import RemoveToken from './RemoveToken';
 import {TableWithButtons} from '../Util';
 
+const useStyles = makeStyles(theme => ({
+    card: {
+        padding: theme.spacing(2),
+    },
+    title: {
+        marginBottom: theme.spacing(2),
+    },
+    warning: {
+        color: amber[700],
+    },
+}));
 
 const Tokens = ({user}) => {
-    const [show, setShow] = React.useState(false);
+    const classes = useStyles();
     const [serverError, setServerError] = React.useState('');
 
     const rows = user.tokens;
@@ -34,53 +51,46 @@ const Tokens = ({user}) => {
     const handleRowClick = () => null;
 
     const handleButtons = (token) => <RemoveToken token={token} onServerError={handleServerError} />;
-   
-    const handleClickOpen = () => {
-        setShow(true);
-    };
-
-    const handleClickClose = () => {
-        setShow(false);
-    };
 
     const handleServerError = (err) => {
-        setServerError(err.log)
+        setServerError(err.log);
+    }
+    const handleCloseError = () => {
+        setServerError('');
     }
 
     return (
-        <React.Fragment>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                {'Tokens'}
-            </Button>
-            <Dialog
-                open={show}
-                onClose={handleClickClose}
-                aria-labelledby="form-dialog-title"
-                fullWidth
-                maxWidth={user.tokens.length ? "md" : "sm"}
-            >
-                <DialogTitle id="form-dialog-title">
-                    {`Tokens ${user.name}`}
-                </DialogTitle>
-                <DialogContent>
-                    {user.tokens.length ? (
-                        <TableWithButtons header={header} rows={rows} rowClick={handleRowClick} buttons={handleButtons} />
-                    ) : (
-                        <DialogContentText>
-                            {'No tokens set.'}
-                        </DialogContentText>
-                    )}
-                </DialogContent>
-                <DialogActions>
-                    <RemoveExpired onServerError={handleServerError} />
-                    <AddToken user={user} />
-                    <Button onClick={handleClickClose} color="primary">
-                        {'Back'}
-                    </Button>
-                    
-                </DialogActions>
-            </Dialog>
-        </React.Fragment>
+        <Card className={classes.card}>
+            <Typography className={classes.title} variant="h5" >
+                {'TOKENS'}
+            </Typography>
+            <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
+                <CardHeader
+                    avatar={
+                        <WarningIcon className={classes.warning}/>
+                    }
+                    action={
+                        <IconButton aria-label="settings" onClick={handleCloseError}>
+                            <CloseIcon />
+                        </IconButton>
+                    }
+                    title={serverError}
+                />
+            </Collapse>
+            <CardContent>
+                {user.tokens.length ? (
+                    <TableWithButtons header={header} rows={rows} rowClick={handleRowClick} buttons={handleButtons} />
+                ) : (
+                    <Typography >
+                        {'Not set.'}
+                    </Typography>
+                )}
+            </CardContent>
+            <CardActions>
+                <RemoveExpired onServerError={handleServerError} />
+                <AddToken user={user} />
+            </CardActions>
+        </ Card>
     );
 };
 

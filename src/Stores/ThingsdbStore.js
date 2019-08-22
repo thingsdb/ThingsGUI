@@ -74,7 +74,6 @@ class ThingsdbStore extends BaseStore {
             this.setState({
                 collection: data
             });
-            // onError('')
         }).fail((event, status, message) => onError(message));
     }
    

@@ -1,108 +1,64 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import React from 'react';
+import Card from '@material-ui/core/Card';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles} from '@material-ui/core/styles';
 
-import Things from '../Collection/Things';
-import CollectionInfo from './CollectionInfo';
-import RemoveCollection from './Remove';
-import RenameCollection from './Rename';
-import SetQuotas from './Quotas';
-import Query from '../Collection/Query';
-import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-import { StyledTabs, StyledTab } from '../Util';
+import CollectionConfig from './CollectionConfig';
+import OverviewQuery from './OverviewQuery';
 
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
     },
-    info: {
-        padding: theme.spacing(2),
+    flex: {
+        flexGrow: 1,
+        display: 'flex',
     },
-    things: {
+    card: {
+        marginBottom: theme.spacing(1),
         padding: theme.spacing(2),
+        width: '100%'
+    },
+    config: {
+        marginRight: theme.spacing(1),
+        minWidth: '450px',
+        width: '40%',
+    },
+    query: {
+        width: '60%',
     },
 }));
 
-const Collection = ({collection, onError}) => {
+const Collection = ({collection}) => {
     const classes = useStyles();
-    const [tabIndex, setTabIndex] = React.useState(0);
-    
-  
-    const handleChange = (_event, newValue) => {
-        setTabIndex(newValue);
 
-        if (newValue == 0) {
-            ThingsdbActions.getCollections(onError); 
-        }
-    };
     
     return (
         <div className={classes.root}>
-            <StyledTabs value={tabIndex} onChange={handleChange} aria-label="styled tabs example">
-                <StyledTab label="Collection Info" />
-                <StyledTab label="Things" />
-                <StyledTab label="Custom" />
-            </StyledTabs>
-            {tabIndex === 0 && 
-                <Grid
-                    alignItems="stretch"
-                    className={classes.info}
-                    container
-                    direction="column"
-                    justify="center"
-                    spacing={3}
-                >
-                    <Grid item xs={12}>
-                        <CollectionInfo collection={collection} />
-                    </Grid>
-                    <Grid item container xs={12} spacing={1} >
-                        <Grid item>
-                            <RenameCollection collection={collection} />
-                        </Grid>
-                        <Grid item>
-                            <RemoveCollection collection={collection} />
-                        </Grid>
-                        <Grid item>
-                            <SetQuotas collection={collection} />
-                        </Grid>
-                    </Grid>
-                </Grid>
-            }
-            {tabIndex === 1 && 
-                <Grid
-                    alignItems="stretch"
-                    className={classes.things}
-                    container
-                    direction="column"
-                    justify="center"
-                    spacing={3}
-                >
-                    <Grid item xs={12}>
-                        <Things collection={collection} onError={onError} />
-                    </Grid>
-                </Grid>
-            }
-            {tabIndex === 2 && 
-                <Grid
-                    alignItems="stretch"
-                    className={classes.things}
-                    container
-                    direction="column"
-                    justify="center"
-                    spacing={3}
-                >
-                    <Grid item xs={12}>
-                        <Query collection={collection} />
-                    </Grid>
-                </Grid>
-            }
-        </div>
+            <div>
+                <Card className={classes.card}>
+                    <Typography variant="h6" >
+                        {'Overview of: '}
+                    </Typography>
+                    <Typography variant="h4" color='primary'>
+                        {collection.name}
+                    </Typography>
+                </Card>
+            </div>
+            <div className={classes.flex}>
+                <div className={classes.config}>
+                    <CollectionConfig collection={collection} />
+                </div>
+                <div className={classes.query}>
+                    <OverviewQuery collection={collection} />
+                </div>
+            </div>
+        </div>    
     );
 };
 
 Collection.propTypes = {
-    onError: PropTypes.func.isRequired,
     collection: PropTypes.object.isRequired,
 };
 

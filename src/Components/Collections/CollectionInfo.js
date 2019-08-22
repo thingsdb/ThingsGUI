@@ -19,12 +19,12 @@ const CollectionInfo = ({collection}) => {
         <Grid container spacing={0}>
             {header.map((h) => (
                 <React.Fragment key={h.ky}>
-                    <Grid item xs={4}>
+                    <Grid item xs={7}>
                         <Typography variant={'caption'} >
                             {h.label + ':'}
                         </Typography>
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={5}>
                         <Typography variant={'subtitle2'} >
                             {collection[h.ky] !== null ? collection[h.ky] : 'Not set'}
                         </Typography>

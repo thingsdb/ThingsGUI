@@ -11,6 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 const initialState = {
     show: false,
@@ -56,6 +57,8 @@ const RemoveThing = ({collection, thing, info}) => {
             queryString, 
             (err) => setState({...state, serverError: err.log})
         );
+
+        ThingsdbActions.getCollections((err) => setState({...state, serverError: err.log}));
 
         if (!state.serverError) {
             setState({...state, show: false});

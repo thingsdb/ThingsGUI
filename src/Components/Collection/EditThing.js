@@ -16,6 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 import {Add1DArray, checkType, onlyNums} from '../Util';
 
 
@@ -132,6 +133,8 @@ const EditThing = ({info, collection, thing}) => {
                 form.queryString, 
                 (err) => setState({...state, serverError: err.log})
             );
+
+            ThingsdbActions.getCollections((err) => setState({...state, serverError: err.log}));
 
             if (!state.serverError) {
                 setState({...state, show: false});

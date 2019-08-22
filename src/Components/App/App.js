@@ -71,22 +71,23 @@ const useStyles = makeStyles(theme => ({
     hide: {
         display: 'none',
     },
-    table: {
-        display: 'table',
+    page: {
+        display: 'flex',
     },
     menu: {
         minWidth: 220,
         padding: theme.spacing(1),
-        width: '30%',
-        margin: 0,
+        width: '15%',
     },
     submenu: {
+        marginBottom: theme.spacing(1),
         paddingBottom: theme.spacing(1),
     },
     content: {
-        padding: theme.spacing(1),
-        width: '70%',
-        margin: 0,
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+        width: '85%',
     },
 }));
 
@@ -149,23 +150,17 @@ const App = ({onError, collections, match, user, users, nodes}) => {
                             <MenuIcon />
                         </IconButton>
                     </TopBar>
-                    <div className={classes.table}>
+                    <div className={classes.page}>
                         <div className={classes.menu}>
-                            <div className={classes.submenu}>
-                                <Card>
-                                    <CollectionsMenu collections={collections} onClickCollection={handleClickCollection}/>
-                                </Card>
-                            </div>
-                            <div className={classes.submenu}>
-                                <Card>
-                                    <UsersMenu users={users} onClickUser={handleClickUser}/>
-                                </Card>  
-                            </div>   
+                            <Card className={classes.submenu}>
+                                <CollectionsMenu collections={collections} onClickCollection={handleClickCollection}/>
+                            </Card>
+                            <Card className={classes.submenu}>
+                                <UsersMenu users={users} onClickUser={handleClickUser}/>
+                            </Card>  
                         </div>
                         <div className={classes.content}>
-                            <Card>
-                                {pages[match.path]}
-                            </Card>    
+                            {pages[match.path]}
                         </div>
                     </div>
                 </div>
