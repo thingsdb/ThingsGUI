@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,8 +15,26 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { makeStyles} from '@material-ui/core/styles';
+
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
+const useStyles = makeStyles(theme => ({
+    card: {
+        width: 150,
+        height: 150,
+        textAlign: 'center',
+        borderRadius: '50%',
+        margin: theme.spacing(1),
+    },
+    wrapper: {
+        width: 150,
+        height: 150,
+        textAlign: 'center',
+        borderRadius: '50%',
+        padding: theme.spacing(2),
+    },
+}));
 
 const initialState = {
     show: false,
@@ -24,7 +45,7 @@ const initialState = {
 };
 
 const Password = ({user}) => {
-
+    const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {show, showPassword, errors, form, serverError} = state;
 
@@ -70,9 +91,22 @@ const Password = ({user}) => {
 
     return (
         <React.Fragment>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                {'Password'}
-            </Button>
+            <Card
+                className={classes.card}
+                raised
+            >
+                <CardActionArea
+                    focusRipple
+                    className={classes.wrapper}
+                    onClick={handleClickOpen}
+                >
+                    <CardContent>
+                        <Typography variant={'h6'} >
+                            {'Password'}
+                        </Typography> 
+                    </CardContent>
+                </CardActionArea>
+            </Card>
             <Dialog
                 open={show}
                 onClose={handleClickClose}

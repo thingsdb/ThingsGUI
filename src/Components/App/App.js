@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
     },
-    open: {
+    normal: {
         minWidth: 1200,
         width: '100%',
         transition: theme.transitions.create(['margin', 'width'], {
@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
             duration: theme.transitions.duration.leavingScreen,
         }),
     },
-    close: {
+    shrink: {
         minWidth: 1200,
         width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(['margin', 'width'], {
@@ -62,6 +62,7 @@ const useStyles = makeStyles(theme => ({
         height: '100vh',
     },
     drawerClose: {
+        width: '0%', 
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
@@ -135,8 +136,8 @@ const App = ({onError, collections, match, user, users, nodes}) => {
     return(
         <React.Fragment>
             <div className={classes.root}>
-                <div className={clsx(classes.open, {
-                        [classes.close]: open,
+                <div className={clsx(classes.normal, {
+                        [classes.shrink]: open,
                         })}
                 >
                     <TopBar user={user} onError={onError}>
@@ -164,8 +165,8 @@ const App = ({onError, collections, match, user, users, nodes}) => {
                         </div>
                     </div>
                 </div>
-                <Card className={clsx(classes.drawerOpen, {
-                        [classes.drawerClose]: open,
+                <Card className={clsx(classes.drawerClose, {
+                        [classes.drawerOpen]: open,
                         })}
                 >               
                     <Nodes nodes={nodes} open={open} onClose={handleDrawerClose} onError={onError} />      

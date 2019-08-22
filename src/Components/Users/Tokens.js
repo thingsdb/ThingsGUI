@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import CloseIcon from '@material-ui/icons/Close';
 import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import WarningIcon from '@material-ui/icons/Warning';
@@ -78,13 +78,15 @@ const Tokens = ({user}) => {
                 />
             </Collapse>
             <CardContent>
-                {user.tokens.length ? (
-                    <TableWithButtons header={header} rows={rows} rowClick={handleRowClick} buttons={handleButtons} />
-                ) : (
-                    <Typography >
-                        {'Not set.'}
-                    </Typography>
-                )}
+                <Grid xs={9}>
+                    {user.tokens.length ? (
+                        <TableWithButtons header={header} rows={rows} rowClick={handleRowClick} buttons={handleButtons} />
+                    ) : (
+                        <Typography >
+                            {'Not set.'}
+                        </Typography>
+                    )}
+                </Grid>
             </CardContent>
             <CardActions>
                 <RemoveExpired onServerError={handleServerError} />
