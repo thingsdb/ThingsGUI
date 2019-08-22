@@ -36,8 +36,12 @@ const Node = ({local, node, counters, onError}) => {
         NodesActions.getNode(onError) // QUEST: en bij status update?
     }, [tabIndex]);
 
+    const onConnected = () => {
+        NodesActions.getNode(onError);
+    }
+
     const handleChangeTab = (_event, newValue) => {
-        setTabIndex(newValue); 
+        setTabIndex(newValue);
     }
 
     return node && local.node_id === node.node_id ? (
@@ -46,7 +50,7 @@ const Node = ({local, node, counters, onError}) => {
                 <StyledTab label="Node Info" />
                 <StyledTab label="Counters" />
             </StyledTabs>
-            {tabIndex === 0 && 
+            {tabIndex === 0 &&
                 <Grid
                     className={classes.info}
                     container
@@ -66,7 +70,7 @@ const Node = ({local, node, counters, onError}) => {
                     </Grid>
                 </Grid>
             }
-            {tabIndex === 1 && 
+            {tabIndex === 1 &&
                 <Grid
                     className={classes.counters}
                     container
@@ -83,7 +87,7 @@ const Node = ({local, node, counters, onError}) => {
             }
         </React.Fragment>
     ) : node ? (
-        <Connect node={node} />
+        <Connect node={node} onConnected={onConnected} />
     ) : null;
 };
 

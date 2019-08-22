@@ -70,7 +70,6 @@ class NodeHandler(BaseHandler):
         }
         return cls.socket_response(data=resp)
 
-
     @classmethod
     @BaseHandler.socket_handler
     async def shutdown(cls, client, data):
@@ -97,12 +96,12 @@ class NodeHandler(BaseHandler):
         else:
             q = r'''new_node('{secret}', '{ipAddress}');'''.format_map(data)
         result = await client.query(q)
-        
+
         resp = {
             'nodes': result,
         }
         return cls.socket_response(data=resp)
-    
+
     @classmethod
     @BaseHandler.socket_handler
     async def pop_node(cls, client, data):  # TODOS check query
