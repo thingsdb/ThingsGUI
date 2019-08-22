@@ -56,7 +56,15 @@ class ThingsdbStore extends BaseStore {
                 users: data.users,
                 user: data.user,
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => {
+            this.setState({
+                collections: [],
+                collection: {},
+                users: [],
+                user: {},
+            });
+            onError(message);
+        });
     }
 
     //COLLECTIONS

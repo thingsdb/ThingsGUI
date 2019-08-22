@@ -60,7 +60,7 @@ const TopBar = ({user, children}) => {
         setAnchorEl(currentTarget)
     }
 
-    const handleMenuClose = () => this.setState({anchorEl: null});
+    const handleMenuClose = () => setAnchorEl(null);
 
     const isOpen = Boolean(anchorEl);
 

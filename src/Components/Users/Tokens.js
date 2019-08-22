@@ -78,7 +78,7 @@ const Tokens = ({user}) => {
                 />
             </Collapse>
             <CardContent>
-                <Grid xs={9}>
+                <Grid container item xs={9}>
                     {user.tokens.length ? (
                         <TableWithButtons header={header} rows={rows} rowClick={handleRowClick} buttons={handleButtons} />
                     ) : (

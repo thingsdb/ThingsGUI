@@ -38,7 +38,11 @@ const ErrorToast = ({errors}) => {
     
     React.useEffect(() => {
             console.log('effect', errors);
-            setError(prevErr => ([...new Set([...prevErr, ...errors])]))
+            if (errors.length) {
+                setError(prevErr => ([...new Set([...prevErr, ...errors])]));
+            } else {
+                setError([]);
+            }  
         },
         [errors]
     )
