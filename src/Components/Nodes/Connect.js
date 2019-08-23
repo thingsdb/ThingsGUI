@@ -22,14 +22,14 @@ const initialState = {
     form: {
         host: 'localhost:9200',
     },
-    serverError: '', 
+    serverError: '',
 };
 
 
-const Connect = ({connErr}) => {
+const Connect = ({connErr, onConnected}) => {
     const [state, setState] = useState(initialState);
     const {show, errors, form, serverError} = state;
-   
+
     const validation = {
         host: () => form.host.length>0,
     };
@@ -42,14 +42,19 @@ const Connect = ({connErr}) => {
         });
     };
 
+    const handleClickCancel = () => {
+        setState({...state, show: false});
+    };
+
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             ApplicationActions.connectOther(form, (err) => setState({...state, serverError: err.log}));
-            
+
             if(!state.serverError) {
                 setState({...state, show: false});
+                onConnected();
             }
         }
     };
@@ -65,7 +70,7 @@ const Connect = ({connErr}) => {
             </Button>
             <Dialog
                 open={show}
-                onClose={() => null}
+                onClose={handleClickCancel}
                 aria-labelledby="form-dialog-title"
                 fullWidth
                 maxWidth="xs"
@@ -77,7 +82,7 @@ const Connect = ({connErr}) => {
                     <DialogContentText>
                         <Typography variant={'caption'} color={'error'}>
                             {connErr || serverError}
-                        </Typography>    
+                        </Typography>
                     </DialogContentText>
                     <TextField
                         autoFocus
@@ -93,6 +98,9 @@ const Connect = ({connErr}) => {
                     />
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={handleClickCancel} color="primary">
+                        {'Cancel'}
+                    </Button>
                     <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
                         {'Connect'}
                     </Button>

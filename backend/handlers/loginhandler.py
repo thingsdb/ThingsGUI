@@ -20,7 +20,7 @@ class LoginHandler(BaseHandler):
             resp = {
                 'loaded': True,
                 'connected': True,
-            }        
+            }
         else:
             resp = {
                 'loaded': True,
@@ -47,10 +47,10 @@ class LoginHandler(BaseHandler):
                     'connected': False,
                     'connErr': 'connection error: {}'.format(str(e)),
                 }
-        
+
         try:
             print(user, client)
-            a = await client.authenticate(auth=[user, password])  # TODOs auth not working correctly 
+            a = await client.authenticate(auth=[user, password])  # TODOs auth not working correctly
             print(a)
         except ThingsDBError as e:
             print('authentication error \n')
@@ -87,8 +87,7 @@ class LoginHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def connect_other(cls, client, data):
-        user = client._username
-        password = client._password
+        user, password = client._auth
         print('close in connect_other')
         client.close()
         await client.wait_closed()
