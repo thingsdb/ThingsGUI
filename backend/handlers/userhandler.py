@@ -53,6 +53,14 @@ class UserHandler(BaseHandler):
 
     @classmethod
     @BaseHandler.socket_handler
+    async def reset_password(cls, client, data):
+        q = r'''set_password('{name}', nil);
+            users_info();'''.format_map(data)
+        result = await client.query(q)
+        return cls.socket_response(data=result)
+
+    @classmethod
+    @BaseHandler.socket_handler
     async def grant(cls, client, data):
         q = r'''grant('{collection}', '{name}', ({access}));
             users_info();'''.format_map(data)

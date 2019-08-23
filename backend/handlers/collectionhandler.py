@@ -11,9 +11,9 @@ class CollectionHandler(BaseHandler):
         depth = data.get('depth')
 
         if thing_id:
-            q = r'''t({}) => {}'''.format(thing_id, depth)
+            q = r'''return(t({}), {})'''.format(thing_id, depth)
         else:
-            q = r'''t(.id()) => {}'''.format(depth)
+            q = r'''return(t(.id()), {})'''.format(depth)
         resp = await client.query(q, target=collection_id)
 
         return cls.socket_response(data=resp)
@@ -27,10 +27,10 @@ class CollectionHandler(BaseHandler):
         propertyName = data.get('propertyName')
 
         if thing_id:
-            q = r'''t({}).filter(|thing| thing.contains('{}')) => {}'''.format(
+            q = r'''return(t({}).filter(|thing| thing.contains('{}')), {})'''.format(
                 thing_id, propertyName, depth)
         else:
-            q = r'''t(.id()).filter(|thing| thing.contains('{}')) => {}'''.format(
+            q = r'''return(t(.id()).filter(|thing| thing.contains('{}')), {})'''.format(
                 propertyName, depth)
         resp = await client.query(q, target=collection_id)
 
@@ -52,7 +52,7 @@ class CollectionHandler(BaseHandler):
                 thing_id)
         else:
             q = r'''t({}).del('{}'); t({})'''.format(thing_id, name, thing_id)
-        print(q)
+        
         resp = await client.query(q, target=collection_id)
 
         return cls.socket_response(data=resp)

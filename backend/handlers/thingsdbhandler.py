@@ -16,7 +16,6 @@ class ThingsDBHandler(BaseHandler):
             'user': user,
         }
 
-        print('19', user)
         return cls.socket_response(data=resp)
 
     @classmethod

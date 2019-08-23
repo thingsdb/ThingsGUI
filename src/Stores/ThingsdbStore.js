@@ -20,6 +20,7 @@ const ThingsdbActions = Vlow.createActions([
     'removeUser',
     'renameUser',
     'password',
+    'resetPassword',
     'grant',
     'revoke',
     'newToken',
@@ -207,6 +208,16 @@ class ThingsdbStore extends BaseStore {
         this.emit('/user/password', {
             name,
             password,
+        }).done((data) => {
+            this.setState({
+                users: data
+            });
+        }).fail((event, status, message) => onError(message));
+    }
+
+    onResetPassword(name, onError) {
+        this.emit('/user/reset-password', {
+            name,
         }).done((data) => {
             this.setState({
                 users: data

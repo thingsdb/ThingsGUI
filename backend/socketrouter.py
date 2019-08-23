@@ -97,6 +97,10 @@ class SocketRouter:
             handler=UserHandler.set_password)
 
         sio.on(
+            event='/user/reset-password',
+            handler=UserHandler.reset_password)
+
+        sio.on(
             event='/user/grant',
             handler=UserHandler.grant)
 
