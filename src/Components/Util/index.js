@@ -1,6 +1,8 @@
 import Add1DArray from './Add1DArray';
 import Buttons from './Buttons';
+import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
+import Info from './Info';
 import ServerError from './ServerError';
 import TableWithButtons from './TableWithButtons';
 import TableWithRowExtend from './TableWithRowExtend';
@@ -23,7 +25,9 @@ export {
     Add1DArray,
     Buttons,
     checkType,
+    ErrorMsg,
     ErrorToast,
+    Info,
     onlyNums,
     ServerError,
     TableWithButtons,

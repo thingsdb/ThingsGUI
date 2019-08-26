@@ -1,31 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
-import CloseIcon from '@material-ui/icons/Close';
-import Collapse from '@material-ui/core/Collapse';
-import Grid from '@material-ui/core/Grid';
-import WarningIcon from '@material-ui/icons/Warning';
-import { amber } from '@material-ui/core/colors';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
+import { ErrorMsg } from '../Util';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
 const useStyles = makeStyles(theme => ({
-    avatar: {
-        backgroundColor: 'transparent',
-    },
     card: {
         width: 150,
         height: 150,
@@ -39,9 +30,6 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center',
         borderRadius: '50%',
         padding: theme.spacing(2),
-    },
-    warning: {
-        color: amber[700],
     },
 }));
 
@@ -131,19 +119,7 @@ const Rename = ({user, users}) => {
                     {'Rename user'}
                 </DialogTitle>
                 <DialogContent>
-                    <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
-                        <Typography component="div">
-                            <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
-                                    <IconButton aria-label="settings" onClick={handleCloseError}>
-                                        <CloseIcon />
-                                    </IconButton>
-                                </Grid>
-                            </Grid>
-                        </Typography>
-                    </Collapse>
+                    <ErrorMsg error={serverError} onClose={handleCloseError} />
                     <TextField
                         autoFocus
                         margin="dense"

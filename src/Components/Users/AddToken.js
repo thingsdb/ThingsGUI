@@ -1,11 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CloseIcon from '@material-ui/icons/Close';
-import WarningIcon from '@material-ui/icons/Warning';
-import { amber } from '@material-ui/core/colors';
-import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import Collapse from '@material-ui/core/Collapse';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,26 +12,16 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
-import {withStyles} from '@material-ui/core/styles';
 import { makeStyles} from '@material-ui/core/styles';
 
+import { ErrorMsg } from '../Util';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 const useStyles = makeStyles(theme => ({
-    avatar: {
-        backgroundColor: 'transparent',
-    },
-    warning: {
-        color: amber[700],
-    },
-}));
-
-const styles = theme => ({
     button: {
         margin: theme.spacing(1),
     },
-});
+}));
 
 
 const timeUnit = [
@@ -150,19 +135,7 @@ const AddToken = ({user}) => {
                     {'New token'}
                 </DialogTitle>
                 <DialogContent>
-                    <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
-                        <Typography component="div">
-                            <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
-                                    <IconButton aria-label="settings" onClick={handleCloseError}>
-                                        <CloseIcon />
-                                    </IconButton>
-                                </Grid>
-                            </Grid>
-                        </Typography>
-                    </Collapse>
+                    <ErrorMsg error={serverError} onClose={handleCloseError} />
                     <List>
                         <ListItem>
                             <FormControlLabel

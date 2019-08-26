@@ -1,14 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
-import CloseIcon from '@material-ui/icons/Close';
-import Collapse from '@material-ui/core/Collapse';
-import WarningIcon from '@material-ui/icons/Warning';
-import { amber } from '@material-ui/core/colors';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -24,12 +19,11 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { makeStyles} from '@material-ui/core/styles';
 
+import { ErrorMsg } from '../Util';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
+
 const useStyles = makeStyles(theme => ({
-    avatar: {
-        backgroundColor: 'transparent',
-    },
     card: {
         width: 150,
         height: 150,
@@ -44,15 +38,6 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '50%',
         padding: theme.spacing(2),
     },
-    warning: {
-        color: amber[700],
-    },
-    switch: {
-        backgroundColor: theme.palette.secondary.main,
-        "&:disabled": {
-            backgroundColor: theme.palette.secondary.main,
-          }
-    }
 }));
 
 const initialState = {
@@ -156,19 +141,7 @@ const Password = ({user}) => {
                     {'Password'}
                 </DialogTitle>
                 <DialogContent>
-                    <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
-                        <Typography component="div">
-                            <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
-                                    <IconButton aria-label="settings" onClick={handleCloseError}>
-                                        <CloseIcon />
-                                    </IconButton>
-                                </Grid>
-                            </Grid>
-                        </Typography>
-                    </Collapse>
+                    <ErrorMsg error={serverError} onClose={handleCloseError} />
                     <Typography component="div">
                         <FormLabel component="legend">{'Set?'}</FormLabel>
                         <Grid component="label" container alignItems="center" spacing={1}>

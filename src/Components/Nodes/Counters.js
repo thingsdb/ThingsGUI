@@ -1,12 +1,9 @@
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
 import React from 'react';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
+import { Info } from '../Util';
 
 
 const Counters = ({counters}) => {
-    
     const header = [
         {ky: 'title1', title: '[TITLE1]', labels: [
             {ky: 'queries_success', label: 'Succesfull queries'},
@@ -27,34 +24,7 @@ const Counters = ({counters}) => {
     ];
     
     return (
-        <Grid container spacing={1}>
-            {header.map((h) => (
-                <React.Fragment key={h.ky}>
-                    <Grid item xs={12}>
-                        <Typography variant={'caption'}>
-                                {h.title + ':'}
-                        </Typography>
-                        <Divider />
-                    </Grid>
-                    {h.labels.map((l) => (
-                        <React.Fragment key={l.ky}>
-                            <Grid container item xs={12}>
-                                <Grid item xs={6}>
-                                    <Typography variant={'caption'}>
-                                        {l.label + ':'}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography variant={'subtitle2'}>
-                                        {counters[l.ky]}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </React.Fragment>
-                    ))}      
-                </React.Fragment>
-            ))}
-        </Grid>
+        <Info header={header} content={counters}/>
     );
 };
 

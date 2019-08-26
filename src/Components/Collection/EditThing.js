@@ -1,39 +1,21 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CloseIcon from '@material-ui/icons/Close';
 import Collapse from '@material-ui/core/Collapse';
-import Grid from '@material-ui/core/Grid';
-import WarningIcon from '@material-ui/icons/Warning';
-import { amber } from '@material-ui/core/colors';
-import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles} from '@material-ui/core/styles';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-import {Add1DArray, checkType, onlyNums} from '../Util';
+import {Add1DArray, ErrorMsg, onlyNums} from '../Util';
 
-const useStyles = makeStyles(theme => ({
-    avatar: {
-        backgroundColor: 'transparent',
-    },
-    warning: {
-        color: amber[700],
-    },
-}));
 
 const dataTypes = [
     'string',
@@ -57,7 +39,6 @@ const initialState = {
 };
 
 const EditThing = ({info, collection, thing}) => {
-    const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
     const {id, index, name, parentType} = info;
@@ -182,19 +163,7 @@ const EditThing = ({info, collection, thing}) => {
                     {'Edit thing'}
                 </DialogTitle>
                 <DialogContent>
-                    <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
-                        <Typography component="div">
-                            <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
-                                    <IconButton aria-label="settings" onClick={handleCloseError}>
-                                        <CloseIcon />
-                                    </IconButton>
-                                </Grid>
-                            </Grid>
-                        </Typography>
-                    </Collapse>
+                    <ErrorMsg error={serverError} onClose={handleCloseError} />
                     <List>
                         <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
                             <ListItem>
