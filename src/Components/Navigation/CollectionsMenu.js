@@ -10,14 +10,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import AddCollection from '../Collections/Add';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
 
 
-
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     root: {
       width: '100%',
       maxWidth: 360,
@@ -32,10 +31,11 @@ const styles = theme => ({
     iconMenu: {
         backgroundColor: theme.palette.background.paper,
     },
-});
+}));
 
 
-const CollectionsMenu = ({classes, collections, onClickCollection}) => {
+const CollectionsMenu = ({collections, onClickCollection}) => {
+    const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     
     const handleClickCollections = () => {
@@ -88,10 +88,7 @@ const CollectionsMenu = ({classes, collections, onClickCollection}) => {
 CollectionsMenu.propTypes = {
     onClickCollection: PropTypes.func.isRequired,
     collections: PropTypes.array.isRequired,
-
-    /* styles properties */
-    classes: PropTypes.object.isRequired,
     
 };
 
-export default withStyles(styles)(CollectionsMenu);
+export default CollectionsMenu;

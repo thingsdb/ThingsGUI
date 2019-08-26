@@ -1,17 +1,32 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import CloseIcon from '@material-ui/icons/Close';
+import Collapse from '@material-ui/core/Collapse';
+import Grid from '@material-ui/core/Grid';
+import WarningIcon from '@material-ui/icons/Warning';
+import { amber } from '@material-ui/core/colors';
+import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {withVlow} from 'vlow';
+import { makeStyles} from '@material-ui/core/styles';
 
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import {ServerError} from '../Util';
+
+const useStyles = makeStyles(theme => ({
+    avatar: {
+        backgroundColor: 'transparent',
+    },
+    warning: {
+        color: amber[700],
+    },
+}));
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -26,6 +41,7 @@ const initialState = {
 };
 
 const ReplaceNode = ({nodes}) => {
+    const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
 
@@ -64,6 +80,10 @@ const ReplaceNode = ({nodes}) => {
         }
     };
 
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
+    };
+
     return (
         <React.Fragment>
             <Button variant="outlined" onClick={handleClickOpen}>
@@ -80,11 +100,19 @@ const ReplaceNode = ({nodes}) => {
                     {'Replace node'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        <Typography variant={'caption'} color={'error'}>
-                            {serverError}
+                    <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
+                        <Typography component="div">
+                            <Grid component="label" container alignItems="center" spacing={1}>
+                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
+                                <Grid item>{serverError}</Grid>
+                                <Grid item> 
+                                    <IconButton aria-label="settings" onClick={handleCloseError}>
+                                        <CloseIcon />
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
                         </Typography>
-                    </DialogContentText>
+                    </Collapse>
                     <TextField
                         autoFocus
                         margin="dense"

@@ -16,7 +16,7 @@ import AddThings from './AddThings';
 import EditThing from './EditThing';
 import RemoveThing from './RemoveThing';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import {Buttons, ServerError, checkType} from '../Util';
+import {Buttons, checkType} from '../Util';
 
 
 const withStores = withVlow([{

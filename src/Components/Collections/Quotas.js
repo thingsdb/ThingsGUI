@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import CloseIcon from '@material-ui/icons/Close';
+import Collapse from '@material-ui/core/Collapse';
+import Grid from '@material-ui/core/Grid';
+import WarningIcon from '@material-ui/icons/Warning';
+import { amber } from '@material-ui/core/colors';
+import IconButton from '@material-ui/core/IconButton';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -29,6 +36,12 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center',
         borderRadius: '50%',
         padding: theme.spacing(2),
+    },
+    avatar: {
+        backgroundColor: 'transparent',
+    },
+    warning: {
+        color: amber[700],
     },
 }));
 
@@ -111,6 +124,10 @@ const Quotas = ({collection}) => {
         }
     };
 
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
+    }
+
     return (
         <React.Fragment>
             <Card
@@ -140,11 +157,19 @@ const Quotas = ({collection}) => {
                     {'Set quotas'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        <Typography variant={'caption'} color={'error'}>
-                            {serverError}
+                    <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
+                        <Typography component="div">
+                            <Grid component="label" container alignItems="center" spacing={1}>
+                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
+                                <Grid item>{serverError}</Grid>
+                                <Grid item> 
+                                    <IconButton aria-label="settings" onClick={handleCloseError}>
+                                        <CloseIcon />
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
                         </Typography>
-                    </DialogContentText>
+                    </Collapse>
                     <TextField
                         autoFocus
                         margin="dense"

@@ -1,9 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import CloseIcon from '@material-ui/icons/Close';
 import Collapse from '@material-ui/core/Collapse';
+import Grid from '@material-ui/core/Grid';
+import WarningIcon from '@material-ui/icons/Warning';
+import { amber } from '@material-ui/core/colors';
+import IconButton from '@material-ui/core/IconButton';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,11 +20,20 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles} from '@material-ui/core/styles';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 import {Add1DArray, onlyNums} from '../Util';
 
+const useStyles = makeStyles(theme => ({
+    avatar: {
+        backgroundColor: 'transparent',
+    },
+    warning: {
+        color: amber[700],
+    },
+}));
 
 const dataTypes = [
     'string',
@@ -42,6 +57,7 @@ const initialState = {
 };
 
 const AddThings = ({info, collection, thing}) => {
+    const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
     const {id, name, type} = info;
@@ -85,7 +101,7 @@ const AddThings = ({info, collection, thing}) => {
         const q = handleBuildQuery(id, value);
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value, queryString: q});
-            return {...prevState, form: updatedForm, errors: {}, serverError: ''};
+            return {...prevState, form: updatedForm, errors: {}};
         });
     };
 
@@ -94,7 +110,7 @@ const AddThings = ({info, collection, thing}) => {
         const q = handleBuildQuery('value', value);
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {value: value, queryString: q});
-            return {...prevState, form: updatedForm, errors: {}, serverError: ''};
+            return {...prevState, form: updatedForm, errors: {}};
         });
     };
 
@@ -141,6 +157,10 @@ const AddThings = ({info, collection, thing}) => {
             }
         }
     };
+
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
+    }
     
     const addNewProperty = !(type == 'array' || type == 'set');
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
@@ -165,11 +185,19 @@ const AddThings = ({info, collection, thing}) => {
                     {'Add thing'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        <Typography variant={'caption'} color={'error'}>
-                            {serverError}
-                        </Typography>  
-                    </DialogContentText>
+                    <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
+                        <Typography component="div">
+                            <Grid component="label" container alignItems="center" spacing={1}>
+                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
+                                <Grid item>{serverError}</Grid>
+                                <Grid item> 
+                                    <IconButton aria-label="settings" onClick={handleCloseError}>
+                                        <CloseIcon />
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
+                        </Typography>
+                    </Collapse>
                     <List>
                         <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
                             <ListItem>

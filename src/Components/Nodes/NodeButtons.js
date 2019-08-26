@@ -1,22 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import {withStyles} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core';
 
 import AddNode from './AddNode';
 import PopNode from './PopNode';
 import ReplaceNode from './ReplaceNode';
 
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     buttons: {
         padding: theme.spacing(1),
     },
-});
+}));
 
 
-const NodeButtons = ({classes}) => {
-
+const NodeButtons = () => {
+    const classes = useStyles();
     return (
         <React.Fragment>
                 <Grid
@@ -41,4 +41,4 @@ const NodeButtons = ({classes}) => {
     );
 };
 
-export default withStyles(styles)(NodeButtons);
+export default NodeButtons;

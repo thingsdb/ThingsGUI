@@ -59,4 +59,4 @@ Tabel.propTypes = {
     buttons: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(Tabel);
+export default Tabel;

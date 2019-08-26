@@ -8,10 +8,10 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {withStyles} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     button: {
         margin: theme.spacing(1),
     },
@@ -43,9 +43,10 @@ const styles = theme => ({
           margin: 'auto',
         },
     },
-});
+}));
 
-const Tabel = ({classes, header, rows, rowExtend}) => {
+const Tabel = ({header, rows, rowExtend}) => {
+    const classes = useStyles();
     const [selected, setSelected] = React.useState(null);
 
     const handleClickRow = (ri) => () => {
@@ -100,12 +101,10 @@ const Tabel = ({classes, header, rows, rowExtend}) => {
 };
 
 Tabel.propTypes = {
-    /* styles properties */
-    classes: PropTypes.object.isRequired,
 
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     rowExtend: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(Tabel);
+export default Tabel;

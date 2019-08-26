@@ -10,12 +10,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import AddUser from '../Users/Add';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     root: {
       width: '100%',
       maxWidth: 360,
@@ -30,10 +30,11 @@ const styles = theme => ({
     iconMenu: {
         backgroundColor: theme.palette.background.paper,
     },
-});
+}));
 
 
-const UsersMenu = ({classes, users, onClickUser}) => {
+const UsersMenu = ({users, onClickUser}) => {
+    const classes = useStyles();
     const [open, setOpen] = React.useState(true);
 
     const handleClickUsers = () => {
@@ -87,9 +88,6 @@ UsersMenu.propTypes = {
     users: PropTypes.array.isRequired,
     onClickUser: PropTypes.func.isRequired,
 
-    /* styles properties */
-    classes: PropTypes.object.isRequired,
-
 };
 
-export default withStyles(styles)(UsersMenu);
+export default UsersMenu;
