@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
             duration: theme.transitions.duration.leavingScreen,
         }),
         marginRight: -drawerWidth,
-        height: '100vh',
+        minHeight: '100vh',
     },
     drawerClose: {
         width: '0%', 
@@ -98,7 +98,7 @@ const App = ({onError, collections, match, user, users, nodes}) => {
     const [indexCollection, setIndexCollection] = React.useState(0)
     const [indexUser, setIndexUser] = React.useState(0)
     const [open, setOpen] = React.useState(false);
-    console.log(user, nodes);
+    console.log(collections, nodes);
 
     React.useEffect(() => {
         console.log('effect 1');

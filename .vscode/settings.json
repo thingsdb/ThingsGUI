@@ -1,7 +1,7 @@
 {
     "git.ignoreLimitWarning": true,
-    "python.pythonPath": "/home/anja/miniconda3/envs/ThingsGUI/bin/python",
     "python.linting.pep8Enabled": true,
     "python.linting.pylintEnabled": true,
     "python.linting.pylintUseMinimalCheckers": true, 
+    "files.eol": "auto",
 }

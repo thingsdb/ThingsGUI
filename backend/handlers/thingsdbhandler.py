@@ -34,25 +34,37 @@ class ThingsDBHandler(BaseHandler):
     @BaseHandler.socket_handler
     async def new_collection(cls, client, data):
         q = r'''new_collection('{name}');
-            collections_info();'''.format_map(data)
+            [collections_info(), users_info()];'''.format_map(data)
         result = await client.query(q)
-        return cls.socket_response(data=result)
+        resp = {
+            'collections': result[0],
+            'users': result[1],
+        }
+        return cls.socket_response(data=resp)
 
     @classmethod
     @BaseHandler.socket_handler
     async def del_collection(cls, client, data):
         q = r'''del_collection('{name}');
-            collections_info();'''.format_map(data)
+            [collections_info(), users_info()];'''.format_map(data)
         result = await client.query(q)
-        return cls.socket_response(data=result)
+        resp = {
+            'collections': result[0],
+            'users': result[1],
+        }
+        return cls.socket_response(data=resp)
 
     @classmethod
     @BaseHandler.socket_handler
     async def rename_collection(cls, client, data):
         q = r'''rename_collection('{oldname}', '{newname}');
-            collections_info();'''.format_map(data)
+            [collections_info(), users_info()];'''.format_map(data)
         result = await client.query(q)
-        return cls.socket_response(data=result)
+        resp = {
+            'collections': result[0],
+            'users': result[1],
+        }
+        return cls.socket_response(data=resp)
 
     @classmethod
     @BaseHandler.socket_handler

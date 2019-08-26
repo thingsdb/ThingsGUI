@@ -1,16 +1,11 @@
 import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
 
-import { ErrorMsg } from '../Util';
+import { ErrorMsg, SimpleModal } from '../Util';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
 const withStores = withVlow([{
@@ -88,7 +83,7 @@ const AddUser = ({users}) => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.addUser(form.name, (err) => setState({...state, serverError: err.log}));
-            
+
             if (!state.serverError) {
                 setState({...state, show: false});
             }
@@ -99,54 +94,45 @@ const AddUser = ({users}) => {
         setState({...state, serverError: ''});
     };
 
-    return (
+    const Content =
         <React.Fragment>
-            <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
-                <AddBoxIcon className={classes.icon}/>
-            </ButtonBase>
-            <Dialog
-                open={show}
-                onClose={handleClickClose}
-                aria-labelledby="form-dialog-title"
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Name"
+                type="text"
+                value={form.name}
+                spellCheck={false}
+                onChange={handleOnChange}
                 fullWidth
-                maxWidth="xs"
-            >
-                <DialogTitle id="form-dialog-title">
-                    {'New user'}
-                </DialogTitle>
-                <DialogContent>
-                    <ErrorMsg error={serverError} onClose={handleCloseError} />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Name"
-                        type="text"
-                        value={form.name}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        error={errors.name}
-                        // helperText={users.some((u) => u.name===form.name)?'already exists':null}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClickClose} color="primary">
-                        {'Cancel'}
-                    </Button>
-                    <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
-                        {'Ok'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                error={errors.name}
+            />
         </React.Fragment>
+    ;
+
+    return(
+        <SimpleModal
+            button={
+                <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
+                    <AddBoxIcon className={classes.icon}/>
+                </ButtonBase>
+            }
+            title={'New User'}
+            open={show}
+            onOk={handleClickOk}
+            onClose={handleClickClose}
+        >
+            {Content}
+        </SimpleModal>
     );
 };
 
 AddUser.propTypes = {
 
     /* application properties */
-    users: ThingsdbStore.types.users.isRequired,    
+    users: ThingsdbStore.types.users.isRequired,
 };
 
 export default withStores(AddUser); // QUEST: volgorde goed zo?

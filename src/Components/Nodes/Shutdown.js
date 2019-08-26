@@ -1,12 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { ErrorMsg } from '../Util';
+import { ErrorMsg, SimpleModal } from '../Util';
 import {NodesActions} from '../../Stores/NodesStore';
 
 const initialState = {
@@ -37,34 +33,19 @@ const CountersReset = ({node}) => {
         setState({...state, serverError: ''});
     };
 
-    return (
-        <React.Fragment>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                {'Shutdown'}
-            </Button>
-            <Dialog
-                open={show}
-                onClose={handleClickClose}
-                aria-labelledby="form-dialog-title"
-                fullWidth
-                maxWidth="xs"
-            >
-                <DialogTitle id="form-dialog-title">
-                    {'Shutdown node?'}
-                </DialogTitle>
-                <DialogContent>
-                    <ErrorMsg error={serverError} onClose={handleCloseError} />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClickClose} color="primary">
-                        {'Cancel'}
-                    </Button>
-                    <Button onClick={handleClickOk} color="primary">
-                        {'Ok'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </React.Fragment>
+    return(
+        <SimpleModal 
+            button={
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    {'Shutdown'}
+                </Button>         
+            }
+            title={'Shutdown node?'}
+            content={<ErrorMsg error={serverError} onClose={handleCloseError} />}
+            open={show}
+            onOk={handleClickOk}
+            onClose={handleClickClose}
+        />
     );
 };
 

@@ -91,14 +91,16 @@ class ThingsdbStore extends BaseStore {
         this.emit('/thingsdb/add', {
             name,
         }).done((data) => {
-            this.setState({
-                collections: data.collections,
-            });
-
             if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') || 
             user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
+                    collections: data.collections,
                     users: data.users,
+                });
+            }
+            else {
+                this.setState({
+                    collections: data.collections,
                 });
             }
         }).fail((event, status, message) => onError(message));
@@ -110,14 +112,16 @@ class ThingsdbStore extends BaseStore {
             oldname,
             newname,
         }).done((data) => {
-            this.setState({
-                collections: data.collections,
-            });
-
             if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') || 
             user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
+                    collections: data.collections,
                     users: data.users,
+                });
+            }
+            else {
+                this.setState({
+                    collections: data.collections,
                 });
             }
         }).fail((event, status, message) => onError(message));
@@ -128,14 +132,16 @@ class ThingsdbStore extends BaseStore {
         this.emit('/thingsdb/remove', {
             name,
         }).done((data) => {
-            this.setState({
-                collections: data.collections,
-            });
-
             if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') || 
             user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
+                    collections: data.collections,
                     users: data.users,
+                });
+            }
+            else {
+                this.setState({
+                    collections: data.collections,
                 });
             }
         }).fail((event, status, message) => onError(message));

@@ -1,94 +1,34 @@
 import React from 'react';
-import BlockIcon from '@material-ui/icons/Block';
-import Collapse from '@material-ui/core/Collapse';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import Divider from '@material-ui/core/Divider';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 
 import AddCollection from '../Collections/Add';
+import {Menu} from '../Util';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
 
 
-const useStyles = makeStyles(theme => ({
-    root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
-    },
-    nested: {
-      paddingLeft: theme.spacing(4),
-    },
-    nestedAdd: {
-        padding: 0,
-    },
-    iconMenu: {
-        backgroundColor: theme.palette.background.paper,
-    },
-}));
-
-
 const CollectionsMenu = ({collections, onClickCollection}) => {
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
-    
-    const handleClickCollections = () => {
-        setOpen(!open);
-    };
-    const handleClickCollection = (collection) => () => {
+
+    const handleClickCollection = (collection) => {
         onClickCollection(collection);
         ApplicationActions.navigate({path: 'collection'});
-    } 
+    }
 
     return (
-        <React.Fragment>
-            <List className={classes.root}>
-                <ListItem button onClick={handleClickCollections}>
-                    <ListItemIcon>
-                        {open ? <ExpandMore /> : <ChevronRightIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary="COLLECTIONS" />
-                </ListItem>
-                <Collapse in={open} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        {collections.length ? collections.map((collection, i) => {
-                            return(
-                                <ListItem key={i} button className={classes.nested} onClick={handleClickCollection(i)}>
-                                    <ListItemIcon>
-                                        <DashboardIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={collection.name} />
-                                </ListItem>
-                            );
-                        }) : (
-                            <ListItem button className={classes.nested}>
-                                <ListItemIcon>
-                                    <BlockIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={'No collection info visible.'} primaryTypographyProps={{'variant':'caption', 'color':'error'}} />
-                            </ListItem>
-                        )}    
-                        <Divider />
-                        <ListItem className={classes.nestedAdd} >
-                            <AddCollection />
-                        </ListItem>
-                    </List>
-                </Collapse>    
-            </List>
-        </React.Fragment>
+        <Menu
+            title={'COLLECTIONS'}
+            icon={<DashboardIcon />}
+            items={collections}
+            addItem={<AddCollection />}
+            onClickItem={handleClickCollection}
+        />
     );
 };
 
 CollectionsMenu.propTypes = {
     onClickCollection: PropTypes.func.isRequired,
     collections: PropTypes.array.isRequired,
-    
+
 };
 
 export default CollectionsMenu;

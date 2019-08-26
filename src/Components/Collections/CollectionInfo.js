@@ -1,37 +1,25 @@
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import { Info } from '../Util';
 
 
 const CollectionInfo = ({collection}) => {
     const header = [
-        {ky: 'collection_id', label: 'Collection ID'},
-        {ky: 'name', label: 'Name'},
-        {ky: 'quota_array_size', label: 'Quota on array size'},
-        {ky: 'quota_properties', label: 'Quota on properties'},
-        {ky: 'quota_raw_size', label: 'Quota on raw size'},
-        {ky: 'quota_things', label: 'Quota on things'},
-        {ky: 'things', label: 'Things stored'},
+        {ky: 'title1', title: '[TITLE1]', labels: [
+            {ky: 'collection_id', label: 'Collection ID'},
+            {ky: 'name', label: 'Name'},
+            {ky: 'things', label: 'Things stored'},
+        ]},
+        {ky: 'title2', title: '[TITLE2]', labels: [
+            {ky: 'quota_array_size', label: 'Quota on array size'},
+            {ky: 'quota_properties', label: 'Quota on properties'},
+            {ky: 'quota_raw_size', label: 'Quota on raw size'},
+            {ky: 'quota_things', label: 'Quota on things'},
+        ]}
     ];
     
     return (
-        <Grid container spacing={0}>
-            {header.map((h) => (
-                <React.Fragment key={h.ky}>
-                    <Grid item xs={4}>
-                        <Typography variant={'caption'} >
-                            {h.label + ':'}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                        <Typography variant={'subtitle2'} >
-                            {collection[h.ky] !== null ? collection[h.ky] : 'Not set'}
-                        </Typography>
-                    </Grid>
-                </React.Fragment>
-            ))}
-        </Grid>
+        <Info header={header} content={collection}/>
     );
 };
 

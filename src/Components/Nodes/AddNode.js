@@ -1,12 +1,8 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { ErrorMsg } from '../Util';
+import { ErrorMsg, SimpleModal } from '../Util';
 import {NodesActions} from '../../Stores/NodesStore';
 
 
@@ -14,7 +10,7 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '', 
+    serverError: '',
 };
 
 const AddNode = () => {
@@ -62,68 +58,60 @@ const AddNode = () => {
         setState({...state, serverError: ''});
     };
 
-    return (
+    const Content =
         <React.Fragment>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                {'Add node'}
-            </Button>
-            <Dialog
-                open={show}
-                onClose={handleClickClose}
-                aria-labelledby="form-dialog-title"
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <TextField
+                autoFocus
+                margin="dense"
+                id="secret"
+                label="Secret"
+                type="text"
+                value={form.secret}
+                spellCheck={false}
+                onChange={handleOnChange}
                 fullWidth
-                maxWidth="xs"
-            >
-                <DialogTitle id="form-dialog-title">
-                    {'Add node'}
-                </DialogTitle>
-                <DialogContent>
-                    <ErrorMsg error={serverError} onClose={handleCloseError} />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="secret"
-                        label="Secret"
-                        type="text"
-                        value={form.secret}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        error={errors.secret}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="ipAddress"
-                        label="IP address"
-                        type="text"
-                        value={form.ipAddress}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        error={errors.ipAddress}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="port"
-                        label="Port"
-                        type="text"
-                        value={form.port}
-                        spellCheck={false}
-                        onChange={handleOnChange} 
-                        fullWidth
-                        error={errors.port}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClickClose} color="primary">
-                        {'Cancel'}
-                    </Button>
-                    <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
-                        {'Ok'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                error={errors.secret}
+            />
+            <TextField
+                margin="dense"
+                id="ipAddress"
+                label="IP address"
+                type="text"
+                value={form.ipAddress}
+                spellCheck={false}
+                onChange={handleOnChange}
+                fullWidth
+                error={errors.ipAddress}
+            />
+            <TextField
+                margin="dense"
+                id="port"
+                label="Port"
+                type="text"
+                value={form.port}
+                spellCheck={false}
+                onChange={handleOnChange}
+                fullWidth
+                error={errors.port}
+            />
         </React.Fragment>
+    ;
+
+    return(
+        <SimpleModal
+            button={
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    {'Add node'}
+                </Button>
+            }
+            title={'Add Node'}
+            open={show}
+            onOk={handleClickOk}
+            onClose={handleClickClose}
+        >
+            {Content}
+        </SimpleModal>
     );
 };
 

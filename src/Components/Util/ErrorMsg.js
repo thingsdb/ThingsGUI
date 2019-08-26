@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 const ErrorMsg = ({error, onClose}) => {
     const classes = useStyles();
-
+    console.log('TESTTESTTESSST')
     return (
         <React.Fragment>
             <Collapse in={Boolean(error)} timeout="auto" unmountOnExit>

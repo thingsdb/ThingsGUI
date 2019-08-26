@@ -1,36 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';;
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles} from '@material-ui/core/styles';
-import { ErrorMsg } from '../Util';
 
+import { CardButton, ErrorMsg, SimpleModal } from '../Util';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
-const useStyles = makeStyles(theme => ({
-    card: {
-        width: 150,
-        height: 150,
-        textAlign: 'center',
-        borderRadius: '50%',
-        margin: theme.spacing(1),
-    },
-    wrapper: {
-        width: 150,
-        height: 150,
-        textAlign: 'center',
-        borderRadius: '50%',
-        padding: theme.spacing(2),
-    },
-}));
 
 const quotaTypes = [
     'things',
@@ -46,7 +21,6 @@ const initialState = {
 };
 
 const Quotas = ({collection}) => {
-    const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {show, form, serverError} = state;
 
@@ -87,9 +61,9 @@ const Quotas = ({collection}) => {
 
     const handleUnset = () => {
         ThingsdbActions.setQuota(
-            collection.name, 
-            form.quotaType, 
-            "nil", 
+            collection.name,
+            form.quotaType,
+            "nil",
             (err) => setState({...state, serverError: err.log})
         );
 
@@ -100,9 +74,9 @@ const Quotas = ({collection}) => {
 
     const handleClickOk = () => {
         ThingsdbActions.setQuota(
-            collection.name, 
-            form.quotaType, 
-            form.quota, 
+            collection.name,
+            form.quotaType,
+            form.quota,
             (err) => setState({...state, serverError: err.log})
         );
 
@@ -115,79 +89,58 @@ const Quotas = ({collection}) => {
         setState({...state, serverError: ''});
     }
 
-    return (
+    const Content =
         <React.Fragment>
-            <Card
-                className={classes.card}
-                raised
-            >
-                <CardActionArea
-                    focusRipple
-                    className={classes.wrapper}
-                    onClick={handleClickOpen}
-                >
-                    <CardContent>
-                        <Typography variant={'h6'} >
-                            {'Quotas'}
-                        </Typography> 
-                    </CardContent>
-                </CardActionArea>
-            </Card>
-            <Dialog
-                open={show}
-                onClose={handleClickClose}
-                aria-labelledby="form-dialog-title"
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <TextField
+                autoFocus
+                margin="dense"
+                id="quotaType"
+                label="Type"
+                value={form.quotaType}
+                onChange={handleOnChangeType}
                 fullWidth
-                maxWidth="xs"
+                select
+                SelectProps={{native: true}}
             >
-                <DialogTitle id="form-dialog-title">
-                    {'Set quotas'}
-                </DialogTitle>
-                <DialogContent>
-                    <ErrorMsg error={serverError} onClose={handleCloseError} />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="quota"
-                        label="Type"
-                        value={form.quotaType}
-                        onChange={handleOnChangeType}
-                        fullWidth
-                        select
-                        SelectProps={{native: true}}
-                    >
-                        {quotaTypes.map(p => (
-                            <option key={p} value={p}>
-                                {p}
-                            </option>
-                        ))}
-                    </TextField>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="quota"
-                        inputProps={{min: "1"}}
-                        label="Quota"
-                        type="number"
-                        value={form.quota}  // TODOK placeholder
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleUnset} color="primary">
-                        {'Unset quota'}
-                    </Button>
-                    <Button onClick={handleClickClose} color="primary">
-                        {'Cancel'}
-                    </Button>
-                    <Button onClick={handleClickOk} color="primary">
-                        {'Ok'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                {quotaTypes.map(p => (
+                    <option key={p} value={p}>
+                        {p}
+                    </option>
+                ))}
+            </TextField>
+            <TextField
+                autoFocus
+                margin="dense"
+                id="quota"
+                inputProps={{min: "1"}}
+                label="Quota"
+                type="number"
+                value={form.quota}  // TODOK placeholder
+                spellCheck={false}
+                onChange={handleOnChange}
+                fullWidth
+            />
         </React.Fragment>
+    ;
+
+    return(
+        <SimpleModal
+            button={
+                <CardButton onClick={handleClickOpen} title={'Quotas'} />
+            }
+            actionButtons={
+                <Button onClick={handleUnset} color="primary">
+                    {'Unset Quota'}
+                </Button>
+            }
+            title={'Set quotas'}
+            open={show}
+            onOk={handleClickOk}
+            onClose={handleClickClose}
+        >
+            {Content}
+        </SimpleModal>
     );
 };
 

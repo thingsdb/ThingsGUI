@@ -1,13 +1,9 @@
 import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import {withVlow} from 'vlow';
 
-import { ErrorMsg } from '../Util';
+import { ErrorMsg, SimpleModal } from '../Util';
 import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 
 
@@ -42,7 +38,7 @@ const Connect = ({connErr, onConnected}) => {
         });
     };
 
-    const handleClickCancel = () => {
+    const handleClickClose = () => {
         setState({...state, show: false});
     };
 
@@ -67,47 +63,39 @@ const Connect = ({connErr, onConnected}) => {
         setState({...state, serverError: ''});
     };
 
-    return (
+    const Content =
         <React.Fragment>
-            <Button variant="outlined" onClick={handleClickConnect}>
-                {'Connect'}
-            </Button>
-            <Dialog
-                open={show}
-                onClose={handleClickCancel}
-                aria-labelledby="form-dialog-title"
+            <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
+            <TextField
+                autoFocus
+                margin="dense"
+                id="host"
+                label="Host"
+                type="text"
+                value={form.host}
+                spellCheck={false}
+                onChange={handleOnChange}
                 fullWidth
-                maxWidth="xs"
-            >
-                <DialogTitle id="form-dialog-title">
-                    {'Connect to other node'}
-                </DialogTitle>
-                <DialogContent>
-                    <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="host"
-                        label="Host"
-                        type="text"
-                        value={form.host}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        error={errors.host}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClickCancel} color="primary">
-                        {'Cancel'}
-                    </Button>
-                    <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
-                        {'Connect'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                error={errors.host}
+            />
         </React.Fragment>
 
+    ;
+
+    return(
+        <SimpleModal
+            button={
+                <Button variant="outlined" onClick={handleClickConnect}>
+                    {'Connect'}
+                </Button>
+            }
+            title={'Connect to other node'}
+            open={show}
+            onOk={handleClickOk}
+            onClose={handleClickClose}
+        >
+            {Content}
+        </SimpleModal>
     );
 };
 

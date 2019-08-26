@@ -12,11 +12,9 @@ const RemoveToken = ({token, onServerError}) => {
     };
 
     return (
-        <React.Fragment>
-            <IconButton onClick={handleClickOk}>
-                <DeleteIcon />
-            </IconButton>
-        </React.Fragment>
+        <IconButton onClick={handleClickOk}>
+            <DeleteIcon />
+        </IconButton>
     );
 };
 

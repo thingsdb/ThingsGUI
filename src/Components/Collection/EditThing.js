@@ -1,20 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import EditIcon from '@material-ui/icons/Edit';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-import {Add1DArray, ErrorMsg, onlyNums} from '../Util';
+import {Add1DArray, ErrorMsg, onlyNums, SimpleModal} from '../Util';
 
 
 const dataTypes = [
@@ -43,7 +38,6 @@ const EditThing = ({info, collection, thing}) => {
     const {show, errors, form, serverError} = state;
     const {id, index, name, parentType} = info;
 
-    console.log(parentType);
 
     const handleClickOpen = () => {
         const q = parentType == 'set' ? buildQuery(id, name, '{}', parentType): '';
@@ -63,14 +57,14 @@ const EditThing = ({info, collection, thing}) => {
     const handleClickClose = () => {
         setState(initialState);
     };
-    
+
     const validation = {
         queryString: () => '',
         newProperty: () => form.newProperty == name ? '' : Boolean(thing[form.newProperty]) ? 'Property name already in use' : '',
         value: () => {
             let errText;
             const bool = form.value.length>0;
-            
+
             if (!bool && form.dataType == 'number') {
                 errText = onlyNums(form.value) ? '' : 'only numbers';
             }
@@ -101,14 +95,14 @@ const EditThing = ({info, collection, thing}) => {
         const dataType = key=='dataType' ? value : form.dataType;
 
         const val = dataType === 'array' ? `[${input}]`
-        : dataType == 'object' ? `{}` 
+        : dataType == 'object' ? `{}`
         : dataType == 'string' ? `'${input}'`
-        : dataType == 'number' ? `${input}` 
-        : dataType == 'set' ? `set([])` 
-        : ''; 
+        : dataType == 'number' ? `${input}`
+        : dataType == 'set' ? `set([])`
+        : '';
 
         return buildQuery(id, name, val, parentType);
-        
+
     };
 
     const buildQuery = (i, n, v, t) => {
@@ -126,8 +120,8 @@ const EditThing = ({info, collection, thing}) => {
         if (!Object.values(err).some(d => d)) {
             CollectionActions.rawQuery(
                 collection.collection_id,
-                id, 
-                form.queryString, 
+                id,
+                form.queryString,
                 (err) => setState({...state, serverError: err.log})
             );
 
@@ -142,107 +136,99 @@ const EditThing = ({info, collection, thing}) => {
     const handleCloseError = () => {
         setState({...state, serverError: ''});
     }
-    
+
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';
 
 
-    return (
+    const Content =
         <React.Fragment>
-            <ButtonBase onClick={handleClickOpen} >
-                <EditIcon color={'primary'}/>
-            </ButtonBase>
-            <Dialog
-                open={show}
-                onClose={handleClickClose}
-                aria-labelledby="form-dialog-title"
-                fullWidth
-                maxWidth="xs"
-            >
-                <DialogTitle id="form-dialog-title">
-                    {'Edit thing'}
-                </DialogTitle>
-                <DialogContent>
-                    <ErrorMsg error={serverError} onClose={handleCloseError} />
-                    <List>
-                        <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
-                            <ListItem>
-                                <TextField
-                                    margin="dense"
-                                    id="queryString"
-                                    label="Query"
-                                    type="text"
-                                    value={form.queryString}
-                                    spellCheck={false}
-                                    onChange={handleOnChange}
-                                    fullWidth
-                                    error={errors.queryString}
-                                    multiline
-                                    InputProps={{
-                                        readOnly: true,
-                                        disableUnderline: true,
-                                    }}
-                                    inputProps={{
-                                        style: {
-                                            fontFamily: 'monospace',
-                                        },
-                                    }}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem> 
-                        </Collapse>
-                        <ListItem>
-                            <TextField
-                                margin="dense"
-                                id="dataType"
-                                label="Data type"
-                                value={form.dataType}
-                                onChange={handleOnChange}
-                                fullWidth
-                                select
-                                SelectProps={{native: true}}
-                            >
-                                {dataTypes.map(d => ( 
-                                    <option key={d} value={d} disabled={parentType=='set'&&d!='object'} >
-                                        {d}
-                                    </option>
-                                ))}
-                            </ TextField>
-                        </ListItem>    
-                        
-                        {singleInputField ? (
-                            <ListItem>
-                                <TextField
-                                    margin="dense"
-                                    id="value"
-                                    label="Value"
-                                    type="text"
-                                    value={form.value}
-                                    spellCheck={false}
-                                    onChange={handleOnChange}
-                                    fullWidth
-                                    helperText={errors.value}
-                                    error={Boolean(errors.value)}
-                                />
-                            </ListItem>
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <List>
+                <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
+                    <ListItem>
+                        <TextField
+                            margin="dense"
+                            id="queryString"
+                            label="Query"
+                            type="text"
+                            value={form.queryString}
+                            spellCheck={false}
+                            onChange={handleOnChange}
+                            fullWidth
+                            error={errors.queryString}
+                            multiline
+                            InputProps={{
+                                readOnly: true,
+                                disableUnderline: true,
+                            }}
+                            inputProps={{
+                                style: {
+                                    fontFamily: 'monospace',
+                                },
+                            }}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </ListItem>
+                </Collapse>
+                <ListItem>
+                    <TextField
+                        margin="dense"
+                        id="dataType"
+                        label="Data type"
+                        value={form.dataType}
+                        onChange={handleOnChange}
+                        fullWidth
+                        select
+                        SelectProps={{native: true}}
+                    >
+                        {dataTypes.map(d => (
+                            <option key={d} value={d} disabled={parentType=='set'&&d!='object'} >
+                                {d}
+                            </option>
+                        ))}
+                    </ TextField>
+                </ListItem>
 
-                        ) : multiInputField ? (
-                            <Add1DArray cb={handleArrayItems}/>
-                        ) : null}              
-                    </List>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClickClose} color="primary">
-                        {'Cancel'}
-                    </Button>
-                    <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
-                        {'Edit'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                {singleInputField ? (
+                    <ListItem>
+                        <TextField
+                            margin="dense"
+                            id="value"
+                            label="Value"
+                            type="text"
+                            value={form.value}
+                            spellCheck={false}
+                            onChange={handleOnChange}
+                            fullWidth
+                            helperText={errors.value}
+                            error={Boolean(errors.value)}
+                        />
+                    </ListItem>
+
+                ) : multiInputField ? (
+                    <Add1DArray cb={handleArrayItems}/>
+                ) : null}
+            </List>
         </React.Fragment>
+    ;
+
+    return(
+        <SimpleModal
+            button={
+                <ButtonBase onClick={handleClickOpen} >
+                    <EditIcon color={'primary'}/>
+                </ButtonBase>
+            }
+            title={'Edit Thing'}
+            open={show}
+            onOk={handleClickOk}
+            onClose={handleClickClose}
+        >
+            {Content}
+        </SimpleModal>
     );
 };
 

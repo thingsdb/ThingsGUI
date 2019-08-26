@@ -5,7 +5,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {withStyles} from '@material-ui/core/styles';
 
 
 const styles = theme => ({
@@ -14,7 +13,7 @@ const styles = theme => ({
     },
 });
 
-const Tabel = ({header, rows, rowClick, buttons}) => {
+const TableWithButtons = ({header, rows, rowClick, buttons}) => {
 
     const handleClickRow = (row) => () => {
         rowClick(row);
@@ -52,11 +51,11 @@ const Tabel = ({header, rows, rowClick, buttons}) => {
     );
 };
 
-Tabel.propTypes = {
+TableWithButtons.propTypes = {
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     rowClick: PropTypes.func.isRequired,
     buttons: PropTypes.func.isRequired,
 };
 
-export default Tabel;
+export default TableWithButtons;

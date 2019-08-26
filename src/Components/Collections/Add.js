@@ -1,18 +1,13 @@
 import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
 
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
-import { ErrorMsg } from '../Util';
+import { ErrorMsg, SimpleModal } from '../Util';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -102,46 +97,38 @@ const Add = ({connErr, collections}) => {
         setState({...state, serverError: ''});
     }
 
-    return (
+    const Content =
         <React.Fragment>
-            <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
-                <AddBoxIcon className={classes.icon}/>
-            </ButtonBase>
-            <Dialog
-                open={show}
-                onClose={handleClickClose}
-                aria-labelledby="form-dialog-title"
+            <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
+            <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Name"
+                type="text"
+                value={form.name}
+                spellCheck={false}
+                onChange={handleOnChange}
                 fullWidth
-                maxWidth="xs"
-            >
-                <DialogTitle id="form-dialog-title">
-                    {'New collection'}
-                </DialogTitle>
-                <DialogContent>
-                    <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Name"
-                        type="text"
-                        value={form.name}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        error={errors.name}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClickClose} color="primary">
-                        {'Cancel'}
-                    </Button>
-                    <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
-                        {'Ok'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                error={errors.name}
+            />
         </React.Fragment>
+    ;
+
+    return(
+        <SimpleModal
+            button={
+                <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
+                    <AddBoxIcon className={classes.icon}/>
+                </ButtonBase>
+            }
+            title={'New collection'}
+            open={show}
+            onOk={handleClickOk}
+            onClose={handleClickClose}
+        >
+            {Content}
+        </SimpleModal>
     );
 };
 

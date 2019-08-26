@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import Divider from '@material-ui/core/Divider';
@@ -51,7 +52,7 @@ const Info = ({header, content}) => {
 };
 
 Info.propTypes = {
-    header: PropTypes.object.isRequired,
+    header: PropTypes.array.isRequired,
     content: PropTypes.object.isRequired
 };
 
