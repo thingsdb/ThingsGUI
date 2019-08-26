@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const Thing = ({thing, collection, things, info, onError}) => {
+const Thing = ({thing, collection, things, info}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
 
@@ -61,7 +61,6 @@ const Thing = ({thing, collection, things, info, onError}) => {
                     things={things}
                     thing={v}
                     info={infoNew}
-                    onError={onError}
                 />
             </div>
         );
@@ -78,7 +77,7 @@ const Thing = ({thing, collection, things, info, onError}) => {
     const handleClick = () => {
         setShow(!show); // QUEST: work with prevstate?
         if (thing && thing['#']) {
-            CollectionActions.query(collection.collection_id, onError, thing['#']);
+            CollectionActions.query(collection.collection_id, thing['#']);
         }
     };
 
@@ -164,7 +163,6 @@ Thing.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     collection: PropTypes.object.isRequired,
     info: PropTypes.object.isRequired,
-    onError: PropTypes.func.isRequired,
 
     /* collection properties */
     things: CollectionStore.types.things.isRequired,

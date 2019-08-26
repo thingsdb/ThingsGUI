@@ -50,21 +50,20 @@ class ThingsdbStore extends BaseStore {
         this.state = ThingsdbStore.defaults;
     }
 
-    onGetInfo(onError) {
+    onGetInfo() {
         this.emit('/thingsdb/get_info').done((data) => {
             this.setState({
                 collections: data.collections,
                 users: data.users,
                 user: data.user,
             });
-        }).fail((event, status, message) => {
+        }).fail(() => {
             this.setState({
                 collections: [],
                 collection: {},
                 users: [],
                 user: {},
             });
-            onError(message);
         });
     }
 

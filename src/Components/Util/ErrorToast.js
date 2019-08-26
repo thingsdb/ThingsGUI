@@ -44,7 +44,7 @@ const ErrorToast = ({messages}) => {
     return(
         <div className={classes.portal}>
             <ul>
-                {[...messages].map((e, i) => (
+                {[...messages].map((message, i) => (
                     <Slide key={i} direction="up" in timeout={{enter: 500}}>
                         <Card className={classes.card}>
                             <ExpansionPanel className={classes.panel}>
@@ -60,11 +60,11 @@ const ErrorToast = ({messages}) => {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Typography variant="caption">
-                                        {e}
+                                        {message.text}
                                     </Typography>
                                 </ExpansionPanelDetails>
                                 <ExpansionPanelActions>
-                                    <IconButton onClick={MessageActions.removeByIdx(i)}>
+                                    <IconButton onClick={() => MessageActions.remove(message)}>
                                         <CloseIcon />
                                     </IconButton>
                                 </ExpansionPanelActions>

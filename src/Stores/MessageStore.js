@@ -10,7 +10,7 @@ const MessageActions = Vlow.createActions([
 class MessageStore extends Vlow.Store {
 
     static types = {
-        messages: PropTypes.arrayOf(PropTypes.string),
+        messages: PropTypes.arrayOf(PropTypes.object),
     }
 
     static defaults = {

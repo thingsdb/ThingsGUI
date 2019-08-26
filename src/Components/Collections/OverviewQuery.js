@@ -33,17 +33,9 @@ const useStyles = makeStyles(theme => ({
 const OverviewQuery = ({collection}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
-    const [serverError, setServerError] = React.useState('');
-
 
     const handleChange = (_event, newValue) => {
         setTabIndex(newValue);
-    };
-    const handleServerError = (err) => {
-        setServerError(err.log);
-    };
-    const handleCloseError = () => {
-        setServerError('');
     };
 
     return (
