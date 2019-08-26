@@ -15,7 +15,6 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
@@ -100,23 +99,21 @@ const Quotas = ({collection}) => {
 
     const handleUnset = () => {
         ThingsdbActions.setQuota(
-            collection.name, 
-            form.quotaType, 
-            "nil", 
-            (err) => setState({...state, serverError: err.log})
+            collection.name,
+            form.quotaType,
+            'nil',
         );
 
         if (!state.serverError) {
             setState({...state, show: false});
         }
-    }
+    };
 
     const handleClickOk = () => {
         ThingsdbActions.setQuota(
-            collection.name, 
-            form.quotaType, 
-            form.quota, 
-            (err) => setState({...state, serverError: err.log})
+            collection.name,
+            form.quotaType,
+            form.quota,
         );
 
         if (!state.serverError) {
@@ -126,7 +123,7 @@ const Quotas = ({collection}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
     return (
         <React.Fragment>
@@ -140,9 +137,9 @@ const Quotas = ({collection}) => {
                     onClick={handleClickOpen}
                 >
                     <CardContent>
-                        <Typography variant={'h6'} >
+                        <Typography variant="h6">
                             {'Quotas'}
-                        </Typography> 
+                        </Typography>
                     </CardContent>
                 </CardActionArea>
             </Card>
@@ -160,9 +157,15 @@ const Quotas = ({collection}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
@@ -191,7 +194,7 @@ const Quotas = ({collection}) => {
                         autoFocus
                         margin="dense"
                         id="quota"
-                        inputProps={{min: "1"}}
+                        inputProps={{min: 1}}
                         label="Quota"
                         type="number"
                         value={form.quota}  // TODOK placeholder

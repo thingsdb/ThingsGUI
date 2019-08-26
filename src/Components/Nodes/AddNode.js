@@ -11,14 +11,13 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 
 import {NodesActions} from '../../Stores/NodesStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -31,7 +30,7 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '', 
+    serverError: '',
 };
 
 const AddNode = () => {
@@ -66,10 +65,7 @@ const AddNode = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            NodesActions.addNode(
-                form,
-                (err) => setState({...state, serverError: err.log})
-            );
+            NodesActions.addNode(form);
             if (!state.serverError) {
                 setState({...state, show: false});
             }
@@ -99,9 +95,15 @@ const AddNode = () => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
@@ -139,7 +141,7 @@ const AddNode = () => {
                         type="text"
                         value={form.port}
                         spellCheck={false}
-                        onChange={handleOnChange} 
+                        onChange={handleOnChange}
                         fullWidth
                         error={errors.port}
                     />

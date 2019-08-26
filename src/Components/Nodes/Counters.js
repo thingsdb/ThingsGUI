@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 
 const Counters = ({counters}) => {
-    
+
     const header = [
         {ky: 'title1', title: '[TITLE1]', labels: [
             {ky: 'queries_success', label: 'Succesfull queries'},
@@ -25,14 +25,14 @@ const Counters = ({counters}) => {
             {ky: 'events_unaligned', label: 'Events unaligned'},
         ]}
     ];
-    
+
     return (
         <Grid container spacing={1}>
             {header.map((h) => (
                 <React.Fragment key={h.ky}>
                     <Grid item xs={12}>
-                        <Typography variant={'caption'}>
-                                {h.title + ':'}
+                        <Typography variant="caption">
+                            {h.title + ':'}
                         </Typography>
                         <Divider />
                     </Grid>
@@ -40,18 +40,18 @@ const Counters = ({counters}) => {
                         <React.Fragment key={l.ky}>
                             <Grid container item xs={12}>
                                 <Grid item xs={6}>
-                                    <Typography variant={'caption'}>
+                                    <Typography variant="caption">
                                         {l.label + ':'}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant={'subtitle2'}>
+                                    <Typography variant="subtitle2">
                                         {counters[l.ky]}
                                     </Typography>
                                 </Grid>
                             </Grid>
                         </React.Fragment>
-                    ))}      
+                    ))}
                 </React.Fragment>
             ))}
         </Grid>

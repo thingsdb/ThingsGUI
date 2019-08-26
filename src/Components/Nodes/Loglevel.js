@@ -12,14 +12,13 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 
 import {NodesActions} from '../../Stores/NodesStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -65,9 +64,8 @@ const Loglevel = ({node}) => {
 
     const handleClickOk = () => {
         NodesActions.setLoglevel(
-            node, 
-            form.log_level, 
-            (err) => setState({...state, serverError: err.log})
+            node,
+            form.log_level,
         );
         if (!state.serverError) {
             setState({...state, show: false});
@@ -97,9 +95,15 @@ const Loglevel = ({node}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>

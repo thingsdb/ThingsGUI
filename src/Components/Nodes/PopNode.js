@@ -17,7 +17,7 @@ import { makeStyles} from '@material-ui/core/styles';
 
 import {NodesActions} from '../../Stores/NodesStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 const initialState = {
     show: false,
-    serverError: '', 
+    serverError: '',
 };
 
 const PopNode = () => {
@@ -45,7 +45,7 @@ const PopNode = () => {
     };
 
     const handleClickOk = () => {
-        NodesActions.popNode((err) => setState({...state, serverError: err.log}));
+        NodesActions.popNode();
         if (!state.serverError) {
             setState({...state, show: false});
         }
@@ -77,9 +77,15 @@ const PopNode = () => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>

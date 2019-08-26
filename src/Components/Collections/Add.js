@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Avatar from '@material-ui/core/Avatar';
@@ -104,7 +103,7 @@ const Add = ({connErr, collections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.addCollection(form.name, (err) => setState({...state, serverError: err.log}));
+            ThingsdbActions.addCollection(form.name);
 
             if(!state.serverError) {
                 setState({...state, show: false});
@@ -114,12 +113,12 @@ const Add = ({connErr, collections}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
     return (
         <React.Fragment>
             <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
-                <AddBoxIcon className={classes.icon}/>
+                <AddBoxIcon className={classes.icon} />
             </ButtonBase>
             <Dialog
                 open={show}
@@ -135,9 +134,15 @@ const Add = ({connErr, collections}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{connErr || serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {connErr || serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>

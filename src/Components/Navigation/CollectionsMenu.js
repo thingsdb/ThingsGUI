@@ -18,12 +18,12 @@ import {ApplicationActions} from '../../Stores/ApplicationStore';
 
 const useStyles = makeStyles(theme => ({
     root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
     },
     nested: {
-      paddingLeft: theme.spacing(4),
+        paddingLeft: theme.spacing(4),
     },
     nestedAdd: {
         padding: 0,
@@ -37,14 +37,14 @@ const useStyles = makeStyles(theme => ({
 const CollectionsMenu = ({collections, onClickCollection}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
-    
+
     const handleClickCollections = () => {
         setOpen(!open);
     };
     const handleClickCollection = (collection) => () => {
         onClickCollection(collection);
         ApplicationActions.navigate({path: 'collection'});
-    } 
+    };
 
     return (
         <React.Fragment>
@@ -71,15 +71,15 @@ const CollectionsMenu = ({collections, onClickCollection}) => {
                                 <ListItemIcon>
                                     <BlockIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={'No collection info visible.'} primaryTypographyProps={{'variant':'caption', 'color':'error'}} />
+                                <ListItemText primary="No collection info visible." primaryTypographyProps={{'variant':'caption', 'color':'error'}} />
                             </ListItem>
-                        )}    
+                        )}
                         <Divider />
                         <ListItem className={classes.nestedAdd} >
                             <AddCollection />
                         </ListItem>
                     </List>
-                </Collapse>    
+                </Collapse>
             </List>
         </React.Fragment>
     );
@@ -87,8 +87,8 @@ const CollectionsMenu = ({collections, onClickCollection}) => {
 
 CollectionsMenu.propTypes = {
     onClickCollection: PropTypes.func.isRequired,
-    collections: PropTypes.array.isRequired,
-    
+    collections: PropTypes.arrayOf(PropTypes.object).isRequired,
+
 };
 
 export default CollectionsMenu;

@@ -21,7 +21,7 @@ import { makeStyles} from '@material-ui/core/styles';
 
 import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -71,7 +71,7 @@ const Login = ({loaded, connected, connErr}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connect(form, (err) => setState({...state, serverError: err.log}));
+            ApplicationActions.connect(form);
         }
     };
 
@@ -96,9 +96,15 @@ const Login = ({loaded, connected, connErr}) => {
                 <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                     <Typography component="div">
                         <Grid component="label" container alignItems="center" spacing={1}>
-                            <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                            <Grid item>{connErr || serverError}</Grid>
-                            <Grid item> 
+                            <Grid item>
+                                <Avatar className={classes.avatar}>
+                                    <WarningIcon className={classes.warning} />
+                                </Avatar>
+                            </Grid>
+                            <Grid item>
+                                {connErr || serverError}
+                            </Grid>
+                            <Grid item>
                                 <IconButton aria-label="settings" onClick={handleCloseError}>
                                     <CloseIcon />
                                 </IconButton>

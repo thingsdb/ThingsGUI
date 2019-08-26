@@ -14,19 +14,17 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-import {Add1DArray, checkType, onlyNums} from '../Util';
+import {Add1DArray, onlyNums} from '../Util';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -62,8 +60,6 @@ const EditThing = ({info, collection, thing}) => {
     const {show, errors, form, serverError} = state;
     const {id, index, name, parentType} = info;
 
-    console.log(parentType);
-
     const handleClickOpen = () => {
         const q = parentType == 'set' ? buildQuery(id, name, '{}', parentType): '';
         setState({
@@ -82,14 +78,14 @@ const EditThing = ({info, collection, thing}) => {
     const handleClickClose = () => {
         setState(initialState);
     };
-    
+
     const validation = {
         queryString: () => '',
-        newProperty: () => form.newProperty == name ? '' : Boolean(thing[form.newProperty]) ? 'Property name already in use' : '',
+        newProperty: () => form.newProperty == name ? '' : Boolean(thing[form.newProperty]) ? 'Property name already in use' : '', // eslint-disable-line
         value: () => {
             let errText;
             const bool = form.value.length>0;
-            
+
             if (!bool && form.dataType == 'number') {
                 errText = onlyNums(form.value) ? '' : 'only numbers';
             }
@@ -120,37 +116,35 @@ const EditThing = ({info, collection, thing}) => {
         const dataType = key=='dataType' ? value : form.dataType;
 
         const val = dataType === 'array' ? `[${input}]`
-        : dataType == 'object' ? `{}` 
-        : dataType == 'string' ? `'${input}'`
-        : dataType == 'number' ? `${input}` 
-        : dataType == 'set' ? `set([])` 
-        : ''; 
+            : dataType == 'object' ? '{}'
+                : dataType == 'string' ? `'${input}'`
+                    : dataType == 'number' ? `${input}`
+                        : dataType == 'set' ? 'set([])'
+                            : '';
 
         return buildQuery(id, name, val, parentType);
-        
+
     };
 
     const buildQuery = (i, n, v, t) => {
         return t==='array' ? `t(${i}).${n}.splice(${index}, 1, ${v})`
-        : t==='object' ? `t(${i}).${n} = ${v}`
-        : t==='set' ? `t(${i}).${n}.add(${v})`
-        : '';
+            : t==='object' ? `t(${i}).${n} = ${v}`
+                : t==='set' ? `t(${i}).${n}.add(${v})`
+                    : '';
     };
 
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
         setState({...state, errors: err});
-        console.log(form.queryString, collection.collection_id, id);
         if (!Object.values(err).some(d => d)) {
             CollectionActions.rawQuery(
                 collection.collection_id,
-                id, 
-                form.queryString, 
-                (err) => setState({...state, serverError: err.log})
+                id,
+                form.queryString
             );
 
-            ThingsdbActions.getCollections((err) => setState({...state, serverError: err.log}));
+            ThingsdbActions.getCollections();
 
             if (!state.serverError) {
                 setState({...state, show: false});
@@ -160,8 +154,8 @@ const EditThing = ({info, collection, thing}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
-    
+    };
+
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';
 
@@ -169,7 +163,7 @@ const EditThing = ({info, collection, thing}) => {
     return (
         <React.Fragment>
             <ButtonBase onClick={handleClickOpen} >
-                <EditIcon color={'primary'}/>
+                <EditIcon color="primary" />
             </ButtonBase>
             <Dialog
                 open={show}
@@ -185,9 +179,15 @@ const EditThing = ({info, collection, thing}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
@@ -222,7 +222,7 @@ const EditThing = ({info, collection, thing}) => {
                                         shrink: true,
                                     }}
                                 />
-                            </ListItem> 
+                            </ListItem>
                         </Collapse>
                         <ListItem>
                             <TextField
@@ -235,14 +235,14 @@ const EditThing = ({info, collection, thing}) => {
                                 select
                                 SelectProps={{native: true}}
                             >
-                                {dataTypes.map(d => ( 
+                                {dataTypes.map(d => (
                                     <option key={d} value={d} disabled={parentType=='set'&&d!='object'} >
                                         {d}
                                     </option>
                                 ))}
-                            </ TextField>
-                        </ListItem>    
-                        
+                            </TextField>
+                        </ListItem>
+
                         {singleInputField ? (
                             <ListItem>
                                 <TextField
@@ -260,8 +260,8 @@ const EditThing = ({info, collection, thing}) => {
                             </ListItem>
 
                         ) : multiInputField ? (
-                            <Add1DArray cb={handleArrayItems}/>
-                        ) : null}              
+                            <Add1DArray cb={handleArrayItems} />
+                        ) : null}
                     </List>
                 </DialogContent>
                 <DialogActions>
@@ -280,7 +280,7 @@ const EditThing = ({info, collection, thing}) => {
 EditThing.propTypes = {
     info: PropTypes.object.isRequired,
     collection: PropTypes.object.isRequired,
-    thing: PropTypes.any.isRequired,
+    thing: PropTypes.any.isRequired,// eslint-disable-line react/forbid-prop-types
 };
 
 export default EditThing;

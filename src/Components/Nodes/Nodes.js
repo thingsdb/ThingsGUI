@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card from '@material-ui/core/Card';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -12,8 +11,14 @@ import {withVlow} from 'vlow';
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
 import {TableWithRowExtend} from '../Util';
+import {NodesStore} from '../../Stores/NodesStore';
 
 
+
+const withStores = withVlow([{
+    store: NodesStore,
+    keys: ['nodes']
+}]);
 
 const useStyles = makeStyles(theme => ({
     drawerHeader: {
@@ -25,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Nodes = ({onError, open, onClose, nodes}) => {
+const Nodes = ({open, onClose, nodes}) => {
     const classes = useStyles();
 
 
@@ -40,15 +45,15 @@ const Nodes = ({onError, open, onClose, nodes}) => {
         ky: 'status',
         label: 'Status',
     }];
-    const rowExtend = (node) => <Node local={node} onError={onError} />;
+    const rowExtend = (node) => <Node local={node} />; // eslint-disable-line react/no-multi-comp
 
     return(
         <div>
             <div className={classes.drawerHeader}>
                 <IconButton onClick={onClose}>
-                {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
+                    {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
                 </IconButton>
-                <Typography variant={'h6'}> 
+                <Typography variant="h6">
                     {'NODES'}
                 </Typography>
             </div>
@@ -60,10 +65,9 @@ const Nodes = ({onError, open, onClose, nodes}) => {
 };
 
 Nodes.propTypes = {
-    onError: PropTypes.func.isRequired,
-    nodes: PropTypes.array.isRequired,
+    nodes: NodesStore.types.nodes.isRequired,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
 };
 
-export default Nodes;
+export default withStores(Nodes);

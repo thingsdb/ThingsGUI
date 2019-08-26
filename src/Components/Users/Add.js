@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Avatar from '@material-ui/core/Avatar';
@@ -7,7 +6,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import WarningIcon from '@material-ui/icons/Warning';
-import { amber } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
@@ -95,8 +93,8 @@ const AddUser = ({users}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.addUser(form.name, (err) => setState({...state, serverError: err.log}));
-            
+            ThingsdbActions.addUser(form.name);
+
             if (!state.serverError) {
                 setState({...state, show: false});
             }
@@ -110,7 +108,7 @@ const AddUser = ({users}) => {
     return (
         <React.Fragment>
             <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
-                <AddBoxIcon className={classes.icon}/>
+                <AddBoxIcon className={classes.icon} />
             </ButtonBase>
             <Dialog
                 open={show}
@@ -126,9 +124,15 @@ const AddUser = ({users}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
@@ -166,7 +170,7 @@ const AddUser = ({users}) => {
 AddUser.propTypes = {
 
     /* application properties */
-    users: ThingsdbStore.types.users.isRequired,    
+    users: ThingsdbStore.types.users.isRequired,
 };
 
 export default withStores(AddUser); // QUEST: volgorde goed zo?

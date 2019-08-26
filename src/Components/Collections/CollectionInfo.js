@@ -14,18 +14,18 @@ const CollectionInfo = ({collection}) => {
         {ky: 'quota_things', label: 'Quota on things'},
         {ky: 'things', label: 'Things stored'},
     ];
-    
+
     return (
         <Grid container spacing={0}>
             {header.map((h) => (
                 <React.Fragment key={h.ky}>
                     <Grid item xs={4}>
-                        <Typography variant={'caption'} >
+                        <Typography variant="caption">
                             {h.label + ':'}
                         </Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <Typography variant={'subtitle2'} >
+                        <Typography variant="subtitle2">
                             {collection[h.ky] !== null ? collection[h.ky] : 'Not set'}
                         </Typography>
                     </Grid>

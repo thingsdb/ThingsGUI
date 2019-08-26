@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -15,7 +14,7 @@ import Nodes from '../Nodes/Nodes';
 import TopBar from '../Navigation/TopBar';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
-import {NodesActions, NodesStore} from '../../Stores/NodesStore';
+import {NodesActions} from '../../Stores/NodesStore';
 
 
 const withStores = withVlow([{
@@ -24,9 +23,6 @@ const withStores = withVlow([{
 }, {
     store: ThingsdbStore,
     keys: ['collections', 'user', 'users']
-}, {
-    store: NodesStore,
-    keys: ['nodes']
 }]);
 
 const drawerWidth = 600;
@@ -44,13 +40,13 @@ const useStyles = makeStyles(theme => ({
     },
     shrink: {
         minWidth: 1200,
-        width: `calc(100% - ${drawerWidth}px)`,
+        width: 'calc(100% - '+drawerWidth+'px)',
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
-    drawerOpen: { 
+    drawerOpen: {
         width: drawerWidth,
         flexGrow: 1,
         padding: theme.spacing(3),
@@ -62,7 +58,7 @@ const useStyles = makeStyles(theme => ({
         height: '100vh',
     },
     drawerClose: {
-        width: '0%', 
+        width: '0%',
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
@@ -93,54 +89,47 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const App = ({onError, collections, match, user, users, nodes}) => {
+const App = ({collections, match, user, users}) => {
     const classes = useStyles();
-    const [indexCollection, setIndexCollection] = React.useState(0)
-    const [indexUser, setIndexUser] = React.useState(0)
+    const [indexCollection, setIndexCollection] = React.useState(0);
+    const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
-    console.log(user, nodes);
 
     React.useEffect(() => {
-        console.log('effect 1');
-        ThingsdbActions.getInfo(onError);
-        NodesActions.getNodes(onError);
-    },
-    [],
-);
-    
+        ThingsdbActions.getInfo();
+        NodesActions.getNodes();
+    }, []);
+
     const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
     const selectedCollection = findItem(indexCollection, collections);
-    const selectedUser = findItem(indexUser, users)
-    
+    const selectedUser = findItem(indexUser, users);
+
     const pages = {
-        collection: <Collection collection={selectedCollection} onError={onError} />,
+        collection: <Collection collection={selectedCollection} />,
         user: <User user={selectedUser} collections={collections} />,
     };
 
     const handleClickCollection = (i) => {
         setIndexCollection(i);
-    }
+    };
 
     const handleClickUser = (i) => {
         setIndexUser(i);
-    }
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
-    }
+    };
 
     const handleDrawerClose = () => {
         setOpen(false);
-    }
-    
+    };
+
     return(
         <React.Fragment>
             <div className={classes.root}>
-                <div className={clsx(classes.normal, {
-                        [classes.shrink]: open,
-                        })}
-                >
-                    <TopBar user={user} onError={onError}>
+                <div className={clsx(classes.normal, {[classes.shrink]: open})}>
+                    <TopBar user={user}>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
@@ -154,32 +143,26 @@ const App = ({onError, collections, match, user, users, nodes}) => {
                     <div className={classes.page}>
                         <div className={classes.menu}>
                             <Card className={classes.submenu}>
-                                <CollectionsMenu collections={collections} onClickCollection={handleClickCollection}/>
+                                <CollectionsMenu collections={collections} onClickCollection={handleClickCollection} />
                             </Card>
                             <Card className={classes.submenu}>
-                                <UsersMenu users={users} onClickUser={handleClickUser}/>
-                            </Card>  
+                                <UsersMenu users={users} onClickUser={handleClickUser} />
+                            </Card>
                         </div>
                         <div className={classes.content}>
                             {pages[match.path]}
                         </div>
                     </div>
                 </div>
-                <Card className={clsx(classes.drawerClose, {
-                        [classes.drawerOpen]: open,
-                        })}
-                >               
-                    <Nodes nodes={nodes} open={open} onClose={handleDrawerClose} onError={onError} />      
+                <Card className={clsx(classes.drawerClose, {[classes.drawerOpen]: open})}>
+                    <Nodes open={open} onClose={handleDrawerClose} />
                 </Card>
             </div>
         </React.Fragment>
     );
-}
+};
 
 App.propTypes = {
-
-    onError: PropTypes.func.isRequired,
-
     /* Application properties */
     match: ApplicationStore.types.match.isRequired,
 
@@ -189,9 +172,6 @@ App.propTypes = {
     /* Users properties */
     user: ThingsdbStore.types.user.isRequired,
     users: ThingsdbStore.types.users.isRequired,
-
-    /* nodes properties */
-    nodes: NodesStore.types.nodes.isRequired,
 };
 
 export default withStores(App);

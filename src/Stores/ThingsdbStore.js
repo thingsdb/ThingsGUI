@@ -70,23 +70,23 @@ class ThingsdbStore extends BaseStore {
 
     //COLLECTIONS
 
-    onGetCollections(onError) {
+    onGetCollections() {
         this.emit('/thingsdb/getcollections').done((data) => {
             this.setState({collections: data});
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onGetCollection(name, onError) {
+    onGetCollection(name) {
         this.emit('/thingsdb/getcollection', {
             name,
         }).done((data) => {
             this.setState({
                 collection: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
-   
-    onAddCollection(name, onError) {
+
+    onAddCollection(name) {
         const {user} = this.state;
         this.emit('/thingsdb/add', {
             name,
@@ -95,16 +95,16 @@ class ThingsdbStore extends BaseStore {
                 collections: data.collections,
             });
 
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') || 
+            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
             user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
                     users: data.users,
                 });
             }
-        }).fail((event, status, message) => onError(message));
+        });
     }
-    
-    onRenameCollection(oldname, newname, onError) {
+
+    onRenameCollection(oldname, newname) {
         const {user} = this.state;
         this.emit('/thingsdb/rename', {
             oldname,
@@ -114,16 +114,16 @@ class ThingsdbStore extends BaseStore {
                 collections: data.collections,
             });
 
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') || 
+            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
             user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
                     users: data.users,
                 });
             }
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onRemoveCollection(name, onError) {
+    onRemoveCollection(name) {
         const {user} = this.state;
         this.emit('/thingsdb/remove', {
             name,
@@ -132,16 +132,16 @@ class ThingsdbStore extends BaseStore {
                 collections: data.collections,
             });
 
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') || 
+            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
             user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
                     users: data.users,
                 });
             }
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onSetQuota(name, quotaType, quota, onError) {
+    onSetQuota(name, quotaType, quota) {
         this.emit('/thingsdb/setquota', {
             name,
             quotaType,
@@ -150,50 +150,50 @@ class ThingsdbStore extends BaseStore {
             this.setState({
                 collections: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
     //USERS
 
-    onGetUsers(onError){
+    onGetUsers(){
         this.emit('/user/getusers').done((data) => {
             this.setState({users: data});
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onGetUser(onError, config=null){
+    onGetUser(config=null){
         this.emit('/user/get', {
             config,
         }).done((data) => {
             this.setState({
                 user: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
 
-    onAddUser(name, onError){
+    onAddUser(name){
         this.emit('/user/add', {
             name,
         }).done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onRemoveUser(name, onError) {
+    onRemoveUser(name) {
         this.emit('/user/remove', {
             name
         }).done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
 
-    onRenameUser(oldname, newname, onError) {
+    onRenameUser(oldname, newname) {
         this.emit('/user/rename', {
             oldname,
             newname,
@@ -201,10 +201,10 @@ class ThingsdbStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onPassword(name, password, onError) {
+    onPassword(name, password) {
         this.emit('/user/password', {
             name,
             password,
@@ -212,63 +212,63 @@ class ThingsdbStore extends BaseStore {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onResetPassword(name, onError) {
+    onResetPassword(name) {
         this.emit('/user/reset-password', {
             name,
         }).done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onGrant(name, collection, access, onError) {
+    onGrant(name, collection, access) {
         this.emit('/user/grant', {
             collection,
             name,
             access,
         }).done((data) => {
             this.setState({users: data});
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onRevoke(name, collection, access, onError) {
+    onRevoke(name, collection, access) {
         this.emit('/user/revoke', {
             collection,
             name,
             access,
         }).done((data) => {
             this.setState({users: data});
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onNewToken(config, onError){ // name [, expirationTime] [, description]
+    onNewToken(config){ // name [, expirationTime] [, description]
         this.emit('/user/newtoken', config).done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onDelToken(key, onError){
+    onDelToken(key){
         this.emit('/user/deltoken', {
             key,
         }).done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onDelExpired(onError){
+    onDelExpired(){
         this.emit('/user/delexpired').done((data) => {
             this.setState({
                 users: data
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 }
 

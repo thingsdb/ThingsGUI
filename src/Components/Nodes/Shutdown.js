@@ -17,7 +17,7 @@ import { makeStyles} from '@material-ui/core/styles';
 
 import {NodesActions} from '../../Stores/NodesStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -31,7 +31,7 @@ const initialState = {
     serverError: '',
 };
 
-const CountersReset = ({node}) => {   
+const CountersReset = ({node}) => {
     const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {show, serverError} = state;
@@ -44,8 +44,8 @@ const CountersReset = ({node}) => {
         setState({...state, show: false});
     };
     const handleClickOk = () => {
-        NodesActions.shutdown(node, (err) => setState({...state, serverError: err.log}));
-        
+        NodesActions.shutdown(node);
+
         if (!state.serverError) {
             setState({...state, show: false});
         }
@@ -74,9 +74,15 @@ const CountersReset = ({node}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>

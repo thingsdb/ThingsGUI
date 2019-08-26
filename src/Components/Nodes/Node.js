@@ -33,16 +33,16 @@ const Node = ({local, node, counters, onError}) => {
     const [tabIndex, setTabIndex] = React.useState(0);
 
     React.useEffect(() => {
-        NodesActions.getNode(onError) // QUEST: en bij status update?
+        NodesActions.getNode(onError); // QUEST: en bij status update?
     }, [tabIndex]);
 
     const onConnected = () => {
         NodesActions.getNode(onError);
-    }
+    };
 
     const handleChangeTab = (_event, newValue) => {
         setTabIndex(newValue);
-    }
+    };
 
     return node && local.node_id === node.node_id ? (
         <React.Fragment>
@@ -81,7 +81,7 @@ const Node = ({local, node, counters, onError}) => {
                         <Counters counters={counters} />
                     </Grid>
                     <Grid item xs={12}>
-                        <CountersReset node={node} onServerError={onError}/>
+                        <CountersReset node={node} onServerError={onError} />
                     </Grid>
                 </Grid>
             }

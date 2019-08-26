@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -38,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 const Thing = ({thing, collection, things, info, onError}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
-   
+
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
         const infoNew = i==null ? {
             name: k,
@@ -51,21 +52,20 @@ const Thing = ({thing, collection, things, info, onError}) => {
             index: i,
             parentName: info.name == '$' ? info.parentName : info.name,
             parentType: type,
-        }
+        };
         return k === '#' ? null : (
             <div key={i ? i : k} className={classes.nested}>
-                <Thing 
-                    classes={classes} 
-                    collection={collection} 
-                    things={things} 
+                <Thing
+                    classes={classes}
+                    collection={collection}
+                    things={things}
                     thing={v}
-                    info={infoNew} 
+                    info={infoNew}
                     onError={onError}
-                /> 
+                />
             </div>
         );
     };
-    console.log(info);
 
     const renderChildren = () => {
         const isArray = Array.isArray(thing);
@@ -86,13 +86,13 @@ const Thing = ({thing, collection, things, info, onError}) => {
     const canToggle = type === 'object' || type === 'array' || type === 'set';
     const objectId = type === 'object' ? thing['#'] : '';
     const key = Object.keys(thing)[0];
-    const val = type === 'array' ? `[${thing.length}]` 
-        : type === 'object' || type === 'set' ? `{${key}${objectId}}` 
-        : type === 'string' || type === 'number' ? thing.toString() 
-        : ''; 
+    const val = type === 'array' ? `[${thing.length}]`
+        : type === 'object' || type === 'set' ? `{${key}${objectId}}`
+            : type === 'string' || type === 'number' ? thing.toString()
+                : '';
 
     const hasButtons = !(type === 'array' && info.name === '$');
-    const canAdd = type === 'array' || type === 'object' || type === 'set'
+    const canAdd = type === 'array' || type === 'object' || type === 'set';
     const canEdit = info.name !== '$';
 
     return (
@@ -100,52 +100,57 @@ const Thing = ({thing, collection, things, info, onError}) => {
             <ListItem>
                 <ListItemIcon>
                     <ButtonBase onClick={handleClick} >
-                        {canToggle ? show ? <ExpandMore color={'primary'}/> : <ChevronRightIcon color={'primary'}/> : <StopIcon color={'primary'}/>}
+                        {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : <StopIcon color="primary" />}
                     </ButtonBase>
                 </ListItemIcon>
-                <ListItemText primary={info.hasOwnProperty('index') ? info.name + `[${info.index}]` : info.name } primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
+                <ListItemText
+                    primary={info.hasOwnProperty('index') ? info.name + `[${info.index}]` : info.name}
+                    primaryTypographyProps={{'variant':'caption', 'color':'primary'}}
+                    secondary={val}
+                />
+
                 {hasButtons ? (
                     <Buttons>
                         <React.Fragment>
                             {canAdd ? (
                                 <ListItemIcon>
-                                    <AddThings 
+                                    <AddThings
                                         info={{
-                                            name: info.hasOwnProperty('index') ? info.name + `[${info.index}]` : info.name,
+                                            name: Object.prototype.hasOwnProperty(info, 'index') ? info.name + '['+info.index+']' : info.name,
                                             id: thing['#'] || info.id,
                                             type: type
-                                        }} 
-                                        collection={collection} 
-                                        thing={things[thing['#']] || thing} 
+                                        }}
+                                        collection={collection}
+                                        thing={things[thing['#']] || thing}
                                     />
                                 </ListItemIcon>
                             ) : null}
                             {canEdit ? (
                                 <ListItemIcon>
                                     <EditThing
-                                            info={{
-                                                name: info.name,
-                                                index: info.hasOwnProperty('index') ? info.index : null,
-                                                id: info.id,
-                                                parentType: info.name === '$' ? 'set' : info.parentType
-                                            }} 
-                                            collection={collection} 
-                                            thing={things[info.id]} 
+                                        info={{
+                                            name: info.name,
+                                            index: info.hasOwnProperty('index') ? info.index : null,
+                                            id: info.id,
+                                            parentType: info.name === '$' ? 'set' : info.parentType
+                                        }}
+                                        collection={collection}
+                                        thing={things[info.id]}
                                     />
                                 </ListItemIcon>
                             ) : null}
                             <ListItemIcon>
-                                <RemoveThing 
-                                    collection={collection}  
-                                    thing={things[thing['#']] || thing} 
-                                    info={info}  
+                                <RemoveThing
+                                    collection={collection}
+                                    thing={things[thing['#']] || thing}
+                                    info={info}
                                 />
                             </ListItemIcon>
                         </React.Fragment>
                     </Buttons>
                 ) : null}
             </ListItem>
-            {canToggle && 
+            {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding dense>
                     {renderChildren()}

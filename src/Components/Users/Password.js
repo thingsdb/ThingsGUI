@@ -49,9 +49,9 @@ const useStyles = makeStyles(theme => ({
     },
     switch: {
         backgroundColor: theme.palette.secondary.main,
-        "&:disabled": {
+        '&:disabled': {
             backgroundColor: theme.palette.secondary.main,
-          }
+        }
     }
 }));
 
@@ -60,15 +60,13 @@ const initialState = {
     showPassword: false,
     errors: {},
     form: {},
-    serverError: '', 
+    serverError: '',
 };
 
 const Password = ({user}) => {
     const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {show, showPassword, errors, form, serverError} = state;
-
-    console.log(user)
 
     const validation = {
         password: () => form.password.length>0,
@@ -95,9 +93,8 @@ const Password = ({user}) => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.password(
-                user.name, 
-                form.password, 
-                (err) => setState({...state, serverError: err.log})
+                user.name,
+                form.password,
             );
 
             if (!state.serverError) {
@@ -109,8 +106,7 @@ const Password = ({user}) => {
     const handleClickReset = () => {
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.resetPassword(
-                user.name, 
-                (err) => setState({...state, serverError: err.log})
+                user.name,
             );
 
             if (!state.serverError) {
@@ -125,7 +121,7 @@ const Password = ({user}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
     return (
         <React.Fragment>
@@ -139,9 +135,9 @@ const Password = ({user}) => {
                     onClick={handleClickOpen}
                 >
                     <CardContent>
-                        <Typography variant={'h6'} >
+                        <Typography variant="h6" >
                             {'Password'}
-                        </Typography> 
+                        </Typography>
                     </CardContent>
                 </CardActionArea>
             </Card>
@@ -159,9 +155,15 @@ const Password = ({user}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
@@ -170,17 +172,23 @@ const Password = ({user}) => {
                         </Typography>
                     </Collapse>
                     <Typography component="div">
-                        <FormLabel component="legend">{'Set?'}</FormLabel>
+                        <FormLabel component="legend">
+                            {'Set?'}
+                        </FormLabel>
                         <Grid component="label" container alignItems="center" spacing={1}>
-                            <Grid item>{'no'}</Grid>
+                            <Grid item>
+                                {'no'}
+                            </Grid>
                             <Grid item>
                                 <Switch
                                     checked={user.has_password}
-                                    color={'primary'}
+                                    color="primary"
                                     onChange={()=>null}
                                 />
                             </Grid>
-                            <Grid item>{'yes'}</Grid>
+                            <Grid item>
+                                {'yes'}
+                            </Grid>
                         </Grid>
                     </Typography>
                     <TextField

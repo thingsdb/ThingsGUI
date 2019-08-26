@@ -27,23 +27,23 @@ class CollectionStore extends BaseStore {
         this.state = CollectionStore.defaults;
     }
 
-    onQuery(collectionId, onError, thingId=null, depth=1) {
+    onQuery(collectionId, thingId=null, depth=1) {
         this.emit('/collection/query', {
             collectionId: collectionId,
             thingId: thingId,
             depth: depth
         }).done((data) => {
             this.setState(prevState => {
-                const things = thingId ? 
-                Object.assign({}, prevState.things, {[thingId]: data})
-                :
-                Object.assign({}, prevState.things, {[collectionId]: data});
+                const things = thingId ?
+                    Object.assign({}, prevState.things, {[thingId]: data})
+                    :
+                    Object.assign({}, prevState.things, {[collectionId]: data});
                 return {things};
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onProperty(collectionId, thingId, propertyName, onError, depth=1) {
+    onProperty(collectionId, thingId, propertyName, depth=1) {
         this.emit('/collection/return-property', {
             collectionId: collectionId,
             thingId: thingId,
@@ -54,29 +54,29 @@ class CollectionStore extends BaseStore {
                 const thingsByProp = Object.assign({}, prevState.thingsByProp, {[collectionId]: data});
                 return {thingsByProp};
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onRemoveThing(config, onError) {
+    onRemoveThing(config) {
         this.emit('/collection/remove-thing', config).done((data) => {
             this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[config.thingId]: data})
+                const things = Object.assign({}, prevState.things, {[config.thingId]: data});
                 return {things};
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onRawQuery(collectionId, thingId, query, onError) {
+    onRawQuery(collectionId, thingId, query) {
         this.emit('/collection/raw-query', {
             collectionId: collectionId,
             thingId: thingId,
             query: query,
         }).done((data) => {
             this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[thingId]: data})
+                const things = Object.assign({}, prevState.things, {[thingId]: data});
                 return {things};
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 }
 

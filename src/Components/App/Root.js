@@ -17,7 +17,7 @@ const theme = createMuiTheme({
             main: 'rgba(85, 161, 255, 0.51)',
         },
         secondary: {
-            main: 'rgba(0, 55, 123, 0.3)',  
+            main: 'rgba(0, 55, 123, 0.3)',
         },
         background: {
             default: '#2E3336',
@@ -28,8 +28,8 @@ const theme = createMuiTheme({
         },
         text: {
             primary: '#eee',
-            secondary: "#00000"
-      } 
+            secondary: '#000',
+        },
     },
 });
 
@@ -40,31 +40,11 @@ const withStores = withVlow([{
 }]);
 
 const Root = ({loaded, connected}) => {
-    const [serverErrors, setServerErrors] = React.useState([])
-
-    React.useEffect(() => {
-        console.log('testets');
-        setServerErrors([]);
-    },
-    [connected]
-    );
-
-    const handleServerError = (err) => {
-        console.log(err);
-        setServerErrors(prevErr => {
-            const newArray = [...prevErr];
-            newArray.push(err.log);
-            return newArray;
-        });
-    }
-
-    
-    console.log(serverErrors);
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
-            {loaded ? connected ? <App onError={handleServerError} /> : <Login /> : <AppLoader onError={handleServerError}/>}
-            <ErrorToast errors={serverErrors}/>
+            {loaded ? connected ? <App /> : <Login /> : <AppLoader />}
+            <ErrorToast />
         </MuiThemeProvider>
     );
 };

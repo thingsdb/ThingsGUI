@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import io from 'socket.io-client';
+import {MessageActions} from '../Stores/MessageStore';
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
     reconnection: true,
@@ -34,7 +35,7 @@ class _SocketRequest {
             clearTimeout(warnOnLong);
 
             if (message !== undefined && message !== null) {
-                // MessageActions.add(message);
+                MessageActions.add(message);
             }
 
             this._alwaysCb(status, data);

@@ -87,9 +87,8 @@ const Rename = ({user, users}) => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.renameUser(
-                user.name, 
-                form.name, 
-                (err) => setState({...state, serverError: err.log})
+                user.name,
+                form.name,
             );
 
             if (!state.serverError) {
@@ -100,7 +99,7 @@ const Rename = ({user, users}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
     return (
         <React.Fragment>
@@ -114,9 +113,9 @@ const Rename = ({user, users}) => {
                     onClick={handleClickOpen}
                 >
                     <CardContent>
-                        <Typography variant={'h6'} >
+                        <Typography variant="h6">
                             {'Rename'}
-                        </Typography> 
+                        </Typography>
                     </CardContent>
                 </CardActionArea>
             </Card>
@@ -134,9 +133,15 @@ const Rename = ({user, users}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
@@ -174,7 +179,7 @@ Rename.propTypes = {
     user: PropTypes.object.isRequired,
 
     /* application properties */
-    users: ThingsdbStore.types.users.isRequired,    
+    users: ThingsdbStore.types.users.isRequired,
 };
 
 export default withStores(Rename);

@@ -21,7 +21,7 @@ import { makeStyles} from '@material-ui/core/styles';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -40,13 +40,10 @@ const RemoveThing = ({collection, thing, info}) => {
     const [state, setState] = React.useState(initialState);
     const {show, serverError} = state;
 
-
-    console.log(info);
-
     const buildQuery = (p, ti, n, i) => {
-        return i == null ? `t(${ti}).del('${n}')` 
+        return i == null ? `t(${ti}).del('${n}')`
             : n == '$' ? `t(${ti}).${p}.remove(t(${ti}).${p}.find(|s| (s.id()==${thing['#']}) ))`
-            : `t(${ti}).${n}.splice(${i}, 1)`;
+                : `t(${ti}).${n}.splice(${i}, 1)`;
     };
 
 
@@ -63,20 +60,19 @@ const RemoveThing = ({collection, thing, info}) => {
 
     const handleClickOk = () => {
         const queryString = buildQuery(
-            info.hasOwnProperty('parentName') ? info.parentName : null, 
-            info.id, 
-            info.name, 
+            info.hasOwnProperty('parentName') ? info.parentName : null,
+            info.id,
+            info.name,
             info.hasOwnProperty('index') ? info.index : null
         );
-        console.log(queryString);
+
         CollectionActions.rawQuery(
             collection.collection_id,
-            info.id, 
-            queryString, 
-            (err) => setState({...state, serverError: err.log})
+            info.id,
+            queryString
         );
 
-        ThingsdbActions.getCollections((err) => setState({...state, serverError: err.log}));
+        ThingsdbActions.getCollections();
 
         if (!state.serverError) {
             setState({...state, show: false});
@@ -85,12 +81,12 @@ const RemoveThing = ({collection, thing, info}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
     return (
         <React.Fragment>
             <ButtonBase onClick={handleClickOpen} >
-                <DeleteIcon color={'primary'}/>
+                <DeleteIcon color="primary" />
             </ButtonBase>
             <Dialog
                 open={show}
@@ -106,9 +102,15 @@ const RemoveThing = ({collection, thing, info}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
@@ -119,7 +121,7 @@ const RemoveThing = ({collection, thing, info}) => {
                     <DialogContentText>
                         {'Are you sure?'}
                     </DialogContentText>
-                </DialogContent> 
+                </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClickClose} color="primary">
                         {'Cancel'}
@@ -135,8 +137,8 @@ const RemoveThing = ({collection, thing, info}) => {
 
 RemoveThing.propTypes = {
     collection: PropTypes.object.isRequired,
-    thing: PropTypes.any.isRequired,
-    info: PropTypes.object.isRequired, 
+    thing: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
+    info: PropTypes.object.isRequired,
 };
 
 export default RemoveThing;

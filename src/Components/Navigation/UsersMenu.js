@@ -17,9 +17,9 @@ import {ApplicationActions} from '../../Stores/ApplicationStore';
 
 const useStyles = makeStyles(theme => ({
     root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
     },
     nested: {
         paddingLeft: theme.spacing(4),
@@ -43,7 +43,7 @@ const UsersMenu = ({users, onClickUser}) => {
     const handleClickUser = (user) => () => {
         onClickUser(user);
         ApplicationActions.navigate({path: 'user'});
-    } 
+    };
 
     return (
         <React.Fragment>
@@ -70,22 +70,22 @@ const UsersMenu = ({users, onClickUser}) => {
                                 <ListItemIcon>
                                     <BlockIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={'No user info visible.'} primaryTypographyProps={{'variant':'caption', 'color':'error'}} />
+                                <ListItemText primary="No user info visible." primaryTypographyProps={{'variant':'caption', 'color':'error'}} />
                             </ListItem>
-                        )}   
+                        )}
                         <Divider />
                         <ListItem className={classes.nestedAdd} >
                             <AddUser />
                         </ListItem>
                     </List>
-                </Collapse>   
+                </Collapse>
             </List>
         </React.Fragment>
     );
 };
 
 UsersMenu.propTypes = {
-    users: PropTypes.array.isRequired,
+    users: PropTypes.arrayOf(PropTypes.object).isRequired,
     onClickUser: PropTypes.func.isRequired,
 
 };

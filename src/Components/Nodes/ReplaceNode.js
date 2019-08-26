@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -19,7 +18,7 @@ import { makeStyles} from '@material-ui/core/styles';
 
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -37,7 +36,7 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '', 
+    serverError: '',
 };
 
 const ReplaceNode = ({nodes}) => {
@@ -70,10 +69,7 @@ const ReplaceNode = ({nodes}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            NodesActions.replaceNode(
-                form,
-                (err) => setState({...state, serverError: err.log})
-            );
+            NodesActions.replaceNode(form);
             if (!state.serverError) {
                 setState({...state, show: false});
             }
@@ -103,9 +99,15 @@ const ReplaceNode = ({nodes}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
@@ -148,7 +150,7 @@ const ReplaceNode = ({nodes}) => {
                         type="text"
                         value={form.port}
                         spellCheck={false}
-                        onChange={handleOnChange} 
+                        onChange={handleOnChange}
                         fullWidth
                         error={errors.port}
                     />

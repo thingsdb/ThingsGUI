@@ -18,12 +18,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
-import {withStyles} from '@material-ui/core/styles';
-import { makeStyles} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -32,33 +31,26 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const styles = theme => ({
-    button: {
-        margin: theme.spacing(1),
-    },
-});
-
-
 const timeUnit = [
     {
-        label: "Second",
-        value: "1"
+        label: 'Second',
+        value: '1'
     },
     {
-        label: "Minute",
-        value: "60"
+        label: 'Minute',
+        value: '60'
     },
     {
-        label: "Hour",
-        value: "60*60"
+        label: 'Hour',
+        value: '60*60'
     },
     {
-        label: "Day",
-        value: "60*60*24"
+        label: 'Day',
+        value: '60*60*24'
     },
     {
-        label: "Week",
-        value: "60*60*24*7"
+        label: 'Week',
+        value: '60*60*24*7'
     },
 ];
 
@@ -116,13 +108,11 @@ const AddToken = ({user}) => {
     const handleClickOk = () => {
         ThingsdbActions.newToken(
             {
-                name: user.name, 
-                expirationTime: switches.expirationTime ? "(now() + " + form.number + "*" + form.timeUnit + ")" : null, 
+                name: user.name,
+                expirationTime: switches.expirationTime ? '(now() + ' + form.number + '*' + form.timeUnit + ')' : null,
                 description: switches.description ? form.description : null
-            }, 
-            (err) => setState({...state, serverError: err.log})
-        );
-        
+            });
+
         if (!state.serverError) {
             setState({...state, show: false});
         }
@@ -153,9 +143,15 @@ const AddToken = ({user}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
@@ -213,7 +209,7 @@ const AddToken = ({user}) => {
                                             autoFocus
                                             margin="dense"
                                             id="number"
-                                            inputProps={{min: "1"}}
+                                            inputProps={{min: 1}}
                                             type="number"
                                             value={form.number}  // TODOK placeholder
                                             spellCheck={false}
@@ -237,7 +233,7 @@ const AddToken = ({user}) => {
                                                 </option>
                                             ))}
                                         </TextField>
-                                    </Grid> 
+                                    </Grid>
                                 </Grid>
                             </ListItem>
                             <ListItem>
@@ -250,9 +246,9 @@ const AddToken = ({user}) => {
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
-                                />   
-                            </ListItem>   
-                        </Collapse>          
+                                />
+                            </ListItem>
+                        </Collapse>
                     </List>
                 </DialogContent>
                 <DialogActions>
@@ -270,7 +266,7 @@ const AddToken = ({user}) => {
 
 AddToken.propTypes = {
 
-    user: PropTypes.object.isRequired,  
+    user: PropTypes.object.isRequired,
 };
 
-export default AddToken; 
+export default AddToken;

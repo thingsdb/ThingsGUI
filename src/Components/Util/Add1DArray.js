@@ -38,7 +38,7 @@ const Add1DArray = ({cb}) => {
     const classes = useStyles();
     const helperspan = React.useRef(null);
     const [state, setState] = React.useState({
-        contentAdd: "add +",
+        contentAdd: 'add +',
         dataType: dataTypes[0],
         errors: {},
     });
@@ -46,23 +46,19 @@ const Add1DArray = ({cb}) => {
 
     const [width, setWidth] = React.useState(100);
     React.useEffect(() => {
-            const helperWidth = helperspan.current.offsetWidth;
-            setWidth(Math.max(50, helperWidth + 1));
-        },
-        [contentAdd],
-    ); 
+        const helperWidth = helperspan.current.offsetWidth;
+        setWidth(Math.max(50, helperWidth + 1));
+    }, [contentAdd]);
 
     const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
-            cb(myItems);
-        },
-        [myItems.length],
-    ); 
+        cb(myItems);
+    }, [myItems.length]);
 
     const validation = {
         contentAdd: () => {
             let errText = contentAdd.length>0 ? '' : 'required';
-            
+
             if (!errText && dataType == 'number') {
                 errText = onlyNums(contentAdd) ? '' : 'only numbers';
             }
@@ -70,49 +66,48 @@ const Add1DArray = ({cb}) => {
         },
     };
 
-	const handleFocus = (_event) => {
-		setState({ ...state, contentAdd: "" });
-	};
-	
-	const handleChange = ({target}) => {
-        const {id, value} = target;
-		setState({...state, [id]: value, errors: {}});
-	};
+    const handleFocus = () => {
+        setState({ ...state, contentAdd: '' });
+    };
 
-	const handleKeypress = (event) => {
+    const handleChange = ({target}) => {
+        const {id, value} = target;
+        setState({...state, [id]: value, errors: {}});
+    };
+
+    const handleKeypress = (event) => {
         const {key} = event;
-		if (key == "Enter") {
+        if (key == 'Enter') {
             const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
             setState({...state, errors: err});
             if (!Object.values(err).some(d => d)) {
 
                 let currentcontent = contentAdd.trim();
                 if (!currentcontent) {
-                    return; 
+                    return;
                 }
 
-                const contentTypeChecked = dataType == 'string' ? "'"+ currentcontent +"'" : currentcontent;
+                const contentTypeChecked = dataType == 'string' ? "'"+ currentcontent +"'" : currentcontent; // eslint-disable-line quotes
                 setMyItems(prevItems => {
                     const newArray = [...prevItems];
                     newArray.push(contentTypeChecked);
                     return newArray;
                 });
-                setState({ ...state, contentAdd: "" });
+                setState({...state, contentAdd: ''});
             }
-		}
-	};
+        }
+    };
 
-	const handleClick = (index) => () => {
+    const handleClick = (index) => () => {
         setMyItems(prevItems => {
             const newArray = [...prevItems];
             newArray.splice(index, 1);
             return newArray;
         });
-	};
-	    
+    };
 
-	const makeAddedList = () => {
-		const elements =  myItems.map((listitem, index) => (
+    const makeAddedList = () => {
+        const elements =  myItems.map((listitem, index) => (
             <Chip
                 key={index}
                 id={listitem}
@@ -121,8 +116,8 @@ const Add1DArray = ({cb}) => {
                 onDelete={handleClick(index)}
                 color="primary"
             />
-		));
-        return elements
+        ));
+        return elements;
     };
 
 
@@ -162,8 +157,8 @@ const Add1DArray = ({cb}) => {
                 helperText={errors.contentAdd}
                 error={Boolean(errors.contentAdd)}
             />
-            <span 
-                id="helperspan" 
+            <span
+                id="helperspan"
                 ref={helperspan}
                 style={{'visibility': 'hidden'}}
             >
@@ -171,7 +166,7 @@ const Add1DArray = ({cb}) => {
             </span>
         </div>
     );
-	
+
 };
 
 Add1DArray.propTypes = {

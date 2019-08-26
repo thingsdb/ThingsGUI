@@ -23,8 +23,8 @@ const NodeInfo = ({node}) => {
         {ky: 'archive_files', label: 'Archived files'},
         {ky: 'archived_in_memory', label: 'Archived in memory'},
         {ky: 'cached_names', label: 'Cached names'},
-           
-        {ky: 'events_in_queue', label: 'Events in queue'},      
+
+        {ky: 'events_in_queue', label: 'Events in queue'},
         {ky: 'global_committed_event_id', label: 'Global committed event ID'},
         {ky: 'global_stored_event_id', label: 'Global stored event ID'},
         {ky: 'db_stored_event_id', label: 'Stored event ID'},
@@ -47,12 +47,12 @@ const NodeInfo = ({node}) => {
             {header.map((h) => (
                 <React.Fragment key={h.ky}>
                     <Grid item xs={6}>
-                        <Typography variant={'caption'} >
+                        <Typography variant="caption">
                             {h.label + ':'}
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography variant={'subtitle2'} >
+                        <Typography variant="subtitle2">
                             {node[h.ky]}
                         </Typography>
                     </Grid>

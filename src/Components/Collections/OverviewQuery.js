@@ -34,19 +34,18 @@ const OverviewQuery = ({collection}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
     const [serverError, setServerError] = React.useState('');
-    
-  
+
+
     const handleChange = (_event, newValue) => {
         setTabIndex(newValue);
     };
-
     const handleServerError = (err) => {
         setServerError(err.log);
-    }
+    };
     const handleCloseError = () => {
         setServerError('');
-    }
-    
+    };
+
     return (
         <Card className={classes.card}>
             <Typography className={classes.title} variant="h5" >
@@ -59,7 +58,7 @@ const OverviewQuery = ({collection}) => {
             <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                 <CardHeader
                     avatar={
-                        <WarningIcon className={classes.warning}/>
+                        <WarningIcon className={classes.warning} />
                     }
                     action={
                         <IconButton aria-label="settings" onClick={handleCloseError}>
@@ -69,7 +68,7 @@ const OverviewQuery = ({collection}) => {
                     title={serverError}
                 />
             </Collapse>
-            {tabIndex === 0 && 
+            {tabIndex === 0 &&
                 <Grid
                     alignItems="stretch"
                     className={classes.grid}
@@ -83,7 +82,7 @@ const OverviewQuery = ({collection}) => {
                     </Grid>
                 </Grid>
             }
-            {tabIndex === 1 && 
+            {tabIndex === 1 &&
                 <Grid
                     alignItems="stretch"
                     className={classes.grid}

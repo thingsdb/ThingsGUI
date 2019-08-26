@@ -1,12 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     root: {
         flexGrow: 1,
         position: 'absolute',
@@ -33,11 +32,11 @@ const withStores = withVlow([{
     keys: ['loaded'],
 }]);
 
-const AppLoader = ({onError, loaded}) => {
+const AppLoader = ({loaded}) => {
 
     const classes = useStyles();
     React.useEffect(() => {
-        ApplicationActions.connected(onError);
+        ApplicationActions.connected();
     }, [loaded]);
 
 
@@ -72,12 +71,12 @@ const AppLoader = ({onError, loaded}) => {
                         item
                         xs={12}
                     >
-                        <img 
+                        <img
                             className={classes.logo}
                             src="/static/img/thingsdb.gif"
-                            alt="loading..." 
+                            alt="loading..."
                             draggable="false"
-                            width= "100"
+                            width={100}
                         />
 
                     </Grid>
@@ -88,7 +87,6 @@ const AppLoader = ({onError, loaded}) => {
 };
 
 AppLoader.propTypes = {
-    onError: PropTypes.func.isRequired,
     loaded: ApplicationStore.types.loaded.isRequired,
 };
 

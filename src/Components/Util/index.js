@@ -9,11 +9,11 @@ import {StyledTabs, StyledTab} from './Tabs';
 const checkType = (t) => {
     let type = typeof(t);
     if (type === 'object') {
-        type = Array.isArray(t) ? 'array' : 'object'
+        type = Array.isArray(t) ? 'array' : 'object';
         if (type === 'object') {
             const kindOfObject = Object.keys(t)[0];
-            type = kindOfObject === '#' ? 'object' : (kindOfObject === '$' ? 'set' : null )
-        }    
+            type = kindOfObject === '#' ? 'object' : (kindOfObject === '$' ? 'set' : null );
+        }
     }
     return(type);
 };

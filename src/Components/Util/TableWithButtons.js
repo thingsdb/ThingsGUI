@@ -5,14 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {withStyles} from '@material-ui/core/styles';
 
-
-const styles = theme => ({
-    button: {
-        margin: theme.spacing(1),
-    },
-});
 
 const Tabel = ({header, rows, rowClick, buttons}) => {
 

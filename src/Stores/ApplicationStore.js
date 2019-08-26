@@ -32,7 +32,7 @@ class ApplicationStore extends BaseStore {
         this.state = ApplicationStore.defaults;
     }
 
-    onConnected(onError) {
+    onConnected() {
         this.emit('/connected').done((data) => {
             setTimeout(() => {
                 this.setState({
@@ -40,25 +40,25 @@ class ApplicationStore extends BaseStore {
                     connected: data.connected,
                 });
             }, 1000);
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onConnect({host, user, password}, onError) {
+    onConnect({host, user, password}) {
         this.emit('/connect', {host, user, password}).done((data) => {
             this.setState({
                 connErr: data.connErr,
                 connected: data.connected,
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
-    onConnectOther({host}, onError) {
+    onConnectOther({host}) {
         this.emit('/connect/other', {host}).done((data) => {
             this.setState({
-                connErr: data.connErr, // QUEST: vangt deze alle errors af? 
+                connErr: data.connErr, // QUEST: vangt deze alle errors af?
                 connected: data.connected,
             });
-        }).fail((event, status, message) => onError(message));
+        });
     }
 
     onDisconnect() {
@@ -68,7 +68,7 @@ class ApplicationStore extends BaseStore {
                 connErr: '',
                 match: {},
             });
-        }); //.fail((_xhr, {error}) => onError(error));
+        });
     }
 
     onNavigate(match) {

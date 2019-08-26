@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -18,7 +19,7 @@ import { makeStyles} from '@material-ui/core/styles';
 
 import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -67,7 +68,7 @@ const Connect = ({connErr, onConnected}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connectOther(form, (err) => setState({...state, serverError: err.log}));
+            ApplicationActions.connectOther(form);
 
             if(!state.serverError) {
                 setState({...state, show: false});
@@ -103,9 +104,15 @@ const Connect = ({connErr, onConnected}) => {
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{connErr || serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {connErr || serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
@@ -141,6 +148,7 @@ const Connect = ({connErr, onConnected}) => {
 };
 
 Connect.propTypes = {
+    onConnected: PropTypes.func.isRequired,
 
     /* application properties */
     connErr: ApplicationStore.types.connErr.isRequired,

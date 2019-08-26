@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CloseIcon from '@material-ui/icons/Close';
@@ -13,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { amber } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
+import {MessageActions, MessageStore} from '../../Stores/MessageStore';
 
 
 const useStyles = makeStyles(theme => ({
@@ -31,67 +32,53 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const withStores = withVlow([{
+    store: MessageStore,
+    keys: ['messages']
+}]);
 
-const ErrorToast = ({errors}) => {
+
+const ErrorToast = ({messages}) => {
     const classes = useStyles();
-    const [error, setError] = React.useState([])
-    
-    React.useEffect(() => {
-            console.log('effect', errors);
-            if (errors.length) {
-                setError(prevErr => ([...new Set([...prevErr, ...errors])]));
-            } else {
-                setError([]);
-            }  
-        },
-        [errors]
-    )
-
-    const handleCloseError = (i) => () => {
-        setError(prevErr => {
-            const newArray = [...prevErr];
-            newArray.splice(i, 1);
-            return newArray;
-        });
-    }
 
     return(
         <div className={classes.portal}>
             <ul>
-                {[...error].map((e, i) => (
-                        <Slide key={i} direction="up" in={true} timeout={{enter: 500}}>
-                            <Card className={classes.card}>
-                                <ExpansionPanel className={classes.panel}>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
-                                    >
-                                        <WarningIcon />
-                                        <Typography >{'Warning'}</Typography>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <Typography variant={'caption'}>
-                                            {e}
-                                        </Typography>
-                                    </ExpansionPanelDetails>
-                                    <ExpansionPanelActions>
-                                        <IconButton onClick={handleCloseError(i)}>
-                                            <CloseIcon /> 
-                                        </IconButton>
-                                    </ExpansionPanelActions>
-                                </ExpansionPanel>
-                            </Card>
-                        </Slide>
+                {[...messages].map((e, i) => (
+                    <Slide key={i} direction="up" in timeout={{enter: 500}}>
+                        <Card className={classes.card}>
+                            <ExpansionPanel className={classes.panel}>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <WarningIcon />
+                                    <Typography >
+                                        {'Warning'}
+                                    </Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Typography variant="caption">
+                                        {e}
+                                    </Typography>
+                                </ExpansionPanelDetails>
+                                <ExpansionPanelActions>
+                                    <IconButton onClick={MessageActions.removeByIdx(i)}>
+                                        <CloseIcon />
+                                    </IconButton>
+                                </ExpansionPanelActions>
+                            </ExpansionPanel>
+                        </Card>
+                    </Slide>
                 ))}
             </ul>
         </div>
     );
-}
-
-ErrorToast.propTypes = {
-    errors: PropTypes.array.isRequired,
 };
 
-export default ErrorToast;
+ErrorToast.propTypes = {
+    messages: MessageStore.types.messages.isRequired,
+};
 
+export default withStores(ErrorToast);

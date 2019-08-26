@@ -12,7 +12,6 @@ import { amber } from '@material-ui/core/colors';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
@@ -63,7 +62,7 @@ const Remove = ({user}) => { // TODO dialog are u sure?
         setState({...state, show: false});
     };
     const handleClickOk = () => {
-        ThingsdbActions.removeUser(user.name, (err) => (err) => setState({...state, serverError: err.log}));
+        ThingsdbActions.removeUser(user.name);
         if (!state.serverError) {
             setState({...state, show: false});
         }
@@ -71,7 +70,7 @@ const Remove = ({user}) => { // TODO dialog are u sure?
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
     return (
         <React.Fragment>
@@ -85,9 +84,9 @@ const Remove = ({user}) => { // TODO dialog are u sure?
                     onClick={handleClickOpen}
                 >
                     <CardContent>
-                        <Typography variant={'h6'} >
+                        <Typography variant="h6">
                             {'Remove'}
-                        </Typography> 
+                        </Typography>
                     </CardContent>
                 </CardActionArea>
             </Card>
@@ -105,9 +104,15 @@ const Remove = ({user}) => { // TODO dialog are u sure?
                     <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                         <Typography component="div">
                             <Grid component="label" container alignItems="center" spacing={1}>
-                                <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                                <Grid item>{serverError}</Grid>
-                                <Grid item> 
+                                <Grid item>
+                                    <Avatar className={classes.avatar}>
+                                        <WarningIcon className={classes.warning} />
+                                    </Avatar>
+                                </Grid>
+                                <Grid item>
+                                    {serverError}
+                                </Grid>
+                                <Grid item>
                                     <IconButton aria-label="settings" onClick={handleCloseError}>
                                         <CloseIcon />
                                     </IconButton>
