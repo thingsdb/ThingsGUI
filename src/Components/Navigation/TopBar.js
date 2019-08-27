@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import AppBar from '@material-ui/core/AppBar';
-import Avatar from '@material-ui/core/Avatar';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
@@ -13,7 +12,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
 
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -57,8 +55,8 @@ const TopBar = ({user, children}) => {
     };
 
     const handleMenuOpen = ({currentTarget}) => {
-        setAnchorEl(currentTarget)
-    }
+        setAnchorEl(currentTarget);
+    };
 
     const handleMenuClose = () => setAnchorEl(null);
 
@@ -77,7 +75,7 @@ const TopBar = ({user, children}) => {
                             alt="ThingsDB Logo"
                             src="/static/img/thingsdb-logo.png"
                             className={classes.avatar}
-                            draggable='false'                                
+                            draggable='false'
                         />
                         {/* </Tooltip> */}
                     </div>
@@ -134,8 +132,7 @@ const TopBar = ({user, children}) => {
 
 TopBar.propTypes = {
     user: PropTypes.object.isRequired,
-    onError: PropTypes.func.isRequired,
-
-}
+    children: PropTypes.object.isRequired,
+};
 
 export default TopBar;

@@ -23,7 +23,7 @@ class NodesStore extends BaseStore {
     }
 
     static defaults = {
-        counters: {}, 
+        counters: {},
         nodes: [],
         node: {},
     }
@@ -38,7 +38,7 @@ class NodesStore extends BaseStore {
             this.setState({nodes: data.nodes});
         }).fail((event, status, message) => {
             this.setState({
-                counters: {}, 
+                counters: {},
                 nodes: [],
                 node: {},
             });
@@ -88,22 +88,22 @@ class NodesStore extends BaseStore {
 
     onAddNode(config, onError) { // secret , ipAddress [, port]
         this.emit('/node/add', config).done(() => {
-            this.onGetNodes(onError); 
+            this.onGetNodes(onError);
         }).fail((event, status, message) => onError(message));
     }
 
     onPopNode(onError) {
         this.emit('/node/pop').done(() => {
-            this.onGetNodes(onError); 
+            this.onGetNodes(onError);
         }).fail((event, status, message) => onError(message));
     }
 
     onReplaceNode(config, onError) { // nodeId , secret [, port]
         this.emit('/node/replace', config).done(() => {
-            this.onGetNodes(onError); 
+            this.onGetNodes(onError);
         }).fail((event, status, message) => onError(message));
     }
-    
-};
+
+}
 
 export {NodesActions, NodesStore};

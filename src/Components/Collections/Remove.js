@@ -23,7 +23,7 @@ const Remove = ({collection}) => {
 
     const handleClickOk = () => {
         ThingsdbActions.removeCollection(collection.name, (err) => setState({...state, serverError: err.log}));
-        
+
         if (!state.serverError) {
             setState({...state, show: false});
         }
@@ -31,13 +31,13 @@ const Remove = ({collection}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
     return(
-        <SimpleModal 
+        <SimpleModal
             button={
-                <CardButton onClick={handleClickOpen} title={'Remove'} />             
-            } 
+                <CardButton onClick={handleClickOpen} title="Remove" />
+            }
             title={`Remove collection ${collection.name}?`}
             content={<ErrorMsg error={serverError} onClose={handleCloseError} />}
             open={show}

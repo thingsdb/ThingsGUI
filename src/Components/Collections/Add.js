@@ -95,9 +95,9 @@ const Add = ({connErr, collections}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
             <TextField
@@ -113,16 +113,16 @@ const Add = ({connErr, collections}) => {
                 error={errors.name}
             />
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
             button={
                 <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
-                    <AddBoxIcon className={classes.icon}/>
+                    <AddBoxIcon className={classes.icon} />
                 </ButtonBase>
             }
-            title={'New collection'}
+            title="New collection"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

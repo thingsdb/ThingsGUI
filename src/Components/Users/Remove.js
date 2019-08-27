@@ -11,7 +11,7 @@ const initialState = {
     serverError: '',
 };
 
-const Remove = ({user}) => { 
+const Remove = ({user}) => {
     const [state, setState] = React.useState(initialState);
     const {show, serverError} = state;
 
@@ -31,14 +31,14 @@ const Remove = ({user}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
     return(
-        <SimpleModal 
+        <SimpleModal
             button={
-                <CardButton onClick={handleClickOpen} title={'Remove'} />             
+                <CardButton onClick={handleClickOpen} title="Remove" />
             }
-            title={'Remove user?'}
+            title="Remove user?"
             content={<ErrorMsg error={serverError} onClose={handleCloseError} />}
             open={show}
             onOk={handleClickOk}

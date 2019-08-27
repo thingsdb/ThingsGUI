@@ -15,24 +15,24 @@ import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 const timeUnit = [
     {
-        label: "Second",
-        value: "1"
+        label: 'Second',
+        value: '1'
     },
     {
-        label: "Minute",
-        value: "60"
+        label: 'Minute',
+        value: '60'
     },
     {
-        label: "Hour",
-        value: "60*60"
+        label: 'Hour',
+        value: '60*60'
     },
     {
-        label: "Day",
-        value: "60*60*24"
+        label: 'Day',
+        value: '60*60*24'
     },
     {
-        label: "Week",
-        value: "60*60*24*7"
+        label: 'Week',
+        value: '60*60*24*7'
     },
 ];
 
@@ -90,7 +90,7 @@ const AddToken = ({user}) => {
         ThingsdbActions.newToken(
             {
                 name: user.name,
-                expirationTime: switches.expirationTime ? "(now() + " + form.number + "*" + form.timeUnit + ")" : null,
+                expirationTime: switches.expirationTime ? '(now() + ' + form.number + '*' + form.timeUnit + ')' : null,
                 description: switches.description ? form.description : null
             },
             (err) => setState({...state, serverError: err.log})
@@ -107,7 +107,7 @@ const AddToken = ({user}) => {
 
     const now = new Date().toISOString().substring(0, 16);
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <List>
@@ -160,7 +160,7 @@ const AddToken = ({user}) => {
                                     autoFocus
                                     margin="dense"
                                     id="number"
-                                    inputProps={{min: "1"}}
+                                    inputProps={{min: '1'}}
                                     type="number"
                                     value={form.number}  // TODOK placeholder
                                     spellCheck={false}
@@ -202,7 +202,7 @@ const AddToken = ({user}) => {
                 </Collapse>
             </List>
         </React.Fragment>
-    ;
+    );
 
 
     return (
@@ -212,7 +212,7 @@ const AddToken = ({user}) => {
                     {'Add token'}
                 </Button>
             }
-            title={'New token'}
+            title="New token"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

@@ -1,13 +1,12 @@
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card from '@material-ui/core/Card';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
-import {withVlow} from 'vlow';
 
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
@@ -46,9 +45,9 @@ const Nodes = ({onError, open, onClose, nodes}) => {
         <div>
             <div className={classes.drawerHeader}>
                 <IconButton onClick={onClose}>
-                {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
+                    {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
                 </IconButton>
-                <Typography variant={'h6'}> 
+                <Typography variant="h6">
                     {'NODES'}
                 </Typography>
             </div>
@@ -61,7 +60,7 @@ const Nodes = ({onError, open, onClose, nodes}) => {
 
 Nodes.propTypes = {
     onError: PropTypes.func.isRequired,
-    nodes: PropTypes.array.isRequired,
+    nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
 };

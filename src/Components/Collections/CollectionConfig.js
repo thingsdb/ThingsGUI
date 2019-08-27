@@ -29,34 +29,34 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const CollectionConfig = ({collection}) => {
-    const classes = useStyles();    
+    const classes = useStyles();
 
     const buttons = [
         {
             name: 'quotas',
-            component: <SetQuotas collection={collection} />  
+            component: <SetQuotas collection={collection} />
         },
         {
             name: 'rename',
-            component: <RenameCollection collection={collection} /> 
+            component: <RenameCollection collection={collection} />
         },
         {
             name: 'remove',
             component: <RemoveCollection collection={collection} />
         },
-    ]
-    
+    ];
+
     return (
         <div className={classes.flex}>
             <Card className={classes.card}>
-                <Typography className={classes.title}  variant={'h5'} >
+                <Typography className={classes.title} variant="h5" >
                     {'INFO'}
                 </Typography>
                 <CardContent>
                     <CollectionInfo collection={collection} />
                 </CardContent>
-            </ Card>
-            <Grid className={classes.buttons} container spacing={1} direction={'row'} justify={'center'} alignItems={'center'} >
+            </Card>
+            <Grid className={classes.buttons} container spacing={1} direction="row" justify="center" alignItems="center" >
                 {buttons.map(button => (
                     <Grid key={button.name} item>
                         {button.component}

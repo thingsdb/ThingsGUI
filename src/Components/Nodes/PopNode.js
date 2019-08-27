@@ -34,14 +34,14 @@ const PopNode = () => {
         setState({...state, serverError: ''});
     };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <DialogContentText>
                 {'Are you sure you want to remove the latest node?'}
             </DialogContentText>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
@@ -50,7 +50,7 @@ const PopNode = () => {
                     {'Pop Node'}
                 </Button>
             }
-            title={'CAUTION'}
+            title="CAUTION"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

@@ -82,23 +82,29 @@ const Password = ({user}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <Typography component="div">
-                <FormLabel component="legend">{'Set?'}</FormLabel>
+                <FormLabel component="legend">
+                    {'Set?'}
+                </FormLabel>
                 <Grid component="label" container alignItems="center" spacing={1}>
-                    <Grid item>{'no'}</Grid>
+                    <Grid item>
+                        {'no'}
+                    </Grid>
                     <Grid item>
                         <Switch
                             checked={user.has_password}
-                            color={'primary'}
+                            color="primary"
                             onChange={()=>null}
                         />
                     </Grid>
-                    <Grid item>{'yes'}</Grid>
+                    <Grid item>
+                        {'yes'}
+                    </Grid>
                 </Grid>
             </Typography>
             <TextField
@@ -123,19 +129,19 @@ const Password = ({user}) => {
                 }}
             />
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
             button={
-                <CardButton onClick={handleClickOpen} title={'Password'} />
+                <CardButton onClick={handleClickOpen} title="Password" />
             }
             actionButtons={
                 <Button onClick={handleClickReset} color="primary">
                     {'Reset'}
                 </Button>
             }
-            title={'Password'}
+            title="Password"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

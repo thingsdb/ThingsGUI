@@ -17,9 +17,9 @@ const CollectionInfo = ({collection}) => {
             {ky: 'quota_things', label: 'Quota on things'},
         ]}
     ];
-    
+
     return (
-        <Info header={header} content={collection}/>
+        <Info header={header} content={collection} />
     );
 };
 

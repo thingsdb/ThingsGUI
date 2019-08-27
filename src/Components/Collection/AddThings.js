@@ -60,7 +60,7 @@ const AddThings = ({info, collection, thing}) => {
 
     const validation = {
         queryString: () => '',
-        newProperty: () => Boolean(thing[form.newProperty]) ? 'Property name already in use' : '',
+        newProperty: () => thing[form.newProperty] ? 'Property name already in use' : '',
         value: () => {
             let errText;
             const bool = form.value.length>0;
@@ -96,11 +96,11 @@ const AddThings = ({info, collection, thing}) => {
         const dataType = key=='dataType' ? value : form.dataType;
 
         const val = dataType === 'array' ? `[${input}]`
-        : dataType == 'object' ? `{}`
-        : dataType == 'string' ? `'${input}'`
-        : dataType == 'number' ? `${input}`
-        : dataType == 'set' ? `set([])`
-        : '';
+            : dataType == 'object' ? '{}'
+                : dataType == 'string' ? `'${input}'`
+                    : dataType == 'number' ? `${input}`
+                        : dataType == 'set' ? 'set([])'
+                            : '';
 
         const n = type == 'object' ? propName : name;
         return buildQuery(id, n, val, type);
@@ -110,8 +110,8 @@ const AddThings = ({info, collection, thing}) => {
     const buildQuery = (i, n, v, t) => {
         return t==='array' ? `t(${i}).${n}.push(${v})`
             : t==='object' ? `t(${i}).${n} = ${v}`
-            : t==='set' ? `t(${i}).${n}.add(${v})`
-            : '';
+                : t==='set' ? `t(${i}).${n}.add(${v})`
+                    : '';
     };
 
 
@@ -136,14 +136,14 @@ const AddThings = ({info, collection, thing}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
     const addNewProperty = !(type == 'array' || type == 'set');
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';
 
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <List>
@@ -208,7 +208,7 @@ const AddThings = ({info, collection, thing}) => {
                                 {d}
                             </option>
                         ))}
-                    </ TextField>
+                    </TextField>
                 </ListItem>
 
                 {singleInputField ? (
@@ -228,20 +228,20 @@ const AddThings = ({info, collection, thing}) => {
                     </ListItem>
 
                 ) : multiInputField ? (
-                    <Add1DArray cb={handleArrayItems}/>
+                    <Add1DArray cb={handleArrayItems} />
                 ) : null}
             </List>
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
             button={
                 <ButtonBase onClick={handleClickOpen} >
-                    <AddBoxIcon color={'primary'}/>
+                    <AddBoxIcon color="primary" />
                 </ButtonBase>
             }
-            title={'Add Thing'}
+            title="Add Thing"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

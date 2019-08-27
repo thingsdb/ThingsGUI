@@ -34,18 +34,17 @@ const useStyles = makeStyles(theme => ({
 
 const ErrorToast = ({errors}) => {
     const classes = useStyles();
-    const [error, setError] = React.useState([])
-    
+    const [error, setError] = React.useState([]);
+
     React.useEffect(() => {
-            console.log('effect', errors);
-            if (errors.length) {
-                setError(prevErr => ([...new Set([...prevErr, ...errors])]));
-            } else {
-                setError([]);
-            }  
-        },
-        [errors]
-    )
+        if (errors.length) {
+            setError(prevErr => ([...new Set([...prevErr, ...errors])]));
+        } else {
+            setError([]);
+        }
+    },
+    [errors]
+    );
 
     const handleCloseError = (i) => () => {
         setError(prevErr => {
@@ -53,44 +52,46 @@ const ErrorToast = ({errors}) => {
             newArray.splice(i, 1);
             return newArray;
         });
-    }
+    };
 
     return(
         <div className={classes.portal}>
             <ul>
                 {[...error].map((e, i) => (
-                        <Slide key={i} direction="up" in={true} timeout={{enter: 500}}>
-                            <Card className={classes.card}>
-                                <ExpansionPanel className={classes.panel}>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
-                                    >
-                                        <WarningIcon />
-                                        <Typography >{'Warning'}</Typography>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <Typography variant={'caption'}>
-                                            {e}
-                                        </Typography>
-                                    </ExpansionPanelDetails>
-                                    <ExpansionPanelActions>
-                                        <IconButton onClick={handleCloseError(i)}>
-                                            <CloseIcon /> 
-                                        </IconButton>
-                                    </ExpansionPanelActions>
-                                </ExpansionPanel>
-                            </Card>
-                        </Slide>
+                    <Slide key={i} direction="up" in timeout={{enter: 500}}>
+                        <Card className={classes.card}>
+                            <ExpansionPanel className={classes.panel}>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <WarningIcon />
+                                    <Typography>
+                                        {'Warning'}
+                                    </Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Typography variant="caption">
+                                        {e}
+                                    </Typography>
+                                </ExpansionPanelDetails>
+                                <ExpansionPanelActions>
+                                    <IconButton onClick={handleCloseError(i)}>
+                                        <CloseIcon />
+                                    </IconButton>
+                                </ExpansionPanelActions>
+                            </ExpansionPanel>
+                        </Card>
+                    </Slide>
                 ))}
             </ul>
         </div>
     );
-}
+};
 
 ErrorToast.propTypes = {
-    errors: PropTypes.array.isRequired,
+    errors: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default ErrorToast;

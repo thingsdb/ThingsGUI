@@ -52,13 +52,13 @@ const User = ({user, collections}) => {
                     <Tokens user={user} />
                 </div>
             </div>
-        </div>    
+        </div>
     );
 };
 
 User.propTypes = {
     user: PropTypes.object.isRequired,
-    collections: PropTypes.array.isRequired,
+    collections: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default User;

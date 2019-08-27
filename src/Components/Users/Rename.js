@@ -60,9 +60,9 @@ const Rename = ({user, users}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
@@ -77,15 +77,15 @@ const Rename = ({user, users}) => {
                 fullWidth
                 error={errors.name}
             />
-        </ React.Fragment>
-    ;
+        </React.Fragment>
+    );
 
     return(
         <SimpleModal
             button={
-                <CardButton onClick={handleClickOpen} title={'Rename'} />
+                <CardButton onClick={handleClickOpen} title="Rename" />
             }
-            title={'Rename user'}
+            title="Rename user"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

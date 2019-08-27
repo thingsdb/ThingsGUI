@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
             minHeight: 56,
         },
     },
-        content: {
+    content: {
         '&$expanded': {
             margin: '12px 0',
         },
@@ -34,13 +34,13 @@ const useStyles = makeStyles(theme => ({
         border: '1px solid rgba(0, 0, 0, .125)',
         boxShadow: 'none',
         '&:not(:last-child)': {
-          borderBottom: 0,
+            borderBottom: 0,
         },
         '&:before': {
-          display: 'none',
+            display: 'none',
         },
         '&$expanded': {
-          margin: 'auto',
+            margin: 'auto',
         },
     },
 }));

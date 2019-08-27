@@ -58,7 +58,7 @@ const AddNode = () => {
         setState({...state, serverError: ''});
     };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
@@ -96,7 +96,7 @@ const AddNode = () => {
                 error={errors.port}
             />
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
@@ -105,7 +105,7 @@ const AddNode = () => {
                     {'Add node'}
                 </Button>
             }
-            title={'Add Node'}
+            title="Add Node"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

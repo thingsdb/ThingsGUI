@@ -22,9 +22,9 @@ const Counters = ({counters}) => {
             {ky: 'events_unaligned', label: 'Events unaligned'},
         ]}
     ];
-    
+
     return (
-        <Info header={header} content={counters}/>
+        <Info header={header} content={counters} />
     );
 };
 

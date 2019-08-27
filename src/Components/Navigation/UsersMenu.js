@@ -12,11 +12,11 @@ const UsersMenu = ({users, onClickUser}) => {
     const handleClickUser = (user) => {
         onClickUser(user);
         ApplicationActions.navigate({path: 'user'});
-    }
+    };
 
     return (
         <Menu
-            title={'USERS'}
+            title="USERS"
             icon={<PersonIcon />}
             items={users}
             addItem={<AddUser />}
@@ -26,7 +26,7 @@ const UsersMenu = ({users, onClickUser}) => {
 };
 
 UsersMenu.propTypes = {
-    users: PropTypes.array.isRequired,
+    users: PropTypes.arrayOf(PropTypes.object).isRequired,
     onClickUser: PropTypes.func.isRequired,
 
 };

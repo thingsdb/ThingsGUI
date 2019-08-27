@@ -11,26 +11,31 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
     avatar: {
         backgroundColor: 'transparent',
     },
     warning: {
         color: amber[700],
     },
-}));
+});
 
 const ErrorMsg = ({error, onClose}) => {
     const classes = useStyles();
-    console.log('TESTTESTTESSST')
     return (
         <React.Fragment>
             <Collapse in={Boolean(error)} timeout="auto" unmountOnExit>
                 <Typography component="div">
                     <Grid component="label" container alignItems="center" spacing={1}>
-                        <Grid item><Avatar className={classes.avatar}><WarningIcon className={classes.warning}/></Avatar></Grid>
-                        <Grid item>{error}</Grid>
-                        <Grid item> 
+                        <Grid item>
+                            <Avatar className={classes.avatar}>
+                                <WarningIcon className={classes.warning} />
+                            </Avatar>
+                        </Grid>
+                        <Grid item>
+                            {error}
+                        </Grid>
+                        <Grid item>
                             <IconButton aria-label="settings" onClick={onClose}>
                                 <CloseIcon />
                             </IconButton>
@@ -44,6 +49,7 @@ const ErrorMsg = ({error, onClose}) => {
 
 ErrorMsg.propTypes = {
     error: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired,
 };
 
 export default ErrorMsg;

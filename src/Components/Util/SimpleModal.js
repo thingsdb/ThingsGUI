@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClose}) => { 
+const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClose}) => {
 
     const handleClose = () => {
         onClose();
@@ -51,6 +51,7 @@ SimpleModal.defaultProps = {
 },
 
 SimpleModal.propTypes = {
+    children: PropTypes.object.isRequired,
     button: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
     actionButtons: PropTypes.object,

@@ -6,13 +6,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-
-const styles = theme => ({
-    button: {
-        margin: theme.spacing(1),
-    },
-});
-
 const TableWithButtons = ({header, rows, rowClick, buttons}) => {
 
     const handleClickRow = (row) => () => {

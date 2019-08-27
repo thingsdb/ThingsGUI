@@ -61,7 +61,7 @@ const ReplaceNode = ({nodes}) => {
         setState({...state, serverError: ''});
     };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
@@ -104,7 +104,7 @@ const ReplaceNode = ({nodes}) => {
                 error={errors.port}
             />
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
@@ -113,7 +113,7 @@ const ReplaceNode = ({nodes}) => {
                     {'Replace Node'}
                 </Button>
             }
-            title={'Replace Node'}
+            title="Replace Node"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

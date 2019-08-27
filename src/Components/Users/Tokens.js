@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
 import Card from '@material-ui/core/Card';
@@ -54,10 +55,10 @@ const Tokens = ({user}) => {
 
     const handleServerError = (err) => {
         setServerError(err.log);
-    }
+    };
     const handleCloseError = () => {
         setServerError('');
-    }
+    };
 
     return (
         <Card className={classes.card}>
@@ -67,7 +68,7 @@ const Tokens = ({user}) => {
             <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                 <CardHeader
                     avatar={
-                        <WarningIcon className={classes.warning}/>
+                        <WarningIcon className={classes.warning} />
                     }
                     action={
                         <IconButton aria-label="settings" onClick={handleCloseError}>
@@ -92,7 +93,7 @@ const Tokens = ({user}) => {
                 <RemoveExpired onServerError={handleServerError} />
                 <AddToken user={user} />
             </CardActions>
-        </ Card>
+        </Card>
     );
 };
 

@@ -10,9 +10,9 @@ const StyledTabs = withStyles(theme => ({
         justifyContent: 'center',
         backgroundColor: 'transparent',
         '& > div': {
-        maxWidth: 40,
-        width: '100%',
-        backgroundColor: theme.palette.primary.main,
+            maxWidth: 40,
+            width: '100%',
+            backgroundColor: theme.palette.primary.main,
         },
     },
 }))(props => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
@@ -25,7 +25,7 @@ const StyledTab = withStyles(theme => ({
         fontSize: theme.typography.pxToRem(15),
         marginRight: theme.spacing(1),
         '&:focus': {
-        opacity: 1,
+            opacity: 1,
         },
     },
 }))(props => <Tab disableRipple {...props} />);

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';;
+import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../Util';
@@ -63,14 +63,14 @@ const Quotas = ({collection}) => {
         ThingsdbActions.setQuota(
             collection.name,
             form.quotaType,
-            "nil",
+            'nil',
             (err) => setState({...state, serverError: err.log})
         );
 
         if (!state.serverError) {
             setState({...state, show: false});
         }
-    }
+    };
 
     const handleClickOk = () => {
         ThingsdbActions.setQuota(
@@ -87,9 +87,9 @@ const Quotas = ({collection}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
@@ -113,7 +113,7 @@ const Quotas = ({collection}) => {
                 autoFocus
                 margin="dense"
                 id="quota"
-                inputProps={{min: "1"}}
+                inputProps={{min: '1'}}
                 label="Quota"
                 type="number"
                 value={form.quota}  // TODOK placeholder
@@ -122,19 +122,19 @@ const Quotas = ({collection}) => {
                 fullWidth
             />
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
             button={
-                <CardButton onClick={handleClickOpen} title={'Quotas'} />
+                <CardButton onClick={handleClickOpen} title="Quotas" />
             }
             actionButtons={
                 <Button onClick={handleUnset} color="primary">
                     {'Unset Quota'}
                 </Button>
             }
-            title={'Set quotas'}
+            title="Set quotas"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

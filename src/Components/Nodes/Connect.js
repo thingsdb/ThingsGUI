@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import {withVlow} from 'vlow';
@@ -63,7 +64,7 @@ const Connect = ({connErr, onConnected}) => {
         setState({...state, serverError: ''});
     };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
             <TextField
@@ -79,8 +80,7 @@ const Connect = ({connErr, onConnected}) => {
                 error={errors.host}
             />
         </React.Fragment>
-
-    ;
+    );
 
     return(
         <SimpleModal
@@ -89,7 +89,7 @@ const Connect = ({connErr, onConnected}) => {
                     {'Connect'}
                 </Button>
             }
-            title={'Connect to other node'}
+            title="Connect to other node"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
@@ -100,6 +100,8 @@ const Connect = ({connErr, onConnected}) => {
 };
 
 Connect.propTypes = {
+
+    onConnected: PropTypes.func.isRequired,
 
     /* application properties */
     connErr: ApplicationStore.types.connErr.isRequired,

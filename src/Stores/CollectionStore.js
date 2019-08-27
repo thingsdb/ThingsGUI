@@ -34,10 +34,10 @@ class CollectionStore extends BaseStore {
             depth: depth
         }).done((data) => {
             this.setState(prevState => {
-                const things = thingId ? 
-                Object.assign({}, prevState.things, {[thingId]: data})
-                :
-                Object.assign({}, prevState.things, {[collectionId]: data});
+                const things = thingId ?
+                    Object.assign({}, prevState.things, {[thingId]: data})
+                    :
+                    Object.assign({}, prevState.things, {[collectionId]: data});
                 return {things};
             });
         }).fail((event, status, message) => onError(message));
@@ -60,7 +60,7 @@ class CollectionStore extends BaseStore {
     onRemoveThing(config, onError) {
         this.emit('/collection/remove-thing', config).done((data) => {
             this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[config.thingId]: data})
+                const things = Object.assign({}, prevState.things, {[config.thingId]: data});
                 return {things};
             });
         }).fail((event, status, message) => onError(message));
@@ -73,7 +73,7 @@ class CollectionStore extends BaseStore {
             query: query,
         }).done((data) => {
             this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[thingId]: data})
+                const things = Object.assign({}, prevState.things, {[thingId]: data});
                 return {things};
             });
         }).fail((event, status, message) => onError(message));

@@ -10,7 +10,7 @@ const initialState = {
     serverError: '',
 };
 
-const CountersReset = ({node}) => {   
+const CountersReset = ({node}) => {
     const [state, setState] = React.useState(initialState);
     const {show, serverError} = state;
 
@@ -23,7 +23,7 @@ const CountersReset = ({node}) => {
     };
     const handleClickOk = () => {
         NodesActions.shutdown(node, (err) => setState({...state, serverError: err.log}));
-        
+
         if (!state.serverError) {
             setState({...state, show: false});
         }
@@ -34,13 +34,13 @@ const CountersReset = ({node}) => {
     };
 
     return(
-        <SimpleModal 
+        <SimpleModal
             button={
                 <Button variant="outlined" onClick={handleClickOpen}>
                     {'Shutdown'}
-                </Button>         
+                </Button>
             }
-            title={'Shutdown node?'}
+            title="Shutdown node?"
             content={<ErrorMsg error={serverError} onClose={handleCloseError} />}
             open={show}
             onOk={handleClickOk}

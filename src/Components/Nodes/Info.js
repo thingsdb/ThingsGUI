@@ -28,7 +28,7 @@ const NodeInfo = ({node}) => {
             {ky: 'cached_names', label: 'Cached names'},
         ]},
         {ky: 'title5', title: '[TITLE5]', labels: [
-            {ky: 'events_in_queue', label: 'Events in queue'},      
+            {ky: 'events_in_queue', label: 'Events in queue'},
             {ky: 'global_committed_event_id', label: 'Global committed event ID'},
             {ky: 'global_stored_event_id', label: 'Global stored event ID'},
             {ky: 'db_stored_event_id', label: 'Stored event ID'},
@@ -36,7 +36,7 @@ const NodeInfo = ({node}) => {
             {ky: 'local_stored_event_id', label: 'Local stored event ID'},
             {ky: 'next_event_id', label: 'Next event ID'},
             {ky: 'next_thing_id', label: 'Next thing ID'},
-    
+
         ]},
         {ky: 'title6', title: '[TITLE6]', labels: [
             {ky: 'version', label: 'Version'},
@@ -50,7 +50,7 @@ const NodeInfo = ({node}) => {
     ];
 
     return (
-        <Info header={header} content={node}/>
+        <Info header={header} content={node} />
     );
 };
 

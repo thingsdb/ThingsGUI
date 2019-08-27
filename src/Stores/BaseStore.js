@@ -1,5 +1,4 @@
 /* global process */
-import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import io from 'socket.io-client';
 
@@ -38,7 +37,6 @@ class _SocketRequest {
             }
 
             this._alwaysCb(status, data);
-            console.log('status', status, 'event', event, 'data', data, 'message', message);
             if (status === 0) {
                 window.console.debug(`Socket response ("${event}"):`, data);
                 this._doneCb(data);

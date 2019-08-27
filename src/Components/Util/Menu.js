@@ -13,9 +13,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
     root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
     },
     nested: {
         paddingLeft: theme.spacing(4),
@@ -35,7 +35,7 @@ const Menu = ({title, icon, items, addItem, onClickItem}) => {
     };
     const handleClickItem = (i) => () => {
         onClickItem(i);
-    }
+    };
 
     return (
         <React.Fragment>
@@ -78,7 +78,7 @@ const Menu = ({title, icon, items, addItem, onClickItem}) => {
 
 Menu.propTypes = {
     title: PropTypes.string.isRequired,
-    items: PropTypes.array.isRequired,
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
     icon: PropTypes.element.isRequired,
     addItem: PropTypes.object.isRequired,
     onClickItem: PropTypes.func.isRequired,

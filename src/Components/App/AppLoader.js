@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
     root: {
         flexGrow: 1,
         position: 'absolute',
@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
         height: 250,
         textAlign: 'center',
     },
-}));
+});
 
 const withStores = withVlow([{
     store: ApplicationStore,

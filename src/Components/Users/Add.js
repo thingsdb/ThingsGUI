@@ -94,7 +94,7 @@ const AddUser = ({users}) => {
         setState({...state, serverError: ''});
     };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
@@ -110,16 +110,16 @@ const AddUser = ({users}) => {
                 error={errors.name}
             />
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
             button={
                 <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
-                    <AddBoxIcon className={classes.icon}/>
+                    <AddBoxIcon className={classes.icon} />
                 </ButtonBase>
             }
-            title={'New User'}
+            title="New User"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
@@ -135,4 +135,4 @@ AddUser.propTypes = {
     users: ThingsdbStore.types.users.isRequired,
 };
 
-export default withStores(AddUser); // QUEST: volgorde goed zo?
+export default withStores(AddUser);

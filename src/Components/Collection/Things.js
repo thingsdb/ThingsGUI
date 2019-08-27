@@ -34,13 +34,11 @@ const useStyles = makeStyles(theme => ({
 const ThingRoot = ({things, collection, onError}) => {
     const classes = useStyles();
     const fetched = things.hasOwnProperty(collection.collection_id);
-    
+
     React.useEffect(() => {
         CollectionActions.query(collection.collection_id, onError);
     }, [collection.collection_id]);
-    
 
-    fetched&&console.log(Object.entries(things[collection.collection_id]), things[collection.collection_id]);
     return (
         <React.Fragment>
             {fetched ? (
@@ -51,38 +49,39 @@ const ThingRoot = ({things, collection, onError}) => {
                 >
                     {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
                         <React.Fragment key={k}>
-                            <Thing 
-                                className={classes.thing} 
-                                id={collection.collection_id} 
-                                thing={v} 
-                                collection={collection} 
+                            <Thing
+                                className={classes.thing}
+                                id={collection.collection_id}
+                                thing={v}
+                                collection={collection}
                                 info={{
                                     name: k,
                                     id: collection.collection_id,
                                     parentType: 'object',
-                                }} 
-                                onError={onError} 
+                                }}
+                                onError={onError}
                             />
                         </React.Fragment>
                     ))}
                     <ListItem>
-                    <ListItemIcon>
-                            <AddThings 
+                        <ListItemIcon>
+                            <AddThings
                                 info={{
                                     id: collection.collection_id,
                                     name: '',
-                                    type: 'object', 
+                                    type: 'object',
                                 }}
-                                collection={collection} 
-                                thing={things[collection.collection_id]} />
+                                collection={collection}
+                                thing={things[collection.collection_id]}
+                            />
                         </ListItemIcon>
                         {Object.entries(things[collection.collection_id]).length<2 ? (
-                            <ListItemText primary={'Add your first thing!'} /> 
+                            <ListItemText primary="Add your first thing!" />
                         ) : null}
                     </ListItem>
                 </List>
             ) : (
-                <Typography variant={'caption'}>
+                <Typography variant="caption">
                     {'Cannot fetch data.'}
                 </Typography>
             )}
@@ -92,6 +91,8 @@ const ThingRoot = ({things, collection, onError}) => {
 
 ThingRoot.propTypes = {
     onError: PropTypes.func.isRequired,
+
+    collection: PropTypes.object.isRequired,
 
     /* collection properties */
     things: CollectionStore.types.things.isRequired,

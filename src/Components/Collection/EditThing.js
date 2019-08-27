@@ -60,7 +60,7 @@ const EditThing = ({info, collection, thing}) => {
 
     const validation = {
         queryString: () => '',
-        newProperty: () => form.newProperty == name ? '' : Boolean(thing[form.newProperty]) ? 'Property name already in use' : '',
+        newProperty: () => form.newProperty == name ? '' : thing[form.newProperty] ? 'Property name already in use' : '',
         value: () => {
             let errText;
             const bool = form.value.length>0;
@@ -95,11 +95,11 @@ const EditThing = ({info, collection, thing}) => {
         const dataType = key=='dataType' ? value : form.dataType;
 
         const val = dataType === 'array' ? `[${input}]`
-        : dataType == 'object' ? `{}`
-        : dataType == 'string' ? `'${input}'`
-        : dataType == 'number' ? `${input}`
-        : dataType == 'set' ? `set([])`
-        : '';
+            : dataType == 'object' ? '{}'
+                : dataType == 'string' ? `'${input}'`
+                    : dataType == 'number' ? `${input}`
+                        : dataType == 'set' ? 'set([])'
+                            : '';
 
         return buildQuery(id, name, val, parentType);
 
@@ -107,16 +107,15 @@ const EditThing = ({info, collection, thing}) => {
 
     const buildQuery = (i, n, v, t) => {
         return t==='array' ? `t(${i}).${n}.splice(${index}, 1, ${v})`
-        : t==='object' ? `t(${i}).${n} = ${v}`
-        : t==='set' ? `t(${i}).${n}.add(${v})`
-        : '';
+            : t==='object' ? `t(${i}).${n} = ${v}`
+                : t==='set' ? `t(${i}).${n}.add(${v})`
+                    : '';
     };
 
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
         setState({...state, errors: err});
-        console.log(form.queryString, collection.collection_id, id);
         if (!Object.values(err).some(d => d)) {
             CollectionActions.rawQuery(
                 collection.collection_id,
@@ -135,13 +134,13 @@ const EditThing = ({info, collection, thing}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';
 
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <List>
@@ -189,7 +188,7 @@ const EditThing = ({info, collection, thing}) => {
                                 {d}
                             </option>
                         ))}
-                    </ TextField>
+                    </TextField>
                 </ListItem>
 
                 {singleInputField ? (
@@ -209,20 +208,20 @@ const EditThing = ({info, collection, thing}) => {
                     </ListItem>
 
                 ) : multiInputField ? (
-                    <Add1DArray cb={handleArrayItems}/>
+                    <Add1DArray cb={handleArrayItems} />
                 ) : null}
             </List>
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
             button={
                 <ButtonBase onClick={handleClickOpen} >
-                    <EditIcon color={'primary'}/>
+                    <EditIcon color="primary" />
                 </ButtonBase>
             }
-            title={'Edit Thing'}
+            title="Edit Thing"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

@@ -20,7 +20,7 @@ const RemoveThing = ({collection, thing, info}) => {
     const buildQuery = (p, ti, n, i) => {
         return i == null ? `t(${ti}).del('${n}')`
             : n == '$' ? `t(${ti}).${p}.remove(t(${ti}).${p}.find(|s| (s.id()==${thing['#']}) ))`
-            : `t(${ti}).${n}.splice(${i}, 1)`;
+                : `t(${ti}).${n}.splice(${i}, 1)`;
     };
 
 
@@ -59,25 +59,25 @@ const RemoveThing = ({collection, thing, info}) => {
 
     const handleCloseError = () => {
         setState({...state, serverError: ''});
-    }
+    };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <DialogContentText>
                 {'Are you sure?'}
             </DialogContentText>
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
             button={
                 <ButtonBase onClick={handleClickOpen} >
-                    <DeleteIcon color={'primary'}/>
+                    <DeleteIcon color="primary" />
                 </ButtonBase>
             }
-            title={'Remove Thing'}
+            title="Remove Thing"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

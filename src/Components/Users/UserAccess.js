@@ -5,7 +5,6 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CloseIcon from '@material-ui/icons/Close';
 import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -77,33 +76,33 @@ const UserAccess = ({user, collections}) => {
     const [state, setState] = React.useState(initialState);
     const {switches, serverError} = state;
 
-    const getSwitches = (target, privileges) => {     
+    const getSwitches = (target, privileges) => {
         let s = {
             full: false,
-            read: false, 
+            read: false,
             modify: false,
             grant: false,
             watch: false,
             run: false,
-        }
+        };
 
         s.full = privileges.includes('FULL');
         if (s.full) {
-            s.read = true; 
+            s.read = true;
             s.modify = true;
             s.grant = true;
-            s.watch = true; 
+            s.watch = true;
             s.run = true;
         } else {
-            s.read = privileges.includes('READ'); 
+            s.read = privileges.includes('READ');
             s.modify = privileges.includes('MODIFY');
             s.grant = privileges.includes('GRANT');
-            s.watch = privileges.includes('WATCH'); 
+            s.watch = privileges.includes('WATCH');
             s.run = privileges.includes('RUN');
         }
-         
-        return ({[target]: s})
-    }
+
+        return ({[target]: s});
+    };
 
     const targets = [
         {name: 'ThingsDB', value: '.thingsdb'},
@@ -112,16 +111,16 @@ const UserAccess = ({user, collections}) => {
     ];
 
     React.useEffect(() => {
-            let s = {};
-            targets.map(({name, value}) => {
-                s = Object.assign({}, s, getSwitches(value, ''));
-            });
-            user.access.map(({target, privileges}) => {
-                s = Object.assign({}, s, getSwitches(target, privileges));
-            });
-            setState({serverError: '', switches:s});
-        },
-        [user, collections.length]
+        let s = {};
+        targets.map(({_name, value}) => {
+            s = Object.assign({}, s, getSwitches(value, ''));
+        });
+        user.access.map(({target, privileges}) => {
+            s = Object.assign({}, s, getSwitches(target, privileges));
+        });
+        setState({serverError: '', switches:s});
+    },
+    [user, targets]
     );
 
 
@@ -135,8 +134,8 @@ const UserAccess = ({user, collections}) => {
 
         if (checked) {
             ThingsdbActions.grant(
-                user.name, 
-                key, 
+                user.name,
+                key,
                 value,
                 (err) => {
                     setState((prevState => {
@@ -144,27 +143,27 @@ const UserAccess = ({user, collections}) => {
                         newswitches[key][value] = checked;
                         return {serverError: err.log, switches: newswitches};
                     }));
-                } 
+                }
             );
         } else {
             ThingsdbActions.revoke(
-                user.name, 
-                key, 
-                value, 
+                user.name,
+                key,
+                value,
                 (err) => {
                     setState((prevState => {
                         let newswitches = JSON.parse(JSON.stringify(prevState.switches));
                         newswitches[key][value] = checked;
                         return {serverError: err.log, switches: newswitches};
                     }));
-                } 
+                }
             );
         }
     };
 
     const handleCloseError = () => {
-        setState({...state, serverError: ''});;
-    }
+        setState({...state, serverError: ''});
+    };
 
     const buttons = [
         {
@@ -179,7 +178,7 @@ const UserAccess = ({user, collections}) => {
             name: 'remove',
             component: <RemoveUser user={user} />
         },
-    ]
+    ];
 
 
     const switchesKeys = Object.keys(switches);
@@ -193,7 +192,7 @@ const UserAccess = ({user, collections}) => {
                 <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                     <CardHeader
                         avatar={
-                            <WarningIcon className={classes.warning}/>
+                            <WarningIcon className={classes.warning} />
                         }
                         action={
                             <IconButton aria-label="settings" onClick={handleCloseError}>
@@ -216,19 +215,19 @@ const UserAccess = ({user, collections}) => {
                                 <Grid item container xs={9} >
                                     <Grid item container xs={12} >
                                         {privileges.map(({ky, label}) => (
-                                            <Grid item xs={2} key={ky} container justify={'center'} >
-                                                <Typography variant={'caption'} align={'center'} >
+                                            <Grid item xs={2} key={ky} container justify="center" >
+                                                <Typography variant="caption" align="center" >
                                                     {label}
                                                 </Typography>
                                             </Grid>
                                         ))}
-                                    </Grid>   
+                                    </Grid>
                                 </Grid>
                             </Grid>
                             {switchesKeys.map((key, i) => (
                                 <React.Fragment key={i}>
                                     <Grid item container xs={12} spacing={2}>
-                                        <Grid item xs={3} container alignItems={'center'} >
+                                        <Grid item xs={3} container alignItems="center">
                                             <Typography>
                                                 {key}
                                             </Typography>
@@ -236,11 +235,11 @@ const UserAccess = ({user, collections}) => {
                                         <Grid item container xs={9} >
                                             <Grid item container xs={12} >
                                                 {privileges.map(({ky, label}) => (
-                                                    <Grid item xs={2} key={ky} container justify={'center'} >
-                                                        <Checkbox disabled={Boolean(serverError)} checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary"/>
+                                                    <Grid item xs={2} key={ky} container justify="center">
+                                                        <Checkbox disabled={Boolean(serverError)} checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
                                                     </Grid>
                                                 ))}
-                                            </Grid>   
+                                            </Grid>
                                         </Grid>
                                     </Grid>
                                 </React.Fragment>
@@ -248,22 +247,22 @@ const UserAccess = ({user, collections}) => {
                         </Grid>
                     </Grid>
                 </Grid>
-            </Card> 
-            <Grid className={classes.buttons} container spacing={1} direction={'row'} justify={'center'} alignItems={'center'} >
+            </Card>
+            <Grid className={classes.buttons} container spacing={1} direction="row" justify="center" alignItems="center" >
                 {buttons.map(button => (
                     <Grid key={button.name} item>
                         {button.component}
                     </Grid>
                 ))}
             </Grid>
-        </div>    
-           
+        </div>
+
     );
 };
 
 UserAccess.propTypes = {
     user: PropTypes.object.isRequired,
-    collections: PropTypes.array.isRequired,
+    collections: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default UserAccess;

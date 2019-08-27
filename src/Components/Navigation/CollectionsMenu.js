@@ -12,11 +12,11 @@ const CollectionsMenu = ({collections, onClickCollection}) => {
     const handleClickCollection = (collection) => {
         onClickCollection(collection);
         ApplicationActions.navigate({path: 'collection'});
-    }
+    };
 
     return (
         <Menu
-            title={'COLLECTIONS'}
+            title="COLLECTIONS"
             icon={<DashboardIcon />}
             items={collections}
             addItem={<AddCollection />}
@@ -27,7 +27,7 @@ const CollectionsMenu = ({collections, onClickCollection}) => {
 
 CollectionsMenu.propTypes = {
     onClickCollection: PropTypes.func.isRequired,
-    collections: PropTypes.array.isRequired,
+    collections: PropTypes.arrayOf(PropTypes.object).isRequired,
 
 };
 

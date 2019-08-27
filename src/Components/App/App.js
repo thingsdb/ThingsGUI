@@ -98,10 +98,8 @@ const App = ({onError, collections, match, user, users, nodes}) => {
     const [indexCollection, setIndexCollection] = React.useState(0);
     const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
-    console.log(collections, nodes);
 
     React.useEffect(() => {
-        console.log('effect 1');
         ThingsdbActions.getInfo(onError);
         NodesActions.getNodes(onError);
     },

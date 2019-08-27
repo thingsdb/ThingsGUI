@@ -56,7 +56,7 @@ const Loglevel = ({node}) => {
         setState({...state, serverError: ''});
     };
 
-    const Content =
+    const Content = (
         <React.Fragment>
             <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
@@ -77,7 +77,7 @@ const Loglevel = ({node}) => {
                 ))}
             </TextField>
         </React.Fragment>
-    ;
+    );
 
     return(
         <SimpleModal
@@ -86,7 +86,7 @@ const Loglevel = ({node}) => {
                     {'Loglevel'}
                 </Button>
             }
-            title={'Set Loglevel'}
+            title="Set Loglevel"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

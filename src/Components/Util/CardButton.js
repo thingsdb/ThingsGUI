@@ -29,7 +29,7 @@ const CardButton = ({onClick, title}) => {
     const classes = useStyles();
 
     const handleClick = () => {
-        onClick()
+        onClick();
     };
 
     return(
@@ -43,9 +43,9 @@ const CardButton = ({onClick, title}) => {
                 onClick={handleClick}
             >
                 <CardContent>
-                    <Typography variant={'h6'} >
+                    <Typography variant="h6" >
                         {title}
-                    </Typography> 
+                    </Typography>
                 </CardContent>
             </CardActionArea>
         </Card>
