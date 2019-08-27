@@ -13,7 +13,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Things from '../Collection/Things';
 import Query from '../Collection/Query';
-import { StyledTabs, StyledTab } from '../Util';
 
 const useStyles = makeStyles(theme => ({
     grid: {
@@ -69,7 +68,7 @@ const OverviewQuery = ({collection}) => {
                 spacing={1}
             >
                 <Grid item xs={4}>
-                    <Query collection={collection} />
+                    <Query collection={collection} onError={handleServerError} />
                 </Grid>
                 <Grid item xs={8}>
                     <Typography className={classes.title} variant="body1" >

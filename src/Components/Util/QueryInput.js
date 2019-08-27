@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Language from './Language.js';
 import * as monaco from 'monaco-editor';
 
@@ -134,7 +135,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
 monaco.languages.setLanguageConfiguration('mySpecialLanguage', {
     surroundingPairs: [{open:'{', close: '}'}],
     autoClosingPairs: [{open:'{', close: '}'}],
-    brackets: [['{','}']]
+    brackets: [['{','}']],
 });
 
 monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
@@ -162,8 +163,6 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 }))
             );
         }
-
-
         return { suggestions };
     }
 });
@@ -171,19 +170,41 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
 
 class QueryInput extends React.Component {
 
+    static propTypes = {
+        onChange: PropTypes.func.isRequired,
+    }
+
+    constructor(props) {
+        super(props);
+    }
+
     componentDidMount() {
-        monaco.editor.create(this.ele, {
+        const {onChange} = this.props;
+        const model = monaco.editor.createModel('', 'mySpecialLanguage');
+
+        this._editor = monaco.editor.create(this.ele, {
             theme: 'vs-dark',
             language: 'mySpecialLanguage',
             minimap: {
-                enabled: false,
+                enabled: true,
             },
             scrollbar: {
-                enabled: false,
+                enabled: true,
             },
-            lineNumbers: 'off',
+            lineNumbers: 'on',
+        });
+        this._editor.setModel(model);
+        this._subscription = model.onDidChangeContent(() => {
+            let v = model.getValue();
+            onChange(v);
         });
     }
+
+    componentWillUnmount() {
+        this._editor && this._editor.dispose();
+        this._subscription && this._subscription.dispose();
+    }
+
 
     render() {
         return (
