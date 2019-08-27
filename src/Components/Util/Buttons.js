@@ -6,11 +6,11 @@ import Collapse from '@material-ui/core/Collapse';
 import { makeStyles } from '@material-ui/core/styles';
 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(() => ({
     root: {
         minWidth: 170,
     },
-});
+}));
 
 const Buttons = ({children}) => {
     const classes = useStyles();

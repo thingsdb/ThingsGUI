@@ -11,10 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import {makeStyles} from '@material-ui/core/styles';
 
 
-const useStyles = makeStyles(theme => ({
-    button: {
-        margin: theme.spacing(1),
-    },
+const useStyles = makeStyles(() => ({
     row: {
         backgroundColor: 'rgba(0, 0, 0, .03)',
         borderBottom: '1px solid rgba(0, 0, 0, .125)',
@@ -22,11 +19,6 @@ const useStyles = makeStyles(theme => ({
         minHeight: 56,
         '&$expanded': {
             minHeight: 56,
-        },
-    },
-    content: {
-        '&$expanded': {
-            margin: '12px 0',
         },
     },
     collapse: {

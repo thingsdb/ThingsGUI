@@ -11,14 +11,14 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
     warning: {
         color: amber[700],
     },
-});
+}));
 
 const ErrorMsg = ({error, onClose}) => {
     const classes = useStyles();
