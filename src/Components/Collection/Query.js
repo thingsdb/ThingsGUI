@@ -1,11 +1,10 @@
-import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 
 
-const Query = ({collection}) => {
+const Query = () => {
     const [query, setQuery] = React.useState('');
     const handleInput = ({target}) => {
         const {value} = target;
@@ -15,7 +14,7 @@ const Query = ({collection}) => {
     return (
         <Grid container spacing={0}>
             <Grid item xs={6}>
-                <Typography variant='caption' >
+                <Typography variant="caption">
                     {'Query:'}
                 </Typography>
             </Grid>
@@ -47,10 +46,6 @@ const Query = ({collection}) => {
             </Grid>
         </Grid>
     );
-};
-
-Query.propTypes = {
-    collection: PropTypes.object.isRequired
 };
 
 export default Query;

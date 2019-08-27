@@ -32,13 +32,8 @@ const useStyles = makeStyles(theme => ({
 
 const OverviewQuery = ({collection}) => {
     const classes = useStyles();
-    const [tabIndex, setTabIndex] = React.useState(0);
     const [serverError, setServerError] = React.useState('');
 
-
-    const handleChange = (_event, newValue) => {
-        setTabIndex(newValue);
-    };
 
     const handleServerError = (err) => {
         setServerError(err.log);
@@ -52,10 +47,6 @@ const OverviewQuery = ({collection}) => {
             <Typography className={classes.title} variant="h5" >
                 {'VIEW & MAKE THINGS'}
             </Typography>
-            <StyledTabs value={tabIndex} onChange={handleChange} aria-label="styled tabs example">
-                <StyledTab label="Things" />
-                <StyledTab label="Custom" />
-            </StyledTabs>
             <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
                 <CardHeader
                     avatar={
@@ -69,35 +60,24 @@ const OverviewQuery = ({collection}) => {
                     title={serverError}
                 />
             </Collapse>
-            {tabIndex === 0 &&
-                <Grid
-                    alignItems="stretch"
-                    className={classes.grid}
-                    container
-                    direction="column"
-                    justify="center"
-                    spacing={3}
-                >
-                    <Grid item xs={12}>
-                        <Things collection={collection} onError={handleServerError} />
-                    </Grid>
+            <Grid
+                alignItems="stretch"
+                className={classes.grid}
+                container
+                direction="row"
+                justify="center"
+                spacing={1}
+            >
+                <Grid item xs={4}>
+                    <Query collection={collection} />
                 </Grid>
-            }
-            {tabIndex === 1 &&
-                <Grid
-                    alignItems="stretch"
-                    className={classes.grid}
-                    container
-                    direction="column"
-                    justify="center"
-                    spacing={3}
-                >
-                    <Grid item xs={12}>
-                        <Query collection={collection} />
-                    </Grid>
+                <Grid item xs={8}>
+                    <Typography className={classes.title} variant="body1" >
+                        {'Things Tree'}
+                    </Typography>
+                    <Things collection={collection} onError={handleServerError} />
                 </Grid>
-            }
-
+            </Grid>
         </Card>
     );
 };
