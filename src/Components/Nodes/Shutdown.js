@@ -41,11 +41,12 @@ const CountersReset = ({node}) => {
                 </Button>
             }
             title="Shutdown node?"
-            content={<ErrorMsg error={serverError} onClose={handleCloseError} />}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
-        />
+        >
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
+        </SimpleModal>
     );
 };
 

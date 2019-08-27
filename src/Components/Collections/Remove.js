@@ -39,11 +39,12 @@ const Remove = ({collection}) => {
                 <CardButton onClick={handleClickOpen} title="Remove" />
             }
             title={`Remove collection ${collection.name}?`}
-            content={<ErrorMsg error={serverError} onClose={handleCloseError} />}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
-        />
+        >
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
+        </SimpleModal>
     );
 };
 
