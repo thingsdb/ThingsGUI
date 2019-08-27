@@ -72,12 +72,12 @@ const AppLoader = ({onError, loaded}) => {
                         item
                         xs={12}
                     >
-                        <img 
+                        <img
                             className={classes.logo}
                             src="/static/img/thingsdb.gif"
-                            alt="loading..." 
+                            alt="loading..."
                             draggable="false"
-                            width= "100"
+                            width="100"
                         />
 
                     </Grid>

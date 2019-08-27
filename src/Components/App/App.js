@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
-    drawerOpen: { 
+    drawerOpen: {
         width: drawerWidth,
         flexGrow: 1,
         padding: theme.spacing(3),
@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
         minHeight: '100vh',
     },
     drawerClose: {
-        width: '0%', 
+        width: '0%',
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
@@ -95,8 +95,8 @@ const useStyles = makeStyles(theme => ({
 
 const App = ({onError, collections, match, user, users, nodes}) => {
     const classes = useStyles();
-    const [indexCollection, setIndexCollection] = React.useState(0)
-    const [indexUser, setIndexUser] = React.useState(0)
+    const [indexCollection, setIndexCollection] = React.useState(0);
+    const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
     console.log(collections, nodes);
 
@@ -106,12 +106,12 @@ const App = ({onError, collections, match, user, users, nodes}) => {
         NodesActions.getNodes(onError);
     },
     [],
-);
-    
+    );
+
     const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
     const selectedCollection = findItem(indexCollection, collections);
-    const selectedUser = findItem(indexUser, users)
-    
+    const selectedUser = findItem(indexUser, users);
+
     const pages = {
         collection: <Collection collection={selectedCollection} onError={onError} />,
         user: <User user={selectedUser} collections={collections} />,
@@ -119,26 +119,26 @@ const App = ({onError, collections, match, user, users, nodes}) => {
 
     const handleClickCollection = (i) => {
         setIndexCollection(i);
-    }
+    };
 
     const handleClickUser = (i) => {
         setIndexUser(i);
-    }
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
-    }
+    };
 
     const handleDrawerClose = () => {
         setOpen(false);
-    }
-    
+    };
+
     return(
         <React.Fragment>
             <div className={classes.root}>
                 <div className={clsx(classes.normal, {
-                        [classes.shrink]: open,
-                        })}
+                    [classes.shrink]: open,
+                })}
                 >
                     <TopBar user={user} onError={onError}>
                         <IconButton
@@ -154,11 +154,11 @@ const App = ({onError, collections, match, user, users, nodes}) => {
                     <div className={classes.page}>
                         <div className={classes.menu}>
                             <Card className={classes.submenu}>
-                                <CollectionsMenu collections={collections} onClickCollection={handleClickCollection}/>
+                                <CollectionsMenu collections={collections} onClickCollection={handleClickCollection} />
                             </Card>
                             <Card className={classes.submenu}>
-                                <UsersMenu users={users} onClickUser={handleClickUser}/>
-                            </Card>  
+                                <UsersMenu users={users} onClickUser={handleClickUser} />
+                            </Card>
                         </div>
                         <div className={classes.content}>
                             {pages[match.path]}
@@ -166,15 +166,15 @@ const App = ({onError, collections, match, user, users, nodes}) => {
                     </div>
                 </div>
                 <Card className={clsx(classes.drawerClose, {
-                        [classes.drawerOpen]: open,
-                        })}
-                >               
-                    <Nodes nodes={nodes} open={open} onClose={handleDrawerClose} onError={onError} />      
+                    [classes.drawerOpen]: open,
+                })}
+                >
+                    <Nodes nodes={nodes} open={open} onClose={handleDrawerClose} onError={onError} />
                 </Card>
             </div>
         </React.Fragment>
     );
-}
+};
 
 App.propTypes = {
 
