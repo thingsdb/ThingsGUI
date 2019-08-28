@@ -3,10 +3,18 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
 
 import CollectionConfig from './CollectionConfig';
 import CollectionTree from './CollectionTree';
 import CollectionQuery from './CollectionQuery';
+import {CollectionStore} from '../../Stores/CollectionStore';
+
+
+
+const withStores = withVlow([{
+    store: CollectionStore,
+}]);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -67,4 +75,4 @@ Collection.propTypes = {
     collection: PropTypes.object.isRequired,
 };
 
-export default Collection;
+export default withStores(Collection);

@@ -9,7 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-import {Add1DArray, ErrorMsg, onlyNums, SimpleModal} from '../Util';
+import {Add1DArray, buildInput, buildQueryAdd, ErrorMsg, onlyNums, SimpleModal} from '../Util';
 
 
 const dataTypes = [
@@ -40,7 +40,7 @@ const AddThings = ({info, collection, thing}) => {
 
     const handleClickOpen = () => {
         const t = type == 'set' ?  dataTypes[3] : dataTypes[0];
-        const q = type == 'set' ? buildQuery(id, name, '{}', type): '';
+        const q = type == 'set' ? buildQueryAdd(id, name, '{}', type): '';
         setState({
             show: true,
             errors: {},
@@ -72,6 +72,17 @@ const AddThings = ({info, collection, thing}) => {
         },
     };
 
+    const handleBuildQuery = (key, value) => {
+        const propName = key=='newProperty' ? value : form.newProperty;
+        const n = type == 'object' ? propName : name;
+
+        const input = key=='value' ? value : form.value;
+        const dataType = key=='dataType' ? value : form.dataType;
+        const val = buildInput(input, dataType);
+        return buildQueryAdd(id, n, val, type);
+
+    };
+
     const handleOnChange = ({target}) => {
         const {id, value} = target;
         const q = handleBuildQuery(id, value);
@@ -89,31 +100,6 @@ const AddThings = ({info, collection, thing}) => {
             return {...prevState, form: updatedForm, errors: {}};
         });
     };
-
-    const handleBuildQuery = (key, value) => {
-        const propName = key=='newProperty' ? value : form.newProperty;
-        const input = key=='value' ? value : form.value;
-        const dataType = key=='dataType' ? value : form.dataType;
-
-        const val = dataType === 'array' ? `[${input}]`
-            : dataType == 'object' ? '{}'
-                : dataType == 'string' ? `'${input}'`
-                    : dataType == 'number' ? `${input}`
-                        : dataType == 'set' ? 'set([])'
-                            : '';
-
-        const n = type == 'object' ? propName : name;
-        return buildQuery(id, n, val, type);
-
-    };
-
-    const buildQuery = (i, n, v, t) => {
-        return t==='array' ? `t(${i}).${n}.push(${v})`
-            : t==='object' ? `t(${i}).${n} = ${v}`
-                : t==='set' ? `t(${i}).${n}.add(${v})`
-                    : '';
-    };
-
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});

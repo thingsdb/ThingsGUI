@@ -56,7 +56,6 @@ const Thing = ({thing, collection, things, info, onError}) => {
         return k === '#' ? null : (
             <div key={i ? i : k} className={classes.nested}>
                 <Thing
-                    classes={classes}
                     collection={collection}
                     things={things}
                     thing={v}

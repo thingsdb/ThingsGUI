@@ -9,7 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-import {Add1DArray, ErrorMsg, onlyNums, SimpleModal} from '../Util';
+import {Add1DArray, buildInput, buildQueryEdit, ErrorMsg, onlyNums, SimpleModal} from '../Util';
 
 
 const dataTypes = [
@@ -40,7 +40,7 @@ const EditThing = ({info, collection, thing}) => {
 
 
     const handleClickOpen = () => {
-        const q = parentType == 'set' ? buildQuery(id, name, '{}', parentType): '';
+        const q = parentType == 'set' ? buildQueryEdit(id, name, '{}', parentType, index): '';
         setState({
             show: true,
             errors: {},
@@ -72,6 +72,14 @@ const EditThing = ({info, collection, thing}) => {
         },
     };
 
+    const handleBuildQuery = (key, value) => {
+        const input = key=='value' ? value : form.value;
+        const dataType = key=='dataType' ? value : form.dataType;
+        const val = buildInput(input, dataType);
+        return buildQueryEdit(id, name, val, parentType, index);
+
+    };
+
     const handleOnChange = ({target}) => {
         const {id, value} = target;
         const q = handleBuildQuery(id, value);
@@ -88,28 +96,6 @@ const EditThing = ({info, collection, thing}) => {
             const updatedForm = Object.assign({}, prevState.form, {value: value, queryString: q});
             return {...prevState, form: updatedForm, errors: {}};
         });
-    };
-
-    const handleBuildQuery = (key, value) => {
-        const input = key=='value' ? value : form.value;
-        const dataType = key=='dataType' ? value : form.dataType;
-
-        const val = dataType === 'array' ? `[${input}]`
-            : dataType == 'object' ? '{}'
-                : dataType == 'string' ? `'${input}'`
-                    : dataType == 'number' ? `${input}`
-                        : dataType == 'set' ? 'set([])'
-                            : '';
-
-        return buildQuery(id, name, val, parentType);
-
-    };
-
-    const buildQuery = (i, n, v, t) => {
-        return t==='array' ? `t(${i}).${n}.splice(${index}, 1, ${v})`
-            : t==='object' ? `t(${i}).${n} = ${v}`
-                : t==='set' ? `t(${i}).${n}.add(${v})`
-                    : '';
     };
 
 

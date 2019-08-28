@@ -80,12 +80,13 @@ class CollectionStore extends BaseStore {
         }).fail((event, status, message) => onError(message));
     }
 
-    onQueryWithOutput(collectionId, query, setOutput, onError) {
+    onQueryWithOutput(collectionId, query, onOutput, onError) {
+        console.log("store");
         this.emit('/collection/query-with-output', {
             collectionId: collectionId,
             query: query,
         }).done((data) => {
-            setOutput(data.output);
+            onOutput(data.output);
             this.setState(prevState => {
                 const things = Object.assign({}, prevState.things, {[collectionId]: data.things});
                 return {things};

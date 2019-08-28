@@ -73,12 +73,15 @@ class CollectionHandler(BaseHandler):
     async def query_with_output(cls, client, data):
         collection_id = data.get('collectionId')
         query = data.get('query')
-        q = r'''[{}, t(.id())]'''.format(query)
-        result = await client.query(q, target=collection_id)
+        q1 = r'''{}'''.format(query)
+        output = await client.query(q1, target=collection_id)
+
+        q2 = r'''t(.id())'''
+        things = await client.query(q2, target=collection_id)
 
         resp = {
-            'output': result[0],
-            'things': result[1],
+            'output': output,
+            'things': things,
         }
 
         return cls.socket_response(data=resp)

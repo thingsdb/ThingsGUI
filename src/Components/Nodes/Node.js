@@ -8,7 +8,7 @@ import Connect from './Connect';
 import Counters from './Counters';
 import CountersReset from './CountersReset';
 import Loglevel from './Loglevel';
-import Info from './Info';
+import NodeInfo from './NodeInfo';
 import Shutdown from './Shutdown';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
 import { StyledTabs, StyledTab } from '../Util';
@@ -58,7 +58,7 @@ const Node = ({local, node, counters, onError}) => {
                     spacing={3}
                 >
                     <Grid item xs={12}>
-                        <Info node={node} />
+                        <NodeInfo node={node} />
                     </Grid>
                     <Grid item container xs={12} spacing={1} >
                         <Grid item>
@@ -75,7 +75,7 @@ const Node = ({local, node, counters, onError}) => {
                     className={classes.counters}
                     container
                     direction="column"
-                    spacing={0}
+                    spacing={1}
                 >
                     <Grid item xs={12}>
                         <Counters counters={counters} />

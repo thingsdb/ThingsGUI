@@ -16,6 +16,7 @@ import TopBar from '../Navigation/TopBar';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
+import {DrawerLayout} from '../Util';
 
 
 const withStores = withVlow([{
@@ -29,46 +30,8 @@ const withStores = withVlow([{
     keys: ['nodes']
 }]);
 
-const drawerWidth = 600;
+
 const useStyles = makeStyles(theme => ({
-    root: {
-        display: 'flex',
-    },
-    normal: {
-        minWidth: 1200,
-        width: '100%',
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-    },
-    shrink: {
-        minWidth: 1200,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerOpen: {
-        width: drawerWidth,
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        marginRight: -drawerWidth,
-        minHeight: '100vh',
-    },
-    drawerClose: {
-        width: '0%',
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-        marginRight: 0,
-    },
     hide: {
         display: 'none',
     },
@@ -132,45 +95,40 @@ const App = ({onError, collections, match, user, users, nodes}) => {
     };
 
     return(
-        <React.Fragment>
-            <div className={classes.root}>
-                <div className={clsx(classes.normal, {
-                    [classes.shrink]: open,
-                })}
-                >
-                    <TopBar user={user} onError={onError}>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            edge="end"
-                            onClick={handleDrawerOpen}
-                            className={clsx(open && classes.hide)}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                    </TopBar>
-                    <div className={classes.page}>
-                        <div className={classes.menu}>
-                            <Card className={classes.submenu}>
-                                <CollectionsMenu collections={collections} onClickCollection={handleClickCollection} />
-                            </Card>
-                            <Card className={classes.submenu}>
-                                <UsersMenu users={users} onClickUser={handleClickUser} />
-                            </Card>
-                        </div>
-                        <div className={classes.content}>
-                            {pages[match.path]}
-                        </div>
+        <DrawerLayout
+            open={open}
+            onClose={handleDrawerClose}
+            topbar={
+                <TopBar user={user} onError={onError}>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="end"
+                        onClick={handleDrawerOpen}
+                        className={clsx(open && classes.hide)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </TopBar>
+            }
+            mainContent={
+                <div className={classes.page}>
+                    <div className={classes.menu}>
+                        <Card className={classes.submenu}>
+                            <CollectionsMenu collections={collections} onClickCollection={handleClickCollection} />
+                        </Card>
+                        <Card className={classes.submenu}>
+                            <UsersMenu users={users} onClickUser={handleClickUser} />
+                        </Card>
+                    </div>
+                    <div className={classes.content}>
+                        {pages[match.path]}
                     </div>
                 </div>
-                <Card className={clsx(classes.drawerClose, {
-                    [classes.drawerOpen]: open,
-                })}
-                >
-                    <Nodes nodes={nodes} open={open} onClose={handleDrawerClose} onError={onError} />
-                </Card>
-            </div>
-        </React.Fragment>
+            }
+            drawerTitle="NODES"
+            drawerContent={<Nodes nodes={nodes} onError={onError} />}
+        />
     );
 };
 

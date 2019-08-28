@@ -169,6 +169,20 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
     }
 });
 
+const theme = {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [{ background: '#0000002e' }],
+    colors: {
+        'editor.foreground': '#0000002e',
+        'editor.background': '#0000002e',
+        'editorCursor.foreground': '#c6c6c6',
+        'editor.lineHighlightBackground': '#141719',
+        'editorLineNumber.foreground': '#0000002e',
+        'editor.selectionBackground': '#20344b',
+        'editor.inactiveSelectionBackground': '#0000002e'
+    }
+};
 
 class QueryInput extends React.Component {
 
@@ -176,22 +190,24 @@ class QueryInput extends React.Component {
         onChange: PropTypes.func.isRequired,
     }
 
+
+
     constructor(props) {
         super(props);
     }
-
     componentDidMount() {
         const {onChange} = this.props;
         const model = monaco.editor.createModel('', 'mySpecialLanguage');
-
+        monaco.editor.defineTheme('myTheme', theme);
         this._editor = monaco.editor.create(this.ele, {
-            theme: 'vs-dark',
+            // automaticLayout: true, This will make it that the editor installs a timer and checks every 100ms if its container has changed its size... https://github.com/microsoft/monaco-editor/issues/543
+            theme: 'myTheme',
             language: 'mySpecialLanguage',
             minimap: {
-                enabled: true,
+                enabled: false,
             },
             scrollbar: {
-                enabled: true,
+                enabled: false,
             },
             lineNumbers: 'on',
         });
@@ -200,11 +216,20 @@ class QueryInput extends React.Component {
             let v = model.getValue();
             onChange(v);
         });
+
+        // resize container on window size.
+        window.addEventListener('resize', this.handleEditorSize);
     }
 
     componentWillUnmount() {
         this._editor && this._editor.dispose();
         this._subscription && this._subscription.dispose();
+
+        window.removeEventListener('resize', this.handleEditorSize);
+    }
+
+    handleEditorSize = () => {
+        this._editor.layout();
     }
 
 
