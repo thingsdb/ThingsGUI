@@ -5,35 +5,41 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 
 import CollectionConfig from './CollectionConfig';
-import OverviewQuery from './OverviewQuery';
+import CollectionTree from './CollectionTree';
+import CollectionQuery from './CollectionQuery';
 
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
     },
-    card: {
+    title: {
         marginBottom: theme.spacing(1),
         padding: theme.spacing(2),
         width: '100%'
     },
     config: {
-        marginBottom: theme.spacing(1),
+        marginLeft: theme.spacing(1),
+        marginTop: theme.spacing(1),
         minWidth: '450px',
-        width: '100%',
+        width: '40%',
     },
-    query: {
-        width: '100%',
+    flex: {
+        display: 'flex',
+    },
+    tree: {
+        marginTop: theme.spacing(1),
+        width: '60%',
     },
 }));
 
 const Collection = ({collection}) => {
     const classes = useStyles();
 
-    
+
     return (
         <div className={classes.root}>
             <div>
-                <Card className={classes.card}>
+                <Card className={classes.title}>
                     <Typography variant="h6" >
                         {'Overview of: '}
                     </Typography>
@@ -43,14 +49,17 @@ const Collection = ({collection}) => {
                 </Card>
             </div>
             <div>
+                <CollectionQuery collection={collection} />
+            </div>
+            <div className={classes.flex}>
+                <div className={classes.tree}>
+                    <CollectionTree collection={collection} />
+                </div>
                 <div className={classes.config}>
                     <CollectionConfig collection={collection} />
                 </div>
-                <div className={classes.query}>
-                    <OverviewQuery collection={collection} />
-                </div>
             </div>
-        </div>    
+        </div>
     );
 };
 

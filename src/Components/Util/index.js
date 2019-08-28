@@ -3,6 +3,7 @@ import Buttons from './Buttons';
 import CardButton from './CardButton';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
+import HarmonicCard from './HarmonicCard';
 import Info from './Info';
 import Menu from './Menu';
 import ServerError from './ServerError';
@@ -31,6 +32,7 @@ export {
     checkType,
     ErrorMsg,
     ErrorToast,
+    HarmonicCard,
     Info,
     Menu,
     onlyNums,

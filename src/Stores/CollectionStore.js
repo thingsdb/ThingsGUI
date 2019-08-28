@@ -7,6 +7,7 @@ const CollectionActions = Vlow.createActions([
     'property',
     'removeThing',
     'rawQuery',
+    'queryWithOutput',
 ]);
 
 // TODO: CALLBACKS
@@ -74,6 +75,19 @@ class CollectionStore extends BaseStore {
         }).done((data) => {
             this.setState(prevState => {
                 const things = Object.assign({}, prevState.things, {[thingId]: data});
+                return {things};
+            });
+        }).fail((event, status, message) => onError(message));
+    }
+
+    onQueryWithOutput(collectionId, query, setOutput, onError) {
+        this.emit('/collection/query-with-output', {
+            collectionId: collectionId,
+            query: query,
+        }).done((data) => {
+            setOutput(data.output);
+            this.setState(prevState => {
+                const things = Object.assign({}, prevState.things, {[collectionId]: data.things});
                 return {things};
             });
         }).fail((event, status, message) => onError(message));

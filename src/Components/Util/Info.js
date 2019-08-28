@@ -6,9 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        margin: theme.spacing(2),
-    },
     grid: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
@@ -19,7 +16,7 @@ const Info = ({header, content}) => {
     const classes = useStyles();
 
     return (
-        <Grid container className={classes.root}>
+        <Grid container>
             {header.map((h) => (
                 <React.Fragment key={h.ky}>
                     <Grid item xs={12} className={classes.grid}>

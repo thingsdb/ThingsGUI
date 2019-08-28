@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Card from '@material-ui/core/Card';
+
 import Language from './Language.js';
 import * as monaco from 'monaco-editor';
 
@@ -208,7 +210,7 @@ class QueryInput extends React.Component {
 
     render() {
         return (
-            <div style={{height: 400, width: '100%'}} ref={(ele) => this.ele = ele} />
+            <Card style={{height: 400, width: '100%'}} ref={(ele) => this.ele = ele} />
         );
     }
 }

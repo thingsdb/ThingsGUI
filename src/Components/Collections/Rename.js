@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import {withVlow} from 'vlow';
 
-import { CardButton, ErrorMsg, SimpleModal } from '../Util';
+import { ErrorMsg, SimpleModal } from '../Util';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
 const withStores = withVlow([{
@@ -88,7 +89,9 @@ const Rename = ({collection, collections}) => {
     return(
         <SimpleModal
             button={
-                <CardButton onClick={handleClickOpen} title="Rename" />
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    {'Rename'}
+                </Button>
             }
             title="Rename Collection"
             open={show}

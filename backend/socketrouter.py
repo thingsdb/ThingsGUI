@@ -59,7 +59,7 @@ class SocketRouter:
         sio.on(
             event='/collection/query',
             handler=CollectionHandler.query_thing)
-        
+
         sio.on(
             event='/collection/return-property',
             handler=CollectionHandler.return_property)
@@ -71,6 +71,10 @@ class SocketRouter:
         sio.on(
             event='/collection/raw-query',
             handler=CollectionHandler.raw_query)
+
+        sio.on(
+            event='/collection/query-with-output',
+            handler=CollectionHandler.query_with_output)
 
         sio.on(
             event='/user/getusers',
@@ -115,11 +119,11 @@ class SocketRouter:
         sio.on(
             event='/user/deltoken',
             handler=UserHandler.del_token)
-        
+
         sio.on(
             event='/user/delexpired',
             handler=UserHandler.del_expired)
-        
+
         sio.on(
             event='/node/getnodes',
             handler=NodeHandler.get_nodes)

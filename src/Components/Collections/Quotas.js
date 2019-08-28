@@ -3,7 +3,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-import { CardButton, ErrorMsg, SimpleModal } from '../Util';
+import { ErrorMsg, SimpleModal } from '../Util';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
@@ -127,7 +127,9 @@ const Quotas = ({collection}) => {
     return(
         <SimpleModal
             button={
-                <CardButton onClick={handleClickOpen} title="Quotas" />
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    {'Quotas'}
+                </Button>
             }
             actionButtons={
                 <Button onClick={handleUnset} color="primary">

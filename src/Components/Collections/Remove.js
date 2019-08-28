@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Button from '@material-ui/core/Button';
 
-import { CardButton, ErrorMsg, SimpleModal } from '../Util';
+import { ErrorMsg, SimpleModal } from '../Util';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 const initialState = {
@@ -36,7 +37,9 @@ const Remove = ({collection}) => {
     return(
         <SimpleModal
             button={
-                <CardButton onClick={handleClickOpen} title="Remove" />
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    {'Remove'}
+                </Button>
             }
             title={`Remove collection ${collection.name}?`}
             open={show}

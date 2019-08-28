@@ -52,7 +52,7 @@ class CollectionHandler(BaseHandler):
                 thing_id)
         else:
             q = r'''t({}).del('{}'); t({})'''.format(thing_id, name, thing_id)
-        
+
         resp = await client.query(q, target=collection_id)
 
         return cls.socket_response(data=resp)
@@ -68,3 +68,17 @@ class CollectionHandler(BaseHandler):
         resp = await client.query(q, target=collection_id)
         return cls.socket_response(data=resp)
 
+    @classmethod
+    @BaseHandler.socket_handler
+    async def query_with_output(cls, client, data):
+        collection_id = data.get('collectionId')
+        query = data.get('query')
+        q = r'''[{}, t(.id())]'''.format(query)
+        result = await client.query(q, target=collection_id)
+
+        resp = {
+            'output': result[0],
+            'things': result[1],
+        }
+
+        return cls.socket_response(data=resp)

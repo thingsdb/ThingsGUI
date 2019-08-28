@@ -5,15 +5,27 @@ import PropTypes from 'prop-types';
 import QueryInput from '../Util/QueryInput';
 import {CollectionActions} from '../../Stores/CollectionStore';
 
+import {ErrorMsg} from '../Util';
 
-const Query = ({collection, onError}) => {
+const Query = ({collection}) => {
     const [query, setQuery] = React.useState('');
+    const [output, setOutput] = React.useState({});
+    const [serverError, setServerError] = React.useState('');
+
     const handleInput = (value) => {
         setQuery(value);
     };
 
     const handleSubmit = () => {
-        CollectionActions.rawQuery(collection.collection_id, collection.collection_id, query, onError);
+        CollectionActions.queryWithOutput(collection.collection_id, query, setOutput, handleServerError);
+    };
+    console.log(output);
+
+    const handleServerError = (err) => {
+        setServerError(err.log);
+    };
+    const handleCloseError = () => {
+        setServerError('');
     };
 
     return (
@@ -25,8 +37,14 @@ const Query = ({collection, onError}) => {
             spacing={1}
         >
             <Grid item xs={12}>
+                <ErrorMsg error={serverError} onClose={handleCloseError} />
+            </Grid>
+            <Grid item xs={12}>
                 <QueryInput onChange={handleInput} />
             </Grid>
+            {/* <Grid item xs={12}>
+                <QueryOutput output={output} />
+            </Grid> */}
             <Grid item xs={12}>
                 <Button variant="outlined" onClick={handleSubmit}>
                     {'Submit'}
@@ -39,9 +57,6 @@ const Query = ({collection, onError}) => {
 
 
 Query.propTypes = {
-    onError: PropTypes.func.isRequired,
-
     collection: PropTypes.object.isRequired,
-
 };
 export default Query;
