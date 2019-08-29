@@ -69,7 +69,7 @@ const TreeBranch = ({item, tree, info}) => {
     const key = Object.keys(item)[0];
     const val = type === 'array' ? `[${item.length}]`
         : type === 'object' || type === 'set' ? `{${key}${objectId}}`
-            : type === 'string' || type === 'number' ? item.toString()
+            : type === 'string' || type === 'number' || type === 'boolean' ? item.toString()
                 : '';
 
     return (

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
@@ -45,7 +46,6 @@ const useStyles = makeStyles(theme => ({
     },
     submenu: {
         marginBottom: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
     },
     content: {
         paddingTop: theme.spacing(1),
@@ -61,6 +61,9 @@ const App = ({onError, collections, match, user, users, nodes}) => {
     const [indexCollection, setIndexCollection] = React.useState(0);
     const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
+    const [ cards, setCards ] = useGlobal('cards');
+
+    console.log(cards);
 
     React.useEffect(() => {
         ThingsdbActions.getInfo(onError);
@@ -88,6 +91,10 @@ const App = ({onError, collections, match, user, users, nodes}) => {
 
     const handleDrawerOpen = () => {
         setOpen(true);
+
+        let newCards = [...cards];
+        newCards.push('hoi');
+        setCards(newCards);
     };
 
     const handleDrawerClose = () => {

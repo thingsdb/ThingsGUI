@@ -62,7 +62,7 @@ const Tokens = ({user}) => {
 
     return (
         <Card className={classes.card}>
-            <Typography className={classes.title} variant="h5" >
+            <Typography className={classes.title} variant="body1" >
                 {'TOKENS'}
             </Typography>
             <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>

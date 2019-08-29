@@ -186,7 +186,7 @@ const UserAccess = ({user, collections}) => {
     return (
         <div className={classes.flex}>
             <Card className={classes.card}>
-                <Typography className={classes.title} variant="h5" >
+                <Typography className={classes.title} variant="body1" >
                     {'ACCESS RULES'}
                 </Typography>
                 <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>

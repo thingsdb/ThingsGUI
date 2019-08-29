@@ -6,6 +6,9 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
@@ -19,6 +22,7 @@ const dataTypes = [
     'object',
     'set',
     'closure',
+    'boolean',
 ];
 
 const initialState = {
@@ -67,6 +71,8 @@ const EditThing = ({info, collection, thing}) => {
 
             if (!bool && form.dataType == 'number') {
                 errText = onlyNums(form.value) ? '' : 'only numbers';
+            } else if (!errText && form.dataType == 'boolean') {
+                errText = form.value == 'true' || form.value == 'false' ? '' : 'not a boolean value';
             }
             return(errText);
         },
@@ -81,10 +87,10 @@ const EditThing = ({info, collection, thing}) => {
     };
 
     const handleOnChange = ({target}) => {
-        const {id, value} = target;
-        const q = handleBuildQuery(id, value);
+        const {name, value} = target;
+        const q = handleBuildQuery(name, value);
         setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {[id]: value, queryString: q});
+            const updatedForm = Object.assign({}, prevState.form, {[name]: value, queryString: q});
             return {...prevState, form: updatedForm, errors: {}};
         });
     };
@@ -124,6 +130,8 @@ const EditThing = ({info, collection, thing}) => {
 
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';
+    const booleanInputField = form.dataType == 'boolean';
+
 
 
     const Content = (
@@ -134,14 +142,14 @@ const EditThing = ({info, collection, thing}) => {
                     <ListItem>
                         <TextField
                             margin="dense"
-                            id="queryString"
+                            name="queryString"
                             label="Query"
                             type="text"
                             value={form.queryString}
                             spellCheck={false}
                             onChange={handleOnChange}
                             fullWidth
-                            error={errors.queryString}
+                            error={Boolean(errors.queryString)}
                             multiline
                             InputProps={{
                                 readOnly: true,
@@ -161,7 +169,7 @@ const EditThing = ({info, collection, thing}) => {
                 <ListItem>
                     <TextField
                         margin="dense"
-                        id="dataType"
+                        name="dataType"
                         label="Data type"
                         value={form.dataType}
                         onChange={handleOnChange}
@@ -181,7 +189,7 @@ const EditThing = ({info, collection, thing}) => {
                     <ListItem>
                         <TextField
                             margin="dense"
-                            id="value"
+                            name="value"
                             label="Value"
                             type="text"
                             value={form.value}
@@ -195,6 +203,23 @@ const EditThing = ({info, collection, thing}) => {
 
                 ) : multiInputField ? (
                     <Add1DArray cb={handleArrayItems} />
+                ) : booleanInputField ? (
+                    <ListItem>
+                        <RadioGroup aria-label="position" name="value" value={form.value} onChange={handleOnChange} row >
+                            <FormControlLabel
+                                value="true"
+                                control={<Radio color="primary" />}
+                                label="true"
+                                labelPlacement="end"
+                            />
+                            <FormControlLabel
+                                value="false"
+                                control={<Radio color="primary" />}
+                                label="false"
+                                labelPlacement="end"
+                            />
+                        </RadioGroup>
+                    </ListItem>
                 ) : null}
             </List>
         </React.Fragment>

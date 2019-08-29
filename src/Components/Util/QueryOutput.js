@@ -10,7 +10,7 @@ import {Tree} from '../Util';
 const useStyles = makeStyles(() => ({
     card: {
         backgroundColor: '#141719',
-        minHeight: 400,
+        minHeight: 'calc(100vh - 50vh)',
     },
 }));
 

@@ -69,7 +69,7 @@ const Tree = ({tree}) => {
     const key = Object.keys(tree)[0];
     const val = type === 'array' ? `[${tree.length}]`
         : type === 'object' || type === 'set' ? `{${key}${objectId}}`
-            : type === 'string' || type === 'number' ? tree.toString()
+            : type === 'string' || type === 'number' || type === 'boolean' ? tree.toString()
                 : '';
 
     return (

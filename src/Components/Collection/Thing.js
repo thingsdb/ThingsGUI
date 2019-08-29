@@ -87,7 +87,7 @@ const Thing = ({thing, collection, things, info, onError}) => {
     const key = Object.keys(thing)[0];
     const val = type === 'array' ? `[${thing.length}]`
         : type === 'object' || type === 'set' ? `{${key}${objectId}}`
-            : type === 'string' || type === 'number' ? thing.toString()
+            : type === 'string' || type === 'number' || type === 'boolean' ? thing.toString()
                 : '';
 
     const hasButtons = !(type === 'array' && info.name === '$');

@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
     drawerOpen: {
         width: drawerWidth,
         flexGrow: 1,
-        padding: theme.spacing(3),
+        padding: theme.spacing(1),
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -81,7 +81,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, drawerTitle, drawerCo
                         <IconButton onClick={onClose}>
                             {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
                         </IconButton>
-                        <Typography variant="h6">
+                        <Typography variant="body1">
                             {drawerTitle}
                         </Typography>
                     </div>

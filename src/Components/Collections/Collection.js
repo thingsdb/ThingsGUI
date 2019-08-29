@@ -48,7 +48,7 @@ const Collection = ({collection}) => {
         <div className={classes.root}>
             <div>
                 <Card className={classes.title}>
-                    <Typography variant="h6" >
+                    <Typography variant="body1" >
                         {'Overview of: '}
                     </Typography>
                     <Typography variant="h4" color='primary'>

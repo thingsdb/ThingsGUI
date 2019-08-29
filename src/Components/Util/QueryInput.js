@@ -172,7 +172,12 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
 const theme = {
     base: 'vs-dark',
     inherit: true,
-    rules: [{ background: '#0000002e' }],
+    rules: [
+        { token: 'custom-info', foreground: '808080' },
+        { token: 'custom-error', foreground: 'ff0000', fontStyle: 'bold' },
+        { token: 'custom-notice', foreground: 'FFA500' },
+        { token: 'custom-date', foreground: '008800' },
+    ],
     colors: {
         'editor.foreground': '#0000002e',
         'editor.background': '#0000002e',
@@ -235,7 +240,7 @@ class QueryInput extends React.Component {
 
     render() {
         return (
-            <Card style={{height: 400, width: '100%'}} ref={(ele) => this.ele = ele} />
+            <Card style={{height: 'calc(100vh - 50vh)', width: '100%'}} ref={(ele) => this.ele = ele} />
         );
     }
 }

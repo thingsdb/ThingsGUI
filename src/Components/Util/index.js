@@ -35,7 +35,7 @@ const buildInput = (input, type) => {
     return type === 'array' ? `[${input}]`
         : type == 'object' ? '{}'
             : type == 'string' ? `'${input}'`
-                : type == 'number' ? `${input}`
+                : type == 'number' || type == 'boolean' ? `${input}`
                     : type == 'set' ? 'set([])'
                         : '';
 };

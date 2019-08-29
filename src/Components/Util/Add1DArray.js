@@ -1,5 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,6 +13,10 @@ const useStyles = makeStyles(theme => ({
     container: {
         display: 'flex',
         flexWrap: 'wrap',
+    },
+    dense: {
+        padding: 0,
+        margin: 0,
     },
     textField: {
         marginLeft: theme.spacing(1),
@@ -32,13 +39,14 @@ const useStyles = makeStyles(theme => ({
 const dataTypes = [
     'string',
     'number',
+    'boolean',
 ];
 
 const Add1DArray = ({cb}) => {
     const classes = useStyles();
     const helperspan = React.useRef(null);
     const [state, setState] = React.useState({
-        contentAdd: 'add +',
+        contentAdd: '',
         dataType: dataTypes[0],
         errors: {},
     });
@@ -56,7 +64,7 @@ const Add1DArray = ({cb}) => {
     React.useEffect(() => {
         cb(myItems);
     },
-    [myItems.length, cb],
+    [myItems.length],
     );
 
     const validation = {
@@ -65,19 +73,19 @@ const Add1DArray = ({cb}) => {
 
             if (!errText && dataType == 'number') {
                 errText = onlyNums(contentAdd) ? '' : 'only numbers';
+            } else if (!errText && dataType == 'boolean') {
+                errText = contentAdd == 'true' || contentAdd == 'false' ? '' : 'not a boolean value';
             }
             return(errText);
         },
     };
 
-    const handleFocus = () => {
-        setState({ ...state, contentAdd: '' });
+    const handleChange = ({target}) => {
+        const {name, value} = target;
+        console.log(state, value);
+        setState({...state, [name]: value, errors: {}});
     };
 
-    const handleChange = ({target}) => {
-        const {id, value} = target;
-        setState({...state, [id]: value, errors: {}});
-    };
 
     const handleKeypress = (event) => {
         const {key} = event;
@@ -85,6 +93,7 @@ const Add1DArray = ({cb}) => {
             const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
             setState({...state, errors: err});
             if (!Object.values(err).some(d => d)) {
+
 
                 let currentcontent = contentAdd.trim();
                 if (!currentcontent) {
@@ -133,8 +142,7 @@ const Add1DArray = ({cb}) => {
                 className={classes.textField}
                 id="dataType"
                 type="text"
-                name="datatype"
-                autoComplete="off"
+                name="dataType"
                 onChange={handleChange}
                 value={dataType}
                 variant="outlined"
@@ -147,21 +155,40 @@ const Add1DArray = ({cb}) => {
                     </option>
                 ))}
             </TextField>
-            <TextField
-                className={classes.textField}
-                id="contentAdd"
-                type="text"
-                name="initvalue"
-                autoComplete="off"
-                onFocus={handleFocus}
-                onChange={handleChange}
-                onKeyPress={handleKeypress}
-                value={contentAdd}
-                style={{ width: width }}
-                variant="outlined"
-                helperText={errors.contentAdd}
-                error={Boolean(errors.contentAdd)}
-            />
+            {dataType == 'boolean' ? (
+                <RadioGroup className={classes.dense} aria-label="position" name="contentAdd" value={contentAdd} onChange={handleChange} row onKeyPress={handleKeypress}>
+                    <FormControlLabel
+                        className={classes.dense}
+                        value="true"
+                        control={<Radio color="primary" />}
+                        label="true"
+                        labelPlacement="bottom"
+                    />
+                    <FormControlLabel
+                        className={classes.dense}
+                        value="false"
+                        control={<Radio color="primary" />}
+                        label="false"
+                        labelPlacement="bottom"
+                    />
+                </RadioGroup>
+            ) : (
+                <TextField
+                    className={classes.textField}
+                    id="contentAdd"
+                    type="text"
+                    name="contentAdd"
+                    autoComplete="off"
+                    onChange={handleChange}
+                    onKeyPress={handleKeypress}
+                    value={contentAdd}
+                    style={{ width: width }}
+                    variant="outlined"
+                    helperText={errors.contentAdd}
+                    error={Boolean(errors.contentAdd)}
+                    placeholder="+"
+                />
+            )}
             <span
                 id="helperspan"
                 ref={helperspan}

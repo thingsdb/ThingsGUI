@@ -36,7 +36,7 @@ const User = ({user, collections}) => {
         <div className={classes.root}>
             <div>
                 <Card className={classes.card}>
-                    <Typography variant="h6" >
+                    <Typography variant="body1" >
                         {'Authentication of: '}
                     </Typography>
                     <Typography variant="h4" color='primary'>

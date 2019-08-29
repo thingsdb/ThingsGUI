@@ -10,9 +10,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles} from '@material-ui/core/styles';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(1),
+const useStyles = makeStyles(() => ({
+    padding: {
+        paddingTop: '4px',
+        paddingBottom: '4px',
     },
 }));
 
@@ -27,13 +28,14 @@ const HarmonicCard = ({title, content, buttons}) => {
     return (
         <Card className={classes.padding}>
             <CardHeader
+                className={classes.padding}
                 action={
                     <IconButton onClick={handleExpandClick}>
                         {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                 }
                 title={title}
-                titleTypographyProps={{variant: 'h6'}}
+                titleTypographyProps={{variant: 'body1'}}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>

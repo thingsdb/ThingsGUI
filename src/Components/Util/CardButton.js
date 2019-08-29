@@ -43,7 +43,7 @@ const CardButton = ({onClick, title}) => {
                 onClick={handleClick}
             >
                 <CardContent>
-                    <Typography variant="h6" >
+                    <Typography variant="body1" >
                         {title}
                     </Typography>
                 </CardContent>

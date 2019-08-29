@@ -39,7 +39,7 @@ const Menu = ({title, icon, items, addItem, onClickItem}) => {
 
     return (
         <React.Fragment>
-            <List className={classes.root}>
+            <List className={classes.root} dense disablePadding>
                 <ListItem button onClick={handleClickOpen}>
                     <ListItemIcon>
                         {open ? <ExpandMore /> : <ChevronRightIcon />}
