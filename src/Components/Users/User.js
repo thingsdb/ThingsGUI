@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const User = ({user, collections}) => {
+const User = ({user}) => {
     const classes = useStyles();
 
 
@@ -46,7 +46,7 @@ const User = ({user, collections}) => {
             </div>
             <div>
                 <div className={classes.user}>
-                    <UserAccess user={user} collections={collections} />
+                    <UserAccess user={user} />
                 </div>
                 <div className={classes.tokens}>
                     <Tokens user={user} />
@@ -58,7 +58,6 @@ const User = ({user, collections}) => {
 
 User.propTypes = {
     user: PropTypes.object.isRequired,
-    collections: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default User;

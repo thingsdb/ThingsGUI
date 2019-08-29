@@ -4,8 +4,9 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import {ThingsdbActions} from '../../Stores/ThingsdbStore';
+import ThingsdbActions from '../../Actions/ThingsdbActions';
 
+const thingsdbActions = new ThingsdbActions();
 
 const quotaTypes = [
     'things',
@@ -17,12 +18,11 @@ const quotaTypes = [
 const initialState = {
     show: false,
     form: {},
-    serverError: '',
 };
 
 const Quotas = ({collection}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, form, serverError} = state;
+    const {show, form} = state;
 
 
     const _getQuota = (quotaType) => collection[`quota_${quotaType}`]||'';
@@ -35,7 +35,6 @@ const Quotas = ({collection}) => {
                 quotaType: 'things',
                 quota: _getQuota('things'),
             },
-            serverError: '',
         });
     };
 
@@ -60,38 +59,28 @@ const Quotas = ({collection}) => {
     };
 
     const handleUnset = () => {
-        ThingsdbActions.setQuota(
+        thingsdbActions.setQuota(
             collection.name,
             form.quotaType,
             'nil',
-            (err) => setState({...state, serverError: err.log})
         );
 
-        if (!state.serverError) {
-            setState({...state, show: false});
-        }
+        setState({...state, show: false});
     };
 
     const handleClickOk = () => {
-        ThingsdbActions.setQuota(
+        thingsdbActions.setQuota(
             collection.name,
             form.quotaType,
             form.quota,
-            (err) => setState({...state, serverError: err.log})
         );
 
-        if (!state.serverError) {
-            setState({...state, show: false});
-        }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
+        setState({...state, show: false});
     };
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
             <TextField
                 autoFocus
                 margin="dense"

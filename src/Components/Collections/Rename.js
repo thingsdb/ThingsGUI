@@ -1,34 +1,31 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import {withVlow} from 'vlow';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
+import ThingsdbActions from '../../Actions/ThingsdbActions';
 
-const withStores = withVlow([{
-    store: ThingsdbStore,
-    keys: ['collections']
-}]);
+
+const thingsdbActions = new ThingsdbActions();
 
 const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '',
 };
 
-const Rename = ({collection, collections}) => {
+const Rename = ({collection}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
+    const collections = useGlobal('collections')[0];
 
     const handleClickOpen = () => {
         setState({
             show: true,
             errors: {},
             form: {...collection},
-            serverError: '',
         });
     };
 
@@ -52,25 +49,18 @@ const Rename = ({collection, collections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.renameCollection(
+            thingsdbActions.renameCollection(
                 collection.name,
                 form.name,
-                (err) => setState({...state, serverError: err.log})
             );
+            setState({...state, show: false});
 
-            if (!state.serverError) {
-                setState({...state, show: false});
-            }
         }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
     };
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
             <TextField
                 autoFocus
                 margin="dense"
@@ -105,9 +95,6 @@ const Rename = ({collection, collections}) => {
 
 Rename.propTypes = {
     collection: PropTypes.object.isRequired,
-
-    /* collections properties */
-    collections: ThingsdbStore.types.collections.isRequired,
 };
 
-export default withStores(Rename);
+export default Rename;

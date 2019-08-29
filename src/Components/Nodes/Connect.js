@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import {withVlow} from 'vlow';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationActions';
 
 
 const withStores = withVlow([{

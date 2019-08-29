@@ -2,36 +2,27 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../Util';
-import {ThingsdbActions} from '../../Stores/ThingsdbStore';
+import ThingsdbActions from '../../Actions/ThingsdbActions';
 
 
-
-const initialState = {
-    show: false,
-    serverError: '',
-};
+const thingsActions = new ThingsdbActions();
 
 const Remove = ({user}) => {
-    const [state, setState] = React.useState(initialState);
-    const {show, serverError} = state;
+    const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
-        setState({...state, show: true});
+        setShow(true);
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setShow(false);
     };
     const handleClickOk = () => {
-        ThingsdbActions.removeUser(user.name, (err) => setState({...state, serverError: err.log}));
-        if (!state.serverError) {
-            setState({...state, show: false});
-        }
+        thingsActions.removeUser(user.name);
+        setShow(false);
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
+
 
     return(
         <SimpleModal
@@ -42,9 +33,9 @@ const Remove = ({user}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
-        >
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
-        </SimpleModal>
+        />
+        //     <ErrorMsg error={serverError} onClose={handleCloseError} />
+        // </SimpleModal>
     );
 };
 

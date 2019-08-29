@@ -1,4 +1,5 @@
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import PropTypes from 'prop-types';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import AppBar from '@material-ui/core/AppBar';
@@ -15,9 +16,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import {makeStyles} from '@material-ui/core/styles';
 
-import {ApplicationActions} from '../../Stores/ApplicationStore';
+import ApplicationActions from '../../Actions/ApplicationActions';
 // import packageJson from '../../'; TODO does not find package.json
 
+const applicationActions = new ApplicationActions();
 
 
 const useStyles = makeStyles(theme => ({
@@ -46,12 +48,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TopBar = ({user, children}) => {
+const TopBar = ({children}) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const user = useGlobal('user')[0];
 
     const handleClickLogout = () => {
-        ApplicationActions.disconnect();
+        applicationActions.disconnect();
     };
 
     const handleMenuOpen = ({currentTarget}) => {
@@ -131,7 +134,6 @@ const TopBar = ({user, children}) => {
 };
 
 TopBar.propTypes = {
-    user: PropTypes.object.isRequired,
     children: PropTypes.object.isRequired,
 };
 

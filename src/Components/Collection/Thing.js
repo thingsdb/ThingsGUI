@@ -10,20 +10,16 @@ import ListItemText from '@material-ui/core/ListItemText';
 import StopIcon from '@material-ui/icons/Stop';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {withVlow} from 'vlow';
+import { useGlobal } from 'reactn'; // <-- reactn
 import {makeStyles} from '@material-ui/core/styles';
 
 import AddThings from './AddThings';
 import EditThing from './EditThing';
 import RemoveThing from './RemoveThing';
-import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
+import CollectionActions from '../../Actions/CollectionActions';
 import {Buttons, checkType} from '../Util';
 
-
-const withStores = withVlow([{
-    store: CollectionStore,
-    keys: ['things']
-}]);
+const collectionActions = new CollectionActions();
 
 const useStyles = makeStyles(theme => ({
     nested: {
@@ -36,9 +32,10 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const Thing = ({thing, collection, things, info, onError}) => {
+const Thing = ({thing, collection, info}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
+    const things = useGlobal('things')[0];
 
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
         const infoNew = i==null ? {
@@ -57,10 +54,8 @@ const Thing = ({thing, collection, things, info, onError}) => {
             <div key={i ? i : k} className={classes.nested}>
                 <Thing
                     collection={collection}
-                    things={things}
                     thing={v}
                     info={infoNew}
-                    onError={onError}
                 />
             </div>
         );
@@ -77,7 +72,7 @@ const Thing = ({thing, collection, things, info, onError}) => {
     const handleClick = () => {
         setShow(!show); // QUEST: work with prevstate?
         if (thing && thing['#']) {
-            CollectionActions.query(collection.collection_id, onError, thing['#']);
+            collectionActions.query(collection.collection_id, thing['#']);
         }
     };
 
@@ -158,10 +153,6 @@ Thing.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     collection: PropTypes.object.isRequired,
     info: PropTypes.object.isRequired,
-    onError: PropTypes.func.isRequired,
-
-    /* collection properties */
-    things: CollectionStore.types.things.isRequired,
 };
 
-export default withStores(Thing);
+export default Thing;

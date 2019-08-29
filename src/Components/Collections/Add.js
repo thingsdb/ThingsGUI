@@ -1,21 +1,15 @@
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
-import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
 
-import {ApplicationStore} from '../../Stores/ApplicationStore';
-import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
+import ThingsdbActions from '../../Actions/ThingsdbActions';
 import { ErrorMsg, SimpleModal } from '../Util';
 
-const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['connErr']
-}, {
-    store: ThingsdbStore,
-    keys: ['collections']
-}]);
+
+const thingsdbActions = new ThingsdbActions();
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -46,13 +40,14 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '',
 };
 
-const Add = ({connErr, collections}) => {
+const Add = () => {
     const classes = useStyles();
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
+    const connErr = useGlobal('connErr')[0];
+    const collections = useGlobal('collections')[0];
 
     const validation = {
         name: () => form.name.length>0&&collections.every((c) => c.name!==form.name),
@@ -65,7 +60,6 @@ const Add = ({connErr, collections}) => {
             form: {
                 name: '',
             },
-            serverError: '',
         });
     };
 
@@ -85,21 +79,16 @@ const Add = ({connErr, collections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.addCollection(form.name, (err) => setState({...state, serverError: err.log}));
+            thingsdbActions.addCollection(form.name);
+            setState({...state, show: false});
 
-            if(!state.serverError) {
-                setState({...state, show: false});
-            }
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
+            {/* <ErrorMsg error={connErr} onClose={handleCloseError} /> */}
             <TextField
                 autoFocus
                 margin="dense"
@@ -132,12 +121,4 @@ const Add = ({connErr, collections}) => {
     );
 };
 
-Add.propTypes = {
-
-    /* application properties */
-    connErr: ApplicationStore.types.connErr.isRequired,
-    /* collections properties */
-    collections: ThingsdbStore.types.collections.isRequired,
-};
-
-export default withStores(Add);
+export default Add;

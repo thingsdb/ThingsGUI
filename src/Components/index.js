@@ -9,10 +9,19 @@ import Root from './App/Root';
 
 // Set an initial global state directly:
 setGlobal({
-    cards: [],
-    disabled: false,
-    initial: 'values',
-    x: 1,
+    loaded: false,
+    connected: false,
+    connErr: '',
+    match: {},
+    things: {},
+    counters: {},
+    nodes: [],
+    node: {},
+    collections: [],
+    collection: {},
+    users: [],
+    user: {},
+    error: '',
 });
 
 ReactDOM.render(<Root />, document.getElementById('app'));

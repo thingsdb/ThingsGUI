@@ -1,33 +1,32 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import TextField from '@material-ui/core/TextField';
-import {withVlow} from 'vlow';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../Util';
-import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
+import ThingsdbActions from '../../Actions/ThingsdbActions';
 
-const withStores = withVlow([{
-    store: ThingsdbStore,
-    keys: ['users']
-}]);
 
 const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '',
 };
 
-const Rename = ({user, users}) => {
+const thingsActions = new ThingsdbActions();
+
+const Rename = ({user}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
+    const users = useGlobal('users')[0];
+
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),
     };
 
     const handleClickOpen = () => {
-        setState({show: true, errors: {}, form: {...user}, serverError: ''});
+        setState({show: true, errors: {}, form: {...user}});
     };
 
     const handleClickClose = () => {
@@ -46,25 +45,19 @@ const Rename = ({user, users}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.renameUser(
+            thingsActions.renameUser(
                 user.name,
                 form.name,
-                (err) => setState({...state, serverError: err.log})
             );
 
-            if (!state.serverError) {
-                setState({...state, show: false});
-            }
+            setState({...state, show: false});
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
             <TextField
                 autoFocus
                 margin="dense"
@@ -97,9 +90,6 @@ const Rename = ({user, users}) => {
 
 Rename.propTypes = {
     user: PropTypes.object.isRequired,
-
-    /* application properties */
-    users: ThingsdbStore.types.users.isRequired,
 };
 
-export default withStores(Rename);
+export default Rename;

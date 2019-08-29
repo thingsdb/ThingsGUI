@@ -6,7 +6,7 @@ import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {ThingsdbActions, ThingsdbStore} from '../../Actions/ThingsdbActions';
 
 const withStores = withVlow([{
     store: ThingsdbStore,

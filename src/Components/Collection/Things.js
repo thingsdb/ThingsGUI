@@ -5,19 +5,16 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
-import {withVlow} from 'vlow';
 
 import AddThings from './AddThings';
-import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
+import CollectionActions from '../../Actions/CollectionActions';
 
 import Thing from './Thing';
 
-const withStores = withVlow([{
-    store: CollectionStore,
-    keys: ['things']
-}]);
+const collectionActions = new CollectionActions();
 
 
 const useStyles = makeStyles(theme => ({
@@ -31,12 +28,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ThingRoot = ({things, collection, onError}) => {
+const ThingRoot = ({collection}) => {
     const classes = useStyles();
     const fetched = things.hasOwnProperty(collection.collection_id);
+    const things = useGlobal('things')[0];
 
     React.useEffect(() => {
-        CollectionActions.query(collection.collection_id, onError);
+        collectionActions.query(collection.collection_id);
     }, [collection.collection_id]);
 
     return (
@@ -59,7 +57,6 @@ const ThingRoot = ({things, collection, onError}) => {
                                     id: collection.collection_id,
                                     parentType: 'object',
                                 }}
-                                onError={onError}
                             />
                         </React.Fragment>
                     ))}
@@ -90,13 +87,8 @@ const ThingRoot = ({things, collection, onError}) => {
 };
 
 ThingRoot.propTypes = {
-    onError: PropTypes.func.isRequired,
-
     collection: PropTypes.object.isRequired,
-
-    /* collection properties */
-    things: CollectionStore.types.things.isRequired,
 };
 
 
-export default withStores(ThingRoot);
+export default ThingRoot;

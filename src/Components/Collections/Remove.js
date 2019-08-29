@@ -3,35 +3,25 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import {ThingsdbActions} from '../../Stores/ThingsdbStore';
+import ThingsdbActions from '../../Actions/ThingsdbActions';
 
-const initialState = {
-    show: false,
-    serverError: '',
-};
+const thingsdbActions = new ThingsdbActions();
+
 
 const Remove = ({collection}) => {
-    const [state, setState] = React.useState(initialState);
-    const {show, serverError} = state;
+    const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
-        setState({...state, show: true});
+        setShow(true);
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setShow(false);
     };
 
     const handleClickOk = () => {
-        ThingsdbActions.removeCollection(collection.name, (err) => setState({...state, serverError: err.log}));
-
-        if (!state.serverError) {
-            setState({...state, show: false});
-        }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
+        thingsdbActions.removeCollection(collection.name);
+        setShow(false);
     };
 
     return(
@@ -46,7 +36,7 @@ const Remove = ({collection}) => {
             onOk={handleClickOk}
             onClose={handleClickClose}
         >
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
         </SimpleModal>
     );
 };

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import Checkbox from '@material-ui/core/Checkbox';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -15,7 +16,7 @@ import { makeStyles} from '@material-ui/core/styles';
 import PasswordUser from './Password';
 import RemoveUser from './Remove';
 import RenameUser from './Rename';
-import {ThingsdbActions} from '../../Stores/ThingsdbStore';
+import ThingsdbActions from '../../Actions/ThingsdbActions';
 
 const useStyles = makeStyles(theme => ({
     flex: {
@@ -66,15 +67,11 @@ const privileges = [
     },
 ];
 
-const initialState = {
-    switches: {},
-    serverError: '',
-};
 
-const UserAccess = ({user, collections}) => {
+const UserAccess = ({user}) => {
     const classes = useStyles();
-    const [state, setState] = React.useState(initialState);
-    const {switches, serverError} = state;
+    const [switches, setSwitches] = React.useState({});
+    const collections = useGlobal('collections')[0];
 
     const getSwitches = (target, privileges) => {
         let s = {
@@ -118,7 +115,7 @@ const UserAccess = ({user, collections}) => {
         user.access.map(({target, privileges}) => {
             s = Object.assign({}, s, getSwitches(target, privileges));
         });
-        setState({serverError: '', switches:s});
+        setSwitches(s);
     },
     [user, targets]
     );
@@ -126,10 +123,10 @@ const UserAccess = ({user, collections}) => {
 
     const handleOnChangeSwitch = (key) => ({target}) => {
         const {value, checked} = target;
-        setState((prevState => {
-            let newswitches = JSON.parse(JSON.stringify(prevState.switches));
+        setSwitches((prevSwitches => {
+            let newswitches = JSON.parse(JSON.stringify(prevSwitches));
             newswitches[key][value] = checked;
-            return {...state, switches: newswitches};
+            return newswitches;
         }));
 
         if (checked) {
@@ -137,32 +134,14 @@ const UserAccess = ({user, collections}) => {
                 user.name,
                 key,
                 value,
-                (err) => {
-                    setState((prevState => {
-                        let newswitches = JSON.parse(JSON.stringify(prevState.switches));
-                        newswitches[key][value] = checked;
-                        return {serverError: err.log, switches: newswitches};
-                    }));
-                }
             );
         } else {
             ThingsdbActions.revoke(
                 user.name,
                 key,
                 value,
-                (err) => {
-                    setState((prevState => {
-                        let newswitches = JSON.parse(JSON.stringify(prevState.switches));
-                        newswitches[key][value] = checked;
-                        return {serverError: err.log, switches: newswitches};
-                    }));
-                }
             );
         }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
     };
 
     const buttons = [
@@ -189,19 +168,6 @@ const UserAccess = ({user, collections}) => {
                 <Typography className={classes.title} variant="body1" >
                     {'ACCESS RULES'}
                 </Typography>
-                <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
-                    <CardHeader
-                        avatar={
-                            <WarningIcon className={classes.warning} />
-                        }
-                        action={
-                            <IconButton aria-label="settings" onClick={handleCloseError}>
-                                <CloseIcon />
-                            </IconButton>
-                        }
-                        title={serverError}
-                    />
-                </Collapse>
                 <Grid
                     className={classes.user}
                     container
@@ -236,7 +202,7 @@ const UserAccess = ({user, collections}) => {
                                             <Grid item container xs={12} >
                                                 {privileges.map(({ky, label}) => (
                                                     <Grid item xs={2} key={ky} container justify="center">
-                                                        <Checkbox disabled={Boolean(serverError)} checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
+                                                        <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
                                                     </Grid>
                                                 ))}
                                             </Grid>
@@ -262,7 +228,6 @@ const UserAccess = ({user, collections}) => {
 
 UserAccess.propTypes = {
     user: PropTypes.object.isRequired,
-    collections: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default UserAccess;

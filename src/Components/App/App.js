@@ -6,7 +6,6 @@ import Card from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {makeStyles} from '@material-ui/core/styles';
-import {withVlow} from 'vlow';
 
 import Collection from '../Collections/Collection';
 import CollectionsMenu from '../Navigation/CollectionsMenu';
@@ -14,22 +13,9 @@ import User from '../Users/User';
 import UsersMenu from '../Navigation/UsersMenu';
 import Nodes from '../Nodes/Nodes';
 import TopBar from '../Navigation/TopBar';
-import {ApplicationStore} from '../../Stores/ApplicationStore';
-import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
-import {NodesActions, NodesStore} from '../../Stores/NodesStore';
+import ThingsdbActions from '../../Actions/ThingsdbActions';
+import NodesActions from '../../Actions/NodesActions';
 import {DrawerLayout} from '../Util';
-
-
-const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}, {
-    store: ThingsdbStore,
-    keys: ['collections', 'user', 'users']
-}, {
-    store: NodesStore,
-    keys: ['nodes']
-}]);
 
 
 const useStyles = makeStyles(theme => ({
@@ -55,19 +41,23 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const thingsActions = new ThingsdbActions();
+const nodesActions = new NodesActions();
 
-const App = ({onError, collections, match, user, users, nodes}) => {
+
+const App = ({onError}) => {
     const classes = useStyles();
     const [indexCollection, setIndexCollection] = React.useState(0);
     const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
-    const [ cards, setCards ] = useGlobal('cards');
 
-    console.log(cards);
+    const match = useGlobal('match')[0];
+    const collections = useGlobal('collections')[0];
+    const users = useGlobal('users')[0];
 
     React.useEffect(() => {
-        ThingsdbActions.getInfo(onError);
-        NodesActions.getNodes(onError);
+        thingsActions.getInfo(onError);
+        nodesActions.getNodes(onError);
     },
     [],
     );
@@ -77,8 +67,8 @@ const App = ({onError, collections, match, user, users, nodes}) => {
     const selectedUser = findItem(indexUser, users);
 
     const pages = {
-        collection: <Collection collection={selectedCollection} onError={onError} />,
-        user: <User user={selectedUser} collections={collections} />,
+        collection: <Collection collection={selectedCollection} />,
+        user: <User user={selectedUser} />,
     };
 
     const handleClickCollection = (i) => {
@@ -91,10 +81,6 @@ const App = ({onError, collections, match, user, users, nodes}) => {
 
     const handleDrawerOpen = () => {
         setOpen(true);
-
-        let newCards = [...cards];
-        newCards.push('hoi');
-        setCards(newCards);
     };
 
     const handleDrawerClose = () => {
@@ -106,7 +92,7 @@ const App = ({onError, collections, match, user, users, nodes}) => {
             open={open}
             onClose={handleDrawerClose}
             topbar={
-                <TopBar user={user} onError={onError}>
+                <TopBar >
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -122,10 +108,10 @@ const App = ({onError, collections, match, user, users, nodes}) => {
                 <div className={classes.page}>
                     <div className={classes.menu}>
                         <Card className={classes.submenu}>
-                            <CollectionsMenu collections={collections} onClickCollection={handleClickCollection} />
+                            <CollectionsMenu onClickCollection={handleClickCollection} />
                         </Card>
                         <Card className={classes.submenu}>
-                            <UsersMenu users={users} onClickUser={handleClickUser} />
+                            <UsersMenu onClickUser={handleClickUser} />
                         </Card>
                     </div>
                     <div className={classes.content}>
@@ -134,7 +120,7 @@ const App = ({onError, collections, match, user, users, nodes}) => {
                 </div>
             }
             drawerTitle="NODES"
-            drawerContent={<Nodes nodes={nodes} onError={onError} />}
+            drawerContent={<Nodes />}
         />
     );
 };
@@ -143,18 +129,6 @@ App.propTypes = {
 
     onError: PropTypes.func.isRequired,
 
-    /* Application properties */
-    match: ApplicationStore.types.match.isRequired,
-
-    /* Collections properties */
-    collections: ThingsdbStore.types.collections.isRequired,
-
-    /* Users properties */
-    user: ThingsdbStore.types.user.isRequired,
-    users: ThingsdbStore.types.users.isRequired,
-
-    /* nodes properties */
-    nodes: NodesStore.types.nodes.isRequired,
 };
 
-export default withStores(App);
+export default App;

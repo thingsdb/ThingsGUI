@@ -1,12 +1,11 @@
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import {withVlow} from 'vlow';
 
 import App from './App';
 import AppLoader from './AppLoader';
 import Login from './Login';
-import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ErrorToast} from '../Util';
 
 const theme = createMuiTheme({
@@ -34,13 +33,11 @@ const theme = createMuiTheme({
 });
 
 
-const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['loaded', 'connected']
-}]);
 
-const Root = ({loaded, connected}) => {
+const Root = () => {
     const [serverErrors, setServerErrors] = React.useState([]);
+    const loaded = useGlobal('loaded');
+    const connected = useGlobal('connected');
 
     React.useEffect(() => {
         setServerErrors([]);
@@ -65,9 +62,6 @@ const Root = ({loaded, connected}) => {
     );
 };
 
-Root.propTypes = {
-    loaded: ApplicationStore.types.loaded.isRequired,
-    connected: ApplicationStore.types.connected.isRequired,
-};
 
-export default withStores(Root);
+
+export default Root;

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -9,16 +10,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {withVlow} from 'vlow';
 
 import { ErrorMsg } from '../Util';
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
-
-
-const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['loaded', 'connected', 'connErr']
-}]);
+import ApplicationActions from '../../Actions/ApplicationActions';
 
 
 
@@ -39,9 +33,15 @@ const validation = {
     password: (o) => o.password.length>0,
 };
 
-const Login = ({loaded, connected, connErr}) => {
+const applicationActions = new ApplicationActions();
+
+const Login = () => {
     const [state, setState] = useState(initialState);
     const {showPassword, errors, form, serverError} = state;
+    const loaded = useGlobal('loaded')[0];
+    const connected = useGlobal('connected')[0];
+    const connErr = useGlobal('connErr')[0];
+
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -55,7 +55,7 @@ const Login = ({loaded, connected, connErr}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connect(form, (err) => setState({...state, serverError: err.log}));
+            applicationActions.connect(form);
         }
     };
 
@@ -131,10 +131,4 @@ const Login = ({loaded, connected, connErr}) => {
     );
 };
 
-Login.propTypes = {
-    loaded: ApplicationStore.types.loaded.isRequired,
-    connected: ApplicationStore.types.connected.isRequired,
-    connErr: ApplicationStore.types.connErr.isRequired,
-};
-
-export default withStores(Login);
+export default Login;

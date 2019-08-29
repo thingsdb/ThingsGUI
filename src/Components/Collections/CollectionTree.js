@@ -6,23 +6,14 @@ import {ErrorMsg, HarmonicCard} from '../Util';
 
 
 const CollectionTree = ({collection}) => {
-    const [serverError, setServerError] = React.useState('');
-
-
-    const handleServerError = (err) => {
-        setServerError(err.log);
-    };
-    const handleCloseError = () => {
-        setServerError('');
-    };
 
     return (
         <HarmonicCard
             title="THINGS TREE"
             content={
                 <React.Fragment>
-                    <ErrorMsg error={serverError} onClose={handleCloseError} />
-                    <Things collection={collection} onError={handleServerError} />
+                    {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+                    <Things collection={collection} />
                 </React.Fragment>
             }
         />

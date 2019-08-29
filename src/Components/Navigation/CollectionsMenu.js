@@ -1,17 +1,20 @@
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PropTypes from 'prop-types';
 
 import AddCollection from '../Collections/Add';
 import {Menu} from '../Util';
-import {ApplicationActions} from '../../Stores/ApplicationStore';
+import ApplicationActions from '../../Actions/ApplicationActions';
 
+const applicationActions = new ApplicationActions();
 
-const CollectionsMenu = ({collections, onClickCollection}) => {
+const CollectionsMenu = ({onClickCollection}) => {
+    const collections = useGlobal('collections')[0];
 
     const handleClickCollection = (collection) => {
         onClickCollection(collection);
-        ApplicationActions.navigate({path: 'collection'});
+        applicationActions.navigate({path: 'collection'});
     };
 
     return (
@@ -27,8 +30,6 @@ const CollectionsMenu = ({collections, onClickCollection}) => {
 
 CollectionsMenu.propTypes = {
     onClickCollection: PropTypes.func.isRequired,
-    collections: PropTypes.arrayOf(PropTypes.object).isRequired,
-
 };
 
 export default CollectionsMenu;

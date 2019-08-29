@@ -1,5 +1,5 @@
 /* global process */
-import Vlow from 'vlow';
+import React from 'reactn';
 import io from 'socket.io-client';
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
@@ -64,7 +64,7 @@ class _SocketRequest {
     }
 }
 
-class BaseStore extends Vlow.Store {
+class BaseActions extends React.PureComponent {
 
     getSocketObj() {
         return socket;
@@ -79,4 +79,4 @@ class BaseStore extends Vlow.Store {
     }
 }
 
-export default BaseStore;
+export default BaseActions;

@@ -2,13 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import {ThingsdbActions} from '../../Stores/ThingsdbStore';
+import ThingsdbActions from '../../Actions/ThingsdbActions';
 
 
-const RemoveToken = ({token, onServerError}) => {
+const thingsActions = new ThingsdbActions();
+
+const RemoveToken = ({token}) => {
 
     const handleClickOk = () => {
-        ThingsdbActions.delToken(token.key, (err) => onServerError(err));
+        thingsActions.delToken(token.key);
     };
 
     return (
@@ -20,7 +22,6 @@ const RemoveToken = ({token, onServerError}) => {
 
 RemoveToken.propTypes = {
     token: PropTypes.object.isRequired,
-    onServerError: PropTypes.func.isRequired,
 };
 
 export default RemoveToken;

@@ -1,10 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useGlobal } from 'reactn'; // <-- reactn
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import {withVlow} from 'vlow';
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+import ApplicationActions from '../../Actions/ApplicationActions';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -28,16 +27,15 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['loaded'],
-}]);
+const applicationActions = new ApplicationActions();
 
-const AppLoader = ({onError, loaded}) => {
+const AppLoader = () => {
 
     const classes = useStyles();
+
+    const loaded = useGlobal('loaded')[0];
     React.useEffect(() => {
-        ApplicationActions.connected(onError);
+        applicationActions.connected();
     }, [loaded]);
 
 
@@ -87,9 +85,5 @@ const AppLoader = ({onError, loaded}) => {
     );
 };
 
-AppLoader.propTypes = {
-    onError: PropTypes.func.isRequired,
-    loaded: ApplicationStore.types.loaded.isRequired,
-};
 
-export default withStores(AppLoader);
+export default AppLoader;

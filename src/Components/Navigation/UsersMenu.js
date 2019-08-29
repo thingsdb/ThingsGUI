@@ -4,7 +4,7 @@ import PersonIcon from '@material-ui/icons/Person';
 
 import AddUser from '../Users/Add';
 import {Menu} from '../Util';
-import {ApplicationActions} from '../../Stores/ApplicationStore';
+import {ApplicationActions} from '../../Stores/ApplicationActions';
 
 
 const UsersMenu = ({users, onClickUser}) => {
