@@ -48,7 +48,7 @@ const App = () => {
     const classes = useStyles();
 
     const match = useGlobal('match')[0];
-    const collections = useGlobal('collections', 'users')[0];
+    const collections = useGlobal('collections')[0];
     const users = useGlobal('users')[0];
 
     const [indexCollection, setIndexCollection] = React.useState(0);

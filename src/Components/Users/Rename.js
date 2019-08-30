@@ -45,7 +45,7 @@ const Rename = ({user}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            thingsActions.renameUser(
+            ThingsdbActions.renameUser(
                 user.name,
                 form.name,
             );

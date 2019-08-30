@@ -86,7 +86,7 @@ const AddToken = ({user}) => {
     };
 
     const handleClickOk = () => {
-        thingsActions.newToken(
+        ThingsdbActions.newToken(
             {
                 name: user.name,
                 expirationTime: switches.expirationTime ? '(now() + ' + form.number + '*' + form.timeUnit + ')' : null,

@@ -6,12 +6,7 @@ const NodesActions = {
     getNodes: () => {
         emit('/node/getnodes').done((data) => {
             setGlobal({nodes: data.nodes});
-        }).fail((event, status, message) => setGlobal({
-            error: message,
-            counters: {},
-            nodes: [],
-            node: {},
-        }));
+        }).fail((event, status, message) => setGlobal({error: message}));
     },
 
     getNode: () => {

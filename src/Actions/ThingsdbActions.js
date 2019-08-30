@@ -10,15 +10,7 @@ const ThingsdbActions = {
                 users: data.users,
                 user: data.user,
             });
-        }).fail((event, status, message) => {
-            setGlobal({
-                error: message,
-                collections: [],
-                collection: {},
-                users: [],
-                user: {},
-            });
-        });
+        }).fail((event, status, message) => setGlobal({error: message}));
     },
 
     //COLLECTIONS
@@ -56,6 +48,7 @@ const ThingsdbActions = {
                     collections: data.collections,
                 });
             }
+            console.log(getGlobal().collections, getGlobal().users);
         }).fail((event, status, message) => setGlobal({error: message}));
     },
 

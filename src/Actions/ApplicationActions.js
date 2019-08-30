@@ -42,9 +42,9 @@ const ApplicationActions = {
     disconnect: () => {
         emit('/disconnect').done(() => {
             setGlobal({
+                loaded: false,
                 connected: false,
                 connErr: '',
-                match: {},
             });
         }); //.fail((_xhr, {error}) => onError(error));
     },

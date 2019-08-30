@@ -21,7 +21,12 @@ setGlobal({
     collection: {},
     users: [],
     user: {},
-    error: '',
+    error: {
+        msg: {
+
+        },
+        toast: [],
+    },
 });
 
 ReactDOM.render(<Root />, document.getElementById('app'));

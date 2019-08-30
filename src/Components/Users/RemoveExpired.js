@@ -7,7 +7,7 @@ import ThingsdbActions from '../../Actions/ThingsdbActions';
 const RemoveExpired = () => {
 
     const handleClickOk = () => {
-        thingsActions.delExpired();
+        ThingsdbActions.delExpired();
     };
 
     return (

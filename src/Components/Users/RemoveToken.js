@@ -10,7 +10,7 @@ import ThingsdbActions from '../../Actions/ThingsdbActions';
 const RemoveToken = ({token}) => {
 
     const handleClickOk = () => {
-        thingsActions.delToken(token.key);
+        ThingsdbActions.delToken(token.key);
     };
 
     return (

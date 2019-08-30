@@ -18,7 +18,7 @@ const Remove = ({user}) => {
         setShow(false);
     };
     const handleClickOk = () => {
-        thingsActions.removeUser(user.name);
+        ThingsdbActions.removeUser(user.name);
         setShow(false);
     };
 

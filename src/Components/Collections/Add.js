@@ -45,6 +45,7 @@ const initialState = {
 const Add = () => {
     const connErr = useGlobal('connErr')[0];
     const collections = useGlobal('collections')[0];
+    console.log(collections);
 
     const classes = useStyles();
 
