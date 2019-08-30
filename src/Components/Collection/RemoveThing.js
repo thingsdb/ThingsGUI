@@ -8,8 +8,8 @@ import { ErrorMsg, SimpleModal } from '../Util';
 import CollectionActions from '../../Actions/CollectionActions';
 import ThingsdbActions from '../../Actions/ThingsdbActions';
 
-const thingsdbActions = new ThingsdbActions();
-const collectionActions = new CollectionActions();
+
+
 
 
 const RemoveThing = ({collection, thing, info}) => {
@@ -38,13 +38,13 @@ const RemoveThing = ({collection, thing, info}) => {
             info.hasOwnProperty('index') ? info.index : null
         );
 
-        collectionActions.rawQuery(
+        CollectionActions.rawQuery(
             collection.collection_id,
             info.id,
             queryString,
         );
 
-        thingsdbActions.getCollections();
+        ThingsdbActions.getCollections();
         setShow(false);
 
     };

@@ -4,7 +4,8 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import {NodesActions} from '../../Stores/NodesStore';
+import NodesActions from '../../Actions/NodesActions';
+
 
 
 const loglevels = [
@@ -18,15 +19,14 @@ const loglevels = [
 const initialState = {
     show: false,
     form: {},
-    serverError: '',
 };
 
 const Loglevel = ({node}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, form, serverError} = state;
+    const {show, form} = state;
 
     const handleClickOpen = () => {
-        setState({show: true, form: {...node}, serverError: ''});
+        setState({show: true, form: {...node}});
     };
 
     const handleClickClose = () => {
@@ -45,20 +45,13 @@ const Loglevel = ({node}) => {
         NodesActions.setLoglevel(
             node,
             form.log_level,
-            (err) => setState({...state, serverError: err.log})
         );
-        if (!state.serverError) {
-            setState({...state, show: false});
-        }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
+        setState({...state, show: false});
     };
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
             <TextField
                 autoFocus
                 margin="dense"

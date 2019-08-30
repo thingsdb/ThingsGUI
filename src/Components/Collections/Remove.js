@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import { ErrorMsg, SimpleModal } from '../Util';
 import ThingsdbActions from '../../Actions/ThingsdbActions';
 
-const thingsdbActions = new ThingsdbActions();
+
 
 
 const Remove = ({collection}) => {
@@ -20,7 +20,7 @@ const Remove = ({collection}) => {
     };
 
     const handleClickOk = () => {
-        thingsdbActions.removeCollection(collection.name);
+        ThingsdbActions.removeCollection(collection.name);
         setShow(false);
     };
 

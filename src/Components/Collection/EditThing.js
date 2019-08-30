@@ -14,8 +14,8 @@ import CollectionActions from '../../Actions/CollectionActions';
 import ThingsdbActions from '../../Actions/ThingsdbActions';
 import {Add1DArray, buildInput, buildQueryEdit, ErrorMsg, onlyNums, SimpleModal} from '../Util';
 
-const thingsdbActions = new ThingsdbActions();
-const collectionActions = new CollectionActions();
+
+
 
 const dataTypes = [
     'string',
@@ -109,13 +109,13 @@ const EditThing = ({info, collection, thing}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
-            collectionActions.rawQuery(
+            CollectionActions.rawQuery(
                 collection.collection_id,
                 id,
                 form.queryString,
             );
 
-            thingsdbActions.getCollections();
+            ThingsdbActions.getCollections();
             setState({...state, show: false});
         }
     };

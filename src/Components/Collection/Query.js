@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import CollectionActions from '../../Actions/CollectionActions';
 import {ErrorMsg, QueryInput, QueryOutput} from '../Util';
 
-const collectionActions = new CollectionActions();
+
 
 const Query = ({collection}) => {
     const [query, setQuery] = React.useState('');
@@ -17,10 +17,8 @@ const Query = ({collection}) => {
     };
 
     const handleSubmit = () => {
-        console.log('query');
-        collectionActions.queryWithOutput(collection.collection_id, query, handleOutput);
+        CollectionActions.queryWithOutput(collection.collection_id, query, handleOutput);
     };
-    console.log(output);
 
     const handleOutput = (out) => {
         setOutput(out);

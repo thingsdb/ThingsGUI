@@ -19,7 +19,6 @@ import ApplicationActions from '../../Actions/ApplicationActions';
 const initialState = {
     showPassword: false,
     errors: {},
-    serverError: '',
     form: {
         host: 'localhost:9200',
         user: 'admin',
@@ -33,14 +32,16 @@ const validation = {
     password: (o) => o.password.length>0,
 };
 
-const applicationActions = new ApplicationActions();
+
 
 const Login = () => {
-    const [state, setState] = useState(initialState);
-    const {showPassword, errors, form, serverError} = state;
     const loaded = useGlobal('loaded')[0];
     const connected = useGlobal('connected')[0];
     const connErr = useGlobal('connErr')[0];
+
+    const [state, setState] = useState(initialState);
+    const {showPassword, errors, form} = state;
+
 
 
     const handleOnChange = ({target}) => {
@@ -55,16 +56,12 @@ const Login = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            applicationActions.connect(form);
+            ApplicationActions.connect(form);
         }
     };
 
     const handleClickShowPassword = () => {
         setState({...state, showPassword: !showPassword});
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
     };
 
     return (
@@ -77,7 +74,7 @@ const Login = () => {
                 {'Login'}
             </DialogTitle>
             <DialogContent>
-                <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
+                {/* <ErrorMsg error={connErr} onClose={handleCloseError} /> */}
                 <TextField
                     autoFocus
                     margin="dense"

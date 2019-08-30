@@ -3,34 +3,23 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import {NodesActions} from '../../Stores/NodesStore';
+import NodesActions from '../../Actions/NodesActions';
 
-const initialState = {
-    show: false,
-    serverError: '',
-};
+
 
 const CountersReset = ({node}) => {
-    const [state, setState] = React.useState(initialState);
-    const {show, serverError} = state;
+    const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
-        setState({...state, show: true});
+        setShow(true);
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setShow(false);
     };
     const handleClickOk = () => {
-        NodesActions.shutdown(node, (err) => setState({...state, serverError: err.log}));
-
-        if (!state.serverError) {
-            setState({...state, show: false});
-        }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
+        NodesActions.shutdown(node);
+        setShow(false);
     };
 
     return(
@@ -44,9 +33,9 @@ const CountersReset = ({node}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
-        >
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
-        </SimpleModal>
+        />
+        //     <ErrorMsg error={serverError} onClose={handleCloseError} />
+        // </SimpleModal>
     );
 };
 

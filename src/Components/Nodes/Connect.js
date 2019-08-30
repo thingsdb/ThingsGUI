@@ -1,17 +1,14 @@
 import React, {useState} from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import {withVlow} from 'vlow';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationActions';
+import ApplicationActions from '../../Actions/ApplicationActions';
 
 
-const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['connErr']
-}]);
+
 
 const initialState = {
     show: false,
@@ -19,13 +16,14 @@ const initialState = {
     form: {
         host: 'localhost:9200',
     },
-    serverError: '',
 };
 
 
-const Connect = ({connErr, onConnected}) => {
+const Connect = ({onConnected}) => {
+    const connErr = useGlobal('connErr')[0];
+
     const [state, setState] = useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
 
     const validation = {
         host: () => form.host.length>0,
@@ -47,12 +45,10 @@ const Connect = ({connErr, onConnected}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connectOther(form, (err) => setState({...state, serverError: err.log}));
+            ApplicationActions.connectOther(form);
 
-            if(!state.serverError) {
-                setState({...state, show: false});
-                onConnected();
-            }
+            setState({...state, show: false});
+            onConnected();
         }
     };
 
@@ -60,13 +56,9 @@ const Connect = ({connErr, onConnected}) => {
         setState({...state, show: true});
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
-
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
+            {/* <ErrorMsg error={connErr} onClose={handleCloseError} /> */}
             <TextField
                 autoFocus
                 margin="dense"
@@ -102,9 +94,6 @@ const Connect = ({connErr, onConnected}) => {
 Connect.propTypes = {
 
     onConnected: PropTypes.func.isRequired,
-
-    /* application properties */
-    connErr: ApplicationStore.types.connErr.isRequired,
 };
 
-export default withStores(Connect);
+export default Connect;

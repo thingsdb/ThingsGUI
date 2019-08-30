@@ -22,7 +22,7 @@ const initialState = {
     form: {},
 };
 
-const thingsActions = new ThingsdbActions();
+
 
 const Password = ({user}) => {
     const [state, setState] = React.useState(initialState);

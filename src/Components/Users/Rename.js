@@ -13,13 +13,13 @@ const initialState = {
     form: {},
 };
 
-const thingsActions = new ThingsdbActions();
+
 
 const Rename = ({user}) => {
-    const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
     const users = useGlobal('users')[0];
 
+    const [state, setState] = React.useState(initialState);
+    const {show, errors, form} = state;
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),

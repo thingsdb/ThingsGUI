@@ -1,5 +1,4 @@
 /* global process */
-import React from 'reactn';
 import io from 'socket.io-client';
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
@@ -64,19 +63,4 @@ class _SocketRequest {
     }
 }
 
-class BaseActions extends React.PureComponent {
-
-    getSocketObj() {
-        return socket;
-    }
-
-    emit(name, data) {
-        return new _SocketRequest(name, data);
-    }
-
-    post(url, data) {
-        return new _JsonRequest('POST', url, data);
-    }
-}
-
-export default BaseActions;
+export const emit = (event, data) => new _SocketRequest(event, data);

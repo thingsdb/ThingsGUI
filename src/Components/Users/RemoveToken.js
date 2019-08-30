@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ThingsdbActions from '../../Actions/ThingsdbActions';
 
 
-const thingsActions = new ThingsdbActions();
+
 
 const RemoveToken = ({token}) => {
 

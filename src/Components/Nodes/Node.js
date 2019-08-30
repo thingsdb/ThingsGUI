@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core';
-import {withVlow} from 'vlow';
 
 import Connect from './Connect';
 import Counters from './Counters';
@@ -10,14 +10,11 @@ import CountersReset from './CountersReset';
 import Loglevel from './Loglevel';
 import NodeInfo from './NodeInfo';
 import Shutdown from './Shutdown';
-import {NodesActions, NodesStore} from '../../Stores/NodesStore';
+import NodesActions from '../../Actions/NodesActions';
 import { StyledTabs, StyledTab } from '../Util';
 
 
-const withStores = withVlow([{
-    store: NodesStore,
-    keys: ['node', 'counters']
-}]);
+
 
 const useStyles = makeStyles(theme => ({
     info: {
@@ -28,16 +25,19 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Node = ({local, node, counters, onError}) => {
+const Node = ({local}) => {
+    const node = useGlobal('node')[0];
+    const counters = useGlobal('counters')[0];
+    console.log('node');
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
 
     React.useEffect(() => {
-        NodesActions.getNode(onError); // QUEST: en bij status update?
+        NodesActions.getNode(); // QUEST: en bij status update?
     }, [tabIndex]);
 
     const onConnected = () => {
-        NodesActions.getNode(onError);
+        NodesActions.getNode();
     };
 
     const handleChangeTab = (_event, newValue) => {
@@ -81,7 +81,7 @@ const Node = ({local, node, counters, onError}) => {
                         <Counters counters={counters} />
                     </Grid>
                     <Grid item xs={12}>
-                        <CountersReset node={node} onServerError={onError} />
+                        <CountersReset node={node} />
                     </Grid>
                 </Grid>
             }
@@ -92,13 +92,7 @@ const Node = ({local, node, counters, onError}) => {
 };
 
 Node.propTypes = {
-    onError: PropTypes.func.isRequired,
     local: PropTypes.object.isRequired,
-
-    /* nodes properties */
-    node: NodesStore.types.node.isRequired,
-    counters: NodesStore.types.counters.isRequired,
-
 };
 
-export default withStores(Node);
+export default Node;

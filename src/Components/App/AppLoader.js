@@ -1,5 +1,4 @@
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,16 +26,14 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const applicationActions = new ApplicationActions();
+
 
 const AppLoader = () => {
-
     const classes = useStyles();
 
-    const loaded = useGlobal('loaded')[0];
     React.useEffect(() => {
-        applicationActions.connected();
-    }, [loaded]);
+        ApplicationActions.connected();
+    }, []);
 
 
     return(

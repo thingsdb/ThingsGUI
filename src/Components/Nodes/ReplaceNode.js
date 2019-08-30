@@ -1,26 +1,24 @@
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import {withVlow} from 'vlow';
 
-import {NodesActions, NodesStore} from '../../Stores/NodesStore';
+import NodesActions from '../../Actions/NodesActions';
 import { ErrorMsg, SimpleModal } from '../Util';
 
-const withStores = withVlow([{
-    store: NodesStore,
-    keys: ['nodes']
-}]);
+
 
 const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '',
 };
 
-const ReplaceNode = ({nodes}) => {
+const ReplaceNode = () => {
+    const nodes = useGlobal('nodes')[0];
+
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
 
     const validation = {
         secret: () => form.secret.length>0,
@@ -28,7 +26,7 @@ const ReplaceNode = ({nodes}) => {
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, errors: {}, form: {nodeId: '', secret: '', port: ''}, serverError: ''});
+        setState({...state, show: true, errors: {}, form: {nodeId: '', secret: '', port: ''}});
     };
 
     const handleClickClose = () => {
@@ -47,23 +45,14 @@ const ReplaceNode = ({nodes}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            NodesActions.replaceNode(
-                form,
-                (err) => setState({...state, serverError: err.log})
-            );
-            if (!state.serverError) {
-                setState({...state, show: false});
-            }
+            NodesActions.replaceNode(form);
+            setState({...state, show: false});
         }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
     };
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
             <TextField
                 autoFocus
                 margin="dense"
@@ -123,8 +112,4 @@ const ReplaceNode = ({nodes}) => {
     );
 };
 
-ReplaceNode.propTypes = {
-    nodes: NodesStore.types.nodes.isRequired,
-};
-
-export default withStores(ReplaceNode);
+export default ReplaceNode;

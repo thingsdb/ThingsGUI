@@ -1,14 +1,12 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
-import PropTypes from 'prop-types';
-
+import { useGlobal } from 'reactn'; // <-- reactn
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
 import {TableWithRowExtend} from '../Util';
 
-const Nodes = ({onError, nodes}) => {
-
-
+const Nodes = () => {
+    const nodes = useGlobal('nodes')[0];
     const rows = nodes;
     const header = [{
         ky: 'address',
@@ -20,7 +18,7 @@ const Nodes = ({onError, nodes}) => {
         ky: 'status',
         label: 'Status',
     }];
-    const rowExtend = (node) => <Node local={node} onError={onError} />;
+    const rowExtend = (node) => <Node local={node} />;
 
     return(
         <React.Fragment>
@@ -28,11 +26,6 @@ const Nodes = ({onError, nodes}) => {
             <NodeButtons />
         </React.Fragment>
     );
-};
-
-Nodes.propTypes = {
-    onError: PropTypes.func.isRequired,
-    nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Nodes;

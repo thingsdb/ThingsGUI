@@ -19,7 +19,7 @@ import RemoveThing from './RemoveThing';
 import CollectionActions from '../../Actions/CollectionActions';
 import {Buttons, checkType} from '../Util';
 
-const collectionActions = new CollectionActions();
+
 
 const useStyles = makeStyles(theme => ({
     nested: {
@@ -33,9 +33,9 @@ const useStyles = makeStyles(theme => ({
 
 
 const Thing = ({thing, collection, info}) => {
+    const things = useGlobal('things')[0];
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
-    const things = useGlobal('things')[0];
 
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
         const infoNew = i==null ? {
@@ -72,7 +72,7 @@ const Thing = ({thing, collection, info}) => {
     const handleClick = () => {
         setShow(!show); // QUEST: work with prevstate?
         if (thing && thing['#']) {
-            collectionActions.query(collection.collection_id, thing['#']);
+            CollectionActions.query(collection.collection_id, thing['#']);
         }
     };
 

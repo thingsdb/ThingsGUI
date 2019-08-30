@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useGlobal } from 'reactn'; // <-- reactn
 import clsx from 'clsx';
@@ -41,26 +40,29 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const thingsActions = new ThingsdbActions();
-const nodesActions = new NodesActions();
 
 
-const App = ({onError}) => {
+
+
+const App = () => {
     const classes = useStyles();
+
+    const match = useGlobal('match')[0];
+    const collections = useGlobal('collections', 'users')[0];
+    const users = useGlobal('users')[0];
+
     const [indexCollection, setIndexCollection] = React.useState(0);
     const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
 
-    const match = useGlobal('match')[0];
-    const collections = useGlobal('collections')[0];
-    const users = useGlobal('users')[0];
-
     React.useEffect(() => {
-        thingsActions.getInfo(onError);
-        nodesActions.getNodes(onError);
+        ThingsdbActions.getInfo();
+        NodesActions.getNodes();
     },
     [],
     );
+
+    console.log('app');
 
     const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
     const selectedCollection = findItem(indexCollection, collections);
@@ -123,12 +125,6 @@ const App = ({onError}) => {
             drawerContent={<Nodes />}
         />
     );
-};
-
-App.propTypes = {
-
-    onError: PropTypes.func.isRequired,
-
 };
 
 export default App;

@@ -3,35 +3,24 @@ import Button from '@material-ui/core/Button';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import {NodesActions} from '../../Stores/NodesStore';
+import NodesActions from '../../Actions/NodesActions';
 
 
-const initialState = {
-    show: false,
-    serverError: '',
-};
 
 const PopNode = () => {
-    const [state, setState] = React.useState(initialState);
-    const {show, serverError} = state;
+    const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
-        setState({...state, show: true, serverError: ''});
+        setShow(true);
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setShow(false);
     };
 
     const handleClickOk = () => {
-        NodesActions.popNode((err) => setState({...state, serverError: err.log}));
-        if (!state.serverError) {
-            setState({...state, show: false});
-        }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
+        NodesActions.popNode();
+        setShow(false);
     };
 
     const Content = (
@@ -39,7 +28,7 @@ const PopNode = () => {
             <DialogContentText>
                 {'Are you sure you want to remove the latest node?'}
             </DialogContentText>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
         </React.Fragment>
     );
 

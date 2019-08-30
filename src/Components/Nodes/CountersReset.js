@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import {NodesActions} from '../../Stores/NodesStore';
+import NodesActions from '../../Actions/NodesActions';
 
 
-const CountersReset = ({node, onServerError}) => {
+
+const CountersReset = ({node}) => {
 
     const handleClickOk = () => {
-        NodesActions.resetCounters(node, (err) => onServerError(err));
+        NodesActions.resetCounters(node);
     };
 
     return (
@@ -21,7 +22,6 @@ const CountersReset = ({node, onServerError}) => {
 
 CountersReset.propTypes = {
     node: PropTypes.object.isRequired,
-    onServerError: PropTypes.func.isRequired,
 };
 
 export default CountersReset;

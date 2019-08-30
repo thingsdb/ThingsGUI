@@ -14,7 +14,7 @@ import CollectionActions from '../../Actions/CollectionActions';
 
 import Thing from './Thing';
 
-const collectionActions = new CollectionActions();
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -30,11 +30,12 @@ const useStyles = makeStyles(theme => ({
 
 const ThingRoot = ({collection}) => {
     const classes = useStyles();
-    const fetched = things.hasOwnProperty(collection.collection_id);
     const things = useGlobal('things')[0];
 
+    const fetched = things.hasOwnProperty(collection.collection_id);
+
     React.useEffect(() => {
-        collectionActions.query(collection.collection_id);
+        CollectionActions.query(collection.collection_id);
     }, [collection.collection_id]);
 
     return (

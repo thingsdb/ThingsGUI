@@ -19,7 +19,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import ApplicationActions from '../../Actions/ApplicationActions';
 // import packageJson from '../../'; TODO does not find package.json
 
-const applicationActions = new ApplicationActions();
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -49,12 +49,13 @@ const useStyles = makeStyles(theme => ({
 
 
 const TopBar = ({children}) => {
-    const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState(null);
     const user = useGlobal('user')[0];
 
+    const classes = useStyles();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
     const handleClickLogout = () => {
-        applicationActions.disconnect();
+        ApplicationActions.disconnect();
     };
 
     const handleMenuOpen = ({currentTarget}) => {

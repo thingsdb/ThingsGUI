@@ -9,7 +9,7 @@ import ThingsdbActions from '../../Actions/ThingsdbActions';
 import { ErrorMsg, SimpleModal } from '../Util';
 
 
-const thingsdbActions = new ThingsdbActions();
+
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -43,11 +43,14 @@ const initialState = {
 };
 
 const Add = () => {
-    const classes = useStyles();
-    const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
     const connErr = useGlobal('connErr')[0];
     const collections = useGlobal('collections')[0];
+
+    const classes = useStyles();
+
+    const [state, setState] = React.useState(initialState);
+    const {show, errors, form} = state;
+
 
     const validation = {
         name: () => form.name.length>0&&collections.every((c) => c.name!==form.name),
@@ -79,7 +82,7 @@ const Add = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            thingsdbActions.addCollection(form.name);
+            ThingsdbActions.addCollection(form.name);
             setState({...state, show: false});
 
         }

@@ -3,13 +3,8 @@ import React from 'react';
 import { useGlobal } from 'reactn'; // <-- reactn
 import Checkbox from '@material-ui/core/Checkbox';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CloseIcon from '@material-ui/icons/Close';
-import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import WarningIcon from '@material-ui/icons/Warning';
 import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
 
@@ -69,9 +64,12 @@ const privileges = [
 
 
 const UserAccess = ({user}) => {
+    const collections = useGlobal('collections')[0];
+
     const classes = useStyles();
     const [switches, setSwitches] = React.useState({});
-    const collections = useGlobal('collections')[0];
+
+    console.log('grant');
 
     const getSwitches = (target, privileges) => {
         let s = {
@@ -117,7 +115,7 @@ const UserAccess = ({user}) => {
         });
         setSwitches(s);
     },
-    [user, targets]
+    [user, targets.length]
     );
 
 

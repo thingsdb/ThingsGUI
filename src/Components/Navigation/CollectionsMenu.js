@@ -7,14 +7,14 @@ import AddCollection from '../Collections/Add';
 import {Menu} from '../Util';
 import ApplicationActions from '../../Actions/ApplicationActions';
 
-const applicationActions = new ApplicationActions();
+
 
 const CollectionsMenu = ({onClickCollection}) => {
     const collections = useGlobal('collections')[0];
 
     const handleClickCollection = (collection) => {
         onClickCollection(collection);
-        applicationActions.navigate({path: 'collection'});
+        ApplicationActions.navigate({path: 'collection'});
     };
 
     return (

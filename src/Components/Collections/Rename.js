@@ -8,7 +8,7 @@ import { ErrorMsg, SimpleModal } from '../Util';
 import ThingsdbActions from '../../Actions/ThingsdbActions';
 
 
-const thingsdbActions = new ThingsdbActions();
+
 
 const initialState = {
     show: false,
@@ -17,9 +17,10 @@ const initialState = {
 };
 
 const Rename = ({collection}) => {
+    const collections = useGlobal('collections')[0];
+
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
-    const collections = useGlobal('collections')[0];
 
     const handleClickOpen = () => {
         setState({
@@ -49,7 +50,7 @@ const Rename = ({collection}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            thingsdbActions.renameCollection(
+            ThingsdbActions.renameCollection(
                 collection.name,
                 form.name,
             );

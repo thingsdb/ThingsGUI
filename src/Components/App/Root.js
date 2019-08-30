@@ -35,29 +35,28 @@ const theme = createMuiTheme({
 
 
 const Root = () => {
-    const [serverErrors, setServerErrors] = React.useState([]);
-    const loaded = useGlobal('loaded');
-    const connected = useGlobal('connected');
+    // const [serverErrors, setServerErrors] = React.useState([]);
+    const loaded = useGlobal('loaded')[0];
+    const connected = useGlobal('connected')[0];
+    // React.useEffect(() => {
+    //     setServerErrors([]);
+    // },
+    // [connected]
+    // );
 
-    React.useEffect(() => {
-        setServerErrors([]);
-    },
-    [connected]
-    );
-
-    const handleServerError = (err) => {
-        setServerErrors(prevErr => {
-            const newArray = [...prevErr];
-            newArray.push(err.log);
-            return newArray;
-        });
-    };
+    // const handleServerError = (err) => {
+    //     setServerErrors(prevErr => {
+    //         const newArray = [...prevErr];
+    //         newArray.push(err.log);
+    //         return newArray;
+    //     });
+    // };
 
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
-            {loaded ? connected ? <App onError={handleServerError} /> : <Login /> : <AppLoader onError={handleServerError} />}
-            <ErrorToast errors={serverErrors} />
+            {loaded ? connected ? <App /> : <Login /> : <AppLoader />}
+            {/* <ErrorToast errors={serverErrors} /> */}
         </MuiThemeProvider>
     );
 };

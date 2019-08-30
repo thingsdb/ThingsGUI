@@ -5,7 +5,7 @@ import { CardButton, ErrorMsg, SimpleModal } from '../Util';
 import ThingsdbActions from '../../Actions/ThingsdbActions';
 
 
-const thingsActions = new ThingsdbActions();
+
 
 const Remove = ({user}) => {
     const [show, setShow] = React.useState(false);

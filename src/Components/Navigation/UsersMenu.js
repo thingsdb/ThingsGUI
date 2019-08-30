@@ -1,13 +1,16 @@
 import React from 'react';
+import { useGlobal } from 'reactn'; // <-- reactn
 import PropTypes from 'prop-types';
 import PersonIcon from '@material-ui/icons/Person';
 
 import AddUser from '../Users/Add';
 import {Menu} from '../Util';
-import {ApplicationActions} from '../../Stores/ApplicationActions';
+import ApplicationActions from '../../Actions/ApplicationActions';
 
 
-const UsersMenu = ({users, onClickUser}) => {
+
+const UsersMenu = ({onClickUser}) => {
+    const users = useGlobal('users')[0];
 
     const handleClickUser = (user) => {
         onClickUser(user);
@@ -26,7 +29,6 @@ const UsersMenu = ({users, onClickUser}) => {
 };
 
 UsersMenu.propTypes = {
-    users: PropTypes.arrayOf(PropTypes.object).isRequired,
     onClickUser: PropTypes.func.isRequired,
 
 };
