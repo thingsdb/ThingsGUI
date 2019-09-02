@@ -7,7 +7,6 @@ import App from './App';
 import AppLoader from './AppLoader';
 import Login from './Login';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
-import {ErrorToast} from '../Util';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -40,27 +39,26 @@ const withStores = withVlow([{
 }]);
 
 const Root = ({loaded, connected}) => {
-    const [serverErrors, setServerErrors] = React.useState([]);
+    // const [serverErrors, setServerErrors] = React.useState([]);
 
-    React.useEffect(() => {
-        setServerErrors([]);
-    },
-    [connected]
-    );
+    // React.useEffect(() => {
+    //     setServerErrors([]);
+    // },
+    // [connected]
+    // );
 
-    const handleServerError = (err) => {
-        setServerErrors(prevErr => {
-            const newArray = [...prevErr];
-            newArray.push(err.log);
-            return newArray;
-        });
-    };
+    // const handleServerError = (err) => {
+    //     setServerErrors(prevErr => {
+    //         const newArray = [...prevErr];
+    //         newArray.push(err.log);
+    //         return newArray;
+    //     });
+    // };
 
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
-            {loaded ? connected ? <App onError={handleServerError} /> : <Login /> : <AppLoader onError={handleServerError} />}
-            <ErrorToast errors={serverErrors} />
+            {loaded ? connected ? <App /> : <Login /> : <AppLoader />}
         </MuiThemeProvider>
     );
 };

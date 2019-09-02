@@ -66,16 +66,8 @@ class _SocketRequest {
 
 class BaseStore extends Vlow.Store {
 
-    getSocketObj() {
-        return socket;
-    }
-
     emit(name, data) {
         return new _SocketRequest(name, data);
-    }
-
-    post(url, data) {
-        return new _JsonRequest('POST', url, data);
     }
 }
 

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import BaseStore from './BaseStore';
+import {ErrorActions} from './ErrorStore';
 
 const ApplicationActions = Vlow.createActions([
     'connected',
@@ -32,7 +33,7 @@ class ApplicationStore extends BaseStore {
         this.state = ApplicationStore.defaults;
     }
 
-    onConnected(onError) {
+    onConnected() {
         this.emit('/connected').done((data) => {
             setTimeout(() => {
                 this.setState({
@@ -40,7 +41,7 @@ class ApplicationStore extends BaseStore {
                     connected: data.connected,
                 });
             }, 1000);
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => ErrorActions.setToastError(message.log));
     }
 
     onConnect({host, user, password}, onError) {

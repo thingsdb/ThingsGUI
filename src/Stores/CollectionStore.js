@@ -4,7 +4,6 @@ import BaseStore from './BaseStore';
 
 const CollectionActions = Vlow.createActions([
     'query',
-    'property',
     'removeThing',
     'rawQuery',
     'queryWithOutput',
@@ -20,7 +19,6 @@ class CollectionStore extends BaseStore {
 
     static defaults = {
         things: {},
-        thingsByProp: {},
     }
 
     constructor() {
@@ -40,20 +38,6 @@ class CollectionStore extends BaseStore {
                     :
                     Object.assign({}, prevState.things, {[collectionId]: data});
                 return {things};
-            });
-        }).fail((event, status, message) => onError(message));
-    }
-
-    onProperty(collectionId, thingId, propertyName, onError, depth=1) {
-        this.emit('/collection/return-property', {
-            collectionId: collectionId,
-            thingId: thingId,
-            propertyName: propertyName,
-            depth: depth
-        }).done((data) => {
-            this.setState(prevState => {
-                const thingsByProp = Object.assign({}, prevState.thingsByProp, {[collectionId]: data});
-                return {thingsByProp};
             });
         }).fail((event, status, message) => onError(message));
     }

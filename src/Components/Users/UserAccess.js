@@ -76,6 +76,8 @@ const UserAccess = ({user, collections}) => {
     const [state, setState] = React.useState(initialState);
     const {switches, serverError} = state;
 
+    console.log('grant');
+
     const getSwitches = (target, privileges) => {
         let s = {
             full: false,
@@ -120,7 +122,7 @@ const UserAccess = ({user, collections}) => {
         });
         setState({serverError: '', switches:s});
     },
-    [user, targets]
+    [user, targets.length]
     );
 
 

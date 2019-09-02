@@ -28,16 +28,16 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Node = ({local, node, counters, onError}) => {
+const Node = ({local, node, counters}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
 
     React.useEffect(() => {
-        NodesActions.getNode(onError); // QUEST: en bij status update?
+        NodesActions.getNode(); // QUEST: en bij status update?
     }, [tabIndex]);
 
     const onConnected = () => {
-        NodesActions.getNode(onError);
+        NodesActions.getNode();
     };
 
     const handleChangeTab = (_event, newValue) => {
@@ -81,7 +81,7 @@ const Node = ({local, node, counters, onError}) => {
                         <Counters counters={counters} />
                     </Grid>
                     <Grid item xs={12}>
-                        <CountersReset node={node} onServerError={onError} />
+                        <CountersReset node={node} />
                     </Grid>
                 </Grid>
             }
@@ -92,7 +92,6 @@ const Node = ({local, node, counters, onError}) => {
 };
 
 Node.propTypes = {
-    onError: PropTypes.func.isRequired,
     local: PropTypes.object.isRequired,
 
     /* nodes properties */

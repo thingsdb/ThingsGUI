@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { amber } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
+import { ErrorActions, ErrorStore } from '../../Stores/ErrorStore';
 
 
 const useStyles = makeStyles(theme => ({
@@ -31,33 +33,41 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const withStores = withVlow([{
+    store: ErrorStore,
+    keys: ['toastErrors']
+}]);
 
-const ErrorToast = ({errors}) => {
+
+const ErrorToast = ({toastErrors}) => {
     const classes = useStyles();
-    const [error, setError] = React.useState([]);
+    // const [error, setError] = React.useState([]);
 
-    React.useEffect(() => {
-        if (errors.length) {
-            setError(prevErr => ([...new Set([...prevErr, ...errors])]));
-        } else {
-            setError([]);
-        }
-    },
-    [errors]
-    );
+    // React.useEffect(() => {
+    //     if (toastErrors.length) {
+    //         setError(prevErr => ([...new Set([...prevErr, ...toastErrors])]));
+    //     } else {
+    //         setError([]);
+    //     }
+    // },
+    // [toastErrors]
+    // );
+    console.log("toast", toastErrors);
 
     const handleCloseError = (i) => () => {
-        setError(prevErr => {
-            const newArray = [...prevErr];
-            newArray.splice(i, 1);
-            return newArray;
-        });
+        // setError(prevErr => {
+        //     const newArray = [...prevErr];
+        //     newArray.splice(i, 1);
+        //     return newArray;
+        // });
+
+        ErrorActions.removeToastError(i);
     };
 
     return(
         <div className={classes.portal}>
             <ul>
-                {[...error].map((e, i) => (
+                {[...toastErrors].map((e, i) => (
                     <Slide key={i} direction="up" in timeout={{enter: 500}}>
                         <Card className={classes.card}>
                             <ExpansionPanel className={classes.panel}>
@@ -91,8 +101,8 @@ const ErrorToast = ({errors}) => {
 };
 
 ErrorToast.propTypes = {
-    errors: PropTypes.arrayOf(PropTypes.string).isRequired,
+    toastErrors: ErrorStore.types.toastErrors.isRequired,
 };
 
-export default ErrorToast;
+export default withStores(ErrorToast);
 

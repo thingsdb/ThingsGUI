@@ -6,7 +6,7 @@ import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
 import {TableWithRowExtend} from '../Util';
 
-const Nodes = ({onError, nodes}) => {
+const Nodes = ({nodes}) => {
 
 
     const rows = nodes;
@@ -20,7 +20,7 @@ const Nodes = ({onError, nodes}) => {
         ky: 'status',
         label: 'Status',
     }];
-    const rowExtend = (node) => <Node local={node} onError={onError} />;
+    const rowExtend = (node) => <Node local={node} />;
 
     return(
         <React.Fragment>
@@ -31,7 +31,6 @@ const Nodes = ({onError, nodes}) => {
 };
 
 Nodes.propTypes = {
-    onError: PropTypes.func.isRequired,
     nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 

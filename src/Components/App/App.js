@@ -17,6 +17,7 @@ import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
 import {DrawerLayout} from '../Util';
+import {ErrorToast} from '../Util';
 
 
 const withStores = withVlow([{
@@ -55,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const App = ({onError, collections, match, user, users, nodes}) => {
+const App = ({collections, match, user, users, nodes}) => {
     const classes = useStyles();
     const [indexCollection, setIndexCollection] = React.useState(0);
     const [indexUser, setIndexUser] = React.useState(0);
@@ -64,8 +65,8 @@ const App = ({onError, collections, match, user, users, nodes}) => {
     console.log('apps');
 
     React.useEffect(() => {
-        ThingsdbActions.getInfo(onError);
-        NodesActions.getNodes(onError);
+        ThingsdbActions.getInfo();
+        NodesActions.getNodes();
     },
     [],
     );
@@ -75,7 +76,7 @@ const App = ({onError, collections, match, user, users, nodes}) => {
     const selectedUser = findItem(indexUser, users);
 
     const pages = {
-        collection: <Collection collection={selectedCollection} onError={onError} />,
+        collection: <Collection collection={selectedCollection} />,
         user: <User user={selectedUser} collections={collections} />,
     };
 
@@ -100,7 +101,7 @@ const App = ({onError, collections, match, user, users, nodes}) => {
             open={open}
             onClose={handleDrawerClose}
             topbar={
-                <TopBar user={user} onError={onError}>
+                <TopBar user={user}>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -125,17 +126,16 @@ const App = ({onError, collections, match, user, users, nodes}) => {
                     <div className={classes.content}>
                         {pages[match.path]}
                     </div>
+                    <ErrorToast />
                 </div>
             }
             drawerTitle="NODES"
-            drawerContent={<Nodes nodes={nodes} onError={onError} />}
+            drawerContent={<Nodes nodes={nodes} />}
         />
     );
 };
 
 App.propTypes = {
-
-    onError: PropTypes.func.isRequired,
 
     /* Application properties */
     match: ApplicationStore.types.match.isRequired,

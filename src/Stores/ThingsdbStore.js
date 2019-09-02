@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import BaseStore from './BaseStore';
+import {ErrorActions} from './ErrorStore';
 
 const ThingsdbActions = Vlow.createActions([
 
@@ -50,7 +51,7 @@ class ThingsdbStore extends BaseStore {
         this.state = ThingsdbStore.defaults;
     }
 
-    onGetInfo(onError) {
+    onGetInfo() {
         this.emit('/thingsdb/get_info').done((data) => {
             this.setState({
                 collections: data.collections,
@@ -64,7 +65,7 @@ class ThingsdbStore extends BaseStore {
                 users: [],
                 user: {},
             });
-            onError(message);
+            ErrorActions.setToastError(message.log);
         });
     }
 
@@ -85,13 +86,13 @@ class ThingsdbStore extends BaseStore {
             });
         }).fail((event, status, message) => onError(message));
     }
-   
+
     onAddCollection(name, onError) {
         const {user} = this.state;
         this.emit('/thingsdb/add', {
             name,
         }).done((data) => {
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') || 
+            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
             user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
                     collections: data.collections,
@@ -105,14 +106,14 @@ class ThingsdbStore extends BaseStore {
             }
         }).fail((event, status, message) => onError(message));
     }
-    
+
     onRenameCollection(oldname, newname, onError) {
         const {user} = this.state;
         this.emit('/thingsdb/rename', {
             oldname,
             newname,
         }).done((data) => {
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') || 
+            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
             user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
                     collections: data.collections,
@@ -132,7 +133,7 @@ class ThingsdbStore extends BaseStore {
         this.emit('/thingsdb/remove', {
             name,
         }).done((data) => {
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') || 
+            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
             user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
                     collections: data.collections,
