@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core';
+import {withVlow} from 'vlow';
 
 import Connect from './Connect';
 import Counters from './Counters';
@@ -9,11 +10,14 @@ import CountersReset from './CountersReset';
 import Loglevel from './Loglevel';
 import NodeInfo from './NodeInfo';
 import Shutdown from './Shutdown';
-import { NodesActions, useStore } from '../../Actions/NodesActions';
+import {NodesActions, NodesStore} from '../../Stores/NodesStore';
 import { StyledTabs, StyledTab } from '../Util';
 
 
-
+const withStores = withVlow([{
+    store: NodesStore,
+    keys: ['node', 'counters']
+}]);
 
 const useStyles = makeStyles(theme => ({
     info: {
@@ -24,20 +28,16 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Node = ({local}) => {
-    const [store, dispatch] = useStore();
-    const {node, counters} = store;
-
-    console.log('node');
+const Node = ({local, node, counters, onError}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
 
     React.useEffect(() => {
-        NodesActions.getNode(dispatch); // QUEST: en bij status update?
+        NodesActions.getNode(onError); // QUEST: en bij status update?
     }, [tabIndex]);
 
     const onConnected = () => {
-        NodesActions.getNode(dispatch);
+        NodesActions.getNode(onError);
     };
 
     const handleChangeTab = (_event, newValue) => {
@@ -81,7 +81,7 @@ const Node = ({local}) => {
                         <Counters counters={counters} />
                     </Grid>
                     <Grid item xs={12}>
-                        <CountersReset node={node} />
+                        <CountersReset node={node} onServerError={onError} />
                     </Grid>
                 </Grid>
             }
@@ -92,7 +92,13 @@ const Node = ({local}) => {
 };
 
 Node.propTypes = {
+    onError: PropTypes.func.isRequired,
     local: PropTypes.object.isRequired,
+
+    /* nodes properties */
+    node: NodesStore.types.node.isRequired,
+    counters: NodesStore.types.counters.isRequired,
+
 };
 
-export default Node;
+export default withStores(Node);

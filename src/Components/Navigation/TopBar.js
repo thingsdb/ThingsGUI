@@ -15,9 +15,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import {makeStyles} from '@material-ui/core/styles';
 
-import { ApplicationActions, useStore } from '../../Actions/ApplicationActions';
+import {ApplicationActions} from '../../Stores/ApplicationStore';
 // import packageJson from '../../'; TODO does not find package.json
-
 
 
 
@@ -47,15 +46,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TopBar = ({children}) => {
-    const [store, dispatch] = useStore();
-    const {user} = store;
-
+const TopBar = ({user, children}) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClickLogout = () => {
-        ApplicationActions.disconnect(dispatch);
+        ApplicationActions.disconnect();
     };
 
     const handleMenuOpen = ({currentTarget}) => {
@@ -135,6 +131,7 @@ const TopBar = ({children}) => {
 };
 
 TopBar.propTypes = {
+    user: PropTypes.object.isRequired,
     children: PropTypes.object.isRequired,
 };
 

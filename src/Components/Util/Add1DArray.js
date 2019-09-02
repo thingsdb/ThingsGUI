@@ -82,6 +82,7 @@ const Add1DArray = ({cb}) => {
 
     const handleChange = ({target}) => {
         const {name, value} = target;
+        console.log(state, value);
         setState({...state, [name]: value, errors: {}});
     };
 

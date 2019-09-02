@@ -5,16 +5,17 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import { CollectionActions, useStore } from '../../Actions/CollectionActions';
-import { ThingsdbActions } from '../../Actions/ThingsdbActions';
+import {CollectionActions} from '../../Stores/CollectionStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
-
-
-
+const initialState = {
+    show: false,
+    serverError: '',
+};
 
 const RemoveThing = ({collection, thing, info}) => {
-    const dispatch = useStore()[1];
-    const [show, setShow] = React.useState(false);
+    const [state, setState] = React.useState(initialState);
+    const {show, serverError} = state;
 
     const buildQuery = (p, ti, n, i) => {
         return i == null ? `t(${ti}).del('${n}')`
@@ -24,11 +25,14 @@ const RemoveThing = ({collection, thing, info}) => {
 
 
     const handleClickOpen = () => {
-        setShow(true);
+        setState({
+            show: true,
+            serverError: '',
+        });
     };
 
     const handleClickClose = () => {
-        setShow(false);
+        setState({...state, show: false});
     };
 
     const handleClickOk = () => {
@@ -40,20 +44,26 @@ const RemoveThing = ({collection, thing, info}) => {
         );
 
         CollectionActions.rawQuery(
-            dispatch,
             collection.collection_id,
             info.id,
             queryString,
+            (err) => setState({...state, serverError: err.log})
         );
 
-        ThingsdbActions.getCollection(dispatch);
-        setShow(false);
+        ThingsdbActions.getCollections((err) => setState({...state, serverError: err.log}));
 
+        if (!state.serverError) {
+            setState({...state, show: false});
+        }
+    };
+
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
     };
 
     const Content = (
         <React.Fragment>
-            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
             <DialogContentText>
                 {'Are you sure?'}
             </DialogContentText>

@@ -10,15 +10,20 @@ import ListItemText from '@material-ui/core/ListItemText';
 import StopIcon from '@material-ui/icons/Stop';
 import PropTypes from 'prop-types';
 import React from 'react';
+import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 
 import AddThings from './AddThings';
 import EditThing from './EditThing';
 import RemoveThing from './RemoveThing';
-import { CollectionActions, useStore } from '../../Actions/CollectionActions';
+import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import {Buttons, checkType} from '../Util';
 
 
+const withStores = withVlow([{
+    store: CollectionStore,
+    keys: ['things']
+}]);
 
 const useStyles = makeStyles(theme => ({
     nested: {
@@ -31,9 +36,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const Thing = ({thing, collection, info}) => {
-    const [store, dispatch] = useStore();
-    const {things} = store;
+const Thing = ({thing, collection, things, info, onError}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
 
@@ -54,8 +57,10 @@ const Thing = ({thing, collection, info}) => {
             <div key={i ? i : k} className={classes.nested}>
                 <Thing
                     collection={collection}
+                    things={things}
                     thing={v}
                     info={infoNew}
+                    onError={onError}
                 />
             </div>
         );
@@ -72,7 +77,7 @@ const Thing = ({thing, collection, info}) => {
     const handleClick = () => {
         setShow(!show); // QUEST: work with prevstate?
         if (thing && thing['#']) {
-            CollectionActions.query(dispatch, collection.collection_id, thing['#']);
+            CollectionActions.query(collection.collection_id, onError, thing['#']);
         }
     };
 
@@ -153,6 +158,10 @@ Thing.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     collection: PropTypes.object.isRequired,
     info: PropTypes.object.isRequired,
+    onError: PropTypes.func.isRequired,
+
+    /* collection properties */
+    things: CollectionStore.types.things.isRequired,
 };
 
-export default Thing;
+export default withStores(Thing);

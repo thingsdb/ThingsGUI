@@ -3,26 +3,33 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CollectionActions, useStore } from '../../Actions/CollectionActions';
+import {CollectionActions} from '../../Stores/CollectionStore';
 import {ErrorMsg, QueryInput, QueryOutput} from '../Util';
 
-
-
 const Query = ({collection}) => {
-    const dispatch = useStore()[1];
     const [query, setQuery] = React.useState('');
     const [output, setOutput] = React.useState({});
+    const [serverError, setServerError] = React.useState('');
 
     const handleInput = (value) => {
         setQuery(value);
     };
 
     const handleSubmit = () => {
-        CollectionActions.queryWithOutput(dispatch, collection.collection_id, query, handleOutput);
+        console.log('query');
+        CollectionActions.queryWithOutput(collection.collection_id, query, handleOutput, handleServerError);
     };
+    console.log(output);
 
     const handleOutput = (out) => {
         setOutput(out);
+    };
+
+    const handleServerError = (err) => {
+        setServerError(err.log);
+    };
+    const handleCloseError = () => {
+        setServerError('');
     };
 
     return (
@@ -34,7 +41,7 @@ const Query = ({collection}) => {
             spacing={2}
         >
             <Grid item xs={12}>
-                {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+                <ErrorMsg error={serverError} onClose={handleCloseError} />
             </Grid>
             <Grid item container xs={12} spacing={2} alignItems="flex-start">
                 <Grid item container xs={6} spacing={2}>

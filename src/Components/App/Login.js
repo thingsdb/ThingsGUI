@@ -9,15 +9,23 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {withVlow} from 'vlow';
 
 import { ErrorMsg } from '../Util';
-import {useStore, ApplicationActions} from '../../Actions/ApplicationActions';
+import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+
+
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['loaded', 'connected', 'connErr']
+}]);
 
 
 
 const initialState = {
     showPassword: false,
     errors: {},
+    serverError: '',
     form: {
         host: 'localhost:9200',
         user: 'admin',
@@ -31,16 +39,9 @@ const validation = {
     password: (o) => o.password.length>0,
 };
 
-
-
-const Login = () => {
-    const [store, dispatch] = useStore();
-    const {loaded, connected, connErr} = store;
-
+const Login = ({loaded, connected, connErr}) => {
     const [state, setState] = useState(initialState);
-    const {showPassword, errors, form} = state;
-
-
+    const {showPassword, errors, form, serverError} = state;
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -54,12 +55,16 @@ const Login = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connect(dispatch, form);
+            ApplicationActions.connect(form, (err) => setState({...state, serverError: err.log}));
         }
     };
 
     const handleClickShowPassword = () => {
         setState({...state, showPassword: !showPassword});
+    };
+
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
     };
 
     return (
@@ -72,7 +77,7 @@ const Login = () => {
                 {'Login'}
             </DialogTitle>
             <DialogContent>
-                {/* <ErrorMsg error={connErr} onClose={handleCloseError} /> */}
+                <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
                 <TextField
                     autoFocus
                     margin="dense"
@@ -126,4 +131,10 @@ const Login = () => {
     );
 };
 
-export default Login;
+Login.propTypes = {
+    loaded: ApplicationStore.types.loaded.isRequired,
+    connected: ApplicationStore.types.connected.isRequired,
+    connErr: ApplicationStore.types.connErr.isRequired,
+};
+
+export default withStores(Login);

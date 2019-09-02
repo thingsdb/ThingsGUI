@@ -10,11 +10,9 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import { CollectionActions, useStore } from '../../Actions/CollectionActions';
-import { ThingsdbActions } from '../../Actions/ThingsdbActions';
+import {CollectionActions} from '../../Stores/CollectionStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 import {Add1DArray, buildInput, buildQueryAdd, ErrorMsg, onlyNums, SimpleModal} from '../Util';
-
-
 
 
 const dataTypes = [
@@ -36,12 +34,12 @@ const initialState = {
         value: '',
         dataType: dataTypes[0],
     },
+    serverError: '',
 };
 
 const AddThings = ({info, collection, thing}) => {
-    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {show, errors, form, serverError} = state;
     const {id, name, type} = info;
 
     const handleClickOpen = () => {
@@ -56,6 +54,7 @@ const AddThings = ({info, collection, thing}) => {
                 value: '',
                 dataType: t,
             },
+            serverError: '',
         });
     };
 
@@ -91,6 +90,7 @@ const AddThings = ({info, collection, thing}) => {
     };
 
     const handleOnChange = ({target}) => {
+        console.log(target.value);
         const {name, value} = target;
         const q = handleBuildQuery(name, value);
         setState(prevState => {
@@ -100,6 +100,7 @@ const AddThings = ({info, collection, thing}) => {
     };
 
     const handleArrayItems = (items) => {
+        console.log('arrayitems');
         const value = items.toString();
         const q = handleBuildQuery('value', value);
         setState(prevState => {
@@ -113,15 +114,22 @@ const AddThings = ({info, collection, thing}) => {
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
             CollectionActions.rawQuery(
-                dispatch,
                 collection.collection_id,
                 id,
                 form.queryString,
+                (err) => setState({...state, serverError: err.log})
             );
 
-            ThingsdbActions.getCollections(dispatch);
-            setState({...state, show: false});
+            ThingsdbActions.getCollections((err) => setState({...state, serverError: err.log}));
+
+            if (!state.serverError) { // QUEST? Is serverError already known here?
+                setState({...state, show: false});
+            }
         }
+    };
+
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
     };
 
     const addNewProperty = !(type == 'array' || type == 'set');
@@ -132,7 +140,7 @@ const AddThings = ({info, collection, thing}) => {
 
     const Content = (
         <React.Fragment>
-            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
             <List>
                 <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
                     <ListItem>

@@ -1,13 +1,13 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
 import {TableWithRowExtend} from '../Util';
-import {useStore} from '../../Actions/ApplicationActions';
 
-const Nodes = () => {
-    const store = useStore()[0];
-    const {nodes} = store;
+const Nodes = ({onError, nodes}) => {
+
 
     const rows = nodes;
     const header = [{
@@ -20,7 +20,7 @@ const Nodes = () => {
         ky: 'status',
         label: 'Status',
     }];
-    const rowExtend = (node) => <Node local={node} />;
+    const rowExtend = (node) => <Node local={node} onError={onError} />;
 
     return(
         <React.Fragment>
@@ -28,6 +28,11 @@ const Nodes = () => {
             <NodeButtons />
         </React.Fragment>
     );
+};
+
+Nodes.propTypes = {
+    onError: PropTypes.func.isRequired,
+    nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Nodes;

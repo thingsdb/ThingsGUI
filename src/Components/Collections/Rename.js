@@ -2,31 +2,33 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import {withVlow} from 'vlow';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
-
-
+const withStores = withVlow([{
+    store: ThingsdbStore,
+    keys: ['collections']
+}]);
 
 const initialState = {
     show: false,
     errors: {},
     form: {},
+    serverError: '',
 };
 
-const Rename = ({collection}) => {
-    const [store, dispatch] = useStore();
-    const {collections} = store;
-
+const Rename = ({collection, collections}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {show, errors, form, serverError} = state;
 
     const handleClickOpen = () => {
         setState({
             show: true,
             errors: {},
             form: {...collection},
+            serverError: '',
         });
     };
 
@@ -51,18 +53,24 @@ const Rename = ({collection}) => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.renameCollection(
-                dispatch,
                 collection.name,
                 form.name,
+                (err) => setState({...state, serverError: err.log})
             );
-            setState({...state, show: false});
 
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
+    };
+
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
     };
 
     const Content = (
         <React.Fragment>
-            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
                 autoFocus
                 margin="dense"
@@ -97,6 +105,9 @@ const Rename = ({collection}) => {
 
 Rename.propTypes = {
     collection: PropTypes.object.isRequired,
+
+    /* collections properties */
+    collections: ThingsdbStore.types.collections.isRequired,
 };
 
-export default Rename;
+export default withStores(Rename);

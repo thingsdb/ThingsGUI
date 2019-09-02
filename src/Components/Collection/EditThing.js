@@ -10,11 +10,9 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import { CollectionActions, useStore } from '../../Actions/CollectionActions';
-import { ThingsdbActions } from '../../Actions/ThingsdbActions';
+import {CollectionActions} from '../../Stores/CollectionStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 import {Add1DArray, buildInput, buildQueryEdit, ErrorMsg, onlyNums, SimpleModal} from '../Util';
-
-
 
 
 const dataTypes = [
@@ -36,12 +34,12 @@ const initialState = {
         value: '',
         dataType: dataTypes[0],
     },
+    serverError: '',
 };
 
 const EditThing = ({info, collection, thing}) => {
-    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {show, errors, form, serverError} = state;
     const {id, index, name, parentType} = info;
 
 
@@ -56,6 +54,7 @@ const EditThing = ({info, collection, thing}) => {
                 value: '',
                 dataType: dataTypes[0],
             },
+            serverError: '',
         });
     };
 
@@ -111,15 +110,22 @@ const EditThing = ({info, collection, thing}) => {
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
             CollectionActions.rawQuery(
-                dispatch,
                 collection.collection_id,
                 id,
                 form.queryString,
+                (err) => setState({...state, serverError: err.log})
             );
 
-            ThingsdbActions.getCollection(dispatch);
-            setState({...state, show: false});
+            ThingsdbActions.getCollections((err) => setState({...state, serverError: err.log}));
+
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
+    };
+
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
     };
 
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
@@ -130,7 +136,7 @@ const EditThing = ({info, collection, thing}) => {
 
     const Content = (
         <React.Fragment>
-            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
             <List>
                 <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
                     <ListItem>

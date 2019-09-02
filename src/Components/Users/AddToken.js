@@ -10,8 +10,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Switch from '@material-ui/core/Switch';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
-
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
 const timeUnit = [
@@ -44,12 +43,12 @@ const initialState = {
         description: false,
         expirationTime: false,
     },
+    serverError: '',
 };
 
 const AddToken = ({user}) => {
-    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
-    const {show, form, switches} = state;
+    const {show, form, switches, serverError} = state;
 
     const handleClickOpen = () => {
         setState({
@@ -63,6 +62,7 @@ const AddToken = ({user}) => {
                 description: false,
                 expirationTime: false,
             },
+            serverError: '',
         });
     };
 
@@ -89,21 +89,27 @@ const AddToken = ({user}) => {
     const handleClickOk = () => {
         ThingsdbActions.newToken(
             {
-                dispatch: dispatch,
                 name: user.name,
                 expirationTime: switches.expirationTime ? '(now() + ' + form.number + '*' + form.timeUnit + ')' : null,
                 description: switches.description ? form.description : null
-            }
+            },
+            (err) => setState({...state, serverError: err.log})
         );
 
-        setState({...state, show: false});
+        if (!state.serverError) {
+            setState({...state, show: false});
+        }
+    };
+
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
     };
 
     const now = new Date().toISOString().substring(0, 16);
 
     const Content = (
         <React.Fragment>
-            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
             <List>
                 <ListItem>
                     <FormControlLabel

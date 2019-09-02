@@ -12,7 +12,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../Util';
-import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
 const initialState = {
@@ -20,21 +20,19 @@ const initialState = {
     showPassword: false,
     errors: {},
     form: {},
+    serverError: '',
 };
 
-
-
 const Password = ({user}) => {
-    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
-    const {show, showPassword, errors, form} = state;
+    const {show, showPassword, errors, form, serverError} = state;
 
     const validation = {
         password: () => form.password.length>0,
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, showPassword: false, errors: {}, form: {...user, password: ''}});
+        setState({...state, show: true, showPassword: false, errors: {}, form: {...user, password: ''}, serverError: ''});
     };
 
     const handleClickClose = () => {
@@ -54,23 +52,27 @@ const Password = ({user}) => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.password(
-                dispatch,
                 user.name,
                 form.password,
+                (err) => setState({...state, serverError: err.log})
             );
 
-            setState({...state, show: false});
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 
     const handleClickReset = () => {
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.resetPassword(
-                dispatch,
                 user.name,
+                (err) => setState({...state, serverError: err.log})
             );
 
-            setState({...state, show: false});
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 
@@ -78,9 +80,13 @@ const Password = ({user}) => {
         setState({...state, showPassword: !showPassword});
     };
 
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
+    };
+
     const Content = (
         <React.Fragment>
-            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
             <Typography component="div">
                 <FormLabel component="legend">
                     {'Set?'}

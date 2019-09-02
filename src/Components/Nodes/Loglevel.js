@@ -4,8 +4,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import { NodesActions, useStore } from '../../Actions/NodesActions';
-
+import {NodesActions} from '../../Stores/NodesStore';
 
 
 const loglevels = [
@@ -19,15 +18,15 @@ const loglevels = [
 const initialState = {
     show: false,
     form: {},
+    serverError: '',
 };
 
 const Loglevel = ({node}) => {
-    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
-    const {show, form} = state;
+    const {show, form, serverError} = state;
 
     const handleClickOpen = () => {
-        setState({show: true, form: {...node}});
+        setState({show: true, form: {...node}, serverError: ''});
     };
 
     const handleClickClose = () => {
@@ -44,16 +43,22 @@ const Loglevel = ({node}) => {
 
     const handleClickOk = () => {
         NodesActions.setLoglevel(
-            dispatch,
             node,
             form.log_level,
+            (err) => setState({...state, serverError: err.log})
         );
-        setState({...state, show: false});
+        if (!state.serverError) {
+            setState({...state, show: false});
+        }
+    };
+
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
     };
 
     const Content = (
         <React.Fragment>
-            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
                 autoFocus
                 margin="dense"

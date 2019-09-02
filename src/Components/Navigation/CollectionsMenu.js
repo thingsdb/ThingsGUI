@@ -4,17 +4,14 @@ import PropTypes from 'prop-types';
 
 import AddCollection from '../Collections/Add';
 import {Menu} from '../Util';
-import { ApplicationActions, useStore } from '../../Actions/ApplicationActions';
+import {ApplicationActions} from '../../Stores/ApplicationStore';
 
 
-
-const CollectionsMenu = ({onClickCollection}) => {
-    const [store, dispatch] = useStore();
-    const {collections} = store;
+const CollectionsMenu = ({collections, onClickCollection}) => {
 
     const handleClickCollection = (collection) => {
         onClickCollection(collection);
-        ApplicationActions.navigate(dispatch, {path: 'collection'});
+        ApplicationActions.navigate({path: 'collection'});
     };
 
     return (
@@ -30,6 +27,8 @@ const CollectionsMenu = ({onClickCollection}) => {
 
 CollectionsMenu.propTypes = {
     onClickCollection: PropTypes.func.isRequired,
+    collections: PropTypes.arrayOf(PropTypes.object).isRequired,
+
 };
 
 export default CollectionsMenu;

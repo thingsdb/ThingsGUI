@@ -4,17 +4,14 @@ import PersonIcon from '@material-ui/icons/Person';
 
 import AddUser from '../Users/Add';
 import {Menu} from '../Util';
-import { ApplicationActions, useStore } from '../../Actions/ApplicationActions';
+import {ApplicationActions} from '../../Stores/ApplicationStore';
 
 
-
-const UsersMenu = ({onClickUser}) => {
-    const [store, dispatch] = useStore();
-    const {users} = store;
+const UsersMenu = ({users, onClickUser}) => {
 
     const handleClickUser = (user) => {
         onClickUser(user);
-        ApplicationActions.navigate(dispatch, {path: 'user'});
+        ApplicationActions.navigate({path: 'user'});
     };
 
     return (
@@ -29,6 +26,7 @@ const UsersMenu = ({onClickUser}) => {
 };
 
 UsersMenu.propTypes = {
+    users: PropTypes.arrayOf(PropTypes.object).isRequired,
     onClickUser: PropTypes.func.isRequired,
 
 };

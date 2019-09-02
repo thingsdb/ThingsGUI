@@ -1,12 +1,13 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
 
 import App from './App';
 import AppLoader from './AppLoader';
 import Login from './Login';
+import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ErrorToast} from '../Util';
-import {useStore} from '../../Actions/ApplicationActions';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -33,34 +34,40 @@ const theme = createMuiTheme({
 });
 
 
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['loaded', 'connected']
+}]);
 
-const Root = () => {
-    // const [serverErrors, setServerErrors] = React.useState([]);
-    const store = useStore()[0];
-    const {connected, loaded} = store;
-    // React.useEffect(() => {
-    //     setServerErrors([]);
-    // },
-    // [connected]
-    // );
+const Root = ({loaded, connected}) => {
+    const [serverErrors, setServerErrors] = React.useState([]);
 
-    // const handleServerError = (err) => {
-    //     setServerErrors(prevErr => {
-    //         const newArray = [...prevErr];
-    //         newArray.push(err.log);
-    //         return newArray;
-    //     });
-    // };
+    React.useEffect(() => {
+        setServerErrors([]);
+    },
+    [connected]
+    );
+
+    const handleServerError = (err) => {
+        setServerErrors(prevErr => {
+            const newArray = [...prevErr];
+            newArray.push(err.log);
+            return newArray;
+        });
+    };
 
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
-            {loaded ? connected ? <App /> : <Login /> : <AppLoader />}
-            {/* <ErrorToast errors={serverErrors} /> */}
+            {loaded ? connected ? <App onError={handleServerError} /> : <Login /> : <AppLoader onError={handleServerError} />}
+            <ErrorToast errors={serverErrors} />
         </MuiThemeProvider>
     );
 };
 
+Root.propTypes = {
+    loaded: ApplicationStore.types.loaded.isRequired,
+    connected: ApplicationStore.types.connected.isRequired,
+};
 
-
-export default Root;
+export default withStores(Root);

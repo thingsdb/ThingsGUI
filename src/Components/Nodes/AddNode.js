@@ -3,20 +3,19 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import { NodesActions, useStore } from '../../Actions/NodesActions';
-
+import {NodesActions} from '../../Stores/NodesStore';
 
 
 const initialState = {
     show: false,
     errors: {},
     form: {},
+    serverError: '',
 };
 
 const AddNode = () => {
-    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {show, errors, form, serverError} = state;
 
     const validation = {
         secret: () => form.secret.length>0,
@@ -25,7 +24,7 @@ const AddNode = () => {
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, errors: {}, form: {secret: '', ipAddress: '', port: ''}});
+        setState({...state, show: true, errors: {}, form: {secret: '', ipAddress: '', port: ''}, serverError: ''});
     };
 
     const handleClickClose = () => {
@@ -46,17 +45,22 @@ const AddNode = () => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             NodesActions.addNode(
-                dispatch,
                 form,
+                (err) => setState({...state, serverError: err.log})
             );
-            setState({...state, show: false});
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
+    };
 
     const Content = (
         <React.Fragment>
-            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
                 autoFocus
                 margin="dense"

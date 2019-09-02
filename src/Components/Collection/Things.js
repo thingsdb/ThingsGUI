@@ -7,13 +7,17 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
 
 import AddThings from './AddThings';
-import { CollectionActions, useStore } from '../../Actions/CollectionActions';
+import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 
 import Thing from './Thing';
 
-
+const withStores = withVlow([{
+    store: CollectionStore,
+    keys: ['things']
+}]);
 
 
 const useStyles = makeStyles(theme => ({
@@ -27,15 +31,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ThingRoot = ({collection}) => {
-    const [store, dispatch] = useStore();
-    const {things} = store;
+const ThingRoot = ({things, collection, onError}) => {
     const classes = useStyles();
-
     const fetched = things.hasOwnProperty(collection.collection_id);
 
     React.useEffect(() => {
-        CollectionActions.query(dispatch, collection.collection_id);
+        CollectionActions.query(collection.collection_id, onError);
     }, [collection.collection_id]);
 
     return (
@@ -58,6 +59,7 @@ const ThingRoot = ({collection}) => {
                                     id: collection.collection_id,
                                     parentType: 'object',
                                 }}
+                                onError={onError}
                             />
                         </React.Fragment>
                     ))}
@@ -88,8 +90,13 @@ const ThingRoot = ({collection}) => {
 };
 
 ThingRoot.propTypes = {
+    onError: PropTypes.func.isRequired,
+
     collection: PropTypes.object.isRequired,
+
+    /* collection properties */
+    things: CollectionStore.types.things.isRequired,
 };
 
 
-export default ThingRoot;
+export default withStores(ThingRoot);

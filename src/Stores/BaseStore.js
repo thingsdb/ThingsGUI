@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React, { createContext, useReducer, useContext } from 'react';
+/* global process */
+import Vlow from 'vlow';
 import io from 'socket.io-client';
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
@@ -64,57 +64,19 @@ class _SocketRequest {
     }
 }
 
-export const emit = (event, data) => new _SocketRequest(event, data);
+class BaseStore extends Vlow.Store {
 
+    getSocketObj() {
+        return socket;
+    }
 
-// TODOK
-const initialState = {
-    loaded: false,
-    connected: false,
-    connErr: '',
-    match: {},
-    things: {},
-    counters: {},
-    nodes: [],
-    node: {},
-    collections: [],
-    collection: {},
-    users: [],
-    user: {},
-    error: {
-        msg: {
+    emit(name, data) {
+        return new _SocketRequest(name, data);
+    }
 
-        },
-        toast: [],
-    },
-};
+    post(url, data) {
+        return new _JsonRequest('POST', url, data);
+    }
+}
 
-export const StoreContext = createContext(initialState);
-
-
-const reducer = (state, action) => {
-    const update = action(state);
-    return { ...state, ...update };
-};
-
-export const StoreProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
-    return (
-        <StoreContext.Provider value={{ state, dispatch }}>
-            {children}
-        </StoreContext.Provider>
-    );
-};
-
-StoreProvider.propTypes = {
-    children: PropTypes.node
-};
-
-StoreProvider.defaultProps = {
-    children: null,
-};
-
-export const useStore = () => {
-    const { state, dispatch } = useContext(StoreContext);
-    return [state, dispatch];
-};
+export default BaseStore;

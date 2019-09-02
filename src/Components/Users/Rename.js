@@ -1,32 +1,33 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
+import {withVlow} from 'vlow';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../Util';
-import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
+const withStores = withVlow([{
+    store: ThingsdbStore,
+    keys: ['users']
+}]);
 
 const initialState = {
     show: false,
     errors: {},
     form: {},
+    serverError: '',
 };
 
-
-
-const Rename = ({user}) => {
-    const [store, dispatch] = useStore();
-    const {users} = store;
-
+const Rename = ({user, users}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {show, errors, form, serverError} = state;
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),
     };
 
     const handleClickOpen = () => {
-        setState({show: true, errors: {}, form: {...user}});
+        setState({show: true, errors: {}, form: {...user}, serverError: ''});
     };
 
     const handleClickClose = () => {
@@ -46,19 +47,24 @@ const Rename = ({user}) => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.renameUser(
-                dispatch,
                 user.name,
                 form.name,
+                (err) => setState({...state, serverError: err.log})
             );
 
-            setState({...state, show: false});
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
+    };
 
     const Content = (
         <React.Fragment>
-            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
                 autoFocus
                 margin="dense"
@@ -91,6 +97,9 @@ const Rename = ({user}) => {
 
 Rename.propTypes = {
     user: PropTypes.object.isRequired,
+
+    /* application properties */
+    users: ThingsdbStore.types.users.isRequired,
 };
 
-export default Rename;
+export default withStores(Rename);

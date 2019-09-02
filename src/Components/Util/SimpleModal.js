@@ -48,11 +48,10 @@ const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClos
 
 SimpleModal.defaultProps = {
     actionButtons: null,
-    children: null,
 },
 
 SimpleModal.propTypes = {
-    children: PropTypes.object,
+    children: PropTypes.object.isRequired,
     button: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
     actionButtons: PropTypes.object,

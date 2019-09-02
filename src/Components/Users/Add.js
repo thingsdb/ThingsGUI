@@ -2,11 +2,16 @@ import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
+import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
+const withStores = withVlow([{
+    store: ThingsdbStore,
+    keys: ['users']
+}]);
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -37,15 +42,13 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
+    serverError: '',
 };
 
-const AddUser = () => {
-    const [store, dispatch] = useStore();
-    const {users} = store;
-
+const AddUser = ({users}) => {
     const classes = useStyles();
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {show, errors, form, serverError} = state;
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),
@@ -59,6 +62,7 @@ const AddUser = () => {
             form: {
                 name: '',
             },
+            serverError: '',
         });
     };
 
@@ -78,16 +82,21 @@ const AddUser = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.addUser(dispatch, form.name);
-            setState({...state, show: false});
+            ThingsdbActions.addUser(form.name, (err) => setState({...state, serverError: err.log}));
 
+            if (!state.serverError) {
+                setState({...state, show: false});
+            }
         }
     };
 
+    const handleCloseError = () => {
+        setState({...state, serverError: ''});
+    };
 
     const Content = (
         <React.Fragment>
-            {/* <ErrorMsg error={serverError} onClose={handleCloseError} /> */}
+            <ErrorMsg error={serverError} onClose={handleCloseError} />
             <TextField
                 autoFocus
                 margin="dense"
@@ -120,4 +129,10 @@ const AddUser = () => {
     );
 };
 
-export default AddUser;
+AddUser.propTypes = {
+
+    /* application properties */
+    users: ThingsdbStore.types.users.isRequired,
+};
+
+export default withStores(AddUser);

@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {makeStyles} from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
 
 import Collection from '../Collections/Collection';
 import CollectionsMenu from '../Navigation/CollectionsMenu';
@@ -11,9 +13,22 @@ import User from '../Users/User';
 import UsersMenu from '../Navigation/UsersMenu';
 import Nodes from '../Nodes/Nodes';
 import TopBar from '../Navigation/TopBar';
-import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
-import { NodesActions } from '../../Actions/NodesActions';
+import {ApplicationStore} from '../../Stores/ApplicationStore';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {NodesActions, NodesStore} from '../../Stores/NodesStore';
 import {DrawerLayout} from '../Util';
+
+
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['match']
+}, {
+    store: ThingsdbStore,
+    keys: ['collections', 'user', 'users']
+}, {
+    store: NodesStore,
+    keys: ['nodes']
+}]);
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,34 +55,28 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
-
-
-const App = () => {
+const App = ({onError, collections, match, user, users, nodes}) => {
     const classes = useStyles();
-    const [store, dispatch] = useStore();
-    const {match, collections, users} = store;
-
     const [indexCollection, setIndexCollection] = React.useState(0);
     const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
 
+    console.log('apps');
+
     React.useEffect(() => {
-        ThingsdbActions.getInfo(dispatch);
-        NodesActions.getNodes(dispatch);
+        ThingsdbActions.getInfo(onError);
+        NodesActions.getNodes(onError);
     },
     [],
     );
-
-    console.log('app', match);
 
     const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
     const selectedCollection = findItem(indexCollection, collections);
     const selectedUser = findItem(indexUser, users);
 
     const pages = {
-        collection: <Collection collection={selectedCollection} />,
-        user: <User user={selectedUser} />,
+        collection: <Collection collection={selectedCollection} onError={onError} />,
+        user: <User user={selectedUser} collections={collections} />,
     };
 
     const handleClickCollection = (i) => {
@@ -91,7 +100,7 @@ const App = () => {
             open={open}
             onClose={handleDrawerClose}
             topbar={
-                <TopBar >
+                <TopBar user={user} onError={onError}>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -107,10 +116,10 @@ const App = () => {
                 <div className={classes.page}>
                     <div className={classes.menu}>
                         <Card className={classes.submenu}>
-                            <CollectionsMenu onClickCollection={handleClickCollection} />
+                            <CollectionsMenu collections={collections} onClickCollection={handleClickCollection} />
                         </Card>
                         <Card className={classes.submenu}>
-                            <UsersMenu onClickUser={handleClickUser} />
+                            <UsersMenu users={users} onClickUser={handleClickUser} />
                         </Card>
                     </div>
                     <div className={classes.content}>
@@ -119,9 +128,27 @@ const App = () => {
                 </div>
             }
             drawerTitle="NODES"
-            drawerContent={<Nodes />}
+            drawerContent={<Nodes nodes={nodes} onError={onError} />}
         />
     );
 };
 
-export default App;
+App.propTypes = {
+
+    onError: PropTypes.func.isRequired,
+
+    /* Application properties */
+    match: ApplicationStore.types.match.isRequired,
+
+    /* Collections properties */
+    collections: ThingsdbStore.types.collections.isRequired,
+
+    /* Users properties */
+    user: ThingsdbStore.types.user.isRequired,
+    users: ThingsdbStore.types.users.isRequired,
+
+    /* nodes properties */
+    nodes: NodesStore.types.nodes.isRequired,
+};
+
+export default withStores(App);
