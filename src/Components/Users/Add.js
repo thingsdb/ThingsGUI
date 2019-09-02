@@ -1,12 +1,11 @@
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles} from '@material-ui/core/styles';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import ThingsdbActions from '../../Actions/ThingsdbActions';
+import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
 
 
 const useStyles = makeStyles(theme => ({
@@ -41,7 +40,8 @@ const initialState = {
 };
 
 const AddUser = () => {
-    const users = useGlobal('users')[0];
+    const [store, dispatch] = useStore();
+    const {users} = store;
 
     const classes = useStyles();
     const [state, setState] = React.useState(initialState);
@@ -78,7 +78,7 @@ const AddUser = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.addUser(form.name);
+            ThingsdbActions.addUser(dispatch, form.name);
             setState({...state, show: false});
 
         }

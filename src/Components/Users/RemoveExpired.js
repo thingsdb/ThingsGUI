@@ -1,13 +1,13 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import ThingsdbActions from '../../Actions/ThingsdbActions';
+import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
 
 
 
 const RemoveExpired = () => {
-
+    const dispatch = useStore()[1];
     const handleClickOk = () => {
-        ThingsdbActions.delExpired();
+        ThingsdbActions.delExpired(dispatch);
     };
 
     return (

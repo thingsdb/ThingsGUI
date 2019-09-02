@@ -2,12 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../Util';
-import ThingsdbActions from '../../Actions/ThingsdbActions';
+import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
 
 
 
 
 const Remove = ({user}) => {
+    const dispatch = useStore()[1];
     const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -18,7 +19,7 @@ const Remove = ({user}) => {
         setShow(false);
     };
     const handleClickOk = () => {
-        ThingsdbActions.removeUser(user.name);
+        ThingsdbActions.removeUser(dispatch, user.name);
         setShow(false);
     };
 

@@ -3,12 +3,13 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CollectionActions from '../../Actions/CollectionActions';
+import { CollectionActions, useStore } from '../../Actions/CollectionActions';
 import {ErrorMsg, QueryInput, QueryOutput} from '../Util';
 
 
 
 const Query = ({collection}) => {
+    const dispatch = useStore()[1];
     const [query, setQuery] = React.useState('');
     const [output, setOutput] = React.useState({});
 
@@ -17,7 +18,7 @@ const Query = ({collection}) => {
     };
 
     const handleSubmit = () => {
-        CollectionActions.queryWithOutput(collection.collection_id, query, handleOutput);
+        CollectionActions.queryWithOutput(dispatch, collection.collection_id, query, handleOutput);
     };
 
     const handleOutput = (out) => {

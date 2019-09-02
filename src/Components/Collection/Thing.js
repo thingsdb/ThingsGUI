@@ -10,13 +10,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import StopIcon from '@material-ui/icons/Stop';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import {makeStyles} from '@material-ui/core/styles';
 
 import AddThings from './AddThings';
 import EditThing from './EditThing';
 import RemoveThing from './RemoveThing';
-import CollectionActions from '../../Actions/CollectionActions';
+import { CollectionActions, useStore } from '../../Actions/CollectionActions';
 import {Buttons, checkType} from '../Util';
 
 
@@ -33,7 +32,8 @@ const useStyles = makeStyles(theme => ({
 
 
 const Thing = ({thing, collection, info}) => {
-    const things = useGlobal('things')[0];
+    const [store, dispatch] = useStore();
+    const {things} = store;
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
 
@@ -72,7 +72,7 @@ const Thing = ({thing, collection, info}) => {
     const handleClick = () => {
         setShow(!show); // QUEST: work with prevstate?
         if (thing && thing['#']) {
-            CollectionActions.query(collection.collection_id, thing['#']);
+            CollectionActions.query(dispatch, collection.collection_id, thing['#']);
         }
     };
 

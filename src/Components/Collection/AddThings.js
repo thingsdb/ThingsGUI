@@ -10,8 +10,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import CollectionActions from '../../Actions/CollectionActions';
-import ThingsdbActions from '../../Actions/ThingsdbActions';
+import { CollectionActions, useStore } from '../../Actions/CollectionActions';
+import { ThingsdbActions } from '../../Actions/ThingsdbActions';
 import {Add1DArray, buildInput, buildQueryAdd, ErrorMsg, onlyNums, SimpleModal} from '../Util';
 
 
@@ -39,6 +39,7 @@ const initialState = {
 };
 
 const AddThings = ({info, collection, thing}) => {
+    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
     const {id, name, type} = info;
@@ -112,12 +113,13 @@ const AddThings = ({info, collection, thing}) => {
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
             CollectionActions.rawQuery(
+                dispatch,
                 collection.collection_id,
                 id,
                 form.queryString,
             );
 
-            ThingsdbActions.getCollections();
+            ThingsdbActions.getCollections(dispatch);
             setState({...state, show: false});
         }
     };

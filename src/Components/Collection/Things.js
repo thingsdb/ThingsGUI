@@ -5,12 +5,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 
 import AddThings from './AddThings';
-import CollectionActions from '../../Actions/CollectionActions';
+import { CollectionActions, useStore } from '../../Actions/CollectionActions';
 
 import Thing from './Thing';
 
@@ -29,13 +28,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ThingRoot = ({collection}) => {
+    const [store, dispatch] = useStore();
+    const {things} = store;
     const classes = useStyles();
-    const things = useGlobal('things')[0];
 
     const fetched = things.hasOwnProperty(collection.collection_id);
 
     React.useEffect(() => {
-        CollectionActions.query(collection.collection_id);
+        CollectionActions.query(dispatch, collection.collection_id);
     }, [collection.collection_id]);
 
     return (

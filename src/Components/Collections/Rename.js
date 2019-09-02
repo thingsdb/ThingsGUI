@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import ThingsdbActions from '../../Actions/ThingsdbActions';
+import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
 
 
 
@@ -17,7 +16,8 @@ const initialState = {
 };
 
 const Rename = ({collection}) => {
-    const collections = useGlobal('collections')[0];
+    const [store, dispatch] = useStore();
+    const {collections} = store;
 
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
@@ -51,6 +51,7 @@ const Rename = ({collection}) => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.renameCollection(
+                dispatch,
                 collection.name,
                 form.name,
             );

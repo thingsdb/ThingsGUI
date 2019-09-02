@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -12,7 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { ErrorMsg } from '../Util';
-import ApplicationActions from '../../Actions/ApplicationActions';
+import {useStore, ApplicationActions} from '../../Actions/ApplicationActions';
 
 
 
@@ -35,9 +34,8 @@ const validation = {
 
 
 const Login = () => {
-    const loaded = useGlobal('loaded')[0];
-    const connected = useGlobal('connected')[0];
-    const connErr = useGlobal('connErr')[0];
+    const [store, dispatch] = useStore();
+    const {loaded, connected, connErr} = store;
 
     const [state, setState] = useState(initialState);
     const {showPassword, errors, form} = state;
@@ -56,7 +54,7 @@ const Login = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connect(form);
+            ApplicationActions.connect(dispatch, form);
         }
     };
 

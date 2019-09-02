@@ -3,11 +3,12 @@ import Button from '@material-ui/core/Button';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import NodesActions from '../../Actions/NodesActions';
+import { NodesActions, useStore } from '../../Actions/NodesActions';
 
 
 
 const PopNode = () => {
+    const dispatch = useStore()[1];
     const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -19,7 +20,7 @@ const PopNode = () => {
     };
 
     const handleClickOk = () => {
-        NodesActions.popNode();
+        NodesActions.popNode(dispatch);
         setShow(false);
     };
 

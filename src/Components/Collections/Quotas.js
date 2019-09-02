@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import ThingsdbActions from '../../Actions/ThingsdbActions';
+import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
 
 
 
@@ -21,6 +21,7 @@ const initialState = {
 };
 
 const Quotas = ({collection}) => {
+    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
     const {show, form} = state;
 
@@ -60,6 +61,7 @@ const Quotas = ({collection}) => {
 
     const handleUnset = () => {
         ThingsdbActions.setQuota(
+            dispatch,
             collection.name,
             form.quotaType,
             'nil',
@@ -70,6 +72,7 @@ const Quotas = ({collection}) => {
 
     const handleClickOk = () => {
         ThingsdbActions.setQuota(
+            dispatch,
             collection.name,
             form.quotaType,
             form.quota,

@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import NodesActions from '../../Actions/NodesActions';
+import { NodesActions, useStore } from '../../Actions/NodesActions';
 
 
 
@@ -22,6 +22,7 @@ const initialState = {
 };
 
 const Loglevel = ({node}) => {
+    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
     const {show, form} = state;
 
@@ -43,6 +44,7 @@ const Loglevel = ({node}) => {
 
     const handleClickOk = () => {
         NodesActions.setLoglevel(
+            dispatch,
             node,
             form.log_level,
         );

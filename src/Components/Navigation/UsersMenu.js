@@ -1,20 +1,20 @@
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import PropTypes from 'prop-types';
 import PersonIcon from '@material-ui/icons/Person';
 
 import AddUser from '../Users/Add';
 import {Menu} from '../Util';
-import ApplicationActions from '../../Actions/ApplicationActions';
+import { ApplicationActions, useStore } from '../../Actions/ApplicationActions';
 
 
 
 const UsersMenu = ({onClickUser}) => {
-    const users = useGlobal('users')[0];
+    const [store, dispatch] = useStore();
+    const {users} = store;
 
     const handleClickUser = (user) => {
         onClickUser(user);
-        ApplicationActions.navigate({path: 'user'});
+        ApplicationActions.navigate(dispatch, {path: 'user'});
     };
 
     return (

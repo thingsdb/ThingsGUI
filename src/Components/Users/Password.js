@@ -12,7 +12,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../Util';
-import ThingsdbActions from '../../Actions/ThingsdbActions';
+import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
 
 
 const initialState = {
@@ -25,6 +25,7 @@ const initialState = {
 
 
 const Password = ({user}) => {
+    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
     const {show, showPassword, errors, form} = state;
 
@@ -53,6 +54,7 @@ const Password = ({user}) => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.password(
+                dispatch,
                 user.name,
                 form.password,
             );
@@ -64,6 +66,7 @@ const Password = ({user}) => {
     const handleClickReset = () => {
         if (!Object.values(errors).some(d => d)) {
             ThingsdbActions.resetPassword(
+                dispatch,
                 user.name,
             );
 

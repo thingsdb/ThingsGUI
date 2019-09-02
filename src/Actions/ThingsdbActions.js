@@ -1,228 +1,342 @@
-import { emit } from './BaseActions';
-import { getGlobal, setGlobal } from 'reactn';
+import {emit, useStore} from './BaseActions';
 
 const ThingsdbActions = {
 
-    getInfo: () => {
+    getInfo: (dispatch) => {
         emit('/thingsdb/get_info').done((data) => {
-            setGlobal({
-                collections: data.collections,
-                users: data.users,
-                user: data.user,
+            dispatch(() => {
+                return {
+                    collections: data.collections,
+                    users: data.users,
+                    user: data.user,
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
     //COLLECTIONS
 
-    getCollections: () => {
-        emit('/thingsdb/getcollections').done((data) => {
-            setGlobal({collections: data});
-        }).fail((event, status, message) => setGlobal({error: message}));
+    getCollections: (dispatch) => {
+        emit('/thingsdb/getCollection(dispatch)s').done((data) => {
+            dispatch(() => {
+                return {collections: data};
+            });
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    getCollection: (name) => {
-        emit('/thingsdb/getcollection', {
+    getCollection: (dispatch, name) => {
+        emit('/thingsdb/getCollection(dispatch)', {
             name,
         }).done((data) => {
-            setGlobal({
-                collection: data
+            dispatch(() => {
+                return {
+                    collection: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
-
-    addCollection: (name) => {
-        const user = getGlobal().user;
+    addCollection: (dispatch, name) => {
         emit('/thingsdb/add', {
             name,
         }).done((data) => {
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
-            user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
-                setGlobal({
-                    collections: data.collections,
-                    users: data.users,
-                });
-            }
-            else {
-                setGlobal({
-                    collections: data.collections,
-                });
-            }
-            console.log(getGlobal().collections, getGlobal().users);
-        }).fail((event, status, message) => setGlobal({error: message}));
+            dispatch((state) => {
+                if (state.user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
+                state.user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
+                    return{
+                        collections: data.collections,
+                        users: data.users,
+                    };
+                }
+                else {
+                    return{
+                        collections: data.collections,
+                    };
+                }
+            });
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    renameCollection: (oldname, newname) => {
-        const user = getGlobal().user;
+    renameCollection: (dispatch, oldname, newname) => {
         emit('/thingsdb/rename', {
             oldname,
             newname,
         }).done((data) => {
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
-            user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
-                setGlobal({
-                    collections: data.collections,
-                    users: data.users,
-                });
-            }
-            else {
-                setGlobal({
-                    collections: data.collections,
-                });
-            }
-        }).fail((event, status, message) => setGlobal({error: message}));
+            dispatch((state) => {
+                if (state.user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
+                state.user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
+                    return{
+                        collections: data.collections,
+                        users: data.users,
+                    };
+                }
+                else {
+                    return{
+                        collections: data.collections,
+                    };
+                }
+            });
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    removeCollection: (name) => {
-        const user = getGlobal().user;
+    removeCollection: (dispatch, name) => {
         emit('/thingsdb/remove', {
             name,
         }).done((data) => {
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
-            user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
-                setGlobal({
-                    collections: data.collections,
-                    users: data.users,
-                });
-            }
-            else {
-                setGlobal({
-                    collections: data.collections,
-                });
-            }
-        }).fail((event, status, message) => setGlobal({error: message}));
+            dispatch((state) => {
+                if (state.user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
+                state.user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
+                    return{
+                        collections: data.collections,
+                        users: data.users,
+                    };
+                }
+                else {
+                    return{
+                        collections: data.collections,
+                    };
+                }
+            });
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    setQuota: (name, quotaType, quota) => {
+    setQuota: (dispatch, name, quotaType, quota) => {
         emit('/thingsdb/setquota', {
             name,
             quotaType,
             quota,
         }).done((data) => {
-            setGlobal({
-                collections: data
+            dispatch(() => {
+                return {
+                    collections: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
     //USERS
 
-    getUsers: () => {
+    getUsers: (dispatch) => {
         emit('/user/getusers').done((data) => {
-            setGlobal({users: data});
-        }).fail((event, status, message) => setGlobal({error: message}));
+            dispatch(() => {
+                return {
+                    users: data
+                };
+            });
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    getUser: (config=null) => {
+    getUser: (dispatch, config=null) => {
         emit('/user/get', {
             config,
         }).done((data) => {
-            setGlobal({
-                user: data
+            dispatch(() => {
+                return {
+                    users: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
 
-    addUser: (name) => {
+    addUser: (dispatch, name) => {
         emit('/user/add', {
             name,
         }).done((data) => {
-            setGlobal({
-                users: data
+            dispatch(() => {
+                return {
+                    users: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    removeUser: (name) =>  {
+    removeUser: (dispatch, name) =>  {
         emit('/user/remove', {
             name
         }).done((data) => {
-            setGlobal({
-                users: data
+            dispatch(() => {
+                return {
+                    users: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
 
-    renameUser: (oldname, newname) => {
+    renameUser: (dispatch, oldname, newname) => {
         emit('/user/rename', {
             oldname,
             newname,
         }).done((data) => {
-            setGlobal({
-                users: data
+            dispatch(() => {
+                return {
+                    users: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    password: (name, password) => {
+    password: (dispatch, name, password) => {
         emit('/user/password', {
             name,
             password,
         }).done((data) => {
-            setGlobal({
-                users: data
+            dispatch(() => {
+                return {
+                    users: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    resetPassword: (name) =>  {
+    resetPassword: (dispatch, name) =>  {
         emit('/user/reset-password', {
             name,
         }).done((data) => {
-            setGlobal({
-                users: data
+            dispatch(() => {
+                return {
+                    users: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    grant: (name, collection, access) => {
+    grant: (dispatch, name, collection, access) => {
         emit('/user/grant', {
             collection,
             name,
             access,
         }).done((data) => {
-            setGlobal({users: data});
-        }).fail((event, status, message) => setGlobal({error: message}));
+            dispatch(() => {
+                return {
+                    users: data
+                };
+            });
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    revoke: (name, collection, access) => {
+    revoke: (dispatch, name, collection, access) => {
         emit('/user/revoke', {
             collection,
             name,
             access,
         }).done((data) => {
-            setGlobal({users: data});
-        }).fail((event, status, message) => setGlobal({error: message}));
-    },
-
-    newToken: (config) => { // name [, expirationTime] [, description]
-        emit('/user/newtoken', config).done((data) => {
-            setGlobal({
-                users: data
+            dispatch(() => {
+                return {
+                    users: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    delToken: (key) => {
+    newToken: (dispatch, config) => { // name [, expirationTime] [, description]
+        emit('/user/newtoken', config).done((data) => {
+            dispatch(() => {
+                return {
+                    users: data
+                };
+            });
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
+    },
+
+    delToken: (dispatch, key) => {
         emit('/user/deltoken', {
             key,
         }).done((data) => {
-            setGlobal({
-                users: data
+            dispatch(() => {
+                return {
+                    users: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 
-    delExpired: () => {
+    delExpired: (dispatch) => {
         emit('/user/delexpired').done((data) => {
-            setGlobal({
-                users: data
+            dispatch(() => {
+                return {
+                    users: data
+                };
             });
-        }).fail((event, status, message) => setGlobal({error: message}));
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
     },
 };
 
 
-export default ThingsdbActions;
+export {ThingsdbActions, useStore};

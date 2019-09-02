@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core';
 
@@ -10,7 +9,7 @@ import CountersReset from './CountersReset';
 import Loglevel from './Loglevel';
 import NodeInfo from './NodeInfo';
 import Shutdown from './Shutdown';
-import NodesActions from '../../Actions/NodesActions';
+import { NodesActions, useStore } from '../../Actions/NodesActions';
 import { StyledTabs, StyledTab } from '../Util';
 
 
@@ -26,18 +25,19 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Node = ({local}) => {
-    const node = useGlobal('node')[0];
-    const counters = useGlobal('counters')[0];
+    const [store, dispatch] = useStore();
+    const {node, counters} = store;
+
     console.log('node');
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
 
     React.useEffect(() => {
-        NodesActions.getNode(); // QUEST: en bij status update?
+        NodesActions.getNode(dispatch); // QUEST: en bij status update?
     }, [tabIndex]);
 
     const onConnected = () => {
-        NodesActions.getNode();
+        NodesActions.getNode(dispatch);
     };
 
     const handleChangeTab = (_event, newValue) => {

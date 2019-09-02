@@ -1,11 +1,10 @@
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles} from '@material-ui/core/styles';
 
-import ThingsdbActions from '../../Actions/ThingsdbActions';
+import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
 import { ErrorMsg, SimpleModal } from '../Util';
 
 
@@ -43,8 +42,8 @@ const initialState = {
 };
 
 const Add = () => {
-    const connErr = useGlobal('connErr')[0];
-    const collections = useGlobal('collections')[0];
+    const [store, dispatch] = useStore();
+    const {collections, connErr} = store;
     console.log(collections);
 
     const classes = useStyles();
@@ -83,7 +82,7 @@ const Add = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.addCollection(form.name);
+            ThingsdbActions.addCollection(dispatch, form.name);
             setState({...state, show: false});
 
         }

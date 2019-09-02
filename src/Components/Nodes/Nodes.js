@@ -1,12 +1,14 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
 import {TableWithRowExtend} from '../Util';
+import {useStore} from '../../Actions/ApplicationActions';
 
 const Nodes = () => {
-    const nodes = useGlobal('nodes')[0];
+    const store = useStore()[0];
+    const {nodes} = store;
+
     const rows = nodes;
     const header = [{
         ky: 'address',

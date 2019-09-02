@@ -1,57 +1,86 @@
-import { emit } from './BaseActions';
-import { setGlobal } from 'reactn';
+import {emit, useStore} from './BaseActions';
 
 
 const ApplicationActions = {
 
-    connected: () => {
+    connected: (dispatch) => {
         emit('/connected').done((data) => {
             setTimeout(() => {
-                setGlobal({
-                    loaded: data.loaded,
-                    connected: data.connected,
+                dispatch(() => {
+                    return {
+                        loaded: data.loaded,
+                        connected: data.connected,
+                    };
                 });
             }, 1000);
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    connect: ({host, user, password}) => {
+    connect: (dispatch, {host, user, password}) => {
         emit('/connect', {host, user, password}).done((data) => {
-            setGlobal({
-                connErr: data.connErr,
-                connected: data.connected,
+            dispatch(() => {
+                return {
+                    connErr: data.connErr,
+                    connected: data.connected,
+                };
             });
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    connectOther: ({host}) => {
+    connectOther: (dispatch, {host}) => {
         emit('/connect/other', {host}).done((data) => {
-            setGlobal({
-                connErr: data.connErr, // QUEST: vangt deze alle errors af?
-                connected: data.connected,
+            dispatch(() => {
+                return {
+                    connErr: data.connErr, // QUEST: vangt deze alle errors af?
+                    connected: data.connected,
+                };
             });
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    disconnect: () => {
+    disconnect: (dispatch) => {
         emit('/disconnect').done(() => {
-            setGlobal({
-                loaded: false,
-                connected: false,
-                connErr: '',
+            dispatch(() => {
+                return {
+                    loaded: false,
+                    connected: false,
+                    connErr: '',
+                    match: {},
+                    things: {},
+                    counters: {},
+                    nodes: [],
+                    node: {},
+                    collections: [],
+                    collection: {},
+                    users: [],
+                    user: {},
+                    error: {
+                        msg: {},
+                        toast: [],
+                    }
+                };
+
             });
         }); //.fail((_xhr, {error}) => onError(error));
     },
 
-    navigate: (match) => {
-        setGlobal({match});
+    navigate: (dispatch, match) => {
+        dispatch(() => {
+            return {match};
+        });
     },
 };
 
-export default ApplicationActions;
+export {ApplicationActions, useStore};

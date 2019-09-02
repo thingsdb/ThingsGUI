@@ -1,5 +1,4 @@
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -7,6 +6,7 @@ import App from './App';
 import AppLoader from './AppLoader';
 import Login from './Login';
 import {ErrorToast} from '../Util';
+import {useStore} from '../../Actions/ApplicationActions';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -36,8 +36,8 @@ const theme = createMuiTheme({
 
 const Root = () => {
     // const [serverErrors, setServerErrors] = React.useState([]);
-    const loaded = useGlobal('loaded')[0];
-    const connected = useGlobal('connected')[0];
+    const store = useStore()[0];
+    const {connected, loaded} = store;
     // React.useEffect(() => {
     //     setServerErrors([]);
     // },

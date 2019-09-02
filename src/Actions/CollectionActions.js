@@ -1,67 +1,82 @@
-import { emit } from './BaseActions';
-import { getGlobal, setGlobal } from 'reactn';
+import {emit, useStore} from './BaseActions';
 
 
 const CollectionActions = {
-    query: (collectionId, thingId=null, depth=1) => {
+    query: (dispatch, collectionId, thingId=null, depth=1) => {
         emit('/collection/query', {
             collectionId: collectionId,
             thingId: thingId,
             depth: depth
         }).done((data) => {
-            const things = thingId ?
-                Object.assign({}, getGlobal().things, {[thingId]: data})
-                :
-                Object.assign({}, getGlobal().things, {[collectionId]: data});
-            setGlobal({
-                things: things,
+            dispatch((state) => {
+                const things = thingId ?
+                    Object.assign({}, state.things, {[thingId]: data})
+                    :
+                    Object.assign({}, state.things, {[collectionId]: data});
+                return {
+                    things: things,
+                };
             });
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    removeThing: (config) => {
+    removeThing: (dispatch, config) => {
         emit('/collection/remove-thing', config).done((data) => {
-            const things = Object.assign({}, getGlobal().things, {[config.thingId]: data});
-            setGlobal({
-                things: things,
+            dispatch((state) => {
+                const things = Object.assign({}, state.things, {[config.thingId]: data});
+                return{
+                    things: things,
+                };
             });
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    rawQuery: (collectionId, thingId, query) => {
+    rawQuery: (dispatch, collectionId, thingId, query) => {
         emit('/collection/raw-query', {
             collectionId: collectionId,
             thingId: thingId,
             query: query,
         }).done((data) => {
-            const things = Object.assign({}, getGlobal().things, {[thingId]: data});
-            setGlobal({
-                things: things,
+            dispatch((state) => {
+                const things = Object.assign({}, state.things, {[thingId]: data});
+                return{
+                    things: things,
+                };
             });
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    queryWithOutput: (collectionId, query, onOutput) => {
+    queryWithOutput: (dispatch, collectionId, query, onOutput) => {
         emit('/collection/query-with-output', {
             collectionId: collectionId,
             query: query,
         }).done((data) => {
             onOutput(data.output);
 
-            const things = Object.assign({}, getGlobal().things, {[collectionId]: data.things});
-            setGlobal({
-                things: things,
+            dispatch((state) => {
+                const things = Object.assign({}, state.things, {[collectionId]: data.things});
+                return{
+                    things: things,
+                };
             });
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
-    }
+    },
 };
 
-export default CollectionActions;
+export {CollectionActions, useStore};

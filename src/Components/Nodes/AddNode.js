@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import NodesActions from '../../Actions/NodesActions';
+import { NodesActions, useStore } from '../../Actions/NodesActions';
 
 
 
@@ -14,6 +14,7 @@ const initialState = {
 };
 
 const AddNode = () => {
+    const dispatch = useStore()[1];
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
@@ -45,6 +46,7 @@ const AddNode = () => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             NodesActions.addNode(
+                dispatch,
                 form,
             );
             setState({...state, show: false});

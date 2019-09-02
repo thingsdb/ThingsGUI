@@ -1,5 +1,4 @@
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,8 +11,8 @@ import User from '../Users/User';
 import UsersMenu from '../Navigation/UsersMenu';
 import Nodes from '../Nodes/Nodes';
 import TopBar from '../Navigation/TopBar';
-import ThingsdbActions from '../../Actions/ThingsdbActions';
-import NodesActions from '../../Actions/NodesActions';
+import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
+import { NodesActions } from '../../Actions/NodesActions';
 import {DrawerLayout} from '../Util';
 
 
@@ -46,23 +45,21 @@ const useStyles = makeStyles(theme => ({
 
 const App = () => {
     const classes = useStyles();
-
-    const match = useGlobal('match')[0];
-    const collections = useGlobal('collections')[0];
-    const users = useGlobal('users')[0];
+    const [store, dispatch] = useStore();
+    const {match, collections, users} = store;
 
     const [indexCollection, setIndexCollection] = React.useState(0);
     const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {
-        ThingsdbActions.getInfo();
-        NodesActions.getNodes();
+        ThingsdbActions.getInfo(dispatch);
+        NodesActions.getNodes(dispatch);
     },
     [],
     );
 
-    console.log('app');
+    console.log('app', match);
 
     const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
     const selectedCollection = findItem(indexCollection, collections);

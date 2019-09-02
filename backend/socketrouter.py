@@ -33,11 +33,11 @@ class SocketRouter:
             handler=ThingsDBHandler.get_dbinfo)
 
         sio.on(
-            event='/thingsdb/getcollections',
+            event='/thingsdb/getCollection(dispatch)s',
             handler=ThingsDBHandler.get_collections)
 
         sio.on(
-            event='/thingsdb/getcollection',
+            event='/thingsdb/getCollection(dispatch)',
             handler=ThingsDBHandler.get_collection)
 
         sio.on(

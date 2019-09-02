@@ -1,20 +1,20 @@
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PropTypes from 'prop-types';
 
 import AddCollection from '../Collections/Add';
 import {Menu} from '../Util';
-import ApplicationActions from '../../Actions/ApplicationActions';
+import { ApplicationActions, useStore } from '../../Actions/ApplicationActions';
 
 
 
 const CollectionsMenu = ({onClickCollection}) => {
-    const collections = useGlobal('collections')[0];
+    const [store, dispatch] = useStore();
+    const {collections} = store;
 
     const handleClickCollection = (collection) => {
         onClickCollection(collection);
-        ApplicationActions.navigate({path: 'collection'});
+        ApplicationActions.navigate(dispatch, {path: 'collection'});
     };
 
     return (

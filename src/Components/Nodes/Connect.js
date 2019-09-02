@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import ApplicationActions from '../../Actions/ApplicationActions';
+import { ApplicationActions, useStore } from '../../Actions/ApplicationActions';
 
 
 
@@ -20,7 +19,8 @@ const initialState = {
 
 
 const Connect = ({onConnected}) => {
-    const connErr = useGlobal('connErr')[0];
+    const [store, dispatch] = useStore();
+    const {connErr} = store;
 
     const [state, setState] = useState(initialState);
     const {show, errors, form} = state;
@@ -45,7 +45,7 @@ const Connect = ({onConnected}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connectOther(form);
+            ApplicationActions.connectOther(dispatch, form);
 
             setState({...state, show: false});
             onConnected();

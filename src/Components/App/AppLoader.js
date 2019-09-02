@@ -2,7 +2,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import ApplicationActions from '../../Actions/ApplicationActions';
+import {useStore, ApplicationActions} from '../../Actions/ApplicationActions';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -29,10 +29,13 @@ const useStyles = makeStyles(() => ({
 
 
 const AppLoader = () => {
+    const [store, dispatch] = useStore();
+    const {loaded} = store;
     const classes = useStyles();
-
+    console.log(loaded);
     React.useEffect(() => {
-        ApplicationActions.connected();
+        console.log('effect');
+        ApplicationActions.connected(dispatch);
     }, []);
 
 

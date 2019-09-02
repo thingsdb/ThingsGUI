@@ -5,14 +5,15 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import CollectionActions from '../../Actions/CollectionActions';
-import ThingsdbActions from '../../Actions/ThingsdbActions';
+import { CollectionActions, useStore } from '../../Actions/CollectionActions';
+import { ThingsdbActions } from '../../Actions/ThingsdbActions';
 
 
 
 
 
 const RemoveThing = ({collection, thing, info}) => {
+    const dispatch = useStore()[1];
     const [show, setShow] = React.useState(false);
 
     const buildQuery = (p, ti, n, i) => {
@@ -39,12 +40,13 @@ const RemoveThing = ({collection, thing, info}) => {
         );
 
         CollectionActions.rawQuery(
+            dispatch,
             collection.collection_id,
             info.id,
             queryString,
         );
 
-        ThingsdbActions.getCollections();
+        ThingsdbActions.getCollection(dispatch);
         setShow(false);
 
     };

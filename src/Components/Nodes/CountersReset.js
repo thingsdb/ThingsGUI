@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import NodesActions from '../../Actions/NodesActions';
+import { NodesActions, useStore } from '../../Actions/NodesActions';
 
 
 
 const CountersReset = ({node}) => {
-
+    const dispatch = useStore()[1];
     const handleClickOk = () => {
-        NodesActions.resetCounters(node);
+        NodesActions.resetCounters(dispatch, node);
     };
 
     return (

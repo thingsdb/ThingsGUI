@@ -1,9 +1,8 @@
 import React from 'react';
-import { useGlobal } from 'reactn'; // <-- reactn
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-import NodesActions from '../../Actions/NodesActions';
+import { NodesActions, useStore } from '../../Actions/NodesActions';
 import { ErrorMsg, SimpleModal } from '../Util';
 
 
@@ -15,7 +14,8 @@ const initialState = {
 };
 
 const ReplaceNode = () => {
-    const nodes = useGlobal('nodes')[0];
+    const [store, dispatch] = useStore();
+    const {nodes} = store;
 
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
@@ -45,7 +45,7 @@ const ReplaceNode = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            NodesActions.replaceNode(form);
+            NodesActions.replaceNode(dispatch, form);
             setState({...state, show: false});
         }
     };

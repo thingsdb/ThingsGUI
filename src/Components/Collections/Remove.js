@@ -3,12 +3,13 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import ThingsdbActions from '../../Actions/ThingsdbActions';
+import { ThingsdbActions, useStore } from '../../Actions/ThingsdbActions';
 
 
 
 
 const Remove = ({collection}) => {
+    const dispatch = useStore()[1];
     const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -20,7 +21,7 @@ const Remove = ({collection}) => {
     };
 
     const handleClickOk = () => {
-        ThingsdbActions.removeCollection(collection.name);
+        ThingsdbActions.removeCollection(dispatch, collection.name);
         setShow(false);
     };
 

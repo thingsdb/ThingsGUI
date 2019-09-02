@@ -1,86 +1,115 @@
-import { emit } from './BaseActions';
-import { setGlobal } from 'reactn';
+import {emit, useStore} from './BaseActions';
 
 const NodesActions = {
 
-    getNodes: () => {
+    getNodes: (dispatch) => {
         emit('/node/getnodes').done((data) => {
-            setGlobal({nodes: data.nodes});
-        }).fail((event, status, message) => setGlobal({error: message}));
-    },
-
-    getNode: () => {
-        emit('/node/get').done((data) => {
-            setGlobal({
-                node: data.node,
-                counters: data.counters
+            dispatch(() => {
+                return {
+                    nodes: data.nodes
+                };
             });
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    setLoglevel: (node, level) => {
+    getNode: (dispatch) => {
+        emit('/node/get').done((data) => {
+            dispatch(() => {
+                return {
+                    node: data.node,
+                    counters: data.counters
+                };
+            });
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
+        }));
+    },
+
+    setLoglevel: (dispatch, node, level) => {
         emit('/node/loglevel', {
             node: node.node_id,
             level,
         }).done((data) => {
-            setGlobal({
-                node: data.node
+            dispatch(() => {
+                return {
+                    node: data.node,
+                };
             });
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    resetCounters: (node) => {
+    resetCounters: (dispatch, node) => {
         emit('/node/counters/reset', {
             node: node.node_id,
         }).done((data) => {
-            setGlobal({
-                counters: data.counters
+            dispatch(() => {
+                return {
+                    counters: data.counters
+                };
             });
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    shutdown: (node) => {
+    shutdown: (dispatch, node) => {
         emit('/node/shutdown', {
             node: node.node_id,
         }).done((data) => {
-            setGlobal({
-                node: data.node
+            dispatch(() => {
+                return {
+                    node: data.node,
+                };
             });
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    addNode: (config) => { // secret , ipAddress [, port]
+    addNode: (dispatch, config) => { // secret , ipAddress [, port]
         emit('/node/add', config).done(() => {
-            NodesActions.onGetNodes();
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+            NodesActions.onGetNodes(dispatch);
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    popNode: () => {
+    popNode: (dispatch) => {
         emit('/node/pop').done(() => {
-            NodesActions.onGetNodes();
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+            NodesActions.onGetNodes(dispatch);
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
-    replaceNode: (config) => { // nodeId , secret [, port]
+    replaceNode: (dispatch, config) => { // nodeId , secret [, port]
         emit('/node/replace', config).done(() => {
-            NodesActions.onGetNodes();
-        }).fail((event, status, message) => setGlobal({
-            error: message,
+            NodesActions.onGetNodes(dispatch);
+        }).fail((event, status, message) => dispatch(() => {
+            return {
+                error: message,
+            };
         }));
     },
 
 };
 
-export default NodesActions;
+export {NodesActions, useStore};

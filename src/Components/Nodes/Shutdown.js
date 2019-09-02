@@ -3,11 +3,12 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import NodesActions from '../../Actions/NodesActions';
+import { NodesActions, useStore } from '../../Actions/NodesActions';
 
 
 
 const CountersReset = ({node}) => {
+    const dispatch = useStore()[1];
     const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -18,7 +19,7 @@ const CountersReset = ({node}) => {
         setShow(false);
     };
     const handleClickOk = () => {
-        NodesActions.shutdown(node);
+        NodesActions.shutdown(dispatch, node);
         setShow(false);
     };
 
