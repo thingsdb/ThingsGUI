@@ -113,11 +113,11 @@ const UserAccess = ({user, collections}) => {
 
     const handleOnChangeSwitch = (key) => ({target}) => {
         const {value, checked} = target;
-        setSwitches((prevSwitches => {
-            let newswitches = JSON.parse(JSON.stringify(prevSwitches));
+        setSwitches(switches => {
+            let newswitches = JSON.parse(JSON.stringify(switches));
             newswitches[key][value] = checked;
-            return {switches: newswitches};
-        }));
+            return newswitches;
+        });
 
         if (checked) {
             ThingsdbActions.grant(
