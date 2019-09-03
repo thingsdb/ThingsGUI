@@ -13,13 +13,13 @@ const initialState = {
     form: {
         host: 'localhost:9200',
     },
-    serverError: '',
 };
 
+const tag = '9';
 
 const Connect = ({onConnected}) => {
     const [state, setState] = useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
 
     const validation = {
         host: () => form.host.length>0,
@@ -41,9 +41,9 @@ const Connect = ({onConnected}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connectOther(form, (err) => setState({...state, serverError: err.log}));
+            const success = ApplicationActions.connectOther(form, tag);
 
-            if(!state.serverError) {
+            if(success) {
                 setState({...state, show: false});
                 onConnected();
             }
@@ -54,9 +54,6 @@ const Connect = ({onConnected}) => {
         setState({...state, show: true});
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>

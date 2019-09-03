@@ -43,12 +43,13 @@ const initialState = {
         description: false,
         expirationTime: false,
     },
-    serverError: '',
 };
+
+const tag = '15';
 
 const AddToken = ({user}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, form, switches, serverError} = state;
+    const {show, form, switches} = state;
 
     const handleClickOpen = () => {
         setState({
@@ -62,7 +63,6 @@ const AddToken = ({user}) => {
                 description: false,
                 expirationTime: false,
             },
-            serverError: '',
         });
     };
 
@@ -87,23 +87,20 @@ const AddToken = ({user}) => {
     };
 
     const handleClickOk = () => {
-        ThingsdbActions.newToken(
+        const success = ThingsdbActions.newToken(
             {
                 name: user.name,
                 expirationTime: switches.expirationTime ? '(now() + ' + form.number + '*' + form.timeUnit + ')' : null,
                 description: switches.description ? form.description : null
             },
-            (err) => setState({...state, serverError: err.log})
+            tag
         );
 
-        if (!state.serverError) {
+        if (success) {
             setState({...state, show: false});
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const now = new Date().toISOString().substring(0, 16);
 

@@ -6,33 +6,26 @@ import { ErrorMsg, SimpleModal } from '../Util';
 import {NodesActions} from '../../Stores/NodesStore';
 
 
-const initialState = {
-    show: false,
-    serverError: '',
-};
+const tag = '11';
 
 const PopNode = () => {
-    const [state, setState] = React.useState(initialState);
-    const {show, serverError} = state;
+    const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
-        setState({...state, show: true, serverError: ''});
+        setShow(true);
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setShow(false);
     };
 
     const handleClickOk = () => {
-        NodesActions.popNode((err) => setState({...state, serverError: err.log}));
-        if (!state.serverError) {
-            setState({...state, show: false});
+        const success = NodesActions.popNode(tag);
+        if (success) {
+            setShow(false);
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>

@@ -2,20 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CloseIcon from '@material-ui/icons/Close';
-import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import WarningIcon from '@material-ui/icons/Warning';
-import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
 
 import PasswordUser from './Password';
 import RemoveUser from './Remove';
 import RenameUser from './Rename';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
+import {ErrorMsg} from '../Util';
 
 const useStyles = makeStyles(theme => ({
     flex: {
@@ -32,14 +27,8 @@ const useStyles = makeStyles(theme => ({
     user: {
         padding: theme.spacing(2),
     },
-    icon: {
-        color: amber[700],
-    },
     title: {
         marginBottom: theme.spacing(2),
-    },
-    warning: {
-        color: amber[700],
     },
 }));
 
@@ -66,15 +55,11 @@ const privileges = [
     },
 ];
 
-const initialState = {
-    switches: {},
-    serverError: '',
-};
+const tag = '19';
 
 const UserAccess = ({user, collections}) => {
     const classes = useStyles();
-    const [state, setState] = React.useState(initialState);
-    const {switches, serverError} = state;
+    const [switches, setSwitches] = React.useState({});
 
     console.log('grant');
 
@@ -120,7 +105,7 @@ const UserAccess = ({user, collections}) => {
         user.access.map(({target, privileges}) => {
             s = Object.assign({}, s, getSwitches(target, privileges));
         });
-        setState({serverError: '', switches:s});
+        setSwitches(s);
     },
     [user, targets.length]
     );
@@ -128,10 +113,10 @@ const UserAccess = ({user, collections}) => {
 
     const handleOnChangeSwitch = (key) => ({target}) => {
         const {value, checked} = target;
-        setState((prevState => {
-            let newswitches = JSON.parse(JSON.stringify(prevState.switches));
+        setSwitches((prevSwitches => {
+            let newswitches = JSON.parse(JSON.stringify(prevSwitches));
             newswitches[key][value] = checked;
-            return {...state, switches: newswitches};
+            return {switches: newswitches};
         }));
 
         if (checked) {
@@ -139,32 +124,16 @@ const UserAccess = ({user, collections}) => {
                 user.name,
                 key,
                 value,
-                (err) => {
-                    setState((prevState => {
-                        let newswitches = JSON.parse(JSON.stringify(prevState.switches));
-                        newswitches[key][value] = checked;
-                        return {serverError: err.log, switches: newswitches};
-                    }));
-                }
+                tag,
             );
         } else {
             ThingsdbActions.revoke(
                 user.name,
                 key,
                 value,
-                (err) => {
-                    setState((prevState => {
-                        let newswitches = JSON.parse(JSON.stringify(prevState.switches));
-                        newswitches[key][value] = checked;
-                        return {serverError: err.log, switches: newswitches};
-                    }));
-                }
+                tag,
             );
         }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
     };
 
     const buttons = [
@@ -191,19 +160,7 @@ const UserAccess = ({user, collections}) => {
                 <Typography className={classes.title} variant="body1" >
                     {'ACCESS RULES'}
                 </Typography>
-                <Collapse in={Boolean(serverError)} timeout="auto" unmountOnExit>
-                    <CardHeader
-                        avatar={
-                            <WarningIcon className={classes.warning} />
-                        }
-                        action={
-                            <IconButton aria-label="settings" onClick={handleCloseError}>
-                                <CloseIcon />
-                            </IconButton>
-                        }
-                        title={serverError}
-                    />
-                </Collapse>
+                <ErrorMsg tag={tag} />
                 <Grid
                     className={classes.user}
                     container
@@ -238,7 +195,7 @@ const UserAccess = ({user, collections}) => {
                                             <Grid item container xs={12} >
                                                 {privileges.map(({ky, label}) => (
                                                     <Grid item xs={2} key={ky} container justify="center">
-                                                        <Checkbox disabled={Boolean(serverError)} checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
+                                                        <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
                                                     </Grid>
                                                 ))}
                                             </Grid>

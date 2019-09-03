@@ -1,13 +1,12 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
-const RemoveExpired = ({onServerError}) => {
+const RemoveExpired = () => {
 
     const handleClickOk = () => {
-        ThingsdbActions.delExpired((err) => onServerError(err));
+        ThingsdbActions.delExpired();
     };
 
     return (
@@ -17,10 +16,6 @@ const RemoveExpired = ({onServerError}) => {
             </Button>
         </React.Fragment>
     );
-};
-
-RemoveExpired.propTypes = {
-    onServerError: PropTypes.func.isRequired,
 };
 
 export default RemoveExpired;

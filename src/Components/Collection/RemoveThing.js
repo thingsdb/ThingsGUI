@@ -8,14 +8,10 @@ import { ErrorMsg, SimpleModal } from '../Util';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
-const initialState = {
-    show: false,
-    serverError: '',
-};
 
+const tag = '4';
 const RemoveThing = ({collection, thing, info}) => {
-    const [state, setState] = React.useState(initialState);
-    const {show, serverError} = state;
+    const [show, setShow] = React.useState(false);
 
     const buildQuery = (p, ti, n, i) => {
         return i == null ? `t(${ti}).del('${n}')`
@@ -25,14 +21,11 @@ const RemoveThing = ({collection, thing, info}) => {
 
 
     const handleClickOpen = () => {
-        setState({
-            show: true,
-            serverError: '',
-        });
+        setShow(true);
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setShow(false);
     };
 
     const handleClickOk = () => {
@@ -43,23 +36,21 @@ const RemoveThing = ({collection, thing, info}) => {
             info.hasOwnProperty('index') ? info.index : null
         );
 
-        CollectionActions.rawQuery(
+        const success = CollectionActions.rawQuery(
             collection.collection_id,
             info.id,
             queryString,
-            (err) => setState({...state, serverError: err.log})
+            tag,
         );
 
-        ThingsdbActions.getCollections((err) => setState({...state, serverError: err.log}));
+        ThingsdbActions.getCollections();
 
-        if (!state.serverError) {
-            setState({...state, show: false});
+        if (success) {
+            setShow(false);
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
+
 
     const Content = (
         <React.Fragment>

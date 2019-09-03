@@ -36,6 +36,8 @@ const initialState = {
     },
 };
 
+const tag = '1';
+
 const AddThings = ({info, collection, thing}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
@@ -88,7 +90,6 @@ const AddThings = ({info, collection, thing}) => {
     };
 
     const handleOnChange = ({target}) => {
-        console.log(target.value);
         const {name, value} = target;
         const q = handleBuildQuery(name, value);
         setState(prevState => {
@@ -98,7 +99,6 @@ const AddThings = ({info, collection, thing}) => {
     };
 
     const handleArrayItems = (items) => {
-        console.log('arrayitems');
         const value = items.toString();
         const q = handleBuildQuery('value', value);
         setState(prevState => {
@@ -111,23 +111,19 @@ const AddThings = ({info, collection, thing}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
-            CollectionActions.rawQuery(
+            const success = CollectionActions.rawQuery(
                 collection.collection_id,
                 id,
                 form.queryString,
-                ""
+                tag,
             );
 
             ThingsdbActions.getCollections();
 
-            if (!state.serverError) { // QUEST? Is serverError already known here?
+            if (success) {
                 setState({...state, show: false});
             }
         }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
     };
 
     const addNewProperty = !(type == 'array' || type == 'set');

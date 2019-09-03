@@ -5,33 +5,26 @@ import { CardButton, ErrorMsg, SimpleModal } from '../Util';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
-
-const initialState = {
-    show: false,
-    serverError: '',
-};
+const tag = '17';
 
 const Remove = ({user}) => {
-    const [state, setState] = React.useState(initialState);
-    const {show, serverError} = state;
+    const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
-        setState({...state, show: true});
+        setShow(true);
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setShow(false);
     };
+
     const handleClickOk = () => {
-        ThingsdbActions.removeUser(user.name, (err) => setState({...state, serverError: err.log}));
-        if (!state.serverError) {
-            setState({...state, show: false});
+        const success = ThingsdbActions.removeUser(user.name, tag);
+        if (success) {
+            setShow(false);
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     return(
         <SimpleModal

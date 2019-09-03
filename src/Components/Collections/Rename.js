@@ -16,19 +16,19 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '',
 };
+
+const tag = '8';
 
 const Rename = ({collection, collections}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
 
     const handleClickOpen = () => {
         setState({
             show: true,
             errors: {},
             form: {...collection},
-            serverError: '',
         });
     };
 
@@ -52,21 +52,18 @@ const Rename = ({collection, collections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.renameCollection(
+            const success = ThingsdbActions.renameCollection(
                 collection.name,
                 form.name,
-                (err) => setState({...state, serverError: err.log})
+                tag
             );
 
-            if (!state.serverError) {
+            if (success) {
                 setState({...state, show: false});
             }
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>

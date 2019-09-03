@@ -6,31 +6,24 @@ import PropTypes from 'prop-types';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ErrorMsg, QueryInput, QueryOutput} from '../Util';
 
+const tag = '3';
+
 const Query = ({collection}) => {
     const [query, setQuery] = React.useState('');
     const [output, setOutput] = React.useState({});
-    const [serverError, setServerError] = React.useState('');
 
     const handleInput = (value) => {
         setQuery(value);
     };
 
     const handleSubmit = () => {
-        console.log('query');
-        CollectionActions.queryWithOutput(collection.collection_id, query, handleOutput, handleServerError);
+        CollectionActions.queryWithOutput(collection.collection_id, query, handleOutput, tag);
     };
-    console.log(output);
 
     const handleOutput = (out) => {
         setOutput(out);
     };
 
-    const handleServerError = (err) => {
-        setServerError(err.log);
-    };
-    const handleCloseError = () => {
-        setServerError('');
-    };
 
     return (
         <Grid

@@ -34,12 +34,13 @@ const initialState = {
         value: '',
         dataType: dataTypes[0],
     },
-    serverError: '',
 };
+
+const tag = '2';
 
 const EditThing = ({info, collection, thing}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
     const {id, index, name, parentType} = info;
 
 
@@ -54,7 +55,6 @@ const EditThing = ({info, collection, thing}) => {
                 value: '',
                 dataType: dataTypes[0],
             },
-            serverError: '',
         });
     };
 
@@ -109,24 +109,21 @@ const EditThing = ({info, collection, thing}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
-            CollectionActions.rawQuery(
+            const success = CollectionActions.rawQuery(
                 collection.collection_id,
                 id,
                 form.queryString,
-                (err) => setState({...state, serverError: err.log})
+                tag
             );
 
-            ThingsdbActions.getCollections((err) => setState({...state, serverError: err.log}));
+            ThingsdbActions.getCollections();
 
-            if (!state.serverError) {
+            if (success) {
                 setState({...state, show: false});
             }
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';

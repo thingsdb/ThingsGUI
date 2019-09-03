@@ -42,13 +42,14 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '',
 };
+
+const tag = '14';
 
 const AddUser = ({users}) => {
     const classes = useStyles();
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),
@@ -62,7 +63,6 @@ const AddUser = ({users}) => {
             form: {
                 name: '',
             },
-            serverError: '',
         });
     };
 
@@ -82,17 +82,14 @@ const AddUser = ({users}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.addUser(form.name, (err) => setState({...state, serverError: err.log}));
+            const success = ThingsdbActions.addUser(form.name, tag);
 
-            if (!state.serverError) {
+            if (success) {
                 setState({...state, show: false});
             }
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>

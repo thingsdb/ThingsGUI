@@ -10,12 +10,13 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '',
 };
+
+const tag = '8';
 
 const AddNode = () => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
 
     const validation = {
         secret: () => form.secret.length>0,
@@ -24,7 +25,7 @@ const AddNode = () => {
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, errors: {}, form: {secret: '', ipAddress: '', port: ''}, serverError: ''});
+        setState({...state, show: true, errors: {}, form: {secret: '', ipAddress: '', port: ''}});
     };
 
     const handleClickClose = () => {
@@ -44,19 +45,16 @@ const AddNode = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            NodesActions.addNode(
+            const success = NodesActions.addNode(
                 form,
-                (err) => setState({...state, serverError: err.log})
+                tag
             );
-            if (!state.serverError) {
+            if (success) {
                 setState({...state, show: false});
             }
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>

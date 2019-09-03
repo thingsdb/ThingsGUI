@@ -17,12 +17,13 @@ const quotaTypes = [
 const initialState = {
     show: false,
     form: {},
-    serverError: '',
 };
+
+const tag = '6';
 
 const Quotas = ({collection}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, form, serverError} = state;
+    const {show, form} = state;
 
 
     const _getQuota = (quotaType) => collection[`quota_${quotaType}`]||'';
@@ -35,7 +36,6 @@ const Quotas = ({collection}) => {
                 quotaType: 'things',
                 quota: _getQuota('things'),
             },
-            serverError: '',
         });
     };
 
@@ -60,34 +60,31 @@ const Quotas = ({collection}) => {
     };
 
     const handleUnset = () => {
-        ThingsdbActions.setQuota(
+        const success = ThingsdbActions.setQuota(
             collection.name,
             form.quotaType,
             'nil',
-            (err) => setState({...state, serverError: err.log})
+            tag,
         );
 
-        if (!state.serverError) {
+        if (success) {
             setState({...state, show: false});
         }
     };
 
     const handleClickOk = () => {
-        ThingsdbActions.setQuota(
+        const success = ThingsdbActions.setQuota(
             collection.name,
             form.quotaType,
             form.quota,
-            (err) => setState({...state, serverError: err.log})
+            tag,
         );
 
-        if (!state.serverError) {
+        if (success) {
             setState({...state, show: false});
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>

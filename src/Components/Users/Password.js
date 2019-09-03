@@ -20,19 +20,20 @@ const initialState = {
     showPassword: false,
     errors: {},
     form: {},
-    serverError: '',
 };
+
+const tag = '16';
 
 const Password = ({user}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, showPassword, errors, form, serverError} = state;
+    const {show, showPassword, errors, form} = state;
 
     const validation = {
         password: () => form.password.length>0,
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, showPassword: false, errors: {}, form: {...user, password: ''}, serverError: ''});
+        setState({...state, show: true, showPassword: false, errors: {}, form: {...user, password: ''}});
     };
 
     const handleClickClose = () => {
@@ -51,13 +52,13 @@ const Password = ({user}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.password(
+            const success = ThingsdbActions.password(
                 user.name,
                 form.password,
-                (err) => setState({...state, serverError: err.log})
+                tag
             );
 
-            if (!state.serverError) {
+            if (success) {
                 setState({...state, show: false});
             }
         }
@@ -65,12 +66,12 @@ const Password = ({user}) => {
 
     const handleClickReset = () => {
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.resetPassword(
+            const success = ThingsdbActions.resetPassword(
                 user.name,
-                (err) => setState({...state, serverError: err.log})
+                tag
             );
 
-            if (!state.serverError) {
+            if (success) {
                 setState({...state, show: false});
             }
         }
@@ -80,9 +81,6 @@ const Password = ({user}) => {
         setState({...state, showPassword: !showPassword});
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>

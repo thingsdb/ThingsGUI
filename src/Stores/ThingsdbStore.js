@@ -319,7 +319,7 @@ class ThingsdbStore extends BaseStore {
         });
     }
 
-    onDelToken(key, tag){
+    onDelToken(key){
         this.emit('/user/del_token', {
             key,
         }).done((data) => {
@@ -327,21 +327,15 @@ class ThingsdbStore extends BaseStore {
                 users: data
             });
             return true;
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 
-    onDelExpired(tag){
+    onDelExpired(){
         this.emit('/user/del_expired').done((data) => {
             this.setState({
                 users: data
             });
             return true;
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 }

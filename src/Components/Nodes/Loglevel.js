@@ -18,15 +18,16 @@ const loglevels = [
 const initialState = {
     show: false,
     form: {},
-    serverError: '',
 };
+
+const tag = '10';
 
 const Loglevel = ({node}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, form, serverError} = state;
+    const {show, form} = state;
 
     const handleClickOpen = () => {
-        setState({show: true, form: {...node}, serverError: ''});
+        setState({show: true, form: {...node}});
     };
 
     const handleClickClose = () => {
@@ -42,18 +43,14 @@ const Loglevel = ({node}) => {
     };
 
     const handleClickOk = () => {
-        NodesActions.setLoglevel(
+        const success = NodesActions.setLoglevel(
             node,
             form.log_level,
-            (err) => setState({...state, serverError: err.log})
+            tag
         );
-        if (!state.serverError) {
+        if (success) {
             setState({...state, show: false});
         }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
     };
 
     const Content = (

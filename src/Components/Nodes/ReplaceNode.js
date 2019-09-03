@@ -15,12 +15,13 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '',
 };
+
+const tag = '12';
 
 const ReplaceNode = ({nodes}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
 
     const validation = {
         secret: () => form.secret.length>0,
@@ -28,7 +29,7 @@ const ReplaceNode = ({nodes}) => {
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, errors: {}, form: {nodeId: '', secret: '', port: ''}, serverError: ''});
+        setState({...state, show: true, errors: {}, form: {nodeId: '', secret: '', port: ''}});
     };
 
     const handleClickClose = () => {
@@ -47,18 +48,14 @@ const ReplaceNode = ({nodes}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            NodesActions.replaceNode(
+            const success = NodesActions.replaceNode(
                 form,
-                (err) => setState({...state, serverError: err.log})
+                tag
             );
-            if (!state.serverError) {
+            if (success) {
                 setState({...state, show: false});
             }
         }
-    };
-
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
     };
 
     const Content = (

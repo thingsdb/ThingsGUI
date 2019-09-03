@@ -5,10 +5,10 @@ import IconButton from '@material-ui/core/IconButton';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
-const RemoveToken = ({token, onServerError}) => {
+const RemoveToken = ({token}) => {
 
     const handleClickOk = () => {
-        ThingsdbActions.delToken(token.key, (err) => onServerError(err));
+        ThingsdbActions.delToken(token.key);
     };
 
     return (
@@ -20,7 +20,6 @@ const RemoveToken = ({token, onServerError}) => {
 
 RemoveToken.propTypes = {
     token: PropTypes.object.isRequired,
-    onServerError: PropTypes.func.isRequired,
 };
 
 export default RemoveToken;

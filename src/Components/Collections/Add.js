@@ -5,7 +5,6 @@ import TextField from '@material-ui/core/TextField';
 import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
 
-import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 import { ErrorMsg, SimpleModal } from '../Util';
 
@@ -43,13 +42,14 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '',
 };
+
+const tag = '5';
 
 const Add = ({collections}) => {
     const classes = useStyles();
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
 
     const validation = {
         name: () => form.name.length>0&&collections.every((c) => c.name!==form.name),
@@ -62,7 +62,6 @@ const Add = ({collections}) => {
             form: {
                 name: '',
             },
-            serverError: '',
         });
     };
 
@@ -82,17 +81,14 @@ const Add = ({collections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.addCollection(form.name, (err) => setState({...state, serverError: err.log}));
+            const success = ThingsdbActions.addCollection(form.name, tag);
 
-            if(!state.serverError) {
+            if(success) {
                 setState({...state, show: false});
             }
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>

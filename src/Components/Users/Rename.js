@@ -15,19 +15,20 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
-    serverError: '',
 };
+
+const tag = '18';
 
 const Rename = ({user, users}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
 
     const validation = {
         name: () => form.name.length>0&&users.every((u) => u.name!==form.name),
     };
 
     const handleClickOpen = () => {
-        setState({show: true, errors: {}, form: {...user}, serverError: ''});
+        setState({show: true, errors: {}, form: {...user}});
     };
 
     const handleClickClose = () => {
@@ -46,21 +47,18 @@ const Rename = ({user, users}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.renameUser(
+            const success = ThingsdbActions.renameUser(
                 user.name,
                 form.name,
-                (err) => setState({...state, serverError: err.log})
+                tag
             );
 
-            if (!state.serverError) {
+            if (success) {
                 setState({...state, show: false});
             }
         }
     };
 
-    const handleCloseError = () => {
-        setState({...state, serverError: ''});
-    };
 
     const Content = (
         <React.Fragment>
