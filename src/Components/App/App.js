@@ -16,8 +16,7 @@ import TopBar from '../Navigation/TopBar';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import {DrawerLayout} from '../Util';
-import {ErrorToast} from '../Util';
+import {DrawerLayout, ErrorToast} from '../Util';
 
 
 const withStores = withVlow([{

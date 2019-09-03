@@ -34,12 +34,11 @@ const initialState = {
         value: '',
         dataType: dataTypes[0],
     },
-    serverError: '',
 };
 
 const AddThings = ({info, collection, thing}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form, serverError} = state;
+    const {show, errors, form} = state;
     const {id, name, type} = info;
 
     const handleClickOpen = () => {
@@ -54,7 +53,6 @@ const AddThings = ({info, collection, thing}) => {
                 value: '',
                 dataType: t,
             },
-            serverError: '',
         });
     };
 
@@ -117,10 +115,10 @@ const AddThings = ({info, collection, thing}) => {
                 collection.collection_id,
                 id,
                 form.queryString,
-                (err) => setState({...state, serverError: err.log})
+                ""
             );
 
-            ThingsdbActions.getCollections((err) => setState({...state, serverError: err.log}));
+            ThingsdbActions.getCollections();
 
             if (!state.serverError) { // QUEST? Is serverError already known here?
                 setState({...state, show: false});
@@ -140,7 +138,7 @@ const AddThings = ({info, collection, thing}) => {
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <ErrorMsg tag={tag} />
             <List>
                 <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
                     <ListItem>

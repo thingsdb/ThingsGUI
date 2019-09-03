@@ -31,12 +31,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ThingRoot = ({things, collection, onError}) => {
+const ThingRoot = ({things, collection}) => {
     const classes = useStyles();
     const fetched = things.hasOwnProperty(collection.collection_id);
 
     React.useEffect(() => {
-        CollectionActions.query(collection.collection_id, onError);
+        CollectionActions.query(collection.collection_id);
     }, [collection.collection_id]);
 
     return (
@@ -59,7 +59,6 @@ const ThingRoot = ({things, collection, onError}) => {
                                     id: collection.collection_id,
                                     parentType: 'object',
                                 }}
-                                onError={onError}
                             />
                         </React.Fragment>
                     ))}
@@ -90,8 +89,6 @@ const ThingRoot = ({things, collection, onError}) => {
 };
 
 ThingRoot.propTypes = {
-    onError: PropTypes.func.isRequired,
-
     collection: PropTypes.object.isRequired,
 
     /* collection properties */

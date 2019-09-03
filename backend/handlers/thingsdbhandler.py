@@ -22,6 +22,7 @@ class ThingsDBHandler(BaseHandler):
     @BaseHandler.socket_handler
     async def get_collections(cls, client, data):
         resp = await client.collections_info()
+        print('get_collections', resp)
         return cls.socket_response(data=resp)
 
     @classmethod
@@ -73,4 +74,3 @@ class ThingsDBHandler(BaseHandler):
             collections_info();'''.format_map(data)
         result = await client.query(q)
         return cls.socket_response(data=result)
-        

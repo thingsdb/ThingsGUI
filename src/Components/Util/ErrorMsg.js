@@ -9,6 +9,8 @@ import { amber } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
+import { ErrorActions, ErrorStore } from '../../Stores/ErrorStore';
 
 
 const useStyles = makeStyles(() => ({
@@ -20,11 +22,20 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const ErrorMsg = ({error, onClose}) => {
+const withStores = withVlow([{
+    store: ErrorStore,
+    keys: ['msgError']
+}]);
+
+const ErrorMsg = ({tag, msgError}) => {
     const classes = useStyles();
+
+    const handleCloseError = () => {
+        ErrorActions.removeMsgError(tag);
+    };
     return (
         <React.Fragment>
-            <Collapse in={Boolean(error)} timeout="auto" unmountOnExit>
+            <Collapse in={Boolean(msgError[tag])} timeout="auto" unmountOnExit>
                 <Typography component="div">
                     <Grid component="label" container alignItems="center" spacing={1}>
                         <Grid item>
@@ -33,10 +44,10 @@ const ErrorMsg = ({error, onClose}) => {
                             </Avatar>
                         </Grid>
                         <Grid item>
-                            {error}
+                            {msgError[tag]}
                         </Grid>
                         <Grid item>
-                            <IconButton aria-label="settings" onClick={onClose}>
+                            <IconButton aria-label="settings" onClick={handleCloseError}>
                                 <CloseIcon />
                             </IconButton>
                         </Grid>
@@ -48,8 +59,9 @@ const ErrorMsg = ({error, onClose}) => {
 };
 
 ErrorMsg.propTypes = {
-    error: PropTypes.string.isRequired,
-    onClose: PropTypes.func.isRequired,
+    msgError: ErrorStore.types.msgError.isRequired,
+    tag: PropTypes.string.isRequired,
+
 };
 
-export default ErrorMsg;
+export default withStores(ErrorMsg);

@@ -10,9 +10,6 @@ import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 import { ErrorMsg, SimpleModal } from '../Util';
 
 const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['connErr']
-}, {
     store: ThingsdbStore,
     keys: ['collections']
 }]);
@@ -49,7 +46,7 @@ const initialState = {
     serverError: '',
 };
 
-const Add = ({connErr, collections}) => {
+const Add = ({collections}) => {
     const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {show, errors, form, serverError} = state;
@@ -99,7 +96,7 @@ const Add = ({connErr, collections}) => {
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
+            <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
                 margin="dense"
@@ -134,8 +131,6 @@ const Add = ({connErr, collections}) => {
 
 Add.propTypes = {
 
-    /* application properties */
-    connErr: ApplicationStore.types.connErr.isRequired,
     /* collections properties */
     collections: ThingsdbStore.types.collections.isRequired,
 };

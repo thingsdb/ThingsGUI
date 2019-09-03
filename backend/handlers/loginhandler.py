@@ -49,11 +49,8 @@ class LoginHandler(BaseHandler):
                 }
 
         try:
-            print(user, client)
             a = await client.authenticate(auth=[user, password])  # TODOs auth not working correctly
-            print(a)
         except ThingsDBError as e:
-            print('authentication error \n')
             return {
                 'connected': False,
                 'connErr': 'auth error: {}'.format(str(e)),
@@ -88,22 +85,27 @@ class LoginHandler(BaseHandler):
     @BaseHandler.socket_handler
     async def connect_other(cls, client, data):
         user, password = client._auth
-        print('close in connect_other')
         client.close()
         await client.wait_closed()
 
         resp = await cls._connect(client, data['host'], user, password)
-        return cls.socket_response(data=resp)
+
+        if (resp['connected']):
+            response = cls.socket_response(data=resp)
+        else:
+            response = cls.socket_response(data=None, message=Message(
+                text=resp['connErr'],
+                status=500,
+                log=resp['connErr']))
+
+        return response
 
     @classmethod
     @BaseHandler.socket_handler
     async def disconnect(cls, client, data):
-        print("disconnect login handler")
         client.close()
         await client.wait_closed()
-
         resp = {
             'connected': False,
-            'connErr': '',
         }
         return cls.socket_response(data=resp)

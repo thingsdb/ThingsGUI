@@ -63,7 +63,7 @@ const RemoveThing = ({collection, thing, info}) => {
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <ErrorMsg tag={tag} />
             <DialogContentText>
                 {'Are you sure?'}
             </DialogContentText>

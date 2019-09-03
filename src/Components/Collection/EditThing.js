@@ -136,7 +136,7 @@ const EditThing = ({info, collection, thing}) => {
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <ErrorMsg tag={tag} />
             <List>
                 <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
                     <ListItem>

@@ -46,7 +46,7 @@ const Remove = ({collection}) => {
             onOk={handleClickOk}
             onClose={handleClickClose}
         >
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <ErrorMsg tag={tag} />
         </SimpleModal>
     );
 };

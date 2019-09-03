@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import BaseStore from './BaseStore';
+import {ErrorActions} from './ErrorStore';
 
 const CollectionActions = Vlow.createActions([
     'query',
@@ -26,7 +27,7 @@ class CollectionStore extends BaseStore {
         this.state = CollectionStore.defaults;
     }
 
-    onQuery(collectionId, onError, thingId=null, depth=1) {
+    onQuery(collectionId, thingId=null, depth=1) {
         this.emit('/collection/query', {
             collectionId: collectionId,
             thingId: thingId,
@@ -39,20 +40,24 @@ class CollectionStore extends BaseStore {
                     Object.assign({}, prevState.things, {[collectionId]: data});
                 return {things};
             });
-        }).fail((event, status, message) => onError(message));
+        }).fail((event, status, message) => ErrorActions.setToastError(message.log));
     }
 
-    onRemoveThing(config, onError) {
-        this.emit('/collection/remove-thing', config).done((data) => {
+    onRemoveThing(config, tag) {
+        this.emit('/collection/remove_thing', config).done((data) => {
             this.setState(prevState => {
                 const things = Object.assign({}, prevState.things, {[config.thingId]: data});
                 return {things};
             });
-        }).fail((event, status, message) => onError(message));
+            return true;
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.log);
+            return false;
+        });
     }
 
-    onRawQuery(collectionId, thingId, query, onError) {
-        this.emit('/collection/raw-query', {
+    onRawQuery(collectionId, thingId, query, tag) {
+        this.emit('/collection/raw_query', {
             collectionId: collectionId,
             thingId: thingId,
             query: query,
@@ -61,12 +66,15 @@ class CollectionStore extends BaseStore {
                 const things = Object.assign({}, prevState.things, {[thingId]: data});
                 return {things};
             });
-        }).fail((event, status, message) => onError(message));
+            return true;
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.log);
+            return false;
+        });
     }
 
-    onQueryWithOutput(collectionId, query, onOutput, onError) {
-        console.log("store");
-        this.emit('/collection/query-with-output', {
+    onQueryWithOutput(collectionId, query, onOutput, tag) {
+        this.emit('/collection/query_with_output', {
             collectionId: collectionId,
             query: query,
         }).done((data) => {
@@ -75,7 +83,11 @@ class CollectionStore extends BaseStore {
                 const things = Object.assign({}, prevState.things, {[collectionId]: data.things});
                 return {things};
             });
-        }).fail((event, status, message) => onError(message));
+            return true;
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.log);
+            return false;
+        });
     }
 }
 

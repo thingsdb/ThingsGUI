@@ -17,14 +17,12 @@ class ApplicationStore extends BaseStore {
     static types = {
         loaded: PropTypes.bool,
         connected: PropTypes.bool,
-        connErr: PropTypes.string,
         match: PropTypes.shape({match: PropTypes.string}),
     }
 
     static defaults = {
         loaded: false,
         connected: false,
-        connErr: '',
         match: {},
     }
 
@@ -44,32 +42,38 @@ class ApplicationStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.log));
     }
 
-    onConnect({host, user, password}, onError) {
+    onConnect({host, user, password}, tag) {
         this.emit('/connect', {host, user, password}).done((data) => {
             this.setState({
-                connErr: data.connErr,
                 connected: data.connected,
             });
-        }).fail((event, status, message) => onError(message));
+            return true;
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.log);
+            return false;
+        });
     }
 
-    onConnectOther({host}, onError) {
+    onConnectOther({host}, tag) {
         this.emit('/connect/other', {host}).done((data) => {
             this.setState({
-                connErr: data.connErr, // QUEST: vangt deze alle errors af?
                 connected: data.connected,
             });
-        }).fail((event, status, message) => onError(message));
+            return true;
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.log);
+            return false;
+        });
     }
 
     onDisconnect() {
-        this.emit('/disconnect').done(() => {
+        this.emit('/disconnect').done((data) => {
             this.setState({
-                connected: false,
-                connErr: '',
+                connected: data.connected,
                 match: {},
             });
-        }); //.fail((_xhr, {error}) => onError(error));
+            ErrorActions.resetToastError();
+        }).fail((event, status, message) => ErrorActions.setToastError(message.log));
     }
 
     onNavigate(match) {

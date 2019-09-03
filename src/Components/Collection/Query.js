@@ -41,7 +41,7 @@ const Query = ({collection}) => {
             spacing={2}
         >
             <Grid item xs={12}>
-                <ErrorMsg error={serverError} onClose={handleCloseError} />
+                <ErrorMsg tag={tag} />
             </Grid>
             <Grid item container xs={12} spacing={2} alignItems="flex-start">
                 <Grid item container xs={6} spacing={2}>

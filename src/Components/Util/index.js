@@ -41,16 +41,16 @@ const buildInput = (input, type) => {
 };
 
 const buildQueryAdd = (id, name, value, type) => {
-    return type==='array' ? `t(${id}).${name}.push(${value})`
-        : type==='object' ? `t(${id}).${name} = ${value}`
-            : type==='set' ? `t(${id}).${name}.add(${value})`
+    return type==='array' ? `#${id}.${name}.push(${value})`
+        : type==='object' ? `#${id}.${name} = ${value}`
+            : type==='set' ? `#${id}.${name}.add(${value})`
                 : '';
 };
 
 const buildQueryEdit = (id, name, value, type, index) => {
-    return type==='array' ? `t(${id}).${name}.splice(${index}, 1, ${value})`
-        : type==='object' ? `t(${id}).${name} = ${value}`
-            : type==='set' ? `t(${id}).${name}.add(${value})`
+    return type==='array' ? `#${id}.${name}.splice(${index}, 1, ${value})`
+        : type==='object' ? `#${id}.${name} = ${value}`
+            : type==='set' ? `#${id}.${name}.add(${value})`
                 : '';
 };
 

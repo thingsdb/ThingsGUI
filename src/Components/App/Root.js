@@ -39,21 +39,6 @@ const withStores = withVlow([{
 }]);
 
 const Root = ({loaded, connected}) => {
-    // const [serverErrors, setServerErrors] = React.useState([]);
-
-    // React.useEffect(() => {
-    //     setServerErrors([]);
-    // },
-    // [connected]
-    // );
-
-    // const handleServerError = (err) => {
-    //     setServerErrors(prevErr => {
-    //         const newArray = [...prevErr];
-    //         newArray.push(err.log);
-    //         return newArray;
-    //     });
-    // };
 
     return(
         <MuiThemeProvider theme={theme}>

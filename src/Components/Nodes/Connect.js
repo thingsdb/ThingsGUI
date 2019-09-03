@@ -2,16 +2,10 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import {withVlow} from 'vlow';
 
 import { ErrorMsg, SimpleModal } from '../Util';
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+import {ApplicationActions} from '../../Stores/ApplicationStore';
 
-
-const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['connErr']
-}]);
 
 const initialState = {
     show: false,
@@ -23,7 +17,7 @@ const initialState = {
 };
 
 
-const Connect = ({connErr, onConnected}) => {
+const Connect = ({onConnected}) => {
     const [state, setState] = useState(initialState);
     const {show, errors, form, serverError} = state;
 
@@ -66,7 +60,7 @@ const Connect = ({connErr, onConnected}) => {
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
+            <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
                 margin="dense"
@@ -100,11 +94,7 @@ const Connect = ({connErr, onConnected}) => {
 };
 
 Connect.propTypes = {
-
     onConnected: PropTypes.func.isRequired,
-
-    /* application properties */
-    connErr: ApplicationStore.types.connErr.isRequired,
 };
 
-export default withStores(Connect);
+export default Connect;

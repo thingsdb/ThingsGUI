@@ -86,7 +86,7 @@ const Password = ({user}) => {
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <ErrorMsg tag={tag} />
             <Typography component="div">
                 <FormLabel component="legend">
                     {'Set?'}

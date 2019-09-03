@@ -2,32 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Things from '../Collection/Things';
-import {ErrorMsg, HarmonicCard} from '../Util';
+import {HarmonicCard} from '../Util';
 
 
-const CollectionTree = ({collection}) => {
-    const [serverError, setServerError] = React.useState('');
-
-
-    const handleServerError = (err) => {
-        setServerError(err.log);
-    };
-    const handleCloseError = () => {
-        setServerError('');
-    };
-
-    return (
-        <HarmonicCard
-            title="THINGS TREE"
-            content={
-                <React.Fragment>
-                    <ErrorMsg error={serverError} onClose={handleCloseError} />
-                    <Things collection={collection} onError={handleServerError} />
-                </React.Fragment>
-            }
-        />
-    );
-};
+const CollectionTree = ({collection}) => (
+    <HarmonicCard
+        title="THINGS TREE"
+        content={
+            <React.Fragment>
+                <Things collection={collection} />
+            </React.Fragment>
+        }
+    />
+);
 
 CollectionTree.propTypes = {
     collection: PropTypes.object.isRequired,

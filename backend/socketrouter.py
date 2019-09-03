@@ -33,11 +33,11 @@ class SocketRouter:
             handler=ThingsDBHandler.get_dbinfo)
 
         sio.on(
-            event='/thingsdb/getCollection(dispatch)s',
+            event='/thingsdb/get_collections',
             handler=ThingsDBHandler.get_collections)
 
         sio.on(
-            event='/thingsdb/getCollection(dispatch)',
+            event='/thingsdb/get_collection',
             handler=ThingsDBHandler.get_collection)
 
         sio.on(
@@ -53,7 +53,7 @@ class SocketRouter:
             handler=ThingsDBHandler.rename_collection)
 
         sio.on(
-            event='/thingsdb/setquota',
+            event='/thingsdb/set_quota',
             handler=ThingsDBHandler.set_quota)
 
         sio.on(
@@ -61,23 +61,19 @@ class SocketRouter:
             handler=CollectionHandler.query_thing)
 
         sio.on(
-            event='/collection/return-property',
-            handler=CollectionHandler.return_property)
-
-        sio.on(
-            event='/collection/remove-thing',
+            event='/collection/remove_thing',
             handler=CollectionHandler.remove_thing)
 
         sio.on(
-            event='/collection/raw-query',
+            event='/collection/raw_query',
             handler=CollectionHandler.raw_query)
 
         sio.on(
-            event='/collection/query-with-output',
+            event='/collection/query_with_output',
             handler=CollectionHandler.query_with_output)
 
         sio.on(
-            event='/user/getusers',
+            event='/user/get_users',
             handler=UserHandler.get_users)
 
         sio.on(
@@ -101,7 +97,7 @@ class SocketRouter:
             handler=UserHandler.set_password)
 
         sio.on(
-            event='/user/reset-password',
+            event='/user/reset_password',
             handler=UserHandler.reset_password)
 
         sio.on(
@@ -113,19 +109,19 @@ class SocketRouter:
             handler=UserHandler.revoke)
 
         sio.on(
-            event='/user/newtoken',
+            event='/user/new_token',
             handler=UserHandler.new_token)
 
         sio.on(
-            event='/user/deltoken',
+            event='/user/del_token',
             handler=UserHandler.del_token)
 
         sio.on(
-            event='/user/delexpired',
+            event='/user/del_expired',
             handler=UserHandler.del_expired)
 
         sio.on(
-            event='/node/getnodes',
+            event='/node/get_nodes',
             handler=NodeHandler.get_nodes)
 
         sio.on(

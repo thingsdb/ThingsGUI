@@ -39,7 +39,7 @@ const PopNode = () => {
             <DialogContentText>
                 {'Are you sure you want to remove the latest node?'}
             </DialogContentText>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <ErrorMsg tag={tag} />
         </React.Fragment>
     );
 

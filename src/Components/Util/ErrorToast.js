@@ -41,26 +41,8 @@ const withStores = withVlow([{
 
 const ErrorToast = ({toastErrors}) => {
     const classes = useStyles();
-    // const [error, setError] = React.useState([]);
-
-    // React.useEffect(() => {
-    //     if (toastErrors.length) {
-    //         setError(prevErr => ([...new Set([...prevErr, ...toastErrors])]));
-    //     } else {
-    //         setError([]);
-    //     }
-    // },
-    // [toastErrors]
-    // );
-    console.log("toast", toastErrors);
 
     const handleCloseError = (i) => () => {
-        // setError(prevErr => {
-        //     const newArray = [...prevErr];
-        //     newArray.splice(i, 1);
-        //     return newArray;
-        // });
-
         ErrorActions.removeToastError(i);
     };
 

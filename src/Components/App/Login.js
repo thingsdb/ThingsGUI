@@ -17,7 +17,7 @@ import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStor
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['loaded', 'connected', 'connErr']
+    keys: ['loaded', 'connected']
 }]);
 
 
@@ -39,7 +39,7 @@ const validation = {
     password: (o) => o.password.length>0,
 };
 
-const Login = ({loaded, connected, connErr}) => {
+const Login = ({loaded, connected}) => {
     const [state, setState] = useState(initialState);
     const {showPassword, errors, form, serverError} = state;
 
@@ -55,7 +55,7 @@ const Login = ({loaded, connected, connErr}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ApplicationActions.connect(form, (err) => setState({...state, serverError: err.log}));
+            ApplicationActions.connect(form);
         }
     };
 
@@ -77,7 +77,7 @@ const Login = ({loaded, connected, connErr}) => {
                 {'Login'}
             </DialogTitle>
             <DialogContent>
-                <ErrorMsg error={connErr || serverError} onClose={handleCloseError} />
+                <ErrorMsg tag={tag} />
                 <TextField
                     autoFocus
                     margin="dense"
@@ -134,7 +134,6 @@ const Login = ({loaded, connected, connErr}) => {
 Login.propTypes = {
     loaded: ApplicationStore.types.loaded.isRequired,
     connected: ApplicationStore.types.connected.isRequired,
-    connErr: ApplicationStore.types.connErr.isRequired,
 };
 
 export default withStores(Login);

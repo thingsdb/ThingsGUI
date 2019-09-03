@@ -96,7 +96,7 @@ const AddUser = ({users}) => {
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
                 margin="dense"

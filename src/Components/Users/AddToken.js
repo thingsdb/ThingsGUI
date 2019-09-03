@@ -109,7 +109,7 @@ const AddToken = ({user}) => {
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg error={serverError} onClose={handleCloseError} />
+            <ErrorMsg tag={tag} />
             <List>
                 <ListItem>
                     <FormControlLabel

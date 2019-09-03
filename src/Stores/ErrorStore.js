@@ -6,6 +6,8 @@ const ErrorActions = Vlow.createActions([
     'setToastError',
     'removeToastError',
     'resetToastError',
+    'setMsgError',
+    'removeMsgError',
 ]);
 
 // TODO: CALLBACKS
@@ -13,10 +15,12 @@ class ErrorStore extends BaseStore {
 
     static types = {
         toastErrors: PropTypes.arrayOf(PropTypes.string),
+        msgError: PropTypes.object,
     }
 
     static defaults = {
         toastErrors: [],
+        msgError: {},
     }
 
     constructor() {
@@ -25,8 +29,6 @@ class ErrorStore extends BaseStore {
     }
 
     onSetToastError(error) {
-        const {toastErrors} = this.state;
-        console.log(error, toastErrors);
         this.setState(prevState => {
             return({toastErrors: [...new Set([...prevState.toastErrors, error])]});
         });
@@ -42,6 +44,21 @@ class ErrorStore extends BaseStore {
 
     onResetToastError() {
         this.setState({toastErrors: []});
+    }
+
+    onSetMsgError(tag, error) {
+        this.setState(prevState => {
+            const err = Object.assign({}, prevState.msgError, {[tag]: error});
+            return {msgError: err};
+        });
+    }
+
+    onRemoveMsgError(tag) {
+        this.setState(prevState => {
+            let copyState = JSON.parse(JSON.stringify(prevState.msgError));
+            delete copyState[tag];
+            return {msgError: copyState};
+        });
     }
 }
 
