@@ -56,7 +56,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.log));
     }
 
-    onSetLoglevel(node, level, tag) {
+    onSetLoglevel(node, level, tag, cb) {
         this.emit('/node/loglevel', {
             node: node.node_id,
             level,
@@ -64,10 +64,10 @@ class NodesStore extends BaseStore {
             this.setState({
                 node: data.node
             });
-            return true;
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.log);
-            return false;
+
         });
     }
     onResetCounters(node) {
@@ -80,47 +80,43 @@ class NodesStore extends BaseStore {
         });//.fail((event, status, message) => ErrorActions.setMsgError(message.log)); TODO create msg error!
     }
 
-    onShutdown(node, tag) {
+    onShutdown(node, tag, cb) {
         this.emit('/node/shutdown', {
             node: node.node_id,
         }).done((data) => {
             this.setState({
                 node: data.node
             });
-            return true;
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 
-    onAddNode(config, tag) { // secret , ipAddress [, port]
+    onAddNode(config, tag, cb) { // secret , ipAddress [, port]
         this.emit('/node/add', config).done(() => {
             this.onGetNodes();
-            return true;
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 
-    onPopNode(tag) {
+    onPopNode(tag, cb) {
         this.emit('/node/pop').done(() => {
             this.onGetNodes();
-            return true;
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 
-    onReplaceNode(config, tag) { // nodeId , secret [, port]
+    onReplaceNode(config, tag, cb) { // nodeId , secret [, port]
         this.emit('/node/replace', config).done(() => {
             this.onGetNodes();
-            return true;
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 

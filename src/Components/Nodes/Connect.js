@@ -41,12 +41,14 @@ const Connect = ({onConnected}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            const success = ApplicationActions.connectOther(form, tag);
-
-            if(success) {
-                setState({...state, show: false});
-                onConnected();
-            }
+            ApplicationActions.connectOther(
+                form,
+                tag,
+                () => {
+                    setState({...state, show: false});
+                    onConnected();
+                }
+            );
         }
     };
 

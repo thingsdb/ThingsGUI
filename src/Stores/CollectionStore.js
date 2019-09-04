@@ -43,20 +43,19 @@ class CollectionStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.log));
     }
 
-    onRemoveThing(config, tag) {
+    onRemoveThing(config, tag, cb) {
         this.emit('/collection/remove_thing', config).done((data) => {
             this.setState(prevState => {
                 const things = Object.assign({}, prevState.things, {[config.thingId]: data});
                 return {things};
             });
-            return true;
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 
-    onRawQuery(collectionId, thingId, query, tag) {
+    onRawQuery(collectionId, thingId, query, tag, cb) {
         this.emit('/collection/raw_query', {
             collectionId: collectionId,
             thingId: thingId,
@@ -66,14 +65,13 @@ class CollectionStore extends BaseStore {
                 const things = Object.assign({}, prevState.things, {[thingId]: data});
                 return {things};
             });
-            return true;
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 
-    onQueryWithOutput(collectionId, query, onOutput, tag) {
+    onQueryWithOutput(collectionId, query, onOutput, tag, cb) {
         this.emit('/collection/query_with_output', {
             collectionId: collectionId,
             query: query,
@@ -83,10 +81,9 @@ class CollectionStore extends BaseStore {
                 const things = Object.assign({}, prevState.things, {[collectionId]: data.things});
                 return {things};
             });
-            return true;
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 }

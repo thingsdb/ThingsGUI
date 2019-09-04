@@ -20,11 +20,12 @@ const Remove = ({collection}) => {
     };
 
     const handleClickOk = () => {
-        const success = ThingsdbActions.removeCollection(collection.name, tag);
+        ThingsdbActions.removeCollection(
+            collection.name,
+            tag,
+            () => setShow(false)
+        );
 
-        if (success) {
-            setShow(false);
-        }
     };
 
     return(

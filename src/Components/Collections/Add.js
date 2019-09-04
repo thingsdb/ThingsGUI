@@ -81,11 +81,11 @@ const Add = ({collections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            const success = ThingsdbActions.addCollection(form.name, tag);
-
-            if(success) {
-                setState({...state, show: false});
-            }
+            ThingsdbActions.addCollection(
+                form.name,
+                tag,
+                () => setState({...state, show: false})
+            );
         }
     };
 

@@ -52,15 +52,12 @@ const Rename = ({collection, collections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            const success = ThingsdbActions.renameCollection(
+            ThingsdbActions.renameCollection(
                 collection.name,
                 form.name,
-                tag
+                tag,
+                () => setState({...state, show: false})
             );
-
-            if (success) {
-                setState({...state, show: false});
-            }
         }
     };
 

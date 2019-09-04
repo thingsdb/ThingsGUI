@@ -21,6 +21,10 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
 
     ],
 
+    // typeKeywords: [
+    //     'any', 'boolean', 'number', 'object', 'string', 'undefined'
+    // ],
+
     operators: [
         '*', '/', '%', '//',
         '+', '-',
@@ -33,7 +37,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
     ],
 
     // we include these common regular expressions
-    symbols: /[=><!~?:&|+\-*\/\^%]+/,
+    symbols: /[=><!~?:&|+\-*\/\^%#]+/,
     escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
     digits: /\d+(_+\d+)*/,
     octaldigits: /[0-7]+(_+[0-7]+)*/,
@@ -43,22 +47,27 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
     regexpctl: /[(){}\[\]\$\^|\-*+?\.]/,
     regexpesc: /\\(?:[bBdDfnrstvwWn0\\\/]|@regexpctl|c[A-Z]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})/,
 
+
+
+
     // The main tokenizer for our languages
     tokenizer: {
         root: [
             [/[{}]/, 'delimiter.bracket'],
 
             // identifiers and keywords
-            [/^[A-Za-z_][0-9A-Za-z_]*/, {
+            [/[A-Za-z_][0-9A-Za-z_]*/, {
                 cases: {
+                    // '@typeKeywords': 'keyword',
                     '@keywords': 'keyword',
                     '@default': 'identifier'
                 }
             }],
+            // [/[A-Z][\w\$]*/, 'type.identifier'],  // to show class names nicely
+            // [/[A-Z][\w\$]*/, 'identifier'],
 
             // whitespace
-            [/[ \t\r\n]+/, ''],
-            [/\/\*/, 'comment', '@comment'],
+            { include: '@whitespace' },
 
             // regular expression: ensure it is terminated before beginning (otherwise it is an opeator)
             [/\/(?=([^\\\/]|\\.)+\/(i?)(\s*)(\.|;|\/|,|\)|\]|\}|$))/, { token: 'regexp', bracket: '@open', next: '@regexp' }],
@@ -91,11 +100,18 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             [/'/, 'string', '@string_single'],
         ],
 
-        comment: [
-            [/[^\/*]+/, 'comment'],
-            [/\*\//, 'comment', '@pop'],
-            [/[\/*]/, 'comment']
+        whitespace: [
+            [/[ \t\r\n]+/, ''],
+            // [/\/\*\*(?!\/)/, 'comment.doc', '@jsdoc'],
+            // [/\/\*/, 'comment', '@comment'],
+            // [/\/\/.*$/, 'comment'],
         ],
+
+        // comment: [
+        //     [/[^\/*]+/, 'comment'],
+        //     [/\*\//, 'comment', '@pop'],
+        //     [/[\/*]/, 'comment']
+        // ],
 
         // We match regular expression quite precisely
         regexp: [
@@ -173,10 +189,10 @@ const theme = {
     base: 'vs-dark',
     inherit: true,
     rules: [
-        { token: 'custom-info', foreground: '808080' },
-        { token: 'custom-error', foreground: 'ff0000', fontStyle: 'bold' },
-        { token: 'custom-notice', foreground: 'FFA500' },
-        { token: 'custom-date', foreground: '008800' },
+        { token: 'identifier', foreground: '62948b', fontStyle: 'bold' },
+        { token: 'number', foreground: 'd2a800' },
+        { token: 'string', foreground: 'e26d14' },
+        { token: 'keyword', foreground: '2a80e8'},
     ],
     colors: {
         'editor.foreground': '#0000002e',
@@ -195,11 +211,10 @@ class QueryInput extends React.Component {
         onChange: PropTypes.func.isRequired,
     }
 
-
-
     constructor(props) {
         super(props);
     }
+
     componentDidMount() {
         const {onChange} = this.props;
         const model = monaco.editor.createModel('', 'mySpecialLanguage');

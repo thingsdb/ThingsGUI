@@ -43,14 +43,12 @@ const Loglevel = ({node}) => {
     };
 
     const handleClickOk = () => {
-        const success = NodesActions.setLoglevel(
+        NodesActions.setLoglevel(
             node,
             form.log_level,
-            tag
+            tag,
+            () => setState({...state, show: false})
         );
-        if (success) {
-            setState({...state, show: false});
-        }
     };
 
     const Content = (

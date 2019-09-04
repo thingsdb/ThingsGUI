@@ -87,18 +87,15 @@ const AddToken = ({user}) => {
     };
 
     const handleClickOk = () => {
-        const success = ThingsdbActions.newToken(
+        ThingsdbActions.newToken(
             {
                 name: user.name,
                 expirationTime: switches.expirationTime ? '(now() + ' + form.number + '*' + form.timeUnit + ')' : null,
-                description: switches.description ? form.description : null
+                description: switches.description ? form.description : null,
             },
-            tag
+            tag,
+            () => setState({...state, show: false})
         );
-
-        if (success) {
-            setState({...state, show: false});
-        }
     };
 
 

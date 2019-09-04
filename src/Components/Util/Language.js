@@ -50,7 +50,7 @@ export default {
         'now': 'Return the time in seconds since the epoch as a floating point number. If you require the same time multiple times within a query, then call now() only once and save it to a variable, for example now = now();',
         'raise': 'Raises an error.',
         'set': 'Returns a new empty set. If an array is given, then all elements in the given array must be or type thing and a new set is returned based on the given things.',
-        't': 'This function can be used to get a thing or multiple things by id.',
+        'thing': 'This function can be used to get a thing or multiple things by id.',
         'try': 'Try a statement and if the statement fails with an error, then the error is returned. It is also possible to catch only specific errors.',
         'wse': '',
 

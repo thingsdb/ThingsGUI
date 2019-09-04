@@ -48,13 +48,11 @@ const ReplaceNode = ({nodes}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            const success = NodesActions.replaceNode(
+            NodesActions.replaceNode(
                 form,
-                tag
+                tag,
+                () => setState({...state, show: false})
             );
-            if (success) {
-                setState({...state, show: false});
-            }
         }
     };
 

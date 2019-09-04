@@ -111,18 +111,17 @@ const AddThings = ({info, collection, thing}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
-            const success = CollectionActions.rawQuery(
+            CollectionActions.rawQuery(
                 collection.collection_id,
                 id,
                 form.queryString,
                 tag,
+                () => {
+                    ThingsdbActions.getCollections();
+                    setState({...state, show: false});
+                }
             );
 
-            ThingsdbActions.getCollections();
-
-            if (success) {
-                setState({...state, show: false});
-            }
         }
     };
 

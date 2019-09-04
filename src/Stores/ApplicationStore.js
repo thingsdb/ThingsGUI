@@ -47,22 +47,19 @@ class ApplicationStore extends BaseStore {
             this.setState({
                 connected: data.connected,
             });
-            return true;
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 
-    onConnectOther({host}, tag) {
+    onConnectOther({host}, tag, cb) {
         this.emit('/connect/other', {host}).done((data) => {
             this.setState({
                 connected: data.connected,
             });
-            return true;
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.log);
-            return false;
         });
     }
 

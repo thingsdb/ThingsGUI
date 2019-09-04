@@ -47,15 +47,12 @@ const Rename = ({user, users}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            const success = ThingsdbActions.renameUser(
+            ThingsdbActions.renameUser(
                 user.name,
                 form.name,
-                tag
+                tag,
+                () => setState({...state, show: false})
             );
-
-            if (success) {
-                setState({...state, show: false});
-            }
         }
     };
 

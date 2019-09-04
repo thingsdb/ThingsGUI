@@ -30,6 +30,10 @@ const withStores = withVlow([{
 const ErrorMsg = ({tag, msgError}) => {
     const classes = useStyles();
 
+    React.useEffect(()=>{
+        return () => handleCloseError();
+    }, []);
+
     const handleCloseError = () => {
         ErrorActions.removeMsgError(tag);
     };

@@ -52,28 +52,22 @@ const Password = ({user}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            const success = ThingsdbActions.password(
+            ThingsdbActions.password(
                 user.name,
                 form.password,
-                tag
+                tag,
+                () => setState({...state, show: false})
             );
-
-            if (success) {
-                setState({...state, show: false});
-            }
         }
     };
 
     const handleClickReset = () => {
         if (!Object.values(errors).some(d => d)) {
-            const success = ThingsdbActions.resetPassword(
+            ThingsdbActions.resetPassword(
                 user.name,
-                tag
+                tag,
+                () => setState({...state, show: false})
             );
-
-            if (success) {
-                setState({...state, show: false});
-            }
         }
     };
 

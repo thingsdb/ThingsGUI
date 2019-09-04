@@ -60,29 +60,23 @@ const Quotas = ({collection}) => {
     };
 
     const handleUnset = () => {
-        const success = ThingsdbActions.setQuota(
+        ThingsdbActions.setQuota(
             collection.name,
             form.quotaType,
             'nil',
             tag,
+            () => setState({...state, show: false})
         );
-
-        if (success) {
-            setState({...state, show: false});
-        }
     };
 
     const handleClickOk = () => {
-        const success = ThingsdbActions.setQuota(
+        ThingsdbActions.setQuota(
             collection.name,
             form.quotaType,
             form.quota,
             tag,
+            () => setState({...state, show: false})
         );
-
-        if (success) {
-            setState({...state, show: false});
-        }
     };
 
 

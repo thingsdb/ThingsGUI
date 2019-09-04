@@ -36,18 +36,16 @@ const RemoveThing = ({collection, thing, info}) => {
             info.hasOwnProperty('index') ? info.index : null
         );
 
-        const success = CollectionActions.rawQuery(
+        CollectionActions.rawQuery(
             collection.collection_id,
             info.id,
             queryString,
             tag,
+            () => {
+                ThingsdbActions.getCollections();
+                setShow(false);
+            }
         );
-
-        ThingsdbActions.getCollections();
-
-        if (success) {
-            setShow(false);
-        }
     };
 
 

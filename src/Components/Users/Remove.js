@@ -19,10 +19,7 @@ const Remove = ({user}) => {
     };
 
     const handleClickOk = () => {
-        const success = ThingsdbActions.removeUser(user.name, tag);
-        if (success) {
-            setShow(false);
-        }
+        ThingsdbActions.removeUser(user.name, tag, () => setShow(false));
     };
 
 
