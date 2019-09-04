@@ -4,6 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import CloseIcon from '@material-ui/icons/Close';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import WarningIcon from '@material-ui/icons/Warning';
 import { amber } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
@@ -16,6 +17,13 @@ import { ErrorActions, ErrorStore } from '../../Stores/ErrorStore';
 const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
+    },
+    div: {
+        minWidth: 280,
+        maxWidth: 300,
+    },
+    multiline: {
+        whiteSpace: 'pre-wrap',
     },
     warning: {
         color: amber[700],
@@ -40,15 +48,18 @@ const ErrorMsg = ({tag, msgError}) => {
     return (
         <React.Fragment>
             <Collapse in={Boolean(msgError[tag])} timeout="auto" unmountOnExit>
-                <Typography component="div">
+                <Typography component="div" variant="caption">
                     <Grid component="label" container alignItems="center" spacing={1}>
                         <Grid item>
                             <Avatar className={classes.avatar}>
                                 <WarningIcon className={classes.warning} />
                             </Avatar>
                         </Grid>
-                        <Grid item>
-                            {msgError[tag]}
+                        <Grid item className={classes.div}>
+                            {msgError[tag] && msgError[tag].substring(0, msgError[tag].search(/https/))}
+                            <Link href={msgError[tag] && msgError[tag].substring(msgError[tag].search(/https/), msgError[tag].length)}>
+                                {msgError[tag] ? msgError[tag].substring(msgError[tag].search(/https/), msgError[tag].length) : ''}
+                            </Link>
                         </Grid>
                         <Grid item>
                             <IconButton aria-label="settings" onClick={handleCloseError}>
