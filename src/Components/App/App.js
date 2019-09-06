@@ -13,6 +13,8 @@ import User from '../Users/User';
 import UsersMenu from '../Navigation/UsersMenu';
 import Nodes from '../Nodes/Nodes';
 import TopBar from '../Navigation/TopBar';
+import QueryEditor from '../Editor/QueryEditor'
+import QueryEditorMenu from '../Navigation/QueryEditorMenu';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
@@ -21,7 +23,7 @@ import {DrawerLayout, ErrorToast} from '../Util';
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['match']
+    keys: ['match', 'openEditor']
 }, {
     store: ThingsdbStore,
     keys: ['collections', 'user', 'users']
@@ -55,13 +57,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const App = ({collections, match, user, users, nodes}) => {
+const App = ({collections, match, user, users, nodes, openEditor}) => {
     const classes = useStyles();
     const [indexCollection, setIndexCollection] = React.useState(0);
     const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
 
-    console.log('apps');
+    console.log(openEditor);
 
     React.useEffect(() => {
         ThingsdbActions.getInfo();
@@ -121,11 +123,15 @@ const App = ({collections, match, user, users, nodes}) => {
                         <Card className={classes.submenu}>
                             <UsersMenu users={users} onClickUser={handleClickUser} />
                         </Card>
+                        <Card className={classes.submenu}>
+                            <QueryEditorMenu />
+                        </Card>
                     </div>
                     <div className={classes.content}>
                         {pages[match.path]}
                     </div>
                     <ErrorToast />
+                    <QueryEditor show={openEditor} />
                 </div>
             }
             drawerTitle="NODES"
@@ -138,6 +144,7 @@ App.propTypes = {
 
     /* Application properties */
     match: ApplicationStore.types.match.isRequired,
+    openEditor: ApplicationStore.types.openEditor.isRequired,
 
     /* Collections properties */
     collections: ThingsdbStore.types.collections.isRequired,

@@ -56,9 +56,9 @@ const ErrorMsg = ({tag, msgError}) => {
                             </Avatar>
                         </Grid>
                         <Grid item className={classes.div}>
-                            {msgError[tag] && msgError[tag].substring(0, msgError[tag].search(/https/))}
+                            {msgError[tag] && msgError[tag].includes('https') ? msgError[tag].substring(0, msgError[tag].search(/https/)) : msgError[tag]}
                             <Link href={msgError[tag] && msgError[tag].substring(msgError[tag].search(/https/), msgError[tag].length)}>
-                                {msgError[tag] ? msgError[tag].substring(msgError[tag].search(/https/), msgError[tag].length) : ''}
+                                {msgError[tag] && msgError[tag].includes('https') ? msgError[tag].substring(msgError[tag].search(/https/), msgError[tag].length) : ''}
                             </Link>
                         </Grid>
                         <Grid item>

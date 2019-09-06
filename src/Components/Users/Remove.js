@@ -9,6 +9,11 @@ const tag = '17';
 
 const Remove = ({user}) => {
     const [show, setShow] = React.useState(false);
+    const [name, setName] = React.useState('');
+
+    React.useEffect(() => {
+        setName(user.name);
+    }, []);
 
     const handleClickOpen = () => {
         setShow(true);
@@ -19,7 +24,11 @@ const Remove = ({user}) => {
     };
 
     const handleClickOk = () => {
-        ThingsdbActions.removeUser(user.name, tag, () => setShow(false));
+        ThingsdbActions.removeUser(
+            user.name,
+            tag,
+            () => setShow(false)
+        );
     };
 
 
@@ -28,7 +37,7 @@ const Remove = ({user}) => {
             button={
                 <CardButton onClick={handleClickOpen} title="Remove" />
             }
-            title="Remove user?"
+            title={`Remove ${name}`}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

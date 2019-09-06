@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 
 import Language from './Language.js';
 import * as monaco from 'monaco-editor';
@@ -255,7 +255,7 @@ class QueryInput extends React.Component {
 
     render() {
         return (
-            <Card style={{height: 'calc(100vh - 50vh)', width: '100%'}} ref={(ele) => this.ele = ele} />
+            <Paper style={{height: 'calc(100vh - 60vh)', width: '100%'}} ref={(ele) => this.ele = ele} />
         );
     }
 }

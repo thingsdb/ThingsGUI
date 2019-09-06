@@ -20,7 +20,10 @@ const PopNode = () => {
     };
 
     const handleClickOk = () => {
-        NodesActions.popNode(tag, () => setShow(false));
+        NodesActions.popNode(
+            tag,
+            () => setShow(false)
+        );
     };
 
 

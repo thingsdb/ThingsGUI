@@ -9,6 +9,8 @@ const ApplicationActions = Vlow.createActions([
     'connectOther',
     'disconnect',
     'navigate',
+    'openEditor',
+    'closeEditor',
 ]);
 
 // TODO: CALLBACKS
@@ -18,12 +20,14 @@ class ApplicationStore extends BaseStore {
         loaded: PropTypes.bool,
         connected: PropTypes.bool,
         match: PropTypes.shape({match: PropTypes.string}),
+        openEditor: PropTypes.bool,
     }
 
     static defaults = {
         loaded: false,
         connected: false,
         match: {},
+        openEditor: false,
     }
 
     constructor() {
@@ -75,6 +79,13 @@ class ApplicationStore extends BaseStore {
 
     onNavigate(match) {
         this.setState({match});
+    }
+
+    onOpenEditor() {
+        this.setState({openEditor: true});
+    }
+    onCloseEditor() {
+        this.setState({openEditor: false});
     }
 }
 

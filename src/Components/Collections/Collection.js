@@ -7,7 +7,6 @@ import {withVlow} from 'vlow';
 
 import CollectionConfig from './CollectionConfig';
 import CollectionTree from './CollectionTree';
-import CollectionQuery from './CollectionQuery';
 import {CollectionStore} from '../../Stores/CollectionStore';
 
 
@@ -27,7 +26,6 @@ const useStyles = makeStyles(theme => ({
     },
     config: {
         marginLeft: theme.spacing(1),
-        marginTop: theme.spacing(1),
         minWidth: '450px',
         width: '40%',
     },
@@ -35,7 +33,6 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
     },
     tree: {
-        marginTop: theme.spacing(1),
         width: '60%',
     },
 }));
@@ -55,9 +52,6 @@ const Collection = ({collection}) => {
                         {collection.name}
                     </Typography>
                 </Card>
-            </div>
-            <div>
-                <CollectionQuery collection={collection} />
             </div>
             <div className={classes.flex}>
                 <div className={classes.tree}>

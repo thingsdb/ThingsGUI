@@ -54,6 +54,12 @@ const buildQueryEdit = (id, name, value, type, index) => {
                 : '';
 };
 
+const buildQueryRemove = (parent, parentId, name, index, id) => {
+    return index == null ? `#${parentId}.del('${name}')`
+        : name == '$' ? `#${parentId}.${parent}.remove(#${parentId}.${parent}.find(|s| (s.id()==${id}) ))`
+            : `#${parentId}.${name}.splice(${index}, 1)`;
+};
+
 
 
 export {
@@ -62,6 +68,7 @@ export {
     buildInput,
     buildQueryAdd,
     buildQueryEdit,
+    buildQueryRemove,
     CardButton,
     checkType,
     DrawerLayout,

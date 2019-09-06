@@ -34,6 +34,7 @@ const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClos
                 </DialogContent>
                 <DialogActions>
                     {actionButtons}
+
                     <Button onClick={handleClose} color="primary">
                         {'Cancel'}
                     </Button>

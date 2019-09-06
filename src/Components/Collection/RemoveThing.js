@@ -4,7 +4,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
-import { ErrorMsg, SimpleModal } from '../Util';
+import { buildQueryRemove, ErrorMsg, SimpleModal } from '../Util';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
@@ -12,13 +12,6 @@ import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 const tag = '4';
 const RemoveThing = ({collection, thing, info}) => {
     const [show, setShow] = React.useState(false);
-
-    const buildQuery = (p, ti, n, i) => {
-        return i == null ? `t(${ti}).del('${n}')`
-            : n == '$' ? `t(${ti}).${p}.remove(t(${ti}).${p}.find(|s| (s.id()==${thing['#']}) ))`
-                : `t(${ti}).${n}.splice(${i}, 1)`;
-    };
-
 
     const handleClickOpen = () => {
         setShow(true);
@@ -29,11 +22,12 @@ const RemoveThing = ({collection, thing, info}) => {
     };
 
     const handleClickOk = () => {
-        const queryString = buildQuery(
+        const queryString = buildQueryRemove(
             info.hasOwnProperty('parentName') ? info.parentName : null,
             info.id,
             info.name,
-            info.hasOwnProperty('index') ? info.index : null
+            info.hasOwnProperty('index') ? info.index : null,
+            thing['#']
         );
 
         CollectionActions.rawQuery(
@@ -66,7 +60,7 @@ const RemoveThing = ({collection, thing, info}) => {
                     <DeleteIcon color="primary" />
                 </ButtonBase>
             }
-            title="Remove Thing"
+            title={`Remove ${info.name}`}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

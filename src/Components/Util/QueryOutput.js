@@ -1,6 +1,4 @@
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
+import Paper from '@material-ui/core/Paper';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles} from '@material-ui/core/styles';
@@ -10,24 +8,18 @@ import {Tree} from '../Util';
 const useStyles = makeStyles(() => ({
     card: {
         backgroundColor: '#141719',
-        minHeight: 'calc(100vh - 50vh)',
+        minHeight: 'calc(100vh - 60vh)',
     },
 }));
 
 const QueryOutput = ({output}) => {
     const classes = useStyles();
     return (
-        <Card className={classes.card} >
-            <CardHeader
-                title="output"
-                titleTypographyProps={{variant: 'caption'}}
+        <Paper className={classes.card} >
+            <Tree
+                tree={output}
             />
-            <CardContent>
-                <Tree
-                    tree={output}
-                />
-            </CardContent>
-        </Card>
+        </Paper>
 
     );
 };

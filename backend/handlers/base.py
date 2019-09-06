@@ -31,7 +31,7 @@ class BaseHandler:
     async def connect(cls, sid, environ):
         logging.info('Socket connection: {} (Remote address: {})'.format(
             sid, environ.get('REMOTE_ADDR', 'unknown')))
-        cls.clients[sid] = Client(auto_reconnect=False)
+        cls.clients[sid] = Client()
         print(len(cls.clients))
         return True
 

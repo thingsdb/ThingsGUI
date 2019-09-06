@@ -10,6 +10,11 @@ const tag = '7';
 
 const Remove = ({collection}) => {
     const [show, setShow] = React.useState(false);
+    const [name, setName] = React.useState('');
+
+    React.useEffect(() => {
+        setName(collection.name);
+    }, []);
 
     const handleClickOpen = () => {
         setShow(true);
@@ -35,7 +40,7 @@ const Remove = ({collection}) => {
                     {'Remove'}
                 </Button>
             }
-            title={`Remove collection ${collection.name}?`}
+            title={`Remove collection ${name}?`}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

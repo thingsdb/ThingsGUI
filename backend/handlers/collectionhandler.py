@@ -1,5 +1,5 @@
 from .base import BaseHandler
-
+from thingsdb import scope
 
 class CollectionHandler(BaseHandler):
 
@@ -85,5 +85,37 @@ class CollectionHandler(BaseHandler):
             'output': output,
             'things': things,
         }
+
+        return cls.socket_response(data=resp)
+
+    @classmethod
+    @BaseHandler.socket_handler
+    async def query_editor(cls, client, data):
+        s = data.get('scope')
+        query = data.get('query')
+
+        if (s == 'thingsdb'):
+            q1 = r'''{}'''.format(query)
+            output = await client.query(q1, target=scope.thingsdb)
+            resp = {
+                'output': output,
+            }
+        elif (s == 'node'):
+            q1 = r'''{}'''.format(query)
+            output = await client.query(q1, target=scope.node)
+            resp = {
+                'output': output,
+            }
+        else:
+            q1 = r'''{}'''.format(query)
+            output = await client.query(q1, target=s)
+            q2 = r'''thing(.id())'''
+            things = await client.query(q2, target=s)
+            resp = {
+                'output': output,
+                'things': things,
+                'collectionId': s,
+            }
+
 
         return cls.socket_response(data=resp)
