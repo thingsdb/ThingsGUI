@@ -7,9 +7,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import StopIcon from '@material-ui/icons/Stop';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -17,7 +17,7 @@ import AddThings from './AddThings';
 import EditThing from './EditThing';
 import RemoveThing from './RemoveThing';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import {Buttons, checkType} from '../Util';
+import {Buttons, checkType, thingValue, TreeIcon} from '../Util';
 
 
 const withStores = withVlow([{
@@ -30,7 +30,8 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: theme.spacing(4),
     },
     listItem: {
-        paddingLeft: theme.spacing(6),
+        margin: 0,
+        padding: 0,
     },
 }));
 
@@ -40,18 +41,22 @@ const Thing = ({thing, collection, things, info}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
 
+
+    // thing info
+    const isTuple = type === 'array' && info.parentType === 'array';
+    const thingId = thing && thing['#'] || info.id;
+    const currThing = thing && things[thing['#']] || thing;
+    const fancyName = (n) => info.index !== null ? n + `[${info.index}]` : n;
+
+
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
-        const infoNew = i==null ? {
-            name: k,
-            id: thing['#'] || info.id,
-            parentName: info.name,
-            parentType: type,
-        } : {
-            name: k,
-            id: thing['#'] || info.id,
+        const infoNew = {
+            name: fancyName(k),
+            id: thingId,
             index: i,
             parentName: info.name == '$' ? info.parentName : info.name,
             parentType: type,
+            isParentTuple: isTuple,
         };
         return k === '#' ? null : (
             <div key={i ? i : k} className={classes.nested}>
@@ -70,7 +75,7 @@ const Thing = ({thing, collection, things, info}) => {
         return isArray ?
             thing.map((t, i) => renderThing([`${info.name}`, t, i]))
             :
-            Object.entries(things[thing['#']] || thing || {}).map(renderThing);
+            Object.entries(currThing || {}).map(renderThing);
     };
 
     const handleClick = () => {
@@ -80,68 +85,78 @@ const Thing = ({thing, collection, things, info}) => {
         }
     };
 
+    // type and value
     const type = checkType(thing);
-    const canToggle = type === 'object' || type === 'array' || type === 'set';
-    const objectId = type === 'object' ? thing['#'] : '';
-    const key = Object.keys(thing)[0];
-    const val = type === 'array' ? `[${thing.length}]`
-        : type === 'object' || type === 'set' ? `{${key}${objectId}}`
-            : type === 'string' || type === 'number' || type === 'boolean' ? thing.toString()
-                : '';
+    const val = thingValue(type, thing);
 
-    const hasButtons = !(type === 'array' && info.name === '$');
-    const canAdd = type === 'array' || type === 'object' || type === 'set';
+    // buttons visible
+    const hasButtons = !(type === 'array' && info.name === '$' || info.isParentTuple);
+    const canAdd = type === 'array' || type === 'object' || type === 'set' || !isTuple;
     const canEdit = info.name !== '$';
+    const canToggle = type === 'object' || type === 'array' || type === 'set';
+
+    console.log(info)
 
     return (
         <React.Fragment>
-            <ListItem>
+            <ListItem className={classes.listItem}>
                 <ListItemIcon>
-                    <ButtonBase onClick={handleClick} >
-                        {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : <StopIcon color="primary" />}
-                    </ButtonBase>
+                    <TreeIcon type={type} />
                 </ListItemIcon>
-                <ListItemText primary={info.hasOwnProperty('index') ? info.name + `[${info.index}]` : info.name} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
-                {hasButtons ? (
-                    <Buttons>
+                <ListItemText
+                    className={classes.listItem}
+                    primary={
                         <React.Fragment>
+                            <Typography
+                                variant="body1"
+                                color="primary"
+                                component="span"
+                            >
+                                {fancyName(info.name)}
+                            </Typography>
+                            {`  -   ${val}`}
+                        </React.Fragment>
+
+                    }
+                    primaryTypographyProps={{
+                        display: 'block',
+                        noWrap: true
+                    }}
+                />
+                {hasButtons ? (
+                    <ListItemIcon>
+                        <Buttons>
                             {canAdd ? (
-                                <ListItemIcon>
-                                    <AddThings
-                                        info={{
-                                            name: info.hasOwnProperty('index') ? info.name + `[${info.index}]` : info.name,
-                                            id: thing['#'] || info.id,
-                                            type: type
-                                        }}
-                                        collection={collection}
-                                        thing={things[thing['#']] || thing}
-                                    />
-                                </ListItemIcon>
+                                <AddThings
+                                    info={{
+                                        name: fancyName(info.name),
+                                        id: thingId,
+                                        type: type
+                                    }}
+                                    collection={collection}
+                                    thing={currThing}
+                                />
                             ) : null}
                             {canEdit ? (
-                                <ListItemIcon>
-                                    <EditThing
-                                        info={{
-                                            name: info.name,
-                                            index: info.hasOwnProperty('index') ? info.index : null,
-                                            id: info.id,
-                                            parentType: info.name === '$' ? 'set' : info.parentType
-                                        }}
-                                        collection={collection}
-                                        thing={things[info.id]}
-                                    />
-                                </ListItemIcon>
-                            ) : null}
-                            <ListItemIcon>
-                                <RemoveThing
+                                <EditThing
+                                    info={{...info, type: type}}
                                     collection={collection}
-                                    thing={things[thing['#']] || thing}
-                                    info={info}
+                                    thing={things[info.id]}
                                 />
-                            </ListItemIcon>
-                        </React.Fragment>
-                    </Buttons>
+                            ) : null}
+                            <RemoveThing
+                                collection={collection}
+                                thing={currThing}
+                                info={info}
+                            />
+                        </Buttons>
+                    </ListItemIcon>
                 ) : null}
+                <ListItemIcon>
+                    <ButtonBase onClick={handleClick} >
+                        {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
+                    </ButtonBase>
+                </ListItemIcon>
             </ListItem>
             {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>
@@ -153,10 +168,22 @@ const Thing = ({thing, collection, things, info}) => {
     );
 };
 
+Thing.defaultProps = {
+    thing: null,
+};
+
+
 Thing.propTypes = {
-    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
+    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     collection: PropTypes.object.isRequired,
-    info: PropTypes.object.isRequired,
+    info: PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.number,
+        index: PropTypes.number,
+        parentName: PropTypes.string,
+        parentType: PropTypes.string,
+        isParentTuple: PropTypes.bool,
+    }).isRequired,
 
     /* collection properties */
     things: CollectionStore.types.things.isRequired,

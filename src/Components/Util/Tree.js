@@ -7,13 +7,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import StopIcon from '@material-ui/icons/Stop';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
 
-import {checkType, TreeBranch} from '../Util';
+import {checkType, thingValue, TreeBranch, TreeIcon} from '../Util';
 
 
 
@@ -23,7 +22,8 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: theme.spacing(4),
     },
     listItem: {
-        paddingLeft: theme.spacing(6),
+        margin: 0,
+        padding: 0,
     },
 }));
 
@@ -34,9 +34,7 @@ const Tree = ({tree}) => {
     const [show, setShow] = React.useState(false);
 
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
-        const infoNew = i==null ? {
-            name: k,
-        } : {
+        const infoNew = {
             name: k,
             index: i,
         };
@@ -60,27 +58,34 @@ const Tree = ({tree}) => {
     };
 
     const handleClick = () => {
-        setShow(!show); // QUEST: work with prevstate?
+        setShow(!show);
     };
 
+    // type and value
     const type = checkType(tree);
+    const val = thingValue(type, tree);
+    // buttons
     const canToggle = type === 'object' || type === 'array' || type === 'set';
-    const objectId = type === 'object' ? tree['#'] : '';
-    const key = Object.keys(tree)[0];
-    const val = type === 'array' ? `[${tree.length}]`
-        : type === 'object' || type === 'set' ? `{${key}${objectId}}`
-            : type === 'string' || type === 'number' || type === 'boolean' ? tree.toString()
-                : '';
 
     return (
         <React.Fragment>
-            <ListItem>
+            <ListItem className={classes.listItem}>
+                <ListItemIcon>
+                    <TreeIcon type={type} />
+                </ListItemIcon>
+                <ListItemText
+                    className={classes.listItem}
+                    primary={val}
+                    primaryTypographyProps={{
+                        display: 'block',
+                        noWrap: true
+                    }}
+                />
                 <ListItemIcon>
                     <ButtonBase onClick={handleClick} >
-                        {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : <StopIcon color="primary" />}
+                        {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
                     </ButtonBase>
                 </ListItemIcon>
-                <ListItemText secondary={val} />
             </ListItem>
             {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>
@@ -92,8 +97,12 @@ const Tree = ({tree}) => {
     );
 };
 
+Tree.defaultProps = {
+    tree: null,
+};
+
 Tree.propTypes = {
-    tree: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
+    tree: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
 };
 
 export default Tree;

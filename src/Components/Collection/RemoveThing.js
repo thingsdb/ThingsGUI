@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { buildQueryRemove, ErrorMsg, SimpleModal } from '../Util';
@@ -12,7 +12,7 @@ import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 const tag = '4';
 const RemoveThing = ({collection, thing, info}) => {
     const [show, setShow] = React.useState(false);
-
+    console.log(info);
     const handleClickOpen = () => {
         setShow(true);
     };
@@ -27,7 +27,7 @@ const RemoveThing = ({collection, thing, info}) => {
             info.id,
             info.name,
             info.hasOwnProperty('index') ? info.index : null,
-            thing['#']
+            thing && thing['#']
         );
 
         CollectionActions.rawQuery(
@@ -37,9 +37,9 @@ const RemoveThing = ({collection, thing, info}) => {
             tag,
             () => {
                 ThingsdbActions.getCollections();
-                setShow(false);
             }
         );
+        setShow(false);
     };
 
 
@@ -70,9 +70,13 @@ const RemoveThing = ({collection, thing, info}) => {
     );
 };
 
+RemoveThing. defaultProp = {
+    thing: null,
+};
+
 RemoveThing.propTypes = {
     collection: PropTypes.object.isRequired,
-    thing: PropTypes.any.isRequired,
+    thing: PropTypes.any,
     info: PropTypes.object.isRequired,
 };
 

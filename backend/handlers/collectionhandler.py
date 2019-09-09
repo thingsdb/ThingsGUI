@@ -37,26 +37,26 @@ class CollectionHandler(BaseHandler):
 
     #     return cls.socket_response(data=resp)
 
-    @classmethod
-    @BaseHandler.socket_handler
-    async def remove_thing(cls, client, data):
-        collection_id = data.get('collectionId')
-        thing_id = data.get('thingId')
-        name = data.get('propertyName')
-        index = data.get('index')
+    # @classmethod
+    # @BaseHandler.socket_handler
+    # async def remove_thing(cls, client, data):
+    #     collection_id = data.get('collectionId')
+    #     thing_id = data.get('thingId')
+    #     name = data.get('propertyName')
+    #     index = data.get('index')
 
-        if (index is not None):
-            q = r'''#{}.{}.splice({}, 1); #{}'''.format(
-                thing_id,
-                name,
-                index,
-                thing_id)
-        else:
-            q = r'''#{}.del('{}'); #{}'''.format(thing_id, name, thing_id)
+    #     if (index is not None):
+    #         q = r'''#{}.{}.splice({}, 1); #{}'''.format(
+    #             thing_id,
+    #             name,
+    #             index,
+    #             thing_id)
+    #     else:
+    #         q = r'''#{}.del('{}'); #{}'''.format(thing_id, name, thing_id)
 
-        resp = await client.query(q, target=collection_id)
+    #     resp = await client.query(q, target=collection_id)
 
-        return cls.socket_response(data=resp)
+    #     return cls.socket_response(data=resp)
 
 
     @classmethod
@@ -65,7 +65,7 @@ class CollectionHandler(BaseHandler):
         collection_id = data.get('collectionId')
         thing_id = data.get('thingId')
         query = data.get('query')
-        q = r'''{}; #{}'''.format(query, thing_id)
+        q = r'''{} #{}'''.format(query, thing_id)
         print(q)
         resp = await client.query(q, target=collection_id)
         return cls.socket_response(data=resp)

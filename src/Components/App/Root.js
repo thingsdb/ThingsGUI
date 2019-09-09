@@ -14,6 +14,13 @@ const theme = createMuiTheme({
         type: 'dark',
         primary: {
             main: 'rgba(85, 161, 255, 0.51)',
+            red: '#ff0831',
+            orange: '#ff7833',
+            yellow: '#ecda45',
+            green: '#4ca024',
+            blue: '#3392ff',
+            pink: '#c523a0',
+            purple: '#9256bd',
         },
         secondary: {
             main: 'rgba(0, 55, 123, 0.3)',

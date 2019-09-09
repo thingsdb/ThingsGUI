@@ -29,6 +29,10 @@ const useStyles = makeStyles(theme => ({
     thing: {
         paddingLeft: theme.spacing(6),
     },
+    listItem: {
+        margin: 0,
+        padding: 0,
+    },
 }));
 
 const ThingRoot = ({things, collection}) => {
@@ -46,6 +50,7 @@ const ThingRoot = ({things, collection}) => {
                     component="nav"
                     className={classes.root}
                     dense
+                    disablePadding
                 >
                     {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
                         <React.Fragment key={k}>
@@ -57,12 +62,15 @@ const ThingRoot = ({things, collection}) => {
                                 info={{
                                     name: k,
                                     id: collection.collection_id,
+                                    index: null,
+                                    parentName: 'root',
                                     parentType: 'object',
+                                    isParentTuple: false,
                                 }}
                             />
                         </React.Fragment>
                     ))}
-                    <ListItem>
+                    <ListItem className={classes.listItem}>
                         <ListItemIcon>
                             <AddThings
                                 info={{

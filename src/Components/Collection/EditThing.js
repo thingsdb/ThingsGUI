@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Collapse from '@material-ui/core/Collapse';
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from '@material-ui/icons/EditOutlined';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
@@ -23,6 +23,7 @@ const dataTypes = [
     'set',
     'closure',
     'boolean',
+    'nil',
 ];
 
 const initialState = {
@@ -42,7 +43,7 @@ const EditThing = ({info, collection, thing}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
     const {id, index, name, parentType} = info;
-
+    console.log(info)
 
     const handleClickOpen = () => {
         const q = parentType == 'set' ? buildQueryEdit(id, name, '{}', parentType, index): '';

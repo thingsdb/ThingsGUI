@@ -7,13 +7,13 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import StopIcon from '@material-ui/icons/Stop';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 
 
-import {checkType} from '.';
+import {checkType, thingValue, TreeIcon} from '../Util';
 
 
 
@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: theme.spacing(4),
     },
     listItem: {
-        paddingLeft: theme.spacing(6),
+        margin: 0,
+        padding: 0,
     },
 }));
 
@@ -34,9 +35,7 @@ const TreeBranch = ({item, tree, info}) => {
     const [show, setShow] = React.useState(false);
 
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
-        const infoNew = i==null ? {
-            name: k,
-        } : {
+        const infoNew = {
             name: k,
             index: i,
         };
@@ -56,31 +55,52 @@ const TreeBranch = ({item, tree, info}) => {
         return isArray ?
             item.map((t, i) => renderThing([`${info.name}`, t, i]))
             :
-            Object.entries(tree[item['#']] || item || {}).map(renderThing);
+            Object.entries((item && tree[item['#']]) || item || {}).map(renderThing);
     };
 
     const handleClick = () => {
-        setShow(!show); // QUEST: work with prevstate?
+        setShow(!show);
     };
 
+    // type and value
     const type = checkType(item);
+    const val = thingValue(type, item);
+    // buttons
     const canToggle = type === 'object' || type === 'array' || type === 'set';
-    const objectId = type === 'object' ? item['#'] : '';
-    const key = Object.keys(item)[0];
-    const val = type === 'array' ? `[${item.length}]`
-        : type === 'object' || type === 'set' ? `{${key}${objectId}}`
-            : type === 'string' || type === 'number' || type === 'boolean' ? item.toString()
-                : '';
+
+    // naming
+    const fancyName = (n) => info.index !== null ? n + `[${info.index}]` : n;
 
     return (
         <React.Fragment>
-            <ListItem>
+            <ListItem className={classes.listItem}>
+                <ListItemIcon>
+                    <TreeIcon type={type} />
+                </ListItemIcon>
+                <ListItemText
+                    className={classes.listItem}
+                    primary={info ? (
+                        <React.Fragment>
+                            <Typography
+                                variant="body1"
+                                color="primary"
+                                component="span"
+                            >
+                                {fancyName(info.name)}
+                            </Typography>
+                            {`  -   ${val}`}
+                        </React.Fragment>
+                    ) : val}
+                    primaryTypographyProps={{
+                        display: 'block',
+                        noWrap: true
+                    }}
+                />
                 <ListItemIcon>
                     <ButtonBase onClick={handleClick} >
-                        {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : <StopIcon color="primary" />}
+                        {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
                     </ButtonBase>
                 </ListItemIcon>
-                <ListItemText primary={info.hasOwnProperty('index') ? info.name + `[${info.index}]` : info.name} primaryTypographyProps={{'variant':'caption', 'color':'primary'}} secondary={val} />
             </ListItem>
             {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>
@@ -92,8 +112,12 @@ const TreeBranch = ({item, tree, info}) => {
     );
 };
 
+TreeBranch.defaultProps = {
+    item: null,
+};
+
 TreeBranch.propTypes = {
-    item: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
+    item: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     tree: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     info: PropTypes.object.isRequired,
 };

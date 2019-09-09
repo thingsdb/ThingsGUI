@@ -61,10 +61,6 @@ class SocketRouter:
             handler=CollectionHandler.query_thing)
 
         sio.on(
-            event='/collection/remove_thing',
-            handler=CollectionHandler.remove_thing)
-
-        sio.on(
             event='/collection/raw_query',
             handler=CollectionHandler.raw_query)
 

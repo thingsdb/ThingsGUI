@@ -45,18 +45,6 @@ class CollectionStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.log));
     }
 
-    onRemoveThing(config, tag, cb) {
-        this.emit('/collection/remove_thing', config).done((data) => {
-            this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[config.thingId]: data});
-                return {things};
-            });
-            cb();
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
-        });
-    }
-
     onRawQuery(collectionId, thingId, query, tag, cb) {
         this.emit('/collection/raw_query', {
             collectionId: collectionId,

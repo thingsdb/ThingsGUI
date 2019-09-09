@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import AddBoxIcon from '@material-ui/icons/AddBox';
+import AddBoxIcon from '@material-ui/icons/AddBoxOutlined';
 import Collapse from '@material-ui/core/Collapse';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
@@ -23,6 +23,7 @@ const dataTypes = [
     'set',
     'closure',
     'boolean',
+    'nil',
 ];
 
 const initialState = {
@@ -256,10 +257,14 @@ const AddThings = ({info, collection, thing}) => {
     );
 };
 
+AddThings.defaultProps = {
+    thing: null,
+},
+
 AddThings.propTypes = {
     info: PropTypes.object.isRequired,
     collection: PropTypes.object.isRequired,
-    thing: PropTypes.any.isRequired,
+    thing: PropTypes.any,
 };
 
 export default AddThings;
