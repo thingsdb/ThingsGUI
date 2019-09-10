@@ -3,6 +3,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import OpenIcon from '@material-ui/icons/OpenInNewOutlined';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -12,10 +13,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 
-
-import {checkType, thingValue, TreeIcon} from '../Util';
-
-
+import {SimpleModal, TreeIcon} from '../Util';
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,47 +27,27 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
-const TreeBranch = ({item, tree, info}) => {
+const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onClick}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
-
-    const renderThing = ([k, v, i=null]) => { // QUEST: ???
-        const infoNew = {
-            name: k,
-            index: i,
-        };
-        return k === '#' ? null : (
-            <div key={i ? i : k} className={classes.nested}>
-                <TreeBranch
-                    item={v}
-                    tree={tree}
-                    info={infoNew}
-                />
-            </div>
-        );
-    };
+    const [open, setOpen] = React.useState(false);
 
     const renderChildren = () => {
-        const isArray = Array.isArray(item);
-        return isArray ?
-            item.map((t, i) => renderThing([`${info.name}`, t, i]))
-            :
-            Object.entries((item && tree[item['#']]) || item || {}).map(renderThing);
+        return onRenderChildren();
     };
 
     const handleClick = () => {
         setShow(!show);
+        onClick();
     };
 
-    // type and value
-    const type = checkType(item);
-    const val = thingValue(type, item);
-    // buttons
-    const canToggle = type === 'object' || type === 'array' || type === 'set';
+    const handleOpenStringDialog = () => {
+        setOpen(true);
+    };
 
-    // naming
-    const fancyName = (n) => info.index !== null ? n + `[${info.index}]` : n;
+    const handleCloseStringDialog = () => {
+        setOpen(false);
+    };
 
     return (
         <React.Fragment>
@@ -79,14 +57,14 @@ const TreeBranch = ({item, tree, info}) => {
                 </ListItemIcon>
                 <ListItemText
                     className={classes.listItem}
-                    primary={info ? (
+                    primary={name ? (
                         <React.Fragment>
                             <Typography
                                 variant="body1"
                                 color="primary"
                                 component="span"
                             >
-                                {fancyName(info.name)}
+                                {name}
                             </Typography>
                             {`  -   ${val}`}
                         </React.Fragment>
@@ -96,10 +74,31 @@ const TreeBranch = ({item, tree, info}) => {
                         noWrap: true
                     }}
                 />
+                {children}
                 <ListItemIcon>
-                    <ButtonBase onClick={handleClick} >
-                        {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
-                    </ButtonBase>
+                    <React.Fragment>
+                        {canToggle ? (
+                            <ButtonBase onClick={handleClick} >
+                                {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
+                            </ButtonBase>
+                        ) : null}
+                        {type === 'string' ? (
+                            <SimpleModal
+                                button={
+                                    <ButtonBase onClick={handleOpenStringDialog} >
+                                        <OpenIcon color="primary" />
+                                    </ButtonBase>
+                                }
+                                title="Show string"
+                                open={open}
+                                onClose={handleCloseStringDialog}
+                            >
+                                <Typography align="justify" variant="body2">
+                                    {val}
+                                </Typography>
+                            </SimpleModal>
+                        ) : null}
+                    </React.Fragment>
                 </ListItemIcon>
             </ListItem>
             {canToggle &&
@@ -113,13 +112,19 @@ const TreeBranch = ({item, tree, info}) => {
 };
 
 TreeBranch.defaultProps = {
-    item: null,
+    children: null,
+    name: null,
+    onClick: () => null,
 };
 
 TreeBranch.propTypes = {
-    item: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
-    tree: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
-    info: PropTypes.object.isRequired,
+    children: PropTypes.object,
+    name: PropTypes.string,
+    type: PropTypes.string.isRequired,
+    val: PropTypes.string.isRequired,
+    canToggle: PropTypes.bool.isRequired,
+    onRenderChildren: PropTypes.func.isRequired,
+    onClick: PropTypes.func,
 };
 
 export default TreeBranch;

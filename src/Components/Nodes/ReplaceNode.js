@@ -1,6 +1,11 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import Collapse from '@material-ui/core/Collapse';
+import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid';
+import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import {withVlow} from 'vlow';
 
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
@@ -20,16 +25,18 @@ const initialState = {
 const tag = '12';
 
 const ReplaceNode = ({nodes}) => {
+    const [addPort, setAddPort] = React.useState(false);
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
     const validation = {
         secret: () => form.secret.length>0,
+        address: () => true,
         port: () => true,
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, errors: {}, form: {nodeId: '', secret: '', port: ''}});
+        setState({...state, show: true, errors: {}, form: {nodeId: nodes[0].node_id, secret: '', address: '', port: ''}});
     };
 
     const handleClickClose = () => {
@@ -40,6 +47,14 @@ const ReplaceNode = ({nodes}) => {
         const {id, value} = target;
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value});
+            return {...prevState, form: updatedForm};
+        });
+    };
+
+    const handleSetPort = () => {
+        setAddPort(!addPort);
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {port: ''});
             return {...prevState, form: updatedForm};
         });
     };
@@ -69,6 +84,9 @@ const ReplaceNode = ({nodes}) => {
                 fullWidth
                 select
                 SelectProps={{native: true}}
+                InputLabelProps={{
+                    shrink: true,
+                }}
             >
                 {nodes.map(p => (
                     <option key={p.node_id} value={p.node_id}>
@@ -89,15 +107,48 @@ const ReplaceNode = ({nodes}) => {
             />
             <TextField
                 margin="dense"
-                id="port"
-                label="Port"
+                id="address"
+                label="Address"
                 type="text"
-                value={form.port}
+                value={form.address}
                 spellCheck={false}
                 onChange={handleOnChange}
                 fullWidth
-                error={errors.port}
+                error={errors.address}
             />
+            <Typography component="div" variant="caption">
+                <Grid component="label" container alignItems="center" spacing={2}>
+                    <Grid item>
+                        {'Add Port:'}
+                    </Grid>
+                    <Grid item>
+                        {'no'}
+                    </Grid>
+                    <Grid item>
+                        <Switch
+                            checked={form.setPort}
+                            color="primary"
+                            onChange={handleSetPort}
+                        />
+                    </Grid>
+                    <Grid item>
+                        {'yes'}
+                    </Grid>
+                </Grid>
+            </Typography>
+            <Collapse in={addPort} timeout="auto" unmountOnExit>
+                <TextField
+                    margin="dense"
+                    id="port"
+                    label="Port"
+                    type="text"
+                    value={form.port}
+                    spellCheck={false}
+                    onChange={handleOnChange}
+                    fullWidth
+                    error={errors.port}
+                />
+            </Collapse>
         </React.Fragment>
     );
 

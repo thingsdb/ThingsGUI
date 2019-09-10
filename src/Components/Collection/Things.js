@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
         // maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
+    icon: {
+        paddingTop: theme.spacing(2),
+    },
     thing: {
         paddingLeft: theme.spacing(6),
     },
@@ -71,7 +74,7 @@ const ThingRoot = ({things, collection}) => {
                         </React.Fragment>
                     ))}
                     <ListItem className={classes.listItem}>
-                        <ListItemIcon>
+                        <ListItemIcon className={classes.icon}>
                             <AddThings
                                 info={{
                                     id: collection.collection_id,

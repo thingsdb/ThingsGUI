@@ -100,7 +100,7 @@ const AddThings = ({info, collection, thing}) => {
     };
 
     const handleArrayItems = (items) => {
-        const value = items.toString();
+        const value = `${items}`;
         const q = handleBuildQuery('value', value);
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {value: value, queryString: q});

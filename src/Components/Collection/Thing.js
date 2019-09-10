@@ -1,23 +1,19 @@
 /* eslint-disable react/no-multi-comp */
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Collapse from '@material-ui/core/Collapse';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import CodeIcon from '@material-ui/icons/Code';
 import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 
 import AddThings from './AddThings';
 import EditThing from './EditThing';
 import RemoveThing from './RemoveThing';
+import {ApplicationActions} from '../../Stores/ApplicationStore';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import {Buttons, checkType, thingValue, TreeIcon} from '../Util';
+import {Buttons, checkType, thingValue, TreeBranch} from '../Util';
 
 
 const withStores = withVlow([{
@@ -39,8 +35,6 @@ const useStyles = makeStyles(theme => ({
 
 const Thing = ({thing, collection, things, info}) => {
     const classes = useStyles();
-    const [show, setShow] = React.useState(false);
-
 
     // thing info
     const isTuple = type === 'array' && info.parentType === 'array';
@@ -49,7 +43,7 @@ const Thing = ({thing, collection, things, info}) => {
     const fancyName = (n) => info.index !== null ? n + `[${info.index}]` : n;
 
 
-    const renderThing = ([k, v, i=null]) => { // QUEST: ???
+    const renderThing = ([k, v, i=null]) => {
         const infoNew = {
             name: fancyName(k),
             id: thingId,
@@ -79,10 +73,13 @@ const Thing = ({thing, collection, things, info}) => {
     };
 
     const handleClick = () => {
-        setShow(!show); // QUEST: work with prevstate?
         if (thing && thing['#']) {
             CollectionActions.query(collection.collection_id, thing['#']);
         }
+    };
+
+    const handleClickOpenEditor = () => {
+        ApplicationActions.openEditor(type==='object' ? `#${thingId}` : `#${thingId}.${fancyName(info.name)}`);
     };
 
     // type and value
@@ -91,80 +88,45 @@ const Thing = ({thing, collection, things, info}) => {
 
     // buttons visible
     const hasButtons = !(type === 'array' && info.name === '$' || info.isParentTuple);
-    const canAdd = type === 'array' || type === 'object' || type === 'set' || !isTuple;
+    const canAdd = (type === 'array' || type === 'object' || type === 'set') && !isTuple;
     const canEdit = info.name !== '$';
     const canToggle = type === 'object' || type === 'array' || type === 'set';
 
-    console.log(info)
-
     return (
-        <React.Fragment>
-            <ListItem className={classes.listItem}>
+        <TreeBranch name={fancyName(info.name)} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
+            {hasButtons ? (
                 <ListItemIcon>
-                    <TreeIcon type={type} />
-                </ListItemIcon>
-                <ListItemText
-                    className={classes.listItem}
-                    primary={
-                        <React.Fragment>
-                            <Typography
-                                variant="body1"
-                                color="primary"
-                                component="span"
-                            >
-                                {fancyName(info.name)}
-                            </Typography>
-                            {`  -   ${val}`}
-                        </React.Fragment>
-
-                    }
-                    primaryTypographyProps={{
-                        display: 'block',
-                        noWrap: true
-                    }}
-                />
-                {hasButtons ? (
-                    <ListItemIcon>
-                        <Buttons>
-                            {canAdd ? (
-                                <AddThings
-                                    info={{
-                                        name: fancyName(info.name),
-                                        id: thingId,
-                                        type: type
-                                    }}
-                                    collection={collection}
-                                    thing={currThing}
-                                />
-                            ) : null}
-                            {canEdit ? (
-                                <EditThing
-                                    info={{...info, type: type}}
-                                    collection={collection}
-                                    thing={things[info.id]}
-                                />
-                            ) : null}
-                            <RemoveThing
+                    <Buttons>
+                        {canAdd ? (
+                            <AddThings
+                                info={{
+                                    name: fancyName(info.name),
+                                    id: thingId,
+                                    type: type
+                                }}
                                 collection={collection}
                                 thing={currThing}
-                                info={info}
                             />
-                        </Buttons>
-                    </ListItemIcon>
-                ) : null}
-                <ListItemIcon>
-                    <ButtonBase onClick={handleClick} >
-                        {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
-                    </ButtonBase>
+                        ) : null}
+                        {canEdit ? (
+                            <EditThing
+                                info={{...info, type: type}}
+                                collection={collection}
+                                thing={things[info.id]}
+                            />
+                        ) : null}
+                        <RemoveThing
+                            collection={collection}
+                            thing={currThing}
+                            info={info}
+                        />
+                        <ButtonBase onClick={handleClickOpenEditor} >
+                            <CodeIcon color="primary" />
+                        </ButtonBase>
+                    </Buttons>
                 </ListItemIcon>
-            </ListItem>
-            {canToggle &&
-            <Collapse in={show} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding dense>
-                    {renderChildren()}
-                </List>
-            </Collapse>}
-        </React.Fragment>
+            ) : null}
+        </TreeBranch>
     );
 };
 

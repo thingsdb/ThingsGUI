@@ -43,7 +43,7 @@ const CardButton = ({onClick, title}) => {
                 onClick={handleClick}
             >
                 <CardContent>
-                    <Typography variant="body1" >
+                    <Typography variant="overline" >
                         {title}
                     </Typography>
                 </CardContent>

@@ -6,6 +6,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -43,7 +44,6 @@ const EditThing = ({info, collection, thing}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
     const {id, index, name, parentType} = info;
-    console.log(info)
 
     const handleClickOpen = () => {
         const q = parentType == 'set' ? buildQueryEdit(id, name, '{}', parentType, index): '';
@@ -97,7 +97,7 @@ const EditThing = ({info, collection, thing}) => {
     };
 
     const handleArrayItems = (items) => {
-        const value = items.toString();
+        const value = `${items}`;
         const q = handleBuildQuery('value', value);
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {value: value, queryString: q});
@@ -123,17 +123,17 @@ const EditThing = ({info, collection, thing}) => {
         }
     };
 
-
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';
     const booleanInputField = form.dataType == 'boolean';
-
-
 
     const Content = (
         <React.Fragment>
             <ErrorMsg tag={tag} />
             <List>
+                <ListItem>
+                    <ListItemText secondary={`WARNING: the current content of ${info.name} will be overwritten. This is irreversible.`} />
+                </ListItem>
                 <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
                     <ListItem>
                         <TextField
@@ -228,7 +228,7 @@ const EditThing = ({info, collection, thing}) => {
                     <EditIcon color="primary" />
                 </ButtonBase>
             }
-            title="Edit Thing"
+            title={`Edit Thing ${info.name}`}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

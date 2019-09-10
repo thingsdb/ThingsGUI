@@ -56,9 +56,13 @@ const Tokens = ({user}) => {
                 <Grid container item xs={9}>
                     {user.tokens.length ? (
                         <TableWithButtons header={header} rows={rows} rowClick={handleRowClick} buttons={handleButtons} />
-                    ) : (
-                        <Typography >
+                    ) : user.has_password ? (
+                        <Typography>
                             {'Not set.'}
+                        </Typography>
+                    ) : (
+                        <Typography color="error">
+                            {`This user had no password set. Set a token or password to prevent ${user.name} from getting locked out.`}
                         </Typography>
                     )}
                 </Grid>

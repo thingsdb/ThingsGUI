@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import { makeStyles} from '@material-ui/core/styles';
 
-import {Tree} from '../Util';
+import {ThingsTree} from '../Util';
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -23,7 +23,11 @@ const QueryOutput = ({output}) => {
                 dense
                 disablePadding
             >
-                <Tree tree={output} />
+                {output ? (
+                    <ThingsTree tree={output} />
+                ) : (
+                    null
+                )}
             </List>
         </Paper>
 

@@ -11,15 +11,15 @@ import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import TableWithButtons from './TableWithButtons';
 import TableWithRowExtend from './TableWithRowExtend';
-import Tree from './Tree';
 import TreeBranch from './TreeBranch';
+import ThingsTree from './ThingsTree';
 import TreeIcon from './TreeIcon';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import {StyledTabs, StyledTab} from './Tabs';
 
 const checkType = (t) => {
-    if (t === null) {
+    if (t === null || t === 'nil') {
         return('nil');
     }
     let type = typeof(t);
@@ -37,7 +37,7 @@ const thingValue = (type, thing) => {
     return type === 'array' ? `[${thing.length}]`
         : type === 'object' ? `{${Object.keys(thing)[0]}${thing['#']}}`
             : type === 'set' ? `{${Object.keys(thing)[0]}}`
-                : type === 'string' || type === 'number' || type === 'boolean' ? thing.toString()
+                : type === 'string' || type === 'number' || type === 'boolean' ? `${thing}`
                     : type === 'nil' ? 'nil'
                         : '';
 };
@@ -96,8 +96,8 @@ export {
     TableWithButtons,
     TableWithRowExtend,
     thingValue,
-    Tree,
     TreeBranch,
+    ThingsTree,
     TreeIcon,
     QueryInput,
     QueryOutput,

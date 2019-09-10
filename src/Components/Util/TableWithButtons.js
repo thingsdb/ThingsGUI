@@ -5,6 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 
 const TableWithButtons = ({header, rows, rowClick, buttons}) => {
 
@@ -30,7 +31,9 @@ const TableWithButtons = ({header, rows, rowClick, buttons}) => {
                         <TableRow key={ri} onClick={handleClickRow(row)}>
                             {header.map((h, i) => (
                                 <TableCell key={h.ky} align={i?'right':'left'}>
-                                    {row[h.ky]}
+                                    <Typography variant="overline">
+                                        {row[h.ky]}
+                                    </Typography>
                                 </TableCell>
                             ))}
                             <TableCell align='right'>

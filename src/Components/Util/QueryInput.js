@@ -209,6 +209,7 @@ class QueryInput extends React.Component {
 
     static propTypes = {
         onChange: PropTypes.func.isRequired,
+        input: PropTypes.string.isRequired,
     }
 
     constructor(props) {
@@ -216,8 +217,8 @@ class QueryInput extends React.Component {
     }
 
     componentDidMount() {
-        const {onChange} = this.props;
-        const model = monaco.editor.createModel('', 'mySpecialLanguage');
+        const {onChange, input} = this.props;
+        const model = monaco.editor.createModel(input, 'mySpecialLanguage');
         monaco.editor.defineTheme('myTheme', theme);
         this._editor = monaco.editor.create(this.ele, {
             // automaticLayout: true, This will make it that the editor installs a timer and checks every 100ms if its container has changed its size... https://github.com/microsoft/monaco-editor/issues/543
@@ -232,6 +233,7 @@ class QueryInput extends React.Component {
             lineNumbers: 'on',
         });
         this._editor.setModel(model);
+        onChange(input);
         this._subscription = model.onDidChangeContent(() => {
             let v = model.getValue();
             onChange(v);

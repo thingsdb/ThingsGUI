@@ -38,9 +38,11 @@ const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClos
                     <Button onClick={handleClose} color="primary">
                         {'Cancel'}
                     </Button>
-                    <Button onClick={handleOk} color="primary">
-                        {'Ok'}
-                    </Button>
+                    {onOk ? (
+                        <Button onClick={handleOk} color="primary">
+                            {'Ok'}
+                        </Button>
+                    ) : null}
                 </DialogActions>
             </Dialog>
         </React.Fragment>
@@ -49,6 +51,7 @@ const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClos
 
 SimpleModal.defaultProps = {
     actionButtons: null,
+    onOk: null,
 },
 
 SimpleModal.propTypes = {
@@ -57,7 +60,7 @@ SimpleModal.propTypes = {
     title: PropTypes.string.isRequired,
     actionButtons: PropTypes.object,
     open: PropTypes.bool.isRequired,
-    onOk: PropTypes.func.isRequired,
+    onOk: PropTypes.func,
     onClose: PropTypes.func.isRequired,
 };
 

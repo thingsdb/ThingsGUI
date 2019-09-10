@@ -6,7 +6,6 @@ import {ThingsdbActions} from './ThingsdbStore';
 
 const CollectionActions = Vlow.createActions([
     'query',
-    'removeThing',
     'rawQuery',
     'queryWithOutput',
     'queryEditor',

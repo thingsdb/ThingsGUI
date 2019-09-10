@@ -111,7 +111,7 @@ class NodesStore extends BaseStore {
         });
     }
 
-    onReplaceNode(config, tag, cb) { // nodeId , secret [, port]
+    onReplaceNode(config, tag, cb) { // nodeId , secret, address [, port]
         this.emit('/node/replace', config).done(() => {
             this.onGetNodes();
             cb();

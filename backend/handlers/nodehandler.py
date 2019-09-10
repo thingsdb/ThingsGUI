@@ -117,11 +117,13 @@ class NodeHandler(BaseHandler):
     @BaseHandler.socket_handler
     async def replace_node(cls, client, data):  # TODOS check ipaddress?
         if data.get('port'):
-            q = r'''replace_node({nodeId}, '{secret}', {port});
+            q = r'''replace_node({nodeId}, '{secret}', '{address}', {port});
                 '''.format_map(data)
+            print(q)
         else:
-            q = r'''replace_node({nodeId}, '{secret}');
+            q = r'''replace_node({nodeId}, '{secret}', '{address}');
                 '''.format_map(data)
+            print(q)
         result = await client.query(q)
 
         resp = {

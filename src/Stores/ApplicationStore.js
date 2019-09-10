@@ -21,6 +21,7 @@ class ApplicationStore extends BaseStore {
         connected: PropTypes.bool,
         match: PropTypes.shape({match: PropTypes.string}),
         openEditor: PropTypes.bool,
+        input: PropTypes.string,
     }
 
     static defaults = {
@@ -28,6 +29,7 @@ class ApplicationStore extends BaseStore {
         connected: false,
         match: {},
         openEditor: false,
+        input: '',
     }
 
     constructor() {
@@ -81,11 +83,11 @@ class ApplicationStore extends BaseStore {
         this.setState({match});
     }
 
-    onOpenEditor() {
-        this.setState({openEditor: true});
+    onOpenEditor(input='') {
+        this.setState({openEditor: true, input: input});
     }
     onCloseEditor() {
-        this.setState({openEditor: false});
+        this.setState({openEditor: false, input: ''});
     }
 }
 

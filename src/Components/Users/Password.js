@@ -33,7 +33,7 @@ const Password = ({user}) => {
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, showPassword: false, errors: {}, form: {...user, password: ''}});
+        setState({...state, show: true, showPassword: false, errors: {}, form: {password: '', set: user.has_password}});
     };
 
     const handleClickClose = () => {
@@ -52,23 +52,29 @@ const Password = ({user}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.password(
-                user.name,
-                form.password,
-                tag,
-                () => setState({...state, show: false})
-            );
+            if (form.set) {
+                ThingsdbActions.password(
+                    user.name,
+                    form.password,
+                    tag,
+                    () => setState({...state, show: false})
+                );
+            } else {
+                ThingsdbActions.resetPassword(
+                    user.name,
+                    tag,
+                    () => setState({...state, show: false})
+                );
+            }
         }
     };
 
-    const handleClickReset = () => {
-        if (!Object.values(errors).some(d => d)) {
-            ThingsdbActions.resetPassword(
-                user.name,
-                tag,
-                () => setState({...state, show: false})
-            );
-        }
+    const handleSetPassword = ({target}) => {
+        const {checked} = target;
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {set: checked});
+            return {...prevState, form: updatedForm};
+        });
     };
 
     const handleClickShowPassword = () => {
@@ -79,19 +85,21 @@ const Password = ({user}) => {
     const Content = (
         <React.Fragment>
             <ErrorMsg tag={tag} />
-            <Typography component="div">
-                <FormLabel component="legend">
-                    {'Set?'}
-                </FormLabel>
+            <Typography component="div" variant="caption">
+                {!user.tokens.length && !form.set ? (
+                    <FormLabel component="label" error>
+                        {`This user has no access tokens. Resetting the password would lock out ${user.name}.`}
+                    </FormLabel>
+                ) : null}
                 <Grid component="label" container alignItems="center" spacing={1}>
                     <Grid item>
                         {'no'}
                     </Grid>
                     <Grid item>
                         <Switch
-                            checked={user.has_password}
+                            checked={form.set}
                             color="primary"
-                            onChange={()=>null}
+                            onChange={handleSetPassword}
                         />
                     </Grid>
                     <Grid item>
@@ -99,27 +107,29 @@ const Password = ({user}) => {
                     </Grid>
                 </Grid>
             </Typography>
-            <TextField
-                autoFocus
-                margin="dense"
-                id="password"
-                label="Password"
-                type={showPassword?'text':'password'}
-                value={form.password}
-                spellCheck={false}
-                onChange={handleOnChange}
-                fullWidth
-                error={errors.password}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton onClick={handleClickShowPassword}>
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-            />
+            {form.set ? (
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="password"
+                    label="Password"
+                    type={showPassword?'text':'password'}
+                    value={form.password}
+                    spellCheck={false}
+                    onChange={handleOnChange}
+                    fullWidth
+                    error={errors.password}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={handleClickShowPassword}>
+                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            ) : null}
         </React.Fragment>
     );
 
@@ -128,12 +138,7 @@ const Password = ({user}) => {
             button={
                 <CardButton onClick={handleClickOpen} title="Password" />
             }
-            actionButtons={
-                <Button onClick={handleClickReset} color="primary">
-                    {'Reset'}
-                </Button>
-            }
-            title="Password"
+            title="Set Password"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

@@ -175,7 +175,7 @@ const UserAccess = ({user, collections}) => {
                                     <Grid item container xs={12} >
                                         {privileges.map(({ky, label}) => (
                                             <Grid item xs={2} key={ky} container justify="center" >
-                                                <Typography variant="caption" align="center" >
+                                                <Typography variant="overline" align="center" >
                                                     {label}
                                                 </Typography>
                                             </Grid>
