@@ -11,8 +11,9 @@ import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import TableWithButtons from './TableWithButtons';
 import TableWithRowExtend from './TableWithRowExtend';
-import TreeBranch from './TreeBranch';
 import ThingsTree from './ThingsTree';
+import TopBarMenu from './TopBarMenu';
+import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
@@ -96,6 +97,7 @@ export {
     TableWithButtons,
     TableWithRowExtend,
     thingValue,
+    TopBarMenu,
     TreeBranch,
     ThingsTree,
     TreeIcon,

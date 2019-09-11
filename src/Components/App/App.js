@@ -1,9 +1,13 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
-import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
+import StorageIcon from '@material-ui/icons/Storage';
+import VisibleIcon from '@material-ui/icons/Visibility';
 import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
@@ -13,12 +17,13 @@ import User from '../Users/User';
 import UsersMenu from '../Navigation/UsersMenu';
 import Nodes from '../Nodes/Nodes';
 import TopBar from '../Navigation/TopBar';
-import QueryEditor from '../Editor/QueryEditor'
+import QueryEditor from '../Editor/QueryEditor';
 import QueryEditorMenu from '../Navigation/QueryEditorMenu';
+import Watcher from '../Watcher/Watcher';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import {DrawerLayout, ErrorToast} from '../Util';
+import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
 
 
 const withStores = withVlow([{
@@ -62,8 +67,7 @@ const App = ({collections, match, user, users, nodes, openEditor}) => {
     const [indexCollection, setIndexCollection] = React.useState(0);
     const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
-
-    console.log(openEditor);
+    const [drawerContent, setDrawerContent] = React.useState(0);
 
     React.useEffect(() => {
         ThingsdbActions.getInfo();
@@ -89,7 +93,8 @@ const App = ({collections, match, user, users, nodes, openEditor}) => {
         setIndexUser(i);
     };
 
-    const handleDrawerOpen = () => {
+    const handleDrawerOpen = (index) => () => {
+        setDrawerContent(index);
         setOpen(true);
     };
 
@@ -103,15 +108,22 @@ const App = ({collections, match, user, users, nodes, openEditor}) => {
             onClose={handleDrawerClose}
             topbar={
                 <TopBar user={user}>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="end"
-                        onClick={handleDrawerOpen}
-                        className={clsx(open && classes.hide)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    <TopBarMenu menuIcon={<MenuIcon />}>
+                        <List>
+                            <ListItem button onClick={handleDrawerOpen(0)} >
+                                <ListItemIcon>
+                                    <StorageIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="NODES" />
+                            </ListItem>
+                            <ListItem button onClick={handleDrawerOpen(1)} >
+                                <ListItemIcon>
+                                    <VisibleIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="WATCHER" />
+                            </ListItem>
+                        </List>
+                    </TopBarMenu>
                 </TopBar>
             }
             mainContent={
@@ -134,8 +146,8 @@ const App = ({collections, match, user, users, nodes, openEditor}) => {
                     <QueryEditor show={openEditor} />
                 </div>
             }
-            drawerTitle="NODES"
-            drawerContent={<Nodes nodes={nodes} />}
+            drawerTitle={drawerContent ? 'WATCHER' : 'NODES'}
+            drawerContent={drawerContent ? <Watcher /> : <Nodes nodes={nodes} />}
         />
     );
 };

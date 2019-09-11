@@ -39,6 +39,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'flex-start',
     },
     drawerOpen: {
+        minWidth: 400,
         width: drawerWidth,
         flexGrow: 1,
         padding: theme.spacing(1),
