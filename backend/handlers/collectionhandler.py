@@ -14,9 +14,7 @@ class CollectionHandler(BaseHandler):
             q = r'''return(#{}, {})'''.format(thing_id, depth)
         else:
             q = r'''return(thing(.id()), {})'''.format(depth)
-        print(q)
         resp = await client.query(q, target=collection_id)
-
         return cls.socket_response(data=resp)
 
     # @classmethod

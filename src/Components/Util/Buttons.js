@@ -16,13 +16,14 @@ const Buttons = ({children}) => {
 
     return (
         <div onMouseLeave={mouseLeave}>
-            {isMouseInside ? (
-                children
-            ) : (
+            <span style={{visibility: isMouseInside?'visible':'hidden'}}>
+                {children}
+            </span>
+            {!isMouseInside ? (
                 <ButtonBase onClick={mouseEnter}>
                     <MoreVertIcon color="primary" />
                 </ButtonBase>
-            )}
+            ): null}
         </div>
     );
 

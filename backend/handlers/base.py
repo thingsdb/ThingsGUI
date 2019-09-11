@@ -32,7 +32,6 @@ class BaseHandler:
         logging.info('Socket connection: {} (Remote address: {})'.format(
             sid, environ.get('REMOTE_ADDR', 'unknown')))
         cls.clients[sid] = Client()
-        print(len(cls.clients))
         return True
 
     @classmethod
