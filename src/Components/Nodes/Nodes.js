@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
+import ReplaceNode from './ReplaceNode';
 import {TableWithRowExtend} from '../Util';
 
 const Nodes = ({nodes}) => {
@@ -21,10 +22,10 @@ const Nodes = ({nodes}) => {
         label: 'Status',
     }];
     const rowExtend = (node) => <Node local={node} />;
-
+    const handleButtons = (node) => <ReplaceNode node={node} />;
     return(
         <React.Fragment>
-            <TableWithRowExtend header={header} rows={rows} rowExtend={rowExtend} />
+            <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} />
             <NodeButtons />
         </React.Fragment>
     );

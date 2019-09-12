@@ -21,13 +21,20 @@ const TopBarMenu = ({ children, menuIcon}) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
+    React.useEffect(() => {
+        // add when mounted
+        document.addEventListener('mousedown', handleMenuClose);
+        // return function to be called when unmounted
+        // return () => {
+        //     document.removeEventListener('mousedown', handleMenuOpen);
+        // };
+    }, []);
 
     const handleMenuOpen = ({currentTarget}) => {
         setAnchorEl(currentTarget);
     };
 
     const handleMenuClose = () => setAnchorEl(null);
-    console.log(anchorEl);
     const isOpen = Boolean(anchorEl);
 
     return (

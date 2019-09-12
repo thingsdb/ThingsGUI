@@ -1,6 +1,7 @@
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Table from '@material-ui/core/Table';
@@ -37,7 +38,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Tabel = ({header, rows, rowExtend}) => {
+const Tabel = ({buttons, header, rows, rowExtend}) => {
     const classes = useStyles();
     const [selected, setSelected] = React.useState(null);
 
@@ -55,7 +56,7 @@ const Tabel = ({header, rows, rowExtend}) => {
                                 {h.label}
                             </TableCell>
                         ))}
-                        <TableCell />
+                        <TableCell colSpan={2} />
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -63,20 +64,27 @@ const Tabel = ({header, rows, rowExtend}) => {
                         const isopen = selected===ri;
                         return (
                             <React.Fragment key={ri}>
-                                <TableRow className={classes.row} onClick={handleClickRow(ri)}>
+                                <TableRow className={classes.row} >
                                     {header.map((h, i) => (
                                         <TableCell key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
                                             {row[h.ky]}
                                         </TableCell>
                                     ))}
+                                    {buttons ? (
+                                        <TableCell align='right' style={{borderBottom: isopen?'none':null}}>
+                                            {buttons(row)}
+                                        </TableCell>
+                                    ) : null}
                                     <TableCell align="right" style={{borderBottom: isopen?'none':null}}>
-                                        {isopen ? <ExpandLess /> : <ExpandMore />}
+                                        <IconButton onClick={handleClickRow(ri)}>
+                                            {isopen ? <ExpandLess /> : <ExpandMore />}
+                                        </IconButton>
                                     </TableCell>
                                 </TableRow>
                                 {isopen ? (
-                                    <TableRow className={classes.collapse} style={{display: isopen?null:'none', borderBottom: 'none'}}>
+                                    <TableRow className={classes.collapse} style={{borderBottom: 'none'}}>
                                         <TableCell colSpan={12}>
-                                            <Collapse hidden={!isopen} in={isopen}>
+                                            <Collapse in={isopen} timeout="auto" unmountOnExit>
                                                 {rowExtend(row)}
                                             </Collapse>
                                         </TableCell>
@@ -92,8 +100,12 @@ const Tabel = ({header, rows, rowExtend}) => {
     );
 };
 
-Tabel.propTypes = {
+Tabel.defaultProps = {
+    buttons: null,
+};
 
+Tabel.propTypes = {
+    buttons: PropTypes.func,
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     rowExtend: PropTypes.func.isRequired,

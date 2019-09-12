@@ -4,7 +4,6 @@ import {makeStyles} from '@material-ui/core';
 
 import AddNode from './AddNode';
 import PopNode from './PopNode';
-import ReplaceNode from './ReplaceNode';
 
 
 const useStyles = makeStyles(theme => ({
@@ -30,9 +29,6 @@ const NodeButtons = () => {
                     </Grid>
                     <Grid item>
                         <PopNode />
-                    </Grid>
-                    <Grid item>
-                        <ReplaceNode />
                     </Grid>
                 </Grid>
             </Grid>

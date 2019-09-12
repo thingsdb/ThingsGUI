@@ -1,20 +1,15 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
 import Collapse from '@material-ui/core/Collapse';
-import FormLabel from '@material-ui/core/FormLabel';
+import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import {withVlow} from 'vlow';
 
-import {NodesActions, NodesStore} from '../../Stores/NodesStore';
+import {NodesActions} from '../../Stores/NodesStore';
 import { ErrorMsg, SimpleModal } from '../Util';
-
-const withStores = withVlow([{
-    store: NodesStore,
-    keys: ['nodes']
-}]);
 
 const initialState = {
     show: false,
@@ -24,7 +19,7 @@ const initialState = {
 
 const tag = '12';
 
-const ReplaceNode = ({nodes}) => {
+const ReplaceNode = ({node}) => {
     const [addPort, setAddPort] = React.useState(false);
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
@@ -36,7 +31,7 @@ const ReplaceNode = ({nodes}) => {
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, errors: {}, form: {nodeId: nodes[0].node_id, secret: '', address: '', port: ''}});
+        setState({...state, show: true, errors: {}, form: {secret: '', address: '', port: ''}});
     };
 
     const handleClickClose = () => {
@@ -64,7 +59,7 @@ const ReplaceNode = ({nodes}) => {
         setState({...state, errors: err});
         if (!Object.values(errors).some(d => d)) {
             NodesActions.replaceNode(
-                form,
+                {...form, nodeId: node.node_id},
                 tag,
                 () => setState({...state, show: false})
             );
@@ -74,26 +69,6 @@ const ReplaceNode = ({nodes}) => {
     const Content = (
         <React.Fragment>
             <ErrorMsg tag={tag} />
-            <TextField
-                autoFocus
-                margin="dense"
-                id="nodeId"
-                label="Node ID"
-                value={form.nodeId}
-                onChange={handleOnChange}
-                fullWidth
-                select
-                SelectProps={{native: true}}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-            >
-                {nodes.map(p => (
-                    <option key={p.node_id} value={p.node_id}>
-                        {p.node_id}
-                    </option>
-                ))}
-            </TextField>
             <TextField
                 margin="dense"
                 id="secret"
@@ -151,15 +126,16 @@ const ReplaceNode = ({nodes}) => {
             </Collapse>
         </React.Fragment>
     );
+    console.log(node);
 
     return(
         <SimpleModal
             button={
-                <Button variant="outlined" onClick={handleClickOpen}>
-                    {'Replace Node'}
-                </Button>
+                <IconButton onClick={handleClickOpen}>
+                    <EditIcon />
+                </IconButton>
             }
-            title="Replace Node"
+            title={`Replace node: ${node.address}`}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
@@ -170,7 +146,7 @@ const ReplaceNode = ({nodes}) => {
 };
 
 ReplaceNode.propTypes = {
-    nodes: NodesStore.types.nodes.isRequired,
+    node: PropTypes.object.isRequired,
 };
 
-export default withStores(ReplaceNode);
+export default ReplaceNode;
