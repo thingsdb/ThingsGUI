@@ -19,7 +19,7 @@ class App(Router, Application):
             port=8080,
             debug_mode=False,
             use_mocks=False,
-            config_file='/etc/oshttp/oshttp.conf',
+            config_file='/etc/oshttp/oshttp.conf', #TODO
             create_local_tokens=False):
         super().__init__(middlewares=[self.error_middleware])
 
