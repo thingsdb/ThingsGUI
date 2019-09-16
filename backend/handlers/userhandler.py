@@ -24,7 +24,7 @@ class UserHandler(BaseHandler):
     async def new_user(cls, client, data):
         q = r'''new_user('{name}');
             users_info();'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)
 
     @classmethod
@@ -32,7 +32,7 @@ class UserHandler(BaseHandler):
     async def del_user(cls, client, data):
         q = r'''del_user('{name}');
             users_info();'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)
 
     @classmethod
@@ -40,7 +40,7 @@ class UserHandler(BaseHandler):
     async def rename_user(cls, client, data):
         q = r'''rename_user('{oldname}', '{newname}');
             users_info();'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)
 
     @classmethod
@@ -48,7 +48,7 @@ class UserHandler(BaseHandler):
     async def set_password(cls, client, data):
         q = r'''set_password('{name}', '{password}');
             users_info();'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)
 
     @classmethod
@@ -56,7 +56,7 @@ class UserHandler(BaseHandler):
     async def reset_password(cls, client, data):
         q = r'''set_password('{name}', nil);
             users_info();'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)
 
     @classmethod
@@ -64,7 +64,7 @@ class UserHandler(BaseHandler):
     async def grant(cls, client, data):
         q = r'''grant('{collection}', '{name}', ({access}));
             users_info();'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)
 
     @classmethod
@@ -72,7 +72,7 @@ class UserHandler(BaseHandler):
     async def revoke(cls, client, data):
         q = r'''revoke('{collection}', '{name}', ({access}));
             users_info();'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)
 
     @classmethod
@@ -93,9 +93,8 @@ class UserHandler(BaseHandler):
             description = ''
         q = r'''new_token('{}', {}, '{}');
             users_info();'''.format(name, expiration_time, description)
-        print(q)
 
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)
 
     @classmethod
@@ -103,7 +102,7 @@ class UserHandler(BaseHandler):
     async def del_token(cls, client, data):
         q = r'''del_token('{key}');
             users_info();'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)
 
     @classmethod
@@ -111,5 +110,5 @@ class UserHandler(BaseHandler):
     async def del_expired(cls, client, data):
         q = r'''del_expired();
             users_info();'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)

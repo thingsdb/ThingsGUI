@@ -96,8 +96,8 @@ class ThingsdbStore extends BaseStore {
         this.emit('/thingsdb/add', {
             name,
         }).done((data) => {
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
-            user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
+            if (user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
+            user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
                     collections: data.collections,
                     users: data.users,
@@ -121,8 +121,8 @@ class ThingsdbStore extends BaseStore {
             oldname,
             newname,
         }).done((data) => {
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
-            user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
+            if (user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
+            user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
                     collections: data.collections,
                     users: data.users,
@@ -145,8 +145,8 @@ class ThingsdbStore extends BaseStore {
         this.emit('/thingsdb/remove', {
             name,
         }).done((data) => {
-            if (user.access.find(a => a.target==='.thingsdb').privileges.includes('FULL') ||
-            user.access.find(a => a.target==='.thingsdb').privileges.includes('GRANT') ) {
+            if (user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
+            user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
                     collections: data.collections,
                     users: data.users,

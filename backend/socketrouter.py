@@ -65,10 +65,6 @@ class SocketRouter:
             handler=CollectionHandler.raw_query)
 
         sio.on(
-            event='/collection/query_with_output',
-            handler=CollectionHandler.query_with_output)
-
-        sio.on(
             event='/collection/query_editor',
             handler=CollectionHandler.query_editor)
 

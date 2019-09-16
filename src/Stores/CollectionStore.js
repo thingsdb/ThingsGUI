@@ -28,9 +28,9 @@ class CollectionStore extends BaseStore {
         this.state = CollectionStore.defaults;
     }
 
-    onQuery(collectionId, thingId=null, depth=1) {
+    onQuery(collection, thingId=null, depth=1) {
         this.emit('/collection/query', {
-            collectionId: collectionId,
+            collectionName: collection.name,
             thingId: thingId,
             depth: depth
         }).done((data) => {
@@ -38,15 +38,15 @@ class CollectionStore extends BaseStore {
                 const things = thingId ?
                     Object.assign({}, prevState.things, {[thingId]: data})
                     :
-                    Object.assign({}, prevState.things, {[collectionId]: data});
+                    Object.assign({}, prevState.things, {[collection.collection_id]: data});
                 return {things};
             });
         }).fail((event, status, message) => ErrorActions.setToastError(message.log));
     }
 
-    onRawQuery(collectionId, thingId, query, tag, cb) {
+    onRawQuery(collection, thingId, query, tag, cb) {
         this.emit('/collection/raw_query', {
-            collectionId: collectionId,
+            collectionName: collection.name,
             thingId: thingId,
             query: query,
         }).done((data) => {
@@ -60,30 +60,15 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQueryWithOutput(collectionId, query, onOutput, tag) {
-        this.emit('/collection/query_with_output', {
-            collectionId: collectionId,
-            query: query,
-        }).done((data) => {
-            onOutput(data.output);
-            this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[collectionId]: data.things});
-                return {things};
-            });
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
-        });
-    }
-
-    onQueryEditor(scope, isCollection, query, onOutput, tag) {
+    onQueryEditor(scope, collectionId, query, onOutput, tag) {
         this.emit('/collection/query_editor', {
             scope: scope,
             query: query,
         }).done((data) => {
             onOutput(data.output);
-            if (isCollection) {
+            if (collectionId!==null) {
                 this.setState(prevState => {
-                    const things = Object.assign({}, prevState.things, {[data.collectionId]: data.things});
+                    const things = Object.assign({}, prevState.things, {[collectionId]: data.things});
                     return {things};
                 });
             } else {

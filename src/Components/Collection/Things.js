@@ -43,8 +43,8 @@ const ThingRoot = ({things, collection}) => {
     const fetched = things.hasOwnProperty(collection.collection_id);
 
     React.useEffect(() => {
-        CollectionActions.query(collection.collection_id);
-    }, [collection.collection_id]);
+        CollectionActions.query(collection);
+    }, [collection.name]);
 
     return (
         <React.Fragment>

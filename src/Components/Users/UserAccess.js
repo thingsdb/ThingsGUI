@@ -63,7 +63,7 @@ const UserAccess = ({user, collections}) => {
 
     console.log('grant');
 
-    const getSwitches = (target, privileges) => {
+    const getSwitches = (scope, privileges) => {
         let s = {
             full: false,
             read: false,
@@ -88,26 +88,26 @@ const UserAccess = ({user, collections}) => {
             s.run = privileges.includes('RUN');
         }
 
-        return ({[target]: s});
+        return ({[scope]: s});
     };
 
-    const targets = [
-        {name: 'ThingsDB', value: '.thingsdb'},
-        {name: 'Node', value: '.node'},
-        ...collections.map((c) => ({name: c.name, value: c.name}))
+    const scopes = [
+        {name: 'ThingsDB', value: '@thingsdb'},
+        {name: 'Node', value: '@node'},
+        ...collections.map((c) => ({name: c.name, value: `@:${c.name}`}))
     ];
 
     React.useEffect(() => {
         let s = {};
-        targets.map(({_name, value}) => {
+        scopes.map(({_name, value}) => {
             s = Object.assign({}, s, getSwitches(value, ''));
         });
-        user.access.map(({target, privileges}) => {
-            s = Object.assign({}, s, getSwitches(target, privileges));
+        user.access.map(({scope, privileges}) => {
+            s = Object.assign({}, s, getSwitches(scope, privileges));
         });
         setSwitches(s);
     },
-    [user, targets.length]
+    [user, scopes.length]
     );
 
 

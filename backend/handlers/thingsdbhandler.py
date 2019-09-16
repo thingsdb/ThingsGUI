@@ -22,7 +22,6 @@ class ThingsDBHandler(BaseHandler):
     @BaseHandler.socket_handler
     async def get_collections(cls, client, data):
         resp = await client.collections_info()
-        print('get_collections', resp)
         return cls.socket_response(data=resp)
 
     @classmethod
@@ -36,7 +35,7 @@ class ThingsDBHandler(BaseHandler):
     async def new_collection(cls, client, data):
         q = r'''new_collection('{name}');
             [collections_info(), users_info()];'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         resp = {
             'collections': result[0],
             'users': result[1],
@@ -48,7 +47,7 @@ class ThingsDBHandler(BaseHandler):
     async def del_collection(cls, client, data):
         q = r'''del_collection('{name}');
             [collections_info(), users_info()];'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         resp = {
             'collections': result[0],
             'users': result[1],
@@ -60,7 +59,7 @@ class ThingsDBHandler(BaseHandler):
     async def rename_collection(cls, client, data):
         q = r'''rename_collection('{oldname}', '{newname}');
             [collections_info(), users_info()];'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         resp = {
             'collections': result[0],
             'users': result[1],
@@ -72,5 +71,5 @@ class ThingsDBHandler(BaseHandler):
     async def set_quota(cls, client, data):
         q = r'''set_quota('{name}', '{quotaType}', {quota});
             collections_info();'''.format_map(data)
-        result = await client.query(q)
+        result = await client.query(q, scope='@thingsdb')
         return cls.socket_response(data=result)

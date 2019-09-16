@@ -26,9 +26,9 @@ const Query = ({collections, input}) => {
     const [index, setIndex] = React.useState(0);
 
     const scopes = [
-        {name: 'ThingsDB', value: 'thingsdb', isCollection: false},
-        {name: 'Node', value: 'node', isCollection: false},
-        ...collections.map((c) => ({name: c.name, value: c.collection_id, isCollection: true}))
+        {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
+        {name: 'Node', value: '@node', collectionId: null},
+        ...collections.map((c) => ({name: c.name, value: `@:${c.name}`, collectionId: c.collection_id}))
     ];
 
 
@@ -37,7 +37,7 @@ const Query = ({collections, input}) => {
     };
 
     const handleSubmit = () => {
-        CollectionActions.queryEditor(scopes[index].value, scopes[index].isCollection, query, handleOutput, tag);
+        CollectionActions.queryEditor(scopes[index].value, scopes[index].collectionId, query, handleOutput, tag);
     };
 
     const handleOutput = (out) => {

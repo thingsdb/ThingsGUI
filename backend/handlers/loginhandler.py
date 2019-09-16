@@ -49,7 +49,8 @@ class LoginHandler(BaseHandler):
                 }
 
         try:
-            a = await client.authenticate(auth=[user, password])  # TODOs auth not working correctly
+            print(user, password)
+            await client.authenticate(user, password)
         except ThingsDBError as e:
             return {
                 'connected': False,
@@ -60,6 +61,7 @@ class LoginHandler(BaseHandler):
             'connected': True,
             'connErr': '',
         }
+        print(resp)
         return resp
 
     @classmethod

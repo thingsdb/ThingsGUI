@@ -74,7 +74,7 @@ const Thing = ({thing, collection, things, info}) => {
 
     const handleClick = () => {
         if (thing && thing['#']) {
-            CollectionActions.query(collection.collection_id, thing['#']);
+            CollectionActions.query(collection, thing['#']);
         }
     };
 

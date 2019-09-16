@@ -31,7 +31,7 @@ const RemoveThing = ({collection, thing, info}) => {
         );
 
         CollectionActions.rawQuery(
-            collection.collection_id,
+            collection,
             info.id,
             queryString,
             tag,

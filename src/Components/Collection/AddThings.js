@@ -113,7 +113,7 @@ const AddThings = ({info, collection, thing}) => {
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
             CollectionActions.rawQuery(
-                collection.collection_id,
+                collection,
                 id,
                 form.queryString,
                 tag,
