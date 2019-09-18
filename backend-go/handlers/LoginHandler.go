@@ -1,89 +1,142 @@
 package handlers
 
 import (
-	"flag"
 	"fmt"
 	"net/http"
-	"strings"
 	"strconv"
+	"strings"
 
+	util "../util"
 	things "github.com/thingsdb/go/client"
-	socketio "github.com/googollee/go-socket.io"
 )
 
-type Message struct {
-	text     string
-	status int
-	log   string
+type Resp struct {
+	connected bool
+	connErr   error
 }
 
-
-func connect(client *things.Client, address string, user string, password string) map[string]interface{} {
+func connect(sid string, logCh chan string, conn *map[string]*things.Conn, address string, user string, password string, token string) Resp {
 	hp := strings.Split(address, ":")
-	if len(hp) {
-		return false, "invalid address"
+	if len(hp) != 2 {
+		return Resp{false, fmt.Errorf("invalid address")}
 	}
 	port, err := strconv.ParseUint(hp[1], 10, 16)
 	if err != nil {
-		return false, "invalid address"
+		return Resp{false, err}
 	}
 	host := hp[0]
 
+	(*conn)[sid] = things.NewConn(host, uint16(port))
+	(*conn)[sid].LogCh = logCh
+	(*conn)[sid].OnClose = func() {
+		delete(*conn, sid)
+	}
 
+	if !(*conn)[sid].IsConnected() {
+		err := (*conn)[sid].Connect()
+		if err != nil {
+			return Resp{false, err}
+		}
+	}
 
-}
-
-func Connected(client *things.Client) (interface{}, Message) {
-	var data map[string]bool
-	if client.isConnected() {
-		data = map[string]bool{
-			"loaded": true,
-			"connected": true,
+	if password != "" {
+		err := (*conn)[sid].AuthPassword(user, password)
+		if err != nil {
+			return Resp{false, err}
 		}
 	} else {
-		data = map[string]bool{
-			"loaded": true,
+		err := (*conn)[sid].AuthToken(token)
+		if err != nil {
+			return Resp{false, err}
+		}
+	}
+	return Resp{connected: true}
+}
+
+func Connected(sid string, conn *map[string]*things.Conn) (int, map[string]bool, util.Message) {
+	var resp map[string]bool
+	fmt.Println(*conn)
+	switch {
+	case (*conn)[sid] == nil:
+		resp = map[string]bool{
+			"loaded":    true,
+			"connected": false,
+		}
+	case (*conn)[sid].IsConnected():
+		resp = map[string]bool{
+			"loaded":    true,
+			"connected": true,
+		}
+	default:
+		resp = map[string]bool{
+			"loaded":    true,
 			"connected": false,
 		}
 	}
-	message := Message{'', http.StatusOK, ''}
-	return data, message
+
+	message := util.Message{"", http.StatusOK, ""}
+	return message.Status, resp, message
 }
 
-func Connect(client *things.Client, data map[string]string) (interface{}, Message) {
-	var data map[string]interface{}
-	var message Message
-	data = connect(
-		client,
+func Connect(sid string, logCh chan string, conn *map[string]*things.Conn, data map[string]string) (int, Resp, util.Message) {
+	var resp Resp
+	var message util.Message
+	resp = connect(
+		sid,
+		logCh,
+		conn,
 		data["host"],
 		data["user"],
-		data["password"])
+		data["password"],
+		data["token"])
 
-	if (resp["connected"]) {
-		message := Message{'', http.StatusOK, ''}
+	if resp.connected {
+		message = util.Message{"", http.StatusOK, ""}
 	} else {
-		message := Message{data["connErr"], http.StatusInternalServerError, data["connErr"]}
+		message = util.Message{resp.connErr.Error(), http.StatusInternalServerError, resp.connErr.Error()}
 	}
-	return data, message
-	}
+	return message.Status, resp, message
+}
 
-func ConnectOther(client *things.Client, data map[string]string) (interface{}, Message) {
-	var data map[string]interface{}
-	var message Message
+func ConnectOther(sid string, logCh chan string, conn *map[string]*things.Conn, data map[string]string) (int, Resp, util.Message) {
+	var resp Resp
+	var message util.Message
 
-	user, password := client._auth
-	client.Close()
+	CloseSingleConn((*conn)[sid])
 
-	data = connect(
-		client,
+	resp = connect(
+		sid,
+		logCh,
+		conn,
 		data["host"],
-		user,
-		password)
+		data["user"],
+		data["password"],
+		data["token"])
 
-	if (resp["connected"]) {
-		message := Message{'', http.StatusOK, ''}
+	if resp.connected {
+		message = util.Message{"", http.StatusOK, ""}
 	} else {
-		message := Message{data["connErr"], http.StatusInternalServerError, data["connErr"]}
+		message = util.Message{resp.connErr.Error(), http.StatusInternalServerError, resp.connErr.Error()}
 	}
-	return data, message
+	return message.Status, resp, message
+}
+
+func Disconnect(conn *things.Conn) (int, interface{}, util.Message) {
+	CloseSingleConn(conn) // check if really closed?
+	message := util.Message{"", http.StatusOK, ""}
+	return 0, map[string]interface{}{"connected": false}, message
+}
+
+func CloseSingleConn(conn *things.Conn) {
+	if conn != nil {
+		conn.Close()
+	}
+}
+
+func CloseAllConn(connections *map[string]*things.Conn) {
+	for _, conn := range *connections {
+		if conn != nil {
+			conn.Close()
+		}
+	}
 }

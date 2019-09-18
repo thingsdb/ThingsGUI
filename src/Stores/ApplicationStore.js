@@ -39,6 +39,7 @@ class ApplicationStore extends BaseStore {
 
     onConnected() {
         this.emit('/connected').done((data) => {
+            console.log(data)
             setTimeout(() => {
                 this.setState({
                     loaded: data.loaded,

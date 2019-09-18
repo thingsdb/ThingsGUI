@@ -1,4 +1,5 @@
 /* global process */
+
 import Vlow from 'vlow';
 import io from 'socket.io-client';
 
@@ -23,6 +24,7 @@ class _SocketRequest {
     }
 
     constructor(event, ...data) {
+        console.log(`${window.location.protocol}//${window.location.host}`)
         window.console.debug(`Socket request: "${event}"`, data);
 
         var warnOnLong = setTimeout(() => {
@@ -30,6 +32,7 @@ class _SocketRequest {
         }, 3000);
 
         socket.emit(event, ...data, (status, data, message) => {
+            console.log('emiiiit', data, status)
             clearTimeout(warnOnLong);
 
             if (message !== undefined && message !== null) {
@@ -37,7 +40,7 @@ class _SocketRequest {
             }
 
             this._alwaysCb(status, data);
-            if (status === 0) {
+            if (status === 200) {
                 window.console.debug(`Socket response ("${event}"):`, data);
                 this._doneCb(data);
             } else if (status === 125) {
