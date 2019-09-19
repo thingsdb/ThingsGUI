@@ -52,11 +52,12 @@ class ThingsdbStore extends BaseStore {
     }
 
     onGetInfo() {
-        this.emit('/thingsdb/get_info').done((data) => {
+        this.emit('getInfo').done((data) => {
+            console.log(data);
             this.setState({
-                collections: data.collections,
-                users: data.users,
-                user: data.user,
+                collections: data.Collections,
+                users: data.Users,
+                user: data.User,
             });
         }).fail((event, status, message) => {
             this.setState({
@@ -65,117 +66,117 @@ class ThingsdbStore extends BaseStore {
                 users: [],
                 user: {},
             });
-            ErrorActions.setToastError(message.log);
+            ErrorActions.setToastError(message.Log);
         });
     }
 
     //COLLECTIONS
 
     onGetCollections() {
-        this.emit('/thingsdb/get_collections').done((data) => {
-            this.setState({collections: data});
-        }).fail((event, status, message) => ErrorActions.setToastError(message.log));
+        this.emit('getCollections').done((data) => {
+            this.setState({collections: data.Collections});
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
     onGetCollection(name, tag, cb) {
-        this.emit('/thingsdb/get_collection', {
+        this.emit('getCollection', {
             name,
         }).done((data) => {
             this.setState({
-                collection: data
+                collection: data.Collection
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
 
     onAddCollection(name, tag, cb) {
         const {user} = this.state;
-        this.emit('/thingsdb/add', {
+        this.emit('newCollection', {
             name,
         }).done((data) => {
             if (user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
             user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
-                    collections: data.collections,
-                    users: data.users,
+                    collections: data.Collections,
+                    users: data.Users,
                 });
             }
             else {
                 this.setState({
-                    collections: data.collections,
+                    collections: data.Collections,
                 });
             }
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
 
     onRenameCollection(oldname, newname, tag, cb) {
         const {user} = this.state;
-        this.emit('/thingsdb/rename', {
+        this.emit('renameCollection', {
             oldname,
             newname,
         }).done((data) => {
             if (user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
             user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
-                    collections: data.collections,
-                    users: data.users,
+                    collections: data.Collections,
+                    users: data.Users,
                 });
             }
             else {
                 this.setState({
-                    collections: data.collections,
+                    collections: data.Collections,
                 });
             }
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
 
     onRemoveCollection(name, tag, cb) {
         const {user} = this.state;
-        this.emit('/thingsdb/remove', {
+        this.emit('delCollection', {
             name,
         }).done((data) => {
             if (user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
             user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT') ) {
                 this.setState({
-                    collections: data.collections,
-                    users: data.users,
+                    collections: data.Collections,
+                    users: data.Users,
                 });
             }
             else {
                 this.setState({
-                    collections: data.collections,
+                    collections: data.Collections,
                 });
             }
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
 
     onSetQuota(name, quotaType, quota, tag, cb) {
-        this.emit('/thingsdb/set_quota', {
+        this.emit('setQuota', {
             name,
             quotaType,
             quota,
         }).done((data) => {
             this.setState({
-                collections: data
+                collections: data.Collections
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -184,10 +185,10 @@ class ThingsdbStore extends BaseStore {
 
     onGetUsers(tag, cb){
         this.emit('/user/get_users').done((data) => {
-            this.setState({users: data});
+            this.setState({users: data.Users});
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -197,11 +198,11 @@ class ThingsdbStore extends BaseStore {
             config,
         }).done((data) => {
             this.setState({
-                user: data
+                user: data.User
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -212,11 +213,11 @@ class ThingsdbStore extends BaseStore {
             name,
         }).done((data) => {
             this.setState({
-                users: data
+                users: data.Users
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -226,11 +227,11 @@ class ThingsdbStore extends BaseStore {
             name
         }).done((data) => {
             this.setState({
-                users: data
+                users: data.Users
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -241,11 +242,11 @@ class ThingsdbStore extends BaseStore {
             newname,
         }).done((data) => {
             this.setState({
-                users: data
+                users: data.Users
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -256,11 +257,11 @@ class ThingsdbStore extends BaseStore {
             password,
         }).done((data) => {
             this.setState({
-                users: data
+                users: data.Users
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -270,11 +271,11 @@ class ThingsdbStore extends BaseStore {
             name,
         }).done((data) => {
             this.setState({
-                users: data
+                users: data.Users
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -285,10 +286,10 @@ class ThingsdbStore extends BaseStore {
             name,
             access,
         }).done((data) => {
-            this.setState({users: data});
+            this.setState({users: data.Users});
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -299,10 +300,10 @@ class ThingsdbStore extends BaseStore {
             name,
             access,
         }).done((data) => {
-            this.setState({users: data});
+            this.setState({users: data.Users});
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -310,11 +311,11 @@ class ThingsdbStore extends BaseStore {
     onNewToken(config, tag, cb){ // name [, expirationTime] [, description]
         this.emit('/user/new_token', config).done((data) => {
             this.setState({
-                users: data
+                users: data.Users
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
@@ -324,7 +325,7 @@ class ThingsdbStore extends BaseStore {
             key,
         }).done((data) => {
             this.setState({
-                users: data
+                users: data.Users
             });
         });
     }
@@ -332,7 +333,7 @@ class ThingsdbStore extends BaseStore {
     onDelExpired(){
         this.emit('/user/del_expired').done((data) => {
             this.setState({
-                users: data
+                users: data.Users
             });
         });
     }

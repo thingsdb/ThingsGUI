@@ -8,8 +8,8 @@ import (
 
 	handlers "./handlers"
 	util "./util"
+	socketio "github.com/googollee/go-socket.io"
 	things "github.com/thingsdb/go/client"
-	socketio "github.com/transceptor-technology/go-socket.io"
 )
 
 // AppVersion exposes version information
@@ -27,8 +27,7 @@ type App struct {
 	configFile  string
 	connections map[string]*things.Conn
 
-	//insertTimeout uint16
-
+	Timeout uint16
 }
 
 func (app *App) logHandler() {
@@ -38,59 +37,64 @@ func (app *App) logHandler() {
 	}
 }
 
-// func (app *App) SocketRouter() {
-// 	app.Server.OnConnect("/", func(s socketio.Conn) error {
-// 		s.SetContext("")
-// 		fmt.Println("connected:", s.Id())
-// 		return nil
-// 	})
-
-// 	app.Server.OnEvent("/connected", "/connected", func(s socketio.Conn) (int, interface{}, util.Message) {
-// 		fmt.Println("hi")
-// 		return handlers.Connected(s.Id(), &app.connections)
-// 	})
-
-// 	app.Server.OnEvent("/connect", "connect", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
-// 		return handlers.Connect(s.Id(), app.logCh, &app.connections, data)
-// 	})
-
-// 	app.Server.OnEvent("/connect/other", "connectOther", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
-// 		return handlers.ConnectOther(s.Id(), app.logCh, &app.connections, data)
-// 	})
-
-// 	app.Server.OnEvent("/disconnect", "disconnect", func(s socketio.Conn) (int, interface{}, util.Message) {
-// 		return handlers.Disconnect(app.connections[s.Id()])
-// 	})
-
-// 	app.Server.OnError("/", func(e error) {
-// 		fmt.Println("meet error:", e)
-// 	})
-
-// 	app.Server.OnDisconnect("/", func(s socketio.Conn, msg string) {
-// 		fmt.Println("closed:", msg)
-// 		handlers.CloseSingleConn(app.connections[s.Id()])
-// 	})
-// }
-
 func (app *App) SocketRouter() {
-	app.Server.On("connection", func(s socketio.Socket) {
-		s.On("/connected", func() (int, interface{}, util.Message) {
-			fmt.Println("hi")
-			return handlers.Connected(s.Id(), &app.connections)
-		})
-		s.On("/connect", func(data map[string]string) (int, interface{}, util.Message) {
-			return handlers.Connect(s.Id(), app.logCh, &app.connections, data)
-		})
-		s.On("/connect/other", func(data map[string]string) (int, interface{}, util.Message) {
-			return handlers.ConnectOther(s.Id(), app.logCh, &app.connections, data)
-		})
-		s.On("/disconnect", func() (int, interface{}, util.Message) {
-			return handlers.Disconnect(app.connections[s.Id()])
-		})
+	app.Server.OnConnect("/", func(s socketio.Conn) error {
+		s.SetContext("")
+		fmt.Println("connected:", s.ID())
+		return nil
 	})
 
-	app.Server.On("error", func(s socketio.Socket, err error) {
-		app.logCh <- fmt.Sprintf("socket.io error: %s", err.Error())
+	app.Server.OnEvent("/", "connected", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
+		return handlers.Connected(s.ID(), &app.connections)
+	})
+
+	app.Server.OnEvent("/", "conn", func(s socketio.Conn, data map[string]string) (int, handlers.LoginResp, util.Message) {
+		return handlers.Connect(s.ID(), app.logCh, &app.connections, data)
+	})
+
+	app.Server.OnEvent("/", "connToOther", func(s socketio.Conn, data map[string]string) (int, handlers.LoginResp, util.Message) {
+		return handlers.ConnectOther(s.ID(), app.logCh, &app.connections, data)
+	})
+
+	app.Server.OnEvent("/", "disconn", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
+		return handlers.Disconnect(app.connections[s.ID()])
+	})
+
+	app.Server.OnEvent("/", "getInfo", func(s socketio.Conn) (int, handlers.ThingsdbResp, util.Message) {
+		return handlers.GetDbinfo(s.ID(), &app.connections, app.Timeout)
+	})
+
+	app.Server.OnEvent("/", "getCollections", func(s socketio.Conn) (int, handlers.ThingsdbResp, util.Message) {
+		return handlers.GetCollections(s.ID(), &app.connections, app.Timeout)
+	})
+
+	app.Server.OnEvent("/", "getCollection", func(s socketio.Conn) (int, handlers.ThingsdbResp, util.Message) {
+		return handlers.GetCollection(s.ID(), &app.connections, app.Timeout)
+	})
+
+	app.Server.OnEvent("/", "newCollection", func(s socketio.Conn, data map[string]interface{}) (int, handlers.ThingsdbResp, util.Message) {
+		return handlers.NewCollection(s.ID(), &app.connections, data, app.Timeout)
+	})
+
+	app.Server.OnEvent("/", "delCollection", func(s socketio.Conn, data map[string]interface{}) (int, handlers.ThingsdbResp, util.Message) {
+		return handlers.DelCollection(s.ID(), &app.connections, data, app.Timeout)
+	})
+
+	app.Server.OnEvent("/", "renameCollection", func(s socketio.Conn, data map[string]interface{}) (int, handlers.ThingsdbResp, util.Message) {
+		return handlers.RenameCollection(s.ID(), &app.connections, data, app.Timeout)
+	})
+
+	app.Server.OnEvent("/", "setQuota", func(s socketio.Conn, data map[string]interface{}) (int, handlers.ThingsdbResp, util.Message) {
+		return handlers.SetQuota(s.ID(), &app.connections, data, app.Timeout)
+	})
+
+	app.Server.OnError("/", func(e error) {
+		fmt.Println("meet error:", e)
+	})
+
+	app.Server.OnDisconnect("/", func(s socketio.Conn, msg string) {
+		fmt.Println("closed:", msg)
+		handlers.CloseSingleConn(app.connections[s.ID()])
 	})
 }
 
@@ -117,8 +121,10 @@ func (app *App) Start() {
 		app.quit(err)
 	}
 
+	go app.Server.Serve()
+	defer app.Server.Close()
+
 	app.connections = make(map[string]*things.Conn)
-	fmt.Println(app.connections)
 	app.SocketRouter()
 
 	//HTTP handlers
@@ -132,5 +138,4 @@ func (app *App) Start() {
 
 	log.Printf("Serving at %s:%d...", app.Host, app.Port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", app.Port), nil))
-
 }

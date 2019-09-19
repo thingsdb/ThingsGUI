@@ -10,19 +10,20 @@ import (
 	things "github.com/thingsdb/go/client"
 )
 
-type Resp struct {
-	connected bool
-	connErr   error
+type LoginResp struct {
+	Loaded    bool
+	Connected bool
+	ConnErr   error
 }
 
-func connect(sid string, logCh chan string, conn *map[string]*things.Conn, address string, user string, password string, token string) Resp {
+func connect(sid string, logCh chan string, conn *map[string]*things.Conn, address string, user string, password string, token string) LoginResp {
 	hp := strings.Split(address, ":")
 	if len(hp) != 2 {
-		return Resp{false, fmt.Errorf("invalid address")}
+		return LoginResp{Connected: false, ConnErr: fmt.Errorf("invalid address")}
 	}
 	port, err := strconv.ParseUint(hp[1], 10, 16)
 	if err != nil {
-		return Resp{false, err}
+		return LoginResp{Connected: false, ConnErr: err}
 	}
 	host := hp[0]
 
@@ -35,51 +36,41 @@ func connect(sid string, logCh chan string, conn *map[string]*things.Conn, addre
 	if !(*conn)[sid].IsConnected() {
 		err := (*conn)[sid].Connect()
 		if err != nil {
-			return Resp{false, err}
+			return LoginResp{Connected: false, ConnErr: err}
 		}
 	}
 
 	if password != "" {
 		err := (*conn)[sid].AuthPassword(user, password)
 		if err != nil {
-			return Resp{false, err}
+			return LoginResp{Connected: false, ConnErr: err}
 		}
 	} else {
 		err := (*conn)[sid].AuthToken(token)
 		if err != nil {
-			return Resp{false, err}
+			return LoginResp{Connected: false, ConnErr: err}
 		}
 	}
-	return Resp{connected: true}
+	return LoginResp{Connected: true}
 }
 
-func Connected(sid string, conn *map[string]*things.Conn) (int, map[string]bool, util.Message) {
-	var resp map[string]bool
-	fmt.Println(*conn)
+func Connected(sid string, conn *map[string]*things.Conn) (int, LoginResp, util.Message) {
+	var resp LoginResp
+	fmt.Println(sid)
 	switch {
 	case (*conn)[sid] == nil:
-		resp = map[string]bool{
-			"loaded":    true,
-			"connected": false,
-		}
+		resp = LoginResp{Loaded: true, Connected: false}
 	case (*conn)[sid].IsConnected():
-		resp = map[string]bool{
-			"loaded":    true,
-			"connected": true,
-		}
+		resp = LoginResp{Loaded: true, Connected: true}
 	default:
-		resp = map[string]bool{
-			"loaded":    true,
-			"connected": false,
-		}
+		resp = LoginResp{Loaded: true, Connected: false}
 	}
-
-	message := util.Message{"", http.StatusOK, ""}
+	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	return message.Status, resp, message
 }
 
-func Connect(sid string, logCh chan string, conn *map[string]*things.Conn, data map[string]string) (int, Resp, util.Message) {
-	var resp Resp
+func Connect(sid string, logCh chan string, conn *map[string]*things.Conn, data map[string]string) (int, LoginResp, util.Message) {
+	var resp LoginResp
 	var message util.Message
 	resp = connect(
 		sid,
@@ -90,16 +81,16 @@ func Connect(sid string, logCh chan string, conn *map[string]*things.Conn, data 
 		data["password"],
 		data["token"])
 
-	if resp.connected {
-		message = util.Message{"", http.StatusOK, ""}
+	if resp.Connected {
+		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	} else {
-		message = util.Message{resp.connErr.Error(), http.StatusInternalServerError, resp.connErr.Error()}
+		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
 	}
 	return message.Status, resp, message
 }
 
-func ConnectOther(sid string, logCh chan string, conn *map[string]*things.Conn, data map[string]string) (int, Resp, util.Message) {
-	var resp Resp
+func ConnectOther(sid string, logCh chan string, conn *map[string]*things.Conn, data map[string]string) (int, LoginResp, util.Message) {
+	var resp LoginResp
 	var message util.Message
 
 	CloseSingleConn((*conn)[sid])
@@ -113,18 +104,18 @@ func ConnectOther(sid string, logCh chan string, conn *map[string]*things.Conn, 
 		data["password"],
 		data["token"])
 
-	if resp.connected {
-		message = util.Message{"", http.StatusOK, ""}
+	if resp.Connected {
+		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	} else {
-		message = util.Message{resp.connErr.Error(), http.StatusInternalServerError, resp.connErr.Error()}
+		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
 	}
 	return message.Status, resp, message
 }
 
-func Disconnect(conn *things.Conn) (int, interface{}, util.Message) {
+func Disconnect(conn *things.Conn) (int, LoginResp, util.Message) {
 	CloseSingleConn(conn) // check if really closed?
-	message := util.Message{"", http.StatusOK, ""}
-	return 0, map[string]interface{}{"connected": false}, message
+	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	return message.Status, LoginResp{Loaded: true, Connected: false}, message
 }
 
 func CloseSingleConn(conn *things.Conn) {
