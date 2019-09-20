@@ -13,7 +13,7 @@ class NodeHandler(BaseHandler):
         client_ = Client()
         await client_.connect(host, port)
         await client_.authenticate(auth=[client._username, client._password])
-        result = await client_.query(q, scope='@thingsdb')
+        result = await client_.query(q, scope='@node')
         client_.close()
         return result
 
@@ -88,12 +88,12 @@ class NodeHandler(BaseHandler):
 
     @classmethod
     @BaseHandler.socket_handler
-    async def new_node(cls, client, data):  # TODOS check ipaddress?
+    async def new_node(cls, client, data):  # TODOS check address?
         if data.get('port'):
-            q = r'''new_node('{secret}', '{ipAddress}', {port});
+            q = r'''new_node('{secret}', '{address}', {port});
                 '''.format_map(data)
         else:
-            q = r'''new_node('{secret}', '{ipAddress}');'''.format_map(data)
+            q = r'''new_node('{secret}', '{address}');'''.format_map(data)
         result = await client.query(q, scope='@thingsdb')
 
         resp = {
@@ -114,7 +114,7 @@ class NodeHandler(BaseHandler):
 
     @classmethod
     @BaseHandler.socket_handler
-    async def replace_node(cls, client, data):  # TODOS check ipaddress?
+    async def replace_node(cls, client, data):  # TODOS check address?
         if data.get('port'):
             q = r'''replace_node({nodeId}, '{secret}', '{address}', {port});
                 '''.format_map(data)

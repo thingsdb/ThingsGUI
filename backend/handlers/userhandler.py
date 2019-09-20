@@ -78,8 +78,6 @@ class UserHandler(BaseHandler):
     @classmethod
     @BaseHandler.socket_handler
     async def new_token(cls, client, data):
-        print(data)
-
         name = data.get('name')
 
         if data.get('expirationTime'):

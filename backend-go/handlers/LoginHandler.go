@@ -16,7 +16,12 @@ type LoginResp struct {
 	ConnErr   error
 }
 
-func connect(sid string, logCh chan string, conn *map[string]*things.Conn, address string, user string, password string, token string) LoginResp {
+type Conn struct {
+	Open       bool
+	Connection *things.Conn
+}
+
+func connect(conn *Conn, logCh chan string, address string, user string, password string, token string) LoginResp {
 	hp := strings.Split(address, ":")
 	if len(hp) != 2 {
 		return LoginResp{Connected: false, ConnErr: fmt.Errorf("invalid address")}
@@ -27,26 +32,27 @@ func connect(sid string, logCh chan string, conn *map[string]*things.Conn, addre
 	}
 	host := hp[0]
 
-	(*conn)[sid] = things.NewConn(host, uint16(port))
-	(*conn)[sid].LogCh = logCh
-	(*conn)[sid].OnClose = func() {
-		delete(*conn, sid)
+	conn.Connection = things.NewConn(host, uint16(port))
+	conn.Open = true
+	conn.Connection.LogCh = logCh
+	conn.Connection.OnClose = func() {
+		conn.Open = false
 	}
 
-	if !(*conn)[sid].IsConnected() {
-		err := (*conn)[sid].Connect()
+	if !(*conn).Connection.IsConnected() {
+		err := (*conn).Connection.Connect()
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 	}
 
 	if password != "" {
-		err := (*conn)[sid].AuthPassword(user, password)
+		err := (*conn).Connection.AuthPassword(user, password)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 	} else {
-		err := (*conn)[sid].AuthToken(token)
+		err := (*conn).Connection.AuthToken(token)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
@@ -54,13 +60,12 @@ func connect(sid string, logCh chan string, conn *map[string]*things.Conn, addre
 	return LoginResp{Connected: true}
 }
 
-func Connected(sid string, conn *map[string]*things.Conn) (int, LoginResp, util.Message) {
+func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
 	var resp LoginResp
-	fmt.Println(sid)
 	switch {
-	case (*conn)[sid] == nil:
+	case conn == nil:
 		resp = LoginResp{Loaded: true, Connected: false}
-	case (*conn)[sid].IsConnected():
+	case conn.IsConnected():
 		resp = LoginResp{Loaded: true, Connected: true}
 	default:
 		resp = LoginResp{Loaded: true, Connected: false}
@@ -69,13 +74,12 @@ func Connected(sid string, conn *map[string]*things.Conn) (int, LoginResp, util.
 	return message.Status, resp, message
 }
 
-func Connect(sid string, logCh chan string, conn *map[string]*things.Conn, data map[string]string) (int, LoginResp, util.Message) {
+func Connect(conn *Conn, logCh chan string, data map[string]string) (int, LoginResp, util.Message) {
 	var resp LoginResp
 	var message util.Message
 	resp = connect(
-		sid,
-		logCh,
 		conn,
+		logCh,
 		data["host"],
 		data["user"],
 		data["password"],
@@ -89,16 +93,15 @@ func Connect(sid string, logCh chan string, conn *map[string]*things.Conn, data 
 	return message.Status, resp, message
 }
 
-func ConnectOther(sid string, logCh chan string, conn *map[string]*things.Conn, data map[string]string) (int, LoginResp, util.Message) {
+func ConnectOther(conn *Conn, logCh chan string, data map[string]string) (int, LoginResp, util.Message) {
 	var resp LoginResp
 	var message util.Message
 
-	CloseSingleConn((*conn)[sid])
+	CloseSingleConn(conn.Connection)
 
 	resp = connect(
-		sid,
-		logCh,
 		conn,
+		logCh,
 		data["host"],
 		data["user"],
 		data["password"],
@@ -121,13 +124,5 @@ func Disconnect(conn *things.Conn) (int, LoginResp, util.Message) {
 func CloseSingleConn(conn *things.Conn) {
 	if conn != nil {
 		conn.Close()
-	}
-}
-
-func CloseAllConn(connections *map[string]*things.Conn) {
-	for _, conn := range *connections {
-		if conn != nil {
-			conn.Close()
-		}
 	}
 }

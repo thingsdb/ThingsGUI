@@ -53,7 +53,7 @@ class ThingsdbStore extends BaseStore {
 
     onGetInfo() {
         this.emit('getInfo').done((data) => {
-            console.log(data);
+            console.log("GETINFO: ", data);
             this.setState({
                 collections: data.Collections,
                 users: data.Users,
@@ -184,7 +184,7 @@ class ThingsdbStore extends BaseStore {
     //USERS
 
     onGetUsers(tag, cb){
-        this.emit('/user/get_users').done((data) => {
+        this.emit('getUsers').done((data) => {
             this.setState({users: data.Users});
             cb();
         }).fail((event, status, message) => {
@@ -194,7 +194,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onGetUser(tag, cb, config=null){
-        this.emit('/user/get', {
+        this.emit('getUser', {
             config,
         }).done((data) => {
             this.setState({
@@ -209,7 +209,7 @@ class ThingsdbStore extends BaseStore {
 
 
     onAddUser(name, tag, cb){
-        this.emit('/user/add', {
+        this.emit('newUser', {
             name,
         }).done((data) => {
             this.setState({
@@ -223,7 +223,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onRemoveUser(name, tag, cb) {
-        this.emit('/user/remove', {
+        this.emit('delUser', {
             name
         }).done((data) => {
             this.setState({
@@ -237,7 +237,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onRenameUser(oldname, newname, tag, cb) {
-        this.emit('/user/rename', {
+        this.emit('renameUser', {
             oldname,
             newname,
         }).done((data) => {
@@ -252,7 +252,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onPassword(name, password, tag, cb) {
-        this.emit('/user/password', {
+        this.emit('setPassword', {
             name,
             password,
         }).done((data) => {
@@ -267,7 +267,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onResetPassword(name, tag, cb) {
-        this.emit('/user/reset_password', {
+        this.emit('resetPassword', {
             name,
         }).done((data) => {
             this.setState({
@@ -280,28 +280,26 @@ class ThingsdbStore extends BaseStore {
         });
     }
 
-    onGrant(name, collection, access, tag, cb) {
-        this.emit('/user/grant', {
+    onGrant(name, collection, access, tag) {
+        this.emit('grant', {
             collection,
             name,
             access,
         }).done((data) => {
             this.setState({users: data.Users});
-            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
 
-    onRevoke(name, collection, access, tag, cb) {
-        this.emit('/user/revoke', {
+    onRevoke(name, collection, access, tag) {
+        this.emit('revoke', {
             collection,
             name,
             access,
         }).done((data) => {
             this.setState({users: data.Users});
-            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
 
@@ -309,7 +307,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onNewToken(config, tag, cb){ // name [, expirationTime] [, description]
-        this.emit('/user/new_token', config).done((data) => {
+        this.emit('newToken', config).done((data) => {
             this.setState({
                 users: data.Users
             });
@@ -321,7 +319,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onDelToken(key){
-        this.emit('/user/del_token', {
+        this.emit('delToken', {
             key,
         }).done((data) => {
             this.setState({
@@ -331,7 +329,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onDelExpired(){
-        this.emit('/user/del_expired').done((data) => {
+        this.emit('delExpired').done((data) => {
             this.setState({
                 users: data.Users
             });

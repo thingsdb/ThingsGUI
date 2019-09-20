@@ -20,12 +20,12 @@ const AddNode = () => {
 
     const validation = {
         secret: () => form.secret.length>0,
-        ipAddress: () => form.ipAddress.length>0, // TODOs validate regex
+        address: () => form.address.length>0, // TODOs validate regex
         port: () => true,
     };
 
     const handleClickOpen = () => {
-        setState({...state, show: true, errors: {}, form: {secret: '', ipAddress: '', port: ''}});
+        setState({...state, show: true, errors: {}, form: {secret: '', address: '', port: ''}});
     };
 
     const handleClickClose = () => {
@@ -71,14 +71,14 @@ const AddNode = () => {
             />
             <TextField
                 margin="dense"
-                id="ipAddress"
+                id="address"
                 label="IP address"
                 type="text"
-                value={form.ipAddress}
+                value={form.address}
                 spellCheck={false}
                 onChange={handleOnChange}
                 fullWidth
-                error={errors.ipAddress}
+                error={errors.address}
             />
             <TextField
                 margin="dense"

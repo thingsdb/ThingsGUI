@@ -24,21 +24,15 @@ class _SocketRequest {
     }
 
     constructor(event, ...data) {
-        console.log(`${window.location.protocol}//${window.location.host}`)
         window.console.debug(`Socket request: "${event}"`, data);
 
         var warnOnLong = setTimeout(() => {
             window.console.warn(`No result for request "${event}" within 3 seconds.`);
         }, 3000);
 
-        console.log(data, JSON.stringify(data), event);
-
         socket.emit(event, ...data, (status, data, message) => {
-
-            console.log('emiiiit', data, status);
-
+            console.log(event, data)
             clearTimeout(warnOnLong);
-
             if (message !== undefined && message !== null) {
                 // MessageActions.add(message);
             }

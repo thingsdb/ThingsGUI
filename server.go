@@ -16,7 +16,7 @@ var (
 
 func init() {
 	flag.StringVar(&host, "host", "localhost", "host")
-	flag.UintVar(&port, "port", 8081, "Port")
+	flag.UintVar(&port, "port", 8080, "Port")
 	flag.UintVar(&timeout, "timeout", 30, "timeout")
 	//flag.BoolVar(&debugMode, "debug mode", false, "Debug ")
 	//flag.StringVar(&configFile, "config file", "default.conf", "Config file")

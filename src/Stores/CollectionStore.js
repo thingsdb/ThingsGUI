@@ -7,7 +7,6 @@ import {ThingsdbActions} from './ThingsdbStore';
 const CollectionActions = Vlow.createActions([
     'query',
     'rawQuery',
-    'queryWithOutput',
     'queryEditor',
 ]);
 
@@ -29,46 +28,46 @@ class CollectionStore extends BaseStore {
     }
 
     onQuery(collection, thingId=null, depth=1) {
-        this.emit('/collection/query', {
+        this.emit('queryThing', {
             collectionName: collection.name,
             thingId: thingId,
             depth: depth
         }).done((data) => {
             this.setState(prevState => {
                 const things = thingId ?
-                    Object.assign({}, prevState.things, {[thingId]: data})
+                    Object.assign({}, prevState.things, {[thingId]: data.Things})
                     :
-                    Object.assign({}, prevState.things, {[collection.collection_id]: data});
+                    Object.assign({}, prevState.things, {[collection.collection_id]: data.Things});
                 return {things};
             });
-        }).fail((event, status, message) => ErrorActions.setToastError(message.log));
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
     onRawQuery(collection, thingId, query, tag, cb) {
-        this.emit('/collection/raw_query', {
+        this.emit('queryRaw', {
             collectionName: collection.name,
             thingId: thingId,
             query: query,
         }).done((data) => {
             this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[thingId]: data});
+                const things = Object.assign({}, prevState.things, {[thingId]: data.Things});
                 return {things};
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
         });
     }
 
     onQueryEditor(scope, collectionId, query, onOutput, tag) {
-        this.emit('/collection/query_editor', {
+        this.emit('queryEditor', {
             scope: scope,
             query: query,
         }).done((data) => {
-            onOutput(data.output);
+            onOutput(data.Output);
             if (collectionId!==null) {
                 this.setState(prevState => {
-                    const things = Object.assign({}, prevState.things, {[collectionId]: data.things});
+                    const things = Object.assign({}, prevState.things, {[collectionId]: data.Things});
                     return {things};
                 });
             } else {
@@ -76,7 +75,7 @@ class CollectionStore extends BaseStore {
             }
 
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
         });
     }
 }

@@ -28,7 +28,7 @@ const Query = ({collections, input}) => {
     const scopes = [
         {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
         {name: 'Node', value: '@node', collectionId: null},
-        ...collections.map((c) => ({name: c.name, value: `@:${c.name}`, collectionId: c.collection_id}))
+        ...collections.map((c) => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
     ];
 
 

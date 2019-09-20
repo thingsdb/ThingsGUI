@@ -35,88 +35,88 @@ class NodesStore extends BaseStore {
     }
 
     onGetNodes(){
-        this.emit('/node/get_nodes').done((data) => {
-            this.setState({nodes: data.nodes});
+        this.emit('getNodes').done((data) => {
+            this.setState({nodes: data.Nodes});
         }).fail((event, status, message) => {
             this.setState({
                 counters: {},
                 nodes: [],
                 node: {},
             });
-            ErrorActions.setToastError(message.log);
+            ErrorActions.setToastError(message.Log);
         });
     }
 
     onGetNode() {
-        this.emit('/node/get').done((data) => {
+        this.emit('getNode').done((data) => {
             this.setState({
-                node: data.node,
-                counters: data.counters
+                node: data.Node,
+                counters: data.Counters
             });
-        }).fail((event, status, message) => ErrorActions.setToastError(message.log));
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
     onSetLoglevel(node, level, tag, cb) {
-        this.emit('/node/loglevel', {
+        this.emit('setLoglevel', {
             node: node.node_id,
             level,
         }).done((data) => {
             this.setState({
-                node: data.node
+                node: data.Node
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
 
         });
     }
     onResetCounters(node) {
-        this.emit('/node/counters/reset', {
+        this.emit('resetCounters', {
             node: node.node_id,
         }).done((data) => {
             this.setState({
-                counters: data.counters
+                counters: data.Counters
             });
-        });//.fail((event, status, message) => ErrorActions.setMsgError(message.log)); TODO create msg error!
+        });//.fail((event, status, message) => ErrorActions.setMsgError(message.Log)); TODO create msg error!
     }
 
     onShutdown(node, tag, cb) {
-        this.emit('/node/shutdown', {
+        this.emit('shutdown', {
             node: node.node_id,
         }).done((data) => {
             this.setState({
-                node: data.node
+                node: data.Node
             });
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
         });
     }
 
-    onAddNode(config, tag, cb) { // secret , ipAddress [, port]
-        this.emit('/node/add', config).done(() => {
+    onAddNode(config, tag, cb) { // secret , address [, port]
+        this.emit('newNode', config).done(() => {
             this.onGetNodes();
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
         });
     }
 
     onPopNode(tag, cb) {
-        this.emit('/node/pop').done(() => {
+        this.emit('popNode').done(() => {
             this.onGetNodes();
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
         });
     }
 
     onReplaceNode(config, tag, cb) { // nodeId , secret, address [, port]
-        this.emit('/node/replace', config).done(() => {
+        this.emit('replaceNode', config).done(() => {
             this.onGetNodes();
             cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.log);
+            ErrorActions.setMsgError(tag, message.Log);
         });
     }
 

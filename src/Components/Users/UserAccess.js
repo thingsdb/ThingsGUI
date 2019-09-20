@@ -91,19 +91,19 @@ const UserAccess = ({user, collections}) => {
         return ({[scope]: s});
     };
 
-    // const scopes = [
-    //     {name: 'ThingsDB', value: '@thingsdb'},
-    //     {name: 'Node', value: '@node'},
-    //     ...collections.map((c) => ({name: c.name, value: `@:${c.name}`}))
-    // ];
+    const scopes = [
+        {name: 'ThingsDB', value: '@thingsdb'},
+        {name: 'Node', value: '@node'},
+        ...collections.map((c) => ({name: c.name, value: `@collection:${c.name}`}))
+    ];
 
     //TODO CHECK IF SCOPES ARE CORRECT
 
     React.useEffect(() => {
         let s = {};
-        // scopes.map(({_name, value}) => {
-        //     s = Object.assign({}, s, getSwitches(value, ''));
-        // });
+        scopes.map(({_name, value}) => {
+            s = Object.assign({}, s, getSwitches(value, ''));
+        });
         user.access.map(({scope, privileges}) => {
             s = Object.assign({}, s, getSwitches(scope, privileges));
         });
