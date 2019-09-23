@@ -7,7 +7,7 @@ import {NodesActions} from '../../Stores/NodesStore';
 const CountersReset = ({node}) => {
 
     const handleClickOk = () => {
-        NodesActions.resetCounters(node);
+        NodesActions.resetCounters();
     };
 
     return (

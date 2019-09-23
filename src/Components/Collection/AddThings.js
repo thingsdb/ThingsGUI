@@ -24,6 +24,7 @@ const dataTypes = [
     'closure',
     'boolean',
     'nil',
+    'blob',
 ];
 
 const initialState = {
@@ -43,6 +44,7 @@ const AddThings = ({info, collection, thing}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
     const {id, name, type} = info;
+    const fileRef = React.useRef(null);
 
     const handleClickOpen = () => {
         const t = type == 'set' ?  dataTypes[3] : dataTypes[0];
@@ -108,21 +110,96 @@ const AddThings = ({info, collection, thing}) => {
         });
     };
 
+    const toBlob = (file) => {
+        var r = new FileReader();
+        r.onload = function(){
+
+            // var bufArr = new ArrayBuffer(r.result.length);
+            // var bufView = new Uint8Array(bufArr);
+            // for (let i = 0; i < r.result.length; i++) {
+            //     bufView[i] = r.result[i];
+            // }
+            // var str = ab2str(bufArr);
+
+            // var enc = new TextDecoder("utf-8");
+            // var arr = new Uint8Array([84,104,105,115,32,105,115,32,97,32,85,105,110,116,
+            //                         56,65,114,114,97,121,32,99,111,110,118,101,114,116,
+            //                         101,100,32,116,111,32,97,32,115,116,114,105,110,103]);
+            // console.log(enc.decode(arr));
+
+            var bufView = new Int8Array(r.result);
+            var output = JSON.stringify(bufView, null, '  ');
+            console.log(output);
+
+        };
+        // r.readAsBinaryString(file);
+        r.readAsArrayBuffer(file);
+        //return r.result;
+    };
+
+    // function readFileAsArrayBuffer(file, success, error) {
+    //     var fr = new FileReader();
+    //     fr.addEventListener('error', error, false);
+    //     if (fr.readAsBinaryString) {
+    //         fr.addEventListener('load', function () {
+    //             var string = this.resultString != null ? this.resultString : this.result;
+    //             var result = new Uint8Array(string.length);
+    //             for (var i = 0; i < string.length; i++) {
+    //                 result[i] = string.charCodeAt(i);
+    //             }
+    //             success(result.buffer);
+    //         }, false);
+    //         return fr.readAsBinaryString(file);
+    //     } else {
+    //         fr.addEventListener('load', function () {
+    //             success(this.result);
+    //         }, false);
+    //         return fr.readAsArrayBuffer(file);
+    //     }
+    // }
+
+    // readFileAsArrayBuffer(input.files[0], function(data) {
+    //     var array = new Int8Array(data);
+    //     output.value = JSON.stringify(array, null, '  ');
+    //     window.setTimeout(ReadFile, 1000);
+    // }, function (e) {
+    //     console.error(e);
+    // });
+
+    // const ab2str = (buf) => {
+    //     return String.fromCharCode.apply(null, new Uint8Array(buf));
+    // }
+
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
-            CollectionActions.rawQuery(
-                collection,
-                id,
-                form.queryString,
-                tag,
-                () => {
-                    ThingsdbActions.getCollections();
-                    setState({...state, show: false});
-                }
-            );
+            if (form.dataType== 'blob') {
+                const d = toBlob(fileRef.current.files[0]);
+                console.log(fileRef.current.files[0], d);
+                CollectionActions.rawQuery(
+                    collection,
+                    id,
+                    form.queryString,
+                    tag,
+                    () => {
+                        ThingsdbActions.getCollections();
+                        setState({...state, show: false});
+                    },
+                );
 
+            } else {
+                CollectionActions.rawQuery(
+                    collection,
+                    id,
+                    form.queryString,
+                    tag,
+                    () => {
+                        ThingsdbActions.getCollections();
+                        setState({...state, show: false});
+                    }
+                );
+            }
         }
     };
 
@@ -130,6 +207,7 @@ const AddThings = ({info, collection, thing}) => {
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';
     const booleanInputField = form.dataType == 'boolean';
+    const blobInputField = form.dataType == 'blob';
 
 
     const Content = (
@@ -234,6 +312,10 @@ const AddThings = ({info, collection, thing}) => {
                                 labelPlacement="end"
                             />
                         </RadioGroup>
+                    </ListItem>
+                ) : blobInputField ? (
+                    <ListItem>
+                        <input type="file" ref={fileRef}  />
                     </ListItem>
                 ) : null}
             </List>

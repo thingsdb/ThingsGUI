@@ -28,7 +28,8 @@ const checkType = (t) => {
         type = Array.isArray(t) ? 'array' : 'object';
         if (type === 'object') {
             const kindOfObject = Object.keys(t)[0];
-            type = kindOfObject === '#' ? 'object' : (kindOfObject === '$' ? 'set' : null );
+            type = kindOfObject === '#' ? 'object'
+                : kindOfObject === '$' ? 'set' : 'object' ; // todo maak onderscheid tussen thing object?
         }
     }
     return(type);
@@ -36,7 +37,7 @@ const checkType = (t) => {
 
 const thingValue = (type, thing) => {
     return type === 'array' ? `[${thing.length}]`
-        : type === 'object' ? `{${Object.keys(thing)[0]}${thing['#']}}`
+        : type === 'object' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
             : type === 'set' ? `{${Object.keys(thing)[0]}}`
                 : type === 'string' || type === 'number' || type === 'boolean' ? `${thing}`
                     : type === 'nil' ? 'nil'

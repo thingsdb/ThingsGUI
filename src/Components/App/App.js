@@ -101,7 +101,6 @@ const App = ({collections, match, user, users, nodes, openEditor}) => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    console.log('app');
     return(
         <DrawerLayout
             open={open}

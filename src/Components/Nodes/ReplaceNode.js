@@ -126,7 +126,7 @@ const ReplaceNode = ({node}) => {
             </Collapse>
         </React.Fragment>
     );
-    console.log(node);
+
 
     return(
         <SimpleModal

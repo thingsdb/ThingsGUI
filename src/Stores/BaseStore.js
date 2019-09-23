@@ -31,7 +31,6 @@ class _SocketRequest {
         }, 3000);
 
         socket.emit(event, ...data, (status, data, message) => {
-            console.log(event, data)
             clearTimeout(warnOnLong);
             if (message !== undefined && message !== null) {
                 // MessageActions.add(message);

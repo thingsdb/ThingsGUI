@@ -12,7 +12,6 @@ import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 const tag = '4';
 const RemoveThing = ({collection, thing, info}) => {
     const [show, setShow] = React.useState(false);
-    console.log(info);
     const handleClickOpen = () => {
         setShow(true);
     };

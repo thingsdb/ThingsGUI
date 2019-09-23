@@ -44,7 +44,6 @@ const Loglevel = ({node}) => {
 
     const handleClickOk = () => {
         NodesActions.setLoglevel(
-            node,
             form.log_level,
             tag,
             () => setState({...state, show: false})

@@ -37,7 +37,7 @@ const Query = ({collections, input}) => {
     };
 
     const handleSubmit = () => {
-        CollectionActions.queryEditor(scopes[index].value, scopes[index].collectionId, query, handleOutput, tag);
+        CollectionActions.queryEditor(query, scopes[index].value, scopes[index].collectionId, handleOutput, tag);
     };
 
     const handleOutput = (out) => {

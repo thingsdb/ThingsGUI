@@ -61,8 +61,6 @@ const UserAccess = ({user, collections}) => {
     const classes = useStyles();
     const [switches, setSwitches] = React.useState({});
 
-    console.log('grant');
-
     const getSwitches = (scope, privileges) => {
         let s = {
             full: false,

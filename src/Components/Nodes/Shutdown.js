@@ -20,7 +20,7 @@ const CountersReset = ({node}) => {
     };
 
     const handleClickOk = () => {
-        NodesActions.shutdown(node, tag, () => setShow(false));
+        NodesActions.shutdown(tag, () => setShow(false));
     };
 
     return(

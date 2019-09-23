@@ -3,6 +3,8 @@ import Vlow from 'vlow';
 import BaseStore from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 
+const scope='@node';
+
 const NodesActions = Vlow.createActions([
     'getNodes',
     'getNode',
@@ -35,8 +37,12 @@ class NodesStore extends BaseStore {
     }
 
     onGetNodes(){
-        this.emit('getNodes').done((data) => {
-            this.setState({nodes: data.Nodes});
+        const query = 'nodes_info();';
+        this.emit('query', {
+            scope,
+            query
+        }).done((data) => {
+            this.setState({nodes: data});
         }).fail((event, status, message) => {
             this.setState({
                 counters: {},
@@ -48,21 +54,26 @@ class NodesStore extends BaseStore {
     }
 
     onGetNode() {
-        this.emit('getNode').done((data) => {
+        const query = '{counters: counters(), node: node_info()};';
+        this.emit('query', {
+            scope,
+            query
+        }).done((data) => {
             this.setState({
-                node: data.Node,
-                counters: data.Counters
+                node: data.node,
+                counters: data.counters
             });
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onSetLoglevel(node, level, tag, cb) {
-        this.emit('setLoglevel', {
-            node: node.node_id,
-            level,
+    onSetLoglevel(level, tag, cb) {
+        const query = `set_log_level(${level}); node_info();`;
+        this.emit('query', {
+            scope,
+            query
         }).done((data) => {
             this.setState({
-                node: data.Node
+                node: data
             });
             cb();
         }).fail((event, status, message) => {
@@ -70,19 +81,23 @@ class NodesStore extends BaseStore {
 
         });
     }
-    onResetCounters(node) {
-        this.emit('resetCounters', {
-            node: node.node_id,
+    onResetCounters() {
+        const query = 'reset_counters(); counters();';
+        this.emit('query', {
+            scope,
+            query
         }).done((data) => {
             this.setState({
-                counters: data.Counters
+                counters: data
             });
         });//.fail((event, status, message) => ErrorActions.setMsgError(message.Log)); TODO create msg error!
     }
 
-    onShutdown(node, tag, cb) {
-        this.emit('shutdown', {
-            node: node.node_id,
+    onShutdown(tag, cb) {
+        const query = 'shutdown(); node_info();';
+        this.emit('query', {
+            scope,
+            query
         }).done((data) => {
             this.setState({
                 node: data.Node
@@ -94,8 +109,14 @@ class NodesStore extends BaseStore {
     }
 
     onAddNode(config, tag, cb) { // secret , address [, port]
-        this.emit('newNode', config).done(() => {
-            this.onGetNodes();
+        const query = config.port ? `new_node('${config.secret}', '${config.address}', ${config.port}); nodes_info();`: `new_node('${config.secret}', '${config.address}'); nodes_info();`;
+        this.emit('query', {
+            scope,
+            query
+        }).done((data) => {
+            this.setState({
+                nodes: data
+            });
             cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
@@ -103,8 +124,14 @@ class NodesStore extends BaseStore {
     }
 
     onPopNode(tag, cb) {
-        this.emit('popNode').done(() => {
-            this.onGetNodes();
+        const query = 'pop_node(); nodes_info();';
+        this.emit('query', {
+            scope,
+            query
+        }).done((data) => {
+            this.setState({
+                nodes: data
+            });
             cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
@@ -112,8 +139,14 @@ class NodesStore extends BaseStore {
     }
 
     onReplaceNode(config, tag, cb) { // nodeId , secret, address [, port]
-        this.emit('replaceNode', config).done(() => {
-            this.onGetNodes();
+        const query = config.port ? `replace_node('${config.nodeId}', '${config.secret}', '${config.address}', ${config.port}); nodes_info();`: `replace_node('${config.nodeId}', '${config.secret}', '${config.address}'); nodes_info();`;
+        this.emit('query', {
+            scope,
+            query
+        }).done((data) => {
+            this.setState({
+                nodes: data
+            });
             cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);

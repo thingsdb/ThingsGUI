@@ -28,29 +28,32 @@ class CollectionStore extends BaseStore {
     }
 
     onQuery(collection, thingId=null, depth=1) {
-        this.emit('queryThing', {
-            collectionName: collection.name,
-            thingId: thingId,
-            depth: depth
+        const query = thingId ? `return(#${thingId}, ${depth})` : `return(thing(.id()), ${depth})`;
+        const scope = `@collection:${collection.name}`;
+        this.emit('query', {
+            query,
+            scope
         }).done((data) => {
             this.setState(prevState => {
                 const things = thingId ?
-                    Object.assign({}, prevState.things, {[thingId]: data.Things})
+                    Object.assign({}, prevState.things, {[thingId]: data})
                     :
-                    Object.assign({}, prevState.things, {[collection.collection_id]: data.Things});
+                    Object.assign({}, prevState.things, {[collection.collection_id]: data});
                 return {things};
             });
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRawQuery(collection, thingId, query, tag, cb) {
-        this.emit('queryRaw', {
-            collectionName: collection.name,
-            thingId: thingId,
-            query: query,
+    onRawQuery(collection, thingId, q, tag, cb, blob=null) {
+        const query = `${q} #${thingId}`;
+        const scope = `@collection:${collection.name}`;
+        console.log(blob)
+        this.emit('query', {
+            query,
+            scope
         }).done((data) => {
             this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[thingId]: data.Things});
+                const things = Object.assign({}, prevState.things, {[thingId]: data});
                 return {things};
             });
             cb();
@@ -59,21 +62,22 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQueryEditor(scope, collectionId, query, onOutput, tag) {
+    onQueryEditor(query, scope, collectionId, onOutput, tag) {
+        console.log(query);
         this.emit('queryEditor', {
-            scope: scope,
-            query: query,
+            query,
+            scope
         }).done((data) => {
-            onOutput(data.Output);
+            console.log(data);
+            onOutput(data.output);
             if (collectionId!==null) {
                 this.setState(prevState => {
-                    const things = Object.assign({}, prevState.things, {[collectionId]: data.Things});
+                    const things = Object.assign({}, prevState.things, {[collectionId]: data.things});
                     return {things};
                 });
             } else {
                 ThingsdbActions.getInfo();
             }
-
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });
