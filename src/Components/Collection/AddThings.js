@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBoxOutlined';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Collapse from '@material-ui/core/Collapse';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
@@ -9,6 +10,8 @@ import ListItem from '@material-ui/core/ListItem';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Dropzone from 'react-dropzone';
+import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
@@ -35,6 +38,8 @@ const initialState = {
         newProperty: '',
         value: '',
         dataType: dataTypes[0],
+        blob: '',
+        fileName: '',
     },
 };
 
@@ -44,7 +49,6 @@ const AddThings = ({info, collection, thing}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
     const {id, name, type} = info;
-    const fileRef = React.useRef(null);
 
     const handleClickOpen = () => {
         const t = type == 'set' ?  dataTypes[3] : dataTypes[0];
@@ -57,6 +61,8 @@ const AddThings = ({info, collection, thing}) => {
                 newProperty: '',
                 value: '',
                 dataType: t,
+                blob: '',
+                fileName: '',
             },
         });
     };
@@ -110,84 +116,95 @@ const AddThings = ({info, collection, thing}) => {
         });
     };
 
-    const toBlob = (file) => {
-        var r = new FileReader();
-        r.onload = function(){
 
-            // var bufArr = new ArrayBuffer(r.result.length);
-            // var bufView = new Uint8Array(bufArr);
-            // for (let i = 0; i < r.result.length; i++) {
-            //     bufView[i] = r.result[i];
-            // }
-            // var str = ab2str(bufArr);
 
-            // var enc = new TextDecoder("utf-8");
-            // var arr = new Uint8Array([84,104,105,115,32,105,115,32,97,32,85,105,110,116,
-            //                         56,65,114,114,97,121,32,99,111,110,118,101,114,116,
-            //                         101,100,32,116,111,32,97,32,115,116,114,105,110,103]);
-            // console.log(enc.decode(arr));
-
-            var bufView = new Int8Array(r.result);
-            var output = JSON.stringify(bufView, null, '  ');
-            console.log(output);
-
-        };
-        // r.readAsBinaryString(file);
-        r.readAsArrayBuffer(file);
-        //return r.result;
-    };
-
-    // function readFileAsArrayBuffer(file, success, error) {
-    //     var fr = new FileReader();
+    // const readFileAsArrayBuffer = (file, success, error) => {
+    //     let fr = new FileReader();
     //     fr.addEventListener('error', error, false);
     //     if (fr.readAsBinaryString) {
     //         fr.addEventListener('load', function () {
-    //             var string = this.resultString != null ? this.resultString : this.result;
-    //             var result = new Uint8Array(string.length);
-    //             for (var i = 0; i < string.length; i++) {
-    //                 result[i] = string.charCodeAt(i);
+    //             let bin = new Uint8Array(fr.result.length);
+    //             for (let i = 0; i < fr.result.length; i++) {
+    //                 bin[i] = fr.result.charCodeAt(i);
     //             }
-    //             success(result.buffer);
+    //             success(bin.buffer);
     //         }, false);
     //         return fr.readAsBinaryString(file);
     //     } else {
     //         fr.addEventListener('load', function () {
-    //             success(this.result);
+    //             success(fr.result);
     //         }, false);
     //         return fr.readAsArrayBuffer(file);
     //     }
-    // }
+    // };
 
-    // readFileAsArrayBuffer(input.files[0], function(data) {
-    //     var array = new Int8Array(data);
-    //     output.value = JSON.stringify(array, null, '  ');
-    //     window.setTimeout(ReadFile, 1000);
-    // }, function (e) {
-    //     console.error(e);
-    // });
+    // const handleClickLoad = () => {
+    //     setState(prevState => {
+    //         const updatedForm = Object.assign({}, prevState.form, {loading: true});
+    //         return {...prevState, form: updatedForm};
+    //     });
+    //     setTimeout(() => {
+    //         readFileAsArrayBuffer(fileRef.current.files[0], function(data) {
+    //             let int8Array = new Int8Array(data);
+    //             let output = JSON.stringify(int8Array, null, '  ');
+    //             setState(prevState => {
+    //                 const updatedForm = Object.assign({}, prevState.form, {loading: false, blob: int8Array}); // check this!
+    //                 return {...prevState, form: updatedForm};
+    //             });
 
-    // const ab2str = (buf) => {
-    //     return String.fromCharCode.apply(null, new Uint8Array(buf));
-    // }
+
+    //             console.log(array, output);
+    //         }, function (e) {
+    //             setState(prevState => {
+    //                 const updatedForm = Object.assign({}, prevState.form, {loading: false});
+    //                 return {...prevState, form: updatedForm};
+    //             });
+    //             console.error(e);
+    //         });
+    //     }, 1000);
+
+    // };
+
+    const handleDropzone = React.useCallback(acceptedFiles => {
+        const reader = new FileReader();
+
+        reader.onabort = () => console.log('file reading was aborted');
+        reader.onerror = () => console.log('file reading has failed');
+        reader.onload = () => {
+            // Do whatever you want with the file contents
+            const binaryStr = reader.result;
+            // let bin = new Uint8Array(reader.result.length);
+            // for (let i = 0; i < reader.result.length; i++) {
+            //     bin[i] = reader.result.charCodeAt(i);
+            // }
+            // let output = JSON.stringify(bin, null, '  ');
+            // console.log(bin, bin.buffer);
+            var encodedData = btoa(binaryStr);
+            setState(prevState => {
+                const updatedForm = Object.assign({}, prevState.form, {blob: encodedData, fileName: acceptedFiles[0].name});
+                return {...prevState, form: updatedForm};
+            });
+        };
+
+        acceptedFiles.forEach(file => reader.readAsBinaryString(file));
+    }, []);
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
             if (form.dataType== 'blob') {
-                const d = toBlob(fileRef.current.files[0]);
-                console.log(fileRef.current.files[0], d);
-                CollectionActions.rawQuery(
+                CollectionActions.blob(
                     collection,
                     id,
                     form.queryString,
+                    form.blob,
                     tag,
                     () => {
                         ThingsdbActions.getCollections();
                         setState({...state, show: false});
                     },
                 );
-
             } else {
                 CollectionActions.rawQuery(
                     collection,
@@ -314,9 +331,29 @@ const AddThings = ({info, collection, thing}) => {
                         </RadioGroup>
                     </ListItem>
                 ) : blobInputField ? (
-                    <ListItem>
-                        <input type="file" ref={fileRef}  />
-                    </ListItem>
+                    <React.Fragment>
+                        <ListItem>
+                            <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
+                                {({getRootProps, getInputProps}) => (
+                                    <section>
+                                        <div {...getRootProps()}>
+                                            <input {...getInputProps()} />
+                                            <p>
+                                                {'Drag "n" drop some files here, or click to select files'}
+                                            </p>
+                                        </div>
+                                    </section>
+                                )}
+                            </Dropzone>
+                        </ListItem>
+                        <Collapse in={Boolean(form.blob)} timeout="auto" unmountOnExit>
+                            <ListItem>
+                                <Typography variant="button" color="primary">
+                                    {form.fileName}
+                                </Typography>
+                            </ListItem>
+                        </Collapse>
+                    </React.Fragment>
                 ) : null}
             </List>
         </React.Fragment>

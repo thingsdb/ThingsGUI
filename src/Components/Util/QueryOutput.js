@@ -23,7 +23,7 @@ const QueryOutput = ({output}) => {
                 dense
                 disablePadding
             >
-                {output ? (
+                {output != null ? (
                     <ThingsTree tree={output} />
                 ) : (
                     null

@@ -64,6 +64,10 @@ func (app *App) SocketRouter() {
 		return handlers.Query(app.connections[s.ID()].Connection, data, app.Timeout)
 	})
 
+	app.Server.OnEvent("/", "queryBlob", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
+		return handlers.QueryBlob(app.connections[s.ID()].Connection, data, app.Timeout)
+	})
+
 	app.Server.OnEvent("/", "queryEditor", func(s socketio.Conn, data map[string]interface{}) (int, map[string]interface{}, util.Message) {
 		return handlers.QueryEditor(app.connections[s.ID()].Connection, data, app.Timeout)
 	})
@@ -96,6 +100,8 @@ func (app *App) Start() {
 	// logchannel
 	app.logCh = make(chan string)
 	go app.logHandler()
+
+	handlers.Init()
 
 	// socketio
 	app.Server, err = socketio.NewServer(nil)

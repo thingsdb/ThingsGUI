@@ -54,7 +54,8 @@ const buildInput = (input, type) => {
                 : type == 'number' || type == 'boolean' ? `${input}`
                     : type == 'set' ? 'set({})'
                         : type == 'nil' ? 'nil'
-                            : '';
+                            : type == 'blob' ? 'blob'
+                                : '';
 };
 
 const buildQueryAdd = (id, name, value, type) => {

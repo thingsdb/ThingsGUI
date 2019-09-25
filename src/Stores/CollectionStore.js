@@ -5,6 +5,7 @@ import {ErrorActions} from './ErrorStore';
 import {ThingsdbActions} from './ThingsdbStore';
 
 const CollectionActions = Vlow.createActions([
+    'blob',
     'query',
     'rawQuery',
     'queryEditor',
@@ -27,6 +28,25 @@ class CollectionStore extends BaseStore {
         this.state = CollectionStore.defaults;
     }
 
+    onBlob(collection, thingId, q, blob, tag, cb) {
+        const query = `${q} #${thingId}`;
+        const scope = `@collection:${collection.name}`;
+        console.log(query, blob);
+        this.emit('queryBlob', {
+            query,
+            scope,
+            blob,
+        }).done((data) => {
+            this.setState(prevState => {
+                const things = Object.assign({}, prevState.things, {[thingId]: data});
+                return {things};
+            });
+            cb();
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
     onQuery(collection, thingId=null, depth=1) {
         const query = thingId ? `return(#${thingId}, ${depth})` : `return(thing(.id()), ${depth})`;
         const scope = `@collection:${collection.name}`;
@@ -44,10 +64,9 @@ class CollectionStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRawQuery(collection, thingId, q, tag, cb, blob=null) {
+    onRawQuery(collection, thingId, q, tag, cb) {
         const query = `${q} #${thingId}`;
         const scope = `@collection:${collection.name}`;
-        console.log(blob)
         this.emit('query', {
             query,
             scope
