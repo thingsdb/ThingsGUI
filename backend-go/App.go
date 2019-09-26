@@ -32,7 +32,7 @@ type App struct {
 func (app *App) logHandler() {
 	for {
 		msg := <-app.logCh
-		println(msg)
+		fmt.Println(msg)
 	}
 }
 
@@ -60,7 +60,7 @@ func (app *App) SocketRouter() {
 		return handlers.Disconnect(app.connections[s.ID()].Connection)
 	})
 
-	app.Server.OnEvent("/", "query", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
+	app.Server.OnEvent("/", "query", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
 		return handlers.Query(app.connections[s.ID()].Connection, data, app.Timeout)
 	})
 
@@ -68,7 +68,7 @@ func (app *App) SocketRouter() {
 		return handlers.QueryBlob(app.connections[s.ID()].Connection, data, app.Timeout)
 	})
 
-	app.Server.OnEvent("/", "queryEditor", func(s socketio.Conn, data map[string]interface{}) (int, map[string]interface{}, util.Message) {
+	app.Server.OnEvent("/", "queryEditor", func(s socketio.Conn, data handlers.Data) (int, map[string]interface{}, util.Message) {
 		return handlers.QueryEditor(app.connections[s.ID()].Connection, data, app.Timeout)
 	})
 
@@ -101,7 +101,8 @@ func (app *App) Start() {
 	app.logCh = make(chan string)
 	go app.logHandler()
 
-	handlers.Init()
+	// for unique numbering
+	util.Init(app.logCh)
 
 	// socketio
 	app.Server, err = socketio.NewServer(nil)
@@ -120,6 +121,7 @@ func (app *App) Start() {
 	http.HandleFunc("/js/main-bundle", handlerMainJsBundle)
 	http.HandleFunc("/js/vendors-bundle", handlerVendorsJsBundle)
 	http.HandleFunc("/favicon.ico", handlerFaviconIco)
+	http.HandleFunc("/download", handlerDownload)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	http.Handle("/socket.io/", app.Server)

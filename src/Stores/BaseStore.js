@@ -64,10 +64,59 @@ class _SocketRequest {
     }
 }
 
+class _JsonRequest {
+
+    constructor(type, url, data) {
+
+        this.doneCb = function (data) { };          // eslint-disable-line
+        this.failCb = function (xhr, data) { };   // eslint-disable-line
+
+        const xhr = new XMLHttpRequest();
+        xhr.open(type, url, true);
+        xhr.setRequestHeader('Content-type', 'application/json');
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState != XMLHttpRequest.DONE) {
+                return;
+            }
+
+            if (xhr.status == 200) {
+                const data = xhr.responseText;
+                // const data = JSON.parse(xhr.responseText);
+                this.doneCb(data);
+            } else {
+                let data;
+                try {
+                    data = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    data = null;
+                }
+                this.failCb(xhr, data);
+            }
+        };
+
+        xhr.send((!data) ? null : JSON.stringify(data));
+    }
+
+    done(doneCb) {
+        this.doneCb = doneCb;
+        return this;
+    }
+
+    fail(failCb) {
+        this.failCb = failCb;
+        return this;
+    }
+}
+
 class BaseStore extends Vlow.Store {
 
     emit(name, data) {
         return new _SocketRequest(name, data);
+    }
+
+    post(url, data) {
+        return new _JsonRequest('POST', url, data);
     }
 }
 

@@ -9,6 +9,7 @@ const CollectionActions = Vlow.createActions([
     'query',
     'rawQuery',
     'queryEditor',
+    'download',
 ]);
 
 // TODO: CALLBACKS
@@ -99,6 +100,13 @@ class CollectionStore extends BaseStore {
             }
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onDownload(link) {
+        console.log(link);
+        this.post('/download', link).done().fail((error) => {
+            ErrorActions.setToastError(error.response);
         });
     }
 }
