@@ -79,7 +79,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                                 {`${name}   `}
                             </Typography>
                             {val.includes('http') ?  link ? (
-                                <Link href={link} download="blob" type="application/octet-stream">
+                                <Link href={link} download="blob" type="application/octet-stream" color="textPrimary">
                                     {val}
                                 </Link>
                             ) : (

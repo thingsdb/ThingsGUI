@@ -33,7 +33,7 @@ func createBinFileLink(t string) string {
 	var hostname string
 	guid := uniq.uniqueId()
 
-	err = ioutil.WriteFile(fmt.Sprintf("/tmp/%d", guid), []byte(t), 0644) // afhandelen dat niet iedere keer een nieuwe file wordt weggeschreven
+	err = ioutil.WriteFile(fmt.Sprintf("/tmp/thingsdb-cache-%d.tmp", guid), []byte(t), 0644) // afhandelen dat niet iedere keer een nieuwe file wordt weggeschreven
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -42,7 +42,6 @@ func createBinFileLink(t string) string {
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	return fmt.Sprintf("http://%s/download/%d", hostname, guid)
 }
 
@@ -71,4 +70,17 @@ func ReplaceBinStrWithLink(thing interface{}) {
 	default:
 		// no match; here v has the same type as i
 	}
+}
+
+func CleanupTmp() error {
+	var err error
+	for k := range uniq.generated {
+		err = os.Remove(fmt.Sprintf("/tmp/thingsdb-cache-%d.tmp", k))
+		if err != nil {
+			return err
+		} else {
+			delete(uniq.generated, k)
+		}
+	}
+	return nil
 }

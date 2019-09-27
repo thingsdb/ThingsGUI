@@ -116,76 +116,18 @@ const AddThings = ({info, collection, thing}) => {
         });
     };
 
-
-
-    // const readFileAsArrayBuffer = (file, success, error) => {
-    //     let fr = new FileReader();
-    //     fr.addEventListener('error', error, false);
-    //     if (fr.readAsBinaryString) {
-    //         fr.addEventListener('load', function () {
-    //             let bin = new Uint8Array(fr.result.length);
-    //             for (let i = 0; i < fr.result.length; i++) {
-    //                 bin[i] = fr.result.charCodeAt(i);
-    //             }
-    //             success(bin.buffer);
-    //         }, false);
-    //         return fr.readAsBinaryString(file);
-    //     } else {
-    //         fr.addEventListener('load', function () {
-    //             success(fr.result);
-    //         }, false);
-    //         return fr.readAsArrayBuffer(file);
-    //     }
-    // };
-
-    // const handleClickLoad = () => {
-    //     setState(prevState => {
-    //         const updatedForm = Object.assign({}, prevState.form, {loading: true});
-    //         return {...prevState, form: updatedForm};
-    //     });
-    //     setTimeout(() => {
-    //         readFileAsArrayBuffer(fileRef.current.files[0], function(data) {
-    //             let int8Array = new Int8Array(data);
-    //             let output = JSON.stringify(int8Array, null, '  ');
-    //             setState(prevState => {
-    //                 const updatedForm = Object.assign({}, prevState.form, {loading: false, blob: int8Array}); // check this!
-    //                 return {...prevState, form: updatedForm};
-    //             });
-
-
-    //             console.log(array, output);
-    //         }, function (e) {
-    //             setState(prevState => {
-    //                 const updatedForm = Object.assign({}, prevState.form, {loading: false});
-    //                 return {...prevState, form: updatedForm};
-    //             });
-    //             console.error(e);
-    //         });
-    //     }, 1000);
-
-    // };
-
     const handleDropzone = React.useCallback(acceptedFiles => {
         const reader = new FileReader();
-
         reader.onabort = () => console.log('file reading was aborted');
         reader.onerror = () => console.log('file reading has failed');
         reader.onload = () => {
-            // Do whatever you want with the file contents
             const binaryStr = reader.result;
-            // let bin = new Uint8Array(reader.result.length);
-            // for (let i = 0; i < reader.result.length; i++) {
-            //     bin[i] = reader.result.charCodeAt(i);
-            // }
-            // let output = JSON.stringify(bin, null, '  ');
-            // console.log(bin, bin.buffer);
             var encodedData = btoa(binaryStr);
             setState(prevState => {
                 const updatedForm = Object.assign({}, prevState.form, {blob: encodedData, fileName: acceptedFiles[0].name});
                 return {...prevState, form: updatedForm};
             });
         };
-
         acceptedFiles.forEach(file => reader.readAsBinaryString(file));
     }, []);
 

@@ -10,6 +10,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Dropzone from 'react-dropzone';
+import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
@@ -25,6 +27,7 @@ const dataTypes = [
     'closure',
     'boolean',
     'nil',
+    'blob',
 ];
 
 const initialState = {
@@ -35,6 +38,8 @@ const initialState = {
         newProperty: '',
         value: '',
         dataType: dataTypes[0],
+        blob: '',
+        fileName: '',
     },
 };
 
@@ -55,6 +60,8 @@ const EditThing = ({info, collection, thing}) => {
                 newProperty: name,
                 value: '',
                 dataType: dataTypes[0],
+                blob: '',
+                fileName: '',
             },
         });
     };
@@ -105,27 +112,57 @@ const EditThing = ({info, collection, thing}) => {
         });
     };
 
+    const handleDropzone = React.useCallback(acceptedFiles => {
+        const reader = new FileReader();
+        reader.onabort = () => console.log('file reading was aborted');
+        reader.onerror = () => console.log('file reading has failed');
+        reader.onload = () => {
+            const binaryStr = reader.result;
+            var encodedData = btoa(binaryStr);
+            setState(prevState => {
+                const updatedForm = Object.assign({}, prevState.form, {blob: encodedData, fileName: acceptedFiles[0].name});
+                return {...prevState, form: updatedForm};
+            });
+        };
+        acceptedFiles.forEach(file => reader.readAsBinaryString(file));
+    }, []);
+
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
-            CollectionActions.rawQuery(
-                collection,
-                id,
-                form.queryString,
-                tag,
-                () => {
-                    ThingsdbActions.getCollections();
-                    setState({...state, show: false});
-                }
-            );
+            if (form.dataType== 'blob') {
+                CollectionActions.blob(
+                    collection,
+                    id,
+                    form.queryString,
+                    form.blob,
+                    tag,
+                    () => {
+                        ThingsdbActions.getCollections();
+                        setState({...state, show: false});
+                    },
+                );
+            } else {
+                CollectionActions.rawQuery(
+                    collection,
+                    id,
+                    form.queryString,
+                    tag,
+                    () => {
+                        ThingsdbActions.getCollections();
+                        setState({...state, show: false});
+                    }
+                );
+            };
         }
     };
 
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';
     const booleanInputField = form.dataType == 'boolean';
+    const blobInputField = form.dataType == 'blob';
 
     const Content = (
         <React.Fragment>
@@ -216,6 +253,30 @@ const EditThing = ({info, collection, thing}) => {
                             />
                         </RadioGroup>
                     </ListItem>
+                ) : blobInputField ? (
+                    <React.Fragment>
+                        <ListItem>
+                            <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
+                                {({getRootProps, getInputProps}) => (
+                                    <section>
+                                        <div {...getRootProps()}>
+                                            <input {...getInputProps()} />
+                                            <p>
+                                                {'Drag "n" drop some files here, or click to select files'}
+                                            </p>
+                                        </div>
+                                    </section>
+                                )}
+                            </Dropzone>
+                        </ListItem>
+                        <Collapse in={Boolean(form.blob)} timeout="auto" unmountOnExit>
+                            <ListItem>
+                                <Typography variant="button" color="primary">
+                                    {form.fileName}
+                                </Typography>
+                            </ListItem>
+                        </Collapse>
+                    </React.Fragment>
                 ) : null}
             </List>
         </React.Fragment>

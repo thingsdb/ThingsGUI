@@ -78,3 +78,13 @@ func QueryEditor(conn *things.Conn, data Data, timeout uint16) (int, map[string]
 	}
 	return message.Status, collectionResp, message
 }
+
+func CleanupTmp() (int, bool, util.Message) {
+	resp := true
+	err := util.CleanupTmp()
+	message := util.Msg(err, http.StatusInternalServerError)
+	if err != nil {
+		resp = false
+	}
+	return message.Status, resp, message
+}

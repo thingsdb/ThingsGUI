@@ -10,6 +10,7 @@ const CollectionActions = Vlow.createActions([
     'rawQuery',
     'queryEditor',
     'download',
+    'cleanupTmp',
 ]);
 
 // TODO: CALLBACKS
@@ -105,6 +106,12 @@ class CollectionStore extends BaseStore {
             cb(textFile);
         }).fail((error, message) => {
             ErrorActions.setToastError(`${error.statusText}: ${message}`);
+        });
+    }
+
+    onCleanupTmp() {
+        this.emit('cleanupTmp').done((_data) => null).fail((event, status, message) => {
+            ErrorActions.setToastError(message.Log);
         });
     }
 }

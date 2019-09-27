@@ -44,6 +44,7 @@ const ThingRoot = ({things, collection}) => {
 
     React.useEffect(() => {
         CollectionActions.query(collection);
+        return () => CollectionActions.cleanupTmp();
     }, [collection.name]);
 
     return (

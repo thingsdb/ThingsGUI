@@ -72,6 +72,10 @@ func (app *App) SocketRouter() {
 		return handlers.QueryEditor(app.connections[s.ID()].Connection, data, app.Timeout)
 	})
 
+	app.Server.OnEvent("/", "cleanupTmp", func(s socketio.Conn) (int, bool, util.Message) {
+		return handlers.CleanupTmp()
+	})
+
 	app.Server.OnError("/", func(e error) {
 		fmt.Println("meet error:", e)
 	})

@@ -29,7 +29,6 @@ class _SocketRequest {
         var warnOnLong = setTimeout(() => {
             window.console.warn(`No result for request "${event}" within 3 seconds.`);
         }, 3000);
-        console.log(...data);
         socket.emit(event, ...data, (status, data, message) => {
             clearTimeout(warnOnLong);
             if (message !== undefined && message !== null) {
