@@ -29,25 +29,6 @@ class CollectionStore extends BaseStore {
         this.state = CollectionStore.defaults;
     }
 
-    onBlob(collection, thingId, q, blob, tag, cb) {
-        const query = `${q} #${thingId}`;
-        const scope = `@collection:${collection.name}`;
-        console.log(query, blob);
-        this.emit('queryBlob', {
-            query,
-            scope,
-            blob,
-        }).done((data) => {
-            this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[thingId]: data});
-                return {things};
-            });
-            cb();
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
     onQuery(collection, thingId=null, depth=1) {
         const query = thingId ? `return(#${thingId}, ${depth})` : `return(thing(.id()), ${depth})`;
         const scope = `@collection:${collection.name}`;
@@ -83,12 +64,10 @@ class CollectionStore extends BaseStore {
     }
 
     onQueryEditor(query, scope, collectionId, onOutput, tag) {
-        console.log(query);
         this.emit('queryEditor', {
             query,
             scope
         }).done((data) => {
-            console.log(data);
             onOutput(data.output);
             if (collectionId!==null) {
                 this.setState(prevState => {
@@ -103,9 +82,28 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onDownload(link) {
-        console.log(link);
-        this.post('/download', link).done().fail((error) => {
+    onBlob(collection, thingId, q, blob, tag, cb) {
+        const query = `${q} #${thingId}`;
+        const scope = `@collection:${collection.name}`;
+        this.emit('queryBlob', {
+            query,
+            scope,
+            blob,
+        }).done((data) => {
+            this.setState(prevState => {
+                const things = Object.assign({}, prevState.things, {[thingId]: data});
+                return {things};
+            });
+            cb();
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onDownload(link, cb) {
+        this.post('/download', link).done((textFile) => {
+            cb(textFile);
+        }).fail((error) => {
             ErrorActions.setToastError(error.response);
         });
     }
