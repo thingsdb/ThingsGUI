@@ -94,11 +94,21 @@ class _BlobRequest {
             } else {
                 let rsp;
                 try {
-                    rsp = JSON.parse(xhr.responseText);
+                    const blob = new Blob([xhr.response], {type: 'text/plain'});
+                    const reader = new FileReader();
+
+                    // This fires after the blob has been read/loaded.
+                    reader.addEventListener('loadend', (e) => {
+                        rsp = e.srcElement.result;
+                        this.failCb(xhr, rsp);
+                    });
+
+                    // Start reading the blob as text.
+                    reader.readAsText(blob);
                 } catch (e) {
-                    rsp = null;
+                    this.failCb(xhr, null);
                 }
-                this.failCb(xhr, rsp);
+
             }
         };
 

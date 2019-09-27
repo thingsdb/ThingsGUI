@@ -103,8 +103,8 @@ class CollectionStore extends BaseStore {
     onDownload(link, cb) {
         this.post('/download', link).done((textFile) => {
             cb(textFile);
-        }).fail((error) => {
-            ErrorActions.setToastError(error.response);
+        }).fail((error, message) => {
+            ErrorActions.setToastError(`${error.statusText}: ${message}`);
         });
     }
 }

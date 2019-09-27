@@ -10,6 +10,7 @@ import (
 
 func sendError(w http.ResponseWriter, err string, code int) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	fmt.Println(err)
 	http.Error(w, err, code)
 }
 
@@ -40,14 +41,14 @@ func handleFileRequest(w http.ResponseWriter, fn, ct string) {
 	if err == nil {
 		w.Header().Set("Content-Type", ct)
 		_, err = w.Write(b)
+		if err != nil {
+			sendError(w, err.Error(), http.StatusInternalServerError)
+		}
 	} else {
-		w.WriteHeader(http.StatusInternalServerError)
-		_, err = fmt.Fprintf(w, "Internal server error: %s", err)
-	}
-	if err != nil {
-		fmt.Println(err)
+		sendError(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
 func handlerMainJsBundle(w http.ResponseWriter, r *http.Request) {
 	handleFileRequest(w, fmt.Sprintf("./static/js/main-bundle-%s.js", AppVersion), "text/javascript")
 }
@@ -69,17 +70,8 @@ func handlerDownload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res := strings.Split(link, "download/")
-	// data, err := ioutil.ReadFile(fmt.Sprintf("/tmp/%s", res[1]))
-	// if err != nil {
-	// 	sendError(w, err.Error(), http.StatusInternalServerError)
-	// }
-	fmt.Println("ENNE1")
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Header().Set("Content-Disposition", "attachment; filename="+fmt.Sprintf("%s", res[1]))
 	w.Header().Set("Content-Transfer-Encoding", "binary")
-
-	// http.ServeFile(w, r, fmt.Sprintf("/tmp/%s", res[1]))
-	fmt.Println("ENNE2")
-
 	handleFileRequest(w, fmt.Sprintf("/tmp/%s", res[1]), "application/octet-stream")
 }
