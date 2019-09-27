@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -76,7 +77,7 @@ func CleanupTmp() error {
 	var err error
 	for k := range uniq.generated {
 		err = os.Remove(fmt.Sprintf("/tmp/thingsdb-cache-%d.tmp", k))
-		if err != nil {
+		if err != nil && !strings.Contains(err.Error(), "no such file or directory") {
 			return err
 		} else {
 			delete(uniq.generated, k)

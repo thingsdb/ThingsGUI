@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import {withVlow} from 'vlow';
-import Draggable from 'react-draggable';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -18,8 +17,6 @@ import { makeStyles} from '@material-ui/core/styles';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
 import {CollectionStore} from '../../Stores/CollectionStore';
 import Query from './Query';
-import Paper from '@material-ui/core/Paper';
-
 
 // function PaperComponent(props) {
 //     return (
