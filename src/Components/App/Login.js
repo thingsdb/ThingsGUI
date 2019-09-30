@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
+import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
@@ -9,6 +10,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import {withVlow} from 'vlow';
 
 import { ErrorMsg } from '../Util';
@@ -25,24 +28,28 @@ const withStores = withVlow([{
 const initialState = {
     showPassword: false,
     errors: {},
+    switches: false, //siwtches instead of switch (reserved word)
     form: {
         host: 'localhost:9200',
-        user: 'admin',
-        password: 'pass',
+        user: '',
+        password: '',
+        token: '',
     },
+
 };
 
 const validation = {
     host: (o) => o.host.length>0,
     user: (o) => o.user.length>0,
     password: (o) => o.password.length>0,
+    token: () => null,
 };
 
 const tag = '0';
 
 const Login = ({loaded, connected}) => {
-    const [state, setState] = useState(initialState);
-    const {showPassword, errors, form} = state;
+    const [state, setState] = React.useState(initialState);
+    const {showPassword, errors, switches, form} = state;
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -64,61 +71,94 @@ const Login = ({loaded, connected}) => {
         setState({...state, showPassword: !showPassword});
     };
 
+    const handleSwitch = ({target}) => {
+        const {checked} = target;
+        setState({...state, switches: checked});
+    };
+
 
     return (
         <Dialog
             open={loaded && !connected}
             onClose={() => null}
             aria-labelledby="form-dialog-title"
+            fullWidth
+            maxWidth="sm"
         >
             <DialogTitle id="form-dialog-title">
                 {'Login'}
             </DialogTitle>
             <DialogContent>
                 <ErrorMsg tag={tag} />
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="host"
-                    label="Host"
-                    type="text"
-                    value={form.host}
-                    spellCheck={false}
-                    onChange={handleOnChange}
-                    fullWidth
-                    error={errors.host}
+                <Collapse in={!switches} timeout="auto" unmountOnExit>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="host"
+                        label="Host"
+                        type="text"
+                        value={form.host}
+                        spellCheck={false}
+                        onChange={handleOnChange}
+                        fullWidth
+                        error={errors.host}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="user"
+                        label="User"
+                        type="text"
+                        value={form.user}
+                        spellCheck={false}
+                        onChange={handleOnChange}
+                        fullWidth
+                        error={errors.user}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="password"
+                        label="Password"
+                        type={showPassword?'text':'password'}
+                        value={form.password}
+                        spellCheck={false}
+                        onChange={handleOnChange}
+                        fullWidth
+                        error={errors.password}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={handleClickShowPassword}>
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </Collapse>
+                <FormControlLabel
+                    control={(
+                        <Switch
+                            checked={switches}
+                            color="primary"
+                            id="swicthToken"
+                            onChange={handleSwitch}
+                        />
+                    )}
+                    label="Use token"
                 />
-                <TextField
-                    margin="dense"
-                    id="user"
-                    label="User"
-                    type="text"
-                    value={form.user}
-                    spellCheck={false}
-                    onChange={handleOnChange}
-                    fullWidth
-                    error={errors.user}
-                />
-                <TextField
-                    margin="dense"
-                    id="password"
-                    label="Password"
-                    type={showPassword?'text':'password'}
-                    value={form.password}
-                    spellCheck={false}
-                    onChange={handleOnChange}
-                    fullWidth
-                    error={errors.password}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton onClick={handleClickShowPassword}>
-                                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
+                <Collapse in={switches} timeout="auto" unmountOnExit>
+                    <TextField
+                        margin="dense"
+                        id="token"
+                        label="Token"
+                        type="text"
+                        value={form.token}
+                        spellCheck={false}
+                        onChange={handleOnChange}
+                        fullWidth
+                        error={errors.token}
+                    />
+                </Collapse>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>

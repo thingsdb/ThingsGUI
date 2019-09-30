@@ -68,7 +68,7 @@ const AppLoader = () => {
                     >
                         <img
                             className={classes.logo}
-                            src="/static/img/thingsdb.gif"
+                            src="/img/thingsdb.gif"
                             alt="loading..."
                             draggable="false"
                             width="100"

@@ -1,4 +1,4 @@
-package app
+package util
 
 import (
 	"encoding/json"
@@ -7,6 +7,10 @@ import (
 	"net/http"
 	"strings"
 )
+
+func HandlerNotFound(w http.ResponseWriter, r *http.Request) {
+	sendError(w, "404 not found", http.StatusNotFound)
+}
 
 func sendError(w http.ResponseWriter, err string, code int) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -36,7 +40,7 @@ func readBody(w http.ResponseWriter, r *http.Request, v interface{}) error {
 	}
 }
 
-func handleFileRequest(w http.ResponseWriter, fn, ct string) {
+func HandleFileRequest(w http.ResponseWriter, fn, ct string) {
 	b, err := ioutil.ReadFile(fn)
 	if err == nil {
 		w.Header().Set("Content-Type", ct)
@@ -49,20 +53,7 @@ func handleFileRequest(w http.ResponseWriter, fn, ct string) {
 	}
 }
 
-func handlerMainJsBundle(w http.ResponseWriter, r *http.Request) {
-	handleFileRequest(w, fmt.Sprintf("./static/js/main-bundle-%s.js", AppVersion), "text/javascript")
-}
-func handlerVendorsJsBundle(w http.ResponseWriter, r *http.Request) {
-	handleFileRequest(w, fmt.Sprintf("./static/js/vendors-bundle-%s.js", AppVersion), "text/javascript")
-}
-func handlerFaviconIco(w http.ResponseWriter, r *http.Request) {
-	handleFileRequest(w, "./static/favicon.ico", "image/x-icon")
-}
-func handlerMain(w http.ResponseWriter, r *http.Request) {
-	handleFileRequest(w, "./templates/go/app.html", "text/html")
-}
-
-func handlerDownload(w http.ResponseWriter, r *http.Request) {
+func HandlerDownload(w http.ResponseWriter, r *http.Request) {
 	var link string
 	if err := readBody(w, r, &link); err != nil {
 		fmt.Println(err)
@@ -73,5 +64,5 @@ func handlerDownload(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Header().Set("Content-Disposition", "attachment; filename="+fmt.Sprintf("%s", res[1]))
 	w.Header().Set("Content-Transfer-Encoding", "binary")
-	handleFileRequest(w, fmt.Sprintf("%s", res[1]), "application/octet-stream")
+	HandleFileRequest(w, fmt.Sprintf("%s", res[1]), "application/octet-stream")
 }

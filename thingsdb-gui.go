@@ -1,12 +1,15 @@
-package app
+package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
+	"runtime"
 
-	handlers "./handlers"
+	handlers "./sockethandlers"
 	util "./util"
 	socketio "github.com/googollee/go-socket.io"
 )
@@ -16,8 +19,29 @@ const AppVersion = "0.0.1-alpha1"
 
 const retryConnectTime = 5
 
+var (
+	host        string
+	port        uint
+	timeout     uint
+	openBrowser bool
+	//debugMode  bool
+	//configFile string
+)
+
+func Init() {
+	fmt.Println("hi")
+	flag.StringVar(&host, "host", "localhost", "host")
+	flag.UintVar(&port, "port", 8080, "Port")
+	flag.UintVar(&timeout, "timeout", 30, "timeout")
+	flag.BoolVar(&openBrowser, "open", true, "opens a page in your default browser")
+	//flag.BoolVar(&debugMode, "debug mode", false, "Debug ")
+	//flag.StringVar(&configFile, "config file", "default.conf", "Config file")
+
+	flag.Parse()
+}
+
 type App struct {
-	onfig       string
+	config      string
 	Host        string
 	Port        uint16
 	logCh       chan string
@@ -25,8 +49,8 @@ type App struct {
 	debugMode   bool
 	configFile  string
 	connections map[string]*handlers.Conn
-
-	Timeout uint16
+	OpenBrowser bool
+	Timeout     uint16
 }
 
 func (app *App) logHandler() {
@@ -99,6 +123,23 @@ func (app *App) quit(err error) {
 	os.Exit(rc)
 }
 
+func open(url string) error { //https://stackoverflow.com/questions/39320371/how-start-web-server-to-open-page-in-browser-in-golang
+	var cmd string
+	var args []string
+
+	switch runtime.GOOS {
+	case "windows":
+		cmd = "cmd"
+		args = []string{"/c", "start"}
+	case "darwin":
+		cmd = "open"
+	default: // "linux", "freebsd", "openbsd", "netbsd"
+		cmd = "xdg-open"
+	}
+	args = append(args, url)
+	return exec.Command(cmd, args...).Run()
+}
+
 func (app *App) Start() {
 	var err error
 
@@ -125,12 +166,28 @@ func (app *App) Start() {
 	http.HandleFunc("/", handlerMain) // homepage
 	http.HandleFunc("/js/main-bundle", handlerMainJsBundle)
 	http.HandleFunc("/js/vendors-bundle", handlerVendorsJsBundle)
+	http.HandleFunc("/img/thingsdb.gif", handlerThingsdbGIF)
 	http.HandleFunc("/favicon.ico", handlerFaviconIco)
-	http.HandleFunc("/download", handlerDownload)
+	http.HandleFunc("/download", util.HandlerDownload)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	http.Handle("/socket.io/", app.Server)
 
 	log.Printf("Serving at %s:%d...", app.Host, app.Port)
+
+	if app.OpenBrowser {
+		go open("http://localhost:8080/")
+	}
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", app.Port), nil))
+}
+
+func main() {
+	Init()
+	a := App{}
+	a.Host = host
+	a.Port = uint16(port)
+	a.Timeout = uint16(timeout)
+	fmt.Println(openBrowser)
+	a.OpenBrowser = openBrowser
+	a.Start()
 }
