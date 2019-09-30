@@ -3,39 +3,36 @@ package util
 import (
 	"fmt"
 	"io/ioutil"
-	"math/rand"
 	"os"
 	"strings"
 	"unicode/utf8"
 )
 
-type UniqueRand struct {
-	generated map[int]bool
+type TmpFiles struct {
+	generated map[string]bool
 }
 
-var uniq = UniqueRand{}
+var tmp = TmpFiles{}
 
 func Init(logChan chan string) {
-	uniq.generated = make(map[int]bool)
-}
-
-func (u *UniqueRand) uniqueId() int {
-	for {
-		i := rand.Int()
-		if !u.generated[i] {
-			u.generated[i] = true
-			return i
-		}
-	}
+	tmp.generated = make(map[string]bool)
 }
 
 func createBinFileLink(t string) string {
 	var err error
 	var hostname string
-	guid := uniq.uniqueId()
 
-	err = ioutil.WriteFile(fmt.Sprintf("/tmp/thingsdb-cache-%d.tmp", guid), []byte(t), 0644) // afhandelen dat niet iedere keer een nieuwe file wordt weggeschreven
+	content := []byte(t)
+	tmpfile, err := ioutil.TempFile("", "thingsdb-cache-")
 	if err != nil {
+		fmt.Println(err)
+	}
+	tmp.generated[tmpfile.Name()] = true
+
+	if _, err := tmpfile.Write(content); err != nil {
+		fmt.Println(err)
+	}
+	if err := tmpfile.Close(); err != nil {
 		fmt.Println(err)
 	}
 
@@ -43,7 +40,8 @@ func createBinFileLink(t string) string {
 	if err != nil {
 		fmt.Println(err)
 	}
-	return fmt.Sprintf("http://%s/download/%d", hostname, guid)
+	fmt.Println("name: ", tmpfile.Name())
+	return fmt.Sprintf("http://%s/download%s", hostname, tmpfile.Name())
 }
 
 func ReplaceBinStrWithLink(thing interface{}) {
@@ -73,14 +71,14 @@ func ReplaceBinStrWithLink(thing interface{}) {
 	}
 }
 
-func CleanupTmp() error {
+func CleanupTmp() error { // cleanup at end of session
 	var err error
-	for k := range uniq.generated {
-		err = os.Remove(fmt.Sprintf("/tmp/thingsdb-cache-%d.tmp", k))
+	for k, _ := range tmp.generated {
+		err = os.Remove(k)
 		if err != nil && !strings.Contains(err.Error(), "no such file or directory") {
 			return err
 		} else {
-			delete(uniq.generated, k)
+			delete(tmp.generated, k)
 		}
 	}
 	return nil

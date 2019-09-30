@@ -82,6 +82,7 @@ func (app *App) SocketRouter() {
 
 	app.Server.OnDisconnect("/", func(s socketio.Conn, msg string) {
 		fmt.Println("closed:", msg)
+		util.CleanupTmp()
 		handlers.CloseSingleConn(app.connections[s.ID()].Connection)
 		delete(app.connections, s.ID())
 

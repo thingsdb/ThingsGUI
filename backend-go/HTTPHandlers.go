@@ -68,10 +68,10 @@ func handlerDownload(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return // error is send by the readBody function
 	}
-
-	res := strings.Split(link, "download/")
+	fmt.Println("link: ", link)
+	res := strings.Split(link, "download")
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Header().Set("Content-Disposition", "attachment; filename="+fmt.Sprintf("%s", res[1]))
 	w.Header().Set("Content-Transfer-Encoding", "binary")
-	handleFileRequest(w, fmt.Sprintf("/tmp/thingsdb-cache-%s.tmp", res[1]), "application/octet-stream")
+	handleFileRequest(w, fmt.Sprintf("%s", res[1]), "application/octet-stream")
 }
