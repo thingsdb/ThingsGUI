@@ -109,45 +109,40 @@ class NodesStore extends BaseStore {
     }
 
     onAddNode(config, tag, cb) { // secret , address [, port]
-        const query = config.port ? `new_node('${config.secret}', '${config.address}', ${config.port}); nodes_info();`: `new_node('${config.secret}', '${config.address}'); nodes_info();`;
+        const query = config.port ? `new_node('${config.secret}', '${config.address}', ${config.port});`: `new_node('${config.secret}', '${config.address}');`;
+        console.log(query);
         this.emit('query', {
-            scope,
+            scope: '@thingsdb',
             query
-        }).done((data) => {
-            this.setState({
-                nodes: data
-            });
+        }).done((_data) => {
             cb();
+            this.onGetNodes();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });
     }
 
     onPopNode(tag, cb) {
-        const query = 'pop_node(); nodes_info();';
+        const query = 'pop_node();';
         this.emit('query', {
-            scope,
+            scope: '@thingsdb',
             query
-        }).done((data) => {
-            this.setState({
-                nodes: data
-            });
+        }).done((_data) => {
             cb();
+            this.onGetNodes();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });
     }
 
     onReplaceNode(config, tag, cb) { // nodeId , secret, address [, port]
-        const query = config.port ? `replace_node('${config.nodeId}', '${config.secret}', '${config.address}', ${config.port}); nodes_info();`: `replace_node('${config.nodeId}', '${config.secret}', '${config.address}'); nodes_info();`;
+        const query = config.port ? `replace_node('${config.nodeId}', '${config.secret}', '${config.address}', ${config.port});`: `replace_node('${config.nodeId}', '${config.secret}', '${config.address}');`;
         this.emit('query', {
-            scope,
+            scope: '@thingsdb',
             query
-        }).done((data) => {
-            this.setState({
-                nodes: data
-            });
+        }).done((_data) => {
             cb();
+            this.onGetNodes();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });

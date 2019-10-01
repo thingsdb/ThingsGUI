@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -31,8 +32,10 @@ const TableWithButtons = ({header, rows, rowClick, buttons}) => {
                         <TableRow key={ri} onClick={handleClickRow(row)}>
                             {header.map((h, i) => (
                                 <TableCell key={h.ky} align={i?'right':'left'}>
-                                    <Typography variant="overline">
-                                        {row[h.ky]}
+                                    <Typography component="div">
+                                        <Box fontFamily="Monospace" fontSize="h6.fontSize" m={1}>
+                                            {row[h.ky]}
+                                        </Box>
                                     </Typography>
                                 </TableCell>
                             ))}

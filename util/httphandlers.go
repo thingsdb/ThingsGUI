@@ -14,7 +14,6 @@ func HandlerNotFound(w http.ResponseWriter, r *http.Request) {
 
 func sendError(w http.ResponseWriter, err string, code int) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	fmt.Println(err)
 	http.Error(w, err, code)
 }
 
@@ -56,10 +55,9 @@ func HandleFileRequest(w http.ResponseWriter, fn, ct string) {
 func HandlerDownload(w http.ResponseWriter, r *http.Request) {
 	var link string
 	if err := readBody(w, r, &link); err != nil {
-		fmt.Println(err)
+		sendError(w, err.Error(), http.StatusInternalServerError)
 		return // error is send by the readBody function
 	}
-	fmt.Println("link: ", link)
 	res := strings.Split(link, "download")
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Header().Set("Content-Disposition", "attachment; filename="+fmt.Sprintf("%s", res[1]))

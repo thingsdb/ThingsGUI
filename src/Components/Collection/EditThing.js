@@ -70,7 +70,7 @@ const EditThing = ({info, collection, thing}) => {
         setState(initialState);
     };
 
-    const validation = {
+    const errorTxt = {
         queryString: () => '',
         newProperty: () => form.newProperty == name ? '' : thing[form.newProperty] ? 'Property name already in use' : '',
         value: () => {
@@ -121,7 +121,7 @@ const EditThing = ({info, collection, thing}) => {
             var encodedData = btoa(binaryStr);
             setState(prevState => {
                 const updatedForm = Object.assign({}, prevState.form, {blob: encodedData, fileName: acceptedFiles[0].name});
-                return {...prevState, form: updatedForm};
+                return {...prevState, form: updatedForm, errors: {}};
             });
         };
         acceptedFiles.forEach(file => reader.readAsBinaryString(file));
@@ -129,7 +129,7 @@ const EditThing = ({info, collection, thing}) => {
 
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
+        const err = Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
             if (form.dataType== 'blob') {

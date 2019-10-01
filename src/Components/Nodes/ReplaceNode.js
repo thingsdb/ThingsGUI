@@ -42,7 +42,7 @@ const ReplaceNode = ({node}) => {
         const {id, value} = target;
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value});
-            return {...prevState, form: updatedForm};
+            return {...prevState, form: updatedForm, errors: {}};
         });
     };
 
@@ -50,14 +50,14 @@ const ReplaceNode = ({node}) => {
         setAddPort(!addPort);
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {port: ''});
-            return {...prevState, form: updatedForm};
+            return {...prevState, form: updatedForm, errors: {}};
         });
     };
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
         setState({...state, errors: err});
-        if (!Object.values(errors).some(d => d)) {
+        if (!Object.values(err).some(d => d)) {
             NodesActions.replaceNode(
                 {...form, nodeId: node.node_id},
                 tag,

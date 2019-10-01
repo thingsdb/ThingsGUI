@@ -48,8 +48,8 @@ class ApplicationStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onConnect({host, user, password}, tag) {
-        this.emit('conn', {host, user, password}).done((data) => {
+    onConnect(config, tag) {
+        this.emit('conn', config).done((data) => {
             this.setState({
                 connected: data.Connected,
             });

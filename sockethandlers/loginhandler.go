@@ -46,7 +46,7 @@ func connect(conn *Conn, logCh chan string, address string, user string, passwor
 		}
 	}
 
-	if password != "" {
+	if token == "" {
 		err := (*conn).Connection.AuthPassword(user, password)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}

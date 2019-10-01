@@ -71,7 +71,7 @@ const AddThings = ({info, collection, thing}) => {
         setState(initialState);
     };
 
-    const validation = {
+    const errorTxt = {
         queryString: () => '',
         newProperty: () => thing[form.newProperty] ? 'Property name already in use' : '',
         value: () => {
@@ -132,7 +132,7 @@ const AddThings = ({info, collection, thing}) => {
     }, []);
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
+        const err = Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
             if (form.dataType== 'blob') {

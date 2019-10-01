@@ -29,7 +29,6 @@ var (
 )
 
 func Init() {
-	fmt.Println("hi")
 	flag.StringVar(&host, "host", "localhost", "host")
 	flag.UintVar(&port, "port", 8080, "Port")
 	flag.UintVar(&timeout, "timeout", 30, "timeout")
@@ -63,7 +62,7 @@ func (app *App) logHandler() {
 func (app *App) SocketRouter() {
 	app.Server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
-		fmt.Println("connected:", s.ID())
+		app.logCh <- fmt.Sprintln("connected:", s.ID())
 		app.connections[s.ID()] = &handlers.Conn{}
 		return nil
 	})
@@ -92,7 +91,7 @@ func (app *App) SocketRouter() {
 		return handlers.QueryBlob(app.connections[s.ID()].Connection, data, app.Timeout)
 	})
 
-	app.Server.OnEvent("/", "queryEditor", func(s socketio.Conn, data handlers.Data) (int, map[string]interface{}, util.Message) {
+	app.Server.OnEvent("/", "queryEditor", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
 		return handlers.QueryEditor(app.connections[s.ID()].Connection, data, app.Timeout)
 	})
 
@@ -101,11 +100,11 @@ func (app *App) SocketRouter() {
 	})
 
 	app.Server.OnError("/", func(e error) {
-		fmt.Println("meet error:", e)
+		app.logCh <- fmt.Sprintln("meet error:", e)
 	})
 
 	app.Server.OnDisconnect("/", func(s socketio.Conn, msg string) {
-		fmt.Println("closed:", msg)
+		app.logCh <- fmt.Sprintln("closed:", msg)
 		util.CleanupTmp()
 		handlers.CloseSingleConn(app.connections[s.ID()].Connection)
 		delete(app.connections, s.ID())
@@ -114,10 +113,9 @@ func (app *App) SocketRouter() {
 }
 
 func (app *App) quit(err error) {
-	fmt.Println("QUIT")
 	rc := 0
 	if err != nil {
-		fmt.Printf("%s\n", err)
+		app.logCh <- fmt.Sprintln("%s\n", err)
 		rc = 1
 	}
 	os.Exit(rc)
@@ -187,7 +185,6 @@ func main() {
 	a.Host = host
 	a.Port = uint16(port)
 	a.Timeout = uint16(timeout)
-	fmt.Println(openBrowser)
 	a.OpenBrowser = openBrowser
 	a.Start()
 }

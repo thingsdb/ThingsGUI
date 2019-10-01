@@ -40,9 +40,9 @@ const initialState = {
 
 const validation = {
     host: (o) => o.host.length>0,
-    user: (o) => o.user.length>0,
-    password: (o) => o.password.length>0,
-    token: () => null,
+    user: (o) => o.token.length==0 ? o.user.length>0 : true,
+    password: (o) => o.token.length==0 ? o.password.length>0 : true,
+    token: (o) => o.password.length==0 ? o.token.length>0 : true,
 };
 
 const tag = '0';
@@ -55,14 +55,14 @@ const Login = ({loaded, connected}) => {
         const {id, value} = target;
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value});
-            return {...prevState, form: updatedForm};
+            return {...prevState, form: updatedForm, errors: {}};
         });
     };
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
-        if (!Object.values(errors).some(d => d)) {
+        if (!Object.values(err).some(d => d)) {
             ApplicationActions.connect(form, tag);
         }
     };
@@ -73,7 +73,18 @@ const Login = ({loaded, connected}) => {
 
     const handleSwitch = ({target}) => {
         const {checked} = target;
-        setState({...state, switches: checked});
+        if (checked) {
+            setState(prevState => {
+                const updatedForm = Object.assign({}, prevState.form, {user: '', password: ''});
+                return {...prevState, form: updatedForm, switches: checked, errors: {}};
+            });
+        } else {
+            setState(prevState => {
+                const updatedForm = Object.assign({}, prevState.form, {token: ''});
+                return {...prevState, form: updatedForm, switches: checked, errors: {}};
+            });
+        }
+
     };
 
 
@@ -90,19 +101,19 @@ const Login = ({loaded, connected}) => {
             </DialogTitle>
             <DialogContent>
                 <ErrorMsg tag={tag} />
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="host"
+                    label="Host"
+                    type="text"
+                    value={form.host}
+                    spellCheck={false}
+                    onChange={handleOnChange}
+                    fullWidth
+                    error={errors.host}
+                />
                 <Collapse in={!switches} timeout="auto" unmountOnExit>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="host"
-                        label="Host"
-                        type="text"
-                        value={form.host}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        error={errors.host}
-                    />
                     <TextField
                         margin="dense"
                         id="user"

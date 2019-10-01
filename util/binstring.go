@@ -18,57 +18,73 @@ func Init(logChan chan string) {
 	tmp.generated = make(map[string]bool)
 }
 
-func createBinFileLink(t string) string {
+func createBinFileLink(t string) (string, error) {
 	var err error
 	var hostname string
 
 	content := []byte(t)
 	tmpfile, err := ioutil.TempFile("", "thingsdb-cache-")
 	if err != nil {
-		fmt.Println(err)
+		return "", err
 	}
-	tmp.generated[tmpfile.Name()] = true
-
-	if _, err := tmpfile.Write(content); err != nil {
-		fmt.Println(err)
+	if _, err = tmpfile.Write(content); err != nil {
+		os.Remove(tmpfile.Name())
+		return "", err
 	}
-	if err := tmpfile.Close(); err != nil {
-		fmt.Println(err)
+	if err = tmpfile.Close(); err != nil {
+		os.Remove(tmpfile.Name())
+		return "", err
 	}
 
 	hostname, err = os.Hostname()
 	if err != nil {
-		fmt.Println(err)
+		os.Remove(tmpfile.Name())
+		return "", err
 	}
-	fmt.Println("name: ", tmpfile.Name())
-	return fmt.Sprintf("http://%s/download%s", hostname, tmpfile.Name())
+	tmp.generated[tmpfile.Name()] = true
+	return fmt.Sprintf("http://%s/download%s", hostname, tmpfile.Name()), nil
 }
 
-func ReplaceBinStrWithLink(thing interface{}) {
+func ReplaceBinStrWithLink(thing interface{}) error {
+	var err error
 	switch v := thing.(type) {
 	case []interface{}:
 		for i := 0; i < len(v); i++ {
 			if t, ok := v[i].(string); ok {
 				if !utf8.ValidString(t) {
-					v[i] = createBinFileLink(t)
+					v[i], err = createBinFileLink(t)
+					if err != nil {
+						return err
+					}
 				}
 			} else {
-				ReplaceBinStrWithLink(v[i])
+				err = ReplaceBinStrWithLink(v[i])
+				if err != nil {
+					return err
+				}
 			}
 		}
 	case map[string]interface{}:
 		for k := range v {
 			if t, ok := v[k].(string); ok {
 				if !utf8.ValidString(t) {
-					v[k] = createBinFileLink(t)
+					v[k], err = createBinFileLink(t)
+					if err != nil {
+						return err
+					}
 				}
 			} else {
-				ReplaceBinStrWithLink(v[k])
+				err = ReplaceBinStrWithLink(v[k])
+				if err != nil {
+					return err
+				}
 			}
 		}
 	default:
 		// no match; here v has the same type as i
 	}
+
+	return nil
 }
 
 func CleanupTmp() error { // cleanup at end of session

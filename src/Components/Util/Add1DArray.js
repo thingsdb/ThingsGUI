@@ -67,7 +67,7 @@ const Add1DArray = ({cb}) => {
     [myItems.length],
     );
 
-    const validation = {
+    const errorTxt = {
         contentAdd: () => {
             let errText = contentAdd.length>0 ? '' : 'required';
 
@@ -89,7 +89,7 @@ const Add1DArray = ({cb}) => {
     const handleKeypress = (event) => {
         const {key} = event;
         if (key == 'Enter') {
-            const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky]();  return d; }, {});
+            const err = Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
             setState({...state, errors: err});
             if (!Object.values(err).some(d => d)) {
 
