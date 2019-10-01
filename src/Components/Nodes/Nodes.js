@@ -1,14 +1,34 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import PropTypes from 'prop-types';
+import {withVlow} from 'vlow';
 
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
 import ReplaceNode from './ReplaceNode';
+import {NodesActions, NodesStore} from '../../Stores/NodesStore';
 import {TableWithRowExtend} from '../Util';
+
+const withStores = withVlow([{
+    store: NodesStore,
+    keys: ['nodes']
+}]);
 
 const Nodes = ({nodes}) => {
 
+    const n = JSON.stringify(nodes);
+    console.log(n);
+    const getN = React.useCallback(
+        () => {
+            NodesActions.getNodes();
+        },
+        [n],
+    );
+
+    React.useEffect(() => {
+        console.log("NODES");
+        getN();
+    }, [getN]);
 
     const rows = nodes;
     const header = [{
@@ -32,7 +52,8 @@ const Nodes = ({nodes}) => {
 };
 
 Nodes.propTypes = {
-    nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
+    /* nodes properties */
+    nodes: NodesStore.types.nodes.isRequired,
 };
 
-export default Nodes;
+export default withStores(Nodes);

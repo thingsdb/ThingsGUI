@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
-import BaseStore from './BaseStore';
+import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 import {ThingsdbActions} from './ThingsdbStore';
 

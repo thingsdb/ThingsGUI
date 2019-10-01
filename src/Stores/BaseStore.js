@@ -136,4 +136,69 @@ class BaseStore extends Vlow.Store {
     }
 }
 
-export default BaseStore;
+// class PushNotificationStore extends BaseStore {
+
+//     // static types = {
+//     //     connected: PropTypes.bool,
+//     //     loaded: PropTypes.bool,
+//     //     msg: PropTypes.string,
+//     // }
+
+//     constructor() {
+//         super(null);
+
+//         this.state = {
+//             connected: socket.connected,
+//             loaded: false,
+//             msg: 'Loading Oversight',
+//         };
+
+//         socket.on('reconnect', () => this.setState(() => ({
+//             connected: socket.connected,
+//             /* When re-connecting on intital load, loading the
+//              * required resources never completes so we should force loaded to
+//             * `true`.
+//              */
+//             loaded: true,
+
+//         })));
+
+//         socket.on('connect_failed', () => {
+//             window.console.warn('Connection failed');
+//         });
+
+//         socket.on('connect', () => {
+//             this.onLoadInterval = window.setInterval(this.onLoadedCheck, 1000);
+//             this.setState({connected: true});
+//         });
+
+//         socket.on('reconnecting', (attempt) => {
+//             let msg = `Connection lost, trying to reconnect... (attempt ${attempt})`;
+//             window.console.warn(msg);
+//             this.setState(() => ({
+//                 connected: socket.connected,
+//                 msg: msg
+//             }));
+//         });
+//     }
+
+// onLoadedCheck = () => {
+//     if (activeRequests === 0) {
+//         this.setState({loaded: true});
+//         clearInterval(this.onLoadInterval);
+//     }
+// }
+
+// onTriggerSessionError() {
+//     this.setState({
+//         loaded: false,
+//         msg: 'Session has expired, redirecting to login...'
+//     });
+
+//     setTimeout(() => {
+//         location.reload();
+//     }, 3000);
+// }
+// }
+
+export {BaseStore};

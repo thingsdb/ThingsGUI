@@ -22,7 +22,6 @@ import QueryEditorMenu from '../Navigation/QueryEditorMenu';
 import Watcher from '../Watcher/Watcher';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
-import {NodesActions, NodesStore} from '../../Stores/NodesStore';
 import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
 
 
@@ -32,9 +31,6 @@ const withStores = withVlow([{
 }, {
     store: ThingsdbStore,
     keys: ['collections', 'user', 'users']
-}, {
-    store: NodesStore,
-    keys: ['nodes']
 }]);
 
 
@@ -62,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const App = ({collections, match, user, users, nodes, openEditor}) => {
+const App = ({collections, match, user, users, openEditor}) => {
     const classes = useStyles();
     const [indexCollection, setIndexCollection] = React.useState(0);
     const [indexUser, setIndexUser] = React.useState(0);
@@ -71,7 +67,6 @@ const App = ({collections, match, user, users, nodes, openEditor}) => {
 
     React.useEffect(() => {
         ThingsdbActions.getInfo();
-        NodesActions.getNodes();
     },
     [],
     );
@@ -146,7 +141,7 @@ const App = ({collections, match, user, users, nodes, openEditor}) => {
                 </div>
             }
             drawerTitle={drawerContent ? 'WATCHER' : 'NODES'}
-            drawerContent={drawerContent ? <Watcher /> : <Nodes nodes={nodes} />}
+            drawerContent={drawerContent ? <Watcher /> : <Nodes />}
         />
     );
 };
@@ -163,9 +158,6 @@ App.propTypes = {
     /* Users properties */
     user: ThingsdbStore.types.user.isRequired,
     users: ThingsdbStore.types.users.isRequired,
-
-    /* nodes properties */
-    nodes: NodesStore.types.nodes.isRequired,
 };
 
 export default withStores(App);

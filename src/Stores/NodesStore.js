@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
-import BaseStore from './BaseStore';
+import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 
 const scope='@node';
@@ -136,7 +136,7 @@ class NodesStore extends BaseStore {
     }
 
     onReplaceNode(config, tag, cb) { // nodeId , secret, address [, port]
-        const query = config.port ? `replace_node('${config.nodeId}', '${config.secret}', '${config.address}', ${config.port});`: `replace_node('${config.nodeId}', '${config.secret}', '${config.address}');`;
+        const query = config.port ? `replace_node(${config.nodeId}, '${config.secret}', '${config.address}', ${config.port});`: `replace_node(${config.nodeId}, '${config.secret}', '${config.address}');`;
         this.emit('query', {
             scope: '@thingsdb',
             query

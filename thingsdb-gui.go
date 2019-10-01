@@ -62,7 +62,7 @@ func (app *App) logHandler() {
 func (app *App) SocketRouter() {
 	app.Server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
-		app.logCh <- fmt.Sprintln("connected:", s.ID())
+		app.logCh <- fmt.Sprintf("connected: %s", s.ID())
 		app.connections[s.ID()] = &handlers.Conn{}
 		return nil
 	})
@@ -100,11 +100,11 @@ func (app *App) SocketRouter() {
 	})
 
 	app.Server.OnError("/", func(e error) {
-		app.logCh <- fmt.Sprintln("meet error:", e)
+		app.logCh <- fmt.Sprintf("meet error: %s", e.Error())
 	})
 
 	app.Server.OnDisconnect("/", func(s socketio.Conn, msg string) {
-		app.logCh <- fmt.Sprintln("closed:", msg)
+		app.logCh <- fmt.Sprintf("closed: %s", msg)
 		util.CleanupTmp()
 		handlers.CloseSingleConn(app.connections[s.ID()].Connection)
 		delete(app.connections, s.ID())
@@ -115,7 +115,7 @@ func (app *App) SocketRouter() {
 func (app *App) quit(err error) {
 	rc := 0
 	if err != nil {
-		app.logCh <- fmt.Sprintln("%s\n", err)
+		app.logCh <- fmt.Sprintf("%s", err.Error())
 		rc = 1
 	}
 	os.Exit(rc)
