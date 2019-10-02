@@ -93,28 +93,6 @@ func Connect(conn *Conn, logCh chan string, data map[string]string) (int, LoginR
 	return message.Status, resp, message
 }
 
-func ConnectOther(conn *Conn, logCh chan string, data map[string]string) (int, LoginResp, util.Message) {
-	var resp LoginResp
-	var message util.Message
-
-	CloseSingleConn(conn.Connection)
-
-	resp = connect(
-		conn,
-		logCh,
-		data["host"],
-		data["user"],
-		data["password"],
-		data["token"])
-
-	if resp.Connected {
-		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
-	} else {
-		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
-	}
-	return message.Status, resp, message
-}
-
 func Disconnect(conn *things.Conn) (int, LoginResp, util.Message) {
 	CloseSingleConn(conn) // check if really closed?
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}

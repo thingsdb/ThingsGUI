@@ -6,29 +6,26 @@ import {withVlow} from 'vlow';
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
 import ReplaceNode from './ReplaceNode';
+import TableWithRowExtend from './TableWithRowExtend';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import {TableWithRowExtend} from '../Util';
 
 const withStores = withVlow([{
     store: NodesStore,
-    keys: ['nodes']
+    keys: ['nodes', 'connectedNode']
 }]);
 
-const Nodes = ({nodes}) => {
-
-    const n = JSON.stringify(nodes);
-    console.log(n);
-    const getN = React.useCallback(
-        () => {
-            NodesActions.getNodes();
-        },
-        [n],
-    );
+const Nodes = ({nodes, connectedNode}) => {
 
     React.useEffect(() => {
-        console.log("NODES");
-        getN();
-    }, [getN]);
+        NodesActions.getNodes();
+        const setPoll = setInterval(
+            () => {
+                NodesActions.getNodes();
+            }, 5000);
+        return () => {
+            clearInterval(setPoll);
+        };
+    }, []);
 
     const rows = nodes;
     const header = [{
@@ -41,11 +38,11 @@ const Nodes = ({nodes}) => {
         ky: 'status',
         label: 'Status',
     }];
-    const rowExtend = (node) => <Node local={node} />;
+    const rowExtend = (node) => <Node selectedNode={node} />;
     const handleButtons = (node) => <ReplaceNode node={node} />;
     return(
         <React.Fragment>
-            <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} />
+            <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode}/>
             <NodeButtons />
         </React.Fragment>
     );
@@ -54,6 +51,7 @@ const Nodes = ({nodes}) => {
 Nodes.propTypes = {
     /* nodes properties */
     nodes: NodesStore.types.nodes.isRequired,
+    connectedNode: NodesStore.types.connectedNode.isRequired,
 };
 
 export default withStores(Nodes);

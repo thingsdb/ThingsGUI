@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"time"
 
 	handlers "./sockethandlers"
 	util "./util"
@@ -75,12 +76,24 @@ func (app *App) SocketRouter() {
 		return handlers.Connect(app.connections[s.ID()], app.logCh, data)
 	})
 
-	app.Server.OnEvent("/", "connToOther", func(s socketio.Conn, data map[string]string) (int, handlers.LoginResp, util.Message) {
-		return handlers.ConnectOther(app.connections[s.ID()], app.logCh, data)
-	})
-
 	app.Server.OnEvent("/", "disconn", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
 		return handlers.Disconnect(app.connections[s.ID()].Connection)
+	})
+
+	app.Server.OnEvent("/", "log", func(s socketio.Conn, data string) {
+		//fmt.Println(<-app.logCh)
+		go func() {
+			// time.Sleep(time.Second * 10)
+			// your code here
+			for {
+				// msg := <-app.logCh
+				// fmt.Println(msg)
+				time.Sleep(time.Second * 10)
+				s.Emit("logging", "hii")
+			}
+
+		}()
+
 	})
 
 	app.Server.OnEvent("/", "query", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
@@ -113,6 +126,7 @@ func (app *App) SocketRouter() {
 }
 
 func (app *App) quit(err error) {
+	fmt.Println("QUIT")
 	rc := 0
 	if err != nil {
 		app.logCh <- fmt.Sprintf("%s", err.Error())

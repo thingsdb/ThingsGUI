@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
         bottom: '1%',
         right: '1%',
         width: '400px',
+        zIndex: '1',
     },
 }));
 

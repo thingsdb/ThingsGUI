@@ -1,4 +1,5 @@
 import Collapse from '@material-ui/core/Collapse';
+import ConnectedIcon from '@material-ui/icons/Power';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,6 +10,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 
 
@@ -38,7 +40,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Tabel = ({buttons, header, rows, rowExtend}) => {
+const Tabel = ({buttons, header, rows, rowExtend, connectedNode}) => {
     const classes = useStyles();
     const [selected, setSelected] = React.useState(null);
 
@@ -51,6 +53,7 @@ const Tabel = ({buttons, header, rows, rowExtend}) => {
             <Table>
                 <TableHead>
                     <TableRow>
+                        <TableCell colSpan={1} />
                         {header.map((h, i) => (
                             <TableCell key={h.ky} align={i?'right':'left'}>
                                 {h.label}
@@ -65,9 +68,14 @@ const Tabel = ({buttons, header, rows, rowExtend}) => {
                         return (
                             <React.Fragment key={ri}>
                                 <TableRow className={classes.row} >
+                                    <TableCell align='right' style={{borderBottom: isopen?'none':null}}>
+                                        {row.node_id == connectedNode.node_id && <ConnectedIcon />}
+                                    </TableCell>
                                     {header.map((h, i) => (
                                         <TableCell key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
-                                            {row[h.ky]}
+                                            <Typography variant="inherit" color={row[h.ky] == 'OFFLINE' ? 'error' : 'inherit'}>
+                                                {row[h.ky]}
+                                            </Typography>
                                         </TableCell>
                                     ))}
                                     {buttons ? (
@@ -109,6 +117,7 @@ Tabel.propTypes = {
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     rowExtend: PropTypes.func.isRequired,
+    connectedNode: PropTypes.object.isRequired,
 };
 
 export default Tabel;

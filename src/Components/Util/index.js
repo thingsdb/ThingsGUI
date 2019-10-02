@@ -10,14 +10,12 @@ import Menu from './Menu';
 import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import TableWithButtons from './TableWithButtons';
-import TableWithRowExtend from './TableWithRowExtend';
 import ThingsTree from './ThingsTree';
 import TopBarMenu from './TopBarMenu';
 import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
-import {StyledTabs, StyledTab} from './Tabs';
 
 const checkType = (t) => {
     if (t === null || t === 'nil') {
@@ -97,7 +95,6 @@ export {
     ServerError,
     SimpleModal,
     TableWithButtons,
-    TableWithRowExtend,
     thingValue,
     TopBarMenu,
     TreeBranch,
@@ -105,6 +102,4 @@ export {
     TreeIcon,
     QueryInput,
     QueryOutput,
-    StyledTabs,
-    StyledTab
 };

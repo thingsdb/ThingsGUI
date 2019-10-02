@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 
-import Connect from './Connect';
 import Counters from './Counters';
 import CountersReset from './CountersReset';
 import Loglevel from './Loglevel';
 import NodeInfo from './NodeInfo';
 import Shutdown from './Shutdown';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
-import { StyledTabs, StyledTab } from '../Util';
 
 
 const withStores = withVlow([{
@@ -28,28 +28,26 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Node = ({local, node, counters}) => {
+const Node = ({selectedNode, node, counters}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
 
     React.useEffect(() => {
-        NodesActions.getNode(); // QUEST: en bij status update?
+        NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
     }, [tabIndex]);
-
-    const onConnected = () => {
-        NodesActions.getNode();
-    };
 
     const handleChangeTab = (_event, newValue) => {
         setTabIndex(newValue);
     };
 
-    return node && local.node_id === node.node_id ? (
+    const offline = selectedNode.status == 'OFFLINE';
+
+    return node ? (
         <React.Fragment>
-            <StyledTabs value={tabIndex} onChange={handleChangeTab} aria-label="styled tabs example">
-                <StyledTab label="Node Info" />
-                <StyledTab label="Counters" />
-            </StyledTabs>
+            <Tabs value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example">
+                <Tab label="Node Info" />
+                <Tab label="Counters" />
+            </Tabs>
             {tabIndex === 0 &&
                 <Grid
                     className={classes.info}
@@ -60,14 +58,16 @@ const Node = ({local, node, counters}) => {
                     <Grid item xs={12}>
                         <NodeInfo node={node} />
                     </Grid>
-                    <Grid item container xs={12} spacing={1} >
-                        <Grid item>
-                            <Loglevel node={node} />
+                    {offline ? null : (
+                        <Grid item container xs={12} spacing={1} >
+                            <Grid item>
+                                <Loglevel node={node} />
+                            </Grid>
+                            <Grid item>
+                                <Shutdown node={node} />
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Shutdown node={node} />
-                        </Grid>
-                    </Grid>
+                    )}
                 </Grid>
             }
             {tabIndex === 1 &&
@@ -80,19 +80,19 @@ const Node = ({local, node, counters}) => {
                     <Grid item xs={12}>
                         <Counters counters={counters} />
                     </Grid>
-                    <Grid item xs={12}>
-                        <CountersReset node={node} />
-                    </Grid>
+                    {offline ? null : (
+                        <Grid item xs={12}>
+                            <CountersReset node={node} />
+                        </Grid>
+                    )}
                 </Grid>
             }
         </React.Fragment>
-    ) : node ? (
-        <Connect node={node} onConnected={onConnected} />
     ) : null;
 };
 
 Node.propTypes = {
-    local: PropTypes.object.isRequired,
+    selectedNode: PropTypes.object.isRequired,
 
     /* nodes properties */
     node: NodesStore.types.node.isRequired,

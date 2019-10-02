@@ -6,11 +6,11 @@ import {ErrorActions} from './ErrorStore';
 const ApplicationActions = Vlow.createActions([
     'connected',
     'connect',
-    'connectOther',
     'disconnect',
     'navigate',
     'openEditor',
     'closeEditor',
+    'logging',
 ]);
 
 // TODO: CALLBACKS
@@ -37,6 +37,11 @@ class ApplicationStore extends BaseStore {
         this.state = ApplicationStore.defaults;
     }
 
+    onLogging() {
+        console.log("logging");
+        this.push();
+    }
+
     onConnected() {
         this.emit('connected').done((data) => {
             setTimeout(() => {
@@ -53,17 +58,6 @@ class ApplicationStore extends BaseStore {
             this.setState({
                 connected: data.Connected,
             });
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
-    onConnectOther({host}, tag, cb) {
-        this.emit('connToOther', {host}).done((data) => {
-            this.setState({
-                connected: data.Connected,
-            });
-            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });

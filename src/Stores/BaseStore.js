@@ -125,6 +125,32 @@ class _BlobRequest {
     }
 }
 
+class _PushNotification {
+
+    // static types = {
+    //     connected: PropTypes.bool,
+    //     loaded: PropTypes.bool,
+    //     msg: PropTypes.string,
+    // }
+
+    constructor() {
+        this.state = {
+            connected: socket.connected,
+            loaded: false,
+            msg: 'Loading Oversight',
+        };
+
+        socket.emit('log', 'hoi');
+        socket.on('logging', (msg) => {
+            console.log(msg);
+        });
+
+        // socket.on('connect_failed', () => {
+        //     window.console.warn('Connection failed');
+        // });
+    }
+}
+
 class BaseStore extends Vlow.Store {
 
     emit(name, data) {
@@ -134,71 +160,10 @@ class BaseStore extends Vlow.Store {
     post(url, data) {
         return new _BlobRequest('POST', url, data);
     }
+
+    push() {
+        return new _PushNotification();
+    }
 }
-
-// class PushNotificationStore extends BaseStore {
-
-//     // static types = {
-//     //     connected: PropTypes.bool,
-//     //     loaded: PropTypes.bool,
-//     //     msg: PropTypes.string,
-//     // }
-
-//     constructor() {
-//         super(null);
-
-//         this.state = {
-//             connected: socket.connected,
-//             loaded: false,
-//             msg: 'Loading Oversight',
-//         };
-
-//         socket.on('reconnect', () => this.setState(() => ({
-//             connected: socket.connected,
-//             /* When re-connecting on intital load, loading the
-//              * required resources never completes so we should force loaded to
-//             * `true`.
-//              */
-//             loaded: true,
-
-//         })));
-
-//         socket.on('connect_failed', () => {
-//             window.console.warn('Connection failed');
-//         });
-
-//         socket.on('connect', () => {
-//             this.onLoadInterval = window.setInterval(this.onLoadedCheck, 1000);
-//             this.setState({connected: true});
-//         });
-
-//         socket.on('reconnecting', (attempt) => {
-//             let msg = `Connection lost, trying to reconnect... (attempt ${attempt})`;
-//             window.console.warn(msg);
-//             this.setState(() => ({
-//                 connected: socket.connected,
-//                 msg: msg
-//             }));
-//         });
-//     }
-
-// onLoadedCheck = () => {
-//     if (activeRequests === 0) {
-//         this.setState({loaded: true});
-//         clearInterval(this.onLoadInterval);
-//     }
-// }
-
-// onTriggerSessionError() {
-//     this.setState({
-//         loaded: false,
-//         msg: 'Session has expired, redirecting to login...'
-//     });
-
-//     setTimeout(() => {
-//         location.reload();
-//     }, 3000);
-// }
-// }
 
 export {BaseStore};
