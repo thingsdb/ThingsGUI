@@ -6,7 +6,6 @@ import {ErrorActions} from './ErrorStore';
 const NodesActions = Vlow.createActions([
     'getNodes',
     'getNode',
-    'getConnectedNode',
     'setLoglevel',
     'resetCounters',
     'shutdown',

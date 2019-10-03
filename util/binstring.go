@@ -12,13 +12,13 @@ type TmpFiles struct {
 	generated map[string]bool
 }
 
-var tmp = TmpFiles{}
-
-func Init(logChan chan string) {
-	tmp.generated = make(map[string]bool)
+func NewTmpFiles() *TmpFiles {
+	return &TmpFiles{
+		generated: make(map[string]bool),
+	}
 }
 
-func createBinFileLink(t string) (string, error) {
+func (tmp *TmpFiles) createBinFileLink(t string) (string, error) {
 	var err error
 	var hostname string
 
@@ -45,20 +45,20 @@ func createBinFileLink(t string) (string, error) {
 	return fmt.Sprintf("http://%s/download%s", hostname, tmpfile.Name()), nil
 }
 
-func ReplaceBinStrWithLink(thing interface{}) error {
+func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) error {
 	var err error
 	switch v := thing.(type) {
 	case []interface{}:
 		for i := 0; i < len(v); i++ {
 			if t, ok := v[i].(string); ok {
 				if !utf8.ValidString(t) {
-					v[i], err = createBinFileLink(t)
+					v[i], err = tmp.createBinFileLink(t)
 					if err != nil {
 						return err
 					}
 				}
 			} else {
-				err = ReplaceBinStrWithLink(v[i])
+				err = tmp.ReplaceBinStrWithLink(v[i])
 				if err != nil {
 					return err
 				}
@@ -68,13 +68,13 @@ func ReplaceBinStrWithLink(thing interface{}) error {
 		for k := range v {
 			if t, ok := v[k].(string); ok {
 				if !utf8.ValidString(t) {
-					v[k], err = createBinFileLink(t)
+					v[k], err = tmp.createBinFileLink(t)
 					if err != nil {
 						return err
 					}
 				}
 			} else {
-				err = ReplaceBinStrWithLink(v[k])
+				err = tmp.ReplaceBinStrWithLink(v[k])
 				if err != nil {
 					return err
 				}
@@ -87,7 +87,7 @@ func ReplaceBinStrWithLink(thing interface{}) error {
 	return nil
 }
 
-func CleanupTmp() error { // cleanup at end of session
+func (tmp *TmpFiles) CleanupTmp() error { // cleanup at end of session
 	var err error
 	for k, _ := range tmp.generated {
 		err = os.Remove(k)

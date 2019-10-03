@@ -22,7 +22,7 @@ type Data struct {
 	Blob  string
 }
 
-func query(conn *things.Conn, data Data, blob map[string]interface{}, timeout uint16) (int, interface{}, util.Message) {
+func query(conn *things.Conn, data Data, blob map[string]interface{}, timeout uint16, tmp *util.TmpFiles) (int, interface{}, util.Message) {
 	resp, err := conn.Query(
 		fmt.Sprintf("%s", data.Scope),
 		fmt.Sprintf("%s", data.Query),
@@ -32,16 +32,16 @@ func query(conn *things.Conn, data Data, blob map[string]interface{}, timeout ui
 		message := util.Message{Text: "Query error", Status: http.StatusInternalServerError, Log: err.Error()}
 		return message.Status, "", message
 	}
-	err = util.ReplaceBinStrWithLink(resp) // run as goroutine??
+	err = tmp.ReplaceBinStrWithLink(resp) // run as goroutine??
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
 }
 
-func Query(conn *things.Conn, data Data, timeout uint16) (int, interface{}, util.Message) {
-	return query(conn, data, nil, timeout)
+func Query(conn *things.Conn, data Data, timeout uint16, tmp *util.TmpFiles) (int, interface{}, util.Message) {
+	return query(conn, data, nil, timeout, tmp)
 }
 
-func QueryBlob(conn *things.Conn, data Data, timeout uint16) (int, interface{}, util.Message) {
+func QueryBlob(conn *things.Conn, data Data, timeout uint16, tmp *util.TmpFiles) (int, interface{}, util.Message) {
 	decodedBlob, err := base64.StdEncoding.DecodeString(data.Blob)
 	if err != nil {
 		message := util.Message{Text: "Query error", Status: http.StatusInternalServerError, Log: err.Error()}
@@ -52,13 +52,13 @@ func QueryBlob(conn *things.Conn, data Data, timeout uint16) (int, interface{}, 
 		"blob": string(decodedBlob),
 	}
 
-	return query(conn, data, blob, timeout)
+	return query(conn, data, blob, timeout, tmp)
 }
 
-func QueryEditor(conn *things.Conn, data Data, timeout uint16) (int, interface{}, util.Message) {
+func QueryEditor(conn *things.Conn, data Data, timeout uint16, tmp *util.TmpFiles) (int, interface{}, util.Message) {
 	var collectionResp = make(map[string]interface{})
 
-	status1, resp1, message1 := query(conn, data, nil, timeout)
+	status1, resp1, message1 := query(conn, data, nil, timeout, tmp)
 	if status1 == http.StatusInternalServerError {
 		return status1, resp1, message1
 	}
@@ -66,7 +66,7 @@ func QueryEditor(conn *things.Conn, data Data, timeout uint16) (int, interface{}
 
 	if strings.Contains(data.Scope, "@collection") {
 		data.Query = "thing(.id());"
-		status2, resp2, message2 := query(conn, data, nil, timeout)
+		status2, resp2, message2 := query(conn, data, nil, timeout, tmp)
 		if status2 == http.StatusInternalServerError {
 			return status2, resp2, message2
 		}
@@ -75,9 +75,9 @@ func QueryEditor(conn *things.Conn, data Data, timeout uint16) (int, interface{}
 	return message1.Status, collectionResp, message1
 }
 
-func CleanupTmp() (int, bool, util.Message) {
+func CleanupTmp(tmp *util.TmpFiles) (int, bool, util.Message) {
 	resp := true
-	err := util.CleanupTmp()
+	err := tmp.CleanupTmp()
 	message := util.Msg(err, http.StatusInternalServerError)
 	if err != nil {
 		resp = false

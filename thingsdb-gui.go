@@ -7,12 +7,13 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"os/signal"
 	"runtime"
-	"time"
 
 	handlers "./sockethandlers"
 	util "./util"
 	socketio "github.com/googollee/go-socket.io"
+	things "github.com/thingsdb/go/client"
 )
 
 // AppVersion exposes version information
@@ -25,114 +26,87 @@ var (
 	port        uint
 	timeout     uint
 	openBrowser bool
-	//debugMode  bool
-	//configFile string
 )
 
 func Init() {
 	flag.StringVar(&host, "host", "localhost", "host")
-	flag.UintVar(&port, "port", 8080, "Port")
+	flag.UintVar(&port, "port", 8080, "port")
 	flag.UintVar(&timeout, "timeout", 30, "timeout")
 	flag.BoolVar(&openBrowser, "open", true, "opens a page in your default browser")
-	//flag.BoolVar(&debugMode, "debug mode", false, "Debug ")
-	//flag.StringVar(&configFile, "config file", "default.conf", "Config file")
 
 	flag.Parse()
 }
 
 type App struct {
-	config      string
-	Host        string
-	Port        uint16
-	logCh       chan string
-	Server      *socketio.Server
-	debugMode   bool
-	configFile  string
-	connections map[string]*handlers.Conn
-	OpenBrowser bool
-	Timeout     uint16
-}
-
-func (app *App) logHandler() {
-	for {
-		msg := <-app.logCh
-		fmt.Println(msg)
-	}
+	host        string
+	port        uint16
+	logCh       map[string]chan string
+	server      *socketio.Server
+	connections map[string]*things.Conn
+	openBrowser bool
+	timeout     uint16
+	tmpFiles    map[string]*util.TmpFiles
 }
 
 func (app *App) SocketRouter() {
-	app.Server.OnConnect("/", func(s socketio.Conn) error {
+	app.server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
-		app.logCh <- fmt.Sprintf("connected: %s", s.ID())
-		app.connections[s.ID()] = &handlers.Conn{}
+		// logchannel per client
+		app.tmpFiles[s.ID()] = util.NewTmpFiles()
+		app.logCh[s.ID()] = make(chan string, 1)
+		app.logCh[s.ID()] <- fmt.Sprintf("connected: %s", s.ID())
 		return nil
 	})
 
-	app.Server.OnEvent("/", "connected", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
-		return handlers.Connected(app.connections[s.ID()].Connection)
+	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
+		return handlers.Connected(app.connections[s.ID()])
 	})
 
-	app.Server.OnEvent("/", "conn", func(s socketio.Conn, data map[string]string) (int, handlers.LoginResp, util.Message) {
-		return handlers.Connect(app.connections[s.ID()], app.logCh, data)
+	app.server.OnEvent("/", "conn", func(s socketio.Conn, data map[string]string) (int, handlers.LoginResp, util.Message) {
+		return handlers.Connect(s.ID(), app.connections, app.logCh, data)
 	})
 
-	app.Server.OnEvent("/", "disconn", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
-		return handlers.Disconnect(app.connections[s.ID()].Connection)
+	app.server.OnEvent("/", "disconn", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
+		return handlers.Disconnect(app.connections[s.ID()])
 	})
 
-	app.Server.OnEvent("/", "log", func(s socketio.Conn, data string) {
-		//fmt.Println(<-app.logCh)
+	app.server.OnEvent("/", "log", func(s socketio.Conn, data string) {
 		go func() {
-			// time.Sleep(time.Second * 10)
-			// your code here
-			for {
-				// msg := <-app.logCh
-				// fmt.Println(msg)
-				time.Sleep(time.Second * 10)
-				s.Emit("logging", "hii")
+			for p := range app.logCh[s.ID()] {
+				fmt.Println(p)
+				s.Emit("logging", p)
 			}
-
 		}()
-
 	})
 
-	app.Server.OnEvent("/", "query", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.Query(app.connections[s.ID()].Connection, data, app.Timeout)
+	app.server.OnEvent("/", "query", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
+		return handlers.Query(app.connections[s.ID()], data, app.timeout, app.tmpFiles[s.ID()])
 	})
 
-	app.Server.OnEvent("/", "queryBlob", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.QueryBlob(app.connections[s.ID()].Connection, data, app.Timeout)
+	app.server.OnEvent("/", "queryBlob", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
+		return handlers.QueryBlob(app.connections[s.ID()], data, app.timeout, app.tmpFiles[s.ID()])
 	})
 
-	app.Server.OnEvent("/", "queryEditor", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.QueryEditor(app.connections[s.ID()].Connection, data, app.Timeout)
+	app.server.OnEvent("/", "queryEditor", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
+		return handlers.QueryEditor(app.connections[s.ID()], data, app.timeout, app.tmpFiles[s.ID()])
 	})
 
-	app.Server.OnEvent("/", "cleanupTmp", func(s socketio.Conn) (int, bool, util.Message) {
-		return handlers.CleanupTmp()
+	app.server.OnEvent("/", "cleanupTmp", func(s socketio.Conn) (int, bool, util.Message) {
+		return handlers.CleanupTmp(app.tmpFiles[s.ID()])
 	})
 
-	app.Server.OnError("/", func(e error) {
-		app.logCh <- fmt.Sprintf("meet error: %s", e.Error())
+	app.server.OnError("/", func(e error) {
+		for _, v := range app.logCh {
+			v <- fmt.Sprintf("meet error: %s", e.Error())
+		}
+		fmt.Printf("meet error: %s\n", e.Error())
 	})
 
-	app.Server.OnDisconnect("/", func(s socketio.Conn, msg string) {
-		app.logCh <- fmt.Sprintf("closed: %s", msg)
-		util.CleanupTmp()
-		handlers.CloseSingleConn(app.connections[s.ID()].Connection)
-		delete(app.connections, s.ID())
-
+	app.server.OnDisconnect("/", func(s socketio.Conn, msg string) {
+		app.logCh[s.ID()] <- fmt.Sprintf("closed: %s", msg)
+		app.tmpFiles[s.ID()].CleanupTmp()
+		handlers.CloseSingleConn(app.connections[s.ID()])
 	})
-}
-
-func (app *App) quit(err error) {
-	fmt.Println("QUIT")
-	rc := 0
-	if err != nil {
-		app.logCh <- fmt.Sprintf("%s", err.Error())
-		rc = 1
-	}
-	os.Exit(rc)
 }
 
 func open(url string) error { //https://stackoverflow.com/questions/39320371/how-start-web-server-to-open-page-in-browser-in-golang
@@ -152,26 +126,25 @@ func open(url string) error { //https://stackoverflow.com/questions/39320371/how
 	return exec.Command(cmd, args...).Run()
 }
 
-func (app *App) Start() {
-	var err error
-
-	// logchannel
-	app.logCh = make(chan string)
-	go app.logHandler()
-
-	// for unique numbering
-	util.Init(app.logCh)
-
-	// socketio
-	app.Server, err = socketio.NewServer(nil)
-	if err != nil {
-		app.quit(err)
+func (app *App) quit() {
+	fmt.Println("QUIT")
+	fmt.Println(app.connections, app.logCh)
+	for _, v := range app.connections {
+		if v != nil {
+			v.Close()
+		}
 	}
+	for _, v := range app.tmpFiles {
+		if v != nil {
+			v.CleanupTmp()
+		}
+	}
+	fmt.Println(app.connections, app.logCh)
+}
 
-	go app.Server.Serve()
-	defer app.Server.Close()
-
-	app.connections = make(map[string]*handlers.Conn)
+func (app *App) Start() {
+	go app.server.Serve()
+	defer app.server.Close()
 	app.SocketRouter()
 
 	//HTTP handlers
@@ -183,22 +156,47 @@ func (app *App) Start() {
 	http.HandleFunc("/download", util.HandlerDownload)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
-	http.Handle("/socket.io/", app.Server)
+	http.Handle("/socket.io/", app.server)
 
-	log.Printf("Serving at %s:%d...", app.Host, app.Port)
+	log.Printf("Serving at %s:%d...", app.host, app.port)
 
-	if app.OpenBrowser {
+	if app.openBrowser {
 		go open("http://localhost:8080/")
 	}
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", app.Port), nil))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", app.port), nil))
 }
 
 func main() {
+	var err error
+
+	// init
 	Init()
 	a := App{}
-	a.Host = host
-	a.Port = uint16(port)
-	a.Timeout = uint16(timeout)
-	a.OpenBrowser = openBrowser
+	a.host = host
+	a.port = uint16(port)
+	a.timeout = uint16(timeout)
+	a.openBrowser = openBrowser
+	a.logCh = make(map[string]chan string)
+	a.connections = make(map[string]*things.Conn)
+	a.tmpFiles = make(map[string]*util.TmpFiles)
+	a.server, err = socketio.NewServer(nil)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// on interrup clean up
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		for sig := range c {
+			if sig == os.Interrupt {
+				a.quit()
+				for len(a.logCh) == 0 && len(a.connections) == 0 {
+					os.Exit(1)
+				}
+			}
+		}
+	}()
+
 	a.Start()
 }

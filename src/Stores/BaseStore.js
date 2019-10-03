@@ -23,6 +23,12 @@ class _SocketRequest {
     _alwaysCb() {
     }
 
+    // _triggerSessionError() {
+    //     setTimeout(() => {
+    //         location.reload();
+    //     }, 3000);
+    // }
+
     constructor(event, ...data) {
         window.console.debug(`Socket request: "${event}"`, data);
 
@@ -40,7 +46,7 @@ class _SocketRequest {
                 window.console.debug(`Socket response ("${event}"):`, data);
                 this._doneCb(data);
             } else if (status === 125) {
-                // ConnectionActions.triggerSessionError();
+                // this._triggerSessionError();
             } else {
                 this._failCb(event, status, message);
             }
@@ -142,7 +148,10 @@ class _PushNotification {
 
         socket.emit('log', 'hoi');
         socket.on('logging', (msg) => {
-            console.log(msg);
+            window.console.log(msg);
+        });
+        socket.on('disconnect', () => {
+            location.reload();
         });
 
         // socket.on('connect_failed', () => {

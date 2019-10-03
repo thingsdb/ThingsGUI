@@ -16,12 +16,7 @@ type LoginResp struct {
 	ConnErr   error
 }
 
-type Conn struct {
-	Open       bool
-	Connection *things.Conn
-}
-
-func connect(conn *Conn, logCh chan string, address string, user string, password string, token string) LoginResp {
+func connect(sid string, conn map[string]*things.Conn, logCh map[string]chan string, address string, user string, password string, token string) LoginResp {
 	hp := strings.Split(address, ":")
 	if len(hp) != 2 {
 		return LoginResp{Connected: false, ConnErr: fmt.Errorf("invalid address")}
@@ -32,27 +27,30 @@ func connect(conn *Conn, logCh chan string, address string, user string, passwor
 	}
 	host := hp[0]
 
-	conn.Connection = things.NewConn(host, uint16(port))
-	conn.Open = true
-	conn.Connection.LogCh = logCh
-	conn.Connection.OnClose = func() {
-		conn.Open = false
+	conn[sid] = things.NewConn(host, uint16(port))
+	conn[sid].LogCh = logCh[sid]
+	conn[sid].OnClose = func() {
+		fmt.Println(sid)
+		close(logCh[sid])
+		delete(conn, sid)
+		delete(logCh, sid)
+		fmt.Println("end", logCh, conn)
 	}
 
-	if !(*conn).Connection.IsConnected() {
-		err := (*conn).Connection.Connect()
+	if !conn[sid].IsConnected() {
+		err := conn[sid].Connect()
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 	}
 
 	if token == "" {
-		err := (*conn).Connection.AuthPassword(user, password)
+		err := conn[sid].AuthPassword(user, password)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 	} else {
-		err := (*conn).Connection.AuthToken(token)
+		err := conn[sid].AuthToken(token)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
@@ -74,10 +72,11 @@ func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
 	return message.Status, resp, message
 }
 
-func Connect(conn *Conn, logCh chan string, data map[string]string) (int, LoginResp, util.Message) {
+func Connect(sid string, conn map[string]*things.Conn, logCh map[string]chan string, data map[string]string) (int, LoginResp, util.Message) {
 	var resp LoginResp
 	var message util.Message
 	resp = connect(
+		sid,
 		conn,
 		logCh,
 		data["host"],
