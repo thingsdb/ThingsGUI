@@ -4,7 +4,7 @@ import {withVlow} from 'vlow';
 
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
-import ReplaceNode from './ReplaceNode';
+import DelNode from './DelNode';
 import TableWithRowExtend from './TableWithRowExtend';
 import {NodesActions, NodesStore} from '../../Stores/NodesStore';
 
@@ -38,7 +38,7 @@ const Nodes = ({nodes, connectedNode}) => {
         label: 'Status',
     }];
     const rowExtend = (node) => <Node selectedNode={node} />;
-    const handleButtons = (node) => <ReplaceNode node={node} />;
+    const handleButtons = (node) => <DelNode node={node} />;
     return(
         <React.Fragment>
             <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode}/>

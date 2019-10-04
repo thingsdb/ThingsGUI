@@ -3,7 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core';
 
 import AddNode from './AddNode';
-import PopNode from './PopNode';
 
 
 const useStyles = makeStyles(theme => ({
@@ -26,9 +25,6 @@ const NodeButtons = () => {
                 <Grid item container xs={12} spacing={1} >
                     <Grid item>
                         <AddNode />
-                    </Grid>
-                    <Grid item>
-                        <PopNode />
                     </Grid>
                 </Grid>
             </Grid>

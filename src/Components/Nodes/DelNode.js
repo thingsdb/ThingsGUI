@@ -1,5 +1,7 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import DeleteIcon from '@material-ui/icons/Delete';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { ErrorMsg, SimpleModal } from '../Util';
@@ -8,7 +10,7 @@ import {NodesActions} from '../../Stores/NodesStore';
 
 const tag = '11';
 
-const PopNode = () => {
+const DelNode = ({node}) => {
     const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -20,7 +22,8 @@ const PopNode = () => {
     };
 
     const handleClickOk = () => {
-        NodesActions.popNode(
+        NodesActions.delNode(
+            node.node_id,
             tag,
             () => setShow(false)
         );
@@ -39,9 +42,9 @@ const PopNode = () => {
     return(
         <SimpleModal
             button={
-                <Button variant="outlined" onClick={handleClickOpen}>
-                    {'Pop Node'}
-                </Button>
+                <ButtonBase onClick={handleClickOpen}>
+                    <DeleteIcon />
+                </ButtonBase>
             }
             title="CAUTION"
             open={show}
@@ -53,4 +56,8 @@ const PopNode = () => {
     );
 };
 
-export default PopNode;
+DelNode.propTypes = {
+    node: PropTypes.object.isRequired,
+};
+
+export default DelNode;

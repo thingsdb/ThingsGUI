@@ -67,9 +67,14 @@ const App = ({collections, match, user, users, openEditor}) => {
 
     React.useEffect(() => {
         ThingsdbActions.getInfo();
-    },
-    [],
-    );
+        const setPoll = setInterval(
+            () => {
+                ThingsdbActions.getInfo();
+            }, 5000);
+        return () => {
+            clearInterval(setPoll);
+        };
+    }, []);
 
     const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
     const selectedCollection = findItem(indexCollection, collections);

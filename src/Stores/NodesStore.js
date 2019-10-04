@@ -10,8 +10,7 @@ const NodesActions = Vlow.createActions([
     'resetCounters',
     'shutdown',
     'addNode',
-    'popNode',
-    'replaceNode',
+    'delNode',
 ]);
 
 // TODO: CALLBACKS
@@ -124,8 +123,8 @@ class NodesStore extends BaseStore {
         });
     }
 
-    onPopNode(tag, cb) {
-        const query = 'pop_node();';
+    onDelNode(nodeId, tag, cb) {
+        const query = `del_node(${nodeId});`;
         this.emit('query', {
             scope: '@thingsdb',
             query
@@ -136,20 +135,6 @@ class NodesStore extends BaseStore {
             ErrorActions.setMsgError(tag, message.Log);
         });
     }
-
-    onReplaceNode(config, tag, cb) { // nodeId , secret, address [, port]
-        const query = config.port ? `replace_node(${config.nodeId}, '${config.secret}', '${config.address}', ${config.port});`: `replace_node(${config.nodeId}, '${config.secret}', '${config.address}');`;
-        this.emit('query', {
-            scope: '@thingsdb',
-            query
-        }).done((_data) => {
-            cb();
-            this.onGetNodes();
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
 }
 
 export {NodesActions, NodesStore};
