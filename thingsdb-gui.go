@@ -71,8 +71,9 @@ func (app *App) SocketRouter() {
 	})
 
 	app.server.OnEvent("/", "log", func(s socketio.Conn, data string) {
+		ch := app.logCh[s.ID()]
 		go func() {
-			for p := range app.logCh[s.ID()] {
+			for p := range ch {
 				fmt.Println(p)
 				s.Emit("logging", p)
 			}
@@ -106,6 +107,10 @@ func (app *App) SocketRouter() {
 		app.logCh[s.ID()] <- fmt.Sprintf("closed: %s", msg)
 		app.tmpFiles[s.ID()].CleanupTmp()
 		handlers.CloseSingleConn(app.connections[s.ID()])
+		if app.logCh[s.ID()] != nil {
+			// close(app.logCh[s.ID()]) // Is it aproblem if not close first???
+			delete(app.logCh, s.ID())
+		}
 	})
 }
 
@@ -128,7 +133,6 @@ func open(url string) error { //https://stackoverflow.com/questions/39320371/how
 
 func (app *App) quit() {
 	fmt.Println("QUIT")
-	fmt.Println(app.connections, app.logCh)
 	for _, v := range app.connections {
 		if v != nil {
 			v.Close()
@@ -139,7 +143,6 @@ func (app *App) quit() {
 			v.CleanupTmp()
 		}
 	}
-	fmt.Println(app.connections, app.logCh)
 }
 
 func (app *App) Start() {
@@ -160,9 +163,9 @@ func (app *App) Start() {
 
 	log.Printf("Serving at %s:%d...", app.host, app.port)
 
-	if app.openBrowser {
-		go open("http://localhost:8080/")
-	}
+	// if app.openBrowser {
+	// 	go open("http://localhost:8080/")
+	// }
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", app.port), nil))
 }
 
@@ -191,9 +194,7 @@ func main() {
 		for sig := range c {
 			if sig == os.Interrupt {
 				a.quit()
-				for len(a.logCh) == 0 && len(a.connections) == 0 {
-					os.Exit(1)
-				}
+				os.Exit(1)
 			}
 		}
 	}()

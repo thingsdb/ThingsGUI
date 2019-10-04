@@ -31,9 +31,8 @@ func connect(sid string, conn map[string]*things.Conn, logCh map[string]chan str
 	conn[sid].LogCh = logCh[sid]
 	conn[sid].OnClose = func() {
 		fmt.Println(sid)
-		close(logCh[sid])
 		delete(conn, sid)
-		delete(logCh, sid)
+
 		fmt.Println("end", logCh, conn)
 	}
 
@@ -43,7 +42,6 @@ func connect(sid string, conn map[string]*things.Conn, logCh map[string]chan str
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 	}
-
 	if token == "" {
 		err := conn[sid].AuthPassword(user, password)
 		if err != nil {

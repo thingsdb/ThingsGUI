@@ -70,11 +70,11 @@ const TopBar = ({user, children}) => {
                                     </ListItemIcon>
                                     <ListItemText primary={user.name} />
                                 </ListItem>
-                                <ListItem button>
+                                <ListItem button onClick={handleClickLogout}>
                                     <ListItemIcon>
                                         <ExitToAppIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary="Logout" onClick={handleClickLogout} />
+                                    <ListItemText primary="Logout" />
                                 </ListItem>
                             </List>
                         </TopBarMenu>
