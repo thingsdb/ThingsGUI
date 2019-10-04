@@ -48,6 +48,14 @@ type App struct {
 	tmpFiles    map[string]*util.TmpFiles
 }
 
+func (app *App) EventCh(sid string) {
+	if app.connections[sid] != nil {
+		for e := range app.connections[sid].EventCh {
+			fmt.Println("EVENT ", e)
+		}
+	}
+}
+
 func (app *App) SocketRouter() {
 	app.server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
@@ -55,6 +63,8 @@ func (app *App) SocketRouter() {
 		app.tmpFiles[s.ID()] = util.NewTmpFiles()
 		app.logCh[s.ID()] = make(chan string, 1)
 		app.logCh[s.ID()] <- fmt.Sprintf("connected: %s", s.ID())
+		fmt.Println(app.connections[s.ID()])
+		go app.EventCh(s.ID())
 		return nil
 	})
 
@@ -163,15 +173,14 @@ func (app *App) Start() {
 
 	log.Printf("Serving at %s:%d...", app.host, app.port)
 
-	// if app.openBrowser {
-	// 	go open("http://localhost:8080/")
-	// }
+	if app.openBrowser {
+		go open("http://localhost:8080/")
+	}
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", app.port), nil))
 }
 
 func main() {
 	var err error
-
 	// init
 	Init()
 	a := App{}

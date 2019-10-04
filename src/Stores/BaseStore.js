@@ -133,12 +133,6 @@ class _BlobRequest {
 
 class _PushNotification {
 
-    // static types = {
-    //     connected: PropTypes.bool,
-    //     loaded: PropTypes.bool,
-    //     msg: PropTypes.string,
-    // }
-
     constructor() {
         this.state = {
             connected: socket.connected,
@@ -153,10 +147,6 @@ class _PushNotification {
         socket.on('disconnect', () => {
             location.reload();
         });
-
-        // socket.on('connect_failed', () => {
-        //     window.console.warn('Connection failed');
-        // });
     }
 }
 

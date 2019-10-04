@@ -32,10 +32,10 @@ const DelNode = ({node}) => {
 
     const Content = (
         <React.Fragment>
+            <ErrorMsg tag={tag} />
             <DialogContentText>
                 {'Are you sure you want to remove the latest node?'}
             </DialogContentText>
-            <ErrorMsg tag={tag} />
         </React.Fragment>
     );
 
