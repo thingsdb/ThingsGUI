@@ -10,13 +10,21 @@ import (
 	things "github.com/thingsdb/go/client"
 )
 
+type Client struct {
+	Connection *things.Conn
+	Closed     chan bool
+	EventCh    chan *things.Event
+	LogCh      chan string
+	TmpFiles   *util.TmpFiles
+}
+
 type LoginResp struct {
 	Loaded    bool
 	Connected bool
 	ConnErr   error
 }
 
-func connect(sid string, conn map[string]*things.Conn, logCh map[string]chan string, address string, user string, password string, token string) LoginResp {
+func connect(client *Client, address string, user string, password string, token string) LoginResp {
 	hp := strings.Split(address, ":")
 	if len(hp) != 2 {
 		return LoginResp{Connected: false, ConnErr: fmt.Errorf("invalid address")}
@@ -27,28 +35,29 @@ func connect(sid string, conn map[string]*things.Conn, logCh map[string]chan str
 	}
 	host := hp[0]
 
-	conn[sid] = things.NewConn(host, uint16(port))
-	conn[sid].LogCh = logCh[sid]
-	conn[sid].OnClose = func() {
-		fmt.Println(sid)
-		delete(conn, sid)
-
-		fmt.Println("end", logCh, conn)
+	client.Connection = things.NewConn(host, uint16(port))
+	client.Connection.EventCh = client.EventCh
+	client.Connection.LogCh = client.LogCh
+	client.Connection.OnClose = func() {
+		go func() {
+			client.Closed <- true
+		}()
 	}
 
-	if !conn[sid].IsConnected() {
-		err := conn[sid].Connect()
+	if !client.Connection.IsConnected() {
+		err := client.Connection.Connect()
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 	}
 	if token == "" {
-		err := conn[sid].AuthPassword(user, password)
+		fmt.Println(user, password)
+		err := client.Connection.AuthPassword(user, password)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 	} else {
-		err := conn[sid].AuthToken(token)
+		err := client.Connection.AuthToken(token)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
@@ -58,6 +67,7 @@ func connect(sid string, conn map[string]*things.Conn, logCh map[string]chan str
 
 func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
 	var resp LoginResp
+	fmt.Println("CONNECTED", conn)
 	switch {
 	case conn == nil:
 		resp = LoginResp{Loaded: true, Connected: false}
@@ -70,13 +80,11 @@ func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
 	return message.Status, resp, message
 }
 
-func Connect(sid string, conn map[string]*things.Conn, logCh map[string]chan string, data map[string]string) (int, LoginResp, util.Message) {
+func Connect(client *Client, data map[string]string) (int, LoginResp, util.Message) {
 	var resp LoginResp
 	var message util.Message
 	resp = connect(
-		sid,
-		conn,
-		logCh,
+		client,
 		data["host"],
 		data["user"],
 		data["password"],
@@ -90,14 +98,17 @@ func Connect(sid string, conn map[string]*things.Conn, logCh map[string]chan str
 	return message.Status, resp, message
 }
 
-func Disconnect(conn *things.Conn) (int, LoginResp, util.Message) {
-	CloseSingleConn(conn) // check if really closed?
+func Disconnect(client *Client) (int, LoginResp, util.Message) {
+	CloseSingleConn(client) // check if really closed?
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	return message.Status, LoginResp{Loaded: true, Connected: false}, message
 }
 
-func CloseSingleConn(conn *things.Conn) {
-	if conn != nil {
-		conn.Close()
+func CloseSingleConn(client *Client) {
+	if client.Connection != nil {
+		client.Connection.Close()
+		<-client.Closed
+		fmt.Println(client.Connection.IsConnected())
+
 	}
 }

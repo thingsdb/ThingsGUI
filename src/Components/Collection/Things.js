@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -11,12 +12,15 @@ import {withVlow} from 'vlow';
 
 import AddThings from './AddThings';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
+import {EventStore, EventActions} from '../../Stores/BaseStore';
 
 import Thing from './Thing';
 
 const withStores = withVlow([{
     store: CollectionStore,
     keys: ['things']
+}, {
+    store: EventStore,
 }]);
 
 
@@ -46,6 +50,14 @@ const ThingRoot = ({things, collection}) => {
         CollectionActions.query(collection);
         return () => CollectionActions.cleanupTmp();
     }, [collection.name]);
+
+    const handleWatch = () => {
+        console.log('watch');
+        EventActions.watch(
+            '@collection:stuff',
+            '3'
+        );
+    };
 
     return (
         <React.Fragment>
@@ -96,6 +108,9 @@ const ThingRoot = ({things, collection}) => {
                     {'Cannot fetch data.'}
                 </Typography>
             )}
+            <Button onClick={handleWatch}>
+                {'Watch'}
+            </Button>
         </React.Fragment>
     );
 };

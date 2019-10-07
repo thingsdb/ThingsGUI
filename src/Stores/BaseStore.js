@@ -2,6 +2,8 @@
 
 import Vlow from 'vlow';
 import io from 'socket.io-client';
+import PropTypes from 'prop-types';
+import {ErrorActions} from './ErrorStore';
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
     reconnection: true,
@@ -134,11 +136,6 @@ class _BlobRequest {
 class _PushNotification {
 
     constructor() {
-        this.state = {
-            connected: socket.connected,
-            loaded: false,
-            msg: 'Loading Oversight',
-        };
 
         socket.emit('log', 'hoi');
         socket.on('logging', (msg) => {
@@ -149,6 +146,7 @@ class _PushNotification {
         });
     }
 }
+
 
 class BaseStore extends Vlow.Store {
 
@@ -165,4 +163,144 @@ class BaseStore extends Vlow.Store {
     }
 }
 
-export {BaseStore};
+const EventActions = Vlow.createActions([
+    'watch',
+    'unwatch',
+]);
+
+const ProtoMap = {
+    ProtoOnWatchIni: 16,
+    ProtoOnWatchUpd: 17,
+    ProtoOnWatchDel: 18,
+    ProtoOnNodeStatus: 19,
+    ProtoOnWarn: 20,
+};
+
+class EventStore extends BaseStore {
+
+    static types = {
+        watchThings: PropTypes.object,
+    }
+
+    constructor() {
+        super(EventActions);
+        this.state = {
+            watchThings: {},
+        };
+        socket.emit('getEvent', 'hoi');
+        socket.on('event', (data) => {
+            window.console.log(data);
+            switch(data.Proto){
+            case ProtoMap.ProtoOnWatchIni:
+                this.watchInit(data.Data);
+                break;
+            case ProtoMap.ProtoOnWatchUpd:
+                this.watchUpdate(data.Data);
+                break;
+            case ProtoMap.ProtoOnWatchDel:
+                this.watchDel(data.Data);
+                break;
+            default:
+
+            }
+        });
+    }
+
+    watchInit(data) {
+        this.setState(prevState => {
+            const watchThings = Object.assign({}, prevState.watchThings, {[data.thing['#']]: data.thing});
+            return {watchThings};
+        });
+    }
+
+    watchUpdate(data) {
+        for (let i = 0; i<data.jobs.length; i++) {
+            switch(true){
+            case data.jobs[i].hasOwnProperty('set'):
+                this.set(data['#'], data.jobs[i].set);
+                break;
+            case data.jobs[i].hasOwnProperty('del'):
+                this.del(data['#'], data.jobs[i].del);
+                break;
+            case data.jobs[i].hasOwnProperty('splice'):
+                this.splice(data['#'], data.jobs[i].splice);
+                break;
+            case data.jobs[i].hasOwnProperty('add'):
+                this.add(data['#'], data.jobs[i].add);
+                break;
+            case data.jobs[i].hasOwnProperty('remove'):
+                this.remove(data['#'], data.jobs[i].remove);
+                break;
+            default:
+
+            }
+        }
+    }
+
+    set(id, set) {
+        this.setState(prevState => {
+            const update = Object.assign({}, prevState.watchThings[id], set);
+            const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
+            return {watchThings};
+        });
+    }
+
+    del(id, del) {
+        this.setState(prevState => {
+            let copyState = JSON.parse(JSON.stringify(prevState.watchThings[id]));
+            delete copyState[del];
+            const watchThings = Object.assign({}, prevState.watchThings, {[id]: copyState});
+            return {watchThings};
+        });
+    }
+
+    splice(id, splice) {
+        const prop = Object.keys(splice)[0];
+        const index = splice[prop][0];
+        const replace = splice[prop][1];
+        const amount = splice[prop][2];
+
+        this.setState(prevState => {
+            const copyArr = [...prevState.watchThings[id]];
+            if (amount) {
+                copyArr.splice(index, replace, ...splice[prop].slice(3));
+            } else {
+                copyArr.splice(index, replace);
+            }
+
+            const update = Object.assign({}, prevState.watchThings[id], {[prop]: copyArr});
+            const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
+            return {watchThings};
+        });
+
+    }
+
+    add() {
+        //add
+    }
+
+    remove() {
+        //remove
+    }
+
+    onWatch(scope, ids) {
+        this.emit('watch', {
+            scope,
+            ids
+        }).done(() => {
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+    onUnwatch(scope, ids) {
+        this.emit('unwatch', {
+            scope,
+            ids
+        }).done((data) => {
+            console.log(data);
+        }).fail((event, status, message) => {
+            ErrorActions.setToastError(message.Log);
+        });
+    }
+}
+
+export {BaseStore, EventActions, EventStore};

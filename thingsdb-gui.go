@@ -40,48 +40,40 @@ func Init() {
 type App struct {
 	host        string
 	port        uint16
-	logCh       map[string]chan string
 	server      *socketio.Server
-	connections map[string]*things.Conn
 	openBrowser bool
 	timeout     uint16
-	tmpFiles    map[string]*util.TmpFiles
-}
-
-func (app *App) EventCh(sid string) {
-	if app.connections[sid] != nil {
-		for e := range app.connections[sid].EventCh {
-			fmt.Println("EVENT ", e)
-		}
-	}
+	client      map[string]*handlers.Client
 }
 
 func (app *App) SocketRouter() {
 	app.server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
-		// logchannel per client
-		app.tmpFiles[s.ID()] = util.NewTmpFiles()
-		app.logCh[s.ID()] = make(chan string, 1)
-		app.logCh[s.ID()] <- fmt.Sprintf("connected: %s", s.ID())
-		fmt.Println(app.connections[s.ID()])
-		go app.EventCh(s.ID())
+
+		app.client[s.ID()] = &handlers.Client{
+			Closed:   make(chan bool),
+			EventCh:  make(chan *things.Event),
+			LogCh:    make(chan string, 1),
+			TmpFiles: util.NewTmpFiles(),
+		}
+		app.client[s.ID()].LogCh <- fmt.Sprintf("connected: %s", s.ID())
 		return nil
 	})
 
 	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
-		return handlers.Connected(app.connections[s.ID()])
+		return handlers.Connected(app.client[s.ID()].Connection)
 	})
 
 	app.server.OnEvent("/", "conn", func(s socketio.Conn, data map[string]string) (int, handlers.LoginResp, util.Message) {
-		return handlers.Connect(s.ID(), app.connections, app.logCh, data)
+		return handlers.Connect(app.client[s.ID()], data)
 	})
 
 	app.server.OnEvent("/", "disconn", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
-		return handlers.Disconnect(app.connections[s.ID()])
+		return handlers.Disconnect(app.client[s.ID()])
 	})
 
 	app.server.OnEvent("/", "log", func(s socketio.Conn, data string) {
-		ch := app.logCh[s.ID()]
+		ch := app.client[s.ID()].LogCh
 		go func() {
 			for p := range ch {
 				fmt.Println(p)
@@ -91,36 +83,52 @@ func (app *App) SocketRouter() {
 	})
 
 	app.server.OnEvent("/", "query", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.Query(app.connections[s.ID()], data, app.timeout, app.tmpFiles[s.ID()])
+		return handlers.Query(app.client[s.ID()], data, app.timeout)
 	})
 
 	app.server.OnEvent("/", "queryBlob", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.QueryBlob(app.connections[s.ID()], data, app.timeout, app.tmpFiles[s.ID()])
+		return handlers.QueryBlob(app.client[s.ID()], data, app.timeout)
 	})
 
 	app.server.OnEvent("/", "queryEditor", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.QueryEditor(app.connections[s.ID()], data, app.timeout, app.tmpFiles[s.ID()])
+		return handlers.QueryEditor(app.client[s.ID()], data, app.timeout)
 	})
 
 	app.server.OnEvent("/", "cleanupTmp", func(s socketio.Conn) (int, bool, util.Message) {
-		return handlers.CleanupTmp(app.tmpFiles[s.ID()])
+		return handlers.CleanupTmp(app.client[s.ID()].TmpFiles)
+	})
+
+	app.server.OnEvent("/", "watch", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
+		return handlers.Watch(app.client[s.ID()], data, app.timeout)
+	})
+
+	app.server.OnEvent("/", "unwatch", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
+		return handlers.Unwatch(app.client[s.ID()], data, app.timeout)
+	})
+
+	app.server.OnEvent("/", "getEvent", func(s socketio.Conn, data string) {
+		ch := app.client[s.ID()].EventCh
+		go func() {
+			for p := range ch {
+				fmt.Println("getevent", *p)
+				s.Emit("event", p)
+			}
+		}()
 	})
 
 	app.server.OnError("/", func(e error) {
-		for _, v := range app.logCh {
-			v <- fmt.Sprintf("meet error: %s", e.Error())
+		for _, v := range app.client {
+			v.LogCh <- fmt.Sprintf("meet error: %s", e.Error())
 		}
 		fmt.Printf("meet error: %s\n", e.Error())
 	})
 
 	app.server.OnDisconnect("/", func(s socketio.Conn, msg string) {
-		app.logCh[s.ID()] <- fmt.Sprintf("closed: %s", msg)
-		app.tmpFiles[s.ID()].CleanupTmp()
-		handlers.CloseSingleConn(app.connections[s.ID()])
-		if app.logCh[s.ID()] != nil {
-			// close(app.logCh[s.ID()]) // Is it aproblem if not close first???
-			delete(app.logCh, s.ID())
-		}
+		app.client[s.ID()].LogCh <- fmt.Sprintf("closed: %s", msg)
+		app.client[s.ID()].TmpFiles.CleanupTmp()
+
+		handlers.CloseSingleConn(app.client[s.ID()])
+		delete(app.client, s.ID())
 	})
 }
 
@@ -142,15 +150,13 @@ func open(url string) error { //https://stackoverflow.com/questions/39320371/how
 }
 
 func (app *App) quit() {
-	fmt.Println("QUIT")
-	for _, v := range app.connections {
+	for _, v := range app.client {
+		fmt.Println("QUIT2", v)
 		if v != nil {
-			v.Close()
-		}
-	}
-	for _, v := range app.tmpFiles {
-		if v != nil {
-			v.CleanupTmp()
+			v.TmpFiles.CleanupTmp()
+			if v.Connection != nil {
+				v.Connection.Close()
+			}
 		}
 	}
 }
@@ -188,9 +194,7 @@ func main() {
 	a.port = uint16(port)
 	a.timeout = uint16(timeout)
 	a.openBrowser = openBrowser
-	a.logCh = make(map[string]chan string)
-	a.connections = make(map[string]*things.Conn)
-	a.tmpFiles = make(map[string]*util.TmpFiles)
+	a.client = make(map[string]*handlers.Client)
 	a.server, err = socketio.NewServer(nil)
 	if err != nil {
 		fmt.Println(err)
