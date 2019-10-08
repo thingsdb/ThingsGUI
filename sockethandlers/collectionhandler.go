@@ -99,8 +99,8 @@ func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, util.
 
 	scope := data.Scope
 	ids := data.Ids
-
-	resp, err := client.Connection.Unwatch(scope, ids, timeout)
+	id, _ := strconv.ParseUint(ids, 10, 16)
+	resp, err := client.Connection.Unwatch(scope, uint16(id), timeout)
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
 }

@@ -1,27 +1,36 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 // import { makeStyles} from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
 
+import {EventStore, EventActions} from '../../Stores/BaseStore';
 import {QueryOutput} from '../Util';
 
-const Watcher = () => {
+const withStores = withVlow([{
+    store: EventStore,
+    keys: ['watchThings']
+}]);
+
+const Watcher = ({watchThings}) => {
 
     return (
         <React.Fragment >
-            <QueryOutput output={null} />
+            {Object.entries(watchThings).map(([k, v]) => k === '#' ? null : (
+                <React.Fragment key={k}>
+                    <QueryOutput output={v} />
+                </React.Fragment>
+            ))}
         </React.Fragment>
 
     );
 };
 
-// Watcher.defaultProps = {
-//     output: null,
-// };
+Watcher.propTypes = {
+    /* event properties */
+    watchThings: EventStore.types.watchThings.isRequired,
+};
 
-// Watcher.propTypes = {
-//     output: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
-// };
-export default Watcher;
+export default withStores(Watcher);
 
 // class ThingForGui(Thing):
 

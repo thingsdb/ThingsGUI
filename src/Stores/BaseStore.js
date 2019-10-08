@@ -182,6 +182,10 @@ class EventStore extends BaseStore {
         watchThings: PropTypes.object,
     }
 
+    static defaults = {
+        watchThings: {},
+    }
+
     constructor() {
         super(EventActions);
         this.state = {
@@ -259,9 +263,9 @@ class EventStore extends BaseStore {
         const index = splice[prop][0];
         const replace = splice[prop][1];
         const amount = splice[prop][2];
-
         this.setState(prevState => {
-            const copyArr = [...prevState.watchThings[id]];
+            const copyArr = [...prevState.watchThings[id][prop]];
+
             if (amount) {
                 copyArr.splice(index, replace, ...splice[prop].slice(3));
             } else {
@@ -275,12 +279,46 @@ class EventStore extends BaseStore {
 
     }
 
-    add() {
-        //add
+    add(id, add) {
+        const prop = Object.keys(add)[0];
+        const amount = add[prop][0]; // onnodig
+        this.setState(prevState => {
+            const copySet = new Set([...prevState.watchThings[id][prop]['$']]);
+            for (let i = 1; i<add[prop].length; i++ ) {
+                copySet.add(add[prop][i]);
+            }
+            const newSet = {'$': [...copySet]};
+            const update = Object.assign({}, prevState.watchThings[id], {[prop]: newSet});
+            const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
+            return {watchThings};
+        });
     }
 
-    remove() {
-        //remove
+    remove(id, remove) {
+        const prop = Object.keys(remove)[0];
+        const amount = remove[prop][0]; // onnodig
+        this.setState(prevState => {
+            const copySet = new Set([...prevState.watchThings[id][prop]['$']]);
+            for (let i = 1; i<remove[prop].length; i++ ) {
+                copySet.forEach(function(t){
+                    if (t['#'] == remove[prop][i]) {
+                        copySet.delete(t);
+                    }
+                });
+            }
+            const newSet = {'$': [...copySet]};
+            const update = Object.assign({}, prevState.watchThings[id], {[prop]: newSet});
+            const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
+            return {watchThings};
+        });
+    }
+
+    watchDel(data) {
+        this.setState(prevState => {
+            let copyState = JSON.parse(JSON.stringify(prevState.watchThings));
+            delete copyState[data['#']];
+            return {watchThings: copyState};
+        });
     }
 
     onWatch(scope, ids) {

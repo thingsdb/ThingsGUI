@@ -59,6 +59,14 @@ const ThingRoot = ({things, collection}) => {
         );
     };
 
+    const handleUnwatch = () => {
+        console.log('unwatch');
+        EventActions.unwatch(
+            '@collection:stuff',
+            '3'
+        );
+    };
+
     return (
         <React.Fragment>
             {fetched ? (
@@ -110,6 +118,9 @@ const ThingRoot = ({things, collection}) => {
             )}
             <Button onClick={handleWatch}>
                 {'Watch'}
+            </Button>
+            <Button onClick={handleUnwatch}>
+                {'Unwatch'}
             </Button>
         </React.Fragment>
     );

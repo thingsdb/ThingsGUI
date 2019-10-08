@@ -111,15 +111,15 @@ const App = ({collections, match, user, users, openEditor}) => {
                         <List>
                             <ListItem button onClick={handleDrawerOpen(0)} >
                                 <ListItemIcon>
-                                    <StorageIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="NODES" />
-                            </ListItem>
-                            <ListItem button onClick={handleDrawerOpen(1)} >
-                                <ListItemIcon>
                                     <VisibleIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="WATCHER" />
+                            </ListItem>
+                            <ListItem button onClick={handleDrawerOpen(1)} >
+                                <ListItemIcon>
+                                    <StorageIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="NODES" />
                             </ListItem>
                         </List>
                     </TopBarMenu>
@@ -145,8 +145,8 @@ const App = ({collections, match, user, users, openEditor}) => {
                     <QueryEditor show={openEditor} />
                 </div>
             }
-            drawerTitle={drawerContent ? 'WATCHER' : 'NODES'}
-            drawerContent={drawerContent ? <Watcher /> : <Nodes />}
+            drawerTitle={drawerContent ? 'NODES' : 'WATCHER'}
+            drawerContent={drawerContent ? <Nodes /> : <Watcher />}
         />
     );
 };
