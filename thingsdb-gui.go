@@ -107,10 +107,15 @@ func (app *App) SocketRouter() {
 	})
 
 	app.server.OnEvent("/", "getEvent", func(s socketio.Conn, data string) {
-		ch := app.client[s.ID()].EventCh
+		eCh := app.client[s.ID()].EventCh
+		lCh := app.client[s.ID()].LogCh
 		go func() {
-			for p := range ch {
-				fmt.Println("getevent", *p)
+			for p := range eCh {
+				fmt.Println(p)
+				err := app.client[s.ID()].TmpFiles.ReplaceBinStrWithLink(p.Data)
+				if err != nil {
+					lCh <- err.Error()
+				}
 				s.Emit("event", p)
 			}
 		}()

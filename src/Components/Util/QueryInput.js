@@ -257,7 +257,7 @@ class QueryInput extends React.Component {
 
     render() {
         return (
-            <Paper style={{height: 'calc(100vh - 60vh)', width: '100%'}} ref={(ele) => this.ele = ele} />
+            <Paper style={{height: 'calc(100vh - 80vh)', width: '100%'}} ref={(ele) => this.ele = ele} />
         );
     }
 }

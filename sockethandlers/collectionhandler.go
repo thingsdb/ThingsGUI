@@ -10,12 +10,6 @@ import (
 	util "../util"
 )
 
-// type Data struct {
-// 	Query string  `json:"query"`
-// 	Scope string  `json:"scope"`
-// 	Blob  []uint8 `json:"blob"`
-// }
-
 type Data struct {
 	Query string `json:"query"`
 	Scope string `json:"scope"`
@@ -88,19 +82,26 @@ func CleanupTmp(tmp *util.TmpFiles) (int, bool, util.Message) {
 
 func Watch(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
 	scope := data.Scope
-	ids := data.Ids
-	id, _ := strconv.ParseUint(ids, 10, 16)
-	resp, err := client.Connection.Watch(scope, uint16(id), timeout)
+	ids := strings.Split(data.Ids, ",")
+	idsInt := make([]interface{}, 0)
+	for _, v := range ids {
+		id, _ := strconv.ParseUint(v, 10, 16)
+		idsInt = append(idsInt, uint16(id))
+	}
+	resp, err := client.Connection.Watch(scope, idsInt, timeout)
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
 }
 
 func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
-
 	scope := data.Scope
-	ids := data.Ids
-	id, _ := strconv.ParseUint(ids, 10, 16)
-	resp, err := client.Connection.Unwatch(scope, uint16(id), timeout)
+	ids := strings.Split(data.Ids, ",")
+	idsInt := make([]interface{}, 0)
+	for _, v := range ids {
+		id, _ := strconv.ParseUint(v, 10, 16)
+		idsInt = append(idsInt, uint16(id))
+	}
+	resp, err := client.Connection.Unwatch(scope, idsInt, timeout)
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
 }

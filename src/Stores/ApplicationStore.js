@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
-import {BaseStore} from './BaseStore';
+import {BaseStore, EventActions} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 
 const ApplicationActions = Vlow.createActions([
@@ -64,13 +64,15 @@ class ApplicationStore extends BaseStore {
     }
 
     onDisconnect() {
-        this.emit('disconn').done((data) => {
-            this.setState({
-                connected: data.Connected,
-                match: {},
-            });
-            ErrorActions.resetToastError();
-        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+        EventActions.resetWatch( () => {
+            this.emit('disconn').done((data) => {
+                this.setState({
+                    connected: data.Connected,
+                    match: {},
+                });
+                ErrorActions.resetToastError();
+            }).fail((event, status, message) => ErrorActions.setToastError(message.Log))
+        });
     }
 
     onNavigate(match) {

@@ -11,8 +11,9 @@ import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
 import AddThings from './AddThings';
+import WatchThings from './WatchThings';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import {EventStore, EventActions} from '../../Stores/BaseStore';
+import {EventStore} from '../../Stores/BaseStore';
 
 import Thing from './Thing';
 
@@ -50,22 +51,6 @@ const ThingRoot = ({things, collection}) => {
         CollectionActions.query(collection);
         return () => CollectionActions.cleanupTmp();
     }, [collection.name]);
-
-    const handleWatch = () => {
-        console.log('watch');
-        EventActions.watch(
-            '@collection:stuff',
-            '3'
-        );
-    };
-
-    const handleUnwatch = () => {
-        console.log('unwatch');
-        EventActions.unwatch(
-            '@collection:stuff',
-            '3'
-        );
-    };
 
     return (
         <React.Fragment>
@@ -106,6 +91,12 @@ const ThingRoot = ({things, collection}) => {
                                 thing={things[collection.collection_id]}
                             />
                         </ListItemIcon>
+                        <ListItemIcon className={classes.icon}>
+                            <WatchThings
+                                collection={collection}
+                                thingId={collection.collection_id}
+                            />
+                        </ListItemIcon>
                         {Object.entries(things[collection.collection_id]).length<2 ? (
                             <ListItemText primary="Add your first thing!" />
                         ) : null}
@@ -116,12 +107,6 @@ const ThingRoot = ({things, collection}) => {
                     {'Cannot fetch data.'}
                 </Typography>
             )}
-            <Button onClick={handleWatch}>
-                {'Watch'}
-            </Button>
-            <Button onClick={handleUnwatch}>
-                {'Unwatch'}
-            </Button>
         </React.Fragment>
     );
 };

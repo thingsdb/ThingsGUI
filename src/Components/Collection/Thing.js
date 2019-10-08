@@ -11,6 +11,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import AddThings from './AddThings';
 import EditThing from './EditThing';
 import RemoveThing from './RemoveThing';
+import WatchThings from './WatchThings';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import {Buttons, checkType, thingValue, TreeBranch} from '../Util';
@@ -91,6 +92,7 @@ const Thing = ({thing, collection, things, info}) => {
     const canAdd = (type === 'array' || type === 'object' || type === 'set') && !isTuple;
     const canEdit = info.name !== '$';
     const canToggle = type === 'object' || type === 'array' || type === 'set';
+    const canWatch = thing && thing.hasOwnProperty('#');
 
     return (
         <TreeBranch name={fancyName(info.name)} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
@@ -120,6 +122,12 @@ const Thing = ({thing, collection, things, info}) => {
                             thing={currThing}
                             info={info}
                         />
+                        {canWatch ? (
+                            <WatchThings
+                                collection={collection}
+                                thingId={thingId}
+                            />
+                        ) : null}
                         <ButtonBase onClick={handleClickOpenEditor} >
                             <CodeIcon color="primary" />
                         </ButtonBase>

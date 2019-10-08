@@ -9,7 +9,7 @@ import {ThingsTree} from '../Util';
 const useStyles = makeStyles(theme => ({
     card: {
         backgroundColor: '#141719',
-        minHeight: 'calc(100vh - 60vh)',
+        //minHeight: 'calc(100vh - 60vh)',
         padding: theme.spacing(2),
     },
 }));

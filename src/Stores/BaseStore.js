@@ -166,6 +166,7 @@ class BaseStore extends Vlow.Store {
 const EventActions = Vlow.createActions([
     'watch',
     'unwatch',
+    'resetWatch',
 ]);
 
 const ProtoMap = {
@@ -180,17 +181,17 @@ class EventStore extends BaseStore {
 
     static types = {
         watchThings: PropTypes.object,
+        watchIds: PropTypes.object,
     }
 
     static defaults = {
         watchThings: {},
+        watchIds: {},
     }
 
     constructor() {
         super(EventActions);
-        this.state = {
-            watchThings: {},
-        };
+        this.state = EventStore.defaults;
         socket.emit('getEvent', 'hoi');
         socket.on('event', (data) => {
             window.console.log(data);
@@ -321,22 +322,57 @@ class EventStore extends BaseStore {
         });
     }
 
-    onWatch(scope, ids) {
+    onWatch(scope, id) {
         this.emit('watch', {
             scope,
-            ids
+            ids: `${id}`
         }).done(() => {
+            this.setState(prevState => {
+                let copyState = prevState.watchIds.hasOwnProperty(scope) ? new Set([...prevState.watchIds[scope]])
+                    : new Set();
+                copyState.add(id);
+                const update = Object.assign({}, prevState.watchIds, {[scope]: [...copyState]});
+                return {watchIds: update};
+            });
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onUnwatch(scope, ids) {
+    onUnwatch(scope, id) {
         this.emit('unwatch', {
             scope,
-            ids
-        }).done((data) => {
-            console.log(data);
+            ids: `${id}`
+        }).done(() => {
+            this.setState(prevState => {
+                let copyThings = JSON.parse(JSON.stringify(prevState.watchThings));
+                delete copyThings[id];
+                let copyIds = new Set([...prevState.watchIds[scope]]);
+                copyIds.delete(id);
+                const update = Object.assign({}, prevState.watchIds, {[scope]: [...copyIds]});
+                return {watchThings: copyThings, watchIds: update};
+            });
         }).fail((event, status, message) => {
             ErrorActions.setToastError(message.Log);
+        });
+    }
+
+    onResetWatch(cb) {
+        const {watchIds} = this.state;
+        console.log(watchIds);
+        Object.entries(watchIds).map(([k, v]) => {
+            console.log(k, v);
+            this.emit('unwatch', {
+                scope: k,
+                ids: v.join()
+            }).done(() => {
+                this.setState(EventStore.defaults);
+                cb();
+            }).fail((event, status, message) => {
+                ErrorActions.setToastError(message.Log);
+            });
+        });
+        this.setState({
+            watchThings: {},
+            watchIds: {}
         });
     }
 }

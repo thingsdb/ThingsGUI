@@ -24,7 +24,7 @@ const dataTypes = [
     'array',
     'object',
     'set',
-    'closure',
+    '___closure',
     'boolean',
     'nil',
     'blob',
