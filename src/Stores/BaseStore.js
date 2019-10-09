@@ -323,14 +323,15 @@ class EventStore extends BaseStore {
     }
 
     onWatch(scope, id) {
+        const idString = `${id}`;
         this.emit('watch', {
             scope,
-            ids: `${id}`
+            ids: [idString]
         }).done(() => {
             this.setState(prevState => {
                 let copyState = prevState.watchIds.hasOwnProperty(scope) ? new Set([...prevState.watchIds[scope]])
                     : new Set();
-                copyState.add(id);
+                copyState.add(idString);
                 const update = Object.assign({}, prevState.watchIds, {[scope]: [...copyState]});
                 return {watchIds: update};
             });
@@ -338,15 +339,16 @@ class EventStore extends BaseStore {
     }
 
     onUnwatch(scope, id) {
+        const idString = `${id}`;
         this.emit('unwatch', {
             scope,
-            ids: `${id}`
+            ids: [idString]
         }).done(() => {
             this.setState(prevState => {
                 let copyThings = JSON.parse(JSON.stringify(prevState.watchThings));
                 delete copyThings[id];
                 let copyIds = new Set([...prevState.watchIds[scope]]);
-                copyIds.delete(id);
+                copyIds.delete(idString);
                 const update = Object.assign({}, prevState.watchIds, {[scope]: [...copyIds]});
                 return {watchThings: copyThings, watchIds: update};
             });
@@ -355,21 +357,17 @@ class EventStore extends BaseStore {
         });
     }
 
-    onResetWatch(cb) {
-        const {watchIds} = this.state;
-        console.log(watchIds);
-        Object.entries(watchIds).map(([k, v]) => {
-            console.log(k, v);
-            this.emit('unwatch', {
-                scope: k,
-                ids: v.join()
-            }).done(() => {
-                this.setState(EventStore.defaults);
-                cb();
-            }).fail((event, status, message) => {
-                ErrorActions.setToastError(message.Log);
-            });
-        });
+    onResetWatch() {
+        // const {watchIds} = this.state;
+        // Object.entries(watchIds).map(([k, v]) => {
+        //     console.log(k, v);
+        //     if (v.length) {
+        //         this.emit('unwatch', {
+        //             scope: k,
+        //             ids: v
+        //         });
+        //     }
+        // });
         this.setState({
             watchThings: {},
             watchIds: {}

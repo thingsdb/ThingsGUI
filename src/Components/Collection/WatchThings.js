@@ -13,7 +13,8 @@ const withStores = withVlow([{
 }]);
 
 const WatchThings = ({collection, thingId, watchIds}) => {
-    const onWatch = watchIds.hasOwnProperty(`@collection:${collection.name}`) && watchIds[`@collection:${collection.name}`].includes(thingId);
+    // stringify thingId
+    const onWatch = watchIds.hasOwnProperty(`@collection:${collection.name}`) && watchIds[`@collection:${collection.name}`].includes(`${thingId}`);
 
     console.log("watch");
 

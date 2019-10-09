@@ -9,6 +9,7 @@ import UserAccess from './UserAccess';
 import Tokens from './Tokens';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {findItem, isObjectEmpty} from '../Util';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -43,14 +44,13 @@ const User = ({match, user, users, collections}) => {
 
     const users2 =
         users.length ? users
-            : Object.entries(user).length === 0 && user.constructor === Object ? []
+            : isObjectEmpty(user) ? []
                 : [user];
 
-    const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
     const selectedUser = findItem(match.index, users2); // TODO CHECK
 
     return (
-        Object.entries(selectedUser).length === 0 && selectedUser.constructor === Object ? null
+        isObjectEmpty(selectedUser) ? null
             : (
                 <div className={classes.root}>
                     <div>

@@ -6,6 +6,7 @@ import AddUser from '../Users/Add';
 import {Menu} from '../Util';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {isObjectEmpty} from '../Util';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
@@ -18,14 +19,14 @@ const UsersMenu = ({user, users}) => {
     React.useEffect(() => {
         ThingsdbActions.getUsers();
         ThingsdbActions.getUser();
-        // const setPoll = setInterval(
-        //     () => {
-        //         ThingsdbActions.getUsers();
-        //         ThingsdbActions.getUser();
-        //     }, 5000);
-        // return () => {
-        //     clearInterval(setPoll);
-        // };
+        const setPoll = setInterval(
+            () => {
+                ThingsdbActions.getUsers();
+                ThingsdbActions.getUser();
+            }, 5000);
+        return () => {
+            clearInterval(setPoll);
+        };
     }, []);
 
     const handleClickUser = (user) => {
@@ -34,7 +35,7 @@ const UsersMenu = ({user, users}) => {
 
     const users2 =
     users.length ? users
-        : Object.entries(user).length === 0 && user.constructor === Object ? []
+        : isObjectEmpty(user) ? []
             : [user];
 
     return (

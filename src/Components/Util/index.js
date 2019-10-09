@@ -75,6 +75,9 @@ const buildQueryRemove = (parent, parentId, name, index, id) => {
             : `#${parentId}.${name}.splice(${index}, 1);`;
 };
 
+const isObjectEmpty = (obj) => Object.entries(obj).length === 0 && obj.constructor === Object;
+const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
+
 
 export {
     Add1DArray,
@@ -88,8 +91,10 @@ export {
     DrawerLayout,
     ErrorMsg,
     ErrorToast,
+    findItem,
     HarmonicCard,
     Info,
+    isObjectEmpty,
     Menu,
     onlyNums,
     ServerError,

@@ -122,9 +122,9 @@ func (app *App) SocketRouter() {
 	})
 
 	app.server.OnError("/", func(e error) {
-		for _, v := range app.client {
-			v.LogCh <- fmt.Sprintf("meet error: %s", e.Error())
-		}
+		// for _, v := range app.client {
+		// 	v.LogCh <- fmt.Sprintf("meet error: %s", e.Error())
+		// }
 		fmt.Printf("meet error: %s\n", e.Error())
 	})
 

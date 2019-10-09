@@ -44,9 +44,6 @@ const useStyles = makeStyles(theme => ({
 
 const TopBar = ({additionals, user}) => {
     const classes = useStyles();
-
-    console.log(additionals, user);
-
     const handleClickLogout = () => {
         ApplicationActions.disconnect();
     };

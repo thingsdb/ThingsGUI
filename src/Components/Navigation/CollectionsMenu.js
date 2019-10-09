@@ -17,13 +17,13 @@ const CollectionsMenu = ({collections}) => {
 
     React.useEffect(() => {
         ThingsdbActions.getCollections();
-        // const setPoll = setInterval(
-        //     () => {
-        //         ThingsdbActions.getCollections();
-        //     }, 5000);
-        // return () => {
-        //     clearInterval(setPoll);
-        // };
+        const setPoll = setInterval(
+            () => {
+                ThingsdbActions.getCollections();
+            }, 5000);
+        return () => {
+            clearInterval(setPoll);
+        };
     }, []);
 
     const handleClickCollection = (collection) => {

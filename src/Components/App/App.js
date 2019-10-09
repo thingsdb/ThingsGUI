@@ -58,7 +58,6 @@ const App = ({match, openEditor}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [drawerContent, setDrawerContent] = React.useState(0);
-    console.log("APP");
 
     const pages = {
         collection: <Collection />,

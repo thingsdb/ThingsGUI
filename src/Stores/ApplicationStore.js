@@ -65,15 +65,14 @@ class ApplicationStore extends BaseStore {
     }
 
     onDisconnect() {
-        EventActions.resetWatch( () => {
-            this.emit('disconn').done((data) => {
-                this.setState({
-                    connected: data.Connected,
-                    match: {},
-                });
-                ErrorActions.resetToastError();
-            }).fail((event, status, message) => ErrorActions.setToastError(message.Log))
-        });
+        EventActions.resetWatch();
+        this.emit('disconn').done((data) => {
+            this.setState({
+                connected: data.Connected,
+                match: {},
+            });
+            ErrorActions.resetToastError();
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
     onNavigate(match) {

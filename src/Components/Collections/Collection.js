@@ -9,6 +9,7 @@ import CollectionTree from './CollectionTree';
 import {CollectionStore} from '../../Stores/CollectionStore';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {findItem} from '../Util';
 
 
 const withStores = withVlow([{
@@ -46,7 +47,6 @@ const useStyles = makeStyles(theme => ({
 const Collection = ({match, collections}) => {
     const classes = useStyles();
 
-    const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
     const selectedCollection = findItem(match.index, collections);
 
 
