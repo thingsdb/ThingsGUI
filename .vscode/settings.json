@@ -1,6 +1,6 @@
 {
     "git.ignoreLimitWarning": true,
-    "python.linting.pep8Enabled": true,
+    "python.linting.pycodestyleEnabled": true,
     "python.linting.pylintEnabled": true,
     "python.linting.pylintUseMinimalCheckers": true, 
     "files.eol": "auto",

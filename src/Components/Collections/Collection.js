@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
@@ -8,11 +7,18 @@ import {withVlow} from 'vlow';
 import CollectionConfig from './CollectionConfig';
 import CollectionTree from './CollectionTree';
 import {CollectionStore} from '../../Stores/CollectionStore';
-
+import {ApplicationStore} from '../../Stores/ApplicationStore';
+import {ThingsdbStore} from '../../Stores/ThingsdbStore';
 
 
 const withStores = withVlow([{
     store: CollectionStore,
+}, {
+    store: ApplicationStore,
+    keys: ['match']
+}, {
+    store: ThingsdbStore,
+    keys: ['collections']
 }]);
 
 const useStyles = makeStyles(theme => ({
@@ -37,8 +43,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Collection = ({collection}) => {
+const Collection = ({match, collections}) => {
     const classes = useStyles();
+
+    const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
+    const selectedCollection = findItem(match.index, collections);
 
 
     return (
@@ -49,16 +58,16 @@ const Collection = ({collection}) => {
                         {'Overview of: '}
                     </Typography>
                     <Typography variant="h4" color='primary'>
-                        {collection.name}
+                        {selectedCollection.name}
                     </Typography>
                 </Card>
             </div>
             <div className={classes.flex}>
                 <div className={classes.tree}>
-                    <CollectionTree collection={collection} />
+                    <CollectionTree collection={selectedCollection} />
                 </div>
                 <div className={classes.config}>
-                    <CollectionConfig collection={collection} />
+                    <CollectionConfig collection={selectedCollection} />
                 </div>
             </div>
         </div>
@@ -66,7 +75,12 @@ const Collection = ({collection}) => {
 };
 
 Collection.propTypes = {
-    collection: PropTypes.object.isRequired,
+    /* Application properties */
+    match: ApplicationStore.types.match.isRequired,
+
+    /* Collections properties */
+    collections: ThingsdbStore.types.collections.isRequired,
 };
+
 
 export default withStores(Collection);

@@ -1,12 +1,22 @@
-
-import PropTypes from 'prop-types';
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
+
 
 import UserAccess from './UserAccess';
 import Tokens from './Tokens';
+import {ApplicationStore} from '../../Stores/ApplicationStore';
+import {ThingsdbStore} from '../../Stores/ThingsdbStore';
+
+const withStores = withVlow([{
+    store: ApplicationStore,
+    keys: ['match']
+}, {
+    store: ThingsdbStore,
+    keys: ['collections', 'user', 'users']
+}]);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -28,37 +38,54 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const User = ({user, collections}) => {
+const User = ({match, user, users, collections}) => {
     const classes = useStyles();
 
+    const users2 =
+        users.length ? users
+            : Object.entries(user).length === 0 && user.constructor === Object ? []
+                : [user];
+
+    const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
+    const selectedUser = findItem(match.index, users2); // TODO CHECK
 
     return (
-        <div className={classes.root}>
-            <div>
-                <Card className={classes.card}>
-                    <Typography variant="body1" >
-                        {'Authentication of: '}
-                    </Typography>
-                    <Typography variant="h4" color='primary'>
-                        {user.name}
-                    </Typography>
-                </Card>
-            </div>
-            <div>
-                <div className={classes.user}>
-                    <UserAccess user={user} collections={collections} />
+        Object.entries(selectedUser).length === 0 && selectedUser.constructor === Object ? null
+            : (
+                <div className={classes.root}>
+                    <div>
+                        <Card className={classes.card}>
+                            <Typography variant="body1" >
+                                {'Authentication of: '}
+                            </Typography>
+                            <Typography variant="h4" color='primary'>
+                                {selectedUser.name}
+                            </Typography>
+                        </Card>
+                    </div>
+                    <div>
+                        <div className={classes.user}>
+                            <UserAccess user={selectedUser} collections={collections} />
+                        </div>
+                        <div className={classes.tokens}>
+                            <Tokens user={selectedUser} />
+                        </div>
+                    </div>
                 </div>
-                <div className={classes.tokens}>
-                    <Tokens user={user} />
-                </div>
-            </div>
-        </div>
+            )
     );
 };
 
 User.propTypes = {
-    user: PropTypes.object.isRequired,
-    collections: PropTypes.arrayOf(PropTypes.object).isRequired,
+    /* Application properties */
+    match: ApplicationStore.types.match.isRequired,
+
+    /* Collections properties */
+    collections: ThingsdbStore.types.collections.isRequired,
+
+    /* Users properties */
+    user: ThingsdbStore.types.user.isRequired,
+    users: ThingsdbStore.types.users.isRequired,
 };
 
-export default User;
+export default withStores(User);

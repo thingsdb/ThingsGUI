@@ -1,24 +1,47 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import PersonIcon from '@material-ui/icons/Person';
+import {withVlow} from 'vlow';
 
 import AddUser from '../Users/Add';
 import {Menu} from '../Util';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
+
+const withStores = withVlow([{
+    store: ThingsdbStore,
+    keys: ['user', 'users']
+}]);
 
 
-const UsersMenu = ({users, onClickUser}) => {
+const UsersMenu = ({user, users}) => {
+
+    React.useEffect(() => {
+        ThingsdbActions.getUsers();
+        ThingsdbActions.getUser();
+        // const setPoll = setInterval(
+        //     () => {
+        //         ThingsdbActions.getUsers();
+        //         ThingsdbActions.getUser();
+        //     }, 5000);
+        // return () => {
+        //     clearInterval(setPoll);
+        // };
+    }, []);
 
     const handleClickUser = (user) => {
-        onClickUser(user);
-        ApplicationActions.navigate({path: 'user'});
+        ApplicationActions.navigate({path: 'user', index: user});
     };
+
+    const users2 =
+    users.length ? users
+        : Object.entries(user).length === 0 && user.constructor === Object ? []
+            : [user];
 
     return (
         <Menu
             title="USERS"
             icon={<PersonIcon />}
-            items={users}
+            items={users2}
             addItem={<AddUser />}
             onClickItem={handleClickUser}
         />
@@ -26,9 +49,10 @@ const UsersMenu = ({users, onClickUser}) => {
 };
 
 UsersMenu.propTypes = {
-    users: PropTypes.arrayOf(PropTypes.object).isRequired,
-    onClickUser: PropTypes.func.isRequired,
 
+    /* Users properties */
+    user: ThingsdbStore.types.user.isRequired,
+    users: ThingsdbStore.types.users.isRequired,
 };
 
-export default UsersMenu;
+export default withStores(UsersMenu);

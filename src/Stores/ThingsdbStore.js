@@ -8,7 +8,7 @@ const scope='@thingsdb';
 const ThingsdbActions = Vlow.createActions([
 
     //COLLECTIONS ACTIONS
-    'getInfo',
+    'getCollection',
     'getCollections',
     'addCollection',
     'renameCollection',
@@ -16,6 +16,7 @@ const ThingsdbActions = Vlow.createActions([
     'setQuota',
 
     //USER ACTIONS
+    'getUser',
     'getUsers',
     'addUser',
     'removeUser',
@@ -51,29 +52,22 @@ class ThingsdbStore extends BaseStore {
         this.state = ThingsdbStore.defaults;
     }
 
-    onGetInfo() {
-        const query='{collections: collections_info(), users: users_info(), user: user_info()};';
+    //COLLECTIONS
+
+    onGetCollection() {
+        const query='collection_info();';
         this.emit('query', {
             scope,
             query
         }).done((data) => {
-            this.setState({
-                collections: data.collections,
-                users: data.users,
-                user: data.user,
-            });
+            this.setState({collection: data});
         }).fail((event, status, message) => {
             this.setState({
-                collections: [],
                 collection: {},
-                users: [],
-                user: {},
             });
             ErrorActions.setToastError(message.Log);
         });
     }
-
-    //COLLECTIONS
 
     onGetCollections() {
         const query='collections_info();';
@@ -82,7 +76,12 @@ class ThingsdbStore extends BaseStore {
             query
         }).done((data) => {
             this.setState({collections: data});
-        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+        }).fail((event, status, message) => {
+            this.setState({
+                collections: [],
+            });
+            ErrorActions.setToastError(message.Log);
+        });
     }
 
     onAddCollection(name, tag, cb) {
@@ -177,16 +176,33 @@ class ThingsdbStore extends BaseStore {
 
     //USERS
 
-    onGetUsers(tag, cb){
+    onGetUser(){
+        const query = 'user_info();';
+        this.emit('query', {
+            scope,
+            query
+        }).done((data) => {
+            this.setState({user: data});
+        }).fail((event, status, message) => {
+            this.setState({
+                user: {},
+            });
+            ErrorActions.setToastError(message.Log);
+        });
+    }
+
+    onGetUsers(){
         const query = 'users_info();';
         this.emit('query', {
             scope,
             query
         }).done((data) => {
             this.setState({users: data});
-            cb();
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
+            this.setState({
+                users: [],
+            });
+            ErrorActions.setToastError(message.Log);
         });
     }
 

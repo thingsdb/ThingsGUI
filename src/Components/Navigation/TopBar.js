@@ -9,13 +9,18 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
 import Toolbar from '@material-ui/core/Toolbar';
-
+import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {TopBarMenu} from '../Util';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
+import {ThingsdbStore} from '../../Stores/ThingsdbStore';
 // import packageJson from '../../'; TODO does not find package.json
 
+const withStores = withVlow([{
+    store: ThingsdbStore,
+    keys: ['user']
+}]);
 
 
 const useStyles = makeStyles(theme => ({
@@ -37,8 +42,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TopBar = ({user, children}) => {
+const TopBar = ({additionals, user}) => {
     const classes = useStyles();
+
+    console.log(additionals, user);
 
     const handleClickLogout = () => {
         ApplicationActions.disconnect();
@@ -80,7 +87,7 @@ const TopBar = ({user, children}) => {
                         </TopBarMenu>
                     </div>
                     <div>
-                        {children}
+                        {additionals}
                     </div>
                 </Toolbar>
             </AppBar>
@@ -88,9 +95,15 @@ const TopBar = ({user, children}) => {
     );
 };
 
-TopBar.propTypes = {
-    user: PropTypes.object.isRequired,
-    children: PropTypes.object.isRequired,
+TopBar.defaultProps = {
+    additionals: null,
 };
 
-export default TopBar;
+TopBar.propTypes = {
+    additionals: PropTypes.object,
+
+    /* Users properties */
+    user: ThingsdbStore.types.user.isRequired,
+};
+
+export default withStores(TopBar);

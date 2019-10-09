@@ -21,16 +21,12 @@ import QueryEditor from '../Editor/QueryEditor';
 import QueryEditorMenu from '../Navigation/QueryEditorMenu';
 import Watcher from '../Watcher/Watcher';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
-import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
 
 
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['match', 'openEditor']
-}, {
-    store: ThingsdbStore,
-    keys: ['collections', 'user', 'users']
 }]);
 
 
@@ -58,39 +54,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const App = ({collections, match, user, users, openEditor}) => {
+const App = ({match, openEditor}) => {
     const classes = useStyles();
-    const [indexCollection, setIndexCollection] = React.useState(0);
-    const [indexUser, setIndexUser] = React.useState(0);
     const [open, setOpen] = React.useState(false);
     const [drawerContent, setDrawerContent] = React.useState(0);
-
-    React.useEffect(() => {
-        ThingsdbActions.getInfo();
-        const setPoll = setInterval(
-            () => {
-                ThingsdbActions.getInfo();
-            }, 5000);
-        return () => {
-            clearInterval(setPoll);
-        };
-    }, []);
-
-    const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
-    const selectedCollection = findItem(indexCollection, collections);
-    const selectedUser = findItem(indexUser, users);
+    console.log("APP");
 
     const pages = {
-        collection: <Collection collection={selectedCollection} />,
-        user: <User user={selectedUser} collections={collections} />,
-    };
-
-    const handleClickCollection = (i) => {
-        setIndexCollection(i);
-    };
-
-    const handleClickUser = (i) => {
-        setIndexUser(i);
+        collection: <Collection />,
+        user: <User />,
     };
 
     const handleDrawerOpen = (index) => () => {
@@ -106,33 +78,35 @@ const App = ({collections, match, user, users, openEditor}) => {
             open={open}
             onClose={handleDrawerClose}
             topbar={
-                <TopBar user={user}>
-                    <TopBarMenu menuIcon={<MenuIcon />}>
-                        <List>
-                            <ListItem button onClick={handleDrawerOpen(0)} >
-                                <ListItemIcon>
-                                    <VisibleIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="WATCHER" />
-                            </ListItem>
-                            <ListItem button onClick={handleDrawerOpen(1)} >
-                                <ListItemIcon>
-                                    <StorageIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="NODES" />
-                            </ListItem>
-                        </List>
-                    </TopBarMenu>
-                </TopBar>
+                <TopBar
+                    additionals={
+                        <TopBarMenu menuIcon={<MenuIcon />}>
+                            <List>
+                                <ListItem button onClick={handleDrawerOpen(0)} >
+                                    <ListItemIcon>
+                                        <VisibleIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="WATCHER" />
+                                </ListItem>
+                                <ListItem button onClick={handleDrawerOpen(1)} >
+                                    <ListItemIcon>
+                                        <StorageIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="NODES" />
+                                </ListItem>
+                            </List>
+                        </TopBarMenu>
+                    }
+                />
             }
             mainContent={
                 <div className={classes.page}>
                     <div className={classes.menu}>
                         <Card className={classes.submenu}>
-                            <CollectionsMenu collections={collections} onClickCollection={handleClickCollection} />
+                            <CollectionsMenu />
                         </Card>
                         <Card className={classes.submenu}>
-                            <UsersMenu users={users} onClickUser={handleClickUser} />
+                            <UsersMenu />
                         </Card>
                         <Card className={classes.submenu}>
                             <QueryEditorMenu />
@@ -157,12 +131,6 @@ App.propTypes = {
     match: ApplicationStore.types.match.isRequired,
     openEditor: ApplicationStore.types.openEditor.isRequired,
 
-    /* Collections properties */
-    collections: ThingsdbStore.types.collections.isRequired,
-
-    /* Users properties */
-    user: ThingsdbStore.types.user.isRequired,
-    users: ThingsdbStore.types.users.isRequired,
 };
 
 export default withStores(App);

@@ -76,7 +76,9 @@ class CollectionStore extends BaseStore {
                     return {things};
                 });
             } else {
-                ThingsdbActions.getInfo();
+                ThingsdbActions.getCollections();
+                ThingsdbActions.getUsers();
+                ThingsdbActions.getUser();
             }
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);

@@ -1,17 +1,33 @@
 import React from 'react';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import PropTypes from 'prop-types';
+import {withVlow} from 'vlow';
 
 import AddCollection from '../Collections/Add';
 import {Menu} from '../Util';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
 
 
-const CollectionsMenu = ({collections, onClickCollection}) => {
+const withStores = withVlow([{
+    store: ThingsdbStore,
+    keys: ['collections']
+}]);
+
+const CollectionsMenu = ({collections}) => {
+
+    React.useEffect(() => {
+        ThingsdbActions.getCollections();
+        // const setPoll = setInterval(
+        //     () => {
+        //         ThingsdbActions.getCollections();
+        //     }, 5000);
+        // return () => {
+        //     clearInterval(setPoll);
+        // };
+    }, []);
 
     const handleClickCollection = (collection) => {
-        onClickCollection(collection);
-        ApplicationActions.navigate({path: 'collection'});
+        ApplicationActions.navigate({path: 'collection', index: collection});
     };
 
     return (
@@ -26,9 +42,9 @@ const CollectionsMenu = ({collections, onClickCollection}) => {
 };
 
 CollectionsMenu.propTypes = {
-    onClickCollection: PropTypes.func.isRequired,
-    collections: PropTypes.arrayOf(PropTypes.object).isRequired,
 
+    /* Collections properties */
+    collections: ThingsdbStore.types.collections.isRequired,
 };
 
-export default CollectionsMenu;
+export default withStores(CollectionsMenu);

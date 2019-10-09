@@ -19,7 +19,7 @@ class ApplicationStore extends BaseStore {
     static types = {
         loaded: PropTypes.bool,
         connected: PropTypes.bool,
-        match: PropTypes.shape({match: PropTypes.string}),
+        match: PropTypes.shape({match: PropTypes.string, index: PropTypes.number}),
         openEditor: PropTypes.bool,
         input: PropTypes.string,
     }
@@ -30,6 +30,7 @@ class ApplicationStore extends BaseStore {
         match: {},
         openEditor: false,
         input: '',
+
     }
 
     constructor() {

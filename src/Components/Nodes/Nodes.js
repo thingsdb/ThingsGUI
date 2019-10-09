@@ -15,6 +15,7 @@ const withStores = withVlow([{
 
 const Nodes = ({nodes, connectedNode}) => {
 
+    console.log("NODES");
     React.useEffect(() => {
         NodesActions.getNodes();
         const setPoll = setInterval(
