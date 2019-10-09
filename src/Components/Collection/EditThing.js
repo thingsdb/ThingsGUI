@@ -282,6 +282,8 @@ const EditThing = ({info, collection, thing}) => {
         </React.Fragment>
     );
 
+    const title = index!=null ? `Remove ${info.name}[${info.index}]` : `Edit ${info.name}`;
+
     return(
         <SimpleModal
             button={
@@ -289,7 +291,7 @@ const EditThing = ({info, collection, thing}) => {
                     <EditIcon color="primary" />
                 </ButtonBase>
             }
-            title={`Edit Thing ${info.name}`}
+            title={title}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}

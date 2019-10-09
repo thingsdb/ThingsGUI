@@ -52,6 +52,8 @@ const RemoveThing = ({collection, thing, info}) => {
         </React.Fragment>
     );
 
+    const title = info.hasOwnProperty('index') && info.index!=null ? `Remove ${info.name}[${info.index}]` : `Remove ${info.name}`;
+
     return(
         <SimpleModal
             button={
@@ -59,7 +61,7 @@ const RemoveThing = ({collection, thing, info}) => {
                     <DeleteIcon color="primary" />
                 </ButtonBase>
             }
-            title={`Remove ${info.name}`}
+            title={title}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
