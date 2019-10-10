@@ -11,6 +11,7 @@ const CollectionActions = Vlow.createActions([
     'queryEditor',
     'download',
     'cleanupTmp',
+    'getProcedures',
 ]);
 
 // TODO: CALLBACKS
@@ -114,6 +115,19 @@ class CollectionStore extends BaseStore {
     onCleanupTmp() {
         this.emit('cleanupTmp').done((_data) => null).fail((event, status, message) => {
             ErrorActions.setToastError(message.Log);
+        });
+    }
+
+    onGetProcedures(scope, tag, cb) {
+        const query = 'procedures_info()';
+        this.emit('query', {
+            query,
+            scope
+        }).done((data) => {
+            cb(data);
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+            return [];
         });
     }
 }

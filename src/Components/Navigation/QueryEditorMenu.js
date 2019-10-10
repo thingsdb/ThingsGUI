@@ -26,6 +26,7 @@ const QueryEditorMenu = () => {
     const classes = useStyles();
     const handleClickCollection = () => {
         ApplicationActions.openEditor();
+        // ApplicationActions.navigate({path: 'query', index: 0});
     };
 
     return (

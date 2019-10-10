@@ -233,7 +233,7 @@ class QueryInput extends React.Component {
             lineNumbers: 'on',
         });
         this._editor.setModel(model);
-        onChange(input);
+        // onChange(input);
         this._subscription = model.onDidChangeContent(() => {
             let v = model.getValue();
             onChange(v);
@@ -241,6 +241,25 @@ class QueryInput extends React.Component {
 
         // resize container on window size.
         window.addEventListener('resize', this.handleEditorSize);
+    }
+
+    componentDidUpdate(prevProps) {
+        const { input } = this.props;
+        if (input !== prevProps.input) {
+            const model = this._editor.getModel();
+            console.log(input, model.getValue());
+            if (input !== model.getValue()) {
+                model.pushEditOperations(
+                    [],
+                    [
+                        {
+                            range: model.getFullModelRange(),
+                            text: input,
+                        },
+                    ]
+                );
+            }
+        }
     }
 
     componentWillUnmount() {

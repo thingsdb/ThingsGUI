@@ -62,6 +62,7 @@ const App = ({match, openEditor}) => {
     const pages = {
         collection: <Collection />,
         user: <User />,
+        // query: <Query />,
     };
 
     const handleDrawerOpen = (index) => () => {
