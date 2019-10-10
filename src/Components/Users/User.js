@@ -30,10 +30,11 @@ const useStyles = makeStyles(theme => ({
     },
     user: {
         marginBottom: theme.spacing(1),
-        minWidth: '450px',
+        minWidth: '900px',
         width: '100%',
     },
     tokens: {
+        minWidth: '450px',
         width: '100%',
     },
 }));

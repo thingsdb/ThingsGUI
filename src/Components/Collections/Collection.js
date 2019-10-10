@@ -40,6 +40,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
     },
     tree: {
+        minWidth: '450px',
         width: '60%',
     },
 }));
