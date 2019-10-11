@@ -1,7 +1,5 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles} from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import {withVlow} from 'vlow';
 
 import CollectionConfig from './CollectionConfig';
@@ -9,7 +7,7 @@ import CollectionTree from './CollectionTree';
 import {CollectionStore} from '../../Stores/CollectionStore';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbStore} from '../../Stores/ThingsdbStore';
-import {findItem} from '../Util';
+import {findItem, TitlePage} from '../Util';
 
 
 const withStores = withVlow([{
@@ -22,56 +20,24 @@ const withStores = withVlow([{
     keys: ['collections']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
-    },
-    title: {
-        marginBottom: theme.spacing(1),
-        padding: theme.spacing(2),
-        width: '100%'
-    },
-    config: {
-        marginLeft: theme.spacing(1),
-        minWidth: '450px',
-        width: '40%',
-    },
-    flex: {
-        display: 'flex',
-    },
-    tree: {
-        minWidth: '450px',
-        width: '60%',
-    },
-}));
-
 const Collection = ({match, collections}) => {
-    const classes = useStyles();
-
     const selectedCollection = findItem(match.index, collections);
 
-
     return (
-        <div className={classes.root}>
-            <div>
-                <Card className={classes.title}>
-                    <Typography variant="body1" >
-                        {'Overview of: '}
-                    </Typography>
-                    <Typography variant="h4" color='primary'>
-                        {selectedCollection.name}
-                    </Typography>
-                </Card>
-            </div>
-            <div className={classes.flex}>
-                <div className={classes.tree}>
-                    <CollectionTree collection={selectedCollection} />
-                </div>
-                <div className={classes.config}>
-                    <CollectionConfig collection={selectedCollection} />
-                </div>
-            </div>
-        </div>
+        <TitlePage
+            preTitle='Overview of:'
+            title={selectedCollection.name}
+            content={
+                <React.Fragment>
+                    <Grid item md={7} sm={12} xs={12}>
+                        <CollectionTree collection={selectedCollection} />
+                    </Grid>
+                    <Grid item md={5} sm={12} xs={12}>
+                        <CollectionConfig collection={selectedCollection} />
+                    </Grid>
+                </React.Fragment>
+            }
+        />
     );
 };
 

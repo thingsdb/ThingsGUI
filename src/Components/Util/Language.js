@@ -106,6 +106,14 @@ export default {
         'user_info',
         'users_info',
     ],
+    procedures: [
+        'new_procedure',
+        'del_procedure',
+        'procedure_doc',
+        'procedures_info',
+        'procedure_info',
+        'run',
+    ],
     docs: {
         collection_info: ('Returns information about a specific collection.'),
         collections_info: ('?'),

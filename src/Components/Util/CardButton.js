@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const CardButton = ({onClick, title}) => {
+const CardButton = ({onClick, title, ...other}) => {
     const classes = useStyles();
 
     const handleClick = () => {
@@ -36,25 +36,30 @@ const CardButton = ({onClick, title}) => {
         <Card
             className={classes.card}
             raised
+            {...other}
         >
             <CardActionArea
                 focusRipple
                 className={classes.wrapper}
                 onClick={handleClick}
+                {...other}
             >
-                <CardContent>
-                    <Typography variant="overline" >
-                        {title}
-                    </Typography>
-                </CardContent>
+                <Typography variant="overline" >
+                    {title}
+                </Typography>
             </CardActionArea>
         </Card>
     );
 };
 
+CardButton.defaultProps = {
+    other: {},
+};
+
 CardButton.propTypes = {
     onClick: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
+    other: PropTypes.object,
 };
 
 export default CardButton;

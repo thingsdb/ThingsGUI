@@ -1,17 +1,23 @@
-import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
 
 import {ApplicationStore} from '../../Stores/ApplicationStore';
-import {CollectionActions} from '../../Stores/CollectionStore';
+import {CollectionActions, CollectionStore} from '../../Stores/CollectionStore';
+import {ProcedureActions, ProcedureStore} from '../../Stores/ProcedureStore';
 import {ThingsdbStore} from '../../Stores/ThingsdbStore';
-import {ErrorMsg, HarmonicCard, QueryInput, QueryOutput} from '../Util';
+import {CardButton, ErrorMsg, HarmonicCard, TitlePage, QueryInput, QueryOutput} from '../Util';
 
 
 const withStores = withVlow([{
@@ -20,6 +26,10 @@ const withStores = withVlow([{
 }, {
     store: ApplicationStore,
     keys: ['input']
+}, {
+    store: ProcedureStore,
+}, {
+    store: CollectionStore,
 }]);
 
 const useStyles = makeStyles(theme => ({
@@ -56,11 +66,12 @@ const Query = ({collections, input}) => {
         if (scopes[index].value == '@node') {
             setProcedures([]);
         } else {
-            CollectionActions.getProcedures(scopes[index].value, tag, handleSetProcedures);
+            ProcedureActions.getProcedures(scopes[index].value, tag, handleSetProcedures);
         }
     }, [scopes[index].value]);
 
     const handleSetProcedures = (p) => {
+        console.log('setProcedure', p);
         setProcedures(p);
     };
 
@@ -69,7 +80,11 @@ const Query = ({collections, input}) => {
     };
 
     const handleSubmit = () => {
+        console.log('SUBMIT');
         CollectionActions.queryEditor(query, scopes[index].value, scopes[index].collectionId, handleOutput, tag);
+        if (query.includes('new_procedure') || query.includes('del_procedure')) {
+            ProcedureActions.getProcedures(scopes[index].value, tag, handleSetProcedures);
+        }
     };
 
     const handleOutput = (out) => {
@@ -86,105 +101,87 @@ const Query = ({collections, input}) => {
         setQueryInput(i);
     };
 
-    const makeProcedureList = () => {
-        const elements = procedures ? procedures.map((listitem, index) => (
-            <Tooltip
-                key={index}
-                disableFocusListener
-                disableTouchListener
-                classes={{ tooltip: classes.customWidth }}
-                title={
-                    <Typography variant="caption">
-                        {listitem.definition}
-                    </Typography>
-                }
-            >
-                <Chip
-                    clickable
-                    id={listitem.name}
-                    className={classes.chip}
-                    label={listitem.name}
-                    onClick={handleClickProcedure(index)}
-                    color="primary"
-                />
-            </Tooltip>
-        )) : null;
-        return elements;
+    const handleClickDeleteProcedure = (i) => () => {
+        ProcedureActions.deleteProcedure(scopes[index].value, procedures[i].name, tag, handleSetProcedures);
     };
-    console.log("EDITOR", procedures);
 
     return (
-        <Grid
-            container
-            spacing={1}
-        >
-            <Grid item xs={12}>
-                <HarmonicCard
-                    title="INPUT"
-                    content={
-                        <Grid
-                            container
-                            spacing={1}
-                        >
-                            <Grid item xs={12}>
-                                <ErrorMsg tag={tag} />
+        <TitlePage
+            preTitle='Customize your:'
+            title='Query'
+            content={
+                <React.Fragment>
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardHeader
+                                title="INPUT"
+                                titleTypographyProps={{variant: 'body1'}}
+                            />
+                            <CardContent>
+                                <Grid container spacing={1}>
+                                    <Grid item xs={12}>
+                                        <ErrorMsg tag={tag} />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <QueryInput onChange={handleInput} input={queryInput} />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <FormLabel component="legend">
+                                            {'Scope'}
+                                        </FormLabel>
+                                        <RadioGroup aria-label="scope" name="scope" value={`${index}`} onChange={handleOnChangeScope} row>
+                                            {scopes.map((s, i) => (
+                                                <FormControlLabel key={s.value} value={`${i}`} control={<Radio color='primary' />} label={s.name} />
+                                            ))}
+                                        </RadioGroup>
+                                    </Grid>
+                                </Grid>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={2}>
+                                <CardButton onClick={handleSubmit} title="Submit" style={{height: 80, width: 80}} />
                             </Grid>
-                            <Grid item xs={12}>
-                                <QueryInput onChange={handleInput} input={queryInput} />
-                            </Grid>
-                            <Grid container item alignItems="flex-end" spacing={2} xs={12}>
-                                <Grid item xs={4}>
-                                    <TextField
-                                        autoFocus
-                                        margin="dense"
-                                        id="scope"
-                                        label="Scope"
-                                        value={index}
-                                        onChange={handleOnChangeScope}
-                                        fullWidth
-                                        select
-                                        SelectProps={{native: true}}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
+                            <Grid item xs={10}>
+                                {procedures ? procedures.map((listitem, index) => (
+                                    <Tooltip
+                                        key={index}
+                                        disableFocusListener
+                                        disableTouchListener
+                                        classes={{ tooltip: classes.customWidth }}
+                                        title={
+                                            <Typography variant="caption">
+                                                {listitem.definition}
+                                            </Typography>
+                                        }
                                     >
-                                        {scopes.map((s, i) => (
-                                            <option key={s.value} value={i}>
-                                                {s.name}
-                                            </option>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    {makeProcedureList()}
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Button variant="outlined" onClick={handleSubmit}>
-                                        {'Submit'}
-                                    </Button>
-                                </Grid>
+                                        <Chip
+                                            clickable
+                                            id={listitem.name}
+                                            className={classes.chip}
+                                            label={listitem.name}
+                                            onClick={handleClickProcedure(index)}
+                                            onDelete={handleClickDeleteProcedure(index)}
+                                            color="primary"
+                                        />
+                                    </Tooltip>
+                                )) : null}
                             </Grid>
                         </Grid>
-                    }
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <HarmonicCard
-                    title="OUTPUT"
-                    content={
-                        <Grid
-                            container
-                            spacing={1}
-                        >
-                            <Grid item xs={12}>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <HarmonicCard
+                            title="OUTPUT"
+                            content={
                                 <QueryOutput output={output} />
-                            </Grid>
-                        </Grid>
-                    }
-                />
-            </Grid>
-        </Grid>
-
+                            }
+                        />
+                    </Grid>
+                </React.Fragment>
+            }
+        />
     );
 };
 

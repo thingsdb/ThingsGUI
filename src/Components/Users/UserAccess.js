@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
@@ -11,26 +12,6 @@ import RemoveUser from './Remove';
 import RenameUser from './Rename';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 import {ErrorMsg} from '../Util';
-
-const useStyles = makeStyles(theme => ({
-    flex: {
-        display: 'flex',
-    },
-    buttons: {
-        width: '40%',
-    },
-    card: {
-        width: '60%',
-        padding: theme.spacing(2),
-        marginRight: theme.spacing(1),
-    },
-    user: {
-        padding: theme.spacing(2),
-    },
-    title: {
-        marginBottom: theme.spacing(2),
-    },
-}));
 
 const privileges = [
     {
@@ -58,7 +39,6 @@ const privileges = [
 const tag = '19';
 
 const UserAccess = ({user, collections}) => {
-    const classes = useStyles();
     const [switches, setSwitches] = React.useState({});
 
     const getSwitches = (scope, privileges) => {
@@ -155,66 +135,67 @@ const UserAccess = ({user, collections}) => {
     const switchesKeys = Object.keys(switches);
 
     return (
-        <div className={classes.flex}>
-            <Card className={classes.card}>
-                <Typography className={classes.title} variant="body1" >
-                    {'ACCESS RULES'}
-                </Typography>
-                <ErrorMsg tag={tag} />
-                <Grid
-                    className={classes.user}
-                    container
-                    direction="row"
-                    spacing={3}
-                >
-                    <Grid item >
-                        <Grid container spacing={1}>
-                            <Grid item container xs={12} spacing={2} >
-                                <Grid item xs={3} />
-                                <Grid item container xs={9} >
-                                    <Grid item container xs={12} >
-                                        {privileges.map(({ky, label}) => (
-                                            <Grid item xs={2} key={ky} container justify="center" >
-                                                <Typography variant="overline" align="center" >
-                                                    {label}
-                                                </Typography>
-                                            </Grid>
-                                        ))}
+        <Grid container >
+            <Grid item lg={6} md={12} >
+                <Card>
+                    <CardContent>
+                        <Typography variant="body1" >
+                            {'ACCESS RULES'}
+                        </Typography>
+                        <ErrorMsg tag={tag} />
+                        <Grid
+                            container
+                            direction="row"
+                            spacing={3}
+                        >
+                            <Grid container item spacing={1}>
+                                <Grid item container xs={12} spacing={2} >
+                                    <Grid item xs={3} />
+                                    <Grid item container xs={9} >
+                                        <Grid item container xs={12} >
+                                            {privileges.map(({ky, label}) => (
+                                                <Grid item xs={2} key={ky} container justify="center" >
+                                                    <Typography variant="overline" align="center" >
+                                                        {label}
+                                                    </Typography>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
                                     </Grid>
                                 </Grid>
-                            </Grid>
-                            {switchesKeys.map((key, i) => (
-                                <React.Fragment key={i}>
-                                    <Grid item container xs={12} spacing={2}>
-                                        <Grid item xs={3} container alignItems="center">
-                                            <Typography>
-                                                {key}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item container xs={9} >
-                                            <Grid item container xs={12} >
-                                                {privileges.map(({ky, label}) => (
-                                                    <Grid item xs={2} key={ky} container justify="center">
-                                                        <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
-                                                    </Grid>
-                                                ))}
+                                {switchesKeys.map((key, i) => (
+                                    <React.Fragment key={i}>
+                                        <Grid item container xs={12} spacing={2}>
+                                            <Grid item xs={3} container alignItems="center">
+                                                <Typography>
+                                                    {key}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item container xs={9} >
+                                                <Grid item container xs={12} >
+                                                    {privileges.map(({ky, label}) => (
+                                                        <Grid item xs={2} key={ky} container justify="center">
+                                                            <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
+                                                        </Grid>
+                                                    ))}
+                                                </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Grid>
-                                </React.Fragment>
-                            ))}
+                                    </React.Fragment>
+                                ))}
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Grid>
-            </Card>
-            <Grid className={classes.buttons} container spacing={1} direction="row" justify="center" alignItems="center" >
+                    </CardContent>
+                </Card>
+            </Grid>
+            <Grid container item lg={6} md={12} spacing={1} direction="row" justify="center" alignItems="center" >
                 {buttons.map(button => (
                     <Grid key={button.name} item>
                         {button.component}
                     </Grid>
                 ))}
             </Grid>
-        </div>
+        </Grid>
 
     );
 };

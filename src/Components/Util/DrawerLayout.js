@@ -69,6 +69,9 @@ const useStyles = makeStyles((theme) => ({
         bottom: 0,
         zIndex: '100',
     },
+    content: {
+        margin: theme.spacing(1),
+    },
 }));
 
 
@@ -114,6 +117,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, drawerTitle, drawerCo
     return(
         <React.Fragment>
             <div className={classes.root}>
+
                 <div
                     className={clsx(classes.full, {
                         [classes.shrink]: open,
@@ -121,7 +125,9 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, drawerTitle, drawerCo
                     style={open ? {width: `calc(100% - ${newWidth}px)`} : null}
                 >
                     {topbar}
-                    {mainContent}
+                    <div className={classes.content}>
+                        {mainContent}
+                    </div>
                 </div>
                 <Card
                     className={clsx(classes.drawerClose, {

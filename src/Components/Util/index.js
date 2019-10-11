@@ -11,6 +11,7 @@ import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import TableWithButtons from './TableWithButtons';
 import ThingsTree from './ThingsTree';
+import TitlePage from './TitlePage';
 import TopBarMenu from './TopBarMenu';
 import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
@@ -102,6 +103,7 @@ export {
     TableWithButtons,
     thingValue,
     TopBarMenu,
+    TitlePage,
     TreeBranch,
     ThingsTree,
     TreeIcon,

@@ -14,7 +14,7 @@ import {withVlow} from 'vlow';
 import { ErrorActions, ErrorStore } from '../../Stores/ErrorStore';
 
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     avatar: {
         backgroundColor: 'transparent',
     },
@@ -27,6 +27,9 @@ const useStyles = makeStyles(() => ({
     },
     warning: {
         color: amber[700],
+    },
+    typography: {
+        marginBottom: theme.spacing(1),
     },
 }));
 
@@ -48,7 +51,7 @@ const ErrorMsg = ({tag, msgError}) => {
     return (
         <React.Fragment>
             <Collapse in={Boolean(msgError[tag])} timeout="auto" unmountOnExit>
-                <Typography component="div" variant="caption">
+                <Typography className={classes.typography} component="div" variant="caption">
                     <Grid component="label" container alignItems="center" spacing={1}>
                         <Grid item>
                             <Avatar className={classes.avatar}>
