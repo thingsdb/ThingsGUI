@@ -21,7 +21,7 @@ const TitlePage = ({preTitle, title, content}) => {
                     </CardContent>
                 </Card>
             </Grid>
-            <Grid container item spacing={1} >
+            <Grid container item spacing={1} alignItems="flex-start">
                 {content}
             </Grid>
         </Grid>

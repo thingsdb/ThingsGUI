@@ -35,7 +35,7 @@ const QueryEditorMenu = () => {
                 <ListItemIcon>
                     <CodeIcon />
                 </ListItemIcon>
-                <ListItemText primary="QUERY EDITOR" />
+                <ListItemText primary="EDITOR" />
             </ListItem>
         </List>
     );

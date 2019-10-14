@@ -29,10 +29,10 @@ const Collection = ({match, collections}) => {
             title={selectedCollection.name}
             content={
                 <React.Fragment>
-                    <Grid item md={7} sm={12} xs={12}>
+                    <Grid item md={7} xs={12}>
                         <CollectionTree collection={selectedCollection} />
                     </Grid>
-                    <Grid item md={5} sm={12} xs={12}>
+                    <Grid item md={5} xs={12}>
                         <CollectionConfig collection={selectedCollection} />
                     </Grid>
                 </React.Fragment>

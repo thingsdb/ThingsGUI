@@ -170,11 +170,11 @@ const EventActions = Vlow.createActions([
 ]);
 
 const ProtoMap = {
-    ProtoOnWatchIni: 16,
-    ProtoOnWatchUpd: 17,
-    ProtoOnWatchDel: 18,
-    ProtoOnNodeStatus: 19,
-    ProtoOnWarn: 20,
+    ProtoOnWatchIni: 1,
+    ProtoOnWatchUpd: 2,
+    ProtoOnWatchDel: 3,
+    ProtoOnNodeStatus: 0,
+    ProtoOnWarn: 4,
 };
 
 class EventStore extends BaseStore {

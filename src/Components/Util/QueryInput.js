@@ -272,20 +272,19 @@ class QueryInput extends React.Component {
 
     componentDidUpdate(prevProps) {
         const { input } = this.props;
-        if (input !== prevProps.input) {
-            const model = this._editor.getModel();
-            console.log(input, model.getValue());
-            if (input !== model.getValue()) {
-                model.pushEditOperations(
-                    [],
-                    [
-                        {
-                            range: model.getFullModelRange(),
-                            text: input,
-                        },
-                    ]
-                );
-            }
+        console.log(input, prevProps.input);
+        const model = this._editor.getModel();
+        if (input && input != prevProps.input && input != model.getValue()) {
+            model.pushEditOperations(
+                [],
+                [
+                    {
+                        range: model.getFullModelRange(),
+                        text: input,
+                    },
+                ]
+            );
+
         }
     }
 
@@ -297,6 +296,7 @@ class QueryInput extends React.Component {
     }
 
     handleEditorSize = () => {
+        console.log("resize editor");
         this._editor.layout();
     }
 

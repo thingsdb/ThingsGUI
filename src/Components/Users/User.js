@@ -33,10 +33,10 @@ const User = ({match, user, users, collections}) => {
                     title={selectedUser.name}
                     content={
                         <React.Fragment>
-                            <Grid item xs={12}>
+                            <Grid item md={12} xs={12}>
                                 <UserAccess user={selectedUser} collections={collections} />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item md={12} xs={12}>
                                 <Tokens user={selectedUser} />
                             </Grid>
                         </React.Fragment>

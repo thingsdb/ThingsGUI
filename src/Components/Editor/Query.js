@@ -1,4 +1,5 @@
 import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Chip from '@material-ui/core/Chip';
@@ -6,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
 import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
@@ -76,6 +76,7 @@ const Query = ({collections, input}) => {
     };
 
     const handleInput = (value) => {
+        setQueryInput('');
         setQuery(value);
     };
 
@@ -105,79 +106,102 @@ const Query = ({collections, input}) => {
         ProcedureActions.deleteProcedure(scopes[index].value, procedures[i].name, tag, handleSetProcedures);
     };
 
+    const handleClickAddProcedure = () => {
+        console.log("hi");
+        setQueryInput('new_procedure("...", ...)');
+    };
+
     return (
         <TitlePage
             preTitle='Customize your:'
             title='Query'
             content={
                 <React.Fragment>
-                    <Grid item xs={12}>
-                        <Card>
-                            <CardHeader
-                                title="INPUT"
-                                titleTypographyProps={{variant: 'body1'}}
+                    <Grid container spacing={1} item xs={9}>
+                        <Grid item xs={12}>
+                            <Card>
+                                <CardHeader
+                                    title="INPUT"
+                                    titleTypographyProps={{variant: 'body1'}}
+                                />
+                                <CardContent>
+                                    <ErrorMsg tag={tag} />
+                                    <QueryInput onChange={handleInput} input={queryInput} />
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <HarmonicCard
+                                title="OUTPUT"
+                                content={
+                                    <QueryOutput output={output} />
+                                }
                             />
-                            <CardContent>
-                                <Grid container spacing={1}>
-                                    <Grid item xs={12}>
-                                        <ErrorMsg tag={tag} />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <QueryInput onChange={handleInput} input={queryInput} />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <FormLabel component="legend">
-                                            {'Scope'}
-                                        </FormLabel>
-                                        <RadioGroup aria-label="scope" name="scope" value={`${index}`} onChange={handleOnChangeScope} row>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={1} item xs={3}>
+                        <Grid container spacing={1} item xs={12}>
+                            <Grid item xs={9}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography variant="body1">
+                                            {'SCOPE'}
+                                        </Typography>
+                                        <RadioGroup aria-label="scope" name="scope" value={`${index}`} onChange={handleOnChangeScope}>
                                             {scopes.map((s, i) => (
                                                 <FormControlLabel key={s.value} value={`${i}`} control={<Radio color='primary' />} label={s.name} />
                                             ))}
                                         </RadioGroup>
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid container spacing={1}>
-                            <Grid item xs={2}>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={3}>
                                 <CardButton onClick={handleSubmit} title="Submit" style={{height: 80, width: 80}} />
                             </Grid>
-                            <Grid item xs={10}>
-                                {procedures ? procedures.map((listitem, index) => (
-                                    <Tooltip
-                                        key={index}
-                                        disableFocusListener
-                                        disableTouchListener
-                                        classes={{ tooltip: classes.customWidth }}
-                                        title={
-                                            <Typography variant="caption">
-                                                {listitem.definition}
-                                            </Typography>
-                                        }
-                                    >
-                                        <Chip
-                                            clickable
-                                            id={listitem.name}
-                                            className={classes.chip}
-                                            label={listitem.name}
-                                            onClick={handleClickProcedure(index)}
-                                            onDelete={handleClickDeleteProcedure(index)}
-                                            color="primary"
-                                        />
-                                    </Tooltip>
-                                )) : null}
-                            </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <HarmonicCard
-                            title="OUTPUT"
-                            content={
-                                <QueryOutput output={output} />
-                            }
-                        />
+                        <Grid item xs={12}>
+                            <Card>
+                                <CardHeader
+                                    title="PROCEDURES"
+                                    titleTypographyProps={{variant: 'body1'}}
+                                />
+                                <CardContent>
+                                    {procedures ? procedures.map((listitem, index) => (
+                                        <Tooltip
+                                            key={index}
+                                            disableFocusListener
+                                            disableTouchListener
+                                            classes={{ tooltip: classes.customWidth }}
+                                            title={
+                                                <Typography variant="caption">
+                                                    {listitem.definition}
+                                                </Typography>
+                                            }
+                                        >
+                                            <Chip
+                                                clickable
+                                                id={listitem.name}
+                                                className={classes.chip}
+                                                label={listitem.name}
+                                                onClick={handleClickProcedure(index)}
+                                                onDelete={handleClickDeleteProcedure(index)}
+                                                color="primary"
+                                            />
+                                        </Tooltip>
+                                    )) : null}
+                                </CardContent>
+                                <CardActions>
+                                    <Chip
+                                        clickable
+                                        className={classes.chip}
+                                        label="ADD"
+                                        onClick={handleClickAddProcedure}
+                                        color="primary"
+                                        variant="outlined"
+                                    />
+                                </CardActions>
+                            </Card>
+                        </Grid>
                     </Grid>
                 </React.Fragment>
             }
