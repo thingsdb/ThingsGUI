@@ -75,18 +75,24 @@ const App = ({match}) => {
             }
             mainContent={
                 <Grid container spacing={1}>
-                    <Grid item xs={4} md={3} lg={2} >
-                        <Card>
-                            <CollectionsMenu />
-                        </Card>
-                        <Card>
-                            <UsersMenu />
-                        </Card>
-                        <Card>
-                            <QueryEditorMenu />
-                        </Card>
+                    <Grid container spacing={1} item xs={12} md={2} style={{minWidth: 200}}>
+                        <Grid item xs={4} md={12} style={{minWidth: 200}}>
+                            <Card>
+                                <CollectionsMenu />
+                            </Card>
+                        </Grid>
+                        <Grid item xs={4} md={12} style={{minWidth: 200}}>
+                            <Card>
+                                <UsersMenu />
+                            </Card>
+                        </Grid>
+                        <Grid item xs={4} md={12} style={{minWidth: 200}}>
+                            <Card>
+                                <QueryEditorMenu />
+                            </Card>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={8} md={9} lg={10}>
+                    <Grid item xs={12} md={10}>
                         {pages[match.path]}
                     </Grid>
                     <ErrorToast />

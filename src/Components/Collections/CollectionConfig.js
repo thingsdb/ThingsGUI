@@ -1,4 +1,5 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 
 import CollectionInfo from './CollectionInfo';
@@ -30,13 +31,13 @@ const CollectionConfig = ({collection}) => {
             title="INFO"
             content={<CollectionInfo collection={collection} />}
             buttons={
-                <React.Fragment>
+                <Grid container item md={3} xs={12} spacing={1} >
                     {buttons.map(button => (
-                        <React.Fragment key={button.name}>
+                        <Grid key={button.name} item>
                             {button.component}
-                        </React.Fragment>
+                        </Grid>
                     ))}
-                </React.Fragment>
+                </Grid>
             }
         />
     );
