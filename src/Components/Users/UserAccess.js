@@ -11,7 +11,7 @@ import PasswordUser from './Password';
 import RemoveUser from './Remove';
 import RenameUser from './Rename';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-import {ErrorMsg} from '../Util';
+import {ErrorMsg, getScopes} from '../Util';
 
 const privileges = [
     {
@@ -69,11 +69,7 @@ const UserAccess = ({user, collections}) => {
         return ({[scope]: s});
     };
 
-    const scopes = [
-        {name: 'ThingsDB', value: '@thingsdb'},
-        {name: 'Node', value: '@node'},
-        ...collections.map((c) => ({name: c.name, value: `@collection:${c.name}`}))
-    ];
+    const scopes = getScopes(collections);
 
     //TODO CHECK IF SCOPES ARE CORRECT
 

@@ -18,7 +18,7 @@ const initialState = {
     form: {},
 };
 
-const tag = '8';
+const tag = '7';
 
 const Rename = ({collection, collections}) => {
     const [state, setState] = React.useState(initialState);

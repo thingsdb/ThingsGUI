@@ -21,7 +21,9 @@ const withStores = withVlow([{
 
 const useStyles = makeStyles(theme => ({
     info: {
-        padding: theme.spacing(1),
+        marginTop: theme.spacing(2),
+        overflowY: 'auto',
+        height: '600px',
     },
     counters: {
         padding: theme.spacing(1),
@@ -31,6 +33,7 @@ const useStyles = makeStyles(theme => ({
 const Node = ({selectedNode, node, counters}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
+    console.log(counters, node);
 
     React.useEffect(() => {
         NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
@@ -52,7 +55,6 @@ const Node = ({selectedNode, node, counters}) => {
                 <Grid
                     className={classes.info}
                     container
-                    direction="column"
                     spacing={3}
                 >
                     <Grid item xs={12}>
@@ -74,8 +76,7 @@ const Node = ({selectedNode, node, counters}) => {
                 <Grid
                     className={classes.counters}
                     container
-                    direction="column"
-                    spacing={1}
+                    spacing={3}
                 >
                     <Grid item xs={12}>
                         <Counters counters={counters} />

@@ -9,7 +9,7 @@ import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
-const tag = '4';
+const tag = '3';
 const RemoveThing = ({collection, thing, info}) => {
     const [show, setShow] = React.useState(false);
     const handleClickOpen = () => {

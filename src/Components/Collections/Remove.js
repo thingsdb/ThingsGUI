@@ -6,7 +6,7 @@ import { ErrorMsg, SimpleModal } from '../Util';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
-const tag = '7';
+const tag = '6';
 
 const Remove = ({collection}) => {
     const [show, setShow] = React.useState(false);

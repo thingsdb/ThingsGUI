@@ -5,12 +5,12 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-const TitlePage2 = ({preTitle, title, headerContent, content}) => {
+const TitlePage2 = ({preTitle, title, sideContent, content}) => {
 
     return (
-        <Grid container spacing={1}>
-            <Grid container spacing={1} item xs={12}>
-                <Grid item xs={8}>
+        <Grid container spacing={1} alignItems="flex-start">
+            <Grid container spacing={1} item md={9} sm={12}>
+                <Grid item xs={12}>
                     <Card>
                         <CardContent>
                             <Typography variant="body1" >
@@ -22,16 +22,10 @@ const TitlePage2 = ({preTitle, title, headerContent, content}) => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={4}>
-                    <Card>
-                        <CardContent>
-                            {headerContent}
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
-            <Grid container item spacing={1} >
                 {content}
+            </Grid>
+            <Grid container spacing={1} item md={3} sm={12}>
+                {sideContent}
             </Grid>
         </Grid>
     );
@@ -40,7 +34,7 @@ const TitlePage2 = ({preTitle, title, headerContent, content}) => {
 TitlePage2.propTypes = {
     preTitle: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    headerContent: PropTypes.object.isRequired,
+    sideContent: PropTypes.object.isRequired,
     content: PropTypes.object.isRequired,
 };
 

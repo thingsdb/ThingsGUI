@@ -16,18 +16,18 @@ const Info = ({header, content}) => {
     const classes = useStyles();
 
     return (
-        <Grid container>
+        <Grid container spacing={1}>
             {header.map((h) => (
                 <React.Fragment key={h.ky}>
                     <Grid item xs={12} className={classes.grid}>
-                        <Typography variant="caption">
+                        <Typography variant="subtitle2" color="primary">
                             {h.title + ':'}
                         </Typography>
                         <Divider />
                     </Grid>
                     {h.labels.map((l) => (
                         <React.Fragment key={l.ky}>
-                            <Grid container item xs={12} spacing={1}>
+                            <Grid container item xs={12}>
                                 <Grid item xs={6}>
                                     <Typography variant="caption">
                                         {l.label + ':'}

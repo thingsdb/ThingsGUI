@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 const Menu = ({title, icon, items, addItem, onClickItem}) => {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(!open);

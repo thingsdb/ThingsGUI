@@ -19,7 +19,7 @@ const initialState = {
     form: {},
 };
 
-const tag = '6';
+const tag = '5';
 
 const Quotas = ({collection}) => {
     const [state, setState] = React.useState(initialState);

@@ -16,7 +16,7 @@ const TableWithButtons = ({header, rows, rowClick, buttons}) => {
 
     return (
         <React.Fragment>
-            <Table >
+            <Table>
                 <TableHead>
                     <TableRow>
                         {header.map((h, i) => (

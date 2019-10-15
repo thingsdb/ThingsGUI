@@ -80,6 +80,11 @@ const buildQueryRemove = (parent, parentId, name, index, id) => {
 const isObjectEmpty = (obj) => Object.entries(obj).length === 0 && obj.constructor === Object;
 const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
 
+const getScopes = (collections) => [
+    {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
+    {name: 'Node', value: '@node', collectionId: null},
+    ...collections.map((c) => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
+];
 
 export {
     Add1DArray,
@@ -99,6 +104,7 @@ export {
     isObjectEmpty,
     Menu,
     onlyNums,
+    getScopes,
     ServerError,
     SimpleModal,
     TableWithButtons,

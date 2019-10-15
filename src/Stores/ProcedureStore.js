@@ -11,40 +11,43 @@ const ProcedureActions = Vlow.createActions([
 // TODO: CALLBACKS
 class ProcedureStore extends BaseStore {
 
-    // static types = {
-    //     things: PropTypes.object,
-    //     thingsByProp: PropTypes.object,
-    // }
+    static types = {
+        procedures: PropTypes.arrayOf(PropTypes.object),
+    }
 
-    // static defaults = {
-    //     things: {},
-    // }
+    static defaults = {
+        procedures: [],
+    }
 
     constructor() {
         super(ProcedureActions);
-        // this.state = ProcedureStore.defaults;
+        this.state = ProcedureStore.defaults;
     }
 
-    onGetProcedures(scope, tag, cb) {
+    onGetProcedures(scope, tag) {
         const query = 'procedures_info()';
         this.emit('query', {
             query,
             scope
         }).done((data) => {
-            cb(data);
+            this.setState({
+                procedures: data
+            });
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             return [];
         });
     }
 
-    onDeleteProcedure(scope, name, tag, cb) {
+    onDeleteProcedure(scope, name, tag) {
         const query = `del_procedure('${name}'); procedures_info();`;
         this.emit('query', {
             query,
             scope
         }).done((data) => {
-            cb(data);
+            this.setState({
+                procedures: data
+            });
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             return [];

@@ -10,22 +10,31 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 
 
-// const drawerWidth = 600;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+        '@global': {
+            '*::-webkit-scrollbar': {
+                width: '0.4em'
+            },
+            '*::-webkit-scrollbar-track': {
+                '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+            },
+            '*::-webkit-scrollbar-thumb': {
+                backgroundColor: theme.palette.primary.main,
+                outline: '1px solid slategrey'
+            }
+        }
     },
     full: {
-        // minWidth: 1200,
         width: '100%',
+        position: 'relative',
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
     },
     shrink: {
-        // minWidth: 1200,
-        // width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
@@ -40,18 +49,14 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerOpen: {
         minWidth: 400,
-        // width: drawerWidth,
-        // flexGrow: 1,
-        paddingRight: theme.spacing(1),
-        paddingTop: theme.spacing(1),
-        paddingRottom: theme.spacing(1),
+        position: 'relative',
+        right: 0,
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-        // marginRight: -drawerWidth,
         minHeight: '100vh',
-        zIndex: 1,
+        zIndex: 2,
     },
     drawerClose: {
         width: '0%',
@@ -103,7 +108,8 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, drawerTitle, drawerCo
             document.body.offsetWidth - (event.clientX - document.body.offsetLeft);
 
         let minWidth = 400;
-        if (offsetRight > minWidth) {
+        let maxWidth = 900;
+        if (offsetRight > minWidth && offsetRight < maxWidth) {
             setNewWidth(offsetRight);
         }
 

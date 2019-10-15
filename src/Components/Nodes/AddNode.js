@@ -12,7 +12,7 @@ const initialState = {
     form: {},
 };
 
-const tag = '8';
+const tag = '10';
 
 const AddNode = () => {
     const [state, setState] = React.useState(initialState);

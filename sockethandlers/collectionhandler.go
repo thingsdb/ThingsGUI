@@ -44,7 +44,7 @@ func QueryBlob(client *Client, data Data, timeout uint16) (int, interface{}, uti
 	}
 
 	blob := map[string]interface{}{
-		"blob": string(decodedBlob),
+		"blob": decodedBlob,
 	}
 
 	return query(client, data, blob, timeout)

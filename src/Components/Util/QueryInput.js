@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Paper from '@material-ui/core/Paper';
 
 import Language from './Language.js';
 import * as monaco from 'monaco-editor';
@@ -272,7 +271,6 @@ class QueryInput extends React.Component {
 
     componentDidUpdate(prevProps) {
         const { input } = this.props;
-        console.log(input, prevProps.input);
         const model = this._editor.getModel();
         if (input && input != prevProps.input && input != model.getValue()) {
             model.pushEditOperations(
@@ -296,14 +294,13 @@ class QueryInput extends React.Component {
     }
 
     handleEditorSize = () => {
-        console.log("resize editor");
         this._editor.layout();
     }
 
 
     render() {
         return (
-            <Paper style={{height: 'calc(100vh - 80vh)', width: '100%'}} ref={(ele) => this.ele = ele} />
+            <div style={{height: 'calc(100vh - 80vh)', width: '100%'}} ref={(ele) => this.ele = ele} />
         );
     }
 }

@@ -20,7 +20,7 @@ const initialState = {
     form: {},
 };
 
-const tag = '10';
+const tag = '12';
 
 const Loglevel = ({node}) => {
     const [state, setState] = React.useState(initialState);

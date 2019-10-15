@@ -21,6 +21,7 @@ const theme = createMuiTheme({
             blue: '#3392ff',
             pink: '#c523a0',
             purple: '#9256bd',
+            cyan: '#16c3b6',
         },
         secondary: {
             main: 'rgba(0, 55, 123, 0.3)',

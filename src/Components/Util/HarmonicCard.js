@@ -8,17 +8,9 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { makeStyles} from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
-    padding: {
-        paddingTop: '4px',
-        paddingBottom: '4px',
-    },
-}));
 
 const HarmonicCard = ({title, content, buttons}) => {
-    const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
     function handleExpandClick() {
@@ -26,9 +18,8 @@ const HarmonicCard = ({title, content, buttons}) => {
     }
 
     return (
-        <Card className={classes.padding}>
+        <Card>
             <CardHeader
-                className={classes.padding}
                 action={
                     <IconButton onClick={handleExpandClick}>
                         {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}

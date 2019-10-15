@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-	"unicode/utf8"
 )
 
 type TmpFiles struct {
@@ -18,11 +17,10 @@ func NewTmpFiles() *TmpFiles {
 	}
 }
 
-func (tmp *TmpFiles) createBinFileLink(t string) (string, error) {
+func (tmp *TmpFiles) createBinFileLink(content []byte) (string, error) {
 	var err error
 	var hostname string
 
-	content := []byte(t)
 	tmpfile, err := ioutil.TempFile("", "thingsdb-cache-")
 	if err != nil {
 		return "", err
@@ -50,12 +48,10 @@ func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) error {
 	switch v := thing.(type) {
 	case []interface{}:
 		for i := 0; i < len(v); i++ {
-			if t, ok := v[i].(string); ok {
-				if !utf8.ValidString(t) {
-					v[i], err = tmp.createBinFileLink(t)
-					if err != nil {
-						return err
-					}
+			if t, ok := v[i].([]byte); ok {
+				v[i], err = tmp.createBinFileLink(t)
+				if err != nil {
+					return err
 				}
 			} else {
 				err = tmp.ReplaceBinStrWithLink(v[i])
@@ -66,12 +62,10 @@ func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) error {
 		}
 	case map[string]interface{}:
 		for k := range v {
-			if t, ok := v[k].(string); ok {
-				if !utf8.ValidString(t) {
-					v[k], err = tmp.createBinFileLink(t)
-					if err != nil {
-						return err
-					}
+			if t, ok := v[k].([]byte); ok {
+				v[k], err = tmp.createBinFileLink(t)
+				if err != nil {
+					return err
 				}
 			} else {
 				err = tmp.ReplaceBinStrWithLink(v[k])
