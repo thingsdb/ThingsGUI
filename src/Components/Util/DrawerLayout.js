@@ -27,12 +27,12 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     full: {
-        width: '100%',
         position: 'relative',
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
+        zIndex: 1,
     },
     shrink: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -40,31 +40,29 @@ const useStyles = makeStyles((theme) => ({
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
-    drawerHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 8px',
-        ...theme.mixins.toolbar,
-        justifyContent: 'flex-start',
-    },
     drawerOpen: {
-        minWidth: 400,
         position: 'relative',
         right: 0,
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
+            duration: theme.transitions.duration.enteringScreen,
         }),
         minHeight: '100vh',
         zIndex: 2,
     },
     drawerClose: {
-        width: '0%',
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
+            duration: theme.transitions.duration.leavingScreen,
         }),
-        marginRight: 0,
+        marginRight: '0px',
+    },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        // padding: '0 8px',
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-start',
     },
     dragger: {
         width: '5px',
@@ -72,16 +70,22 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         top: 0,
         bottom: 0,
-        zIndex: '100',
+        zIndex: 3,
     },
-    content: {
-        margin: theme.spacing(1),
+    draggerClose: {
+        width: '0px',
     },
+    open: {
+        display: 'block',
+    },
+    close: {
+        display: 'none'
+    }
 }));
 
 
 
-const DrawerLayout = ({open, onClose, topbar, mainContent, drawerTitle, drawerContent}) => {
+const DrawerLayout = ({open, onClose, topbar, mainContent, bottomBar, drawerTitle, drawerContent}) => {
     const classes = useStyles();
     const [isResizing, setIsResizing] = React.useState(false);
     const [newWidth, setNewWidth] = React.useState(600);
@@ -108,8 +112,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, drawerTitle, drawerCo
             document.body.offsetWidth - (event.clientX - document.body.offsetLeft);
 
         let minWidth = 400;
-        let maxWidth = 900;
-        if (offsetRight > minWidth && offsetRight < maxWidth) {
+        if (offsetRight > minWidth) {
             setNewWidth(offsetRight);
         }
 
@@ -121,46 +124,41 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, drawerTitle, drawerCo
 
 
     return(
-        <React.Fragment>
-            <div className={classes.root}>
-
-                <div
-                    className={clsx(classes.full, {
-                        [classes.shrink]: open,
-                    })}
-                    style={open ? {width: `calc(100% - ${newWidth}px)`} : null}
-                >
-                    {topbar}
-                    <div className={classes.content}>
-                        {mainContent}
-                    </div>
-                </div>
-                <Card
-                    className={clsx(classes.drawerClose, {
-                        [classes.drawerOpen]: open,
-                    })}
-                    style={open ? {width: newWidth, marginRight: -newWidth } : null}
-                >
-                    <div
-                        id="dragger"
-                        onMouseDown={handleMousedown}
-                        className={classes.dragger}
-                    />
-                    <div>
-                        <div className={classes.drawerHeader}>
-                            <IconButton onClick={onClose}>
-                                {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
-                            </IconButton>
-                            <Typography variant="body1">
-                                {drawerTitle}
-                            </Typography>
-                        </div>
-                        <Divider />
-                        {drawerContent}
-                    </div>
-                </Card>
+        <div className={classes.root}>
+            <div
+                className={clsx(classes.full, {
+                    [classes.shrink]: open,
+                })}
+                style={open ? {width: `calc(100% - ${newWidth}px)`} : {width:'100%'}}
+            >
+                {topbar}
+                {mainContent}
             </div>
-        </React.Fragment>
+            <Card
+                className={clsx(classes.drawerClose, {
+                    [classes.drawerOpen]: open,
+                })}
+                style={open ? {width: newWidth, marginRight: -newWidth } : {width: '0%'}}
+            >
+                <div
+                    onMouseDown={handleMousedown}
+                    className={open ? classes.dragger : classes.draggerClose}
+                />
+                <div className={open ? classes.open : classes.close}>
+                    <div className={classes.drawerHeader}>
+                        <IconButton onClick={onClose}>
+                            {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
+                        </IconButton>
+                        <Typography variant="body1">
+                            {drawerTitle}
+                        </Typography>
+                    </div>
+                    <Divider />
+                    {drawerContent}
+                </div>
+            </Card>
+            {bottomBar}
+        </div>
     );
 };
 
@@ -169,6 +167,7 @@ DrawerLayout.propTypes = {
     onClose: PropTypes.func.isRequired,
     topbar: PropTypes.object.isRequired,
     mainContent: PropTypes.object.isRequired,
+    bottomBar: PropTypes.object.isRequired,
     drawerTitle: PropTypes.string.isRequired,
     drawerContent: PropTypes.object.isRequired,
 };

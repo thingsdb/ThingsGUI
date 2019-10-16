@@ -10,6 +10,7 @@ import StorageIcon from '@material-ui/icons/Storage';
 import VisibleIcon from '@material-ui/icons/Visibility';
 import {withVlow} from 'vlow';
 
+import BottomBar from '../Navigation/BottomBar';
 import Collection from '../Collections/Collection';
 import CollectionsMenu from '../Navigation/CollectionsMenu';
 import User from '../Users/User';
@@ -74,8 +75,8 @@ const App = ({match}) => {
                 />
             }
             mainContent={
-                <Grid container spacing={1} alignItems="flex-start">
-                    <Grid container spacing={1} item xs={12} md={2}>
+                <Grid container alignItems="flex-start">
+                    <Grid container spacing={1} item xs={12} md={2} style={{paddingRight:8}}>
                         <Grid item xs={4} md={12}>
                             <Card>
                                 <CollectionsMenu />
@@ -96,9 +97,9 @@ const App = ({match}) => {
                         {pages[match.path]}
                     </Grid>
                     <ErrorToast />
-                    {/* <QueryEditor show={openEditor} /> */}
                 </Grid>
             }
+            bottomBar={<BottomBar />}
             drawerTitle={drawerContent ? 'NODES' : 'WATCHER'}
             drawerContent={drawerContent ? <Nodes /> : <Watcher />}
         />
