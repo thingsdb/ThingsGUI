@@ -60,7 +60,7 @@ const TopBar = ({additionals, user}) => {
                         {/* <Tooltip disableFocusListener disableTouchListener title={packageJson.version}>                   */}
                         <img
                             alt="ThingsDB Logo"
-                            src="/static/img/thingsdb-logo.png"
+                            src="/img/thingsdb-logo.png"
                             className={classes.avatar}
                             draggable='false'
                         />

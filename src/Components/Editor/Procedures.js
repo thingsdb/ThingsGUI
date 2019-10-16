@@ -36,7 +36,7 @@ const Procedures = ({scope, onSetAsInput, procedures}) => {
     }, [scope]);
 
     const handleClickProcedure = (index) => () => {
-        const i = procedures[index].with_side_effects ? `wse(run('${procedures[index].name}', ${procedures[index].arguments.map(a=>` '<${a}>'` )}))` : `run('${procedures[index].name}', ${procedures[index].arguments.map(a=>` '<${a}>'` )})`;
+        const i = procedures[index].with_side_effects ? `wse(run('${procedures[index].name}', ${procedures[index].arguments.map(a=>` <${a}>` )}))` : `run('${procedures[index].name}', ${procedures[index].arguments.map(a=>` <${a}>` )})`;
         onSetAsInput(i);
     };
 

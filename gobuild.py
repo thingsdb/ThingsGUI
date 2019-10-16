@@ -67,6 +67,11 @@ binfiles = [
     ('''./static/js/vendors-bundle-{}.min.js'''.format(
     get_version(os.path.dirname(__file__))), "FileVendorsBundleMinJS"),
     ("./static/img/thingsdb.gif", "FileThingsdbGIF"),
+    ("./static/img/thingsdb-logo.png", "FileThingsdbLogo"),
+    ("./static/img/githubLogo.svg", "FileGithubLogo"),
+    ("./static/img/facebookLogo.png", "FileFacebookLogo"),
+    ("./static/img/linkedinLogo.png", "FileLinkedinLogo"),
+    ("./static/img/TTLogo.png", "FileTTLogo"),
     ("./static/favicon.ico", "FileFaviconICO"),
     ("./templates/app.html", "FileAppHTML"),
 ]

@@ -215,7 +215,7 @@ const theme = {
     base: 'vs-dark',
     inherit: true,
     rules: [
-        { token: 'identifier', foreground: '62948b', fontStyle: 'bold' },
+        { token: 'identifier', foreground: '579049', fontStyle: 'bold' },
         { token: 'number', foreground: 'd2a800' },
         { token: 'string', foreground: 'e26d14' },
         { token: 'keyword', foreground: '2a80e8'},
