@@ -28,39 +28,39 @@ const useStyles = makeStyles((theme) => ({
     },
     full: {
         position: 'relative',
-        transition: theme.transitions.create(['margin', 'width'], {
+        transition: theme.transitions.create(['width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
         zIndex: 1,
     },
     shrink: {
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
+        transition: theme.transitions.create(['width'], {
+            easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
     drawerOpen: {
         position: 'relative',
         right: 0,
-        transition: theme.transitions.create(['margin', 'width'], {
+        transition: theme.transitions.create(['width'], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
+            duration: theme.transitions.duration.leavingScreen,
         }),
-        minHeight: '100vh',
+        height: '100vh',
         zIndex: 2,
     },
     drawerClose: {
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.leavingScreen,
+        transition: theme.transitions.create(['width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
         }),
         marginRight: '0px',
+        height: '100vh',
     },
     drawerHeader: {
         display: 'flex',
         alignItems: 'center',
-        // padding: '0 8px',
         ...theme.mixins.toolbar,
         justifyContent: 'flex-start',
     },
@@ -107,7 +107,6 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, bottomBar, drawerTitl
     };
 
     const handleMousemove = React.useCallback((event) => {
-        console.log(document.body.offsetWidth, event.clientX, document.body.offsetLeft);
         let offsetRight =
             document.body.offsetWidth - (event.clientX - document.body.offsetLeft);
 
@@ -138,7 +137,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, bottomBar, drawerTitl
                 className={clsx(classes.drawerClose, {
                     [classes.drawerOpen]: open,
                 })}
-                style={open ? {width: newWidth, marginRight: -newWidth } : {width: '0%'}}
+                style={open ? {width: newWidth } : {width: '0%'}}
             >
                 <div
                     onMouseDown={handleMousedown}

@@ -76,7 +76,7 @@ const App = ({match}) => {
             }
             mainContent={
                 <Grid container alignItems="flex-start">
-                    <Grid container spacing={1} item xs={12} md={2} style={{paddingRight:8}}>
+                    <Grid container spacing={1} item xs={12} md={2} style={{paddingRight:8, paddingLeft:8}}>
                         <Grid item xs={4} md={12}>
                             <Card>
                                 <CollectionsMenu />

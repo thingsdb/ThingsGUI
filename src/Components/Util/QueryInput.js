@@ -13,9 +13,9 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
     keywords: [
         'nil', 'true', 'false',
         ...Object.keys(Language.noType),
-        ...Language.node,
-        ...Language.thingsdb,
-        ...Language.procedures,
+        ...Object.keys(Language.node),
+        ...Object.keys(Language.thingsdb),
+        ...Object.keys(Language.procedures),
         ...Object.keys(Language.types.array),
         ...Object.keys(Language.types.set),
         ...Object.keys(Language.types.string),
@@ -96,8 +96,8 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             [/[;,.]/, 'delimiter'],
 
             // strings
-            [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
-            [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+            // [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+            // [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
             [/"/, 'string', '@string_double'],
             [/'/, 'string', '@string_single'],
         ],
@@ -182,27 +182,27 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                     documentation: v,
                 }))
             );
-            suggestions.push(...Language.node
-                .map((v) => ({
-                    label: v,
+            suggestions.push(...Object.entries(Language.node)
+                .map(([k, v]) => ({
+                    label: k,
                     kind: monaco.languages.CompletionItemKind.Function,
-                    insertText: v+'()',
+                    insertText: k+'()',
                     documentation: v,
                 }))
             );
-            suggestions.push(...Language.thingsdb
-                .map((v) => ({
-                    label: v,
+            suggestions.push(...Object.entries(Language.thingsdb)
+                .map(([k, v]) => ({
+                    label: k,
                     kind: monaco.languages.CompletionItemKind.Function,
-                    insertText: v+'()',
+                    insertText: k+'()',
                     documentation: v,
                 }))
             );
-            suggestions.push(...Language.procedures
-                .map((v) => ({
-                    label: v,
+            suggestions.push(...Object.entries(Language.procedures)
+                .map(([k, v]) => ({
+                    label: k,
                     kind: monaco.languages.CompletionItemKind.Function,
-                    insertText: v+'()',
+                    insertText: k+'()',
                     documentation: v,
                 }))
             );
@@ -300,7 +300,7 @@ class QueryInput extends React.Component {
 
     render() {
         return (
-            <div style={{height: 'calc(100vh - 80vh)', width: '100%'}} ref={(ele) => this.ele = ele} />
+            <div style={{height: 'calc(100vh - 50vh)', width: '100%'}} ref={(ele) => this.ele = ele} />
         );
     }
 }
