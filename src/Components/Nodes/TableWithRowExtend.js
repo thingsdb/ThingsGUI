@@ -59,7 +59,7 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode}) => {
                                 {h.label}
                             </TableCell>
                         ))}
-                        <TableCell colSpan={2} />
+                        <TableCell colSpan={buttons&&rows.length ? buttons(rows[0]).length+1 : 1} />
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -79,9 +79,11 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode}) => {
                                         </TableCell>
                                     ))}
                                     {buttons ? (
-                                        <TableCell align='right' style={{borderBottom: isopen?'none':null}}>
-                                            {buttons(row)}
-                                        </TableCell>
+                                        buttons(row).map((r, i) => (
+                                            <TableCell key={i} align='right'>
+                                                {r}
+                                            </TableCell>
+                                        ))
                                     ) : null}
                                     <TableCell align="right" style={{borderBottom: isopen?'none':null}}>
                                         <IconButton onClick={handleClickRow(ri)}>

@@ -3,7 +3,9 @@ import React from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import ExploreIcon from '@material-ui/icons/Explore';
 import ExploreOffIcon from '@material-ui/icons/ExploreOff';
+import Tooltip from '@material-ui/core/Tooltip';
 import {withVlow} from 'vlow';
+import {makeStyles} from '@material-ui/core/styles';
 
 import {EventStore, EventActions} from '../../Stores/BaseStore';
 
@@ -12,21 +14,30 @@ const withStores = withVlow([{
     keys: ['watchIds']
 }]);
 
-const WatchThings = ({collection, thingId, watchIds}) => {
-    // stringify thingId
-    const onWatch = watchIds.hasOwnProperty(`@collection:${collection.name}`) && watchIds[`@collection:${collection.name}`].includes(`${thingId}`);
+const useStyles = makeStyles(theme => ({
+    red: {
+        color: theme.palette.primary.red,
+    },
+    green: {
+        color: theme.palette.primary.green,
+    },
+}));
 
-    console.log("watch");
+const WatchThings = ({scope, thingId, watchIds}) => {
+    const classes = useStyles();
+
+    // stringify thingId
+    const onWatch = watchIds.hasOwnProperty(scope) && watchIds[scope].includes(`${thingId}`);
 
     const handleWatcher = () => {
         if (!onWatch) {
             EventActions.watch(
-                `@collection:${collection.name}`,
+                scope,
                 thingId
             );
         } else {
             EventActions.unwatch(
-                `@collection:${collection.name}`,
+                scope,
                 thingId
             );
         }
@@ -34,15 +45,17 @@ const WatchThings = ({collection, thingId, watchIds}) => {
 
     return (
         <React.Fragment>
-            <ButtonBase onClick={handleWatcher} >
-                {onWatch ? <ExploreIcon color="primary" /> : <ExploreOffIcon color="primary" />}
-            </ButtonBase>
+            <Tooltip disableFocusListener disableTouchListener title={onWatch ? 'Turn watching off' : 'Turn watching on'}>
+                <ButtonBase onClick={handleWatcher} >
+                    {onWatch ? <ExploreIcon className={classes.green} /> : <ExploreOffIcon className={classes.red} />}
+                </ButtonBase>
+            </Tooltip>
         </React.Fragment>
     );
 };
 
 WatchThings.propTypes = {
-    collection: PropTypes.object.isRequired,
+    scope: PropTypes.string.isRequired,
     thingId: PropTypes.number.isRequired,
 
     // Event properties

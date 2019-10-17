@@ -181,7 +181,7 @@ const AddToken = ({user}) => {
                             </Grid>
                         </Grid>
                     </ListItem>
-                    <ListItem>
+                    {/* <ListItem>
                         <TextField
                             id="datetime-local"
                             label="UTC TIME [NOT IN USE]"
@@ -192,7 +192,7 @@ const AddToken = ({user}) => {
                                 shrink: true,
                             }}
                         />
-                    </ListItem>
+                    </ListItem> */}
                 </Collapse>
             </List>
         </React.Fragment>

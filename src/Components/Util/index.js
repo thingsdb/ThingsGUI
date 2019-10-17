@@ -1,4 +1,6 @@
 import Add1DArray from './Add1DArray';
+import AddBlob from './AddBlob';
+import AddBool from './AddBool';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
 import DrawerLayout from './DrawerLayout';
@@ -18,6 +20,7 @@ import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
+import WatchThings from './WatchThings';
 
 const checkType = (t) => {
     if (t === null || t === 'nil') {
@@ -29,7 +32,8 @@ const checkType = (t) => {
         if (type === 'object') {
             const kindOfObject = Object.keys(t)[0];
             type = kindOfObject === '#' ? 'object'
-                : kindOfObject === '$' ? 'set' : 'object' ; // todo maak onderscheid tussen thing object?
+                : kindOfObject === '$' ? 'set'
+                    : kindOfObject === '>' ? 'closure' : 'object' ; // todo maak onderscheid tussen thing object?
         }
     }
     return(type);
@@ -39,13 +43,14 @@ const thingValue = (type, thing) => {
     return type === 'array' ? `[${thing.length}]`
         : type === 'object' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
             : type === 'set' ? `{${Object.keys(thing)[0]}}`
-                : type === 'string' || type === 'number' || type === 'boolean' ? `${thing}`
-                    : type === 'nil' ? 'nil'
-                        : '';
+                : type === 'closure' ? `{${Object.keys(thing)[0]}}`
+                    : type === 'string' || type === 'number' || type === 'boolean' ? `${thing}`
+                        : type === 'nil' ? 'nil'
+                            : '';
 };
 
 const onlyNums = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;
-
+// const closureSyntax = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;
 
 const buildInput = (input, type) => {
     return type === 'array' ? `[${input}]`
@@ -55,7 +60,8 @@ const buildInput = (input, type) => {
                     : type == 'set' ? 'set({})'
                         : type == 'nil' ? 'nil'
                             : type == 'blob' ? 'blob'
-                                : '';
+                                : type == 'closure' ? input
+                                    : '';
 };
 
 const buildQueryAdd = (id, name, value, type) => {
@@ -88,6 +94,8 @@ const getScopes = (collections) => [
 
 export {
     Add1DArray,
+    AddBlob,
+    AddBool,
     Buttons,
     buildInput,
     buildQueryAdd,
@@ -117,4 +125,5 @@ export {
     TreeIcon,
     QueryInput,
     QueryOutput,
+    WatchThings,
 };

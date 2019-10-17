@@ -11,9 +11,9 @@ import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
 import AddThings from './AddThings';
-import WatchThings from './WatchThings';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import {EventStore} from '../../Stores/BaseStore';
+import {WatchThings} from '../Util';
 
 import Thing from './Thing';
 
@@ -93,7 +93,7 @@ const ThingRoot = ({things, collection}) => {
                         </ListItemIcon>
                         <ListItemIcon className={classes.icon}>
                             <WatchThings
-                                collection={collection}
+                                scope={`@collection:${collection.name}`}
                                 thingId={collection.collection_id}
                             />
                         </ListItemIcon>

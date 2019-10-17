@@ -11,10 +11,9 @@ import {makeStyles} from '@material-ui/core/styles';
 import AddThings from './AddThings';
 import EditThing from './EditThing';
 import RemoveThing from './RemoveThing';
-import WatchThings from './WatchThings';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import {Buttons, checkType, thingValue, TreeBranch} from '../Util';
+import {Buttons, checkType, thingValue, TreeBranch, WatchThings} from '../Util';
 
 
 const withStores = withVlow([{
@@ -88,10 +87,10 @@ const Thing = ({thing, collection, things, info}) => {
     const val = thingValue(type, thing);
 
     // buttons visible
-    const hasButtons = !(type === 'array' && info.name === '$' || info.isParentTuple);
+    const hasButtons = !(type === 'array' && info.name === '$' || info.name === '>' || info.isParentTuple);
     const canAdd = (type === 'array' || type === 'object' || type === 'set') && !isTuple;
     const canEdit = info.name !== '$';
-    const canToggle = type === 'object' || type === 'array' || type === 'set';
+    const canToggle = type === 'object' || type === 'array' || type === 'set' || type === 'closure';
     const canWatch = thing && thing.hasOwnProperty('#');
 
     return (
@@ -124,7 +123,7 @@ const Thing = ({thing, collection, things, info}) => {
                         />
                         {canWatch ? (
                             <WatchThings
-                                collection={collection}
+                                scope={`@collection:${collection.name}`}
                                 thingId={thingId}
                             />
                         ) : null}

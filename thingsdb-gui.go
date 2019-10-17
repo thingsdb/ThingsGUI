@@ -72,7 +72,7 @@ func (app *App) SocketRouter() {
 		return handlers.Disconnect(app.client[s.ID()])
 	})
 
-	app.server.OnEvent("/", "log", func(s socketio.Conn, data string) {
+	app.server.OnEvent("/", "log", func(s socketio.Conn) {
 		ch := app.client[s.ID()].LogCh
 		go func() {
 			for p := range ch {

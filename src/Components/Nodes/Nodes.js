@@ -15,7 +15,6 @@ const withStores = withVlow([{
 
 const Nodes = ({nodes, connectedNode}) => {
 
-    console.log("NODES");
     React.useEffect(() => {
         NodesActions.getNodes();
         const setPoll = setInterval(
@@ -39,10 +38,12 @@ const Nodes = ({nodes, connectedNode}) => {
         label: 'Status',
     }];
     const rowExtend = (node) => <Node selectedNode={node} />;
-    const handleButtons = (node) => <DelNode node={node} />;
+    const handleButtons = (node) => ([
+        <DelNode key={0} node={node} />,
+    ]);
     return(
         <React.Fragment>
-            <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode}/>
+            <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode} />
             <NodeButtons />
         </React.Fragment>
     );

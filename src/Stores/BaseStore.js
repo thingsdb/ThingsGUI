@@ -137,7 +137,7 @@ class _PushNotification {
 
     constructor() {
 
-        socket.emit('log', 'hoi');
+        socket.emit('log');
         socket.on('logging', (msg) => {
             window.console.log(msg);
         });
@@ -204,6 +204,13 @@ class EventStore extends BaseStore {
                 break;
             case ProtoMap.ProtoOnWatchDel:
                 this.watchDel(data.Data);
+                break;
+            case ProtoMap.ProtoOnNodeStatus:
+                console.log(data.Data);
+                this.nodeStatus(data.Data);
+                break;
+            case ProtoMap.ProtoOnWarn:
+                console.log(data.Data);
                 break;
             default:
 
@@ -282,7 +289,7 @@ class EventStore extends BaseStore {
 
     add(id, add) {
         const prop = Object.keys(add)[0];
-        const amount = add[prop][0]; // onnodig
+        // const amount = add[prop][0]; // onnodig
         this.setState(prevState => {
             const copySet = new Set([...prevState.watchThings[id][prop]['$']]);
             for (let i = 1; i<add[prop].length; i++ ) {
@@ -297,7 +304,7 @@ class EventStore extends BaseStore {
 
     remove(id, remove) {
         const prop = Object.keys(remove)[0];
-        const amount = remove[prop][0]; // onnodig
+        // const amount = remove[prop][0]; // onnodig
         this.setState(prevState => {
             const copySet = new Set([...prevState.watchThings[id][prop]['$']]);
             for (let i = 1; i<remove[prop].length; i++ ) {
@@ -319,6 +326,14 @@ class EventStore extends BaseStore {
             let copyState = JSON.parse(JSON.stringify(prevState.watchThings));
             delete copyState[data['#']];
             return {watchThings: copyState};
+        });
+    }
+
+    nodeStatus(data) {
+        this.setState(prevState => {
+            const update = Object.assign({}, prevState.watchThings[data['#']], set);
+            const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
+            return {watchThings};
         });
     }
 
@@ -358,16 +373,6 @@ class EventStore extends BaseStore {
     }
 
     onResetWatch() {
-        // const {watchIds} = this.state;
-        // Object.entries(watchIds).map(([k, v]) => {
-        //     console.log(k, v);
-        //     if (v.length) {
-        //         this.emit('unwatch', {
-        //             scope: k,
-        //             ids: v
-        //         });
-        //     }
-        // });
         this.setState({
             watchThings: {},
             watchIds: {}
