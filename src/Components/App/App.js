@@ -76,7 +76,7 @@ const App = ({match}) => {
             }
             mainContent={
                 <Grid container alignItems="flex-start">
-                    <Grid container spacing={1} item xs={12} md={2} style={{paddingRight:8, paddingLeft:8}}>
+                    <Grid container spacing={1} item xs={12} md={2} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
                         <Grid item xs={4} md={12}>
                             <Card>
                                 <CollectionsMenu />
@@ -93,7 +93,7 @@ const App = ({match}) => {
                             </Card>
                         </Grid>
                     </Grid>
-                    <Grid container item xs={12} md={10}>
+                    <Grid container item xs={12} md={10} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
                         {pages[match.path]}
                     </Grid>
                     <ErrorToast />
