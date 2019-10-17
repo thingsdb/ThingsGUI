@@ -151,7 +151,7 @@ const UserAccess = ({user, collections}) => {
                                         <Grid item container xs={12} >
                                             {privileges.map(({ky, label}) => (
                                                 <Grid item xs={2} key={ky} container justify="center" >
-                                                    <Typography variant="overline" align="center" >
+                                                    <Typography variant="overline" align="center" component="span" noWrap>
                                                         {label}
                                                     </Typography>
                                                 </Grid>
@@ -163,7 +163,7 @@ const UserAccess = ({user, collections}) => {
                                     <React.Fragment key={i}>
                                         <Grid item container xs={12} spacing={2}>
                                             <Grid item xs={3} container alignItems="center">
-                                                <Typography>
+                                                <Typography component="span" noWrap>
                                                     {key}
                                                 </Typography>
                                             </Grid>
