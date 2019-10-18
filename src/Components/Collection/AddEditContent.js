@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-import {Add1DArray, AddBlob, AddBool, ErrorMsg, SimpleModal} from '../Util';
+import {Add1DArray, AddBlob, AddBool, ErrorMsg, onlyNums, SimpleModal} from '../Util';
 
 
 // ([\|]+[a-zA-Z\s,]+[\|]|[\|+\|])+[[:print:]][,](?!\|)
@@ -40,9 +40,32 @@ const initialState = {
 
 const tag = '1';
 
-const AddEditContent = ({collection, errorTxt, handleBuildQuery, icon, isEdit, info, init}) => {
+const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init, thing}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
+
+    const errorTxt = {
+        queryString: () => '',
+        newProperty: () => isEdit ? '' : thing[form.newProperty] ? 'property name already in use' : '',
+        value: () => {
+            const bool = form.value.length>0;
+            let errText = bool?'':'is required';
+            switch (form.dataType) {
+            case 'number':
+                if (bool) {
+                    errText = onlyNums(form.value) ? '' : 'only numbers';
+                }
+                return(errText);
+            case 'closure':
+                if (bool) {
+                    errText = /^((?:\|[a-zA-Z\s]*(?:[,][a-zA-Z\s]*)*\|)|(?:\|\|))(?:(?:[\s]|[a-zA-Z0-9,.\*\/+%\-=&\|^?:;!<>])*[a-zA-Z0-9,.\*\/+%\-=&\|^?:;!<>]+)$/.test(form.value) ? '':'closure is not valid';
+                }
+                return(errText);
+            default:
+                return '';
+            }
+        },
+    };
 
     const handleClickOpen = () => {
         setState({
@@ -96,7 +119,8 @@ const AddEditContent = ({collection, errorTxt, handleBuildQuery, icon, isEdit, i
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(errorTxt(form)).reduce((d, ky) => { d[ky] = errorTxt(form)[ky]();  return d; }, {});
+        const err = Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
+        console.log('clickOk', err);
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
             if (form.dataType== 'blob') {
@@ -241,8 +265,8 @@ const AddEditContent = ({collection, errorTxt, handleBuildQuery, icon, isEdit, i
                                 onChange={handleOnChange}
                                 fullWidth
                                 placeholder="example: |x,y| x+y"
-                                helperText={errors.closure}
-                                error={Boolean(errors.closure)}
+                                helperText={errors.value}
+                                error={Boolean(errors.value)}
                             />
                         </ListItem>
                     </React.Fragment>
@@ -268,14 +292,18 @@ const AddEditContent = ({collection, errorTxt, handleBuildQuery, icon, isEdit, i
     );
 };
 
+AddEditContent.defaultProps = {
+    thing: null,
+},
+
 AddEditContent.propTypes = {
     info: PropTypes.object.isRequired,
     collection: PropTypes.object.isRequired,
-    errorTxt: PropTypes.func.isRequired,
     handleBuildQuery: PropTypes.func.isRequired,
     icon: PropTypes.object.isRequired,
     isEdit: PropTypes.bool.isRequired,
     init: PropTypes.object.isRequired,
+    thing: PropTypes.any,
 };
 
 export default AddEditContent;

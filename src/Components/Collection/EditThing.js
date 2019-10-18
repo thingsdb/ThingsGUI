@@ -3,27 +3,11 @@ import React from 'react';
 import EditIcon from '@material-ui/icons/EditOutlined';
 
 import AddEditContent from './AddEditContent';
-import {buildInput, buildQueryEdit, onlyNums} from '../Util';
+import {buildInput, buildQueryEdit} from '../Util';
 
 
-const EditThing = ({info, collection, thing}) => {
+const EditThing = ({info, collection}) => {
     const {id, index, name, parentType} = info;
-
-    const errorTxt = (form) => ({
-        queryString: () => '',
-        newProperty: () => form.newProperty == name ? '' : thing[form.newProperty] ? 'Property name already in use' : '',
-        value: () => {
-            const bool = form.value.length>0;
-            let errText = bool?'':'Is required';
-
-            if (bool && form.dataType == 'number') {
-                errText = onlyNums(form.value) ? '' : 'only numbers';
-            } else if (bool && form.dataType == 'closure') {
-                // errText = form.value == 'true' || form.value == 'false' ? '' : 'not a boolean value';
-            }
-            return(errText);
-        },
-    });
 
     const handleBuildQuery = (key, value, form) => {
         const input = key=='value' ? value : form.value;
@@ -37,7 +21,6 @@ const EditThing = ({info, collection, thing}) => {
     return(
         <AddEditContent
             collection={collection}
-            errorTxt={errorTxt}
             handleBuildQuery={handleBuildQuery}
             icon={<EditIcon color="primary" />}
             isEdit
@@ -53,7 +36,6 @@ const EditThing = ({info, collection, thing}) => {
 EditThing.propTypes = {
     info: PropTypes.object.isRequired,
     collection: PropTypes.object.isRequired,
-    thing: PropTypes.any.isRequired,
 };
 
 export default EditThing;

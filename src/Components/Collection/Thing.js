@@ -113,7 +113,6 @@ const Thing = ({thing, collection, things, info}) => {
                             <EditThing
                                 info={{...info, type: type}}
                                 collection={collection}
-                                thing={things[info.id]}
                             />
                         ) : null}
                         <RemoveThing

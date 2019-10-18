@@ -8,23 +8,6 @@ import {buildInput, buildQueryAdd, onlyNums} from '../Util';
 const AddThings = ({info, collection, thing}) => {
     const {id, name, type} = info;
 
-
-    const errorTxt = (form) => ({
-        queryString: () => '',
-        newProperty: () => thing[form.newProperty] ? 'Property name already in use' : '',
-        value: () => {
-            const bool = form.value.length>0;
-            let errText = bool?'':'Is required';
-
-            if (bool && form.dataType == 'number') {
-                errText = onlyNums(form.value) ? '' : 'only numbers';
-            } else if (bool && form.dataType == 'closure') {
-                // errText = form.value == 'true' || form.value == 'false' ? '' : 'not a boolean value';
-            }
-            return(errText);
-        },
-    });
-
     const handleBuildQuery = (key, value, form) => {
         const propName = key=='newProperty' ? value : form.newProperty;
         const n = type == 'object' ? propName : name;
@@ -41,7 +24,6 @@ const AddThings = ({info, collection, thing}) => {
     return(
         <AddEditContent
             collection={collection}
-            errorTxt={errorTxt}
             handleBuildQuery={handleBuildQuery}
             icon={<AddBoxIcon color="primary" />}
             isEdit={false}
@@ -50,6 +32,7 @@ const AddThings = ({info, collection, thing}) => {
                 query: query,
                 propName: '',
             }}
+            thing={thing}
         />
     );
 };

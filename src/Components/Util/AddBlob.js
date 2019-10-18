@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Collapse from '@material-ui/core/Collapse';
 import Dropzone from 'react-dropzone';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 
@@ -14,7 +15,7 @@ const AddBlob = ({cb}) => {
     },
     [blob],
     );
-    console.log('AddBlob');
+
     const handleDropzone = React.useCallback(acceptedFiles => {
         const reader = new FileReader();
         reader.onabort = () => console.log('file reading was aborted');
@@ -29,25 +30,29 @@ const AddBlob = ({cb}) => {
     }, []);
 
     return(
-        <React.Fragment>
-            <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
-                {({getRootProps, getInputProps}) => (
-                    <section>
-                        <div {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            <p>
-                                {'Drag "n" drop some files here, or click to select files'}
-                            </p>
-                        </div>
-                    </section>
-                )}
-            </Dropzone>
-            <Collapse in={Boolean(blob)} timeout="auto" unmountOnExit>
-                <Typography variant="button" color="primary">
-                    {fileName}
-                </Typography>
-            </Collapse>
-        </React.Fragment>
+        <Grid container>
+            <Grid item>
+                <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
+                    {({getRootProps, getInputProps}) => (
+                        <section>
+                            <div {...getRootProps()}>
+                                <input {...getInputProps()} />
+                                <p>
+                                    {'Drag "n" drop some files here, or click to select files'}
+                                </p>
+                            </div>
+                        </section>
+                    )}
+                </Dropzone>
+            </Grid>
+            <Grid item>
+                <Collapse in={Boolean(blob)} timeout="auto" unmountOnExit>
+                    <Typography variant="button" color="primary">
+                        {fileName}
+                    </Typography>
+                </Collapse>
+            </Grid>
+        </Grid>
     );
 };
 
