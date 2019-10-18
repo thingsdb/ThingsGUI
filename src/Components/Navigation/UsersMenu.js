@@ -30,7 +30,7 @@ const UsersMenu = ({user, users}) => {
     }, []);
 
     const handleClickUser = (user) => {
-        ApplicationActions.navigate({path: 'user', index: user});
+        ApplicationActions.navigate({path: 'user', index: user, item: ''});
     };
 
     const users2 =

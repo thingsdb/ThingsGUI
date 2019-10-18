@@ -11,15 +11,17 @@ import {withVlow} from 'vlow';
 
 import SelectScope from './SelectScope';
 import Procedures from './Procedures';
+import CustomTypes from './CustomTypes';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {CollectionActions, CollectionStore} from '../../Stores/CollectionStore';
 import {ProcedureActions, ProcedureStore} from '../../Stores/ProcedureStore';
+import {TypeActions} from '../../Stores/TypeStore';
 import {ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput} from '../Util';
 
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['input']
+    keys: ['match']
 }, {
     store: ProcedureStore,
 }, {
@@ -28,15 +30,15 @@ const withStores = withVlow([{
 
 const tag = '9';
 
-const Query = ({input}) => {
+const Query = ({match}) => {
     const [query, setQuery] = React.useState('');
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState({});
     const [queryInput, setQueryInput] = React.useState('');
 
     React.useEffect(() => {
-        setQueryInput(input);
-    }, [input]);
+        setQueryInput(match.item);
+    }, [match.item]);
 
     const handleInput = (value) => {
         setQueryInput('');
@@ -45,8 +47,9 @@ const Query = ({input}) => {
 
     const handleSubmit = () => {
         CollectionActions.queryEditor(query, scope.value, scope.collectionId, handleOutput, tag);
-        if (query.includes('new_procedure') || query.includes('del_procedure')) {
+        if (query.includes('new_procedure') || query.includes('del_procedure') || query.includes('new_type') || query.includes('del_type')) {
             ProcedureActions.getProcedures(scope.value, tag);
+            TypeActions.getTypes(scope.value, tag);
         }
     };
 
@@ -110,6 +113,9 @@ const Query = ({input}) => {
                     <Grid item xs={12}>
                         <Procedures scope={scope.hasOwnProperty('value') ? scope.value : ''} onSetAsInput={handleSetAsInput} />
                     </Grid>
+                    <Grid item xs={12}>
+                        <CustomTypes scope={scope.hasOwnProperty('value') ? scope.value : ''} onSetAsInput={handleSetAsInput} />
+                    </Grid>
                 </React.Fragment>
             }
         />
@@ -119,7 +125,7 @@ const Query = ({input}) => {
 Query.propTypes = {
 
     /* Application properties */
-    input: ApplicationStore.types.input.isRequired,
+    match: ApplicationStore.types.match.isRequired,
 };
 
 export default withStores(Query);

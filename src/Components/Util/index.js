@@ -3,6 +3,7 @@ import AddBlob from './AddBlob';
 import AddBool from './AddBool';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
+import Chips from './Chips';
 import DrawerLayout from './DrawerLayout';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
@@ -102,6 +103,7 @@ export {
     buildQueryEdit,
     buildQueryRemove,
     CardButton,
+    Chips,
     checkType,
     DrawerLayout,
     ErrorMsg,
