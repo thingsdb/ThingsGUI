@@ -13,18 +13,20 @@ const withStores = withVlow([{
     keys: ['collections']
 }]);
 
-const SelectScope = ({collections, onChangeScope}) => {
+const SelectScope = ({onChangeScope, scope, collections}) => {
     const [index, setIndex] = React.useState(0);
-    const scopes = getScopes(collections);
+    const [scopesObj, scopeNames] = getScopes(collections);
 
     React.useEffect(() => {
-        onChangeScope(scopes[0]);
+        const index = scope==''?0:scopeNames.indexOf(scope);
+        setIndex(index);
+        onChangeScope(scopesObj[index]);
     }, []);
 
     const handleOnChangeScope = ({target}) => {
         const {value} = target;
         setIndex(value);
-        onChangeScope(scopes[value]);
+        onChangeScope(scopesObj[value]);
     };
 
     return (
@@ -32,7 +34,7 @@ const SelectScope = ({collections, onChangeScope}) => {
             title="SCOPE"
             content={
                 <RadioGroup aria-label="scope" name="scope" value={`${index}`} onChange={handleOnChangeScope}>
-                    {scopes.map((s, i) => (
+                    {scopesObj.map((s, i) => (
                         <FormControlLabel key={s.value} value={`${i}`} control={<Radio color='primary' />} label={s.name} />
                     ))}
                 </RadioGroup>
@@ -43,6 +45,7 @@ const SelectScope = ({collections, onChangeScope}) => {
 
 SelectScope.propTypes = {
     onChangeScope: PropTypes.func.isRequired,
+    scope: PropTypes.string.isRequired,
 
     /* Collections properties */
     collections: ThingsdbStore.types.collections.isRequired,

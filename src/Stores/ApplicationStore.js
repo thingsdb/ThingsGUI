@@ -19,7 +19,7 @@ class ApplicationStore extends BaseStore {
     static types = {
         loaded: PropTypes.bool,
         connected: PropTypes.bool,
-        match: PropTypes.shape({path: PropTypes.string, index: PropTypes.number, item: PropTypes.string}),
+        match: PropTypes.shape({path: PropTypes.string, index: PropTypes.number, item: PropTypes.string, scope: PropTypes.string}),
         openEditor: PropTypes.bool,
         input: PropTypes.string,
     }
@@ -31,6 +31,7 @@ class ApplicationStore extends BaseStore {
             path: '',
             index: 0,
             item: '',
+            scope: '',
         },
         openEditor: false,
         input: '',

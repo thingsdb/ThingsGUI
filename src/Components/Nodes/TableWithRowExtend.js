@@ -80,7 +80,7 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode}) => {
                                     ))}
                                     {buttons ? (
                                         buttons(row).map((r, i) => (
-                                            <TableCell key={i} align='right'>
+                                            <TableCell key={i} align='right' style={{borderBottom: isopen?'none':null}}>
                                                 {r}
                                             </TableCell>
                                         ))

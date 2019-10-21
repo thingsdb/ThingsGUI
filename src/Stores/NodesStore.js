@@ -11,6 +11,9 @@ const NodesActions = Vlow.createActions([
     'shutdown',
     'addNode',
     'delNode',
+    'getBackups',
+    'addBackup',
+    'delBackup',
 ]);
 
 // TODO: CALLBACKS
@@ -21,13 +24,15 @@ class NodesStore extends BaseStore {
         nodes: PropTypes.arrayOf(PropTypes.object),
         node: PropTypes.object,
         connectedNode: PropTypes.object,
+        backups: PropTypes.arrayOf(PropTypes.object),
     }
 
     static defaults = {
         counters: {},
         nodes: [],
         node: {},
-        connectedNode: {}
+        connectedNode: {},
+        backups: [],
     }
 
     constructor() {
@@ -135,6 +140,41 @@ class NodesStore extends BaseStore {
             ErrorActions.setMsgError(tag, message.Log);
         });
     }
+
+    onGetBackups(nodeId) {
+        const query = 'backups_info();';
+        this.emit('query', {
+            scope: `@node:${nodeId}`,
+            query
+        }).done((data) => {
+            this.setState({
+                backups: data,
+            });
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+    onAddBackup(nodeId, config, tag, cb) {
+        const query = `new_backup('${config.file}'${config.time ? `, '${config.time}'${config.repeat ? `, ${config.repeat}`:''}`:''});`;
+        this.emit('query', {
+            scope: `@node:${nodeId}`,
+            query
+        }).done((_data) => {
+            cb();
+            this.onGetBackups(nodeId);
+        }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
+    }
+
+    onDelBackup(nodeId, backupId) {
+        const query = `del_backup(${backupId});`;
+        this.emit('query', {
+            scope: `@node:${nodeId}`,
+            query
+        }).done((_data) => {
+            this.onGetBackups(nodeId);
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+
 }
 
 export {NodesActions, NodesStore};

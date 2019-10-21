@@ -36,10 +36,10 @@ const Chips = ({title, items, onAdd, onClick, onDelete}) => {
 
     return (
         <HarmonicCard
-            title={title}
+            title={title.toUpperCase()}
             content={
                 <React.Fragment>
-                    {items ? items.map((listitem, index) => (
+                    {items && items.length ? items.map((listitem, index) => (
                         <Tooltip
                             key={index}
                             disableFocusListener
@@ -61,7 +61,7 @@ const Chips = ({title, items, onAdd, onClick, onDelete}) => {
                                 color="primary"
                             />
                         </Tooltip>
-                    )) : null}
+                    )) : `No ${title}.`}
                 </React.Fragment>
             }
             buttons={

@@ -64,7 +64,6 @@ const Query = ({match}) => {
     const handleSetAsInput = (i) => {
         setQueryInput(i);
     };
-    console.log('QUERY');
 
     return (
         <TitlePage2
@@ -108,7 +107,7 @@ const Query = ({match}) => {
             sideContent={
                 <React.Fragment>
                     <Grid item xs={12}>
-                        <SelectScope onChangeScope={handleOnChangeScope} />
+                        <SelectScope scope={match.scope} onChangeScope={handleOnChangeScope} />
                     </Grid>
                     <Grid item xs={12}>
                         <Procedures scope={scope.hasOwnProperty('value') ? scope.value : ''} onSetAsInput={handleSetAsInput} />

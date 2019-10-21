@@ -6,6 +6,8 @@ import Tabs from '@material-ui/core/Tabs';
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 
+import AddBackup from './AddBackup';
+import Backup from './Backup';
 import Counters from './Counters';
 import CountersReset from './CountersReset';
 import Loglevel from './Loglevel';
@@ -16,7 +18,7 @@ import {NodesActions, NodesStore} from '../../Stores/NodesStore';
 
 const withStores = withVlow([{
     store: NodesStore,
-    keys: ['node', 'counters']
+    keys: ['node', 'counters', 'backups']
 }]);
 
 const useStyles = makeStyles(theme => ({
@@ -30,13 +32,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Node = ({selectedNode, node, counters}) => {
+const Node = ({selectedNode, node, counters, backups}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
-    console.log(counters, node);
 
     React.useEffect(() => {
         NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
+        NodesActions.getBackups(selectedNode.node_id);
     }, [tabIndex]);
 
     const handleChangeTab = (_event, newValue) => {
@@ -50,6 +52,7 @@ const Node = ({selectedNode, node, counters}) => {
             <Tabs value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example">
                 <Tab label="Node Info" />
                 <Tab label="Counters" />
+                <Tab label="Backup" />
             </Tabs>
             {tabIndex === 0 &&
                 <Grid
@@ -88,6 +91,22 @@ const Node = ({selectedNode, node, counters}) => {
                     )}
                 </Grid>
             }
+            {tabIndex === 2 &&
+                <Grid
+                    className={classes.counters}
+                    container
+                    spacing={3}
+                >
+                    <Grid item xs={12}>
+                        <Backup nodeId={selectedNode.node_id} backups={backups} />
+                    </Grid>
+                    {offline ? null : (
+                        <Grid item xs={12}>
+                            <AddBackup node={node} />
+                        </Grid>
+                    )}
+                </Grid>
+            }
         </React.Fragment>
     ) : null;
 };
@@ -98,6 +117,7 @@ Node.propTypes = {
     /* nodes properties */
     node: NodesStore.types.node.isRequired,
     counters: NodesStore.types.counters.isRequired,
+    backups: NodesStore.types.backups.isRequired,
 
 };
 

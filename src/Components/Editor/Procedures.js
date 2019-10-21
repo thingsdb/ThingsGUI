@@ -37,7 +37,7 @@ const Procedures = ({scope, onSetAsInput, procedures}) => {
 
     return (
         <Chips
-            title="PROCEDURES"
+            title="procedures"
             items={p}
             onAdd={handleClickAddProcedure}
             onClick={handleClickProcedure}

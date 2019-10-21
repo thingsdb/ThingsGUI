@@ -69,7 +69,7 @@ const UserAccess = ({user, collections}) => {
         return ({[scope]: s});
     };
 
-    const scopes = getScopes(collections);
+    const scopes = getScopes(collections)[0];
 
     //TODO CHECK IF SCOPES ARE CORRECT
 

@@ -1,10 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { amber } from '@material-ui/core/colors';
-import { makeStyles} from '@material-ui/core/styles';
 
 import AddToken from './AddToken';
 import RemoveExpired from './RemoveExpired';

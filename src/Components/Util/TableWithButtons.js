@@ -33,7 +33,7 @@ const TableWithButtons = ({header, rows, rowClick, buttons}) => {
                             {header.map((h, i) => (
                                 <TableCell key={h.ky} align={i?'right':'left'}>
                                     <Typography component="div">
-                                        <Box fontFamily="Monospace" fontSize="h6.fontSize" m={1}>
+                                        <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
                                             {row[h.ky]}
                                         </Box>
                                     </Typography>

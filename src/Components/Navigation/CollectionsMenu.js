@@ -27,7 +27,7 @@ const CollectionsMenu = ({collections}) => {
     }, []);
 
     const handleClickCollection = (collection) => {
-        ApplicationActions.navigate({path: 'collection', index: collection, item: ''});
+        ApplicationActions.navigate({path: 'collection', index: collection, item: '', scope:''});
     };
 
     return (

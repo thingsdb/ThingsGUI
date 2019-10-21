@@ -14,6 +14,8 @@ import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import TableWithButtons from './TableWithButtons';
 import ThingsTree from './ThingsTree';
+import TimePicker from './TimePicker';
+import TimePeriodPicker from './TimePeriodPicker';
 import TitlePage from './TitlePage';
 import TitlePage2 from './TitlePage2';
 import TopBarMenu from './TopBarMenu';
@@ -88,10 +90,16 @@ const isObjectEmpty = (obj) => Object.entries(obj).length === 0 && obj.construct
 const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
 
 const getScopes = (collections) => [
-    {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
-    {name: 'Node', value: '@node', collectionId: null},
-    ...collections.map((c) => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
+    [
+        {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
+        {name: 'Node', value: '@node', collectionId: null},
+        ...collections.map((c) => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
+    ],
+    [
+        '@thingsdb', '@node', ...collections.map((c) => (`@collection:${c.name}`))
+    ]
 ];
+
 
 export {
     Add1DArray,
@@ -120,6 +128,8 @@ export {
     TableWithButtons,
     thingValue,
     TopBarMenu,
+    TimePicker,
+    TimePeriodPicker,
     TitlePage,
     TitlePage2,
     TreeBranch,

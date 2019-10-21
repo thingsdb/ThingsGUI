@@ -8,22 +8,21 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Switch from '@material-ui/core/Switch';
 
-import { ErrorMsg, SimpleModal, TimePeriodPicker } from '../Util';
-import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-
+import { ErrorMsg, SimpleModal, TimePicker, TimePeriodPicker } from '../Util';
+import {NodesActions} from '../../Stores/NodesStore';
 
 const initialState = {
     show: false,
     form: {},
     switches: {
-        description: false,
-        expirationTime: false,
+        time: false,
+        repeat: false,
     },
 };
 
-const tag = '15';
+const tag = '20';
 
-const AddToken = ({user}) => {
+const AddBackup = ({node}) => {
     const [state, setState] = React.useState(initialState);
     const {show, form, switches} = state;
 
@@ -31,12 +30,13 @@ const AddToken = ({user}) => {
         setState({
             show: true,
             form: {
-                description: '',
-                expirationTime: '',
+                file: '',
+                time: '',
+                repeat: '',
             },
             switches: {
-                description: false,
-                expirationTime: false,
+                time: false,
+                repeat: false,
             },
         });
     };
@@ -61,19 +61,27 @@ const AddToken = ({user}) => {
         });
     };
 
-    const handleExpirationTime = (expirationTime) => {
+    const handleTime = (time) => {
         setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {expirationTime: expirationTime});
+            const updatedForm = Object.assign({}, prevState.form, {time: time});
+            return {...prevState, form: updatedForm, errors: {}};
+        });
+    };
+
+    const handleRepeat = (repeat) => {
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {repeat: repeat});
             return {...prevState, form: updatedForm, errors: {}};
         });
     };
 
     const handleClickOk = () => {
-        ThingsdbActions.newToken(
+        NodesActions.addBackup(
+            node.node_id,
             {
-                name: user.name,
-                expirationTime: switches.expirationTime ? '(now() + ' + form.expirationTime + ')' : null,
-                description: switches.description ? form.description : null,
+                file: form.file,
+                time: switches.time ? form.time : null,
+                repeat: switches.repeat ? form.repeat : null,
             },
             tag,
             () => setState({...state, show: false})
@@ -85,49 +93,53 @@ const AddToken = ({user}) => {
             <ErrorMsg tag={tag} />
             <List>
                 <ListItem>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="file"
+                        label="File"
+                        type="text"
+                        value={form.file}
+                        spellCheck={false}
+                        onChange={handleOnChange}
+                        placeholder="/tmp/example.tar.gz"
+                        fullWidth
+                    />
+                </ListItem>
+                <ListItem>
                     <FormControlLabel
                         control={(
                             <Switch
-                                checked={switches.description}
+                                checked={switches.time}
                                 color="primary"
-                                id="description"
+                                id="time"
                                 onChange={handleSwitch}
                             />
                         )}
-                        label="Add description [optional]"
+                        label="Add time [optional]"
                     />
                 </ListItem>
-                <Collapse in={switches.description} timeout="auto" unmountOnExit>
+                <Collapse in={switches.time} timeout="auto" unmountOnExit>
                     <ListItem>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="description"
-                            label="Description"
-                            type="text"
-                            value={form.description}
-                            spellCheck={false}
-                            onChange={handleOnChange}
-                            fullWidth
-                        />
+                        <TimePicker cb={handleTime} />
                     </ListItem>
                 </Collapse>
                 <ListItem>
                     <FormControlLabel
                         control={(
                             <Switch
-                                checked={switches.expirationTime}
+                                checked={switches.repeat}
                                 color="primary"
-                                id="expirationTime"
+                                id="repeat"
                                 onChange={handleSwitch}
                             />
                         )}
-                        label="Add expiration time [optional]"
+                        label="Add continuous repeat [optional]"
                     />
                 </ListItem>
-                <Collapse in={switches.expirationTime} timeout="auto" unmountOnExit>
+                <Collapse in={switches.repeat} timeout="auto" unmountOnExit>
                     <ListItem>
-                        <TimePeriodPicker cb={handleExpirationTime} />
+                        <TimePeriodPicker cb={handleRepeat} />
                     </ListItem>
                 </Collapse>
             </List>
@@ -139,10 +151,10 @@ const AddToken = ({user}) => {
         <SimpleModal
             button={
                 <Button variant="outlined" onClick={handleClickOpen}>
-                    {'Add token'}
+                    {'Add backup'}
                 </Button>
             }
-            title="New token"
+            title="New backup"
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
@@ -152,8 +164,8 @@ const AddToken = ({user}) => {
     );
 };
 
-AddToken.propTypes = {
-    user: PropTypes.object.isRequired,
+AddBackup.propTypes = {
+    node: PropTypes.object.isRequired,
 };
 
-export default AddToken;
+export default AddBackup;

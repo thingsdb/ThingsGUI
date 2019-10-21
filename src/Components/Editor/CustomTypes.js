@@ -49,7 +49,7 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
     console.log(typesArr);
     return (
         <Chips
-            title="CUSTOM TYPES"
+            title="custom types"
             items={typesArr}
             onAdd={handleClickAddType}
             onClick={handleClickType}

@@ -79,8 +79,7 @@ const Thing = ({thing, collection, things, info}) => {
     };
 
     const handleClickOpenEditor = () => {
-        ApplicationActions.navigate({path: 'query', index: 0, item: type==='object' ? `#${thingId}` : `#${thingId}.${fancyName(info.name)}`});
-        // ApplicationActions.openEditor(type==='object' ? `#${thingId}` : `#${thingId}.${fancyName(info.name)}`);
+        ApplicationActions.navigate({path: 'query', index: 0, item: type==='object' ? `#${thingId}` : `#${thingId}.${fancyName(info.name)}`, scope:`@collection:${collection.name}`});
     };
 
     // type and value
