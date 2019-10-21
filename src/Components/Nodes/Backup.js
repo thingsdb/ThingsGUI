@@ -8,15 +8,15 @@ import RemoveBackup from './RemoveBackup';
 
 
 const Backup = ({backups, nodeId}) => {
-
+    console.log(backups);
     const rows = backups;
     const header = [
         {ky: 'id', label: 'ID'},
         {ky: 'file_template', label: 'File template'},
         {ky: 'next_run', label: 'Next run at'},
         {ky: 'repeat', label: 'Repeat after (sec)'},
-        {ky: 'last_result_code', label: 'Result code'},
-        {ky: 'last_result_message', label: 'Result message'},
+        {ky: 'result_code', label: 'Result code'},
+        {ky: 'result_message', label: 'Result message'},
 
     ];
     const handleRowClick = () => null;
