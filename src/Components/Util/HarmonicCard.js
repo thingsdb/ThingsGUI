@@ -11,7 +11,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 
 const HarmonicCard = ({title, content, buttons}) => {
-    const [expanded, setExpanded] = React.useState(false);
+    const [expanded, setExpanded] = React.useState(true);
 
     function handleExpandClick() {
         setExpanded(!expanded);

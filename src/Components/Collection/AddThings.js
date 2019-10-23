@@ -3,7 +3,7 @@ import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBoxOutlined';
 
 import AddEditContent from './AddEditContent';
-import {buildInput, buildQueryAdd, onlyNums} from '../Util';
+import {buildInput, buildQueryAdd} from '../Util';
 
 const AddThings = ({info, collection, thing}) => {
     const {id, name, type} = info;
@@ -14,6 +14,7 @@ const AddThings = ({info, collection, thing}) => {
 
         const input = key=='value' ? value : form.value;
         const dataType = key=='dataType' ? value : form.dataType;
+        console.log(input, dataType);
         const val = buildInput(input, dataType);
         return buildQueryAdd(id, n, val, type);
 

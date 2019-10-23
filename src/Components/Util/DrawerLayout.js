@@ -28,33 +28,33 @@ const useStyles = makeStyles((theme) => ({
     },
     full: {
         position: 'relative',
-        transition: theme.transitions.create(['width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
+        // transition: theme.transitions.create(['width'], {
+        //     easing: theme.transitions.easing.sharp,
+        //     duration: theme.transitions.duration.leavingScreen,
+        // }),
         zIndex: 1,
     },
     shrink: {
-        transition: theme.transitions.create(['width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
+        // transition: theme.transitions.create(['width'], {
+        //     easing: theme.transitions.easing.sharp,
+        //     duration: theme.transitions.duration.enteringScreen,
+        // }),
     },
     drawerOpen: {
         position: 'relative',
         right: 0,
-        transition: theme.transitions.create(['width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
+        // transition: theme.transitions.create(['width'], {
+        //     easing: theme.transitions.easing.sharp,
+        //     duration: theme.transitions.duration.leavingScreen,
+        // }),
         height: '100vh',
         zIndex: 2,
     },
     drawerClose: {
-        transition: theme.transitions.create(['width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
+        // transition: theme.transitions.create(['width'], {
+        //     easing: theme.transitions.easing.sharp,
+        //     duration: theme.transitions.duration.enteringScreen,
+        // }),
         marginRight: '0px',
         height: '100vh',
     },

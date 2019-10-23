@@ -21,7 +21,7 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
     }, [scope]);
 
     const makeTypeInstanceInit = (key) => customTypes[key] ?
-        `${key}({${Object.entries(customTypes[key]).map(([k, v]) =>`${k}: ${makeTypeInstanceInit(v)}` )}})`
+        `${key}{${Object.entries(customTypes[key]).map(([k, v]) =>`${k}: ${makeTypeInstanceInit(v)}` )}}`
         : `<${key}>`;
 
     const handleClickType = (index) => {
@@ -36,7 +36,7 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
     };
 
     const handleClickAddType = () => {
-        onSetAsInput('new_type("...", ...)');
+        onSetAsInput('set_type(new_type("..."), {...})');
     };
 
     const t = scope == '@node' || scope == '@thingsdb' || scope == '' ? [] : customTypes;

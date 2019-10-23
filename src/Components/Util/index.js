@@ -64,7 +64,8 @@ const buildInput = (input, type) => {
                         : type == 'nil' ? 'nil'
                             : type == 'blob' ? 'blob'
                                 : type == 'closure' ? input
-                                    : '';
+                                    : input != '' ? input
+                                        : '';
 };
 
 const buildQueryAdd = (id, name, value, type) => {

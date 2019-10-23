@@ -28,13 +28,29 @@ const useStyles = makeStyles(theme => ({
         height: '600px',
     },
     counters: {
-        padding: theme.spacing(1),
+        marginTop: theme.spacing(2),
     },
+    backup: {
+        marginTop: theme.spacing(2),
+        overflowY: 'auto',
+        maxHeight: '400px',
+    }
 }));
 
 const Node = ({selectedNode, node, counters, backups}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
+
+    React.useEffect(() => {
+        const setPoll = setInterval(
+            () => {
+                NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
+                NodesActions.getBackups(selectedNode.node_id);
+            }, 5000);
+        return () => {
+            clearInterval(setPoll);
+        };
+    }, []);
 
     React.useEffect(() => {
         NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
@@ -93,7 +109,7 @@ const Node = ({selectedNode, node, counters, backups}) => {
             }
             {tabIndex === 2 &&
                 <Grid
-                    className={classes.counters}
+                    className={classes.backup}
                     container
                     spacing={3}
                 >

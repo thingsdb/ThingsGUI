@@ -5,44 +5,78 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import {withVlow} from 'vlow';
 
+import {TypeActions, TypeStore} from '../../Stores/TypeStore';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-import {Add1DArray, AddBlob, AddBool, ErrorMsg, onlyNums, SimpleModal} from '../Util';
+import {Add1DArray, AddBlob, AddBool, buildInput, buildQueryAdd, buildQueryEdit, ErrorMsg, onlyNums, SimpleModal} from '../Util';
 
+const withStores = withVlow([{
+    store: TypeStore,
+    keys: ['customTypes']
+}]);
 
 // ([\|]+[a-zA-Z\s,]+[\|]|[\|+\|])+[[:print:]][,](?!\|)
 
 
-const dataTypes = [
-    'string',
-    'number',
-    'array',
-    'object',
-    'set',
-    'closure',
-    'boolean',
-    'nil',
-    'blob',
-];
+// const dataTypes = [
+//     'string',
+//     'number',
+//     'array',
+//     'object',
+//     'set',
+//     'closure',
+//     'boolean',
+//     'nil',
+//     'blob',
+// ];
 
-const initialState = {
-    show: false,
-    errors: {},
-    form: {
-        queryString: '',
-        newProperty: '',
-        value: '',
-        dataType: dataTypes[0],
-        blob: '',
-    },
-};
+// const initialState = {
+//     show: false,
+//     errors: {},
+//     form: {
+//         queryString: '',
+//         newProperty: '',
+//         value: '',
+//         dataType: dataTypes[0],
+//         blob: '',
+//     },
+// };
 
 const tag = '1';
 
-const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init, thing}) => {
+const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init, thing, customTypes}) => {
+    const dataTypes = [
+        'string',
+        'number',
+        'array',
+        'object',
+        'set',
+        'closure',
+        'boolean',
+        'nil',
+        'blob',
+        ...Object.keys(customTypes)
+    ];
+
+    const initialState = {
+        show: false,
+        errors: {},
+        form: {
+            queryString: '',
+            newProperty: '',
+            value: '',
+            dataType: dataTypes[0],
+            blob: '',
+        },
+    };
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
+
+    React.useEffect(() => {
+        TypeActions.getTypes(`@collection:${collection.name}`, tag);
+    }, []);
 
     const errorTxt = {
         queryString: () => '',
@@ -85,13 +119,48 @@ const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init,
         setState(initialState);
     };
 
+    const standardType = (type, customTypes) => {
+        switch (true) {
+        case type.includes('str'):
+            return('\'\'');
+        case type.includes('int'):
+            return('0');
+        case type.includes('float'):
+            return('0.0');
+        case type.includes('bool'):
+            return('false');
+        case type.includes('thing'):
+            return('{}');
+        case type.includes('['):
+            return(`[${makeTypeInstanceInit(type.substring(1,type.length-1),customTypes)}]`);
+        default:
+            return '';
+        }
+
+    };
+
+    const makeTypeInstanceInit = (key, customTypes) => customTypes[key] ?
+        `${key}{${Object.entries(customTypes[key]).map(([k, v]) =>`${k}: ${makeTypeInstanceInit(v, customTypes)}` )}}`
+        : standardType(key, customTypes);
+
+
     const handleOnChange = ({target}) => {
         const {name, value} = target;
-        const q = handleBuildQuery(name, value, form);
-        setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {[name]: value, queryString: q});
-            return {...prevState, form: updatedForm, errors: {}};
-        });
+        if (name == 'dataType' && customTypes.hasOwnProperty(value)) { // incase of custom-type
+            const val = makeTypeInstanceInit(value, customTypes);
+            const q = handleBuildQuery(name, value, {...form, value: val});
+            setState(prevState => {
+                const updatedForm = Object.assign({}, prevState.form, {dataType: value, value: val, queryString: q});
+                return {...prevState, form: updatedForm};
+            });
+        } else {
+            const q = handleBuildQuery(name, value, form);
+            setState(prevState => {
+                const updatedForm = Object.assign({}, prevState.form, {[name]: value, queryString: q});
+                return {...prevState, form: updatedForm, errors: {}};
+            });
+
+        }
     };
 
     const handleArrayItems = (items) => {
@@ -120,7 +189,6 @@ const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init,
 
     const handleClickOk = () => {
         const err = Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
-        console.log('clickOk', err);
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
             if (form.dataType== 'blob') {
@@ -304,6 +372,9 @@ AddEditContent.propTypes = {
     isEdit: PropTypes.bool.isRequired,
     init: PropTypes.object.isRequired,
     thing: PropTypes.any,
+
+    // types store
+    customTypes: TypeStore.types.customTypes.isRequired,
 };
 
-export default AddEditContent;
+export default withStores(AddEditContent);

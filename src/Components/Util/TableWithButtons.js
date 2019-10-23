@@ -16,12 +16,14 @@ const TableWithButtons = ({header, rows, rowClick, buttons}) => {
 
     return (
         <React.Fragment>
-            <Table>
+            <Table padding="none">
                 <TableHead>
                     <TableRow>
                         {header.map((h, i) => (
                             <TableCell key={h.ky} align={i?'right':'left'}>
-                                {h.label}
+                                <Typography variant="caption" color="primary" align={i?'right':'left'}>
+                                    {h.label}
+                                </Typography>
                             </TableCell>
                         ))}
                         <TableCell />
