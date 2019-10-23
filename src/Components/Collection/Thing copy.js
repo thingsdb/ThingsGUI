@@ -111,7 +111,7 @@ const Thing = ({thing, collection, things, info}) => {
                         ) : null}
                         {canEdit ? (
                             <EditThing
-                                info={info}
+                                info={{...info, type: type}}
                                 scope={`@collection:${collection.name}`}
                             />
                         ) : null}

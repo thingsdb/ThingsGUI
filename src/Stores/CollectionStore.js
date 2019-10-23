@@ -47,9 +47,8 @@ class CollectionStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRawQuery(collection, thingId, q, tag, cb) {
+    onRawQuery(scope, thingId, q, tag, cb) {
         const query = `${q} #${thingId}`;
-        const scope = `@collection:${collection.name}`;
         this.emit('query', {
             query,
             scope
@@ -85,9 +84,8 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onBlob(collection, thingId, q, blob, tag, cb) {
+    onBlob(scope, thingId, q, blob, tag, cb) {
         const query = `${q} #${thingId}`;
-        const scope = `@collection:${collection.name}`;
         this.emit('queryBlob', {
             query,
             scope,

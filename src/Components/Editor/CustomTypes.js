@@ -46,7 +46,7 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
             definition: JSON.stringify(customTypes[name])
         }
     ))];
-    console.log(typesArr);
+
     return (
         <Chips
             title="custom types"

@@ -87,7 +87,7 @@ const ThingRoot = ({things, collection}) => {
                                     name: '',
                                     type: 'object',
                                 }}
-                                scope={`@collection:${collection.name}`}
+                                collection={collection}
                                 thing={things[collection.collection_id]}
                             />
                         </ListItemIcon>

@@ -1,0 +1,135 @@
+import PropTypes from 'prop-types';
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
+
+const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) => {
+    const [query, setQuery] = React.useState('');
+
+    React.useEffect(() => {
+        handleBuildQuery(action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type);
+    }, [action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type]);
+
+    React.useEffect(() => {
+        cb(query);
+    }, [query]);
+
+
+    const handleBuildQuery = (action, childVal, childType, childIndex, childId, childName, parentId, parentName, parentType) => {
+        let val;
+        let q = '';
+        switch (action) {
+        case 'add':
+            if (customTypes.hasOwnProperty(childType)) { // incase of custom-type
+                childVal = makeTypeInstanceInit(childType, customTypes);
+            }
+            val = buildInput(childVal, childType);
+            q = buildQueryAdd(parentId, childName, parentName, val, parentType);
+            break;
+        case 'edit':
+            val = buildInput(childVal, childType);
+            q = buildQueryEdit(parentId,  childName, parentName, val, parentType, childIndex);
+            break;
+        case 'remove':
+            q = buildQueryRemove(parentName, parentId, childName, childIndex, childId);
+            break;
+        }
+        setQuery(q);
+    };
+
+
+    const standardType = (type, customTypes) => {
+        switch (true) {
+        case type.includes('str'):
+            return('\'\'');
+        case type.includes('int'):
+            return('0');
+        case type.includes('float'):
+            return('0.0');
+        case type.includes('bool'):
+            return('false');
+        case type.includes('thing'):
+            return('{}');
+        case type.includes('['):
+            return(`[${makeTypeInstanceInit(type.substring(1,type.length-1),customTypes)}]`);
+        default:
+            return '';
+        }
+
+    };
+
+    const makeTypeInstanceInit = (key, customTypes) => customTypes[key] ?
+        `${key}{${Object.entries(customTypes[key]).map(([k, v]) =>`${k}: ${makeTypeInstanceInit(v, customTypes)}` )}}`
+        : standardType(key, customTypes);
+
+    const buildInput = (input, type) => {
+        return type === 'array' ? `[${input}]`
+            : type == 'object' ? '{}'
+                : type == 'string' ? `'${input}'`
+                    : type == 'number' || type == 'boolean' ? `${input}`
+                        : type == 'set' ? 'set({})'
+                            : type == 'nil' ? 'nil'
+                                : type == 'blob' ? 'blob'
+                                    : type == 'closure' ? input
+                                        : input != '' ? input
+                                            : '';
+    };
+
+    const buildQueryAdd = (id, childName, parentName, value, type) => {
+        return type==='array' ? `#${id}.${parentName}.push(${value});`
+            : type==='object' ? `#${id}.${childName} = ${value};`
+                : type==='set' ? `#${id}.${parentName}.add(${value});`
+                    : '';
+    };
+
+    const buildQueryEdit = (id,  childName, parentName, value, type, index) => {
+        return type==='array' ? `#${id}.${parentName}[${index}] = ${value};`
+            : type==='object' ? `#${id}.${childName} = ${value};`
+                : '';
+    };
+
+    const buildQueryRemove = (parentName, parentId, childName, index, id) => {
+        return index == null ? `#${parentId}.del('${childName}');`
+            : childName == '$' ? `#${parentId}.${parentName}.remove(#${parentId}.${parentName}.find(|s| (s.id()==${id}) ));`
+                : `#${parentId}.${childName}.splice(${index}, 1);`; //childname or prentname???
+    };
+
+    return(
+        <React.Fragment>
+            {showQuery ? (
+                <TextField
+                    margin="dense"
+                    name="queryString"
+                    label="Query"
+                    type="text"
+                    value={query}
+                    fullWidth
+                    multiline
+                    InputProps={{
+                        readOnly: true,
+                        disableUnderline: true,
+                    }}
+                    inputProps={{
+                        style: {
+                            fontFamily: 'monospace',
+                        },
+                    }}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
+            ) : null}
+        </React.Fragment>
+    );
+};
+
+BuildQueryString.propTypes = {
+    action: PropTypes.string.isRequired,
+    cb: PropTypes.func.isRequired,
+    child: PropTypes.object.isRequired,
+    customTypes: PropTypes.object.isRequired,
+    parent: PropTypes.object.isRequired,
+    showQuery: PropTypes.bool.isRequired,
+
+};
+
+export default BuildQueryString;

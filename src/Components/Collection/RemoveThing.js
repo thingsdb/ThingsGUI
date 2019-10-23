@@ -2,16 +2,20 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
-import DialogContentText from '@material-ui/core/DialogContentText';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Typography from '@material-ui/core/Typography';
 
-import { buildQueryRemove, ErrorMsg, SimpleModal } from '../Util';
+import BuildQueryString from './BuildQueryString';
+import { ErrorMsg, SimpleModal } from '../Util';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
 const tag = '3';
-const RemoveThing = ({collection, thing, info}) => {
+const RemoveThing = ({scope, thing, info}) => {
     const [show, setShow] = React.useState(false);
+    const [query, setQuery] = React.useState('');
     const handleClickOpen = () => {
         setShow(true);
     };
@@ -21,18 +25,10 @@ const RemoveThing = ({collection, thing, info}) => {
     };
 
     const handleClickOk = () => {
-        const queryString = buildQueryRemove(
-            info.hasOwnProperty('parentName') ? info.parentName : null,
-            info.id,
-            info.name,
-            info.hasOwnProperty('index') ? info.index : null,
-            thing && thing['#']
-        );
-
         CollectionActions.rawQuery(
-            collection,
+            scope,
             info.id,
-            queryString,
+            query,
             tag,
             () => {
                 ThingsdbActions.getCollections();
@@ -41,14 +37,42 @@ const RemoveThing = ({collection, thing, info}) => {
         setShow(false);
     };
 
-
+    const handleQuery = (q) => {
+        setQuery(q);
+    };
 
     const Content = (
         <React.Fragment>
-            <ErrorMsg tag={tag} />
-            <DialogContentText>
-                {'Are you sure?'}
-            </DialogContentText>
+            <List>
+                <ListItem>
+                    <BuildQueryString
+                        action="remove"
+                        cb={handleQuery}
+                        child={{
+                            id: thing && thing['#'],
+                            index: info.hasOwnProperty('index') ? info.index : null,
+                            name: info.name,
+                            type: null,
+                            val: null,
+                        }}
+                        customTypes={{}}
+                        parent={{
+                            id: info.id,
+                            name: info.hasOwnProperty('parentName') ? info.parentName : null,
+                            type: null,
+                        }}
+                        showQuery
+                    />
+                </ListItem>
+                <ListItem>
+                    <ErrorMsg tag={tag} />
+                </ListItem>
+                <ListItem>
+                    <Typography>
+                        {'Are you sure?'}
+                    </Typography>
+                </ListItem>
+            </List>
         </React.Fragment>
     );
 
@@ -76,7 +100,7 @@ RemoveThing. defaultProp = {
 };
 
 RemoveThing.propTypes = {
-    collection: PropTypes.object.isRequired,
+    scope: PropTypes.string.isRequired,
     thing: PropTypes.any,
     info: PropTypes.object.isRequired,
 };

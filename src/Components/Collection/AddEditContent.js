@@ -7,46 +7,20 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {withVlow} from 'vlow';
 
+import BuildQueryString from './BuildQueryString';
 import {TypeActions, TypeStore} from '../../Stores/TypeStore';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
-import {Add1DArray, AddBlob, AddBool, buildInput, buildQueryAdd, buildQueryEdit, ErrorMsg, onlyNums, SimpleModal} from '../Util';
+import {Add1DArray, AddBlob, AddBool, ErrorMsg, onlyNums, SimpleModal} from '../Util';
 
 const withStores = withVlow([{
     store: TypeStore,
     keys: ['customTypes']
 }]);
 
-// ([\|]+[a-zA-Z\s,]+[\|]|[\|+\|])+[[:print:]][,](?!\|)
-
-
-// const dataTypes = [
-//     'string',
-//     'number',
-//     'array',
-//     'object',
-//     'set',
-//     'closure',
-//     'boolean',
-//     'nil',
-//     'blob',
-// ];
-
-// const initialState = {
-//     show: false,
-//     errors: {},
-//     form: {
-//         queryString: '',
-//         newProperty: '',
-//         value: '',
-//         dataType: dataTypes[0],
-//         blob: '',
-//     },
-// };
-
 const tag = '1';
 
-const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init, thing, customTypes}) => {
+const AddEditContent = ({scope, icon, isEdit, info, thing, customTypes}) => {
     const dataTypes = [
         'string',
         'number',
@@ -75,7 +49,7 @@ const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init,
     const {show, errors, form} = state;
 
     React.useEffect(() => {
-        TypeActions.getTypes(`@collection:${collection.name}`, tag);
+        TypeActions.getTypes(scope, tag);
     }, []);
 
     const errorTxt = {
@@ -106,8 +80,8 @@ const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init,
             show: true,
             errors: {},
             form: {
-                queryString: init.query,
-                newProperty: init.propName?init.propName:'',
+                queryString: '',
+                newProperty: isEdit ? info.name:'',
                 value: '',
                 dataType: isEdit?dataTypes[0]:info.type == 'set' ?  dataTypes[3] : dataTypes[0],
                 blob: '',
@@ -119,55 +93,25 @@ const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init,
         setState(initialState);
     };
 
-    const standardType = (type, customTypes) => {
-        switch (true) {
-        case type.includes('str'):
-            return('\'\'');
-        case type.includes('int'):
-            return('0');
-        case type.includes('float'):
-            return('0.0');
-        case type.includes('bool'):
-            return('false');
-        case type.includes('thing'):
-            return('{}');
-        case type.includes('['):
-            return(`[${makeTypeInstanceInit(type.substring(1,type.length-1),customTypes)}]`);
-        default:
-            return '';
-        }
-
-    };
-
-    const makeTypeInstanceInit = (key, customTypes) => customTypes[key] ?
-        `${key}{${Object.entries(customTypes[key]).map(([k, v]) =>`${k}: ${makeTypeInstanceInit(v, customTypes)}` )}}`
-        : standardType(key, customTypes);
-
-
     const handleOnChange = ({target}) => {
         const {name, value} = target;
-        if (name == 'dataType' && customTypes.hasOwnProperty(value)) { // incase of custom-type
-            const val = makeTypeInstanceInit(value, customTypes);
-            const q = handleBuildQuery(name, value, {...form, value: val});
-            setState(prevState => {
-                const updatedForm = Object.assign({}, prevState.form, {dataType: value, value: val, queryString: q});
-                return {...prevState, form: updatedForm};
-            });
-        } else {
-            const q = handleBuildQuery(name, value, form);
-            setState(prevState => {
-                const updatedForm = Object.assign({}, prevState.form, {[name]: value, queryString: q});
-                return {...prevState, form: updatedForm, errors: {}};
-            });
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {[name]: value});
+            return {...prevState, form: updatedForm, errors: {}};
+        });
+    };
 
-        }
+    const handleQuery = (q) => {
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {queryString: q});
+            return {...prevState, form: updatedForm};
+        });
     };
 
     const handleArrayItems = (items) => {
         const value = `${items}`;
-        const q = handleBuildQuery('value', value, form);
         setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {value: value, queryString: q});
+            const updatedForm = Object.assign({}, prevState.form, {value: value});
             return {...prevState, form: updatedForm, errors: {}};
         });
     };
@@ -180,9 +124,8 @@ const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init,
     };
 
     const handleBool = (bool) => {
-        const q = handleBuildQuery('value', bool, form);
         setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {value: bool, queryString: q});
+            const updatedForm = Object.assign({}, prevState.form, {value: bool});
             return {...prevState, form: updatedForm, errors: {}};
         });
     };
@@ -193,7 +136,7 @@ const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init,
         if (!Object.values(err).some(d => d)) {
             if (form.dataType== 'blob') {
                 CollectionActions.blob(
-                    collection,
+                    scope,
                     info.id,
                     form.queryString,
                     form.blob,
@@ -205,7 +148,7 @@ const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init,
                 );
             } else {
                 CollectionActions.rawQuery(
-                    collection,
+                    scope,
                     info.id,
                     form.queryString,
                     tag,
@@ -225,36 +168,29 @@ const AddEditContent = ({collection, handleBuildQuery, icon, isEdit, info, init,
     const blobInputField = form.dataType == 'blob';
     const closureInputField = form.dataType == 'closure';
 
-
     const Content = (
         <React.Fragment>
             <ErrorMsg tag={tag} />
             <List>
-                <Collapse in={Boolean(form.queryString)} timeout="auto" unmountOnExit>
+                <Collapse in={Boolean(form.queryString)} timeout="auto">
                     <ListItem>
-                        <TextField
-                            margin="dense"
-                            name="queryString"
-                            label="Query"
-                            type="text"
-                            value={form.queryString}
-                            spellCheck={false}
-                            onChange={handleOnChange}
-                            fullWidth
-                            error={Boolean(errors.queryString)}
-                            multiline
-                            InputProps={{
-                                readOnly: true,
-                                disableUnderline: true,
+                        <BuildQueryString
+                            action={isEdit?'edit':'add'}
+                            cb={handleQuery}
+                            child={{
+                                id: null,
+                                index: info.index,
+                                name: isEdit?info.name:form.newProperty,
+                                type: form.dataType,
+                                val: form.value,
                             }}
-                            inputProps={{
-                                style: {
-                                    fontFamily: 'monospace',
-                                },
+                            customTypes={customTypes}
+                            parent={{
+                                id: info.id,
+                                name: info.name,
+                                type: isEdit?info.parentType:info.type,
                             }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
+                            showQuery
                         />
                     </ListItem>
                 </Collapse>
@@ -366,11 +302,9 @@ AddEditContent.defaultProps = {
 
 AddEditContent.propTypes = {
     info: PropTypes.object.isRequired,
-    collection: PropTypes.object.isRequired,
-    handleBuildQuery: PropTypes.func.isRequired,
+    scope: PropTypes.string.isRequired,
     icon: PropTypes.object.isRequired,
     isEdit: PropTypes.bool.isRequired,
-    init: PropTypes.object.isRequired,
     thing: PropTypes.any,
 
     // types store

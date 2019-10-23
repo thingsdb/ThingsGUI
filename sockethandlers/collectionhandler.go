@@ -83,10 +83,10 @@ func CleanupTmp(tmp *util.TmpFiles) (int, bool, util.Message) {
 func Watch(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
 	scope := data.Scope
 	ids := data.Ids // strings.Split(data.Ids, ",")
-	idsInt := make([]interface{}, 0)
+	idsInt := make([]uint64, 0)
 	for _, v := range ids {
-		id, _ := strconv.ParseUint(v, 10, 16)
-		idsInt = append(idsInt, uint16(id))
+		id, _ := strconv.ParseUint(v, 10, 64)
+		idsInt = append(idsInt, id)
 	}
 	resp, err := client.Connection.Watch(scope, idsInt, timeout)
 	message := util.Msg(err, http.StatusInternalServerError)
@@ -96,10 +96,10 @@ func Watch(client *Client, data Data, timeout uint16) (int, interface{}, util.Me
 func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
 	scope := data.Scope
 	ids := data.Ids //s strings.Split(data.Ids, ",")
-	idsInt := make([]interface{}, 0)
+	idsInt := make([]uint64, 0)
 	for _, v := range ids {
-		id, _ := strconv.ParseUint(v, 10, 16)
-		idsInt = append(idsInt, uint16(id))
+		id, _ := strconv.ParseUint(v, 10, 64)
+		idsInt = append(idsInt, id)
 	}
 	resp, err := client.Connection.Unwatch(scope, idsInt, timeout)
 

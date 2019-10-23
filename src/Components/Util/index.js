@@ -55,38 +55,6 @@ const thingValue = (type, thing) => {
 const onlyNums = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;
 // const closureSyntax = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;
 
-const buildInput = (input, type) => {
-    return type === 'array' ? `[${input}]`
-        : type == 'object' ? '{}'
-            : type == 'string' ? `'${input}'`
-                : type == 'number' || type == 'boolean' ? `${input}`
-                    : type == 'set' ? 'set({})'
-                        : type == 'nil' ? 'nil'
-                            : type == 'blob' ? 'blob'
-                                : type == 'closure' ? input
-                                    : input != '' ? input
-                                        : '';
-};
-
-const buildQueryAdd = (id, name, value, type) => {
-    return type==='array' ? `#${id}.${name}.push(${value});`
-        : type==='object' ? `#${id}.${name} = ${value};`
-            : type==='set' ? `#${id}.${name}.add(${value});`
-                : '';
-};
-
-const buildQueryEdit = (id, name, value, type, index) => {
-    return type==='array' ? `#${id}.${name}[${index}] = ${value};`
-        : type==='object' ? `#${id}.${name} = ${value};`
-            : '';
-};
-
-const buildQueryRemove = (parent, parentId, name, index, id) => {
-    return index == null ? `#${parentId}.del('${name}');`
-        : name == '$' ? `#${parentId}.${parent}.remove(#${parentId}.${parent}.find(|s| (s.id()==${id}) ));`
-            : `#${parentId}.${name}.splice(${index}, 1);`;
-};
-
 const isObjectEmpty = (obj) => Object.entries(obj).length === 0 && obj.constructor === Object;
 const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
 
@@ -107,10 +75,6 @@ export {
     AddBlob,
     AddBool,
     Buttons,
-    buildInput,
-    buildQueryAdd,
-    buildQueryEdit,
-    buildQueryRemove,
     CardButton,
     Chips,
     checkType,
