@@ -1,19 +1,22 @@
 /* eslint-disable react/no-multi-comp */
-
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import BuildIcon from '@material-ui/icons/Build';
 import CodeIcon from '@material-ui/icons/Code';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Fab from '@material-ui/core/Fab';
+import Grid from '@material-ui/core/Grid';
 import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 
-import AddThings from './AddThings';
-import EditThing from './EditThing';
 import RemoveThing from './RemoveThing';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
-import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import {Buttons, checkType, thingValue, TreeBranch, WatchThings} from '../Util';
+import {CollectionStore} from '../../Stores/CollectionStore';
+import {TitlePage2, ThingsTree, WatchThings} from '../Util';
 
 
 const withStores = withVlow([{
@@ -32,66 +35,118 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
-const ThingActions = ({rootId, rootName, rootType, rootThing, val, scope, info}) => {
+const ThingActions = ({child, parent, thing, scope}) => {
     const classes = useStyles();
 
+    const [show, setShow] = React.useState(false);
+    const [query, setQuery] = React.useState('');
+    const handleClickOpen = () => {
+        setShow(true);
+    };
+
+    const handleClickClose = () => {
+        setShow(false);
+    };
+
+    const handleClickOk = () => {
+        // CollectionActions.rawQuery(
+        //     scope,
+        //     parent.id,
+        //     query,
+        //     tag,
+        //     () => {
+        //         ThingsdbActions.getCollections();
+        //     }
+        // );
+        setShow(false);
+    };
+
+    const handleQuery = (q) => {
+        setQuery(q);
+    };
+
     // thing info
-    const isTuple = rootType === 'array' && info.parentType === 'array';
-
-    const fancyName = (name, index) => index !== null ? name + `[${index}]` : name;
-
-
-
+    const isTuple = parent.type === 'array' && child.type  === 'array';
 
     const handleClickOpenEditor = () => {
-        ApplicationActions.navigate({path: 'query', index: 0, item: type==='object' ? `#${thingId}` : `#${thingId}.${fancyName(info.name)}`, scope: scope});
+        ApplicationActions.navigate({path: 'query', index: 0, item: child.type==='object' ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
     };
 
     // buttons visible
 
-    const canAdd = (type === 'array' || type === 'object' || type === 'set') && !isTuple;
-    const canEdit = info.name !== '$';
+    const hasButtons = !(child.type === 'array' && child.name === '$' || child.name === '>' || parent.isTuple);
+    const canAdd = (child.type === 'array' || child.type === 'object' || child.type === 'set') && !isTuple;
+    const canEdit = child.name !== '$';
+    const canToggle = child.type === 'object' || child.type === 'array' || child.type === 'set' || child.type === 'closure';
     const canWatch = thing && thing.hasOwnProperty('#');
 
     return (
         <React.Fragment>
-
-            <ListItemIcon>
-                <Buttons>
-                    {canAdd ? (
-                        <AddThings
-                            info={{
-                                name: fancyName(info.name),
-                                id: rootId,
-                                type: rootType
-                            }}
-                            scope={scope}
-                            thing={currThing}
-                        />
-                    ) : null}
-                    {canEdit ? (
-                        <EditThing
-                            info={{...info, type: rootType}}
-                            scope={scope}
-                        />
-                    ) : null}
-                    <RemoveThing
-                        scope={scope}
-                        thing={currThing}
-                        info={info}
+            <ButtonBase onClick={handleClickOpen} >
+                <BuildIcon color="primary" />
+            </ButtonBase>
+            <Dialog
+                open={show}
+                onClose={handleClickClose}
+                aria-labelledby="form-dialog-title"
+                fullWidth
+                maxWidth="md"
+            >
+                <DialogContent>
+                    <TitlePage2
+                        preTitle='Details of:'
+                        title={child.name}
+                        content={
+                            <React.Fragment>
+                                <Grid item xs={12}>
+                                    <ThingsTree tree={thing} />
+                                </Grid>
+                            </React.Fragment>
+                        }
+                        sideContent={
+                            <React.Fragment>
+                                <Grid item xs={12} container alignContent="center">
+                                    <RemoveThing
+                                        scope={scope}
+                                        thing={thing}
+                                        child={{
+                                            index: child.index,
+                                            name: child.name,
+                                        }}
+                                        parent={{
+                                            id: parent.id,
+                                            name: parent.name,
+                                            type: parent.type
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} container alignContent="center">
+                                    <Fab color="secondary" onClick={handleClickOpenEditor} >
+                                        <CodeIcon fontSize="large" />
+                                    </Fab>
+                                </Grid>
+                                {canWatch ? (
+                                    <Grid item xs={12} container alignContent="center">
+                                        <WatchThings
+                                            buttonIsFab
+                                            scope={scope}
+                                            thingId={child.id}
+                                        />
+                                    </Grid>
+                                ) : null}
+                            </React.Fragment>
+                        }
                     />
-                    {canWatch ? (
-                        <WatchThings
-                            scope={scope}
-                            thingId={rootId}
-                        />
-                    ) : null}
-                    <ButtonBase onClick={handleClickOpenEditor} >
-                        <CodeIcon color="primary" />
-                    </ButtonBase>
-                </Buttons>
-            </ListItemIcon>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClickClose} color="primary">
+                        {'Cancel'}
+                    </Button>
+                    <Button onClick={handleClickOk} color="primary">
+                        {'Ok'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 };
@@ -102,19 +157,20 @@ ThingActions.defaultProps = {
 
 
 ThingActions.propTypes = {
+    scope: PropTypes.string.isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
-    collection: PropTypes.object.isRequired,
-    info: PropTypes.shape({
+    parent: PropTypes.shape({
+        id: PropTypes.number,
         name: PropTypes.string,
+        type: PropTypes.string,
+        isTuple: PropTypes.bool,
+    }).isRequired,
+    child: PropTypes.shape({
         id: PropTypes.number,
         index: PropTypes.number,
-        parentName: PropTypes.string,
-        parentType: PropTypes.string,
-        isParentTuple: PropTypes.bool,
+        name: PropTypes.string,
+        type: PropTypes.string,
     }).isRequired,
-
-    /* collection properties */
-    things: CollectionStore.types.things.isRequired,
 };
 
 export default withStores(ThingActions);

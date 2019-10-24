@@ -17,23 +17,24 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ThingsTree = ({item, tree, info}) => {
+const ThingsTree = ({item, tree, child, parent}) => {
     const classes = useStyles();
 
-    // is root if info is still null
-    const thing = info === null ? tree : item;
+    // is root if parent is still null
+    const thing = parent === null ? tree : item;
 
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
-        const infoNew = {
-            name: k,
-            index: i,
-        };
         return k === '#' ? null : (
             <div key={i ? i : k} className={classes.nested}>
                 <ThingsTree
                     item={v}
                     tree={tree}
-                    info={infoNew}
+                    parent={{
+                        name: k,
+                    }}
+                    child={{
+                        index: i,
+                    }}
                 />
             </div>
         );
@@ -42,7 +43,7 @@ const ThingsTree = ({item, tree, info}) => {
     const renderChildren = () => {
         const isArray = Array.isArray(thing);
         return isArray ?
-            thing.map((t, i) => renderThing([info ? `${info.name}` : `${i}`, t, i]))
+            thing.map((t, i) => renderThing([parent ? `${parent.name}` : `${i}`, t, i]))
             :
             Object.entries((item && tree[item['#']]) || thing || {}).map(renderThing);
     };
@@ -55,8 +56,8 @@ const ThingsTree = ({item, tree, info}) => {
     const canToggle = type === 'object' || type === 'array' || type === 'set';
 
     // naming
-    const fancyName = (n) => info.index !== null ? n + `[${info.index}]` : n;
-    const name = info && fancyName(info.name);
+    const fancyName = (n) => child.index !== null ? n + `[${child.index}]` : n;
+    const name = parent && fancyName(parent.name);
 
     return (
         <TreeBranch name={name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} />
@@ -65,13 +66,19 @@ const ThingsTree = ({item, tree, info}) => {
 
 ThingsTree.defaultProps = {
     item: null,
-    info: null,
+    child: null,
+    parent: null,
 };
 
 ThingsTree.propTypes = {
     item: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     tree: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
-    info: PropTypes.object,
+    child: PropTypes.shape({
+        index: PropTypes.number,
+    }),
+    parent: PropTypes.shape({
+        name: PropTypes.string,
+    }),
 };
 
 export default ThingsTree;

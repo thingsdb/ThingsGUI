@@ -68,13 +68,15 @@ const ThingRoot = ({things, collection}) => {
                                 id={collection.collection_id}
                                 thing={v}
                                 collection={collection}
-                                info={{
-                                    name: k,
+                                parent={{
                                     id: collection.collection_id,
+                                    name: 'root',
+                                    type: 'object',
+                                    isTuple: false,
+                                }}
+                                child={{
+                                    name: k,
                                     index: null,
-                                    parentName: 'root',
-                                    parentType: 'object',
-                                    isParentTuple: false,
                                 }}
                             />
                         </React.Fragment>
@@ -82,7 +84,11 @@ const ThingRoot = ({things, collection}) => {
                     <ListItem className={classes.listItem}>
                         <ListItemIcon className={classes.icon}>
                             <AddThings
-                                info={{
+                                child={{
+                                    index: null,
+                                    name: '',
+                                }}
+                                parent={{
                                     id: collection.collection_id,
                                     name: '',
                                     type: 'object',
@@ -93,6 +99,7 @@ const ThingRoot = ({things, collection}) => {
                         </ListItemIcon>
                         <ListItemIcon className={classes.icon}>
                             <WatchThings
+                                buttonIsFab={false}
                                 scope={`@collection:${collection.name}`}
                                 thingId={collection.collection_id}
                             />

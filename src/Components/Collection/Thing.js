@@ -3,17 +3,12 @@
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PropTypes from 'prop-types';
 import React from 'react';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import CodeIcon from '@material-ui/icons/Code';
 import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 
-import AddThings from './AddThings';
-import EditThing from './EditThing';
-import RemoveThing from './RemoveThing';
-import {ApplicationActions} from '../../Stores/ApplicationStore';
+import ThingActions from './ThingActions';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import {Buttons, checkType, thingValue, TreeBranch, WatchThings} from '../Util';
+import {checkType, thingValue, TreeBranch} from '../Util';
 
 
 const withStores = withVlow([{
@@ -33,32 +28,33 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const Thing = ({thing, collection, things, info}) => {
+const Thing = ({thing, collection, things, parent, child}) => {
     const classes = useStyles();
 
     // thing info
-    const isTuple = type === 'array' && info.parentType === 'array';
-    const thingId = thing && thing['#'] || info.id;
+    const isTuple = type === 'array' && parent.type === 'array';
+    const thingId = thing && thing['#'] || parent.id;
     const currThing = thing && things[thing['#']] || thing;
-    const fancyName = (n) => info.index !== null ? n + `[${info.index}]` : n;
+    const fancyName = (n) => child.index !== null ? n + `[${child.index}]` : n;
 
 
     const renderThing = ([k, v, i=null]) => {
-        const infoNew = {
-            name: fancyName(k),
-            id: thingId,
-            index: i,
-            parentName: info.name == '$' ? info.parentName : info.name,
-            parentType: type,
-            isParentTuple: isTuple,
-        };
         return k === '#' ? null : (
             <div key={i ? i : k} className={classes.nested}>
                 <Thing
                     collection={collection}
                     things={things}
                     thing={v}
-                    info={infoNew}
+                    parent={{
+                        id: thingId,
+                        name: child.name == '$' ? parent.name : child.name,
+                        type: type,
+                        isTuple: isTuple,
+                    }}
+                    child={{
+                        name: fancyName(k),
+                        index: i,
+                    }}
                 />
             </div>
         );
@@ -67,7 +63,7 @@ const Thing = ({thing, collection, things, info}) => {
     const renderChildren = () => {
         const isArray = Array.isArray(thing);
         return isArray ?
-            thing.map((t, i) => renderThing([`${info.name}`, t, i]))
+            thing.map((t, i) => renderThing([`${child.name}`, t, i]))
             :
             Object.entries(currThing || {}).map(renderThing);
     };
@@ -78,60 +74,28 @@ const Thing = ({thing, collection, things, info}) => {
         }
     };
 
-    const handleClickOpenEditor = () => {
-        ApplicationActions.navigate({path: 'query', index: 0, item: type==='object' ? `#${thingId}` : `#${thingId}.${fancyName(info.name)}`, scope:`@collection:${collection.name}`});
-    };
 
     // type and value
     const type = checkType(thing);
     const val = thingValue(type, thing);
 
-    // buttons visible
-    const hasButtons = !(type === 'array' && info.name === '$' || info.name === '>' || info.isParentTuple);
-    const canAdd = (type === 'array' || type === 'object' || type === 'set') && !isTuple;
-    const canEdit = info.name !== '$';
     const canToggle = type === 'object' || type === 'array' || type === 'set' || type === 'closure';
-    const canWatch = thing && thing.hasOwnProperty('#');
 
     return (
-        <TreeBranch name={fancyName(info.name)} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
-            {hasButtons ? (
-                <ListItemIcon>
-                    <Buttons>
-                        {canAdd ? (
-                            <AddThings
-                                info={{
-                                    name: fancyName(info.name),
-                                    id: thingId,
-                                    type: type
-                                }}
-                                scope={`@collection:${collection.name}`}
-                                thing={currThing}
-                            />
-                        ) : null}
-                        {canEdit ? (
-                            <EditThing
-                                info={info}
-                                scope={`@collection:${collection.name}`}
-                            />
-                        ) : null}
-                        <RemoveThing
-                            scope={`@collection:${collection.name}`}
-                            thing={currThing}
-                            info={info}
-                        />
-                        {canWatch ? (
-                            <WatchThings
-                                scope={`@collection:${collection.name}`}
-                                thingId={thingId}
-                            />
-                        ) : null}
-                        <ButtonBase onClick={handleClickOpenEditor} >
-                            <CodeIcon color="primary" />
-                        </ButtonBase>
-                    </Buttons>
-                </ListItemIcon>
-            ) : null}
+        <TreeBranch name={fancyName(child.name)} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
+            <ListItemIcon>
+                <ThingActions
+                    child={{
+                        id: thing && thing['#']||null,
+                        index: child.index,
+                        name: fancyName(child.name),
+                        type: type,
+                    }}
+                    parent={parent}
+                    thing={currThing}
+                    scope={`@collection:${collection.name}`}
+                />
+            </ListItemIcon>
         </TreeBranch>
     );
 };
@@ -144,13 +108,15 @@ Thing.defaultProps = {
 Thing.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     collection: PropTypes.object.isRequired,
-    info: PropTypes.shape({
-        name: PropTypes.string,
+    parent: PropTypes.shape({
         id: PropTypes.number,
+        name: PropTypes.string,
+        type: PropTypes.string,
+        isTuple: PropTypes.bool,
+    }).isRequired,
+    child: PropTypes.shape({
+        name: PropTypes.string,
         index: PropTypes.number,
-        parentName: PropTypes.string,
-        parentType: PropTypes.string,
-        isParentTuple: PropTypes.bool,
     }).isRequired,
 
     /* collection properties */

@@ -4,14 +4,15 @@ import AddBoxIcon from '@material-ui/icons/AddBoxOutlined';
 
 import AddEditContent from './AddEditContent';
 
-const AddThings = ({info, scope, thing}) => {
+const AddThings = ({child, parent, scope, thing}) => {
 
     return(
         <AddEditContent
             scope={scope}
             icon={<AddBoxIcon color="primary" />}
             isEdit={false}
-            info={info}
+            child={child}
+            parent={parent}
             thing={thing}
         />
     );
@@ -22,7 +23,15 @@ AddThings.defaultProps = {
 },
 
 AddThings.propTypes = {
-    info: PropTypes.object.isRequired,
+    child: PropTypes.shape({
+        index: PropTypes.number,
+        name: PropTypes.string,
+    }).isRequired,
+    parent: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        type: PropTypes.string,
+    }).isRequired,
     scope: PropTypes.string.isRequired,
     thing: PropTypes.any,
 };

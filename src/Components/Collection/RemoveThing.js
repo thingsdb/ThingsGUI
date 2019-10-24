@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
+import Fab from '@material-ui/core/Fab';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
@@ -13,7 +14,7 @@ import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
 
 const tag = '3';
-const RemoveThing = ({scope, thing, info}) => {
+const RemoveThing = ({scope, thing, child, parent}) => {
     const [show, setShow] = React.useState(false);
     const [query, setQuery] = React.useState('');
     const handleClickOpen = () => {
@@ -27,7 +28,7 @@ const RemoveThing = ({scope, thing, info}) => {
     const handleClickOk = () => {
         CollectionActions.rawQuery(
             scope,
-            info.id,
+            parent.id,
             query,
             tag,
             () => {
@@ -50,15 +51,15 @@ const RemoveThing = ({scope, thing, info}) => {
                         cb={handleQuery}
                         child={{
                             id: thing && thing['#'],
-                            index: info.hasOwnProperty('index') ? info.index : null,
-                            name: info.name,
+                            index: child.hasOwnProperty('index') ? child.index : null,
+                            name: child.name,
                             type: null,
                             val: null,
                         }}
                         customTypes={{}}
                         parent={{
-                            id: info.id,
-                            name: info.hasOwnProperty('parentName') ? info.parentName : null,
+                            id: parent.id,
+                            name: parent.hasOwnProperty('name') ? parent.name : null,
                             type: null,
                         }}
                         showQuery
@@ -76,14 +77,14 @@ const RemoveThing = ({scope, thing, info}) => {
         </React.Fragment>
     );
 
-    const title = info.hasOwnProperty('index') && info.index!=null ? `Remove ${info.name}[${info.index}]` : `Remove ${info.name}`;
+    const title = child.hasOwnProperty('index') && child.index!=null ? `Remove ${parent.name}[${child.index}]` : `Remove ${child.name}`;
 
     return(
         <SimpleModal
             button={
-                <ButtonBase onClick={handleClickOpen} >
-                    <DeleteIcon color="primary" />
-                </ButtonBase>
+                <Fab color="secondary" onClick={handleClickOpen} >
+                    <DeleteIcon fontSize="large" />
+                </Fab>
             }
             title={title}
             open={show}
@@ -95,14 +96,22 @@ const RemoveThing = ({scope, thing, info}) => {
     );
 };
 
-RemoveThing. defaultProp = {
+RemoveThing.defaultProps = {
     thing: null,
 };
 
 RemoveThing.propTypes = {
     scope: PropTypes.string.isRequired,
-    thing: PropTypes.any,
-    info: PropTypes.object.isRequired,
+    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
+    child: PropTypes.shape({
+        index: PropTypes.number,
+        name: PropTypes.string,
+    }).isRequired,
+    parent: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        type: PropTypes.string,
+    }).isRequired,
 };
 
 export default RemoveThing;

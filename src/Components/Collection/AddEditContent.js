@@ -20,7 +20,7 @@ const withStores = withVlow([{
 
 const tag = '1';
 
-const AddEditContent = ({scope, icon, isEdit, info, thing, customTypes}) => {
+const AddEditContent = ({scope, icon, isEdit, child, parent, thing, customTypes}) => {
     const dataTypes = [
         'string',
         'number',
@@ -81,9 +81,9 @@ const AddEditContent = ({scope, icon, isEdit, info, thing, customTypes}) => {
             errors: {},
             form: {
                 queryString: '',
-                newProperty: isEdit ? info.name:'',
+                newProperty: isEdit ? child.name:'',
                 value: '',
-                dataType: isEdit?dataTypes[0]:info.type == 'set' ?  dataTypes[3] : dataTypes[0],
+                dataType: isEdit?dataTypes[0]:parent.type == 'set' ?  dataTypes[3] : dataTypes[0],
                 blob: '',
             },
         });
@@ -137,7 +137,7 @@ const AddEditContent = ({scope, icon, isEdit, info, thing, customTypes}) => {
             if (form.dataType== 'blob') {
                 CollectionActions.blob(
                     scope,
-                    info.id,
+                    parent.id,
                     form.queryString,
                     form.blob,
                     tag,
@@ -149,7 +149,7 @@ const AddEditContent = ({scope, icon, isEdit, info, thing, customTypes}) => {
             } else {
                 CollectionActions.rawQuery(
                     scope,
-                    info.id,
+                    parent.id,
                     form.queryString,
                     tag,
                     () => {
@@ -161,7 +161,7 @@ const AddEditContent = ({scope, icon, isEdit, info, thing, customTypes}) => {
         }
     };
 
-    const addNewProperty = !(info.type == 'array' || info.type == 'set' || isEdit);
+    const addNewProperty = !(parent.type == 'array' || parent.type == 'set' || isEdit);
     const singleInputField = form.dataType == 'number' || form.dataType == 'string';
     const multiInputField = form.dataType == 'array';
     const booleanInputField = form.dataType == 'boolean';
@@ -179,16 +179,16 @@ const AddEditContent = ({scope, icon, isEdit, info, thing, customTypes}) => {
                             cb={handleQuery}
                             child={{
                                 id: null,
-                                index: info.index,
-                                name: isEdit?info.name:form.newProperty,
+                                index: child.index,
+                                name: isEdit?child.name:form.newProperty,
                                 type: form.dataType,
                                 val: form.value,
                             }}
                             customTypes={customTypes}
                             parent={{
-                                id: info.id,
-                                name: info.name,
-                                type: isEdit?info.parentType:info.type,
+                                id: parent.id,
+                                name: parent.name,
+                                type: parent.type,
                             }}
                             showQuery
                         />
@@ -223,7 +223,7 @@ const AddEditContent = ({scope, icon, isEdit, info, thing, customTypes}) => {
                         SelectProps={{native: true}}
                     >
                         {dataTypes.map(d => (
-                            <option key={d} value={d} disabled={info.type=='set'&&d!='object'} >
+                            <option key={d} value={d} disabled={parent.type=='set'&&d!='object'} >
                                 {d}
                             </option>
                         ))}
@@ -286,7 +286,7 @@ const AddEditContent = ({scope, icon, isEdit, info, thing, customTypes}) => {
                     {icon}
                 </ButtonBase>
             }
-            title={isEdit?(info.index!=null ? `Edit ${info.name}[${info.index}]` : `Edit ${info.name}`):'Add Thing'}
+            title={isEdit?(child.index!=null ? `Edit ${parent.name}[${child.index}]` : `Edit ${child.name}`):'Add Thing'}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
@@ -301,7 +301,15 @@ AddEditContent.defaultProps = {
 },
 
 AddEditContent.propTypes = {
-    info: PropTypes.object.isRequired,
+    child: PropTypes.shape({
+        index: PropTypes.number,
+        name: PropTypes.string,
+    }).isRequired,
+    parent: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        type: PropTypes.string,
+    }).isRequired,
     scope: PropTypes.string.isRequired,
     icon: PropTypes.object.isRequired,
     isEdit: PropTypes.bool.isRequired,

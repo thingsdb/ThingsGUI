@@ -5,20 +5,29 @@ import EditIcon from '@material-ui/icons/EditOutlined';
 import AddEditContent from './AddEditContent';
 
 
-const EditThing = ({info, scope}) => {
+const EditThing = ({child, parent, scope}) => {
 
     return(
         <AddEditContent
             scope={scope}
             icon={<EditIcon color="primary" />}
             isEdit
-            info={info}
+            child={child}
+            parent={parent}
         />
     );
 };
 
 EditThing.propTypes = {
-    info: PropTypes.object.isRequired,
+    child: PropTypes.shape({
+        index: PropTypes.number,
+        name: PropTypes.string,
+    }).isRequired,
+    parent: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        type: PropTypes.string,
+    }).isRequired,
     scope: PropTypes.string.isRequired,
 };
 
