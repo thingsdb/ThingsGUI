@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import Fab from '@material-ui/core/Fab';
 import List from '@material-ui/core/List';

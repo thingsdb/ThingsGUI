@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
-import AddThings from './AddThings';
+import ThingActions from './ThingActions';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import {EventStore} from '../../Stores/BaseStore';
 import {WatchThings} from '../Util';
@@ -83,10 +83,12 @@ const ThingRoot = ({things, collection}) => {
                     ))}
                     <ListItem className={classes.listItem}>
                         <ListItemIcon className={classes.icon}>
-                            <AddThings
+                            <ThingActions
                                 child={{
+                                    id: null,
                                     index: null,
                                     name: '',
+                                    type: '',
                                 }}
                                 parent={{
                                     id: collection.collection_id,
@@ -95,13 +97,6 @@ const ThingRoot = ({things, collection}) => {
                                 }}
                                 scope={`@collection:${collection.name}`}
                                 thing={things[collection.collection_id]}
-                            />
-                        </ListItemIcon>
-                        <ListItemIcon className={classes.icon}>
-                            <WatchThings
-                                buttonIsFab={false}
-                                scope={`@collection:${collection.name}`}
-                                thingId={collection.collection_id}
                             />
                         </ListItemIcon>
                         {Object.entries(things[collection.collection_id]).length<2 ? (

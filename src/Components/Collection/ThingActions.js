@@ -8,61 +8,108 @@ import CodeIcon from '@material-ui/icons/Code';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Divider from '@material-ui/core/Divider';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import {withVlow} from 'vlow';
-import {makeStyles} from '@material-ui/core/styles';
 
+import Edit from './Edit';
 import RemoveThing from './RemoveThing';
 import {ApplicationActions} from '../../Stores/ApplicationStore';
-import {CollectionStore} from '../../Stores/CollectionStore';
-import {TitlePage2, ThingsTree, WatchThings} from '../Util';
+import {CollectionActions, CollectionStore} from '../../Stores/CollectionStore';
+import {ThingsdbActions} from '../../Stores/ThingsdbStore';
+import {TypeActions, TypeStore} from '../../Stores/TypeStore';
+import {ErrorMsg, WatchThings} from '../Util';
 
 
 const withStores = withVlow([{
     store: CollectionStore,
     keys: ['things']
+}, {
+    store: TypeStore,
+    keys: ['customTypes']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
-    listItem: {
-        margin: 0,
-        padding: 0,
-    },
-}));
+const tag = '1';
 
+const ThingActions = ({child, parent, thing, scope, customTypes}) => {
+    const dataTypes = [
+        'string',
+        'number',
+        'array',
+        'object',
+        'set',
+        'closure',
+        'boolean',
+        'nil',
+        'blob',
+        ...Object.keys(customTypes)
+    ];
 
-const ThingActions = ({child, parent, thing, scope}) => {
-    const classes = useStyles();
-
-    const [show, setShow] = React.useState(false);
-    const [query, setQuery] = React.useState('');
-    const handleClickOpen = () => {
-        setShow(true);
+    const initialState = {
+        errors: {},
+        show: false,
+        query: '',
+        blob: '',
     };
+    const [state, setState] = React.useState(initialState);
+    const {show, query, blob} = state;
+
+    React.useEffect(() => {
+        TypeActions.getTypes(scope, tag);
+    }, []);
+
+
+    const handleClickOpen = () => {
+        setState({
+            show: true,
+            errors: {},
+            query: '',
+            blob: '',
+        });
+    };
+
 
     const handleClickClose = () => {
-        setShow(false);
+        setState({...state, show: false});
     };
+
+    const handleQuery = (q, b) => {
+        setState({...state, query: q, blob: b});
+    };
+
 
     const handleClickOk = () => {
-        // CollectionActions.rawQuery(
-        //     scope,
-        //     parent.id,
-        //     query,
-        //     tag,
-        //     () => {
-        //         ThingsdbActions.getCollections();
-        //     }
-        // );
-        setShow(false);
-    };
-
-    const handleQuery = (q) => {
-        setQuery(q);
+        const err = {};//Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
+        setState({...state, errors: err});
+        if (!Object.values(err).some(d => d)) {
+            if (blob) {
+                CollectionActions.blob(
+                    scope,
+                    child['id']||parent.id,
+                    query,
+                    blob,
+                    tag,
+                    () => {
+                        ThingsdbActions.getCollections();
+                        setState({...state, show: false});
+                    },
+                );
+            } else {
+                CollectionActions.rawQuery(
+                    scope,
+                    child['id']||parent.id,
+                    query,
+                    tag,
+                    () => {
+                        ThingsdbActions.getCollections();
+                        setState({...state, show: false});
+                    }
+                );
+            }
+        }
     };
 
     // thing info
@@ -77,7 +124,6 @@ const ThingActions = ({child, parent, thing, scope}) => {
     const hasButtons = !(child.type === 'array' && child.name === '$' || child.name === '>' || parent.isTuple);
     const canAdd = (child.type === 'array' || child.type === 'object' || child.type === 'set') && !isTuple;
     const canEdit = child.name !== '$';
-    const canToggle = child.type === 'object' || child.type === 'array' || child.type === 'set' || child.type === 'closure';
     const canWatch = thing && thing.hasOwnProperty('#');
 
     return (
@@ -85,68 +131,85 @@ const ThingActions = ({child, parent, thing, scope}) => {
             <ButtonBase onClick={handleClickOpen} >
                 <BuildIcon color="primary" />
             </ButtonBase>
-            <Dialog
-                open={show}
-                onClose={handleClickClose}
-                aria-labelledby="form-dialog-title"
-                fullWidth
-                maxWidth="md"
-            >
-                <DialogContent>
-                    <TitlePage2
-                        preTitle='Details of:'
-                        title={child.name}
-                        content={
-                            <React.Fragment>
+            {show ? (
+                <Dialog
+                    open={show}
+                    onClose={handleClickClose}
+                    aria-labelledby="form-dialog-title"
+                    fullWidth
+                    maxWidth="sm"
+                >
+                    <DialogContent>
+                        <Grid container spacing={1} alignItems="center" justify="center">
+                            <Grid container spacing={1} item xs={10}>
                                 <Grid item xs={12}>
-                                    <ThingsTree tree={thing} />
+                                    <Typography variant="body1" >
+                                        {'Detail view of:'}
+                                    </Typography>
+                                    <Typography variant="h4" color='primary'>
+                                        {child.name||parent.name||'Root'}
+                                    </Typography>
                                 </Grid>
-                            </React.Fragment>
-                        }
-                        sideContent={
-                            <React.Fragment>
-                                <Grid item xs={12} container alignContent="center">
-                                    <RemoveThing
-                                        scope={scope}
+                                <Grid item xs={12}>
+                                    <ErrorMsg tag={tag} />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Edit
+                                        cb={handleQuery}
+                                        customTypes={customTypes}
+                                        dataTypes={dataTypes}
                                         thing={thing}
-                                        child={{
-                                            index: child.index,
-                                            name: child.name,
-                                        }}
-                                        parent={{
-                                            id: parent.id,
-                                            name: parent.name,
-                                            type: parent.type
-                                        }}
+                                        child={child}
+                                        parent={parent}
                                     />
                                 </Grid>
+                            </Grid>
+                            <Grid container spacing={1} item xs={2}>
+                                {hasButtons &&
+                                    <Grid item xs={12} container alignContent="center">
+                                        <RemoveThing
+                                            scope={scope}
+                                            thing={thing}
+                                            child={{
+                                                index: child.index,
+                                                name: child.name,
+                                            }}
+                                            parent={{
+                                                id: parent.id,
+                                                name: parent.name,
+                                                type: parent.type
+                                            }}
+                                        />
+                                    </Grid>
+                                }
                                 <Grid item xs={12} container alignContent="center">
                                     <Fab color="secondary" onClick={handleClickOpenEditor} >
                                         <CodeIcon fontSize="large" />
                                     </Fab>
                                 </Grid>
-                                {canWatch ? (
+                                {canWatch &&
                                     <Grid item xs={12} container alignContent="center">
                                         <WatchThings
                                             buttonIsFab
                                             scope={scope}
-                                            thingId={child.id}
+                                            thingId={child.id||parent.id}
                                         />
                                     </Grid>
-                                ) : null}
-                            </React.Fragment>
-                        }
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClickClose} color="primary">
-                        {'Cancel'}
-                    </Button>
-                    <Button onClick={handleClickOk} color="primary">
-                        {'Ok'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                                }
+                            </Grid>
+                        </Grid>
+                    </DialogContent>
+                    <Divider />
+                    <DialogActions>
+                        <Button onClick={handleClickClose} color="primary">
+                            {'Cancel'}
+                        </Button>
+                        <Button onClick={handleClickOk} color="primary">
+                            {'Save'}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            ) : null}
         </React.Fragment>
     );
 };
@@ -171,6 +234,9 @@ ThingActions.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
     }).isRequired,
+
+    // types store
+    customTypes: TypeStore.types.customTypes.isRequired,
 };
 
 export default withStores(ThingActions);

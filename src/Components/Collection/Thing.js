@@ -35,7 +35,7 @@ const Thing = ({thing, collection, things, parent, child}) => {
     const isTuple = type === 'array' && parent.type === 'array';
     const thingId = thing && thing['#'] || parent.id;
     const currThing = thing && things[thing['#']] || thing;
-    const fancyName = (n) => child.index !== null ? n + `[${child.index}]` : n;
+    const fancyName = (n, i) => i !== null ? n + `[${i}]` : n;
 
 
     const renderThing = ([k, v, i=null]) => {
@@ -52,7 +52,7 @@ const Thing = ({thing, collection, things, parent, child}) => {
                         isTuple: isTuple,
                     }}
                     child={{
-                        name: fancyName(k),
+                        name: fancyName(k, i),
                         index: i,
                     }}
                 />
@@ -82,13 +82,13 @@ const Thing = ({thing, collection, things, parent, child}) => {
     const canToggle = type === 'object' || type === 'array' || type === 'set' || type === 'closure';
 
     return (
-        <TreeBranch name={fancyName(child.name)} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
+        <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
             <ListItemIcon>
                 <ThingActions
                     child={{
                         id: thing && thing['#']||null,
                         index: child.index,
-                        name: fancyName(child.name),
+                        name: child.name,
                         type: type,
                     }}
                     parent={parent}

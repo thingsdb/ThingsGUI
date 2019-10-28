@@ -47,8 +47,9 @@ const Query = ({match}) => {
 
     const handleSubmit = () => {
         CollectionActions.queryEditor(query, scope.value, scope.collectionId, handleOutput, tag);
-        if (query.includes('new_procedure') || query.includes('del_procedure') || query.includes('new_type') || query.includes('del_type')) {
-            ProcedureActions.getProcedures(scope.value, tag);
+        ProcedureActions.getProcedures(scope.value, tag);
+
+        if (scope.value.includes('collection')) {
             TypeActions.getTypes(scope.value, tag);
         }
     };
