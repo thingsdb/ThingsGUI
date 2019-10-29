@@ -85,15 +85,15 @@ const ThingRoot = ({things, collection}) => {
                         <ListItemIcon className={classes.icon}>
                             <ThingActions
                                 child={{
-                                    id: null,
+                                    id: collection.collection_id,
                                     index: null,
                                     name: '',
-                                    type: '',
+                                    type: 'object',
                                 }}
                                 parent={{
-                                    id: collection.collection_id,
+                                    id: null,
                                     name: '',
-                                    type: 'object',
+                                    type: '',
                                 }}
                                 scope={`@collection:${collection.name}`}
                                 thing={things[collection.collection_id]}

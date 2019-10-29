@@ -20,6 +20,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
         let q = '';
         switch (action) {
         case 'edit':
+            console.log(childVal);
             if (customTypes.hasOwnProperty(childType)) { // incase of custom-type
                 v = makeTypeInstanceInit(childName, childType, customTypes, childVal);
                 val = buildInput(v, childType);
@@ -41,7 +42,9 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
 
 
     const standardType = (name, type, customTypes, childVal) => {
+
         const v = childVal[name]||'';
+        console.log(v, name);
         switch (true) {
         case type.includes('str'):
             return(`'${v}'`);
@@ -61,27 +64,32 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
 
     };
 
-    const makeTypeInstanceInit = (name, type, customTypes, val) => customTypes[type] ?
-        `${type}{${Object.entries(customTypes[type]).map(([k, t]) =>`${k}: ${makeTypeInstanceInit(k, t, customTypes, val)}` )}}`
-        : standardType(name, type, customTypes, val);
+    const makeTypeInstanceInit = (n, t, customTypes, val) => customTypes[t] ?
+        `${top}{${Object.entries(customTypes[t]).map(([k, t]) => {
+            console.log(val);
+            const v = val||val.val;
+            const value = Array.isArray(v)&&(v).length ? (v).find( ({ name, type }) => name === n && type === t)
+                : v;
+            return `${k}: ${makeTypeInstanceInit(k, t, customTypes, value)}`;
+        })}}` : standardType(n, t, customTypes, val);
 
-    const buildInput = (input, type) => {
-        return type === 'array' ? `[${input}]`
-            : type == 'object' ? '{}'
-                : type == 'string' ? `'${input}'`
-                    : type == 'number' || type == 'boolean' ? `${input}`
-                        : type == 'set' ? 'set({})'
-                            : type == 'nil' ? 'nil'
-                                : type == 'blob' ? 'blob'
-                                    : type == 'closure' ? input
-                                        : input != '' ? input
+    const buildInput = (childVal, childType) => {
+        return childType === 'array' ? `[${childVal}]`
+            : childType == 'object' ? '{}'
+                : childType == 'string' ? `'${childVal}'`
+                    : childType == 'number' || childType == 'boolean' ? `${childVal}`
+                        : childType == 'set' ? 'set({})'
+                            : childType == 'nil' ? 'nil'
+                                : childType == 'blob' ? 'blob'
+                                    : childType == 'closure' ? childVal
+                                        : childVal != '' ? childVal
                                             : '';
     };
 
-    const buildQueryAdd = (id, childName, parentName, value, type, index) => {
-        return type==='array' ? (index===null ? `#${id}.${parentName}.push(${value});` : `#${id}.${parentName}[${index}] = ${value};`)
-            : type==='object' ? `#${id}.${childName} = ${value};`
-                : type==='set' ? `#${id}.${parentName}.add(${value});`
+    const buildQueryAdd = (parentId, childName, parentName, value, parentType, childIndex) => {
+        return parentType==='array' ? (childIndex===null ? `#${parentId}.${parentName}.push(${value});` : `#${parentId}.${parentName}[${childIndex}] = ${value};`)
+            : parentType==='object' ? `#${parentId}.${childName} = ${value};`
+                : parentType==='set' ? `#${parentId}.${parentName}.add(${value});`
                     : '';
     };
 
@@ -91,10 +99,10 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
     //             : '';
     // };
 
-    const buildQueryRemove = (parentName, parentId, childName, index, id) => {
-        return index == null ? `#${parentId}.del('${childName}');`
-            : childName == '$' ? `#${parentId}.${parentName}.remove(#${parentId}.${parentName}.find(|s| (s.id()==${id}) ));`
-                : `#${parentId}.${childName}.splice(${index}, 1);`; //childname or prentname???
+    const buildQueryRemove = (parentName, parentId, childName, childIndex, childId) => {
+        return childIndex == null ? `#${parentId}.del('${childName}');`
+            : childName == '$' ? `#${parentId}.${parentName}.remove(#${parentId}.${parentName}.find(|s| (s.id()==${childId}) ));`
+                : `#${parentId}.${childName}.splice(${childIndex}, 1);`; //childname or prentname???
     };
 
     return(

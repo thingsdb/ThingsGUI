@@ -81,9 +81,13 @@ const InputField = ({dataType, error, cb, name}) => {
     );
 };
 
+InputField.defaultProps = {
+    error: '',
+};
+
 InputField.propTypes = {
     dataType: PropTypes.string.isRequired,
-    error: PropTypes.string.isRequired,
+    error: PropTypes.string,
     cb: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
 };

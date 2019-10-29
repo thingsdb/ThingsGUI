@@ -5,97 +5,125 @@ import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import InputField from './InputField';
 
 
-const EditCustom = ({errors, cb, customTypes, type}) => {
-    const [input, setInput] = React.useState({});
-    const [next, setNext] = React.useState(null);
+const EditCustom = ({errors, cb, customTypes, name, type}) => {
+    const [input, setInput] = React.useState({
+        name: name,
+        type: type,
+        val: [],
+    });
+    const [openNext, setOpenNext] = React.useState(false);
     React.useEffect(() => {
         cb(input);
     },
     [JSON.stringify(input || {})],
     );
 
-    const handleVal = (key) => (val) => {
+    React.useEffect(() => {
         setInput(prevInput => {
-            const updatedInput = Object.assign({}, prevInput, {[key]: val});
+            const updatedInput = Object.assign({}, prevInput, {name: name, type: type});
             return updatedInput;
         });
-    };
+    },
+    [name, type],
+    );
 
-    const handleClick = (k, t) => () => {
-        setNext({key:k, type:t});
-    };
-
-    const renderChildren = () => {
-        return (next &&
-            <React.Fragment>
-                <EditCustom
-                    errors={errors}
-                    cb={cb}
-                    customTypes={customTypes}
-                    type={next.type}
-                />
-            </React.Fragment>
-        );
-    };
-
-    const setInputField = (k, t) => {
+    const setType = (t) => {
         let type = '';
         switch (true) {
         case t.includes('str'):
             type='string';
             break;
         case t.includes('int'):
-            type='string';
+            type='number';
             break;
         case t.includes('float'):
-            type='string';
+            type='number';
             break;
         case t.includes('bool'):
-            type='string';
+            type='bool';
             break;
         case t.includes('thing'):
-            return(
-                <Button onClick={handleClick(k, t)}>
-                    {`${k}: ${t}`}
-                </Button>
-            );
+            type='object';
+            break;
         case t.includes('['):
-            return(
-                <Button onClick={handleClick(k, t.substring(1,t.length-1))}>
-                    {`${k}: ${t}`}
-                </Button>
-            );
+            type=t.substring(1,type.length-1);
+            break;
         default:
-            return(
-                <Button onClick={handleClick(k, t)}>
-                    {`${k}: ${t}`}
-                </Button>
-            );
+            type = t;
         }
-
-        return(
-            <InputField name={k} dataType={type} error="" cb={handleVal(k)} />
-        );
-
+        return type;
     };
 
-    const hasNext = Boolean(next);
+    const handleVal = (val) => {
+        setInput({...input, val: val});
+    };
+
+    const handleNext = () => {
+        setOpenNext(true);
+    };
+
+    const handleBack = () => {
+        setOpenNext(false);
+    };
+
+    const handleCustom = (c) => {
+        setInput(prevInput => {
+            let updatedInput;
+            if (prevInput.val) {
+                let b=false;
+                let copy = [...prevInput.val];
+                prevInput.val.map((v, i) => {
+                    if (v.name == c.name) {
+                        copy.splice(i, 1, c);
+                        b=true;
+                    }
+                });
+                updatedInput = b?copy:[...prevInput.val, c];
+            } else {
+                updatedInput = [c];
+            }
+            return {...prevInput, val: updatedInput};
+        });
+    };
+
+    const renderThing = ([k, v]) => {
+        const type = setType(v);
+        return (
+            <React.Fragment key={k}>
+                <EditCustom
+                    errors={errors}
+                    cb={handleCustom}
+                    customTypes={customTypes}
+                    name={k}
+                    type={type}
+                />
+            </React.Fragment>
+        );
+    };
+
+    const renderChildren = () => {
+        return (customTypes[type] && (
+            <React.Fragment>
+                <ListItem>
+                    <ListItemText primary={name} />
+                </ListItem>
+                {Object.entries(customTypes[type]).map(renderThing)}
+            </React.Fragment>
+        ));
+    };
+
+    // const hasNext = Boolean(next);
     return(
         <React.Fragment>
-            <Collapse in={!hasNext} timeout="auto">
-                {customTypes[type] && Object.entries(customTypes[type]).map(([k, t]) => (
-                    <ListItem key={k}>
-                        {setInputField(k, t)}
-                    </ListItem>
-                ))}
-            </Collapse>
-            <Collapse in={hasNext} timeout="auto">
-                {renderChildren()}
-            </Collapse>
+            <ListItem>
+                <InputField name={name} dataType={type} error="" cb={handleVal} />
+            </ListItem>
+            {renderChildren()}
         </React.Fragment>
     );
 };
@@ -107,6 +135,7 @@ EditCustom.propTypes = {
     cb: PropTypes.func.isRequired,
     errors: PropTypes.object.isRequired,
     customTypes: PropTypes.object,
+    name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
 };
 

@@ -49,7 +49,6 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
     ];
 
     const initialState = {
-        errors: {},
         show: false,
         query: '',
         blob: '',
@@ -65,7 +64,6 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
     const handleClickOpen = () => {
         setState({
             show: true,
-            errors: {},
             query: '',
             blob: '',
         });
@@ -82,33 +80,29 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
 
 
     const handleClickOk = () => {
-        const err = {};//Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
-        setState({...state, errors: err});
-        if (!Object.values(err).some(d => d)) {
-            if (blob) {
-                CollectionActions.blob(
-                    scope,
-                    child['id']||parent.id,
-                    query,
-                    blob,
-                    tag,
-                    () => {
-                        ThingsdbActions.getCollections();
-                        setState({...state, show: false});
-                    },
-                );
-            } else {
-                CollectionActions.rawQuery(
-                    scope,
-                    child['id']||parent.id,
-                    query,
-                    tag,
-                    () => {
-                        ThingsdbActions.getCollections();
-                        setState({...state, show: false});
-                    }
-                );
-            }
+        if (blob) {
+            CollectionActions.blob(
+                scope,
+                child.id||parent.id,
+                query,
+                blob,
+                tag,
+                () => {
+                    ThingsdbActions.getCollections();
+                    setState({...state, show: false});
+                },
+            );
+        } else {
+            CollectionActions.rawQuery(
+                scope,
+                child.id||parent.id,
+                query,
+                tag,
+                () => {
+                    ThingsdbActions.getCollections();
+                    setState({...state, show: false});
+                }
+            );
         }
     };
 
@@ -140,7 +134,7 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
                     maxWidth="sm"
                 >
                     <DialogContent>
-                        <Grid container spacing={1} alignItems="center" justify="center">
+                        <Grid container spacing={1}>
                             <Grid container spacing={1} item xs={10}>
                                 <Grid item xs={12}>
                                     <Typography variant="body1" >
