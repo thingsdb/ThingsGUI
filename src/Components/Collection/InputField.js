@@ -47,7 +47,7 @@ const InputField = ({dataType, error, cb, name}) => {
                 <TextField
                     margin="dense"
                     name={name}
-                    label={name}
+                    // label={name}
                     type="text"
                     value={val}
                     spellCheck={false}
@@ -66,7 +66,7 @@ const InputField = ({dataType, error, cb, name}) => {
                 <TextField
                     margin="dense"
                     name={name}
-                    label={name}
+                    // label={name}
                     type="text"
                     value={val}
                     spellCheck={false}

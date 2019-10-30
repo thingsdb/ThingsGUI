@@ -157,7 +157,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         SelectProps={{native: true}}
                     >
                         {dataTypes.map(d => (
-                            <option key={d} value={d} disabled={parent.type=='set'&&d!='object'} >
+                            <option key={d} value={d} disabled={parent.type=='set'&&d!='thing'} >
                                 {d}
                             </option>
                         ))}

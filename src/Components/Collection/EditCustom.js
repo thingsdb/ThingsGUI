@@ -1,129 +1,41 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Collapse from '@material-ui/core/Collapse';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 
-import InputField from './InputField';
+import CustomChild from './CustomChild';
+import {Stepper} from '../Util';
 
 
 const EditCustom = ({errors, cb, customTypes, name, type}) => {
-    const [input, setInput] = React.useState({
-        name: name,
-        type: type,
-        val: [],
-    });
-    const [openNext, setOpenNext] = React.useState(false);
-    React.useEffect(() => {
-        cb(input);
-    },
-    [JSON.stringify(input || {})],
-    );
+    const [activeStep, setActiveStep] = React.useState(0);
 
-    React.useEffect(() => {
-        setInput(prevInput => {
-            const updatedInput = Object.assign({}, prevInput, {name: name, type: type});
-            return updatedInput;
-        });
-    },
-    [name, type],
-    );
-
-    const setType = (t) => {
-        let type = '';
-        switch (true) {
-        case t.includes('str'):
-            type='string';
-            break;
-        case t.includes('int'):
-            type='number';
-            break;
-        case t.includes('float'):
-            type='number';
-            break;
-        case t.includes('bool'):
-            type='bool';
-            break;
-        case t.includes('thing'):
-            type='object';
-            break;
-        case t.includes('['):
-            type=t.substring(1,type.length-1);
-            break;
-        default:
-            type = t;
+    const getMaxSteps = (customTypes, type, step) => {
+        let s;
+        if (customTypes[type]) {
+            Object.entries(customTypes[type]).map(([k, t]) => {
+                s = getMaxSteps(customTypes, t, step+1);
+            });
+        } else {
+            s = step;
         }
-        return type;
+        return s;
     };
 
-    const handleVal = (val) => {
-        setInput({...input, val: val});
-    };
+    const maxSteps = getMaxSteps(customTypes, type, 1);
 
     const handleNext = () => {
-        setOpenNext(true);
+        setActiveStep(activeStep+1);
     };
 
     const handleBack = () => {
-        setOpenNext(false);
+        setActiveStep(activeStep-1);
     };
 
-    const handleCustom = (c) => {
-        setInput(prevInput => {
-            let updatedInput;
-            if (prevInput.val) {
-                let b=false;
-                let copy = [...prevInput.val];
-                prevInput.val.map((v, i) => {
-                    if (v.name == c.name) {
-                        copy.splice(i, 1, c);
-                        b=true;
-                    }
-                });
-                updatedInput = b?copy:[...prevInput.val, c];
-            } else {
-                updatedInput = [c];
-            }
-            return {...prevInput, val: updatedInput};
-        });
-    };
-
-    const renderThing = ([k, v]) => {
-        const type = setType(v);
-        return (
-            <React.Fragment key={k}>
-                <EditCustom
-                    errors={errors}
-                    cb={handleCustom}
-                    customTypes={customTypes}
-                    name={k}
-                    type={type}
-                />
-            </React.Fragment>
-        );
-    };
-
-    const renderChildren = () => {
-        return (customTypes[type] && (
-            <React.Fragment>
-                <ListItem>
-                    <ListItemText primary={name} />
-                </ListItem>
-                {Object.entries(customTypes[type]).map(renderThing)}
-            </React.Fragment>
-        ));
-    };
-
-    // const hasNext = Boolean(next);
     return(
         <React.Fragment>
-            <ListItem>
-                <InputField name={name} dataType={type} error="" cb={handleVal} />
-            </ListItem>
-            {renderChildren()}
+            <Stepper maxSteps={maxSteps} onNext={handleNext} onBack={handleBack}>
+                <CustomChild errors={errors} cb={cb} customTypes={customTypes} name={name} type={type} activeStep={activeStep} stepId={0} />
+            </Stepper>
         </React.Fragment>
     );
 };

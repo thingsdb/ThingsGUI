@@ -23,6 +23,7 @@ const theme = createMuiTheme({
             purple: '#9256bd',
             cyan: '#16c3b6',
             beige: '#ead0ae',
+            white: '#fff',
         },
         secondary: {
             main: 'rgba(0, 55, 123, 0.3)',

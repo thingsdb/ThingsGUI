@@ -34,6 +34,9 @@ const useStyles = makeStyles(theme => ({
     beige: {
         color: theme.palette.primary.beige,
     },
+    white: {
+        color: theme.palette.primary.white,
+    },
 
 }));
 
@@ -43,7 +46,7 @@ const TreeIcon = ({type}) => {
 
     const treeIcon = (type) => {
         return type === 'array' ? ['[ ]', 'green']
-            : type == 'object' ? ['{ }', 'blue']
+            : type == 'thing' ? ['{ }', 'blue']
                 : type == 'string' ? ['S', 'orange']
                     : type == 'number' ? ['123', 'yellow']
                         : type == 'boolean' ? ['1/0', 'pink']
@@ -51,7 +54,8 @@ const TreeIcon = ({type}) => {
                                 : type == 'nil' ? ['NIL', 'red']
                                     : type == 'blob' ? ['BIN', 'cyan']
                                         : type == 'closure' ? ['>', 'beige']
-                                            : '';
+                                            : type == 'object' ? ['{ }', 'white']
+                                                : '';
     };
     const [icon, color] = treeIcon(type);
 

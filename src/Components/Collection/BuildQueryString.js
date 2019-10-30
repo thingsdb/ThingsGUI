@@ -20,19 +20,14 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
         let q = '';
         switch (action) {
         case 'edit':
-            console.log(childVal);
             if (customTypes.hasOwnProperty(childType)) { // incase of custom-type
-                v = makeTypeInstanceInit(childName, childType, customTypes, childVal);
+                v = createTypeInput(childName, childType, customTypes, childVal);
                 val = buildInput(v, childType);
             } else {
                 val = buildInput(childVal, childType);
             }
             q = buildQueryAdd(parentId, childName, parentName, val, parentType, childIndex);
             break;
-        // case 'edit':
-        //     val = buildInput(childVal, childType);
-        //     q = buildQueryEdit(parentId,  childName, parentName, val, parentType, childIndex);
-        //     break;
         case 'remove':
             q = buildQueryRemove(parentName, parentId, childName, childIndex, childId);
             break;
@@ -41,10 +36,8 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
     };
 
 
-    const standardType = (name, type, customTypes, childVal) => {
-
-        const v = childVal[name]||'';
-        console.log(v, name);
+    const setTypeInput = (name, type, customTypes, childVal) => {
+        const v = childVal||'';
         switch (true) {
         case type.includes('str'):
             return(`'${v}'`);
@@ -55,27 +48,28 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
         case type.includes('bool'):
             return(`${v}`);
         case type.includes('thing'):
-            return(`{${makeTypeInstanceInit(name, type.substring(1,type.length-1), customTypes, childVal)}}`);
+            return(`{${createTypeInput(name, type, customTypes, childVal)}}`);
         case type.includes('['):
-            return(`[${makeTypeInstanceInit(name, type.substring(1,type.length-1), customTypes, childVal)}]`);
+            return(`[${createTypeInput(name, type.substring(1,type.length-1), customTypes, childVal)}]`);
+        case type.includes('{'):
+            return(`{${createTypeInput(name, type.substring(1,type.length-1), customTypes, childVal)}}`);
         default:
             return '';
         }
-
     };
 
-    const makeTypeInstanceInit = (n, t, customTypes, val) => customTypes[t] ?
-        `${top}{${Object.entries(customTypes[t]).map(([k, t]) => {
-            console.log(val);
-            const v = val||val.val;
-            const value = Array.isArray(v)&&(v).length ? (v).find( ({ name, type }) => name === n && type === t)
-                : v;
-            return `${k}: ${makeTypeInstanceInit(k, t, customTypes, value)}`;
-        })}}` : standardType(n, t, customTypes, val);
+    const mapTypeInput = (nam, typ, customTypes, val) => Object.entries(customTypes[typ]).map(([k, t]) => {
+        const v = val&&val.val||val;
+        const value = Array.isArray(v)&&v.length ? v.find( ({ name, type }) => name === k && type === t) : v;
+        return ` ${k}: ${createTypeInput(k, t, customTypes, value&&value.val)}`;
+    });
+
+    const createTypeInput = (name, type, customTypes, val) => customTypes[type] ?
+        `${type}{${mapTypeInput(name, type, customTypes, val)}}` : setTypeInput(name, type, customTypes, val);
 
     const buildInput = (childVal, childType) => {
         return childType === 'array' ? `[${childVal}]`
-            : childType == 'object' ? '{}'
+            : childType == 'thing' ? '{}'
                 : childType == 'string' ? `'${childVal}'`
                     : childType == 'number' || childType == 'boolean' ? `${childVal}`
                         : childType == 'set' ? 'set({})'
@@ -88,16 +82,10 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
 
     const buildQueryAdd = (parentId, childName, parentName, value, parentType, childIndex) => {
         return parentType==='array' ? (childIndex===null ? `#${parentId}.${parentName}.push(${value});` : `#${parentId}.${parentName}[${childIndex}] = ${value};`)
-            : parentType==='object' ? `#${parentId}.${childName} = ${value};`
+            : parentType==='thing' ? `#${parentId}.${childName} = ${value};`
                 : parentType==='set' ? `#${parentId}.${parentName}.add(${value});`
                     : '';
     };
-
-    // const buildQueryEdit = (id,  childName, parentName, value, type, index) => {
-    //     return type==='array' ? `#${id}.${parentName}[${index}] = ${value};`
-    //         : type==='object' ? `#${id}.${childName} = ${value};`
-    //             : '';
-    // };
 
     const buildQueryRemove = (parentName, parentId, childName, childIndex, childId) => {
         return childIndex == null ? `#${parentId}.del('${childName}');`

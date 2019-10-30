@@ -53,7 +53,7 @@ const ThingsTree = ({item, tree, child, parent}) => {
     const type = checkType(thing);
     const val = thingValue(type, thing);
     // buttons
-    const canToggle = type === 'object' || type === 'array' || type === 'set';
+    const canToggle = type === 'thing' || type === 'object' || type === 'array' || type === 'set';
 
     // naming
     const fancyName = (n) => child.index !== null ? n + `[${child.index}]` : n;

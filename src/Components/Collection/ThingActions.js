@@ -8,7 +8,6 @@ import CodeIcon from '@material-ui/icons/Code';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Divider from '@material-ui/core/Divider';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
@@ -39,7 +38,7 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
         'string',
         'number',
         'array',
-        'object',
+        'thing',
         'set',
         'closure',
         'boolean',
@@ -110,13 +109,13 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
     const isTuple = parent.type === 'array' && child.type  === 'array';
 
     const handleClickOpenEditor = () => {
-        ApplicationActions.navigate({path: 'query', index: 0, item: child.type==='object' ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
+        ApplicationActions.navigate({path: 'query', index: 0, item: child.type==='thing' ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
     };
 
     // buttons visible
 
     const hasButtons = !(child.type === 'array' && child.name === '$' || child.name === '>' || parent.isTuple);
-    const canAdd = (child.type === 'array' || child.type === 'object' || child.type === 'set') && !isTuple;
+    const canAdd = (child.type === 'array' || child.type === 'thing' || child.type === 'set') && !isTuple;
     const canEdit = child.name !== '$';
     const canWatch = thing && thing.hasOwnProperty('#');
 

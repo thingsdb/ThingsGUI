@@ -12,6 +12,7 @@ import Info from './Info';
 import Menu from './Menu';
 import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
+import Stepper from './Stepper';
 import TableWithButtons from './TableWithButtons';
 import ThingsTree from './ThingsTree';
 import TimePicker from './TimePicker';
@@ -34,7 +35,7 @@ const checkType = (t) => {
         type = Array.isArray(t) ? 'array' : 'object';
         if (type === 'object') {
             const kindOfObject = Object.keys(t)[0];
-            type = kindOfObject === '#' ? 'object'
+            type = kindOfObject === '#' ? 'thing'
                 : kindOfObject === '$' ? 'set'
                     : kindOfObject === '>' ? 'closure' : 'object' ; // todo maak onderscheid tussen thing object?
         }
@@ -44,7 +45,7 @@ const checkType = (t) => {
 
 const thingValue = (type, thing) => {
     return type === 'array' ? `[${thing.length}]`
-        : type === 'object' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
+        : type === 'thing' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
             : type === 'set' ? `{${Object.keys(thing)[0]}}`
                 : type === 'closure' ? `{${Object.keys(thing)[0]}}`
                     : type === 'string' || type === 'number' || type === 'boolean' ? `${thing}`
@@ -90,6 +91,7 @@ export {
     getScopes,
     ServerError,
     SimpleModal,
+    Stepper,
     TableWithButtons,
     thingValue,
     TopBarMenu,

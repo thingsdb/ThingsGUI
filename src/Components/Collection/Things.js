@@ -71,7 +71,7 @@ const ThingRoot = ({things, collection}) => {
                                 parent={{
                                     id: collection.collection_id,
                                     name: 'root',
-                                    type: 'object',
+                                    type: 'thing',
                                     isTuple: false,
                                 }}
                                 child={{
@@ -88,7 +88,7 @@ const ThingRoot = ({things, collection}) => {
                                     id: collection.collection_id,
                                     index: null,
                                     name: '',
-                                    type: 'object',
+                                    type: 'thing',
                                 }}
                                 parent={{
                                     id: null,

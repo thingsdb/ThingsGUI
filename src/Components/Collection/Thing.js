@@ -79,7 +79,7 @@ const Thing = ({thing, collection, things, parent, child}) => {
     const type = checkType(thing);
     const val = thingValue(type, thing);
 
-    const canToggle = type === 'object' || type === 'array' || type === 'set' || type === 'closure';
+    const canToggle = type === 'thing' || type === 'array' || type === 'set' || type === 'closure';
 
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
