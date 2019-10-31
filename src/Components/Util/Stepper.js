@@ -7,17 +7,14 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 
-const Stepper = ({children, maxSteps, onNext, onBack}) => {
-    const [activeStep, setActiveStep] = React.useState(0);
+const Stepper = ({children, activeStep, maxSteps, onNext, onBack}) => {
 
     const handleNext = () => {
         onNext();
-        setActiveStep(prevActiveStep => prevActiveStep + 1);
     };
 
     const handleBack = () => {
         onBack();
-        setActiveStep(prevActiveStep => prevActiveStep - 1);
     };
 
     // const hasNext = Boolean(next);
@@ -48,6 +45,7 @@ const Stepper = ({children, maxSteps, onNext, onBack}) => {
 
 Stepper.propTypes = {
     children: PropTypes.object.isRequired,
+    activeStep: PropTypes.number.isRequired,
     maxSteps: PropTypes.number.isRequired,
     onNext: PropTypes.func.isRequired,
     onBack: PropTypes.func.isRequired,

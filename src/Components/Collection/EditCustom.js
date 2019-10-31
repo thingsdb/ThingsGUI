@@ -9,10 +9,17 @@ import {Stepper} from '../Util';
 const EditCustom = ({errors, cb, customTypes, name, type}) => {
     const [activeStep, setActiveStep] = React.useState(0);
 
+    React.useEffect(() => {
+        setActiveStep(0);
+    }, [type]);
+
     const getMaxSteps = (customTypes, type, step) => {
         let s;
         if (customTypes[type]) {
             Object.entries(customTypes[type]).map(([k, t]) => {
+                // if (t.includes('[') || t.includes('{')) {
+                //     step++;
+                // }
                 s = getMaxSteps(customTypes, t, step+1);
             });
         } else {
@@ -33,7 +40,7 @@ const EditCustom = ({errors, cb, customTypes, name, type}) => {
 
     return(
         <React.Fragment>
-            <Stepper maxSteps={maxSteps} onNext={handleNext} onBack={handleBack}>
+            <Stepper activeStep={activeStep} maxSteps={maxSteps} onNext={handleNext} onBack={handleBack}>
                 <CustomChild errors={errors} cb={cb} customTypes={customTypes} name={name} type={type} activeStep={activeStep} stepId={0} />
             </Stepper>
         </React.Fragment>

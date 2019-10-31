@@ -4,11 +4,21 @@ import React from 'react';
 import Collapse from '@material-ui/core/Collapse';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import {makeStyles} from '@material-ui/core/styles';
 
 import InputField from './InputField';
+import ArrayLayout from './ArrayLayout';
+
+const useStyles = makeStyles(() => ({
+    listItem: {
+        margin: 0,
+        padding: 0,
+    },
+}));
 
 
 const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) => {
+    const classes = useStyles();
     const [input, setInput] = React.useState({
         name: name,
         type: type,
@@ -22,11 +32,20 @@ const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) 
 
     React.useEffect(() => {
         setInput(prevInput => {
-            const updatedInput = Object.assign({}, prevInput, {name: name, type: type});
+            const updatedInput = Object.assign({}, prevInput, {name: name});
             return updatedInput;
         });
     },
-    [name, type],
+    [name],
+    );
+
+    React.useEffect(() => {
+        setInput(prevInput => {
+            const updatedInput = Object.assign({}, prevInput, {type: type, val: []});
+            return updatedInput;
+        });
+    },
+    [type],
     );
 
     const setType = (t) => {
@@ -47,12 +66,12 @@ const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) 
         case t.includes('thing'):
             type=['thing', 'thing'];
             break;
-        // case t.includes('['): //array
-        //     type=t.substring(1,typeConv.length-1);
-        //     break;
-        // case t.includes('{'): // set
-        //     type=t.substring(1,typeConv.length-1);
-        //     break;
+        case t.includes('['): //array
+            type=['array', t];
+            break;
+        case t.includes('{'): // set
+            type=['set', t];
+            break;
         default:
             type =[t, t];
         }
@@ -83,48 +102,76 @@ const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) 
         });
     };
 
-    const renderThing = ([k, v]) => {
-        const type = setType(v);
-        return (
-            <React.Fragment key={k}>
-                <CustomChild
-                    errors={errors}
-                    cb={handleCustom}
-                    customTypes={customTypes}
-                    name={k}
-                    type={type[1]}
-                    activeStep={activeStep}
-                    stepId={stepId+1}
-                />
-            </React.Fragment>
-        );
+    const handleCustomArray = (i, t) => (c) => {
+        setInput(prevInput => {
+            const copy = [...prevInput.val];
+            copy.splice(i, 1, {...c, type: t});
+            return {...prevInput, val: copy};
+        });
     };
 
+    const renderThing = ([k, v]) => setType(v)[0] == 'array' ? (
+        <React.Fragment key={k}>
+            <ArrayLayout
+                child={(i) => (
+                    <CustomChild
+                        errors={errors}
+                        cb={handleCustomArray(i, v)}
+                        customTypes={customTypes}
+                        name={k}
+                        type={setType(v)[1].substring(1,setType(v)[1].length-1)}
+                        activeStep={activeStep}
+                        stepId={stepId+1}
+                    />
+                )}
+            />
+        </React.Fragment>
+    ) : (
+        <React.Fragment key={k}>
+            <CustomChild
+                errors={errors}
+                cb={handleCustom}
+                customTypes={customTypes}
+                name={k}
+                type={setType(v)[1]}
+                activeStep={activeStep}
+                stepId={stepId+1}
+            />
+        </React.Fragment>
+    );
+
+
     const renderChildren = () => {
-        return (customTypes[type] && (
+        return (
             <Collapse in={stepId!=activeStep} timeout="auto">
                 {Object.entries(customTypes[type]).map(renderThing)}
             </Collapse>
-        ));
+        );
     };
 
     return(
         <React.Fragment>
-            <Collapse in={stepId==activeStep} timeout="auto">
-                <ListItem>
-                    <ListItemText
-                        primary={name}
-                        secondary={setType(type)[0]}
-                        color="primary"
-                        primaryTypographyProps={{color:'primary'}}
-                        // secondaryTypographyProps={{variant:'caption'}}
-                    />
-                </ListItem>
-                <ListItem>
-                    <InputField name={name} dataType={setType(type)[0]} error="" cb={handleVal} />
-                </ListItem>
-            </Collapse>
-            {renderChildren()}
+            {customTypes[type] ? (
+                <React.Fragment>
+                    <Collapse in={stepId==activeStep} timeout="auto">
+                        <ListItem className={classes.listItem}>
+                            <ListItemText
+                                primary={name}
+                                secondary={setType(type)[0]}
+                                color="primary"
+                                primaryTypographyProps={{color:'primary'}}
+                            />
+                        </ListItem>
+                    </Collapse>
+                    {renderChildren()}
+                </React.Fragment>
+            ) : (
+                <Collapse in={stepId==activeStep} timeout="auto">
+                    <ListItem className={classes.listItem}>
+                        <InputField name={name} dataType={setType(type)[0]} error="" cb={handleVal} />
+                    </ListItem>
+                </Collapse>
+            )}
         </React.Fragment>
     );
 };

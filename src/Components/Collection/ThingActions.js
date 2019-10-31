@@ -130,7 +130,7 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
                     onClose={handleClickClose}
                     aria-labelledby="form-dialog-title"
                     fullWidth
-                    maxWidth="sm"
+                    maxWidth="md"
                 >
                     <DialogContent>
                         <Grid container spacing={1}>
@@ -157,9 +157,9 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
                                     />
                                 </Grid>
                             </Grid>
-                            <Grid container spacing={1} item xs={2}>
+                            <Grid container spacing={1} item xs={2} alignContent="flex-start">
                                 {hasButtons &&
-                                    <Grid item xs={12} container alignContent="center">
+                                    <Grid item xs={12} container>
                                         <RemoveThing
                                             scope={scope}
                                             thing={thing}
@@ -175,13 +175,13 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
                                         />
                                     </Grid>
                                 }
-                                <Grid item xs={12} container alignContent="center">
+                                <Grid item xs={12} container>
                                     <Fab color="secondary" onClick={handleClickOpenEditor} >
                                         <CodeIcon fontSize="large" />
                                     </Fab>
                                 </Grid>
                                 {canWatch &&
-                                    <Grid item xs={12} container alignContent="center">
+                                    <Grid item xs={12} container>
                                         <WatchThings
                                             buttonIsFab
                                             scope={scope}

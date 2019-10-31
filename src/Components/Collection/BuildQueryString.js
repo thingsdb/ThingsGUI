@@ -16,15 +16,13 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
 
     const handleBuildQuery = (action, childVal, childType, childIndex, childId, childName, parentId, parentName, parentType) => {
         let val;
-        let v;
         let q = '';
         switch (action) {
         case 'edit':
             if (customTypes.hasOwnProperty(childType)) { // incase of custom-type
-                v = createTypeInput(childName, childType, customTypes, childVal);
-                val = buildInput(v, childType);
+                val = customTypeInput(childName, childType, customTypes, childVal);
             } else {
-                val = buildInput(childVal, childType);
+                val = standardInput(childVal, childType);
             }
             q = buildQueryAdd(parentId, childName, parentName, val, parentType, childIndex);
             break;
@@ -36,38 +34,38 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
     };
 
 
-    const setTypeInput = (name, type, customTypes, childVal) => {
-        const v = childVal||'';
-        switch (true) {
-        case type.includes('str'):
-            return(`'${v}'`);
-        case type.includes('int'):
-            return(`${v}`);
-        case type.includes('float'):
-            return(`${v}`);
-        case type.includes('bool'):
-            return(`${v}`);
-        case type.includes('thing'):
-            return(`{${createTypeInput(name, type, customTypes, childVal)}}`);
-        case type.includes('['):
-            return(`[${createTypeInput(name, type.substring(1,type.length-1), customTypes, childVal)}]`);
-        case type.includes('{'):
-            return(`{${createTypeInput(name, type.substring(1,type.length-1), customTypes, childVal)}}`);
-        default:
-            return '';
-        }
+    const mapArrayInput = (n, t, customTypes, value) => {
+        const v = Array.isArray(value) ?
+            value.filter(({ name, type }) => name === n && type === t).map((v, i) => customTypeInput(name, t.substring(1,t.length-1), customTypes, v))
+            : customTypeInput(name, t.substring(1,t.length-1), customTypes, value);
+        return v;
+    };
+
+    const createArrayInput = (name, type, customTypes, val) => `[${mapArrayInput(name, type, customTypes, val)}]`;
+
+    const setTypeInput = (n, t, customTypes, childVal) => {
+        const value = Array.isArray(childVal)&&childVal.length ? childVal.find(({ name, type }) => name === n && type === t) : childVal;
+        const v = value&&value.val;
+        return t.includes('str') ? `'${v||''}'`
+            : t.includes('int') || t.includes('float') || t.includes('bool') ? `${v||''}`
+                : t.includes('thing') ? `{${v||''}}` // TODO
+                    : t.includes('[') ? createArrayInput(n, t, customTypes, childVal)
+                        : t.includes('{') ? '' // TODO
+                            : '';
     };
 
     const mapTypeInput = (nam, typ, customTypes, val) => Object.entries(customTypes[typ]).map(([k, t]) => {
         const v = val&&val.val||val;
-        const value = Array.isArray(v)&&v.length ? v.find( ({ name, type }) => name === k && type === t) : v;
-        return ` ${k}: ${createTypeInput(k, t, customTypes, value&&value.val)}`;
+        const value = Array.isArray(v)&&v.length&&customTypes[t] ? v.find(({ name, type }) => name === k && type === t) : v;
+        return ` ${k}: ${customTypeInput(k, t, customTypes, value)}`;
     });
 
-    const createTypeInput = (name, type, customTypes, val) => customTypes[type] ?
-        `${type}{${mapTypeInput(name, type, customTypes, val)}}` : setTypeInput(name, type, customTypes, val);
+    const customTypeInput = (name, type, customTypes, val) => {
+        return customTypes[type] ?
+            `${type}{${mapTypeInput(name, type, customTypes, val)}}` : setTypeInput(name, type, customTypes, val);
+    };
 
-    const buildInput = (childVal, childType) => {
+    const standardInput = (childVal, childType) => {
         return childType === 'array' ? `[${childVal}]`
             : childType == 'thing' ? '{}'
                 : childType == 'string' ? `'${childVal}'`
@@ -76,8 +74,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
                             : childType == 'nil' ? 'nil'
                                 : childType == 'blob' ? 'blob'
                                     : childType == 'closure' ? childVal
-                                        : childVal != '' ? childVal
-                                            : '';
+                                        : '';
     };
 
     const buildQueryAdd = (parentId, childName, parentName, value, parentType, childIndex) => {

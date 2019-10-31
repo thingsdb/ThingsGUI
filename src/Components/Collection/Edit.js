@@ -4,14 +4,23 @@ import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import {makeStyles} from '@material-ui/core/styles';
 
 import BuildQueryString from './BuildQueryString';
 import EditCustom from './EditCustom';
 import InputField from './InputField';
 import {onlyNums} from '../Util';
 
+const useStyles = makeStyles(() => ({
+    listItem: {
+        margin: 0,
+        padding: 0,
+    },
+}));
+
 
 const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
+    const classes = useStyles();
     const initialState = {
         errors: {},
         form: {
@@ -107,7 +116,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         <React.Fragment>
             <List disablePadding dense>
                 <Collapse in={Boolean(form.queryString)} timeout="auto">
-                    <ListItem>
+                    <ListItem className={classes.listItem} >
                         <BuildQueryString
                             action="edit"
                             cb={handleQuery}
@@ -129,7 +138,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                     </ListItem>
                 </Collapse>
                 {addNewProperty ? (
-                    <ListItem>
+                    <ListItem className={classes.listItem}>
                         <TextField
                             margin="dense"
                             name="newProperty"
@@ -145,7 +154,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                     </ListItem>
                 ) : null}
 
-                <ListItem>
+                <ListItem className={classes.listItem}>
                     <TextField
                         margin="dense"
                         name="dataType"
@@ -172,7 +181,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         cb={handleCustom}
                     />
                 ) : (
-                    <ListItem>
+                    <ListItem className={classes.listItem}>
                         <InputField name="Value" dataType={form.dataType} error={errors.value} cb={handleVal} />
                     </ListItem>
                 )}

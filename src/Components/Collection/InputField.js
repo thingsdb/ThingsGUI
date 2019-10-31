@@ -40,14 +40,13 @@ const InputField = ({dataType, error, cb, name}) => {
     const blobInputField = dataType == 'blob';
     const closureInputField = dataType == 'closure';
 
-
     return(
         <React.Fragment>
             {singleInputField ? (
                 <TextField
                     margin="dense"
                     name={name}
-                    // label={name}
+                    label={name}
                     type="text"
                     value={val}
                     spellCheck={false}
@@ -66,7 +65,7 @@ const InputField = ({dataType, error, cb, name}) => {
                 <TextField
                     margin="dense"
                     name={name}
-                    // label={name}
+                    label={name}
                     type="text"
                     value={val}
                     spellCheck={false}
@@ -76,7 +75,7 @@ const InputField = ({dataType, error, cb, name}) => {
                     helperText={error}
                     error={Boolean(error)}
                 />
-            ) : null}
+            ) : null }
         </React.Fragment>
     );
 };
