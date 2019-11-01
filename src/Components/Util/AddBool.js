@@ -5,13 +5,19 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 
-const AddBool = ({cb}) => {
+const AddBool = ({input, cb}) => {
     const [bool, setBool] = React.useState('');
 
     React.useEffect(() => {
         cb(bool);
     },
     [bool],
+    );
+
+    React.useEffect(() => {
+        setBool(input);
+    },
+    [input],
     );
 
     const handleOnChange = ({target}) => {
@@ -37,8 +43,13 @@ const AddBool = ({cb}) => {
     );
 };
 
+AddBool.defaultProps = {
+    input: null,
+};
+
 AddBool.propTypes = {
     cb: PropTypes.func.isRequired,
+    input: PropTypes.bool,
 };
 
 export default AddBool;

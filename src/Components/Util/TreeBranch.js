@@ -61,12 +61,11 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
         CollectionActions.download(val, handleLink);
     };
 
-    const valIsLink = type === 'string' && val.includes('http');
     return (
         <React.Fragment>
             <ListItem className={classes.listItem}>
                 <ListItemIcon>
-                    <TreeIcon type={valIsLink?'blob':type} />
+                    <TreeIcon type={type} />
                 </ListItemIcon>
                 <ListItemText
                     className={classes.listItem}
@@ -79,7 +78,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                             >
                                 {`${name}   `}
                             </Typography>
-                            {valIsLink ?  link ? (
+                            {type === 'blob' ?  link ? (
                                 <Link href={link} download="blob" type="application/octet-stream" color="textPrimary">
                                     {val}
                                 </Link>
@@ -101,7 +100,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                                 {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
                             </ButtonBase>
                         ) : null}
-                        {valIsLink ? (
+                        {type === 'blob' ? (
                             <ButtonBase onClick={handleDownload} >
                                 <DownloadIcon color="primary" />
                             </ButtonBase>

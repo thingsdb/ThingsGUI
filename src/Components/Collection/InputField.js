@@ -2,12 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-import {Add1DArray, AddBlob, AddBool} from '../Util';
+import {Add1DArray, AddBlob, AddBool, onlyNums} from '../Util';
 
 
-const InputField = ({dataType, error, cb, name}) => {
-
+const InputField = ({dataType, cb, name, input}) => {
+    console.log(input);
     const [val, setVal] = React.useState('');
+    const [error, setError] = React.useState('');
 
     React.useEffect(() => {
         cb(val);
@@ -15,10 +16,46 @@ const InputField = ({dataType, error, cb, name}) => {
     [val],
     );
 
+    React.useEffect(() => {
+        let i = '';
+        switch (dataType) {
+        case 'string', 'number':
+            i = input;
+            break;
+        case 'closure':
+            i = input['>'];
+            break;
+        }
+        setVal(i);
+    },
+    [input],
+    );
+
+    const errorTxt = (value) => {
+        const bool = value.length>0;
+        let errText = bool?'':'is required';
+        switch (dataType) {
+        case 'number':
+            if (bool) {
+                errText = onlyNums(value) ? '' : 'only numbers';
+            }
+            return(errText);
+        case 'closure':
+            if (bool) {
+                errText = /^((?:\|[a-zA-Z\s]*(?:[,][a-zA-Z\s]*)*\|)|(?:\|\|))(?:(?:[\s]|[a-zA-Z0-9,.\*\/+%\-=&\|^?:;!<>])*[a-zA-Z0-9,.\*\/+%\-=&\|^?:;!<>]+)$/.test(value) ? '':'closure is not valid';
+            }
+            return(errText);
+        default:
+            return '';
+        }
+    };
+
 
     const handleOnChange = ({target}) => {
         const {value} = target;
         setVal(value);
+        const err = errorTxt(value);
+        setError(err);
     };
 
     const handleArrayItems = (items) => {
@@ -56,9 +93,9 @@ const InputField = ({dataType, error, cb, name}) => {
                     error={Boolean(error)}
                 />
             ) : multiInputField ? (
-                <Add1DArray cb={handleArrayItems} />
+                <Add1DArray input={input} cb={handleArrayItems} />
             ) : booleanInputField ? (
-                <AddBool cb={handleBool} />
+                <AddBool input={input} cb={handleBool} />
             ) : blobInputField ? (
                 <AddBlob cb={handleBlob} />
             ) : closureInputField ? (
@@ -81,14 +118,14 @@ const InputField = ({dataType, error, cb, name}) => {
 };
 
 InputField.defaultProps = {
-    error: '',
-};
+    input: null,
+},
 
 InputField.propTypes = {
     dataType: PropTypes.string.isRequired,
-    error: PropTypes.string,
     cb: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
+    input: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
 };
 
 export default InputField;

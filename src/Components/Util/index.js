@@ -40,6 +40,10 @@ const checkType = (t) => {
                     : kindOfObject === '>' ? 'closure' : 'object' ; // todo maak onderscheid tussen thing object?
         }
     }
+
+    if (type == 'string' && t.includes('http')) {
+        type = 'blob';
+    }
     return(type);
 };
 
@@ -48,7 +52,7 @@ const thingValue = (type, thing) => {
         : type === 'thing' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
             : type === 'set' ? `{${Object.keys(thing)[0]}}`
                 : type === 'closure' ? `{${Object.keys(thing)[0]}}`
-                    : type === 'string' || type === 'number' || type === 'boolean' ? `${thing}`
+                    : type === 'string' || type === 'number' || type === 'boolean' || type === 'blob' ? `${thing}`
                         : type === 'nil' ? 'nil'
                             : '';
 };

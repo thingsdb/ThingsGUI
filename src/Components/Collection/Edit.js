@@ -9,7 +9,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import BuildQueryString from './BuildQueryString';
 import EditCustom from './EditCustom';
 import InputField from './InputField';
-import {onlyNums} from '../Util';
 
 const useStyles = makeStyles(() => ({
     listItem: {
@@ -22,7 +21,7 @@ const useStyles = makeStyles(() => ({
 const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     const classes = useStyles();
     const initialState = {
-        errors: {},
+        error: '',
         form: {
             queryString: '',
             newProperty: '',
@@ -35,47 +34,30 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         },
     };
     const [state, setState] = React.useState(initialState);
-    const {errors, form} = state;
+    const {error, form} = state;
 
     React.useEffect(() => {
-        if (!Object.values(errors).some(d => d)) {
-            cb(form.queryString, form.blob);
-        }
+        cb(form.queryString, form.blob, error);
     },
     [form.queryString, form.blob],
     );
 
-    const errorTxt = {
-        newProperty: () => thing[form.newProperty] ? 'property name already in use' : '',
-        value: () => {
-            const bool = form.value.length>0;
-            let errText = bool?'':'is required';
-            switch (form.dataType) {
-            case 'number':
-                if (bool) {
-                    errText = onlyNums(form.value) ? '' : 'only numbers';
-                }
-                return(errText);
-            case 'closure':
-                if (bool) {
-                    errText = /^((?:\|[a-zA-Z\s]*(?:[,][a-zA-Z\s]*)*\|)|(?:\|\|))(?:(?:[\s]|[a-zA-Z0-9,.\*\/+%\-=&\|^?:;!<>])*[a-zA-Z0-9,.\*\/+%\-=&\|^?:;!<>]+)$/.test(form.value) ? '':'closure is not valid';
-                }
-                return(errText);
-            default:
-                return '';
-            }
-        },
-        // custom: () => {
+    const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
 
-        // },
-    };
-
-    const handleOnChange = ({target}) => {
+    const handleOnChangeName = ({target}) => {
         const {name, value} = target;
-        const err = Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
+        const err = errorTxt(value);
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[name]: value});
-            return {...prevState, form: updatedForm, errors: err};
+            return {...prevState, form: updatedForm, error: err};
+        });
+    };
+
+    const handleOnChangeType = ({target}) => {
+        const {name, value} = target;
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {[name]: value});
+            return {...prevState, form: updatedForm};
         });
     };
 
@@ -93,10 +75,9 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                 return {...prevState, form: updatedForm};
             });
         } else {
-            const err = Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
             setState(prevState => {
                 const updatedForm = Object.assign({}, prevState.form, {value: v});
-                return {...prevState, form: updatedForm, errors: err};
+                return {...prevState, form: updatedForm};
             });
         }
     };
@@ -105,14 +86,12 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         setState(prevState => {
             const updatedVal = Object.assign({}, prevState.form.custom, c);
             const updatedForm = Object.assign({}, prevState.form, {custom: updatedVal});
-            return {...prevState, form: updatedForm, errors: {}};
+            return {...prevState, form: updatedForm};
         });
     };
 
     const addNewProperty = Boolean(child.id);
     const isCustomType = customTypes.hasOwnProperty(form.dataType);
-
-    console.log(form.custom);
 
     return(
         <React.Fragment>
@@ -148,10 +127,10 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                             type="text"
                             value={form.newProperty}
                             spellCheck={false}
-                            onChange={handleOnChange}
+                            onChange={handleOnChangeName}
                             fullWidth
-                            helperText={errors.newProperty}
-                            error={Boolean(errors.newProperty)}
+                            helperText={error}
+                            error={Boolean(error)}
                         />
                     </ListItem>
                 ) : null}
@@ -162,7 +141,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         name="dataType"
                         label="Data type"
                         value={form.dataType}
-                        onChange={handleOnChange}
+                        onChange={handleOnChangeType}
                         fullWidth
                         select
                         SelectProps={{native: true}}
@@ -179,12 +158,11 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         name={child.id?form.newProperty:child.name}
                         type={form.dataType}
                         customTypes={customTypes}
-                        errors={errors}
                         cb={handleCustom}
                     />
                 ) : (
                     <ListItem className={classes.listItem}>
-                        <InputField name="Value" dataType={form.dataType} error={errors.value} cb={handleVal} />
+                        <InputField name="Value" dataType={form.dataType} cb={handleVal} input={thing} />
                     </ListItem>
                 )}
             </List>

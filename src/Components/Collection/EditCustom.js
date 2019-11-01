@@ -6,7 +6,7 @@ import CustomChild from './CustomChild';
 import {Stepper} from '../Util';
 
 
-const EditCustom = ({errors, cb, customTypes, name, type}) => {
+const EditCustom = ({cb, customTypes, name, type}) => {
     const [activeStep, setActiveStep] = React.useState(0);
 
     React.useEffect(() => {
@@ -41,7 +41,7 @@ const EditCustom = ({errors, cb, customTypes, name, type}) => {
     return(
         <React.Fragment>
             <Stepper activeStep={activeStep} maxSteps={maxSteps} onNext={handleNext} onBack={handleBack}>
-                <CustomChild errors={errors} cb={cb} customTypes={customTypes} name={name} type={type} activeStep={activeStep} stepId={0} />
+                <CustomChild cb={cb} customTypes={customTypes} name={name} type={type} activeStep={activeStep} stepId={0} />
             </Stepper>
         </React.Fragment>
     );
@@ -52,7 +52,6 @@ EditCustom.defaultProps = {
 };
 EditCustom.propTypes = {
     cb: PropTypes.func.isRequired,
-    errors: PropTypes.object.isRequired,
     customTypes: PropTypes.object,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,

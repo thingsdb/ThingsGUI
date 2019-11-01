@@ -23,13 +23,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) => {
+const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
     const classes = useStyles();
     const [input, setInput] = React.useState({
         name: name,
         type: type,
         val: [],
     });
+
     React.useEffect(() => {
         cb(input);
     },
@@ -84,7 +85,7 @@ const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) 
         return type;
     };
 
-    const handleVal = (val) => {
+    const handleVal = (val, e) => {
         setInput({...input, val: val});
     };
 
@@ -133,7 +134,6 @@ const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) 
                 child={(i) => (
                     <Card className={classes.card} raised>
                         <CustomChild
-                            errors={errors}
                             cb={handleCustomArray(i, v)}
                             customTypes={customTypes}
                             name={k}
@@ -148,7 +148,6 @@ const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) 
     ) : (
         <React.Fragment key={k}>
             <CustomChild
-                errors={errors}
                 cb={handleCustom}
                 customTypes={customTypes}
                 name={k}
@@ -187,7 +186,7 @@ const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) 
             ) : (
                 <Collapse in={stepId==activeStep} timeout="auto">
                     <ListItem className={classes.listItem}>
-                        <InputField name={name} dataType={setType(type)[0]} error="" cb={handleVal} />
+                        <InputField name={name} dataType={setType(type)[0]} cb={handleVal} />
                     </ListItem>
                 </Collapse>
             )}
@@ -200,7 +199,6 @@ CustomChild.defaultProps = {
 };
 CustomChild.propTypes = {
     cb: PropTypes.func.isRequired,
-    errors: PropTypes.object.isRequired,
     customTypes: PropTypes.object,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,

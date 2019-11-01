@@ -51,9 +51,10 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
         show: false,
         query: '',
         blob: '',
+        error: '',
     };
     const [state, setState] = React.useState(initialState);
-    const {show, query, blob} = state;
+    const {show, query, blob, error} = state;
 
     React.useEffect(() => {
         TypeActions.getTypes(scope, tag);
@@ -65,6 +66,7 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
             show: true,
             query: '',
             blob: '',
+            error: '',
         });
     };
 
@@ -73,8 +75,8 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
         setState({...state, show: false});
     };
 
-    const handleQuery = (q, b) => {
-        setState({...state, query: q, blob: b});
+    const handleQuery = (q, b, e) => {
+        setState({...state, query: q, blob: b, error: e});
     };
 
 
@@ -203,7 +205,7 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
                         <Button onClick={handleClickClose} color="primary">
                             {'Cancel'}
                         </Button>
-                        <Button onClick={handleClickOk} color="primary">
+                        <Button onClick={handleClickOk} disabled={Boolean(error)} color="primary">
                             {'Save'}
                         </Button>
                     </DialogActions>

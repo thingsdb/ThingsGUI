@@ -42,7 +42,7 @@ const dataTypes = [
     'boolean',
 ];
 
-const Add1DArray = ({cb}) => {
+const Add1DArray = ({input, cb}) => {
     const classes = useStyles();
     const helperspan = React.useRef(null);
     const [state, setState] = React.useState({
@@ -66,6 +66,14 @@ const Add1DArray = ({cb}) => {
     },
     [myItems.length],
     );
+    React.useEffect(() => {
+        setMyItems([...myItems, ...input]);
+    },
+    [input],
+    );
+
+    console.log(input);
+
 
     const errorTxt = {
         contentAdd: () => {
@@ -199,8 +207,12 @@ const Add1DArray = ({cb}) => {
     );
 
 };
+Add1DArray.defaultProps = {
+    input: null,
+},
 
 Add1DArray.propTypes = {
+    input: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string])),
     cb: PropTypes.func.isRequired,
 };
 
