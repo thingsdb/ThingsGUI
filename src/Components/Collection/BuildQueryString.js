@@ -36,27 +36,26 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
 
     const mapArrayInput = (n, t, customTypes, value) => {
         const v = Array.isArray(value) ?
-            value.filter(({ name, type }) => name === n && type === t).map((v, i) => customTypeInput(name, t.substring(1,t.length-1), customTypes, v))
+            value.map((v, i) => customTypeInput(name, v.type, customTypes, v))
             : customTypeInput(name, t.substring(1,t.length-1), customTypes, value);
         return v;
     };
 
     const createArrayInput = (name, type, customTypes, val) => `[${mapArrayInput(name, type, customTypes, val)}]`;
 
-    const setTypeInput = (n, t, customTypes, childVal) => {
-        const value = Array.isArray(childVal)&&childVal.length ? childVal.find(({ name, type }) => name === n && type === t) : childVal;
-        const v = value&&value.val;
-        return t.includes('str') ? `'${v||''}'`
-            : t.includes('int') || t.includes('float') || t.includes('bool') ? `${v||''}`
-                : t.includes('thing') ? `{${v||''}}` // TODO
-                    : t.includes('[') ? createArrayInput(n, t, customTypes, childVal)
+    const setTypeInput = (n, t, customTypes, val) => {
+        const v = val&&val.hasOwnProperty('val') ? val.val : val;
+        return t.includes('str') ? `'${v}'`
+            : t.includes('int') || t.includes('float') || t.includes('bool') ? `${v}`
+                : t.includes('thing') ? `{${v}}` // TODO
+                    : t.includes('[') ? createArrayInput(n, t, customTypes, v)
                         : t.includes('{') ? '' // TODO
                             : '';
     };
 
     const mapTypeInput = (nam, typ, customTypes, val) => Object.entries(customTypes[typ]).map(([k, t]) => {
-        const v = val&&val.val||val;
-        const value = Array.isArray(v)&&v.length&&customTypes[t] ? v.find(({ name, type }) => name === k && type === t) : v;
+        const v = val&&val.hasOwnProperty('val') ? val.val : val;
+        const value = Array.isArray(v)&&v.length ? v.find(({ name, type }) => name === k && type === t) : v;
         return ` ${k}: ${customTypeInput(k, t, customTypes, value)}`;
     });
 

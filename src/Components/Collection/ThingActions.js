@@ -159,34 +159,40 @@ const ThingActions = ({child, parent, thing, scope, customTypes}) => {
                             </Grid>
                             <Grid container spacing={1} item xs={2} alignContent="flex-start">
                                 {hasButtons &&
-                                    <Grid item xs={12} container>
-                                        <RemoveThing
-                                            scope={scope}
-                                            thing={thing}
-                                            child={{
-                                                index: child.index,
-                                                name: child.name,
-                                            }}
-                                            parent={{
-                                                id: parent.id,
-                                                name: parent.name,
-                                                type: parent.type
-                                            }}
-                                        />
+                                    <Grid item xs={12} container justify="flex-end">
+                                        <Grid item>
+                                            <RemoveThing
+                                                scope={scope}
+                                                thing={thing}
+                                                child={{
+                                                    index: child.index,
+                                                    name: child.name,
+                                                }}
+                                                parent={{
+                                                    id: parent.id,
+                                                    name: parent.name,
+                                                    type: parent.type
+                                                }}
+                                            />
+                                        </Grid>
                                     </Grid>
                                 }
-                                <Grid item xs={12} container>
-                                    <Fab color="secondary" onClick={handleClickOpenEditor} >
-                                        <CodeIcon fontSize="large" />
-                                    </Fab>
+                                <Grid item xs={12} container justify="flex-end">
+                                    <Grid item>
+                                        <Fab color="secondary" onClick={handleClickOpenEditor} >
+                                            <CodeIcon fontSize="large" />
+                                        </Fab>
+                                    </Grid>
                                 </Grid>
                                 {canWatch &&
-                                    <Grid item xs={12} container>
-                                        <WatchThings
-                                            buttonIsFab
-                                            scope={scope}
-                                            thingId={child.id||parent.id}
-                                        />
+                                    <Grid item xs={12} container justify="flex-end">
+                                        <Grid item>
+                                            <WatchThings
+                                                buttonIsFab
+                                                scope={scope}
+                                                thingId={child.id||parent.id}
+                                            />
+                                        </Grid>
                                     </Grid>
                                 }
                             </Grid>

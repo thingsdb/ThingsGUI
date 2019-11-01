@@ -112,6 +112,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     const addNewProperty = Boolean(child.id);
     const isCustomType = customTypes.hasOwnProperty(form.dataType);
 
+    console.log(form.custom);
+
     return(
         <React.Fragment>
             <List disablePadding dense>

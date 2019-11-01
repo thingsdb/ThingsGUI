@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
+import Card from '@material-ui/core/Card';
 import Collapse from '@material-ui/core/Collapse';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -9,7 +10,12 @@ import {makeStyles} from '@material-ui/core/styles';
 import InputField from './InputField';
 import ArrayLayout from './ArrayLayout';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
+    card: {
+        backgroundColor: theme.palette.secondary.main,
+        padding: theme.spacing(2),
+        margin: theme.spacing(2),
+    },
     listItem: {
         margin: 0,
         padding: 0,
@@ -102,11 +108,22 @@ const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) 
         });
     };
 
-    const handleCustomArray = (i, t) => (c) => {
+    const handleCustomArray = (id, t) => (c) => {
         setInput(prevInput => {
-            const copy = [...prevInput.val];
-            copy.splice(i, 1, {...c, type: t});
-            return {...prevInput, val: copy};
+            let updatedInput;
+            let index;
+            prevInput.val.map((v, i) => {
+                if (v.name == c.name && v.type == t) {
+                    const copy = [...v.val];
+                    copy.splice(id, 1, c);
+                    updatedInput = {name: v.name, type: v.type, val: copy};
+                    index = i;
+                }
+            });
+            let copy2 = [...prevInput.val];
+            index ? copy2.splice(index, 1, updatedInput) : copy2.push({name: c.name, type: t, val: [c]});
+
+            return {...prevInput, val: copy2};
         });
     };
 
@@ -114,15 +131,17 @@ const CustomChild = ({errors, cb, customTypes, name, type, activeStep, stepId}) 
         <React.Fragment key={k}>
             <ArrayLayout
                 child={(i) => (
-                    <CustomChild
-                        errors={errors}
-                        cb={handleCustomArray(i, v)}
-                        customTypes={customTypes}
-                        name={k}
-                        type={setType(v)[1].substring(1,setType(v)[1].length-1)}
-                        activeStep={activeStep}
-                        stepId={stepId+1}
-                    />
+                    <Card className={classes.card} raised>
+                        <CustomChild
+                            errors={errors}
+                            cb={handleCustomArray(i, v)}
+                            customTypes={customTypes}
+                            name={k}
+                            type={setType(v)[1].substring(1,setType(v)[1].length-1)}
+                            activeStep={activeStep}
+                            stepId={stepId+1}
+                        />
+                    </Card>
                 )}
             />
         </React.Fragment>
