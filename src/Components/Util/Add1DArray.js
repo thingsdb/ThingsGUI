@@ -3,16 +3,24 @@ import React from 'react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import AddIcon from '@material-ui/icons/Add';
+import Fab from '@material-ui/core/Fab';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
+import InputField from '../Collection/InputField';
 import {onlyNums} from '../Util';
 
 const useStyles = makeStyles(theme => ({
     container: {
         display: 'flex',
         flexWrap: 'wrap',
+        borderLeft: `3px solid ${theme.palette.primary.main}`,
+        borderRight: `3px solid ${theme.palette.primary.main}`,
+        borderRadius: '20px',
+        padding: theme.spacing(2),
+        margin: theme.spacing(2),
     },
     dense: {
         padding: 0,
@@ -21,7 +29,6 @@ const useStyles = makeStyles(theme => ({
     textField: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
-        padding: 0,
     },
     chip: {
         padding: theme.spacing(1),
@@ -40,9 +47,14 @@ const dataTypes = [
     'string',
     'number',
     'boolean',
+    'nil',
+    'thing',
+    'closure',
+    'set',
+    'array',
 ];
 
-const Add1DArray = ({input, cb}) => {
+const Add1DArray = ({cb}) => {
     const classes = useStyles();
     const helperspan = React.useRef(null);
     const [state, setState] = React.useState({
@@ -50,7 +62,7 @@ const Add1DArray = ({input, cb}) => {
         dataType: dataTypes[0],
         errors: {},
     });
-    const {contentAdd, dataType, errors} = state;
+    const {contentAdd, dataType} = state;
 
     const [width, setWidth] = React.useState(100);
     React.useEffect(() => {
@@ -66,26 +78,9 @@ const Add1DArray = ({input, cb}) => {
     },
     [myItems.length],
     );
-    React.useEffect(() => {
-        setMyItems([...myItems, ...input]);
-    },
-    [input],
-    );
 
-    console.log(input);
-
-
-    const errorTxt = {
-        contentAdd: () => {
-            let errText = contentAdd.length>0 ? '' : 'required';
-
-            if (!errText && dataType == 'number') {
-                errText = onlyNums(contentAdd) ? '' : 'only numbers';
-            } else if (!errText && dataType == 'boolean') {
-                errText = contentAdd == 'true' || contentAdd == 'false' ? '' : 'not a boolean value';
-            }
-            return(errText);
-        },
+    const handleInputField = (val) => {
+        setState({...state, contentAdd: val, errors: {}});
     };
 
     const handleChange = ({target}) => {
@@ -94,28 +89,51 @@ const Add1DArray = ({input, cb}) => {
     };
 
 
-    const handleKeypress = (event) => {
-        const {key} = event;
-        if (key == 'Enter') {
-            const err = Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
-            setState({...state, errors: err});
-            if (!Object.values(err).some(d => d)) {
+    // const handleKeypress = (event) => {
+    //     const {key} = event;
+    //     if (key == 'Enter') {
+    //         const err = '';//Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
+    //         setState({...state, errors: err});
+    //         if (!Object.values(err).some(d => d)) {
 
 
-                let currentcontent = contentAdd.trim();
-                if (!currentcontent) {
-                    return;
-                }
+    //             let currentcontent = contentAdd.trim();
+    //             if (!currentcontent) {
+    //                 return;
+    //             }
 
-                const contentTypeChecked = dataType == 'string' ? '"' + currentcontent + '"' : currentcontent;
-                setMyItems(prevItems => {
-                    const newArray = [...prevItems];
-                    newArray.push(contentTypeChecked);
-                    return newArray;
-                });
-                setState({ ...state, contentAdd: '' });
-            }
-        }
+    //             const contentTypeChecked = dataType == 'string' ? '"' + currentcontent + '"' : currentcontent;
+    //             setMyItems(prevItems => {
+    //                 const newArray = [...prevItems];
+    //                 newArray.push(contentTypeChecked);
+    //                 return newArray;
+    //             });
+    //             setState({ ...state, contentAdd: '' });
+    //         }
+    //     }
+    // };
+
+    const typeControls = (type, input) => {
+        return type === 'array' ? `[${input}]`
+            : type === 'thing' ? '{}'
+                : type === 'set' ? '[{}]'
+                    : type === 'string' ? `'${input}'`
+                        : type === 'closure' || type === 'number' || type === 'boolean' || type === 'blob' ? `${input}`
+                            : type === 'nil' ? 'nil'
+                                : '';
+    };
+
+    const handleAdd = () => {
+        let currentcontent = contentAdd.trim();
+
+        const contentTypeChecked = typeControls(dataType, currentcontent);
+        setMyItems(prevItems => {
+            const newArray = [...prevItems];
+            newArray.push(contentTypeChecked);
+            return newArray;
+        });
+        setState({ ...state, contentAdd: '' });
+
     };
 
     const handleClick = (index) => () => {
@@ -162,40 +180,17 @@ const Add1DArray = ({input, cb}) => {
                     </option>
                 ))}
             </TextField>
-            {dataType == 'boolean' ? (
-                <RadioGroup className={classes.dense} aria-label="position" name="contentAdd" value={contentAdd} onChange={handleChange} row onKeyPress={handleKeypress}>
-                    <FormControlLabel
-                        className={classes.dense}
-                        value="true"
-                        control={<Radio color="primary" />}
-                        label="true"
-                        labelPlacement="bottom"
-                    />
-                    <FormControlLabel
-                        className={classes.dense}
-                        value="false"
-                        control={<Radio color="primary" />}
-                        label="false"
-                        labelPlacement="bottom"
-                    />
-                </RadioGroup>
-            ) : (
-                <TextField
-                    className={classes.textField}
-                    id="contentAdd"
-                    type="text"
-                    name="contentAdd"
-                    autoComplete="off"
-                    onChange={handleChange}
-                    onKeyPress={handleKeypress}
-                    value={contentAdd}
-                    style={{ width: width }}
-                    variant="outlined"
-                    helperText={errors.contentAdd}
-                    error={Boolean(errors.contentAdd)}
-                    placeholder="+"
-                />
-            )}
+            <InputField
+                dataType={dataType}
+                cb={handleInputField}
+                name="+"
+                input={contentAdd}
+                variant="outlined"
+                style={{ width: width }}
+            />
+            <Fab color="secondary" onClick={handleAdd} size="small">
+                <AddIcon fontSize="small" />
+            </Fab>
             <span
                 id="helperspan"
                 ref={helperspan}
@@ -205,14 +200,9 @@ const Add1DArray = ({input, cb}) => {
             </span>
         </div>
     );
-
 };
-Add1DArray.defaultProps = {
-    input: null,
-},
 
 Add1DArray.propTypes = {
-    input: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string])),
     cb: PropTypes.func.isRequired,
 };
 

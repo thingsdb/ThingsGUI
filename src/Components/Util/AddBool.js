@@ -26,7 +26,7 @@ const AddBool = ({input, cb}) => {
     };
 
     return(
-        <RadioGroup aria-label="position" name="value" value={bool} onChange={handleOnChange} row >
+        <RadioGroup aria-label="position" name="value" value={bool} onChange={handleOnChange} row>
             <FormControlLabel
                 value="true"
                 control={<Radio color="primary" />}
@@ -44,12 +44,12 @@ const AddBool = ({input, cb}) => {
 };
 
 AddBool.defaultProps = {
-    input: null,
+    input: '',
 };
 
 AddBool.propTypes = {
     cb: PropTypes.func.isRequired,
-    input: PropTypes.bool,
+    input: PropTypes.string,
 };
 
 export default AddBool;

@@ -92,6 +92,7 @@ const ThingRoot = ({things, collection}) => {
                                 }}
                                 parent={{
                                     id: null,
+                                    index: null,
                                     name: '',
                                     type: '',
                                 }}

@@ -86,7 +86,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
     const buildQueryRemove = (parentName, parentId, childName, childIndex, childId) => {
         return childIndex == null ? `#${parentId}.del('${childName}');`
             : childName == '$' ? `#${parentId}.${parentName}.remove(#${parentId}.${parentName}.find(|s| (s.id()==${childId}) ));`
-                : `#${parentId}.${childName}.splice(${childIndex}, 1);`; //childname or prentname???
+                : `#${parentId}.${parentName}.splice(${childIndex}, 1);`; //childname or prentname???
     };
 
     return(

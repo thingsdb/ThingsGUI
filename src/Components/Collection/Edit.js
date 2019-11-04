@@ -92,6 +92,9 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     const addNewProperty = Boolean(child.id);
     const isCustomType = customTypes.hasOwnProperty(form.dataType);
+    console.log(child, parent);
+
+    const input = child.type == 'thing' ? '' : child.type == 'closure' ? thing['>'] : thing;
 
     return(
         <React.Fragment>
@@ -111,8 +114,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                             customTypes={customTypes}
                             parent={{
                                 id: child.id||parent.id,
-                                name: child.id?child.name:parent.name,
-                                type: child.id?child.type:parent.type,
+                                name: child.id || child.type == 'array'?child.name:parent.name,
+                                type: child.id|| child.type == 'array'?child.type:parent.type,
                             }}
                             showQuery
                         />
@@ -145,6 +148,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         fullWidth
                         select
                         SelectProps={{native: true}}
+                        disabled={child.type != 'thing' && child.type != 'array'}
                     >
                         {dataTypes.map(d => (
                             <option key={d} value={d} disabled={parent.type=='set'&&d!='thing'} >
@@ -162,7 +166,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                     />
                 ) : (
                     <ListItem className={classes.listItem}>
-                        <InputField name="Value" dataType={form.dataType} cb={handleVal} input={thing} />
+                        <InputField name="Value" dataType={form.dataType} cb={handleVal} input={input} />
                     </ListItem>
                 )}
             </List>
@@ -183,8 +187,10 @@ Edit.propTypes = {
     customTypes: PropTypes.object.isRequired,
     parent: PropTypes.shape({
         id: PropTypes.number,
+        index: PropTypes.number,
         name: PropTypes.string,
         type: PropTypes.string,
+        isTuple: PropTypes.bool,
     }).isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,

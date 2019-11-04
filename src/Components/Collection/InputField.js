@@ -1,12 +1,21 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
 
-import {Add1DArray, AddBlob, AddBool, onlyNums} from '../Util';
+import {Add1DArray, AddBlob, AddBool, checkType, onlyNums} from '../Util';
 
+const useStyles = makeStyles(theme => ({
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        marginTop: 0,
+        marginBottom: 0,
+    },
+}));
 
-const InputField = ({dataType, cb, name, input}) => {
-    console.log(input);
+const InputField = ({dataType, cb, name, input, ...props}) => {
+    const classes = useStyles();
     const [val, setVal] = React.useState('');
     const [error, setError] = React.useState('');
 
@@ -17,18 +26,11 @@ const InputField = ({dataType, cb, name, input}) => {
     );
 
     React.useEffect(() => {
-        let i = '';
-        switch (dataType) {
-        case 'string', 'number':
-            i = input;
-            break;
-        case 'closure':
-            i = input['>'];
-            break;
+        if (input != null) {
+            setVal(input);
         }
-        setVal(i);
     },
-    [input],
+    [input, dataType],
     );
 
     const errorTxt = (value) => {
@@ -81,6 +83,7 @@ const InputField = ({dataType, cb, name, input}) => {
         <React.Fragment>
             {singleInputField ? (
                 <TextField
+                    className={classes.textField}
                     margin="dense"
                     name={name}
                     label={name}
@@ -91,15 +94,17 @@ const InputField = ({dataType, cb, name, input}) => {
                     fullWidth
                     helperText={error}
                     error={Boolean(error)}
+                    {...props}
                 />
             ) : multiInputField ? (
-                <Add1DArray input={input} cb={handleArrayItems} />
+                <Add1DArray cb={handleArrayItems} />
             ) : booleanInputField ? (
-                <AddBool input={input} cb={handleBool} />
+                <AddBool input={checkType(input) == 'boolean' ?  `${input}` : ''} cb={handleBool} />
             ) : blobInputField ? (
-                <AddBlob cb={handleBlob} />
+                <AddBlob cb={handleBlob} {...props} />
             ) : closureInputField ? (
                 <TextField
+                    className={classes.textField}
                     margin="dense"
                     name={name}
                     label={name}
@@ -111,6 +116,7 @@ const InputField = ({dataType, cb, name, input}) => {
                     placeholder="example: |x,y| x+y"
                     helperText={error}
                     error={Boolean(error)}
+                    {...props}
                 />
             ) : null }
         </React.Fragment>

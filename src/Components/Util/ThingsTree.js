@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {checkType, thingValue, TreeBranch} from '../Util';
+import {checkType, fancyName, thingValue, TreeBranch} from '../Util';
 
 
 const useStyles = makeStyles(theme => ({
@@ -17,11 +17,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ThingsTree = ({item, tree, child, parent}) => {
+const ThingsTree = ({item, tree, child}) => {
     const classes = useStyles();
 
-    // is root if parent is still null
-    const thing = parent === null ? tree : item;
+    // is root if item is still null
+    const thing = item === null ? tree : item;
 
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
         return k === '#' ? null : (
@@ -29,10 +29,8 @@ const ThingsTree = ({item, tree, child, parent}) => {
                 <ThingsTree
                     item={v}
                     tree={tree}
-                    parent={{
-                        name: k,
-                    }}
                     child={{
+                        name: fancyName(k, i),
                         index: i,
                     }}
                 />
@@ -43,7 +41,7 @@ const ThingsTree = ({item, tree, child, parent}) => {
     const renderChildren = () => {
         const isArray = Array.isArray(thing);
         return isArray ?
-            thing.map((t, i) => renderThing([parent ? `${parent.name}` : `${i}`, t, i]))
+            thing.map((t, i) => renderThing([child ? `${child.name}` : `${i}`, t, i]))
             :
             Object.entries((item && tree[item['#']]) || thing || {}).map(renderThing);
     };
@@ -55,30 +53,22 @@ const ThingsTree = ({item, tree, child, parent}) => {
     // buttons
     const canToggle = type === 'thing' || type === 'object' || type === 'array' || type === 'set';
 
-    // naming
-    const fancyName = (n) => child.index !== null ? n + `[${child.index}]` : n;
-    const name = parent && fancyName(parent.name);
-
     return (
-        <TreeBranch name={name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} />
+        <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} />
     );
 };
 
 ThingsTree.defaultProps = {
     item: null,
-    child: null,
-    parent: null,
 };
 
 ThingsTree.propTypes = {
     item: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     tree: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     child: PropTypes.shape({
-        index: PropTypes.number,
-    }),
-    parent: PropTypes.shape({
         name: PropTypes.string,
-    }),
+        index: PropTypes.number,
+    }).isRequired,
 };
 
 export default ThingsTree;

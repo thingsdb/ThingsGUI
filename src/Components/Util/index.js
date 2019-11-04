@@ -74,6 +74,8 @@ const getScopes = (collections) => [
     ]
 ];
 
+const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
+
 
 export {
     Add1DArray,
@@ -86,6 +88,7 @@ export {
     DrawerLayout,
     ErrorMsg,
     ErrorToast,
+    fancyName,
     findItem,
     HarmonicCard,
     Info,

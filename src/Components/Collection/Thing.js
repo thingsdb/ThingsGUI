@@ -8,7 +8,7 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import ThingActions from './ThingActions';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
-import {checkType, thingValue, TreeBranch} from '../Util';
+import {checkType, fancyName, thingValue, TreeBranch} from '../Util';
 
 
 const withStores = withVlow([{
@@ -32,10 +32,16 @@ const Thing = ({thing, collection, things, parent, child}) => {
     const classes = useStyles();
 
     // thing info
+
+    // type and value
+    const type = checkType(thing);
+    const val = thingValue(type, thing);
+
+    const canToggle = type === 'thing' || type === 'array' || type === 'set' || type === 'closure';
+
     const isTuple = type === 'array' && parent.type === 'array';
     const thingId = thing && thing['#'] || parent.id;
     const currThing = thing && things[thing['#']] || thing;
-    const fancyName = (n, i) => i !== null ? n + `[${i}]` : n;
 
 
     const renderThing = ([k, v, i=null]) => {
@@ -73,13 +79,6 @@ const Thing = ({thing, collection, things, parent, child}) => {
             CollectionActions.query(collection, thing['#']);
         }
     };
-
-
-    // type and value
-    const type = checkType(thing);
-    const val = thingValue(type, thing);
-
-    const canToggle = type === 'thing' || type === 'array' || type === 'set' || type === 'closure';
 
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>

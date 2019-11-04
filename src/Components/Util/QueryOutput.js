@@ -24,7 +24,13 @@ const QueryOutput = ({output}) => {
                 disablePadding
             >
                 {output != null ? (
-                    <ThingsTree tree={output} />
+                    <ThingsTree
+                        tree={output}
+                        child={{
+                            name:'',
+                            index:null,
+                        }}
+                    />
                 ) : (
                     null
                 )}

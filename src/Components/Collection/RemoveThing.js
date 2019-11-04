@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 
 import BuildQueryString from './BuildQueryString';
-import { ErrorMsg, SimpleModal } from '../Util';
+import { ErrorMsg, fancyName, SimpleModal } from '../Util';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
@@ -76,7 +76,7 @@ const RemoveThing = ({scope, thing, child, parent}) => {
         </React.Fragment>
     );
 
-    const title = child.hasOwnProperty('index') && child.index!=null ? `Remove ${parent.name}[${child.index}]` : `Remove ${child.name}`;
+    const title = `Remove ${child.name}`;
 
     return(
         <SimpleModal
