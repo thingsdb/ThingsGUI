@@ -80,21 +80,25 @@ const Thing = ({thing, collection, things, parent, child}) => {
         }
     };
 
+    const hasActions = !(child.name == '$');
+
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
-            <ListItemIcon>
-                <ThingActions
-                    child={{
-                        id: thing && thing['#']||null,
-                        index: child.index,
-                        name: child.name,
-                        type: type,
-                    }}
-                    parent={parent}
-                    thing={currThing}
-                    scope={`@collection:${collection.name}`}
-                />
-            </ListItemIcon>
+            {hasActions ? (
+                <ListItemIcon>
+                    <ThingActions
+                        child={{
+                            id: thing && thing['#']||null,
+                            index: child.index,
+                            name: child.name,
+                            type: type,
+                        }}
+                        parent={parent}
+                        thing={currThing}
+                        scope={`@collection:${collection.name}`}
+                    />
+                </ListItemIcon>
+            ): null}
         </TreeBranch>
     );
 };

@@ -47,9 +47,9 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
         const v = val&&val.hasOwnProperty('val') ? val.val : val;
         return t.includes('str') ? `'${v}'`
             : t.includes('int') || t.includes('float') || t.includes('bool') ? `${v}`
-                : t.includes('thing') ? `{${v}}` // TODO
+                : t.includes('thing') ? '{}' // TODO
                     : t.includes('[') ? createArrayInput(n, t, customTypes, v)
-                        : t.includes('{') ? '' // TODO
+                        : t.includes('{') ? 'set([{}])' // TODO
                             : '';
     };
 

@@ -3,9 +3,17 @@ import React from 'react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles(() => ({
+    dense: {
+        padding: 0,
+        margin: 0,
+    },
+}));
 
 const AddBool = ({input, cb}) => {
+    const classes = useStyles();
     const [bool, setBool] = React.useState('');
 
     React.useEffect(() => {
@@ -26,7 +34,7 @@ const AddBool = ({input, cb}) => {
     };
 
     return(
-        <RadioGroup aria-label="position" name="value" value={bool} onChange={handleOnChange} row>
+        <RadioGroup className={classes.dense} aria-label="position" name="value" value={bool} onChange={handleOnChange} row>
             <FormControlLabel
                 value="true"
                 control={<Radio color="primary" />}

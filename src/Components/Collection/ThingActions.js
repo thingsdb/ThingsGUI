@@ -6,8 +6,6 @@ import BuildIcon from '@material-ui/icons/Build';
 
 import ThingActionsDialog from './ThingActionsDialog';
 
-
-
 const ThingActions = ({child, parent, thing, scope}) => {
     const [show, setShow] = React.useState(false);
 

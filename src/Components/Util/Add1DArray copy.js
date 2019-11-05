@@ -25,11 +25,12 @@ const dataTypes = [
     'string',
     'number',
     'boolean',
-    'nil',
-    'thing',
-    'closure',
     'blob',
+    'closure',
+    'nil',
     'array',
+    'set',
+    'thing',
 ];
 
 const Add1DArray = ({cb}) => {

@@ -1,16 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
 import InputField from '../Collection/InputField';
-import {onlyNums} from '../Util';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -22,44 +19,31 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(2),
         margin: theme.spacing(2),
     },
-    dense: {
-        padding: 0,
-        margin: 0,
-    },
-    textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-    },
     chip: {
         padding: theme.spacing(1),
         margin: theme.spacing(1),
     },
-    transitionGroup: {
-        paddingTop: theme.spacing(2),
-        paddingBottom: 0,
-        paddingLeft: 0,
-        paddingRight: 0,
-    },
 }));
 
 
-const dataTypes = [
+const dataTypes = [ // Do not put array first; causes infinite loop
     'string',
     'number',
     'boolean',
-    'nil',
-    'thing',
     'closure',
-    'set',
+    'nil',
     'array',
+    'set',
+    'thing',
 ];
 
 const Add1DArray = ({cb}) => {
+    console.log('Add1DArray');
     const classes = useStyles();
     const helperspan = React.useRef(null);
     const [state, setState] = React.useState({
         contentAdd: '',
-        dataType: dataTypes[0],
+        dataType: 'string',
         errors: {},
     });
     const {contentAdd, dataType} = state;
@@ -162,35 +146,46 @@ const Add1DArray = ({cb}) => {
 
     return (
         <div className={classes.container} >
-            {makeAddedList()}
-            <TextField
-                className={classes.textField}
-                id="dataType"
-                type="text"
-                name="dataType"
-                onChange={handleChange}
-                value={dataType}
-                variant="outlined"
-                select
-                SelectProps={{native: true}}
-            >
-                {dataTypes.map((p) => (
-                    <option key={p} value={p}>
-                        {p}
-                    </option>
-                ))}
-            </TextField>
-            <InputField
-                dataType={dataType}
-                cb={handleInputField}
-                name="+"
-                input={contentAdd}
-                variant="outlined"
-                style={{ width: width }}
-            />
-            <Fab color="secondary" onClick={handleAdd} size="small">
-                <AddIcon fontSize="small" />
-            </Fab>
+            <Grid container spacing={1} >
+                <Grid item xs={12}>
+                    {makeAddedList()}
+                </Grid>
+                <Grid container item xs={12} spacing={1} >
+                    <Grid item>
+                        <TextField
+                            id="dataType"
+                            type="text"
+                            name="dataType"
+                            onChange={handleChange}
+                            value={dataType}
+                            variant="outlined"
+                            select
+                            SelectProps={{native: true}}
+                        >
+                            {dataTypes.map((p) => (
+                                <option key={p} value={p}>
+                                    {p}
+                                </option>
+                            ))}
+                        </TextField>
+                    </Grid>
+                    <Grid item>
+                        <InputField
+                            dataType={dataType}
+                            cb={handleInputField}
+                            name="+"
+                            input={contentAdd}
+                            variant="outlined"
+                            style={{ width: width }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <Fab color="secondary" onClick={handleAdd} size="small">
+                            <AddIcon fontSize="small" />
+                        </Fab>
+                    </Grid>
+                </Grid>
+            </Grid>
             <span
                 id="helperspan"
                 ref={helperspan}

@@ -25,7 +25,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         form: {
             queryString: '',
             newProperty: '',
-            dataType: child.type,
+            dataType: child.type=='array'||child.type=='thing' ? dataTypes[0]:child.type,
             value: '',
             blob: '',
             custom: {},

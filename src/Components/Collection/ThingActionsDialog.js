@@ -18,7 +18,7 @@ import {ApplicationActions} from '../../Stores/ApplicationStore';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 import {TypeActions, TypeStore} from '../../Stores/TypeStore';
-import {ErrorMsg, fancyName, WatchThings} from '../Util';
+import {ErrorMsg, WatchThings} from '../Util';
 
 
 const withStores = withVlow([{
@@ -32,13 +32,13 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
     const dataTypes = [
         'string',
         'number',
-        'array',
-        'thing',
-        'set',
-        'closure',
         'boolean',
-        'nil',
         'blob',
+        'closure',
+        'nil',
+        'array',
+        'set',
+        'thing',
         ...Object.keys(customTypes)
     ];
 
@@ -92,8 +92,8 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
     };
 
     // buttons visible
-
-    const hasButtons = !(child.type === 'array' && child.name === '$' || child.name === '>' || parent.isTuple);
+    const isRoot = !(child.name||parent.name);
+    const canRemove = !(child.type === 'array' && child.name === '$' || child.name === '>' || parent.isTuple || isRoot);
     const canEdit = !(parent.isTuple && child.type !== 'thing');
     const canWatch = thing && thing.hasOwnProperty('#');
 
@@ -107,8 +107,8 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
         >
             <DialogContent>
                 <Grid container spacing={1}>
-                    <Grid container spacing={1} item xs={10}>
-                        <Grid item xs={12}>
+                    <Grid container spacing={1} item xs={12}>
+                        <Grid item xs={8}>
                             <Typography variant="body1" >
                                 {'Detail view of:'}
                             </Typography>
@@ -116,27 +116,8 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
                                 {child.name||parent.name||'Root'}
                             </Typography>
                         </Grid>
-                        {canEdit ? (
-                            <React.Fragment>
-                                <Grid item xs={12}>
-                                    <ErrorMsg tag={tag} />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Edit
-                                        cb={handleQuery}
-                                        customTypes={customTypes}
-                                        dataTypes={dataTypes}
-                                        thing={thing}
-                                        child={child}
-                                        parent={parent}
-                                    />
-                                </Grid>
-                            </React.Fragment>
-                        ): null}
-                    </Grid>
-                    <Grid container spacing={1} item xs={2} alignContent="flex-start">
-                        {hasButtons &&
-                            <Grid item xs={12} container justify="flex-end">
+                        <Grid container spacing={1} item xs={4}justify="flex-end">
+                            {canRemove &&
                                 <Grid item>
                                     <RemoveThing
                                         scope={scope}
@@ -152,27 +133,40 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
                                         }}
                                     />
                                 </Grid>
-                            </Grid>
-                        }
-                        <Grid item xs={12} container justify="flex-end">
+                            }
                             <Grid item>
                                 <Fab color="secondary" onClick={handleClickOpenEditor} >
                                     <CodeIcon fontSize="large" />
                                 </Fab>
                             </Grid>
-                        </Grid>
-                        {canWatch &&
-                            <Grid item xs={12} container justify="flex-end">
-                                <Grid item>
-                                    <WatchThings
-                                        buttonIsFab
-                                        scope={scope}
-                                        thingId={child.id||parent.id}
-                                    />
-                                </Grid>
+                            {canWatch &&
+                            <Grid item>
+                                <WatchThings
+                                    buttonIsFab
+                                    scope={scope}
+                                    thingId={child.id||parent.id}
+                                />
                             </Grid>
-                        }
+                            }
+                        </Grid>
                     </Grid>
+                    {canEdit ? (
+                        <React.Fragment>
+                            <Grid item xs={12}>
+                                <ErrorMsg tag={tag} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Edit
+                                    cb={handleQuery}
+                                    customTypes={customTypes}
+                                    dataTypes={dataTypes}
+                                    thing={thing}
+                                    child={child}
+                                    parent={parent}
+                                />
+                            </Grid>
+                        </React.Fragment>
+                    ): null}
                 </Grid>
             </DialogContent>
             <Divider />

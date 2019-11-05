@@ -1,7 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Card from '@material-ui/core/Card';
 import Collapse from '@material-ui/core/Collapse';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -60,19 +59,19 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
     const setType = (t) => {
         let type = [];
         switch (true) {
-        case t.includes('str'):
+        case t=='str':
             type=['string', 'str'];
             break;
-        case t.includes('int'):
+        case t=='int':
             type=['number', 'int'];
             break;
-        case t.includes('float'):
+        case t=='float':
             type=['number', 'float'];
             break;
-        case t.includes('bool'):
+        case t=='bool':
             type=['boolean', 'bool'];
             break;
-        case t.includes('thing'):
+        case t=='thing':
             type=['thing', 'thing'];
             break;
         case t.includes('['): //array
@@ -162,7 +161,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
 
     const renderChildren = () => {
         return (
-            <Collapse in={stepId!=activeStep} timeout="auto">
+            <Collapse in={stepId<activeStep} timeout="auto">
                 {Object.entries(customTypes[type]).map(renderThing)}
             </Collapse>
         );
@@ -172,16 +171,14 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
         <React.Fragment>
             {customTypes[type] ? (
                 <React.Fragment>
-                    <Collapse in={stepId==activeStep} timeout="auto">
-                        <ListItem className={classes.listItem}>
-                            <ListItemText
-                                primary={name}
-                                secondary={setType(type)[0]}
-                                color="primary"
-                                primaryTypographyProps={{color:'primary'}}
-                            />
-                        </ListItem>
-                    </Collapse>
+                    <ListItem className={classes.listItem}>
+                        <ListItemText
+                            primary={name}
+                            secondary={setType(type)[0]}
+                            color="primary"
+                            primaryTypographyProps={{color:'primary'}}
+                        />
+                    </ListItem>
                     {renderChildren()}
                 </React.Fragment>
             ) : (

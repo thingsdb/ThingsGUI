@@ -1,21 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
 
 import {Add1DArray, AddBlob, AddBool, checkType, onlyNums} from '../Util';
 
-const useStyles = makeStyles(theme => ({
-    textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        marginTop: 0,
-        marginBottom: 0,
-    },
-}));
 
 const InputField = ({dataType, cb, name, input, ...props}) => {
-    const classes = useStyles();
+    console.log('InputField');
     const [val, setVal] = React.useState('');
     const [error, setError] = React.useState('');
 
@@ -28,7 +19,6 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
     React.useEffect(() => {
         if (input != null) {
             const type = checkType(input);
-            console.log(input, type);
             if (type != 'array' && type != 'thing'){
                 setVal(input);
             }
@@ -77,17 +67,17 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
         setVal(bool);
     };
 
-    const singleInputField = dataType == 'number' || dataType == 'string';
+    const singleInputField = dataType == 'number' || dataType == 'string' || dataType == 'closure';
     const multiInputField = dataType == 'array';
     const booleanInputField = dataType == 'boolean';
     const blobInputField = dataType == 'blob';
-    const closureInputField = dataType == 'closure';
+    const predefined = dataType == 'thing' || dataType == 'set';
+    const predefinedVal = dataType == 'thing' ? '{ }':'set( [ { } ] )';
 
     return(
         <React.Fragment>
             {singleInputField ? (
                 <TextField
-                    className={classes.textField}
                     margin="dense"
                     name={name}
                     label={name}
@@ -98,6 +88,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
                     fullWidth
                     helperText={error}
                     error={Boolean(error)}
+                    placeholder={dataType=='closure'?'example: |x,y| x+y':''}
                     {...props}
                 />
             ) : multiInputField ? (
@@ -106,21 +97,15 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
                 <AddBool input={checkType(input) == 'boolean' ?  `${input}` : ''} cb={handleBool} />
             ) : blobInputField ? (
                 <AddBlob cb={handleBlob} />
-            ) : closureInputField ? (
+            ) : predefined ? (
                 <TextField
-                    className={classes.textField}
                     margin="dense"
                     name={name}
                     label={name}
                     type="text"
-                    value={val}
-                    spellCheck={false}
-                    onChange={handleOnChange}
+                    value={predefinedVal}
                     fullWidth
-                    placeholder="example: |x,y| x+y"
-                    helperText={error}
-                    error={Boolean(error)}
-                    {...props}
+                    disabled
                 />
             ) : null }
         </React.Fragment>
