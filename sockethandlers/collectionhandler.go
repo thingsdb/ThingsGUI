@@ -27,8 +27,12 @@ func query(client *Client, data Data, blob map[string]interface{}, timeout uint1
 		message := util.Message{Text: "Query error", Status: http.StatusInternalServerError, Log: err.Error()}
 		return message.Status, "", message
 	}
-	err = client.TmpFiles.ReplaceBinStrWithLink(resp) // run as goroutine??
+	var r interface{}
+	r, err = client.TmpFiles.ReplaceBinStrWithLink(resp) // run as goroutine??
 	message := util.Msg(err, http.StatusInternalServerError)
+	if r != nil {
+		resp = r
+	}
 	return message.Status, resp, message
 }
 

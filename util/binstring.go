@@ -43,7 +43,7 @@ func (tmp *TmpFiles) createBinFileLink(content []byte) (string, error) {
 	return fmt.Sprintf("http://%s/download%s", hostname, tmpfile.Name()), nil
 }
 
-func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) error {
+func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) (interface{}, error) {
 	var err error
 	switch v := thing.(type) {
 	case []interface{}:
@@ -51,12 +51,12 @@ func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) error {
 			if t, ok := v[i].([]byte); ok {
 				v[i], err = tmp.createBinFileLink(t)
 				if err != nil {
-					return err
+					return nil, err
 				}
 			} else {
-				err = tmp.ReplaceBinStrWithLink(v[i])
+				_, err = tmp.ReplaceBinStrWithLink(v[i])
 				if err != nil {
-					return err
+					return nil, err
 				}
 			}
 		}
@@ -65,20 +65,28 @@ func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) error {
 			if t, ok := v[k].([]byte); ok {
 				v[k], err = tmp.createBinFileLink(t)
 				if err != nil {
-					return err
+					return nil, err
 				}
 			} else {
-				err = tmp.ReplaceBinStrWithLink(v[k])
+				_, err = tmp.ReplaceBinStrWithLink(v[k])
 				if err != nil {
-					return err
+					return nil, err
 				}
 			}
+		}
+	case []byte:
+		var s string
+		s, err = tmp.createBinFileLink(v)
+		if err != nil {
+			return nil, err
+		} else {
+			return s, nil
 		}
 	default:
 		// no match; here v has the same type as i
 	}
 
-	return nil
+	return nil, nil
 }
 
 func (tmp *TmpFiles) CleanupTmp() error { // cleanup at end of session

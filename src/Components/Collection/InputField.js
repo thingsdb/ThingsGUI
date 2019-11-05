@@ -27,7 +27,11 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
 
     React.useEffect(() => {
         if (input != null) {
-            setVal(input);
+            const type = checkType(input);
+            console.log(input, type);
+            if (type != 'array' && type != 'thing'){
+                setVal(input);
+            }
         }
     },
     [input, dataType],
@@ -101,7 +105,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
             ) : booleanInputField ? (
                 <AddBool input={checkType(input) == 'boolean' ?  `${input}` : ''} cb={handleBool} />
             ) : blobInputField ? (
-                <AddBlob cb={handleBlob} {...props} />
+                <AddBlob cb={handleBlob} />
             ) : closureInputField ? (
                 <TextField
                     className={classes.textField}

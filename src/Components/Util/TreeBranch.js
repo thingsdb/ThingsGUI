@@ -69,15 +69,17 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                 </ListItemIcon>
                 <ListItemText
                     className={classes.listItem}
-                    primary={name ? (
+                    primary={
                         <React.Fragment>
-                            <Typography
-                                variant="body1"
-                                color="primary"
-                                component="span"
-                            >
-                                {`${name}   `}
-                            </Typography>
+                            {name ? (
+                                <Typography
+                                    variant="body1"
+                                    color="primary"
+                                    component="span"
+                                >
+                                    {`${name}   `}
+                                </Typography>
+                            ) : null}
                             {type === 'blob' ?  link ? (
                                 <Link href={link} download="blob" type="application/octet-stream" color="textPrimary">
                                     {val}
@@ -86,7 +88,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                                 '   -   Blob'
                             ) : `  -   ${val}`}
                         </React.Fragment>
-                    ) : val}
+                    }
                     primaryTypographyProps={{
                         display: 'block',
                         noWrap: true

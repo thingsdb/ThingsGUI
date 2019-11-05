@@ -5,8 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
 import InputField from '../Collection/InputField';
-import ArrayLayout from '../Collection/ArrayLayout';
-import {onlyNums} from '../Util';
+import {ArrayLayout, onlyNums} from '../Util';
 
 const useStyles = makeStyles(theme => ({
     card: {

@@ -8,11 +8,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import {makeStyles} from '@material-ui/core/styles';
 
 import InputField from './InputField';
-import ArrayLayout from './ArrayLayout';
+import {ArrayLayout} from '../Util';
 
 const useStyles = makeStyles(theme => ({
-    card: {
-        backgroundColor: theme.palette.secondary.main,
+    container: {
+        borderLeft: `3px solid ${theme.palette.primary.main}`,
+        borderRight: `3px solid ${theme.palette.primary.main}`,
+        borderRadius: '20px',
         padding: theme.spacing(2),
         margin: theme.spacing(2),
     },
@@ -112,9 +114,9 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
     const handleCustomArray = (id, t) => (c) => {
         setInput(prevInput => {
             let updatedInput;
-            let index;
+            let index=null;
             prevInput.val.map((v, i) => {
-                if (v.name == c.name && v.type == t) {
+                if (v && v.name == c.name && v.type == t) {
                     const copy = [...v.val];
                     copy.splice(id, 1, c);
                     updatedInput = {name: v.name, type: v.type, val: copy};
@@ -122,8 +124,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
                 }
             });
             let copy2 = [...prevInput.val];
-            index ? copy2.splice(index, 1, updatedInput) : copy2.push({name: c.name, type: t, val: [c]});
-
+            index!=null ? copy2.splice(index, 1, updatedInput) : copy2.push({name: c.name, type: t, val: [c]});
             return {...prevInput, val: copy2};
         });
     };
@@ -132,7 +133,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
         <React.Fragment key={k}>
             <ArrayLayout
                 child={(i) => (
-                    <Card className={classes.card} raised>
+                    <div className={classes.container}>
                         <CustomChild
                             cb={handleCustomArray(i, v)}
                             customTypes={customTypes}
@@ -141,7 +142,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
                             activeStep={activeStep}
                             stepId={stepId+1}
                         />
-                    </Card>
+                    </div>
                 )}
             />
         </React.Fragment>

@@ -31,16 +31,16 @@ const ArrayLayout = ({child}) => {
     };
 
     return(
-        <Grid container>
+        <Grid container spacing={2}>
             {renderChildren()}
 
-            <Grid container item xs={6} justify="center" alignItems="center">
-                <Grid item xs={2}>
+            <Grid container item spacing={1} xs={6} justify="center" alignItems="center">
+                <Grid item>
                     <Fab color="secondary" onClick={handleAdd} size="small">
                         <AddIcon fontSize="small" />
                     </Fab>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item>
                     <Fab color="secondary" onClick={handleRemove} disabled={items==1} size="small">
                         <RemoveIcon fontSize="small" />
                     </Fab>

@@ -30,8 +30,8 @@ const AddBlob = ({cb}) => {
     }, []);
 
     return(
-        <Grid container>
-            <Grid item>
+        <Grid container spacing={1}>
+            <Grid item xs={12}>
                 <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
                     {({getRootProps, getInputProps}) => (
                         <section>
@@ -45,7 +45,7 @@ const AddBlob = ({cb}) => {
                     )}
                 </Dropzone>
             </Grid>
-            <Grid item>
+            <Grid item xs={12}>
                 <Collapse in={Boolean(blob)} timeout="auto" unmountOnExit>
                     <Typography variant="button" color="primary">
                         {fileName}

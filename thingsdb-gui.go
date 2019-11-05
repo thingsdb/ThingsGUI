@@ -112,7 +112,7 @@ func (app *App) SocketRouter() {
 		go func() {
 			for p := range eCh {
 				fmt.Println(p)
-				err := app.client[s.ID()].TmpFiles.ReplaceBinStrWithLink(p.Data)
+				_, err := app.client[s.ID()].TmpFiles.ReplaceBinStrWithLink(p.Data)
 				if err != nil {
 					lCh <- err.Error()
 				}

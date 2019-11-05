@@ -1,6 +1,7 @@
 import Add1DArray from './Add1DArray';
 import AddBlob from './AddBlob';
 import AddBool from './AddBool';
+import ArrayLayout from './ArrayLayout';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
 import Chips from './Chips';
@@ -81,6 +82,7 @@ export {
     Add1DArray,
     AddBlob,
     AddBool,
+    ArrayLayout,
     Buttons,
     CardButton,
     Chips,
