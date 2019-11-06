@@ -6,7 +6,6 @@ import {Add1DArray, AddBlob, AddBool, checkType, onlyNums} from '../Util';
 
 
 const InputField = ({dataType, cb, name, input, ...props}) => {
-    console.log('InputField');
     const [val, setVal] = React.useState('');
     const [error, setError] = React.useState('');
 
@@ -71,7 +70,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
     const multiInputField = dataType == 'array';
     const booleanInputField = dataType == 'boolean';
     const blobInputField = dataType == 'blob';
-    const predefined = dataType == 'thing' || dataType == 'set';
+    const predefined = dataType == 'thing'; //|| dataType == 'set';
     const predefinedVal = dataType == 'thing' ? '{ }':'set( [ { } ] )';
 
     return(

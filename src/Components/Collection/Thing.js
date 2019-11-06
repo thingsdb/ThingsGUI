@@ -56,6 +56,7 @@ const Thing = ({thing, collection, things, parent, child}) => {
                         name: child.name == '$' ? parent.name : child.name,
                         type: type,
                         isTuple: isTuple,
+                        isSet: parent.type == 'set'
                     }}
                     child={{
                         name: fancyName(k, i),
@@ -116,6 +117,7 @@ Thing.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
         isTuple: PropTypes.bool,
+        isSet: PropTypes.bool,
     }).isRequired,
     child: PropTypes.shape({
         name: PropTypes.string,

@@ -38,7 +38,6 @@ const dataTypes = [ // Do not put array first; causes infinite loop
 ];
 
 const Add1DArray = ({cb}) => {
-    console.log('Add1DArray');
     const classes = useStyles();
     const helperspan = React.useRef(null);
     const [state, setState] = React.useState({
@@ -150,7 +149,7 @@ const Add1DArray = ({cb}) => {
                 <Grid item xs={12}>
                     {makeAddedList()}
                 </Grid>
-                <Grid container item xs={12} spacing={1} >
+                <Grid container item xs={12} spacing={1} alignItems="center" >
                     <Grid item>
                         <TextField
                             id="dataType"
@@ -173,7 +172,7 @@ const Add1DArray = ({cb}) => {
                         <InputField
                             dataType={dataType}
                             cb={handleInputField}
-                            name="+"
+                            name=""
                             input={contentAdd}
                             variant="outlined"
                             style={{ width: width }}

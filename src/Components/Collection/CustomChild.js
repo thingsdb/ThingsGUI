@@ -86,49 +86,50 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
         return type;
     };
 
-    const handleVal = (val, e) => {
+    const handleVal = (val) => {
         setInput({...input, val: val});
     };
 
     const handleCustom = (c) => {
         setInput(prevInput => {
-            let updatedInput;
+            let update;
             if (prevInput.val) {
-                let b=false;
-                let copy = [...prevInput.val];
-                prevInput.val.map((v, i) => {
-                    if (v.name == c.name) {
-                        copy.splice(i, 1, c);
-                        b=true;
-                    }
-                });
-                updatedInput = b?copy:[...prevInput.val, c];
+                update = [...prevInput.val];
+                const index = update.findIndex((v) => v.name == c.name);
+                index==-1?update.push(c):update.splice(index, 1, c);
             } else {
-                updatedInput = [c];
+                console.log('hiiiiii');
+                update = [c];
             }
-            return {...prevInput, val: updatedInput};
+            return {...prevInput, val: update};
         });
     };
 
     const handleCustomArray = (id, t) => (c) => {
         setInput(prevInput => {
-            let updatedInput;
-            let index=null;
-            prevInput.val.map((v, i) => {
-                if (v && v.name == c.name && v.type == t) {
-                    const copy = [...v.val];
-                    copy.splice(id, 1, c);
-                    updatedInput = {name: v.name, type: v.type, val: copy};
-                    index = i;
-                }
-            });
-            let copy2 = [...prevInput.val];
-            index!=null ? copy2.splice(index, 1, updatedInput) : copy2.push({name: c.name, type: t, val: [c]});
-            return {...prevInput, val: copy2};
+            let update = [...prevInput.val];
+            const index = prevInput.val.findIndex((v) => v && v.name == c.name && v.type == t);
+            if (index == -1) {
+                update.push({name: c.name, type: t, val: [c]});
+            } else {
+                update[index].val.splice(id, 1, c);
+                update.splice(index, 1, {name: update[index].name, type: update[index].type, val: update[index].val});
+            }
+            return {...prevInput, val: update};
         });
     };
 
-    const renderThing = ([k, v]) => setType(v)[0] == 'array' ? (
+    const handleRemove = (t) => (i) => {
+        setInput(prevInput => {
+            let update = [...prevInput.val];
+            const index = prevInput.val.findIndex((v) => v && v.type == t);
+            update[index].val.splice(i, 1);
+            update.splice(index, 1, {name: update[index].name, type: update[index].type, val: update[index].val});
+            return {...prevInput, val: update};
+        });
+    };
+
+    const renderThing = ([k, v]) => setType(v)[0] == 'array' || setType(v)[0] == 'set' ? (
         <React.Fragment key={k}>
             <ArrayLayout
                 child={(i) => (
@@ -143,6 +144,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
                         />
                     </div>
                 )}
+                onRemove={handleRemove(v)}
             />
         </React.Fragment>
     ) : (

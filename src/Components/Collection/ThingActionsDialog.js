@@ -46,18 +46,25 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
         query: '',
         blob: '',
         error: '',
+        realType: '',
     };
     const [state, setState] = React.useState(initialState);
-    const {query, blob, error} = state;
+    const {query, blob, error, realType} = state;
 
     React.useEffect(() => {
         TypeActions.getTypes(scope, tag);
+        if (parent.id) {
+            TypeActions.getType(`#${parent.id}`,scope, tag, handleType);
+        }
     }, []);
+
+    const handleType = (t) => {
+        setState({...state, realType: t});
+    };
 
     const handleQuery = (q, b, e) => {
         setState({...state, query: q, blob: b, error: e});
     };
-
 
     const handleClickOk = () => {
         if (blob) {
@@ -92,8 +99,9 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
     };
 
     // buttons visible
-    const isRoot = !(child.name||parent.name);
-    const canRemove = !(child.type === 'array' && child.name === '$' || child.name === '>' || parent.isTuple || isRoot);
+    const isRoot = child.name == 'root';
+    const isPartOfCustomType = !(realType=='thing'||realType=='');
+    const canRemove = !(child.type === 'array' && child.name === '$' || child.name === '>' || parent.isTuple || isRoot || isPartOfCustomType);
     const canEdit = !(parent.isTuple && child.type !== 'thing');
     const canWatch = thing && thing.hasOwnProperty('#');
 
@@ -104,6 +112,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
             aria-labelledby="form-dialog-title"
             fullWidth
             maxWidth="md"
+            scroll="body"
         >
             <DialogContent>
                 <Grid container spacing={1}>
@@ -113,24 +122,17 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
                                 {'Detail view of:'}
                             </Typography>
                             <Typography variant="h4" color='primary'>
-                                {child.name||parent.name||'Root'}
+                                {child.name||parent.name}
                             </Typography>
                         </Grid>
-                        <Grid container spacing={1} item xs={4}justify="flex-end">
+                        <Grid container spacing={1} item xs={4} justify="flex-end">
                             {canRemove &&
                                 <Grid item>
                                     <RemoveThing
                                         scope={scope}
                                         thing={thing}
-                                        child={{
-                                            index: child.index,
-                                            name: child.name,
-                                        }}
-                                        parent={{
-                                            id: parent.id,
-                                            name: parent.name,
-                                            type: parent.type
-                                        }}
+                                        child={child}
+                                        parent={parent}
                                     />
                                 </Grid>
                             }
@@ -200,6 +202,7 @@ ThingActionsDialog.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
         isTuple: PropTypes.bool,
+        isSet: PropTypes.bool,
     }).isRequired,
     child: PropTypes.shape({
         id: PropTypes.number,

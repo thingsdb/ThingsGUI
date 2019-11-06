@@ -7,7 +7,7 @@ import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 
 
-const ArrayLayout = ({child}) => {
+const ArrayLayout = ({child, onRemove}) => {
     const [items, setItems] = React.useState(1);
 
     const handleAdd = () => {
@@ -16,6 +16,7 @@ const ArrayLayout = ({child}) => {
 
     const handleRemove = () => {
         setItems(items-1);
+        onRemove(items-1);
     };
 
     const renderChildren = () => {
@@ -53,6 +54,7 @@ const ArrayLayout = ({child}) => {
 
 ArrayLayout.propTypes = {
     child: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired,
 };
 
 export default ArrayLayout;

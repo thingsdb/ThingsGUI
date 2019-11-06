@@ -6,15 +6,15 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
     const [query, setQuery] = React.useState('');
 
     React.useEffect(() => {
-        handleBuildQuery(action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type);
-    }, [action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type]);
+        handleBuildQuery(action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type, parent.isSet);
+    }, [action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type, parent.isSet]);
 
     React.useEffect(() => {
         cb(query);
     }, [query]);
 
 
-    const handleBuildQuery = (action, childVal, childType, childIndex, childId, childName, parentId, parentName, parentType) => {
+    const handleBuildQuery = (action, childVal, childType, childIndex, childId, childName, parentId, parentName, parentType, parentIsSet) => {
         let val;
         let q = '';
         switch (action) {
@@ -27,7 +27,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
             q = buildQueryAdd(parentId, childName, parentName, val, parentType, childIndex);
             break;
         case 'remove':
-            q = buildQueryRemove(parentName, parentId, childName, childIndex, childId);
+            q = buildQueryRemove(parentName, parentId, childName, childIndex, childId, parentIsSet);
             break;
         }
         setQuery(q);
@@ -44,12 +44,12 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
     const createArrayInput = (name, type, customTypes, val) => `[${mapArrayInput(name, type, customTypes, val)}]`;
 
     const setTypeInput = (n, t, customTypes, val) => {
-        const v = val&&val.hasOwnProperty('val') ? val.val : val;
+        const v = val&&val.hasOwnProperty('val') ? val.val : val||'';
         return t.includes('str') ? `'${v}'`
             : t.includes('int') || t.includes('float') || t.includes('bool') ? `${v}`
                 : t.includes('thing') ? '{}' // TODO
                     : t.includes('[') ? createArrayInput(n, t, customTypes, v)
-                        : t.includes('{') ? 'set([{}])' // TODO
+                        : t.includes('{') ? `set(${createArrayInput(n, t, customTypes, v)})`//'set([{}])' // TODO
                             : '';
     };
 
@@ -83,9 +83,9 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
                     : '';
     };
 
-    const buildQueryRemove = (parentName, parentId, childName, childIndex, childId) => {
+    const buildQueryRemove = (parentName, parentId, childName, childIndex, childId, parentIsSet) => {
         return childIndex == null ? `#${parentId}.del('${childName}');`
-            : childName == '$' ? `#${parentId}.${parentName}.remove(#${parentId}.${parentName}.find(|s| (s.id()==${childId}) ));`
+            : parentIsSet ? `#${parentId}.${parentName}.remove(#${parentId}.${parentName}.find(|s| (s.id()==${childId}) ));`
                 : `#${parentId}.${parentName}.splice(${childIndex}, 1);`; //childname or prentname???
     };
 

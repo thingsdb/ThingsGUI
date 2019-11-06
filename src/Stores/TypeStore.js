@@ -4,6 +4,7 @@ import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 
 const TypeActions = Vlow.createActions([
+    'getType',
     'getTypes',
     'deleteType',
 ]);
@@ -22,6 +23,19 @@ class TypeStore extends BaseStore {
     constructor() {
         super(TypeActions);
         this.state = TypeStore.defaults;
+    }
+
+    onGetType(thing, scope, tag, cb) {
+        const query = `type(${thing})`;
+        this.emit('query', {
+            query,
+            scope
+        }).done((data) => {
+            cb(data);
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+            return [];
+        });
     }
 
     onGetTypes(scope, tag) {

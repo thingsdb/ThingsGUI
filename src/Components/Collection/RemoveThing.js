@@ -24,6 +24,7 @@ const RemoveThing = ({scope, thing, child, parent}) => {
         setShow(false);
     };
 
+
     const handleClickOk = () => {
         CollectionActions.rawQuery(
             scope,
@@ -34,7 +35,6 @@ const RemoveThing = ({scope, thing, child, parent}) => {
                 ThingsdbActions.getCollections();
             }
         );
-        setShow(false);
     };
 
     const handleQuery = (q) => {
@@ -60,6 +60,7 @@ const RemoveThing = ({scope, thing, child, parent}) => {
                             id: parent.id,
                             name: parent.hasOwnProperty('name') ? parent.name : null,
                             type: null,
+                            isSet: parent.isSet
                         }}
                         showQuery
                     />
@@ -102,12 +103,17 @@ RemoveThing.defaultProps = {
 RemoveThing.propTypes = {
     scope: PropTypes.string.isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
-    child: PropTypes.shape({
-        index: PropTypes.number,
-        name: PropTypes.string,
-    }).isRequired,
     parent: PropTypes.shape({
         id: PropTypes.number,
+        index: PropTypes.number,
+        name: PropTypes.string,
+        type: PropTypes.string,
+        isTuple: PropTypes.bool,
+        isSet: PropTypes.bool,
+    }).isRequired,
+    child: PropTypes.shape({
+        id: PropTypes.number,
+        index: PropTypes.number,
         name: PropTypes.string,
         type: PropTypes.string,
     }).isRequired,

@@ -25,7 +25,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         form: {
             queryString: '',
             newProperty: '',
-            dataType: child.type=='array'||child.type=='thing' ? dataTypes[0]:child.type,
+            dataType: child.type=='array'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type,
             value: '',
             blob: '',
             custom: {},
@@ -95,8 +95,6 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     const input = child.type == 'thing' ? '' : child.type == 'closure' ? thing['>'] : thing;
 
-    console.log(form.custom);
-
     return(
         <React.Fragment>
             <List disablePadding dense>
@@ -115,8 +113,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                             customTypes={customTypes}
                             parent={{
                                 id: child.id||parent.id,
-                                name: child.id || child.type == 'array'?child.name:parent.name,
-                                type: child.id|| child.type == 'array'?child.type:parent.type,
+                                name: child.id || child.type == 'array' || child.type == 'set' ?child.name:parent.name,
+                                type: child.id|| child.type == 'array'|| child.type == 'set'?child.type:parent.type,
                             }}
                             showQuery
                         />
@@ -181,10 +179,6 @@ Edit.defaultProps = {
 
 Edit.propTypes = {
     cb: PropTypes.func.isRequired,
-    child: PropTypes.shape({
-        index: PropTypes.number,
-        name: PropTypes.string,
-    }).isRequired,
     customTypes: PropTypes.object.isRequired,
     parent: PropTypes.shape({
         id: PropTypes.number,
@@ -192,6 +186,13 @@ Edit.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
         isTuple: PropTypes.bool,
+        isSet: PropTypes.bool,
+    }).isRequired,
+    child: PropTypes.shape({
+        id: PropTypes.number,
+        index: PropTypes.number,
+        name: PropTypes.string,
+        type: PropTypes.string,
     }).isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
