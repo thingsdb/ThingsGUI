@@ -32,7 +32,7 @@ const dataTypes = [ // Do not put array first; causes infinite loop
     'boolean',
     'closure',
     'nil',
-    'array',
+    'list',
     'set',
     'thing',
 ];
@@ -97,7 +97,7 @@ const Add1DArray = ({cb}) => {
     // };
 
     const typeControls = (type, input) => {
-        return type === 'array' ? `[${input}]`
+        return type === 'list' ? `[${input}]`
             : type === 'thing' ? '{}'
                 : type === 'set' ? '[{}]'
                     : type === 'string' ? `'${input}'`

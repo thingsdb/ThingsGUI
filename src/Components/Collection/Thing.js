@@ -43,7 +43,6 @@ const Thing = ({thing, collection, things, parent, child}) => {
     const thingId = thing && thing['#'] || parent.id;
     const currThing = thing && things[thing['#']] || thing;
 
-
     const renderThing = ([k, v, i=null]) => {
         return k === '#' ? null : (
             <div key={i ? i : k} className={classes.nested}>
@@ -53,10 +52,9 @@ const Thing = ({thing, collection, things, parent, child}) => {
                     thing={v}
                     parent={{
                         id: thingId,
-                        name: child.name == '$' ? parent.name : child.name,
+                        name: child.name,
                         type: type,
                         isTuple: isTuple,
-                        isSet: parent.type == 'set'
                     }}
                     child={{
                         name: fancyName(k, i),
@@ -81,25 +79,21 @@ const Thing = ({thing, collection, things, parent, child}) => {
         }
     };
 
-    const hasActions = !(child.name == '$');
-
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
-            {hasActions ? (
-                <ListItemIcon>
-                    <ThingActions
-                        child={{
-                            id: thing && thing['#']||null,
-                            index: child.index,
-                            name: child.name,
-                            type: type,
-                        }}
-                        parent={parent}
-                        thing={currThing}
-                        scope={`@collection:${collection.name}`}
-                    />
-                </ListItemIcon>
-            ): null}
+            <ListItemIcon>
+                <ThingActions
+                    child={{
+                        id: thing && thing['#']||null,
+                        index: child.index,
+                        name: child.name,
+                        type: type,
+                    }}
+                    parent={parent}
+                    thing={currThing}
+                    scope={`@collection:${collection.name}`}
+                />
+            </ListItemIcon>
         </TreeBranch>
     );
 };
@@ -117,7 +111,6 @@ Thing.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
         isTuple: PropTypes.bool,
-        isSet: PropTypes.bool,
     }).isRequired,
     child: PropTypes.shape({
         name: PropTypes.string,

@@ -75,7 +75,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
             type=['thing', 'thing'];
             break;
         case t.includes('['): //array
-            type=['array', t];
+            type=['list', t];
             break;
         case t.includes('{'): // set
             type=['set', t];
@@ -129,7 +129,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
         });
     };
 
-    const renderThing = ([k, v]) => setType(v)[0] == 'array' || setType(v)[0] == 'set' ? (
+    const renderThing = ([k, v]) => setType(v)[0] == 'list' || setType(v)[0] == 'set' ? (
         <React.Fragment key={k}>
             <ArrayLayout
                 child={(i) => (

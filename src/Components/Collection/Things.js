@@ -73,7 +73,6 @@ const ThingRoot = ({things, collection}) => {
                                     name: 'root',
                                     type: 'thing',
                                     isTuple: false,
-                                    isSet: false,
                                 }}
                                 child={{
                                     name: k,
@@ -97,7 +96,6 @@ const ThingRoot = ({things, collection}) => {
                                     name: '',
                                     type: '',
                                     isTuple: false,
-                                    isSet: false,
                                 }}
                                 scope={`@collection:${collection.name}`}
                                 thing={things[collection.collection_id]}

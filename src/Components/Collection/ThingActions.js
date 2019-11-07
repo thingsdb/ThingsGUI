@@ -49,7 +49,6 @@ ThingActions.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
         isTuple: PropTypes.bool,
-        isSet: PropTypes.bool,
     }).isRequired,
     child: PropTypes.shape({
         id: PropTypes.number,

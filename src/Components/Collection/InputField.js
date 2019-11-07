@@ -18,7 +18,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
     React.useEffect(() => {
         if (input != null) {
             const type = checkType(input);
-            if (type != 'array' && type != 'thing'){
+            if (!(type == 'array' || type == 'thing')){
                 setVal(input);
             }
         }
@@ -67,7 +67,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
     };
 
     const singleInputField = dataType == 'number' || dataType == 'string' || dataType == 'closure';
-    const multiInputField = dataType == 'array';
+    const multiInputField = dataType == 'list';
     const booleanInputField = dataType == 'boolean';
     const blobInputField = dataType == 'blob';
     const predefined = dataType == 'thing'; //|| dataType == 'set';

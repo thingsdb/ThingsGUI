@@ -37,8 +37,7 @@ const checkType = (t) => {
         if (type === 'object') {
             const kindOfObject = Object.keys(t)[0];
             type = kindOfObject === '#' ? 'thing'
-                : kindOfObject === '$' ? 'set'
-                    : kindOfObject === '>' ? 'closure' : 'object' ; // todo maak onderscheid tussen thing object?
+                : kindOfObject === '>' ? 'closure' : 'object' ; // todo maak onderscheid tussen thing object?
         }
     }
 
@@ -51,11 +50,10 @@ const checkType = (t) => {
 const thingValue = (type, thing) => {
     return type === 'array' ? `[${thing.length}]`
         : type === 'thing' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
-            : type === 'set' ? `{${Object.keys(thing)[0]}}`
-                : type === 'closure' ? `{${Object.keys(thing)[0]}}`
-                    : type === 'string' || type === 'number' || type === 'boolean' || type === 'blob' ? `${thing}`
-                        : type === 'nil' ? 'nil'
-                            : '';
+            : type === 'closure' ? `{${Object.keys(thing)[0]}}`
+                : type === 'string' || type === 'number' || type === 'boolean' || type === 'blob' ? `${thing}`
+                    : type === 'nil' ? 'nil'
+                        : '';
 };
 
 const onlyNums = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;

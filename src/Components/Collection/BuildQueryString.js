@@ -6,15 +6,15 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
     const [query, setQuery] = React.useState('');
 
     React.useEffect(() => {
-        handleBuildQuery(action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type, parent.isSet);
-    }, [action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type, parent.isSet]);
+        handleBuildQuery(action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type);
+    }, [action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type]);
 
     React.useEffect(() => {
         cb(query);
     }, [query]);
 
 
-    const handleBuildQuery = (action, childVal, childType, childIndex, childId, childName, parentId, parentName, parentType, parentIsSet) => {
+    const handleBuildQuery = (action, childVal, childType, childIndex, childId, childName, parentId, parentName, parentType) => {
         let val;
         let q = '';
         switch (action) {
@@ -27,7 +27,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
             q = buildQueryAdd(parentId, childName, parentName, val, parentType, childIndex);
             break;
         case 'remove':
-            q = buildQueryRemove(parentName, parentId, childName, childIndex, childId, parentIsSet);
+            q = buildQueryRemove(parentName, parentId, childName, childIndex, childId, childType);
             break;
         }
         setQuery(q);
@@ -65,7 +65,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
     };
 
     const standardInput = (childVal, childType) => {
-        return childType === 'array' ? `[${childVal}]`
+        return childType === 'list' ? `[${childVal}]`
             : childType == 'thing' ? '{}'
                 : childType == 'string' ? `'${childVal}'`
                     : childType == 'number' || childType == 'boolean' ? `${childVal}`
@@ -77,15 +77,15 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
     };
 
     const buildQueryAdd = (parentId, childName, parentName, value, parentType, childIndex) => {
-        return parentType==='array' ? (childIndex===null ? `#${parentId}.${parentName}.push(${value});` : `#${parentId}.${parentName}[${childIndex}] = ${value};`)
+        return parentType==='list' ? (childIndex===null ? `#${parentId}.${parentName}.push(${value});` : `#${parentId}.${parentName}[${childIndex}] = ${value};`)
             : parentType==='thing' ? `#${parentId}.${childName} = ${value};`
                 : parentType==='set' ? `#${parentId}.${parentName}.add(${value});`
                     : '';
     };
 
-    const buildQueryRemove = (parentName, parentId, childName, childIndex, childId, parentIsSet) => {
+    const buildQueryRemove = (parentName, parentId, childName, childIndex, childId, childType) => {
         return childIndex == null ? `#${parentId}.del('${childName}');`
-            : parentIsSet ? `#${parentId}.${parentName}.remove(#${parentId}.${parentName}.find(|s| (s.id()==${childId}) ));`
+            : childType ? `#${parentId}.${parentName}.remove(#${parentId}.${parentName}.find(|s| (s.id()==${childId}) ));`
                 : `#${parentId}.${parentName}.splice(${childIndex}, 1);`; //childname or prentname???
     };
 

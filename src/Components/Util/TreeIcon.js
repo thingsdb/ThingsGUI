@@ -50,12 +50,12 @@ const TreeIcon = ({type}) => {
                 : type == 'string' ? ['S', 'orange']
                     : type == 'number' ? ['123', 'yellow']
                         : type == 'boolean' ? ['1/0', 'pink']
-                            : type == 'set' ? ['SET', 'purple']
-                                : type == 'nil' ? ['NIL', 'red']
-                                    : type == 'blob' ? ['BIN', 'cyan']
-                                        : type == 'closure' ? ['>', 'beige']
-                                            : type == 'object' ? ['{ }', 'white']
-                                                : '';
+                            // : type == 'set' ? ['SET', 'purple']
+                            : type == 'nil' ? ['NIL', 'red']
+                                : type == 'blob' ? ['BIN', 'purple']
+                                    : type == 'closure' ? ['>', 'cyan']
+                                        : type == 'object' ? ['{ }', 'white']
+                                            : '';
     };
     const [icon, color] = treeIcon(type);
 

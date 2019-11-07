@@ -26,13 +26,14 @@ class TypeStore extends BaseStore {
     }
 
     onGetType(thing, scope, tag, cb) {
-        const query = `type(${thing})`;
+        const query = `${thing}`;
         this.emit('query', {
             query,
             scope
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {
+            cb('');
             ErrorActions.setMsgError(tag, message.Log);
             return [];
         });

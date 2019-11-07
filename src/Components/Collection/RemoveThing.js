@@ -60,7 +60,6 @@ const RemoveThing = ({scope, thing, child, parent}) => {
                             id: parent.id,
                             name: parent.hasOwnProperty('name') ? parent.name : null,
                             type: null,
-                            isSet: parent.isSet
                         }}
                         showQuery
                     />
@@ -109,7 +108,6 @@ RemoveThing.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
         isTuple: PropTypes.bool,
-        isSet: PropTypes.bool,
     }).isRequired,
     child: PropTypes.shape({
         id: PropTypes.number,

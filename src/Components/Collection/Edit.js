@@ -25,16 +25,24 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         form: {
             queryString: '',
             newProperty: '',
-            dataType: child.type=='array'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type,
+            dataType: child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type,
             value: '',
             blob: '',
             custom: {},
-            thing: {},
-            array: [],
         },
     };
     const [state, setState] = React.useState(initialState);
     const {error, form} = state;
+
+    // React.useEffect(() => {
+    //     setState(prevState => {
+    //         const t = child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type;
+    //         const updatedForm = Object.assign({}, prevState.form, {dataType: t});
+    //         return {...prevState, form: updatedForm};
+    //     });
+    // },
+    // [child.type],
+    // );
 
     React.useEffect(() => {
         cb(form.queryString, form.blob, error);
@@ -113,8 +121,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                             customTypes={customTypes}
                             parent={{
                                 id: child.id||parent.id,
-                                name: child.id || child.type == 'array' || child.type == 'set' ?child.name:parent.name,
-                                type: child.id|| child.type == 'array'|| child.type == 'set'?child.type:parent.type,
+                                name: child.id || child.type == 'list' || child.type == 'set' ?child.name:parent.name,
+                                type: child.id|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
                             }}
                             showQuery
                         />
@@ -139,6 +147,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
                 <ListItem className={classes.listItem}>
                     <TextField
+                        autoFocus
                         margin="dense"
                         name="dataType"
                         label="Data type"
@@ -147,10 +156,10 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         fullWidth
                         select
                         SelectProps={{native: true}}
-                        disabled={child.type != 'thing' && child.type != 'array'}
+                        disabled={!(child.type == 'thing' || child.type == 'list' || child.type == 'set')}
                     >
                         {dataTypes.map(d => (
-                            <option key={d} value={d} disabled={parent.type=='set'&&d!='thing'} >
+                            <option key={d} value={d} disabled={child.type=='set'&&d!='thing'} >
                                 {d}
                             </option>
                         ))}
@@ -186,7 +195,6 @@ Edit.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
         isTuple: PropTypes.bool,
-        isSet: PropTypes.bool,
     }).isRequired,
     child: PropTypes.shape({
         id: PropTypes.number,

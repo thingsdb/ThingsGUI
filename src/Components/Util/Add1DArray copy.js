@@ -28,7 +28,7 @@ const dataTypes = [
     'blob',
     'closure',
     'nil',
-    'array',
+    'list',
     'set',
     'thing',
 ];
