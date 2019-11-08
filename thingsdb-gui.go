@@ -76,7 +76,6 @@ func (app *App) SocketRouter() {
 		ch := app.client[s.ID()].LogCh
 		go func() {
 			for p := range ch {
-				fmt.Println(p)
 				s.Emit("logging", p)
 			}
 		}()
@@ -111,7 +110,6 @@ func (app *App) SocketRouter() {
 		lCh := app.client[s.ID()].LogCh
 		go func() {
 			for p := range eCh {
-				fmt.Println(p)
 				_, err := app.client[s.ID()].TmpFiles.ReplaceBinStrWithLink(p.Data)
 				if err != nil {
 					lCh <- err.Error()
@@ -156,7 +154,6 @@ func open(url string) error { //https://stackoverflow.com/questions/39320371/how
 
 func (app *App) quit() {
 	for _, v := range app.client {
-		fmt.Println("QUIT2", v)
 		if v != nil {
 			v.TmpFiles.CleanupTmp()
 			if v.Connection != nil {

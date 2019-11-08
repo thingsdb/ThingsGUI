@@ -51,7 +51,6 @@ func connect(client *Client, address string, user string, password string, token
 		}
 	}
 	if token == "" {
-		fmt.Println(user, password)
 		err := client.Connection.AuthPassword(user, password)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
@@ -67,7 +66,6 @@ func connect(client *Client, address string, user string, password string, token
 
 func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
 	var resp LoginResp
-	fmt.Println("CONNECTED", conn)
 	switch {
 	case conn == nil:
 		resp = LoginResp{Loaded: true, Connected: false}
@@ -108,7 +106,5 @@ func CloseSingleConn(client *Client) {
 	if client.Connection != nil {
 		client.Connection.Close()
 		<-client.Closed
-		fmt.Println(client.Connection.IsConnected())
-
 	}
 }

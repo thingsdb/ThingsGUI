@@ -127,7 +127,6 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
     const canEdit = !(parent.isTuple && child.type !== 'thing' || isChildCustom);
     const canWatch = thing && thing.hasOwnProperty('#');
 
-    console.log(child, parent);
     return (
         <React.Fragment>
             {show ? (

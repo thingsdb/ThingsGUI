@@ -70,8 +70,8 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
     const multiInputField = dataType == 'list';
     const booleanInputField = dataType == 'boolean';
     const blobInputField = dataType == 'blob';
-    const predefined = dataType == 'thing'; //|| dataType == 'set';
-    const predefinedVal = dataType == 'thing' ? '{ }':'set( [ { } ] )';
+    const predefined = dataType == 'thing';
+    const predefinedVal = '{ }';
 
     return(
         <React.Fragment>

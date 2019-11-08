@@ -159,7 +159,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         disabled={!(child.type == 'thing' || child.type == 'list' || child.type == 'set')}
                     >
                         {dataTypes.map(d => (
-                            <option key={d} value={d} disabled={child.type=='set'&&d!='thing'} >
+                            <option key={d} value={d} disabled={child.type=='set'&&!(d=='thing'||customTypes.hasOwnProperty(d))} >
                                 {d}
                             </option>
                         ))}

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import Button from '@material-ui/core/Button';
+import ExploreIcon from '@material-ui/icons/Explore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -13,7 +13,6 @@ import {withVlow} from 'vlow';
 import ThingActions from './ThingActions';
 import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
 import {EventStore} from '../../Stores/BaseStore';
-import {WatchThings} from '../Util';
 
 import Thing from './Thing';
 
@@ -22,6 +21,7 @@ const withStores = withVlow([{
     keys: ['things']
 }, {
     store: EventStore,
+    keys: ['watchIds']
 }]);
 
 
@@ -41,9 +41,12 @@ const useStyles = makeStyles(theme => ({
         margin: 0,
         padding: 0,
     },
+    green: {
+        color: theme.palette.primary.green,
+    },
 }));
 
-const ThingRoot = ({things, collection}) => {
+const ThingRoot = ({things, collection, watchIds}) => {
     const classes = useStyles();
     const fetched = things.hasOwnProperty(collection.collection_id);
 
@@ -51,6 +54,8 @@ const ThingRoot = ({things, collection}) => {
         CollectionActions.query(collection);
         // return () => CollectionActions.cleanupTmp();
     }, [collection.name]);
+
+    const isWatching = watchIds && watchIds.hasOwnProperty([`@collection:${collection.name}`]) && watchIds[`@collection:${collection.name}`].includes(`${collection.collection_id}`);
 
     return (
         <React.Fragment>
@@ -67,6 +72,7 @@ const ThingRoot = ({things, collection}) => {
                                 className={classes.thing}
                                 id={collection.collection_id}
                                 thing={v}
+                                things={things}
                                 collection={collection}
                                 parent={{
                                     id: collection.collection_id,
@@ -78,10 +84,16 @@ const ThingRoot = ({things, collection}) => {
                                     name: k,
                                     index: null,
                                 }}
+                                watchIds={watchIds}
                             />
                         </React.Fragment>
                     ))}
                     <ListItem className={classes.listItem}>
+                        {isWatching ? (
+                            <ListItemIcon className={classes.icon}>
+                                <ExploreIcon className={classes.green} />
+                            </ListItemIcon>
+                        ) : null}
                         <ListItemIcon className={classes.icon}>
                             <ThingActions
                                 child={{
@@ -120,6 +132,9 @@ ThingRoot.propTypes = {
 
     /* collection properties */
     things: CollectionStore.types.things.isRequired,
+
+    // Event properties
+    watchIds: EventStore.types.watchIds.isRequired,
 };
 
 

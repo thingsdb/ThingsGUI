@@ -107,7 +107,6 @@ func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, util.
 	}
 	resp, err := client.Connection.Unwatch(scope, idsInt, timeout)
 
-	fmt.Println("UNWATCH", ids, resp, err)
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
 }

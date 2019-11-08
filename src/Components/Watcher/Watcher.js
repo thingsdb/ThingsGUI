@@ -1,9 +1,9 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
-// import { makeStyles} from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import {withVlow} from 'vlow';
+import {makeStyles} from '@material-ui/core';
 
-import {EventStore, EventActions} from '../../Stores/BaseStore';
+import {EventStore} from '../../Stores/BaseStore';
 import {QueryOutput} from '../Util';
 
 const withStores = withVlow([{
@@ -11,17 +11,25 @@ const withStores = withVlow([{
     keys: ['watchThings']
 }]);
 
+const useStyles = makeStyles(theme => ({
+    grid: {
+        maxHeight: '800px',
+        overflowY: 'auto',
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+    },
+}));
+
 const Watcher = ({watchThings}) => {
-
+    const classes = useStyles();
     return (
-        <React.Fragment >
+        <Grid container spacing={2} className={classes.grid}>
             {Object.entries(watchThings).map(([k, v]) => k === '#' ? null : (
-                <React.Fragment key={k}>
+                <Grid item xs={12} key={k}>
                     <QueryOutput output={v} />
-                </React.Fragment>
+                </Grid>
             ))}
-        </React.Fragment>
-
+        </Grid>
     );
 };
 

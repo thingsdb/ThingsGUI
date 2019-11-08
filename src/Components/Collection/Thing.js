@@ -1,20 +1,14 @@
 /* eslint-disable react/no-multi-comp */
-
+import ExploreIcon from '@material-ui/icons/Explore';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 
 import ThingActions from './ThingActions';
-import {CollectionStore, CollectionActions} from '../../Stores/CollectionStore';
+import {CollectionActions} from '../../Stores/CollectionStore';
 import {checkType, fancyName, thingValue, TreeBranch} from '../Util';
 
-
-const withStores = withVlow([{
-    store: CollectionStore,
-    keys: ['things']
-}]);
 
 const useStyles = makeStyles(theme => ({
     nested: {
@@ -24,11 +18,14 @@ const useStyles = makeStyles(theme => ({
         margin: 0,
         padding: 0,
     },
+    green: {
+        color: theme.palette.primary.green,
+    },
 }));
 
 
 
-const Thing = ({thing, collection, things, parent, child}) => {
+const Thing = ({thing, collection, things, parent, child, watchIds}) => {
     const classes = useStyles();
 
     // thing info
@@ -42,6 +39,7 @@ const Thing = ({thing, collection, things, parent, child}) => {
     const isTuple = type === 'array' && parent.type === 'array';
     const thingId = thing && thing['#'] || parent.id;
     const currThing = thing && things[thing['#']] || thing;
+    const isWatching = type === 'thing' && watchIds && watchIds.hasOwnProperty([`@collection:${collection.name}`]) && watchIds[`@collection:${collection.name}`].includes(`${thing && thing['#']}`);
 
     const renderThing = ([k, v, i=null]) => {
         return k === '#' ? null : (
@@ -60,6 +58,7 @@ const Thing = ({thing, collection, things, parent, child}) => {
                         name: fancyName(k, i),
                         index: i,
                     }}
+                    watchIds={watchIds}
                 />
             </div>
         );
@@ -81,19 +80,26 @@ const Thing = ({thing, collection, things, parent, child}) => {
 
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
-            <ListItemIcon>
-                <ThingActions
-                    child={{
-                        id: thing && thing['#']||null,
-                        index: child.index,
-                        name: child.name,
-                        type: type,
-                    }}
-                    parent={parent}
-                    thing={currThing}
-                    scope={`@collection:${collection.name}`}
-                />
-            </ListItemIcon>
+            <React.Fragment>
+                {isWatching ? (
+                    <ListItemIcon className={classes.icon}>
+                        <ExploreIcon className={classes.green} />
+                    </ListItemIcon>
+                ) : null}
+                <ListItemIcon>
+                    <ThingActions
+                        child={{
+                            id: thing && thing['#']||null,
+                            index: child.index,
+                            name: child.name,
+                            type: type,
+                        }}
+                        parent={parent}
+                        thing={currThing}
+                        scope={`@collection:${collection.name}`}
+                    />
+                </ListItemIcon>
+            </React.Fragment>
         </TreeBranch>
     );
 };
@@ -116,9 +122,8 @@ Thing.propTypes = {
         name: PropTypes.string,
         index: PropTypes.number,
     }).isRequired,
-
-    /* collection properties */
-    things: CollectionStore.types.things.isRequired,
+    things: PropTypes.object.isRequired,
+    watchIds: PropTypes.object.isRequired,
 };
 
-export default withStores(Thing);
+export default Thing;
