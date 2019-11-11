@@ -19,6 +19,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+
+// t.includes('/download/tmp/thingsdb-cache')
+
+// const
+
 const QueryOutput = ({output}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);

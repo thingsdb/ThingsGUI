@@ -15,6 +15,9 @@ func handlerMainJsBundle(w http.ResponseWriter, r *http.Request) {
 func handlerVendorsJsBundle(w http.ResponseWriter, r *http.Request) {
 	util.HandleFileRequest(w, fmt.Sprintf("./static/js/vendors-bundle-%s.js", AppVersion), "text/javascript")
 }
+func handlerEditorWorkerJS(w http.ResponseWriter, r *http.Request) {
+	util.HandleFileRequest(w, "./static/js/editor.worker.js", "text/javascript")
+}
 func handlerThingsdbGIF(w http.ResponseWriter, r *http.Request) {
 	util.HandleFileRequest(w, "./static/img/thingsdb.gif", "image/gif")
 }

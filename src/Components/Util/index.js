@@ -37,11 +37,11 @@ const checkType = (t) => {
         if (type === 'object') {
             const kindOfObject = Object.keys(t)[0];
             type = kindOfObject === '#' ? 'thing'
-                : kindOfObject === '>' ? 'closure' : 'object' ; // todo maak onderscheid tussen thing object?
+                : kindOfObject === '/' ? 'closure' : 'object' ; // todo maak onderscheid tussen thing object?
         }
     }
 
-    if (type == 'string' && t.includes('http')) {
+    if (type == 'string' && t.includes('/download/tmp/thingsdb-cache')) {
         type = 'blob';
     }
     return(type);

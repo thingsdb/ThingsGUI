@@ -65,7 +65,12 @@ binfiles = [
     ('''./static/js/main-bundle-{}.min.js'''.format(
         get_version(os.path.dirname(__file__))), "FileMainBundleMinJS"),
     ('''./static/js/vendors-bundle-{}.min.js'''.format(
-    get_version(os.path.dirname(__file__))), "FileVendorsBundleMinJS"),
+        get_version(os.path.dirname(__file__))), "FileVendorsBundleMinJS"),
+    # ("./static/js/css.worker.js", "FileCssWorkerJS"),         # Not included in the vendors bundle ?
+    ("./static/js/editor.worker.js", "FileEditorWorkerJS"),     # included in the vendors bundle ?
+    # ("./static/js/html.worker.js", "FileHtmlWorkerJS"),       # included in the vendors bundle ?
+    # ("./static/js/json.worker.js", "FileJsonWorkerJS"),       # included in the vendors bundle ?
+    # ("./static/js/typescript.worker.js", "FileTypescriptWorkerJS"),   # included in the vendors bundle ?
     ("./static/img/thingsdb.gif", "FileThingsdbGIF"),
     ("./static/img/thingsdb-logo.png", "FileThingsdbLogo"),
     ("./static/img/githubLogo.svg", "FileGithubLogo"),

@@ -12,7 +12,6 @@ import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
         '@global': {
             '*::-webkit-scrollbar': {
                 width: '0.4em'
@@ -24,39 +23,42 @@ const useStyles = makeStyles((theme) => ({
                 backgroundColor: theme.palette.primary.main,
                 outline: '1px solid slategrey'
             }
-        }
+        },
+    },
+    flex: {
+        display: 'flex',
+    },
+    body: {
+        overflowY: 'auto',
+        height: 'calc(100% - 60px)',
+        // boxShadow: '0 10px 20px 0 rgba(31,30,30,1)',
+
+        // borderRadius: '20px',
+    },
+    footer: {
+        // borderTop: '3px solid slategrey',
+        boxShadow: '0 -10px 20px 0 rgba(31,30,30,1)',
+
+        borderRadius: '20px',
+        height: '60px',
     },
     full: {
         position: 'relative',
-        // transition: theme.transitions.create(['width'], {
-        //     easing: theme.transitions.easing.sharp,
-        //     duration: theme.transitions.duration.leavingScreen,
-        // }),
         zIndex: 1,
+        overflowY: 'auto',
+        height: '100vh',
     },
     shrink: {
-        // transition: theme.transitions.create(['width'], {
-        //     easing: theme.transitions.easing.sharp,
-        //     duration: theme.transitions.duration.enteringScreen,
-        // }),
+        position: 'relative',
     },
     drawerOpen: {
         position: 'relative',
         right: 0,
-        // transition: theme.transitions.create(['width'], {
-        //     easing: theme.transitions.easing.sharp,
-        //     duration: theme.transitions.duration.leavingScreen,
-        // }),
-        height: '100vh',
         zIndex: 2,
+        height: '100vh',
     },
     drawerClose: {
-        // transition: theme.transitions.create(['width'], {
-        //     easing: theme.transitions.easing.sharp,
-        //     duration: theme.transitions.duration.enteringScreen,
-        // }),
         marginRight: '0px',
-        height: '100vh',
     },
     drawerHeader: {
         display: 'flex',
@@ -80,12 +82,12 @@ const useStyles = makeStyles((theme) => ({
     },
     close: {
         display: 'none'
-    }
+    },
 }));
 
 
 
-const DrawerLayout = ({open, onClose, topbar, mainContent, bottomBar, drawerTitle, drawerContent}) => {
+const DrawerLayout = ({open, onClose, topbar, mainContent, toast, bottomBar, drawerTitle, drawerContent}) => {
     const classes = useStyles();
     const [isResizing, setIsResizing] = React.useState(false);
     const [newWidth, setNewWidth] = React.useState(600);
@@ -124,39 +126,46 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, bottomBar, drawerTitl
 
     return(
         <div className={classes.root}>
-            <div
-                className={clsx(classes.full, {
-                    [classes.shrink]: open,
-                })}
-                style={open ? {width: `calc(100% - ${newWidth}px)`} : {width:'100%'}}
-            >
-                {topbar}
-                {mainContent}
-            </div>
-            <Card
-                className={clsx(classes.drawerClose, {
-                    [classes.drawerOpen]: open,
-                })}
-                style={open ? {width: newWidth } : {width: '0%'}}
-            >
+            <div className={classes.flex}>
                 <div
-                    onMouseDown={handleMousedown}
-                    className={open ? classes.dragger : classes.draggerClose}
-                />
-                <div className={open ? classes.open : classes.close}>
-                    <div className={classes.drawerHeader}>
-                        <IconButton onClick={onClose}>
-                            {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
-                        </IconButton>
-                        <Typography variant="body1">
-                            {drawerTitle}
-                        </Typography>
+                    className={clsx(classes.full, {
+                        [classes.shrink]: open,
+                    })}
+                    style={open ? {width: `calc(100% - ${newWidth}px)`} : {width:'100%'}}
+                >
+                    <div className={classes.body}>
+                        {topbar}
+                        {mainContent}
                     </div>
-                    <Divider />
-                    {drawerContent}
+                    <div className={classes.footer}>
+                        {bottomBar}
+                    </div>
                 </div>
-            </Card>
-            {bottomBar}
+                <Card
+                    className={clsx(classes.drawerClose, {
+                        [classes.drawerOpen]: open,
+                    })}
+                    style={open ? {width: newWidth } : {width: '0%'}}
+                >
+                    <div
+                        onMouseDown={handleMousedown}
+                        className={open ? classes.dragger : classes.draggerClose}
+                    />
+                    <div className={open ? classes.open : classes.close}>
+                        <div className={classes.drawerHeader}>
+                            <IconButton onClick={onClose}>
+                                {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
+                            </IconButton>
+                            <Typography variant="body1">
+                                {drawerTitle}
+                            </Typography>
+                        </div>
+                        <Divider />
+                        {drawerContent}
+                    </div>
+                </Card>
+                {toast}
+            </div>
         </div>
     );
 };
@@ -166,6 +175,7 @@ DrawerLayout.propTypes = {
     onClose: PropTypes.func.isRequired,
     topbar: PropTypes.object.isRequired,
     mainContent: PropTypes.object.isRequired,
+    toast: PropTypes.object.isRequired,
     bottomBar: PropTypes.object.isRequired,
     drawerTitle: PropTypes.string.isRequired,
     drawerContent: PropTypes.object.isRequired,

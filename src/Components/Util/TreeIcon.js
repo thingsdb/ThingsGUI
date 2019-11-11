@@ -53,7 +53,7 @@ const TreeIcon = ({type}) => {
                             // : type == 'set' ? ['SET', 'purple']
                             : type == 'nil' ? ['NIL', 'red']
                                 : type == 'blob' ? ['BIN', 'purple']
-                                    : type == 'closure' ? ['>', 'cyan']
+                                    : type == 'closure' ? ['/', 'cyan']
                                         : type == 'object' ? ['{ }', 'white']
                                             : '';
     };

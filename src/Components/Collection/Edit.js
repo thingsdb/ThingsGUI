@@ -101,7 +101,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     const addNewProperty = Boolean(child.id);
     const isCustomType = customTypes.hasOwnProperty(form.dataType);
 
-    const input = child.type == 'thing' ? '' : child.type == 'closure' ? thing['>'] : thing;
+    const input = child.type == 'thing' ? '' : child.type == 'closure' ? thing['/'] : thing;
 
     return(
         <React.Fragment>

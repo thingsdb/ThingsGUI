@@ -123,7 +123,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
     const isRoot = child.name == 'root';
     const isChildCustom = customTypes.hasOwnProperty(realChildType);
     const isParentCustom = customTypes.hasOwnProperty(realParentType);
-    const canRemove = !(child.name === '>' || parent.isTuple || isRoot || isParentCustom);
+    const canRemove = !(child.name === '/' || parent.isTuple || isRoot || isParentCustom);
     const canEdit = !(parent.isTuple && child.type !== 'thing' || isChildCustom);
     const canWatch = thing && thing.hasOwnProperty('#');
 

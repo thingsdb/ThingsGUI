@@ -172,6 +172,7 @@ func (app *App) Start() {
 	http.HandleFunc("/", handlerMain) // homepage
 	http.HandleFunc("/js/main-bundle", handlerMainJsBundle)
 	http.HandleFunc("/js/vendors-bundle", handlerVendorsJsBundle)
+	http.HandleFunc("/js/editor.worker.js", handlerEditorWorkerJS)
 	http.HandleFunc("/img/thingsdb.gif", handlerThingsdbGIF)
 	http.HandleFunc("/img/thingsdb-logo.png", handlerThingsdbLogo)
 	http.HandleFunc("/img/githubLogo.svg", handlerGithubLogo)
@@ -180,6 +181,7 @@ func (app *App) Start() {
 	http.HandleFunc("/img/TTLogo.png", handlerTTLogo)
 	http.HandleFunc("/favicon.ico", handlerFaviconIco)
 	http.HandleFunc("/download", util.HandlerDownload)
+
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	http.Handle("/socket.io/", app.server)
@@ -187,7 +189,7 @@ func (app *App) Start() {
 	log.Printf("Serving at %s:%d...", app.host, app.port)
 
 	if app.openBrowser {
-		go open("http://localhost:8080/")
+		go open(fmt.Sprintf("http://localhost:%d/", app.port))
 	}
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", app.port), nil))
 }

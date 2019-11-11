@@ -18,6 +18,11 @@ func handlerVendorsJsBundle(w http.ResponseWriter, r *http.Request) {
 	w.Write(FileVendorsBundleMinJS)
 }
 
+func handlerEditorWorkerJS(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/javascript")
+	w.Write(FileEditorWorkerJS)
+}
+
 func handlerThingsdbGIF(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "image/gif")
 	w.Write(FileThingsdbGIF)

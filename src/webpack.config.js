@@ -13,7 +13,7 @@ const config = {
     entry: APP_DIR + '/Components/index.js',
     output: {
         path: BUILD_DIR,
-        publicPath: '/static/js/',
+        publicPath: '/js/',
         filename: process.env.NODE_ENV === 'production' ? `[name]-bundle-${VERSION}.min.js` : `[name]-bundle-${VERSION}.js`,
     },
     module: {

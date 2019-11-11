@@ -96,12 +96,12 @@ const App = ({match}) => {
                     <Grid container item xs={12} md={10} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
                         {pages[match.path]}
                     </Grid>
-                    <ErrorToast />
                 </Grid>
             }
             bottomBar={<BottomBar />}
             drawerTitle={drawerContent ? 'NODES' : 'WATCHER'}
             drawerContent={drawerContent ? <Nodes /> : <Watcher />}
+            toast={<ErrorToast />}
         />
     );
 };
