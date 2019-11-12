@@ -56,6 +56,13 @@ const Rename = ({user, users}) => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
+    };
+
 
     const Content = (
         <React.Fragment>
@@ -84,6 +91,7 @@ const Rename = ({user, users}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
+            onKeyPress={handleKeyPress}
         >
             {Content}
         </SimpleModal>

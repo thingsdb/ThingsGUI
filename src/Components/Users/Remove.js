@@ -31,6 +31,13 @@ const Remove = ({user}) => {
         );
     };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
+    };
+
 
     return(
         <SimpleModal
@@ -41,6 +48,7 @@ const Remove = ({user}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
+            onKeyPress={handleKeyPress}
         >
             <ErrorMsg tag={tag} />
         </SimpleModal>

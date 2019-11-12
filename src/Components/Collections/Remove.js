@@ -30,7 +30,13 @@ const Remove = ({collection}) => {
             tag,
             () => setShow(false)
         );
+    };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
     };
 
     return(
@@ -44,6 +50,7 @@ const Remove = ({collection}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
+            onKeyPress={handleKeyPress}
         >
             <ErrorMsg tag={tag} />
         </SimpleModal>

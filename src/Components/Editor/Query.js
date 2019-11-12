@@ -56,6 +56,13 @@ const Query = ({match}) => {
         }
     };
 
+    const handleKeyPress = (e) => {
+        const {key, ctrlKey} = e;
+        if (ctrlKey && key == 'Enter') {
+            handleSubmit();
+        }
+    };
+
     const handleOutput = (out) => {
         setOutput(out === null ? 'nil' : out);
     };
@@ -74,6 +81,8 @@ const Query = ({match}) => {
         ErrorActions.removeMsgError(tag);
     };
 
+    // const element = document.getElementById('editor');
+    // console.log('el', element);
     return (
         <TitlePage2
             preTitle='Customize your:'
@@ -81,12 +90,12 @@ const Query = ({match}) => {
             content={
                 <React.Fragment>
                     <Grid item xs={12}>
-                        <Card>
+                        <Card id='editor'>
                             <CardHeader
                                 title="INPUT"
                                 titleTypographyProps={{variant: 'body1'}}
                             />
-                            <CardContent>
+                            <CardContent onKeyDownCapture={handleKeyPress}>
                                 <ErrorMsg tag={tag} />
                                 <QueryInput onChange={handleInput} input={queryInput} />
                             </CardContent>

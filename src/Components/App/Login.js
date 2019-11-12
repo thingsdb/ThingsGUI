@@ -67,6 +67,13 @@ const Login = ({loaded, connected}) => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
+    };
+
     const handleClickShowPassword = () => {
         setState({...state, showPassword: !showPassword});
     };
@@ -95,6 +102,7 @@ const Login = ({loaded, connected}) => {
             aria-labelledby="form-dialog-title"
             fullWidth
             maxWidth="sm"
+            onKeyDown={handleKeyPress}
         >
             <DialogTitle id="form-dialog-title">
                 {'Login'}

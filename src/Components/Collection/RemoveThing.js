@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 
 import BuildQueryString from './BuildQueryString';
-import { ErrorMsg, fancyName, SimpleModal } from '../Util';
+import { ErrorMsg, SimpleModal } from '../Util';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 
@@ -35,6 +35,13 @@ const RemoveThing = ({scope, thing, child, parent}) => {
                 ThingsdbActions.getCollections();
             }
         );
+    };
+
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
     };
 
     const handleQuery = (q) => {
@@ -89,6 +96,7 @@ const RemoveThing = ({scope, thing, child, parent}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
+            onKeyDown={handleKeyPress}
         >
             {Content}
         </SimpleModal>

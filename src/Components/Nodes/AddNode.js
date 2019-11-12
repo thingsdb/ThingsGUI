@@ -53,6 +53,13 @@ const AddNode = () => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
+    };
+
 
     const Content = (
         <React.Fragment>
@@ -105,6 +112,7 @@ const AddNode = () => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
+            onKeyPress={handleKeyPress}
         >
             {Content}
         </SimpleModal>

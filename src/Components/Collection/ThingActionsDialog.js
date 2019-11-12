@@ -114,6 +114,12 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
         }
     };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
+    };
 
     const handleClickOpenEditor = () => {
         ApplicationActions.navigate({path: 'query', index: 0, item: child.type==='thing' ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
@@ -137,6 +143,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
                     fullWidth
                     maxWidth="md"
                     scroll="body"
+                    onKeyDown={handleKeyPress}
                 >
                     <DialogContent>
                         <Grid container spacing={1}>

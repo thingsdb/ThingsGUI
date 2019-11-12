@@ -61,6 +61,12 @@ const Rename = ({collection, collections}) => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
+    };
 
     const Content = (
         <React.Fragment>
@@ -91,6 +97,7 @@ const Rename = ({collection, collections}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
+            onKeyPress={handleKeyPress}
         >
             {Content}
         </SimpleModal>

@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClose}) => {
+const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClose, onKeyPress}) => {
 
     const handleClose = () => {
         onClose();
@@ -25,6 +25,7 @@ const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClos
                 aria-labelledby="form-dialog-title"
                 fullWidth
                 maxWidth="xs"
+                onKeyDown={onKeyPress}
             >
                 <DialogTitle id="form-dialog-title">
                     {title}
@@ -51,7 +52,8 @@ const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClos
 
 SimpleModal.defaultProps = {
     actionButtons: null,
-    onOk: null,
+    onOk: ()=>null,
+    onKeyPress: ()=>null,
 },
 
 SimpleModal.propTypes = {
@@ -62,6 +64,7 @@ SimpleModal.propTypes = {
     open: PropTypes.bool.isRequired,
     onOk: PropTypes.func,
     onClose: PropTypes.func.isRequired,
+    onKeyPress: PropTypes.func,
 };
 
 export default SimpleModal;

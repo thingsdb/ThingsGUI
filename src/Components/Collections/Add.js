@@ -89,6 +89,13 @@ const Add = ({collections}) => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
+    };
+
 
     const Content = (
         <React.Fragment>
@@ -119,6 +126,7 @@ const Add = ({collections}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
+            onKeyPress={handleKeyPress}
         >
             {Content}
         </SimpleModal>

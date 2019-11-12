@@ -86,6 +86,13 @@ const AddUser = ({users}) => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
+    };
+
 
     const Content = (
         <React.Fragment>
@@ -116,6 +123,7 @@ const AddUser = ({users}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
+            onKeyPress={handleKeyPress}
         >
             {Content}
         </SimpleModal>

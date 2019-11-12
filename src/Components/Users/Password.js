@@ -69,6 +69,13 @@ const Password = ({user}) => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
+    };
+
     const handleSetPassword = ({target}) => {
         const {checked} = target;
         setState(prevState => {
@@ -142,6 +149,7 @@ const Password = ({user}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
+            onKeyPress={handleKeyPress}
         >
             {Content}
         </SimpleModal>
