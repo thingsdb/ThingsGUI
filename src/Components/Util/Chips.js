@@ -47,7 +47,7 @@ const Chips = ({title, items, onAdd, onClick, onDelete}) => {
                             classes={{ tooltip: classes.customWidth }}
                             title={
                                 <Typography variant="caption">
-                                    {listitem.definition}
+                                    {listitem.doc&&listitem.doc!=''?listitem.doc:listitem.definition}
                                 </Typography>
                             }
                         >

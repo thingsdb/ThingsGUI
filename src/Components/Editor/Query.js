@@ -14,6 +14,7 @@ import Procedures from './Procedures';
 import CustomTypes from './CustomTypes';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {CollectionActions, CollectionStore} from '../../Stores/CollectionStore';
+import { ErrorActions } from '../../Stores/ErrorStore';
 import {ProcedureActions, ProcedureStore} from '../../Stores/ProcedureStore';
 import {TypeActions} from '../../Stores/TypeStore';
 import {ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput} from '../Util';
@@ -41,6 +42,7 @@ const Query = ({match}) => {
     }, [match.item]);
 
     const handleInput = (value) => {
+        handleCloseError();
         setQueryInput('');
         setQuery(value);
     };
@@ -59,11 +61,17 @@ const Query = ({match}) => {
     };
 
     const handleOnChangeScope = (s) => {
+        handleCloseError();
         setScope(s);
     };
 
     const handleSetAsInput = (i) => {
+        handleCloseError();
         setQueryInput(i);
+    };
+
+    const handleCloseError = () => {
+        ErrorActions.removeMsgError(tag);
     };
 
     return (

@@ -9,6 +9,7 @@ import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -30,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onClick}) => {
+const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onClick, button, onAction}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
     const [open, setOpen] = React.useState(false);
@@ -63,7 +64,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
 
     return (
         <React.Fragment>
-            <ListItem className={classes.listItem}>
+            <ListItem className={classes.listItem} button={button?true:false} onClick={onAction}>
                 <ListItemIcon>
                     <TreeIcon type={type} />
                 </ListItemIcon>
@@ -95,7 +96,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                     }}
                 />
                 {children}
-                <ListItemIcon>
+                <ListItemSecondaryAction>
                     <React.Fragment>
                         {canToggle ? (
                             <ButtonBase onClick={handleClick} >
@@ -123,7 +124,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                             </SimpleModal>
                         ) : null}
                     </React.Fragment>
-                </ListItemIcon>
+                </ListItemSecondaryAction>
             </ListItem>
             {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>
@@ -138,11 +139,15 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
 TreeBranch.defaultProps = {
     children: null,
     name: null,
+    button: false,
     onClick: () => null,
+    onAction: () => null,
 };
 
 TreeBranch.propTypes = {
     children: PropTypes.object,
+    button: PropTypes.bool,
+    onAction: PropTypes.func,
     name: PropTypes.string,
     type: PropTypes.string.isRequired,
     val: PropTypes.string.isRequired,

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
-import ThingActions from './ThingActions';
+import ThingActionsDialog from './ThingActionsDialog';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {checkType, fancyName, thingValue, TreeBranch} from '../Util';
 
@@ -27,6 +27,15 @@ const useStyles = makeStyles(theme => ({
 
 const Thing = ({thing, collection, things, parent, child, watchIds}) => {
     const classes = useStyles();
+    const [show, setShow] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setShow(true);
+    };
+
+    const handleClickClose = () => {
+        setShow(false);
+    };
 
     // thing info
 
@@ -79,28 +88,45 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
     };
 
     return (
-        <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick}>
-            <React.Fragment>
-                {isWatching ? (
-                    <ListItemIcon className={classes.icon}>
-                        <ExploreIcon className={classes.green} />
-                    </ListItemIcon>
-                ) : null}
-                <ListItemIcon>
-                    <ThingActions
-                        child={{
-                            id: thing && thing['#']||null,
-                            index: child.index,
-                            name: child.name,
-                            type: type,
-                        }}
-                        parent={parent}
-                        thing={currThing}
-                        scope={`@collection:${collection.name}`}
-                    />
-                </ListItemIcon>
-            </React.Fragment>
-        </TreeBranch>
+        <React.Fragment>
+            <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick} button onAction={handleClickOpen}>
+                <React.Fragment>
+                    {isWatching ? (
+                        <ListItemIcon className={classes.icon}>
+                            <ExploreIcon className={classes.green} />
+                        </ListItemIcon>
+                    ) : null}
+                    {/* <ListItemIcon>
+                        <ThingActions
+                            child={{
+                                id: thing && thing['#']||null,
+                                index: child.index,
+                                name: child.name,
+                                type: type,
+                            }}
+                            parent={parent}
+                            thing={currThing}
+                            scope={`@collection:${collection.name}`}
+                        />
+                    </ListItemIcon> */}
+                </React.Fragment>
+            </TreeBranch>
+            {show ? (
+                <ThingActionsDialog
+                    open={show}
+                    onClose={handleClickClose}
+                    child={{
+                        id: thing && thing['#']||null,
+                        index: child.index,
+                        name: child.name,
+                        type: type,
+                    }}
+                    parent={parent}
+                    thing={currThing}
+                    scope={`@collection:${collection.name}`}
+                />
+            ) : null}
+        </React.Fragment>
     );
 };
 

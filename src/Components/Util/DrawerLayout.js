@@ -30,17 +30,13 @@ const useStyles = makeStyles((theme) => ({
     },
     body: {
         overflowY: 'auto',
-        height: 'calc(100% - 60px)',
-        // boxShadow: '0 10px 20px 0 rgba(31,30,30,1)',
-
-        // borderRadius: '20px',
+        height: 'calc(100% - 65px)',
     },
     footer: {
-        // borderTop: '3px solid slategrey',
-        boxShadow: '0 -10px 20px 0 rgba(31,30,30,1)',
-
-        borderRadius: '20px',
-        height: '60px',
+        boxShadow: '0 -2px 10px 0 rgba(31,30,30,1)',
+        borderRadius: 20,
+        marginTop: 5,
+        height: 60,
     },
     full: {
         position: 'relative',
@@ -52,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
     },
     drawerOpen: {
+        boxShadow: '-2px 0 5px 0 rgba(31,30,30,1)',
         position: 'relative',
         right: 0,
         zIndex: 2,
@@ -67,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-start',
     },
     dragger: {
-        width: '5px',
+        width: 5,
         cursor: 'ew-resize',
         position: 'absolute',
         top: 0,
@@ -75,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
         zIndex: 3,
     },
     draggerClose: {
-        width: '0px',
+        width: 0,
     },
     open: {
         display: 'block',

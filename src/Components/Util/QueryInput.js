@@ -224,10 +224,10 @@ const theme = {
     base: 'vs-dark',
     inherit: true,
     rules: [
-        { token: 'identifier', foreground: 'b46695', fontStyle: 'bold' },
+        { token: 'identifier', foreground: '4c7fbb', fontStyle: 'bold' },
         { token: 'number', foreground: 'd2a800' },
         { token: 'string', foreground: 'e26d14' },
-        { token: 'keyword', foreground: '2a80e8'},
+        { token: 'keyword', foreground: 'b064bd'},
         { token: 'comment', foreground: '608b4e'},
     ],
     colors: {

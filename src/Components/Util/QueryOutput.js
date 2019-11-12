@@ -20,16 +20,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-// t.includes('/download/tmp/thingsdb-cache')
-
-// const
-
 const QueryOutput = ({output}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
     const handleChangeTab = (_event, newValue) => {
         setTabIndex(newValue);
     };
+
+    const jsonOutput = output != null ? JSON.stringify(output, null, 4).replace(/"http:\/\/.*download?\/tmp\/thingsdb-cache-.*"/gi, '<blob data>') : null;
 
     return (
         <Paper className={classes.card} >
@@ -56,7 +54,7 @@ const QueryOutput = ({output}) => {
             }
             {tabIndex === 1 &&
                 <pre>
-                    {output != null ? JSON.stringify(output, null, 4) : null}
+                    {jsonOutput}
                 </pre>
             }
         </Paper>

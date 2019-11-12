@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import BuildIcon from '@material-ui/icons/Build';
+import AddIcon from '@material-ui/icons/AddCircle';
 
 import ThingActionsDialog from './ThingActionsDialog';
 
@@ -20,7 +20,8 @@ const ThingActions = ({child, parent, thing, scope}) => {
     return (
         <React.Fragment>
             <ButtonBase onClick={handleClickOpen} >
-                <BuildIcon color="primary" />
+                {/* <BuildIcon color="primary" /> */}
+                <AddIcon color="primary" />
             </ButtonBase>
             {show ? (
                 <ThingActionsDialog
