@@ -17,11 +17,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ThingsTree = ({item, tree, child}) => {
+const ThingsTree = ({item, tree, child, root}) => {
     const classes = useStyles();
 
     // is root if item is still null
-    const thing = item === null ? tree : item;
+    const thing = root ? tree : item;
 
     const renderThing = ([k, v, i=null]) => { // QUEST: ???
         return k === '#' ? null : (
@@ -33,6 +33,7 @@ const ThingsTree = ({item, tree, child}) => {
                         name: fancyName(k, i),
                         index: i,
                     }}
+                    root={false}
                 />
             </div>
         );
@@ -50,8 +51,9 @@ const ThingsTree = ({item, tree, child}) => {
     // type and value
     const type = checkType(thing);
     const val = thingValue(type, thing);
+
     // buttons
-    const canToggle = type === 'thing' || type === 'object' || type === 'array' || type === 'set';
+    const canToggle = type === 'thing' || type === 'object' || type === 'array' || type === 'set' || type === 'closure' || type === 'regex'|| type === 'error';;
 
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} />
@@ -60,15 +62,17 @@ const ThingsTree = ({item, tree, child}) => {
 
 ThingsTree.defaultProps = {
     item: null,
+    tree: null,
 };
 
 ThingsTree.propTypes = {
     item: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
-    tree: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
+    tree: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     child: PropTypes.shape({
         name: PropTypes.string,
         index: PropTypes.number,
     }).isRequired,
+    root: PropTypes.bool.isRequired,
 };
 
 export default ThingsTree;

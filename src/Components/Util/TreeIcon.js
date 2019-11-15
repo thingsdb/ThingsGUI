@@ -54,8 +54,10 @@ const TreeIcon = ({type}) => {
                             : type == 'nil' ? ['NIL', 'red']
                                 : type == 'blob' ? ['BIN', 'purple']
                                     : type == 'closure' ? ['/', 'cyan']
-                                        : type == 'object' ? ['{ }', 'white']
-                                            : '';
+                                        : type == 'regex' ? ['*', 'cyan']
+                                            : type == 'error' ? ['!', 'cyan']
+                                                : type == 'object' ? ['{ }', 'white']
+                                                    : '';
     };
     const [icon, color] = treeIcon(type);
 

@@ -72,7 +72,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
                         : childType == 'set' ? 'set({})'
                             : childType == 'nil' ? 'nil'
                                 : childType == 'blob' ? 'blob'
-                                    : childType == 'closure' ? childVal
+                                    : childType == 'closure' || childType == 'regex' || childType == 'error' ? childVal
                                         : '';
     };
 

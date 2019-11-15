@@ -31,6 +31,8 @@ const dataTypes = [ // Do not put array first; causes infinite loop
     'number',
     'boolean',
     'closure',
+    'regex',
+    'error',
     'nil',
     'list',
     'set',
@@ -101,7 +103,7 @@ const Add1DArray = ({cb}) => {
             : type === 'thing' ? '{}'
                 : type === 'set' ? '[{}]'
                     : type === 'string' ? `'${input}'`
-                        : type === 'closure' || type === 'number' || type === 'boolean' || type === 'blob' ? `${input}`
+                        : type === 'number' || type === 'boolean' || type === 'blob' || type === 'closure' || type === 'regex' || type === 'error'  ? `${input}`
                             : type === 'nil' ? 'nil'
                                 : '';
     };

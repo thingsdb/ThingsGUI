@@ -35,6 +35,8 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
         'boolean',
         'blob',
         'closure',
+        'regex',
+        'error',
         'nil',
         'list',
         'set',

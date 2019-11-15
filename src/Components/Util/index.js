@@ -1,6 +1,7 @@
 import Add1DArray from './Add1DArray';
 import AddBlob from './AddBlob';
 import AddBool from './AddBool';
+import AddClosure from './AddClosure';
 import ArrayLayout from './ArrayLayout';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
@@ -37,7 +38,10 @@ const checkType = (t) => {
         if (type === 'object') {
             const kindOfObject = Object.keys(t)[0];
             type = kindOfObject === '#' ? 'thing'
-                : kindOfObject === '/' ? 'closure' : 'object' ; // todo maak onderscheid tussen thing object?
+                : kindOfObject === '/' ? 'closure'
+                    : kindOfObject === '*' ? 'regex'
+                        : kindOfObject === '!' ? 'error'
+                            : 'object' ; // todo maak onderscheid tussen thing object?
         }
     }
 
@@ -50,14 +54,13 @@ const checkType = (t) => {
 const thingValue = (type, thing) => {
     return type === 'array' ? `[${thing.length}]`
         : type === 'thing' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
-            : type === 'closure' ? `{${Object.keys(thing)[0]}}`
-                : type === 'string' || type === 'number' || type === 'boolean' || type === 'blob' ? `${thing}`
-                    : type === 'nil' ? 'nil'
+            : type === 'string' || type === 'number' || type === 'boolean' || type === 'blob' ? `${thing}`
+                : type === 'closure' || type === 'regex' || type === 'error' ? `{${Object.keys(thing)[0]}}`
+                    : type === null || type === 'nil' ? 'nil'
                         : '';
 };
 
 const onlyNums = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;
-// const closureSyntax = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;
 
 const isObjectEmpty = (obj) => Object.entries(obj).length === 0 && obj.constructor === Object;
 const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
@@ -80,6 +83,7 @@ export {
     Add1DArray,
     AddBlob,
     AddBool,
+    AddClosure,
     ArrayLayout,
     Buttons,
     CardButton,

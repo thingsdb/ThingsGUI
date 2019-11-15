@@ -43,12 +43,14 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
     const type = checkType(thing);
     const val = thingValue(type, thing);
 
-    const canToggle = type === 'thing' || type === 'array' || type === 'set' || type === 'closure';
+    const canToggle = type === 'thing' || type === 'array' || type === 'set' || type === 'closure' || type === 'regex'|| type === 'error';
 
     const isTuple = type === 'array' && parent.type === 'array';
     const thingId = thing && thing['#'] || parent.id;
     const currThing = thing && things[thing['#']] || thing;
     const isWatching = type === 'thing' && watchIds && watchIds.hasOwnProperty([`@collection:${collection.name}`]) && watchIds[`@collection:${collection.name}`].includes(`${thing && thing['#']}`);
+
+    const hasActions = !(parent.type === 'closure' || parent.type === 'regex' || parent.type === 'error');
 
     const renderThing = ([k, v, i=null]) => {
         return k === '#' ? null : (
@@ -89,7 +91,7 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
 
     return (
         <React.Fragment>
-            <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick} button onAction={handleClickOpen}>
+            <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick} button={hasActions} onAction={hasActions ? handleClickOpen : ()=>null}>
                 <React.Fragment>
                     {isWatching ? (
                         <ListItemIcon className={classes.icon}>

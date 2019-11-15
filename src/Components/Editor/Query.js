@@ -49,8 +49,9 @@ const Query = ({match}) => {
 
     const handleSubmit = () => {
         CollectionActions.queryEditor(query, scope.value, scope.collectionId, handleOutput, tag);
-        ProcedureActions.getProcedures(scope.value, tag);
-
+        if (scope.value != '@node') {
+            ProcedureActions.getProcedures(scope.value, tag);
+        }
         if (scope.value.includes('collection')) {
             TypeActions.getTypes(scope.value, tag);
         }
@@ -64,7 +65,7 @@ const Query = ({match}) => {
     };
 
     const handleOutput = (out) => {
-        setOutput(out === null ? 'nil' : out);
+        setOutput(out);
     };
 
     const handleOnChangeScope = (s) => {

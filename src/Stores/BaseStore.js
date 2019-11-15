@@ -226,6 +226,7 @@ class EventStore extends BaseStore {
     }
 
     watchUpdate(data) {
+        console.log(data);
         for (let i = 0; i<data.jobs.length; i++) {
             switch(true){
             case data.jobs[i].hasOwnProperty('set'):
@@ -269,15 +270,16 @@ class EventStore extends BaseStore {
     splice(id, splice) {
         const prop = Object.keys(splice)[0];
         const index = splice[prop][0];
-        const replace = splice[prop][1];
-        const amount = splice[prop][2];
+        const deleteCount = splice[prop][1];
+        const length = splice[prop].length;
+        // const replace = splice[prop][2];
         this.setState(prevState => {
             const copyArr = [...prevState.watchThings[id][prop]];
 
-            if (amount) {
-                copyArr.splice(index, replace, ...splice[prop].slice(3));
+            if (length>2) {
+                copyArr.splice(index, deleteCount, ...splice[prop].slice(2));
             } else {
-                copyArr.splice(index, replace);
+                copyArr.splice(index, deleteCount);
             }
 
             const update = Object.assign({}, prevState.watchThings[id], {[prop]: copyArr});

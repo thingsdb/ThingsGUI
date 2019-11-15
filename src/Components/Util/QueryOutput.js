@@ -27,7 +27,7 @@ const QueryOutput = ({output}) => {
         setTabIndex(newValue);
     };
 
-    const jsonOutput = output != null ? JSON.stringify(output, null, 4).replace(/"http:\/\/.*download?\/tmp\/thingsdb-cache-.*"/gi, '<blob data>') : null;
+    const jsonOutput = JSON.stringify(output, null, 4).replace(/"http:\/\/.*download\/tmp\/thingsdb-cache-.*"/gi, '<blob data>');
 
     return (
         <Paper className={classes.card} >
@@ -41,15 +41,14 @@ const QueryOutput = ({output}) => {
                     dense
                     disablePadding
                 >
-                    {output != null ? (
-                        <ThingsTree
-                            tree={output}
-                            child={{
-                                name:'',
-                                index:null,
-                            }}
-                        />
-                    ) :  null}
+                    <ThingsTree
+                        tree={output}
+                        child={{
+                            name:'',
+                            index:null,
+                        }}
+                        root
+                    />
                 </List>
             }
             {tabIndex === 1 &&
