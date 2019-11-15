@@ -152,8 +152,11 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
                                     <Typography variant="body1" >
                                         {'Detail view of:'}
                                     </Typography>
-                                    <Typography variant="h4" color='primary'>
-                                        {`${child.name||parent.name} --- ${realChildType||child.type}`}
+                                    <Typography variant="h4" color='primary' component='span'>
+                                        {`${child.name||parent.name}  `}
+                                    </Typography>
+                                    <Typography variant="body2" component='span'>
+                                        {`- ${realChildType||child.type}`}
                                     </Typography>
                                 </Grid>
                                 <Grid container spacing={1} item xs={4} justify="flex-end">
@@ -168,7 +171,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
                                         </Grid>
                                     }
                                     <Grid item>
-                                        <Fab color="secondary" onClick={handleClickOpenEditor} >
+                                        <Fab color="primary" onClick={handleClickOpenEditor} >
                                             <CodeIcon fontSize="large" />
                                         </Fab>
                                     </Grid>

@@ -37,12 +37,12 @@ const ArrayLayout = ({child, onRemove}) => {
 
             <Grid container item spacing={1} xs={6} justify="center" alignItems="center">
                 <Grid item>
-                    <Fab color="secondary" onClick={handleAdd} size="small">
+                    <Fab color="primary" onClick={handleAdd} size="small">
                         <AddIcon fontSize="small" />
                     </Fab>
                 </Grid>
                 <Grid item>
-                    <Fab color="secondary" onClick={handleRemove} disabled={items==1} size="small">
+                    <Fab color="primary" onClick={handleRemove} disabled={items==1} size="small">
                         <RemoveIcon fontSize="small" />
                     </Fab>
                 </Grid>

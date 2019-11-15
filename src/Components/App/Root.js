@@ -28,6 +28,9 @@ const theme = createMuiTheme({
         secondary: {
             main: 'rgba(0, 55, 123, 0.3)',
         },
+        tertiary: {
+            main: '#304765',
+        },
         background: {
             default: '#2E3336',
             paper: '#1E2224'

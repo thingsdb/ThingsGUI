@@ -179,7 +179,7 @@ const Add1DArray = ({cb}) => {
                         />
                     </Grid>
                     <Grid item>
-                        <Fab color="secondary" onClick={handleAdd} size="small">
+                        <Fab color="primary" onClick={handleAdd} size="small">
                             <AddIcon fontSize="small" />
                         </Fab>
                     </Grid>
