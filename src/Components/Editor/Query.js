@@ -95,7 +95,7 @@ const Query = ({match}) => {
                                 title="INPUT"
                                 titleTypographyProps={{variant: 'body1'}}
                             />
-                            <CardContent onKeyDownCapture={handleKeyPress}>
+                            <CardContent onKeyDown={handleKeyPress}>
                                 <ErrorMsg tag={tag} />
                                 <QueryInput onChange={handleInput} input={queryInput} />
                             </CardContent>

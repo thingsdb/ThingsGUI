@@ -277,6 +277,10 @@ class QueryInput extends React.Component {
 
         // resize container on window size.
         window.addEventListener('resize', this.handleEditorSize);
+
+        this._editor.addCommand([monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter], function() {
+            return; // Prevent ctrl+enter from processing the enter key stroke. The idea is that ctrl+enter submits the editor's input.
+        });
     }
 
     componentDidUpdate(prevProps) {
