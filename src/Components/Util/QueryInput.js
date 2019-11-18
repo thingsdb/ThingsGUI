@@ -235,9 +235,9 @@ const theme = {
         'editor.background': '#0000002e',
         'editorCursor.foreground': '#c6c6c6',
         'editor.lineHighlightBackground': '#141719',
-        'editorLineNumber.foreground': '#0000002e',
+        'editorLineNumber.foreground': '#c6c6c6',
         'editor.selectionBackground': '#20344b',
-        'editor.inactiveSelectionBackground': '#0000002e'
+        'editor.inactiveSelectionBackground': '#c6c6c6'
     }
 };
 

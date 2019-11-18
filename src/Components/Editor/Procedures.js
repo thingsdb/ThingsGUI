@@ -15,7 +15,7 @@ const tag = '8';
 
 const Procedures = ({scope, onSetAsInput, procedures}) => {
     React.useEffect(() => {
-        if (!(scope == '@node' || scope == '')) {
+        if (scope&&!scope.includes('@node')) {
             ProcedureActions.getProcedures(scope, tag);
         }
     }, [scope]);
@@ -33,7 +33,7 @@ const Procedures = ({scope, onSetAsInput, procedures}) => {
         onSetAsInput('new_procedure("...", ...)');
     };
 
-    const p = scope == '@node' || scope == '' ? [] : procedures;
+    const p = scope&&!scope.includes('@node') ? procedures:[];
 
     return (
         <Chips

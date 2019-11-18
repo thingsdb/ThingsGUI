@@ -15,14 +15,15 @@ const withStores = withVlow([{
 
 
 const UsersMenu = ({user, users}) => {
-
     React.useEffect(() => {
         ThingsdbActions.getUsers();
         ThingsdbActions.getUser();
         const setPoll = setInterval(
             () => {
-                ThingsdbActions.getUsers();
                 ThingsdbActions.getUser();
+                if (user.access.privileges.includes('GRANT')||user.access.privileges.includes('FULL')) {
+                    ThingsdbActions.getUsers();
+                }
             }, 5000);
         return () => {
             clearInterval(setPoll);

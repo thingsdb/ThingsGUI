@@ -135,10 +135,16 @@ const UserAccess = ({user, collections}) => {
             <Grid item lg={6} md={12} >
                 <Card>
                     <CardContent>
-                        <Typography variant="body1" >
-                            {'ACCESS RULES'}
-                        </Typography>
-                        <ErrorMsg tag={tag} />
+                        <Grid container item xs={12} spacing={2}>
+                            <Grid item xs={12}>
+                                <Typography variant="body1" >
+                                    {'ACCESS RULES'}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <ErrorMsg tag={tag} />
+                            </Grid>
+                        </Grid>
                         <Grid
                             container
                             direction="row"

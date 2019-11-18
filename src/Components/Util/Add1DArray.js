@@ -73,31 +73,6 @@ const Add1DArray = ({cb}) => {
         setState({...state, [name]: value, errors: {}});
     };
 
-
-    // const handleKeypress = (event) => {
-    //     const {key} = event;
-    //     if (key == 'Enter') {
-    //         const err = '';//Object.keys(errorTxt).reduce((d, ky) => { d[ky] = errorTxt[ky]();  return d; }, {});
-    //         setState({...state, errors: err});
-    //         if (!Object.values(err).some(d => d)) {
-
-
-    //             let currentcontent = contentAdd.trim();
-    //             if (!currentcontent) {
-    //                 return;
-    //             }
-
-    //             const contentTypeChecked = dataType == 'string' ? '"' + currentcontent + '"' : currentcontent;
-    //             setMyItems(prevItems => {
-    //                 const newArray = [...prevItems];
-    //                 newArray.push(contentTypeChecked);
-    //                 return newArray;
-    //             });
-    //             setState({ ...state, contentAdd: '' });
-    //         }
-    //     }
-    // };
-
     const typeControls = (type, input) => {
         return type === 'list' ? `[${input}]`
             : type === 'thing' ? '{}'
@@ -201,7 +176,6 @@ const Add1DArray = ({cb}) => {
 Add1DArray.propTypes = {
     cb: PropTypes.func.isRequired,
 };
-
 
 export default Add1DArray;
 

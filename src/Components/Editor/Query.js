@@ -49,7 +49,7 @@ const Query = ({match}) => {
 
     const handleSubmit = () => {
         CollectionActions.queryEditor(query, scope.value, scope.collectionId, handleOutput, tag);
-        if (scope.value != '@node') {
+        if (scope.value&&!scope.value.includes('@node')) {
             ProcedureActions.getProcedures(scope.value, tag);
         }
         if (scope.value.includes('collection')) {
@@ -128,12 +128,16 @@ const Query = ({match}) => {
                     <Grid item xs={12}>
                         <SelectScope scope={match.scope} onChangeScope={handleOnChangeScope} />
                     </Grid>
-                    <Grid item xs={12}>
-                        <Procedures scope={scope.hasOwnProperty('value') ? scope.value : ''} onSetAsInput={handleSetAsInput} />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <CustomTypes scope={scope.hasOwnProperty('value') ? scope.value : ''} onSetAsInput={handleSetAsInput} />
-                    </Grid>
+                    {scope.value && scope.value.includes('@node') ? null : (
+                        <Grid item xs={12}>
+                            <Procedures scope={scope.hasOwnProperty('value') ? scope.value : ''} onSetAsInput={handleSetAsInput} />
+                        </Grid>
+                    )}
+                    {scope.value && scope.value.includes('@collection') ? (
+                        <Grid item xs={12}>
+                            <CustomTypes scope={scope.hasOwnProperty('value') ? scope.value : ''} onSetAsInput={handleSetAsInput} />
+                        </Grid>
+                    ): null}
                 </React.Fragment>
             }
         />

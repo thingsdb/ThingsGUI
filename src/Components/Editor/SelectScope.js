@@ -5,17 +5,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withVlow} from 'vlow';
 
+import {NodesStore} from '../../Stores/NodesStore';
 import {ThingsdbStore} from '../../Stores/ThingsdbStore';
-import {getScopes, HarmonicCard} from '../Util';
+import {getScopes2, HarmonicCard} from '../Util';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
     keys: ['collections']
+}, {
+    store: NodesStore,
+    keys: ['nodes']
 }]);
 
-const SelectScope = ({onChangeScope, scope, collections}) => {
+const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
     const [index, setIndex] = React.useState(0);
-    const [scopesObj, scopeNames] = getScopes(collections);
+    const [scopesObj, scopeNames] = getScopes2(collections, nodes);
 
     React.useEffect(() => {
         const index = scope==''?0:scopeNames.indexOf(scope);
@@ -35,7 +39,7 @@ const SelectScope = ({onChangeScope, scope, collections}) => {
             content={
                 <RadioGroup aria-label="scope" name="scope" value={`${index}`} onChange={handleOnChangeScope}>
                     {scopesObj.map((s, i) => (
-                        <FormControlLabel key={s.value} value={`${i}`} control={<Radio color='primary' />} label={s.name} />
+                        <FormControlLabel key={s.value} value={`${i}`} control={<Radio color='primary' />} label={s.value} />
                     ))}
                 </RadioGroup>
             }
@@ -49,6 +53,8 @@ SelectScope.propTypes = {
 
     /* Collections properties */
     collections: ThingsdbStore.types.collections.isRequired,
+    /* Nodes properties */
+    nodes: NodesStore.types.nodes.isRequired,
 };
 
 export default withStores(SelectScope);

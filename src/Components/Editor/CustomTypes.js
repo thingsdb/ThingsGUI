@@ -15,7 +15,7 @@ const tag = '2';
 
 const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
     React.useEffect(() => {
-        if (!(scope == '@node' || scope == '@thingsdb' || scope == '')) {
+        if (scope&&scope.includes('@collection')) {
             TypeActions.getTypes(scope, tag);
         }
     }, [scope]);
@@ -39,7 +39,7 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
         onSetAsInput('set_type(new_type("..."), {...})');
     };
 
-    const t = scope == '@node' || scope == '@thingsdb' || scope == '' ? [] : customTypes;
+    const t = scope&&scope.includes('@collection') ? customTypes:[];
     const typesArr = [...Object.keys(t).map((name) => (
         {
             name: name,

@@ -26,6 +26,7 @@ import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
+import VariablesArray from './VariablesArray';
 import WatchThings from './WatchThings';
 
 const checkType = (t) => {
@@ -76,6 +77,17 @@ const getScopes = (collections) => [
     ]
 ];
 
+const getScopes2 = (collections, nodes) => [
+    [
+        {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
+        ...nodes.map((n) => ({name: `Node:${n.node_id}`, value: `@node:${n.node_id}`, collectionId: null})),
+        ...collections.map((c) => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
+    ],
+    [
+        '@thingsdb', ...nodes.map((n) => (`@node:${n.node_id}`)), ...collections.map((c) => (`@collection:${c.name}`))
+    ]
+];
+
 const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
 
@@ -100,6 +112,7 @@ export {
     Menu,
     onlyNums,
     getScopes,
+    getScopes2,
     ServerError,
     SimpleModal,
     Stepper,
@@ -115,5 +128,6 @@ export {
     TreeIcon,
     QueryInput,
     QueryOutput,
+    VariablesArray,
     WatchThings,
 };
