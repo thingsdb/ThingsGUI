@@ -21,14 +21,13 @@ const UsersMenu = ({user, users}) => {
         const setPoll = setInterval(
             () => {
                 ThingsdbActions.getUser();
-                if (user.access.privileges.includes('GRANT')||user.access.privileges.includes('FULL')) {
-                    ThingsdbActions.getUsers();
-                }
+                // ThingsdbActions.getUsers();
             }, 5000);
         return () => {
             clearInterval(setPoll);
         };
     }, []);
+
 
     const handleClickUser = (user) => {
         ApplicationActions.navigate({path: 'user', index: user, item: '', scope: ''});

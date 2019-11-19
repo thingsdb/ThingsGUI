@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-import {Add1DArray, AddBlob, AddBool, AddClosure, checkType, onlyNums} from '../Util';
+import {Add1DArray, AddBlob, AddBool, AddClosure, AddError, AddRegex, checkType, onlyNums} from '../Util';
 
 
 const InputField = ({dataType, cb, name, input, ...props}) => {
@@ -35,23 +35,6 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
                 errText = onlyNums(value) ? '' : 'only numbers';
             }
             return(errText);
-        // case 'closure':
-        //     if (bool) {
-        //         errText = /^\|[a-zA-Z\s]*([,][a-zA-Z\s]+)*\|.*$/.test(value) ? '':'closure is not valid';
-        //     }
-        //     return(errText);
-        // case 'regex':
-        //     // if (bool) {
-        //     //     errText = /^\|[a-zA-Z\s]*([,][a-zA-Z\s]+)*\|.*$/.test(value) ? '':'closure is not valid';
-        //     // }
-        //     // return(errText);
-        //     break;
-        // case 'error':
-        //     // if (bool) {
-        //     //     errText = /^\|[a-zA-Z\s]*([,][a-zA-Z\s]+)*\|.*$/.test(value) ? '':'closure is not valid';
-        //     // }
-        //     // return(errText);
-        //     break;
         default:
             return '';
         }
@@ -77,13 +60,13 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
 
     const singleInputField = dataType == 'number' || dataType == 'string';
     const closureInputField = dataType == 'closure';
+    const regexInputField = dataType == 'regex';
+    const errorInputField = dataType == 'error';
     const multiInputField = dataType == 'list';
     const booleanInputField = dataType == 'boolean';
     const blobInputField = dataType == 'blob';
     const predefined = dataType == 'thing';
     const predefinedVal = '{ }';
-
-    console.log(input);
 
     return(
         <React.Fragment>
@@ -120,6 +103,10 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
                 />
             ) : closureInputField ? (
                 <AddClosure input={input} cb={handleVal} />
+            ) : regexInputField ? (
+                <AddRegex input={input} cb={handleVal} />
+            ) : errorInputField ? (
+                <AddError input={input} cb={handleVal} />
             ) : null }
         </React.Fragment>
     );

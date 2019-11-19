@@ -3,6 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import Collapse from '@material-ui/core/Collapse';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import SendIcon from '@material-ui/icons/Send';
@@ -36,6 +37,7 @@ const Query = ({match}) => {
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState({});
     const [queryInput, setQueryInput] = React.useState('');
+    const [shrink, setShrink] = React.useState(true);
 
     React.useEffect(() => {
         setQueryInput(match.item);
@@ -48,6 +50,7 @@ const Query = ({match}) => {
     };
 
     const handleSubmit = () => {
+        setShrink(false);
         CollectionActions.queryEditor(query, scope.value, scope.collectionId, handleOutput, tag);
         if (scope.value&&!scope.value.includes('@node')) {
             ProcedureActions.getProcedures(scope.value, tag);
@@ -82,6 +85,10 @@ const Query = ({match}) => {
         ErrorActions.removeMsgError(tag);
     };
 
+    const handleShrink = () => {
+        setShrink(true);
+    };
+
     // const element = document.getElementById('editor');
     // console.log('el', element);
     return (
@@ -96,9 +103,11 @@ const Query = ({match}) => {
                                 title="INPUT"
                                 titleTypographyProps={{variant: 'body1'}}
                             />
-                            <CardContent onKeyDown={handleKeyPress}>
+                            <CardContent onKeyDown={handleKeyPress} onClick={handleShrink}>
                                 <ErrorMsg tag={tag} />
-                                <QueryInput onChange={handleInput} input={queryInput} />
+                                <Collapse in={shrink} collapsedHeight="40px">
+                                    <QueryInput onChange={handleInput} input={queryInput} />
+                                </Collapse>
                             </CardContent>
                             <Divider />
                             <CardActions>

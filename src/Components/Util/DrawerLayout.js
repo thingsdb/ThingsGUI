@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
         right: 0,
         zIndex: 2,
+        overflowY: 'auto',
         height: '100vh',
     },
     drawerClose: {

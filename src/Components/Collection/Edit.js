@@ -104,7 +104,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     const input = child.type == 'thing' ? ''
         : child.type == 'closure' ? thing['/']
             : child.type == 'regex' ? thing['*']
-                : child.type == 'error' ? thing['!']
+                : child.type == 'error' ? thing
                     : thing;
 
     return(

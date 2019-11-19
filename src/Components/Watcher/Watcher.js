@@ -13,8 +13,8 @@ const withStores = withVlow([{
 
 const useStyles = makeStyles(theme => ({
     grid: {
-        maxHeight: '800px',
-        overflowY: 'auto',
+        // maxHeight: '800px',
+        // overflowY: 'auto',
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
     },

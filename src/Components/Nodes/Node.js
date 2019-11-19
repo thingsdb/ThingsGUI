@@ -25,10 +25,12 @@ const useStyles = makeStyles(theme => ({
     info: {
         marginTop: theme.spacing(2),
         overflowY: 'auto',
-        height: '600px',
+        maxHeight: '600px',
     },
     counters: {
         marginTop: theme.spacing(2),
+        overflowY: 'auto',
+        maxHeight: '600px',
     },
     backup: {
         marginTop: theme.spacing(2),
