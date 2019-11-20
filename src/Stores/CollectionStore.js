@@ -8,6 +8,7 @@ const CollectionActions = Vlow.createActions([
     'blob',
     'query',
     'rawQuery',
+    'rawQuery2',
     'queryEditor',
     'download',
     'cleanupTmp',
@@ -57,6 +58,18 @@ class CollectionStore extends BaseStore {
                 const things = Object.assign({}, prevState.things, {[thingId]: data});
                 return {things};
             });
+            cb();
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onRawQuery2(scope, q, tag, cb) {
+        const query = `${q}`;
+        this.emit('query', {
+            query,
+            scope
+        }).done(() => {
             cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);

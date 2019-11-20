@@ -10,8 +10,14 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 
-const HarmonicCard = ({title, content, buttons}) => {
+const HarmonicCard = ({title, content, buttons, expand}) => {
     const [expanded, setExpanded] = React.useState(true);
+
+    React.useEffect(() => {
+        if (expand!=null) {
+            setExpanded(expand);
+        }
+    }, [expand]);
 
     function handleExpandClick() {
         setExpanded(!expanded);
@@ -43,6 +49,7 @@ const HarmonicCard = ({title, content, buttons}) => {
 };
 
 HarmonicCard.defaultProps = {
+    expand: null,
     buttons: null,
 },
 
@@ -50,6 +57,7 @@ HarmonicCard.propTypes = {
     title: PropTypes.string.isRequired,
     content: PropTypes.object.isRequired,
     buttons: PropTypes.object,
+    expand: PropTypes.bool,
 };
 
 export default HarmonicCard;

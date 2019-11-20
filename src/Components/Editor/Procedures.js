@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {withVlow} from 'vlow';
 
 import {ProcedureActions, ProcedureStore} from '../../Stores/ProcedureStore';
-import {Chips} from '../Util';
+import {ChipsCard} from '../Util';
 
 const withStores = withVlow([{
     store: ProcedureStore,
@@ -36,7 +36,7 @@ const Procedures = ({scope, onSetAsInput, procedures}) => {
     const p = scope&&!scope.includes('@node') ? procedures:[];
 
     return (
-        <Chips
+        <ChipsCard
             title="procedures"
             items={p}
             onAdd={handleClickAddProcedure}

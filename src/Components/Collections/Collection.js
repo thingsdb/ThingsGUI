@@ -4,6 +4,8 @@ import {withVlow} from 'vlow';
 
 import CollectionConfig from './CollectionConfig';
 import CollectionTree from './CollectionTree';
+import CollectionProcedures from './CollectionProcedures';
+import CollectionTypes from './CollectionTypes';
 import {CollectionStore} from '../../Stores/CollectionStore';
 import {ApplicationStore} from '../../Stores/ApplicationStore';
 import {ThingsdbStore} from '../../Stores/ThingsdbStore';
@@ -29,11 +31,21 @@ const Collection = ({match, collections}) => {
             title={selectedCollection.name}
             content={
                 <React.Fragment>
-                    <Grid item md={7} xs={12}>
-                        <CollectionTree collection={selectedCollection} />
+                    <Grid container item md={7} xs={12} spacing={1}>
+                        <Grid item xs={12}>
+                            <CollectionConfig collection={selectedCollection} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CollectionTree collection={selectedCollection} />
+                        </Grid>
                     </Grid>
-                    <Grid item md={5} xs={12}>
-                        <CollectionConfig collection={selectedCollection} />
+                    <Grid container item md={5} xs={12} spacing={1}>
+                        <Grid item xs={12}>
+                            <CollectionProcedures collection={selectedCollection} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CollectionTypes collection={selectedCollection} />
+                        </Grid>
                     </Grid>
                 </React.Fragment>
             }

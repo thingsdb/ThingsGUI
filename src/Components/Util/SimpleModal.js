@@ -1,19 +1,30 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClose, onKeyPress}) => {
+const SimpleModal = ({
+    actionButtons,
+    button,
+    children,
+    disableOk,
+    maxWidth,
+    onClose,
+    onKeyPress,
+    onOk,
+    open,
+    title}) => {
+
 
     const handleClose = () => {
         onClose();
     };
 
     const handleOk = () => {
-        onOk();
+        onOk&&onOk();
     };
 
     return (
@@ -24,12 +35,14 @@ const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClos
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
                 fullWidth
-                maxWidth="xs"
+                maxWidth={maxWidth?maxWidth:'xs'}
                 onKeyDown={onKeyPress}
             >
-                <DialogTitle id="form-dialog-title">
-                    {title}
-                </DialogTitle>
+                {title ? (
+                    <DialogTitle id="form-dialog-title">
+                        {title}
+                    </DialogTitle>
+                ) : null}
                 <DialogContent>
                     {children}
                 </DialogContent>
@@ -37,11 +50,11 @@ const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClos
                     {actionButtons}
 
                     <Button onClick={handleClose} color="primary">
-                        {'Cancel'}
+                        {'Close'}
                     </Button>
                     {onOk ? (
-                        <Button onClick={handleOk} color="primary">
-                            {'Ok'}
+                        <Button onClick={handleOk} disabled={disableOk} color="primary">
+                            {'Submit'}
                         </Button>
                     ) : null}
                 </DialogActions>
@@ -52,19 +65,25 @@ const SimpleModal = ({children, button, title, actionButtons, open, onOk, onClos
 
 SimpleModal.defaultProps = {
     actionButtons: null,
-    onOk: ()=>null,
+    button: null,
+    disableOk: null,
+    maxWidth: null,
     onKeyPress: ()=>null,
+    onOk: null,
+    title: null,
 },
 
 SimpleModal.propTypes = {
-    children: PropTypes.object.isRequired,
-    button: PropTypes.object.isRequired,
-    title: PropTypes.string.isRequired,
     actionButtons: PropTypes.object,
-    open: PropTypes.bool.isRequired,
-    onOk: PropTypes.func,
+    button: PropTypes.object,
+    children: PropTypes.object.isRequired,
+    disableOk: PropTypes.bool,
+    maxWidth: PropTypes.string,
     onClose: PropTypes.func.isRequired,
     onKeyPress: PropTypes.func,
+    onOk: PropTypes.func,
+    open: PropTypes.bool.isRequired,
+    title: PropTypes.string,
 };
 
 export default SimpleModal;

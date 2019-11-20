@@ -1,12 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import CodeIcon from '@material-ui/icons/Code';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Divider from '@material-ui/core/Divider';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -18,7 +13,7 @@ import {ApplicationActions} from '../../Stores/ApplicationStore';
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {ThingsdbActions} from '../../Stores/ThingsdbStore';
 import {TypeActions, TypeStore} from '../../Stores/TypeStore';
-import {ErrorMsg, WatchThings} from '../Util';
+import {ErrorMsg, SimpleModal, WatchThings} from '../Util';
 
 
 const withStores = withVlow([{
@@ -116,13 +111,6 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
         }
     };
 
-    // const handleKeyPress = (event) => {
-    //     const {key} = event;
-    //     if (key == 'Enter') {
-    //         handleClickOk();
-    //     }
-    // };
-
     const handleClickOpenEditor = () => {
         ApplicationActions.navigate({path: 'query', index: 0, item: child.type==='thing' ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
     };
@@ -135,90 +123,79 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
     const canEdit = !(parent.isTuple && child.type !== 'thing' || isChildCustom);
     const canWatch = thing && thing.hasOwnProperty('#');
 
+    const content = (
+        <Grid container spacing={1}>
+            <Grid container spacing={1} item xs={12}>
+                <Grid item xs={8}>
+                    <Typography variant="body1" >
+                        {'Detail view of:'}
+                    </Typography>
+                    <Typography variant="h4" color='primary' component='span'>
+                        {`${child.name||parent.name}  `}
+                    </Typography>
+                    <Typography variant="body2" component='span'>
+                        {`- ${realChildType||child.type}`}
+                    </Typography>
+                </Grid>
+                <Grid container spacing={1} item xs={4} justify="flex-end">
+                    {canRemove &&
+                        <Grid item>
+                            <RemoveThing
+                                scope={scope}
+                                thing={thing}
+                                child={{...child, type: child.type == 'array'?realChildType:child.type}}
+                                parent={parent}
+                            />
+                        </Grid>
+                    }
+                    <Grid item>
+                        <Fab color="primary" onClick={handleClickOpenEditor} >
+                            <CodeIcon fontSize="large" />
+                        </Fab>
+                    </Grid>
+                    {canWatch &&
+                    <Grid item>
+                        <WatchThings
+                            buttonIsFab
+                            scope={scope}
+                            thingId={child.id||parent.id}
+                        />
+                    </Grid>
+                    }
+                </Grid>
+            </Grid>
+            {canEdit ? (
+                <React.Fragment>
+                    <Grid item xs={12}>
+                        <ErrorMsg tag={tag} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Edit
+                            cb={handleQuery}
+                            customTypes={customTypes}
+                            dataTypes={dataTypes}
+                            thing={thing}
+                            child={{...child, type: realChildType||child.type}}
+                            parent={parent}
+                        />
+                    </Grid>
+                </React.Fragment>
+            ): null}
+        </Grid>
+    );
+
     return (
         <React.Fragment>
             {show ? (
-                <Dialog
+                <SimpleModal
                     open={open}
                     onClose={onClose}
-                    aria-labelledby="form-dialog-title"
-                    fullWidth
+                    onOk={canEdit ? handleClickOk:null}
                     maxWidth="md"
-                    scroll="body"
-                    // onKeyDown={handleKeyPress}
+                    disableOk={Boolean(error)}
                 >
-                    <DialogContent>
-                        <Grid container spacing={1}>
-                            <Grid container spacing={1} item xs={12}>
-                                <Grid item xs={8}>
-                                    <Typography variant="body1" >
-                                        {'Detail view of:'}
-                                    </Typography>
-                                    <Typography variant="h4" color='primary' component='span'>
-                                        {`${child.name||parent.name}  `}
-                                    </Typography>
-                                    <Typography variant="body2" component='span'>
-                                        {`- ${realChildType||child.type}`}
-                                    </Typography>
-                                </Grid>
-                                <Grid container spacing={1} item xs={4} justify="flex-end">
-                                    {canRemove &&
-                                        <Grid item>
-                                            <RemoveThing
-                                                scope={scope}
-                                                thing={thing}
-                                                child={{...child, type: child.type == 'array'?realChildType:child.type}}
-                                                parent={parent}
-                                            />
-                                        </Grid>
-                                    }
-                                    <Grid item>
-                                        <Fab color="primary" onClick={handleClickOpenEditor} >
-                                            <CodeIcon fontSize="large" />
-                                        </Fab>
-                                    </Grid>
-                                    {canWatch &&
-                                    <Grid item>
-                                        <WatchThings
-                                            buttonIsFab
-                                            scope={scope}
-                                            thingId={child.id||parent.id}
-                                        />
-                                    </Grid>
-                                    }
-                                </Grid>
-                            </Grid>
-                            {canEdit ? (
-                                <React.Fragment>
-                                    <Grid item xs={12}>
-                                        <ErrorMsg tag={tag} />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Edit
-                                            cb={handleQuery}
-                                            customTypes={customTypes}
-                                            dataTypes={dataTypes}
-                                            thing={thing}
-                                            child={{...child, type: realChildType||child.type}}
-                                            parent={parent}
-                                        />
-                                    </Grid>
-                                </React.Fragment>
-                            ): null}
-                        </Grid>
-                    </DialogContent>
-                    <Divider />
-                    <DialogActions>
-                        <Button onClick={onClose} color="primary">
-                            {'Close'}
-                        </Button>
-                        {canEdit ? (
-                            <Button onClick={handleClickOk} disabled={Boolean(error)} color="primary">
-                                {'Submit'}
-                            </Button>
-                        ) : null}
-                    </DialogActions>
-                </Dialog>
+                    {content}
+                </SimpleModal>
             ) : null}
         </React.Fragment>
     );

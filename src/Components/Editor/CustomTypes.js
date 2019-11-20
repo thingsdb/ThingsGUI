@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {withVlow} from 'vlow';
 
 import {TypeActions, TypeStore} from '../../Stores/TypeStore';
-import {Chips} from '../Util';
+import {ChipsCard} from '../Util';
 
 const withStores = withVlow([{
     store: TypeStore,
@@ -24,18 +24,18 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
         `${key}{${Object.entries(customTypes[key]).map(([k, v]) =>`${k}: ${makeTypeInstanceInit(v)}` )}}`
         : `<${key}>`;
 
-    const handleClickType = (index) => {
+    const handleClick = (index) => {
         const key = Object.keys(t)[index];
         const i = makeTypeInstanceInit(key);
         onSetAsInput(i);
     };
 
-    const handleClickDeleteType = (index) => {
+    const handleClickDelete = (index) => {
         const key = Object.keys(t)[index];
         TypeActions.deleteType(scope, key, tag);
     };
 
-    const handleClickAddType = () => {
+    const handleClickAdd = () => {
         onSetAsInput('set_type(new_type("..."), {...})');
     };
 
@@ -48,12 +48,12 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
     ))];
 
     return (
-        <Chips
+        <ChipsCard
             title="custom types"
             items={typesArr}
-            onAdd={handleClickAddType}
-            onClick={handleClickType}
-            onDelete={handleClickDeleteType}
+            onAdd={handleClickAdd}
+            onClick={handleClick}
+            onDelete={handleClickDelete}
         />
     );
 };

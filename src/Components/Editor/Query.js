@@ -37,7 +37,7 @@ const Query = ({match}) => {
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState({});
     const [queryInput, setQueryInput] = React.useState('');
-    const [shrink, setShrink] = React.useState(true);
+    const [shrink, setShrink] = React.useState(false);
 
     React.useEffect(() => {
         setQueryInput(match.item);
@@ -128,6 +128,7 @@ const Query = ({match}) => {
                             content={
                                 <QueryOutput output={output} />
                             }
+                            expand={!shrink}
                         />
                     </Grid>
                 </React.Fragment>

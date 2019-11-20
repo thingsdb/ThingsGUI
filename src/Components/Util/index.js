@@ -3,11 +3,12 @@ import AddBlob from './AddBlob';
 import AddBool from './AddBool';
 import AddClosure from './AddClosure';
 import AddError from './AddError';
+import AddList from './AddList';
 import AddRegex from './AddRegex';
 import ArrayLayout from './ArrayLayout';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
-import Chips from './Chips';
+import ChipsCard from './ChipsCard';
 import DrawerLayout from './DrawerLayout';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
@@ -99,11 +100,12 @@ export {
     AddBool,
     AddClosure,
     AddError,
+    AddList,
     AddRegex,
     ArrayLayout,
     Buttons,
     CardButton,
-    Chips,
+    ChipsCard,
     checkType,
     DrawerLayout,
     ErrorMsg,

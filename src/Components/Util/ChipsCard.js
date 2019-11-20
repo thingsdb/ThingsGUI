@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Chips = ({title, items, onAdd, onClick, onDelete}) => {
+const ChipsCard = ({title, items, onAdd, onClick, onDelete}) => {
     const classes = useStyles();
 
     const handleClick = (index) => () => {
@@ -65,20 +65,22 @@ const Chips = ({title, items, onAdd, onClick, onDelete}) => {
                 </React.Fragment>
             }
             buttons={
-                <Chip
-                    clickable
-                    className={classes.chip}
-                    label="ADD"
-                    onClick={handleClickAdd}
-                    color="primary"
-                    variant="outlined"
-                />
+                <React.Fragment>
+                    <Chip
+                        clickable
+                        className={classes.chip}
+                        label="ADD"
+                        onClick={handleClickAdd}
+                        color="primary"
+                        variant="outlined"
+                    />
+                </React.Fragment>
             }
         />
     );
 };
 
-Chips.propTypes = {
+ChipsCard.propTypes = {
     title: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
     onAdd: PropTypes.func.isRequired,
@@ -86,4 +88,4 @@ Chips.propTypes = {
     onDelete: PropTypes.func.isRequired,
 };
 
-export default Chips;
+export default ChipsCard;
