@@ -25,10 +25,8 @@ const VariablesArray = ({input, cb}) => {
     );
 
     React.useEffect(() => {
-        setMyItems(prevItems => {
-            const newArray = [...prevItems, ...input];
-            return newArray;
-        });
+        console.log('input', input);
+        setMyItems(input);
     },
     [input.length],
     );
@@ -85,7 +83,6 @@ const VariablesArray = ({input, cb}) => {
         <div>
             {makeAddedList()}
             <TextField
-                margin="dense"
                 name="input"
                 label="Variable"
                 type="text"

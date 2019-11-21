@@ -87,7 +87,6 @@ const AddError = ({input, cb}) => {
                 </Grid>
                 <Grid item xs={2} container justify="center">
                     <TextField
-                        margin="dense"
                         name="errCode"
                         label="Code"
                         type="text"
@@ -109,7 +108,6 @@ const AddError = ({input, cb}) => {
                         </Grid>
                         <Grid item xs={7} container justify="center">
                             <TextField
-                                margin="dense"
                                 name="errMsg"
                                 label="Message"
                                 type="text"

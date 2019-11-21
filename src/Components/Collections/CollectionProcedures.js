@@ -12,12 +12,12 @@ const withStores = withVlow([{
 }]);
 const tag = '21';
 
-const CollectionProcedures = ({collection, procedures}) => {
+const CollectionProcedures = ({scope, procedures}) => {
 
     React.useEffect(() => {
-        ProcedureActions.getProcedures(`@collection:${collection.name}`, tag);
+        ProcedureActions.getProcedures(scope, tag);
 
-    }, [collection]);
+    }, [scope]);
 
     return (
         <HarmonicCard
@@ -43,7 +43,7 @@ const CollectionProcedures = ({collection, procedures}) => {
 };
 
 CollectionProcedures.propTypes = {
-    collection: PropTypes.object.isRequired,
+    scope: PropTypes.string.isRequired,
 
     // procedures store
     procedures: ProcedureStore.types.procedures.isRequired,

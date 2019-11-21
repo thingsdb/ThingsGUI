@@ -86,8 +86,8 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                                     {val}
                                 </Link>
                             ) : (
-                                '   -   Blob'
-                            ) : `  -   ${val}`}
+                                '   :   Blob'
+                            ) : `   :  ${val}`}
                         </React.Fragment>
                     }
                     primaryTypographyProps={{

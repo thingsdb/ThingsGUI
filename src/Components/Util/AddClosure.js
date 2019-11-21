@@ -118,7 +118,6 @@ const AddClosure = ({input, cb}) => {
                 <Grid item xs={1} />
                 <Grid item xs={10} container justify="center">
                     <TextField
-                        margin="dense"
                         name="body"
                         label="Body"
                         type="text"

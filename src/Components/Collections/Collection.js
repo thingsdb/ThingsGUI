@@ -1,6 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import {withVlow} from 'vlow';
+import { makeStyles} from '@material-ui/core/styles';
 
 import CollectionConfig from './CollectionConfig';
 import CollectionTree from './CollectionTree';
@@ -22,7 +23,15 @@ const withStores = withVlow([{
     keys: ['collections']
 }]);
 
+const useStyles = makeStyles(theme => ({
+    spacing: {
+        paddingBottom: theme.spacing(1),
+        // margin: 0,
+    },
+}));
+
 const Collection = ({match, collections}) => {
+    const classes = useStyles();
     const selectedCollection = findItem(match.index, collections);
 
     return (
@@ -31,20 +40,20 @@ const Collection = ({match, collections}) => {
             title={selectedCollection.name}
             content={
                 <React.Fragment>
-                    <Grid container item md={7} xs={12} spacing={1}>
-                        <Grid item xs={12}>
+                    <Grid container item md={7} xs={12}>
+                        <Grid className={classes.spacing} item xs={12}>
                             <CollectionConfig collection={selectedCollection} />
                         </Grid>
                         <Grid item xs={12}>
                             <CollectionTree collection={selectedCollection} />
                         </Grid>
                     </Grid>
-                    <Grid container item md={5} xs={12} spacing={1}>
-                        <Grid item xs={12}>
-                            <CollectionProcedures collection={selectedCollection} />
+                    <Grid container item md={5} xs={12}>
+                        <Grid className={classes.spacing} item xs={12}>
+                            <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
                         </Grid>
                         <Grid item xs={12}>
-                            <CollectionTypes collection={selectedCollection} />
+                            <CollectionTypes scope={`@collection:${selectedCollection.name}`} />
                         </Grid>
                     </Grid>
                 </React.Fragment>

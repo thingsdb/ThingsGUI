@@ -20,32 +20,31 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
         }
     }, [scope]);
 
-    const makeTypeInstanceInit = (key) => customTypes[key] ?
-        `${key}{${Object.entries(customTypes[key]).map(([k, v]) =>`${k}: ${makeTypeInstanceInit(v)}` )}}`
-        : `<${key}>`;
-
-    const handleClick = (index) => {
-        const key = Object.keys(t)[index];
-        const i = makeTypeInstanceInit(key);
-        onSetAsInput(i);
-    };
-
-    const handleClickDelete = (index) => {
-        const key = Object.keys(t)[index];
-        TypeActions.deleteType(scope, key, tag);
-    };
-
-    const handleClickAdd = () => {
-        onSetAsInput('set_type(new_type("..."), {...})');
-    };
-
-    const t = scope&&scope.includes('@collection') ? customTypes:[];
-    const typesArr = [...Object.keys(t).map((name) => (
+    const typesArr = [...Object.keys(customTypes).map((name) => (
         {
             name: name,
             definition: JSON.stringify(customTypes[name])
         }
     ))];
+
+    const makeTypeInstanceInit = (key) => customTypes[key] ?
+        `${key}{${Object.entries(customTypes[key]).map(([k, v]) =>`${k}: ${makeTypeInstanceInit(v)}` )}}`
+        : `<${key}>`;
+
+    const handleClick = (index) => {
+        const key = typesArr[index];
+        const i = makeTypeInstanceInit(key.name);
+        onSetAsInput(i);
+    };
+
+    const handleClickDelete = (index) => {
+        const key = typesArr[index];
+        TypeActions.deleteType(scope, key.name, tag);
+    };
+
+    const handleClickAdd = () => {
+        onSetAsInput('set_type("...", {...})');
+    };
 
     return (
         <ChipsCard
@@ -54,6 +53,7 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
             onAdd={handleClickAdd}
             onClick={handleClick}
             onDelete={handleClickDelete}
+            tag={tag}
         />
     );
 };

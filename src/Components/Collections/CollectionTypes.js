@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withVlow} from 'vlow';
 
-import TypesDialog from './TypesDialog';
+import AddTypeDialog from './AddTypeDialog';
+import EditTypeDialog from './EditTypeDialog';
 import {TypeActions, TypeStore} from '../../Stores/TypeStore';
 import {ChipsCard} from '../Util';
 
@@ -13,36 +14,70 @@ const withStores = withVlow([{
 
 const tag = '21';
 
-const CollectionTypes = ({collection, customTypes}) => {
-    const [open, setOpen] = React.useState(false);
-    const [type, setType] = React.useState(null);
+const CollectionTypes = ({scope, customTypes}) => {
+    const dataTypes1 = [
+        'str',
+        'utf8',
+        'raw',
+        'bytes',
+        'int',
+        'uint',
+        'thing',
+        ...Object.keys(customTypes)
+    ];
+
+    const dataTypes2 = [
+        ...dataTypes1,
+        ...dataTypes1.map((v, i)=>(`[${v}]`)),
+    ];
+
+    const dataTypes3 = [
+        ...dataTypes2,
+        ...dataTypes2.map((v, i)=>(`${v}?`)),
+    ];
+
+    const dataTypes4 = [
+        ...dataTypes3,
+        ...dataTypes1.map((v, i)=>(`{${v}}`)),
+    ];
+
+
+    const [openAdd, setOpenAdd] = React.useState(false);
+    const [openEdit, setOpenEdit] = React.useState(false);
+
+    const [index, setindex] = React.useState(null);
     React.useEffect(() => {
-        TypeActions.getTypes(`@collection:${collection.name}`, tag);
+        TypeActions.getTypes(scope, tag);
 
-    }, [collection]);
-
-    const handleClick = (k) => {
-        setType(k);
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleClickAdd = () => {
-        setOpen(true);
-    };
-
-    const handleClickDelete = (k) => () => {
-        console.log('delete');
-    };
+    }, [scope]);
 
     const typesArr = [...Object.keys(customTypes).map((name) => (
         {
             name: name,
-            definition: JSON.stringify(customTypes[name])
+            definition: JSON.stringify(customTypes[name]),
+            properties: customTypes[name]
         }
     ))];
+
+    const handleClickEdit = (i) => {
+        setindex(i);
+        setOpenEdit(true);
+    };
+    const handleCloseEdit = () => {
+        setOpenEdit(false);
+    };
+
+    const handleClickAdd = () => {
+        setindex(null);
+        setOpenAdd(true);
+    };
+    const handleCloseAdd = () => {
+        setOpenAdd(false);
+    };
+    const handleClickDelete = (i) => {
+        const item = typesArr[i];
+        TypeActions.deleteType(scope, item.name, tag);
+    };
 
     return (
         <React.Fragment>
@@ -50,16 +85,18 @@ const CollectionTypes = ({collection, customTypes}) => {
                 title="custom types"
                 items={typesArr}
                 onAdd={handleClickAdd}
-                onClick={handleClick}
+                onClick={handleClickEdit}
                 onDelete={handleClickDelete}
+                tag={tag}
             />
-            <TypesDialog open={open} onClose={handleClose} customType={null} customTypes={customTypes} collection={collection} />
+            <AddTypeDialog open={openAdd} onClose={handleCloseAdd} dataTypes={dataTypes4} scope={scope} />
+            <EditTypeDialog open={openEdit} onClose={handleCloseEdit} customType={index!=null?typesArr[index]:{}} dataTypes={dataTypes4} scope={scope} />
         </React.Fragment>
     );
 };
 
 CollectionTypes.propTypes = {
-    collection: PropTypes.object.isRequired,
+    scope: PropTypes.string.isRequired,
 
     // types store
     customTypes: TypeStore.types.customTypes.isRequired,

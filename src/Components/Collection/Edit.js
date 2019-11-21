@@ -135,7 +135,6 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                 {addNewProperty ? (
                     <ListItem className={classes.listItem}>
                         <TextField
-                            margin="dense"
                             name="newProperty"
                             label="New property"
                             type="text"
@@ -152,7 +151,6 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                 <ListItem className={classes.listItem}>
                     <TextField
                         autoFocus
-                        margin="dense"
                         name="dataType"
                         label="Data type"
                         value={form.dataType}

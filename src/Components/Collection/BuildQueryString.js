@@ -93,7 +93,6 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
         <React.Fragment>
             {showQuery ? (
                 <TextField
-                    margin="dense"
                     name="queryString"
                     label="Query"
                     type="text"

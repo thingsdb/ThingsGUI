@@ -38,7 +38,6 @@ const AddRegex = ({input, cb}) => {
                 </Grid>
                 <Grid item xs={10} container >
                     <TextField
-                        margin="dense"
                         name="regex"
                         label="Regex"
                         type="text"

@@ -3,7 +3,7 @@ import AddBlob from './AddBlob';
 import AddBool from './AddBool';
 import AddClosure from './AddClosure';
 import AddError from './AddError';
-import AddList from './AddList';
+import AddTypeProperty from './AddTypeProperty';
 import AddRegex from './AddRegex';
 import ArrayLayout from './ArrayLayout';
 import Buttons from './Buttons';
@@ -100,7 +100,7 @@ export {
     AddBool,
     AddClosure,
     AddError,
-    AddList,
+    AddTypeProperty,
     AddRegex,
     ArrayLayout,
     Buttons,

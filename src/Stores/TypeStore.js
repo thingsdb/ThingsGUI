@@ -68,6 +68,21 @@ class TypeStore extends BaseStore {
             return [];
         });
     }
+
+    // onModType(scope, name, tag) {
+    //     const query = `del_type('${name}'); types_info();`;
+    //     this.emit('query', {
+    //         query,
+    //         scope
+    //     }).done((data) => {
+    //         this.setState({
+    //             customTypes: data
+    //         });
+    //     }).fail((event, status, message) => {
+    //         ErrorActions.setMsgError(tag, message.Log);
+    //         return [];
+    //     });
+    // }
 }
 
 export {TypeActions, TypeStore};

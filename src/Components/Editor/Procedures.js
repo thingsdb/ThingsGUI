@@ -42,6 +42,7 @@ const Procedures = ({scope, onSetAsInput, procedures}) => {
             onAdd={handleClickAddProcedure}
             onClick={handleClickProcedure}
             onDelete={handleClickDeleteProcedure}
+            tag={tag}
         />
     );
 };
