@@ -62,12 +62,12 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
             TypeActions.getType(`{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id})}`,scope, tag, setType);
         } else if (child.type == 'thing') {
             if (child.id&&parent.id) {
-                TypeActions.getType(`{childType: type(#${child.id}), parentType: type(#${parent.id})}`,scope, tag, setType); // check if custom type
+                TypeActions.getType(`{childType: type(#${child.id}), parentType: type(#${parent.id}.${parent.name})}`,scope, tag, setType); // check if custom type
             } else {
                 setState({...state, show: true});
             }
         } else {
-            TypeActions.getType(`{parentType: type(#${parent.id})}`,scope, tag, setParentType);
+            TypeActions.getType(`{parentType: type(#${parent.id}.${parent.name})}`,scope, tag, setParentType);
         }
 
     }, []);
@@ -88,8 +88,8 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
         if (blob) {
             CollectionActions.blob(
                 scope,
-                child.id||parent.id,
                 query,
+                child.id||parent.id,
                 blob,
                 tag,
                 () => {
@@ -98,10 +98,10 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
                 },
             );
         } else {
-            CollectionActions.rawQuery(
+            CollectionActions.queryWithReturn(
                 scope,
-                child.id||parent.id,
                 query,
+                child.id||parent.id,
                 tag,
                 () => {
                     ThingsdbActions.getCollections();
@@ -144,7 +144,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
                                 scope={scope}
                                 thing={thing}
                                 child={{...child, type: child.type == 'array'?realChildType:child.type}}
-                                parent={parent}
+                                parent={{...parent, type: parent.type == 'array'?realParentType:parent.type}}
                             />
                         </Grid>
                     }

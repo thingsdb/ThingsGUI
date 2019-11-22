@@ -6,9 +6,9 @@ import {ThingsdbActions} from './ThingsdbStore';
 
 const CollectionActions = Vlow.createActions([
     'blob',
-    'query',
+    'queryWithReturn',
+    'queryWithReturnDepth',
     'rawQuery',
-    'rawQuery2',
     'queryEditor',
     'download',
     'cleanupTmp',
@@ -31,7 +31,7 @@ class CollectionStore extends BaseStore {
         this.state = CollectionStore.defaults;
     }
 
-    onQuery(collection, thingId=null, depth=1) {
+    onQueryWithReturnDepth(collection, thingId=null, depth=1) {
         const query = thingId ? `return(#${thingId}, ${depth})` : `return(thing(.id()), ${depth})`;
         const scope = `@collection:${collection.name}`;
         this.emit('query', {
@@ -48,7 +48,7 @@ class CollectionStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRawQuery(scope, thingId, q, tag, cb) {
+    onQueryWithReturn(scope, q, thingId, tag, cb) {
         const query = `${q} #${thingId}`;
         this.emit('query', {
             query,
@@ -64,7 +64,7 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onRawQuery2(scope, q, tag, cb) {
+    onRawQuery(scope, q, tag, cb) {
         const query = `${q}`;
         this.emit('query', {
             query,
@@ -76,7 +76,7 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQueryEditor(query, scope, collectionId, onOutput, tag) {
+    onQueryEditor(scope, query, collectionId, onOutput, tag) {
         this.emit('queryEditor', {
             query,
             scope
@@ -97,7 +97,7 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onBlob(scope, thingId, q, blob, tag, cb) {
+    onBlob(scope, q, thingId, blob, tag, cb) {
         const query = `${q} #${thingId}`;
         this.emit('queryBlob', {
             query,

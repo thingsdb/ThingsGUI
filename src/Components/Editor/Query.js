@@ -51,7 +51,7 @@ const Query = ({match}) => {
 
     const handleSubmit = () => {
         setShrink(false);
-        CollectionActions.queryEditor(query, scope.value, scope.collectionId, handleOutput, tag);
+        CollectionActions.queryEditor(scope.value, query, scope.collectionId, handleOutput, tag);
         if (scope.value&&!scope.value.includes('@node')) {
             ProcedureActions.getProcedures(scope.value, tag);
         }

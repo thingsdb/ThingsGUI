@@ -24,6 +24,7 @@ const theme = createMuiTheme({
             cyan: '#16c3b6',
             beige: '#ead0ae',
             white: '#fff',
+            warning: '#5a0c186b'
         },
         secondary: {
             main: 'rgba(0, 55, 123, 0.3)',

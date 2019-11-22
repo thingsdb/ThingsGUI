@@ -25,12 +25,6 @@ class _SocketRequest {
     _alwaysCb() {
     }
 
-    // _triggerSessionError() {
-    //     setTimeout(() => {
-    //         location.reload();
-    //     }, 3000);
-    // }
-
     constructor(event, ...data) {
         window.console.debug(`Socket request: "${event}"`, data);
 
@@ -226,7 +220,6 @@ class EventStore extends BaseStore {
     }
 
     watchUpdate(data) {
-        console.log(data);
         for (let i = 0; i<data.jobs.length; i++) {
             switch(true){
             case data.jobs[i].hasOwnProperty('set'):
@@ -272,7 +265,6 @@ class EventStore extends BaseStore {
         const index = splice[prop][0];
         const deleteCount = splice[prop][1];
         const length = splice[prop].length;
-        // const replace = splice[prop][2];
         this.setState(prevState => {
             const copyArr = [...prevState.watchThings[id][prop]];
 
@@ -291,7 +283,6 @@ class EventStore extends BaseStore {
 
     add(id, add) {
         const prop = Object.keys(add)[0];
-        // const amount = add[prop][0]; // onnodig
         this.setState(prevState => {
             const copySet = new Set([...prevState.watchThings[id][prop]['$']]);
             for (let i = 1; i<add[prop].length; i++ ) {
@@ -306,7 +297,6 @@ class EventStore extends BaseStore {
 
     remove(id, remove) {
         const prop = Object.keys(remove)[0];
-        // const amount = remove[prop][0]; // onnodig
         this.setState(prevState => {
             const copySet = new Set([...prevState.watchThings[id][prop]['$']]);
             for (let i = 1; i<remove[prop].length; i++ ) {

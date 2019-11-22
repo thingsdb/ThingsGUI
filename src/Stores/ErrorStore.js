@@ -46,8 +46,6 @@ class ErrorStore extends Vlow.Store {
     }
 
     onSetMsgError(tag, error) {
-        const {toastErrors, msgError} = this.state;
-        console.log("errors in store: ", toastErrors, msgError);
         this.setState(prevState => {
             const err = Object.assign({}, prevState.msgError, {[tag]: error});
             return {msgError: err};
@@ -55,8 +53,6 @@ class ErrorStore extends Vlow.Store {
     }
 
     onRemoveMsgError(tag) {
-        const {toastErrors, msgError} = this.state;
-        console.log("errors in store: ", toastErrors, msgError);
         this.setState(prevState => {
             let copyState = JSON.parse(JSON.stringify(prevState.msgError));
             delete copyState[tag];

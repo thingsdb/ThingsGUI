@@ -24,10 +24,11 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
             } else {
                 val = standardInput(childVal, childType);
             }
-            q = buildQueryAdd(parentId, childName, parentName, val, parentType, childIndex);
+            q = buildQueryAdd(parentId, parentName, parentType, childName, childIndex, val);
             break;
         case 'remove':
-            q = buildQueryRemove(parentName, parentId, childName, childIndex, childId, childType);
+            console.log(childType, parentType, childId);
+            q = buildQueryRemove(parentId, parentName, parentType, childId, childName, childIndex);
             break;
         }
         setQuery(q);
@@ -76,17 +77,17 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
                                         : '';
     };
 
-    const buildQueryAdd = (parentId, childName, parentName, value, parentType, childIndex) => {
+    const buildQueryAdd = (parentId, parentName, parentType, childName, childIndex, value) => {
         return parentType==='list' ? (childIndex===null ? `#${parentId}.${parentName}.push(${value});` : `#${parentId}.${parentName}[${childIndex}] = ${value};`)
             : parentType==='thing' ? `#${parentId}.${childName} = ${value};`
                 : parentType==='set' ? `#${parentId}.${parentName}.add(${value});`
                     : '';
     };
 
-    const buildQueryRemove = (parentName, parentId, childName, childIndex, childId, childType) => {
-        return childIndex == null ? `#${parentId}.del('${childName}');`
-            : childType ? `#${parentId}.${parentName}.remove(#${parentId}.${parentName}.find(|s| (s.id()==${childId}) ));`
-                : `#${parentId}.${parentName}.splice(${childIndex}, 1);`; //childname or prentname???
+    const buildQueryRemove = (parentId, parentName, parentType, childId, childName, childIndex) => {
+        return parentType === 'thing' ? `#${parentId}.del('${childName}');`
+            : parentType === 'set' ? `#${parentId}.${parentName}.remove(#${parentId}.${parentName}.find(|s| (s.id()==${childId}) ));`
+                : `#${parentId}.${parentName}.splice(${childIndex}, 1);`;
     };
 
     return(

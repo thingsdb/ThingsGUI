@@ -26,10 +26,10 @@ const RemoveThing = ({scope, thing, child, parent}) => {
 
 
     const handleClickOk = () => {
-        CollectionActions.rawQuery(
+        CollectionActions.queryWithReturn(
             scope,
-            parent.id,
             query,
+            parent.id,
             tag,
             () => {
                 ThingsdbActions.getCollections();
@@ -59,14 +59,14 @@ const RemoveThing = ({scope, thing, child, parent}) => {
                             id: thing && thing['#'],
                             index: child.hasOwnProperty('index') ? child.index : null,
                             name: child.name,
-                            type: null,
+                            type: child.type,
                             val: null,
                         }}
                         customTypes={{}}
                         parent={{
                             id: parent.id,
                             name: parent.hasOwnProperty('name') ? parent.name : null,
-                            type: null,
+                            type: parent.type,
                         }}
                         showQuery
                     />

@@ -29,6 +29,13 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
 
+
+    React.useEffect(() => {
+        setShow(false); // closes dialog when item of array is removed. Otherwise dialog stays open with previous item.
+    },
+    [JSON.stringify(thing)],
+    );
+
     const handleClickOpen = () => {
         setShow(true);
     };
@@ -85,7 +92,7 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
 
     const handleClick = () => {
         if (thing && thing['#']) {
-            CollectionActions.query(collection, thing['#']);
+            CollectionActions.queryWithReturnDepth(collection, thing['#']);
         }
     };
 

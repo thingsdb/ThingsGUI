@@ -72,6 +72,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
         <React.Fragment>
             {singleInputField ? (
                 <TextField
+                    margin="dense"
                     name={name}
                     label={name}
                     type="text"
@@ -92,6 +93,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
                 <AddBlob cb={handleVal} />
             ) : predefined ? (
                 <TextField
+                    margin="dense"
                     name={name}
                     label={name}
                     type="text"

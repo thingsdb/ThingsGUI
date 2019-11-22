@@ -80,7 +80,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
 
 
     const handleClickOk = () => {
-        CollectionActions.rawQuery2(
+        CollectionActions.rawQuery(
             scope,
             queryString,
             tag,

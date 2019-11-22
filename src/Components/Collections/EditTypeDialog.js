@@ -1,22 +1,28 @@
 /* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import Button from '@material-ui/core/Button';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Popover from '@material-ui/core/Popover';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 import {TypeActions} from '../../Stores/TypeStore';
-import {ErrorMsg, SimpleModal, TableWithButtons} from '../Util';
+import {AddTypeProperty, ErrorMsg, SimpleModal, TableWithButtons} from '../Util';
 
 
 const tag = '24';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     listItem: {
         // margin: 0,
         // padding: 0,
@@ -25,6 +31,10 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
+    popover: {
+        padding: theme.spacing(1),
+        backgroundColor: theme.palette.primary.warning,
+    },
 
 }));
 
@@ -32,12 +42,12 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         queryString: '',
-        propertyName: '',
-        propertyType: '',
-        initialVal: '',
-        error: '',
+        property: {},
     });
-    const {queryString, propertyName, propertyType, initialVal, error} = state;
+    const {queryString, property} = state;
+    const [action, setAction] = React.useState('');
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     const header = [
         {ky: 'propertyName', label: 'Name'},
@@ -48,62 +58,115 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
     React.useEffect(() => {
         setState({
             queryString: '',
-            error: '',
-            properties: [],
+            property: {},
         });
+        setAction('');
     },
     [open],
     );
 
-    const handleQueryAdd = () => {
-        setState({...state, queryString: `mode_type('${customType.name}', 'add', '${propertyName}', '${propertyType}', '${initialVal}')`});
+    const handleQueryAdd = (p) => {
+        setState({...state, queryString: `mod_type('${customType.name}', 'add', '${p.propertyName}', '${p.propertyType}', '${p.propertyVal}')`});
     };
 
-    const handleQueryMod = () => {
-        setState({...state, queryString: `mode_type('${customType.name}', 'mod', '${propertyName}', '${propertyType}')`});
+    const handleQueryMod = (p) => {
+        setState({...state, queryString: `mod_type('${customType.name}', 'mod', '${property.propertyName}', '${p.propertyType}')`});
     };
 
-    const handleQueryDel = () => {
-        setState({...state, queryString: `mode_type('${customType.name}', 'del')`});
+    const handleAdd = () => {
+        setAction('add');
     };
 
-    const handleChange = ({target}) => {
-        const {name, value} = target;
-        setState({...state, [name]: value});
-    } ;
-
-    const handleRemove = (index) => {
-        // setState(prevState => {
-        //     let update = [...prevState.properties];
-        //     update.splice(index, 1);
-        //     return {...prevState, properties: update};
-        // });
+    const handleMod = (i) => () => {
+        setState({property: i, queryString: `mod_type('${customType.name}', 'mod', '${i.propertyName}', '${i.propertyType}')`});
+        setAction('mod');
     };
 
+    const handleDel = (i) => (e) => {
+        setState({property: i, queryString: `mod_type('${customType.name}', 'del', '${i.propertyName}')`});
+        setAnchorEl(e.currentTarget);
+        setAction('del');
+    };
+
+    const handleCloseDelete = () => {
+        setState({property: {}, queryString: ''});
+        setAnchorEl(null);
+    };
+
+    const handleBack = () => {
+        setState({property: {}, queryString: ''});
+        setAction('');
+    };
 
     const handleClickOk = () => {
-        CollectionActions.rawQuery2(
+        CollectionActions.rawQuery(
             scope,
             queryString,
             tag,
             () => {
                 TypeActions.getTypes(scope, tag);
-                onClose();
+                setAction('');
+                setAnchorEl(null);
+                setState({property: {}, queryString: ''});
             }
         );
     };
+    const overview = action=='';
+    const add = action=='add';
+    const edit = action=='mod';
+    const del = action=='del';
 
-    const handleButtons = (backup) => <RemoveBackup nodeId={nodeId} backup={backup} />;
+    const handleClosePopOver = () => {
+        setAnchorEl(null);
+    };
 
+    const openPopOver = Boolean(anchorEl);
+
+    const buttons = (row) => (
+        <React.Fragment>
+            <ButtonBase onClick={handleMod(row)} >
+                <EditIcon color="primary" />
+            </ButtonBase>
+            <ButtonBase onClick={handleDel(row)} >
+                <DeleteIcon color="primary" />
+            </ButtonBase>
+            <Popover
+                classes={{paper: classes.popover}}
+                open={openPopOver}
+                anchorEl={anchorEl}
+                onClose={handleClosePopOver}
+                anchorOrigin={{
+                    vertical: 'center',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'center',
+                    horizontal: 'left',
+                }}
+            >
+                <Typography>{`Are you sure you want to remove '${property.propertyName}'`}</Typography>
+                <Button onClick={handleCloseDelete} color="primary">
+                    {'Cancel'}
+                </Button>
+                <Button onClick={handleClickOk} color="primary">
+                    {'Ok'}
+                </Button>
+            </Popover>
+        </React.Fragment>
+    );
 
     return (
         <React.Fragment>
             <SimpleModal
                 open={open}
                 onClose={onClose}
-                onOk={handleClickOk}
+                onOk={add||edit?handleClickOk:null}
                 maxWidth="sm"
-                disableOk={Boolean(error)}
+                actionButtons={add||edit ? (
+                    <Button onClick={handleBack} color="primary">
+                        {'Back'}
+                    </Button>
+                ):null}
             >
                 <Grid container spacing={1}>
                     <Grid container spacing={1} item xs={12}>
@@ -145,19 +208,31 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
                                     />
                                 </ListItem>
                             </Collapse>
-                            <ListItem>
-                                <Typography variant="body1" >
-                                    {'Current properties:'}
-                                </Typography>
-                            </ListItem>
-                            <ListItem>
-                                <TableWithButtons
-                                    header={header}
-                                    rows={rows}
-                                    rowClick={()=>null}
-                                    buttons={()=>null}
-                                />
-                            </ListItem>
+                            <Collapse in={add || edit} timeout="auto" unmountOnExit>
+                                <ListItem>
+                                    <AddTypeProperty cb={add?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={edit?property: {}} hasPropName={!edit} hasInitVal={add} />
+                                </ListItem>
+                            </Collapse>
+                            <Collapse in={overview||del} timeout="auto" unmountOnExit>
+                                <ListItem>
+                                    <Typography variant="body1" >
+                                        {'Current properties:'}
+                                    </Typography>
+                                </ListItem>
+                                <ListItem>
+                                    <TableWithButtons
+                                        header={header}
+                                        rows={rows}
+                                        rowClick={()=>null}
+                                        buttons={buttons}
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ButtonBase onClick={handleAdd} >
+                                        <AddIcon color="primary" />
+                                    </ButtonBase>
+                                </ListItem>
+                            </Collapse>
                         </List>
                     </Grid>
                 </Grid>

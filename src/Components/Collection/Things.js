@@ -51,7 +51,7 @@ const ThingRoot = ({things, collection, watchIds}) => {
     const fetched = things.hasOwnProperty(collection.collection_id);
 
     React.useEffect(() => {
-        CollectionActions.query(collection);
+        CollectionActions.queryWithReturnDepth(collection);
         // return () => CollectionActions.cleanupTmp();
     }, [collection.name]);
 
