@@ -37,7 +37,11 @@ const checkType = (t) => {
         return('nil');
     }
     let type = typeof(t);
-    if (type === 'object') {
+    if (type === 'string') {
+        type = 'str';
+    } else if (type === 'boolean') {
+        type = 'bool';
+    } else if (type === 'object') {
         type = Array.isArray(t) ? 'array' : 'object';
         if (type === 'object') {
             const kindOfObject = Object.keys(t)[0];
@@ -49,8 +53,8 @@ const checkType = (t) => {
         }
     }
 
-    if (type == 'string' && t.includes('/download/tmp/thingsdb-cache')) {
-        type = 'blob';
+    if (type == 'str' && t.includes('/download/tmp/thingsdb-cache')) {
+        type = 'bytes';
     }
     return(type);
 };
@@ -58,7 +62,7 @@ const checkType = (t) => {
 const thingValue = (type, thing) => {
     return type === 'array' ? `[${thing.length}]`
         : type === 'thing' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
-            : type === 'string' || type === 'number' || type === 'boolean' || type === 'blob' ? `${thing}`
+            : type === 'str' || type === 'number' || type === 'bool' || type === 'bytes' ? `${thing}`
                 : type === 'closure' || type === 'regex' || type === 'error' ? `{${Object.keys(thing)[0]}}`
                     : type === null || type === 'nil' ? 'nil'
                         : '';

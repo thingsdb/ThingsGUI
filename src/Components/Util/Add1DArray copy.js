@@ -22,11 +22,13 @@ const useStyles = makeStyles(theme => ({
 
 
 const dataTypes = [
-    'string',
+    'str',
     'number',
-    'boolean',
-    'blob',
+    'bool',
+    'bytes',
     'closure',
+    'regex',
+    'error',
     'nil',
     'list',
     'set',
@@ -60,23 +62,6 @@ const Add1DArray = ({cb}) => {
             return newArray;
         });
     };
-
-
-    // const handleAdd = () => {
-    //     let currentcontent = contentAdd.trim();
-    //     if (!currentcontent) {
-    //         return;
-    //     }
-
-    //     const contentTypeChecked = dataType == 'string' ? '"' + currentcontent + '"' : currentcontent;
-    //     setMyItems(prevItems => {
-    //         const newArray = [...prevItems];
-    //         newArray.splice(contentTypeChecked);
-    //         return newArray;
-    //     });
-    //     setState({ ...state, contentAdd: '' });
-
-    // };
 
     return (
         <ArrayLayout

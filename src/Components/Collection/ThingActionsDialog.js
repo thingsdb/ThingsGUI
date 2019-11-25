@@ -25,10 +25,10 @@ const tag = '1';
 
 const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customTypes}) => {
     const dataTypes = [
-        'string',
+        'str',
         'number',
-        'boolean',
-        'blob',
+        'bool',
+        'bytes',
         'closure',
         'regex',
         'error',
@@ -57,24 +57,24 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
         // Checks for the real type. From here on the array is redefined to list or set. And thing is redefined to its potential custom type.
         // Furthermore we check if the parent has a custom type. In that case we remove the remove button. Custom type instances have no delete options.
 
-        // it would also be nice if we could check for potential custom type childeren in an array type. To force the datatype of the edit component to that type.
-        if (child.type == 'array') {                                        // check if it is a list or set
-            TypeActions.getType(`{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id})}`,scope, tag, setType);
+        // it would also be nice if we could check for potential custom type childern in an array type. To force the datatype of the edit component to that type.
+        let query='';
+        if (parent.id==null) {
+            query = `{childType: type(#${child.id}), parentType: ''}`; // check if custom type
+        } else if (child.type == 'thing' && parent.type == 'thing') {
+            query = `{childType: type(#${child.id}), parentType: type(#${parent.id})}`; // check if custom type
         } else if (child.type == 'thing') {
-            if (child.id&&parent.id) {
-                TypeActions.getType(`{childType: type(#${child.id}), parentType: type(#${parent.id}.${parent.name})}`,scope, tag, setType); // check if custom type
-            } else {
-                setState({...state, show: true});
-            }
+            query = `{childType: type(#${child.id}), parentType: type(#${parent.id}.${parent.name})}`; // check if custom type
+        } else if (parent.type == 'thing') {
+            query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id})}`; // check if custom type
         } else {
-            TypeActions.getType(`{parentType: type(#${parent.id}.${parent.name})}`,scope, tag, setParentType);
+            query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}.${parent.name})}`; // check if custom type
         }
+
+        TypeActions.getType(query, scope, tag, setType);
 
     }, []);
 
-    const setParentType = (t) => {
-        setState({...state, realParentType: t.parentType, show: true});
-    };
 
     const setType = (t) => {
         setState({...state, realChildType: t.childType, realParentType: t.parentType, show: true});
@@ -120,7 +120,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
     const isChildCustom = customTypes.hasOwnProperty(realChildType);
     const isParentCustom = customTypes.hasOwnProperty(realParentType);
     const canRemove = !(child.name === '/' || parent.isTuple || isRoot || isParentCustom);
-    const canEdit = !(parent.isTuple && child.type !== 'thing' || isChildCustom);
+    const canEdit = !(parent.isTuple && child.type !== 'thing' || isChildCustom || child.type==='nil');
     const canWatch = thing && thing.hasOwnProperty('#');
 
     const content = (

@@ -81,7 +81,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                                     {`${name}   `}
                                 </Typography>
                             ) : null}
-                            {type === 'blob' ?  link ? (
+                            {type === 'bytes' ?  link ? (
                                 <Link href={link} download="blob" type="application/octet-stream" color="textPrimary">
                                     {val}
                                 </Link>
@@ -103,11 +103,11 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                                 {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
                             </ButtonBase>
                         ) : null}
-                        {type === 'blob' ? (
+                        {type === 'bytes' ? (
                             <ButtonBase onClick={handleDownload} >
                                 <DownloadIcon color="primary" />
                             </ButtonBase>
-                        ) : type === 'string' ? (
+                        ) : type === 'str' ? (
                             <SimpleModal
                                 button={
                                     <ButtonBase onClick={handleOpenStringDialog} >

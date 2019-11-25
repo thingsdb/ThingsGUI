@@ -15,16 +15,18 @@ const initialState = {
     variables: [],
     doc: '',
     body: '',
+    callCB: false,
 };
 
 const AddClosure = ({input, cb}) => {
     const [state, setState] = React.useState(initialState);
-    const {variables, body} = state;
+    const {variables, body, callCB} = state;
     const [withWse, setWithWse] = React.useState(false);
-    const [closure, setClosure] = React.useState('');
+    console.log('addclosure', callCB);
 
     React.useEffect(() => {
-        if(input) {
+        const c = withWse ? `|${variables}| wse(${body})` : `|${variables}|${body}`;
+        if(input&&input!=c) {
             let endVarArr = input.indexOf('|', 1);
             let vars = input.substring(1, endVarArr).split(',');
             let b1 = input.substring(endVarArr+1);
@@ -35,8 +37,9 @@ const AddClosure = ({input, cb}) => {
             }
             let b3 = b2[0]=='{' || b2[0]=='(' ? b2.substring(1, b2.length-1) : b2;
             setState({
-                variables:endVarArr==1?[]:vars,
+                variables: endVarArr==1?[]:vars,
                 body: b3,
+                callCB: false,
             });
         }
     },
@@ -44,30 +47,28 @@ const AddClosure = ({input, cb}) => {
     );
 
     React.useEffect(() => {
-        const c = withWse ? `|${variables}| wse({${body}})` : `|${variables}| {${body}}`;
-        setClosure(c);
+        // console.log(variables, body, withWse);
+        const c = withWse ? `|${variables}| wse(${body})` : `|${variables}|${body}`;
+        if (callCB) {
+            cb(c);
+        }
     },
     [variables, body, withWse],
     );
 
-    React.useEffect(() => {
-        cb(closure);
-    },
-    [closure],
-    );
-
     const handleOnChange = ({target}) => {
         const {name, value} = target;
-        setState({...state, [name]: value});
+        setState({...state, [name]: value, callCB: true});
     };
 
     const handleVarArray = (items) => {
-        setState({...state, variables: [...items]});
+        setState({...state, variables: [...items], callCB: true});
     };
 
     const handleWse = ({target}) => {
         const {checked} = target;
         setWithWse(checked);
+        setState({...state, callCB: true});
     };
 
     return(
@@ -101,7 +102,7 @@ const AddClosure = ({input, cb}) => {
                     </Typography>
                 </Grid>
                 <Grid item xs={10} container >
-                    <VariablesArray cb={handleVarArray} input={variables} />
+                    {React.useMemo(()=><VariablesArray cb={handleVarArray} input={variables} />, [JSON.stringify(variables)])}
                 </Grid>
                 <Grid item xs={1} container justify="flex-end">
                     <Typography variant="h3" color="primary">

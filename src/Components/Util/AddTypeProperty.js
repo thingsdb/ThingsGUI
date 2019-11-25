@@ -13,17 +13,17 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
     const {propertyName, propertyType, propertyVal} = state;
 
     React.useEffect(() => {
-        cb(state);
-    },
-    [state.propertyName, state.propertyType, state.propertyVal],
-    );
-
-    React.useEffect(() => {
-        if (input.length) {
+        if (input.length&&(input.propertyName!=state.propertyName || input.propertyType!=state.propertyType || input.propertyVal!=state.propertyVal)) {
             setState(input);
         }
     },
     [input.propertyName, input.propertyType, input.propertyVal],
+    );
+
+    React.useEffect(() => {
+        cb(state);
+    },
+    [state.propertyName, state.propertyType, state.propertyVal],
     );
 
     const handleChange = ({target}) => {

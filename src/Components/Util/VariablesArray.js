@@ -25,7 +25,6 @@ const VariablesArray = ({input, cb}) => {
     );
 
     React.useEffect(() => {
-        console.log('input', input);
         setMyItems(input);
     },
     [input.length],

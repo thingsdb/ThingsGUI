@@ -20,9 +20,13 @@ const CollectionTypes = ({scope, customTypes}) => {
         'utf8',
         'raw',
         'bytes',
+        'bool',
         'int',
         'uint',
+        'float',
+        'number',
         'thing',
+        'any',
         ...Object.keys(customTypes)
     ];
 

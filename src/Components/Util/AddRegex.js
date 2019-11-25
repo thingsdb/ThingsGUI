@@ -6,26 +6,10 @@ import Typography from '@material-ui/core/Typography';
 
 
 const AddRegex = ({input, cb}) => {
-    const [regex, setRegex] = React.useState('');
-
-    React.useEffect(() => {
-        if(input) {
-            let i = input.substring(1, input.length-1);
-            setRegex(i);
-        }
-    },
-    [input],
-    );
-
-    React.useEffect(() => {
-        cb(`/${regex}/`);
-    },
-    [regex],
-    );
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        setRegex(value);
+        cb(value);
     };
 
     return(
@@ -41,14 +25,12 @@ const AddRegex = ({input, cb}) => {
                         name="regex"
                         label="Regex"
                         type="text"
-                        value={regex}
+                        value={input}
                         spellCheck={false}
                         onChange={handleOnChange}
                         fullWidth
                         multiline
                         variant="outlined"
-                        // helperText={error}
-                        // error={Boolean(error)}
                     />
                 </Grid>
                 <Grid item xs={1} container justify="flex-end">

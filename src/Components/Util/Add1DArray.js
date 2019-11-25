@@ -27,9 +27,10 @@ const useStyles = makeStyles(theme => ({
 
 
 const dataTypes = [ // Do not put array first; causes infinite loop
-    'string',
+    'str',
     'number',
-    'boolean',
+    'bool',
+    'bytes',
     'closure',
     'regex',
     'error',
@@ -41,21 +42,12 @@ const dataTypes = [ // Do not put array first; causes infinite loop
 
 const Add1DArray = ({cb}) => {
     const classes = useStyles();
-    const helperspan = React.useRef(null);
     const [state, setState] = React.useState({
         contentAdd: '',
-        dataType: 'string',
+        dataType: 'str',
         errors: {},
     });
     const {contentAdd, dataType} = state;
-
-    const [width, setWidth] = React.useState(100);
-    React.useEffect(() => {
-        const helperWidth = helperspan.current.offsetWidth;
-        setWidth(Math.max(50, helperWidth + 1));
-    },
-    [contentAdd],
-    );
 
     const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
@@ -69,16 +61,16 @@ const Add1DArray = ({cb}) => {
     };
 
     const handleChange = ({target}) => {
-        const {name, value} = target;
-        setState({...state, [name]: value, errors: {}});
+        const {value} = target;
+        setState({...state, dataType: value, contentAdd: '', errors: {}});
     };
 
     const typeControls = (type, input) => {
         return type === 'list' ? `[${input}]`
             : type === 'thing' ? '{}'
                 : type === 'set' ? '[{}]'
-                    : type === 'string' ? `'${input}'`
-                        : type === 'number' || type === 'boolean' || type === 'blob' || type === 'closure' || type === 'regex' || type === 'error'  ? `${input}`
+                    : type === 'str' ? `'${input}'`
+                        : type === 'number' || type === 'bool' || type === 'bytes' || type === 'closure' || type === 'regex' || type === 'error'  ? `${input}`
                             : type === 'nil' ? 'nil'
                                 : '';
     };
@@ -92,7 +84,6 @@ const Add1DArray = ({cb}) => {
             newArray.push(contentTypeChecked);
             return newArray;
         });
-        setState({ ...state, contentAdd: '' });
 
     };
 
@@ -118,7 +109,7 @@ const Add1DArray = ({cb}) => {
         ));
         return elements;
     };
-
+    console.log('listcomp');
 
     return (
         <div className={classes.container} >
@@ -152,7 +143,6 @@ const Add1DArray = ({cb}) => {
                             name=""
                             input={contentAdd}
                             variant="outlined"
-                            style={{ width: width }}
                         />
                     </Grid>
                     <Grid item>
@@ -162,13 +152,6 @@ const Add1DArray = ({cb}) => {
                     </Grid>
                 </Grid>
             </Grid>
-            <span
-                id="helperspan"
-                ref={helperspan}
-                style={{'visibility': 'hidden'}}
-            >
-                {contentAdd}
-            </span>
         </div>
     );
 };

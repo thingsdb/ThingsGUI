@@ -6,25 +6,7 @@ import {Add1DArray, AddBlob, AddBool, AddClosure, AddError, AddRegex, checkType,
 
 
 const InputField = ({dataType, cb, name, input, ...props}) => {
-    const [val, setVal] = React.useState('');
     const [error, setError] = React.useState('');
-
-    React.useEffect(() => {
-        cb(val);
-    },
-    [val],
-    );
-
-    React.useEffect(() => {
-        if (input != null) {
-            const type = checkType(input);
-            if (!(type == 'array' || type == 'thing')){
-                setVal(input);
-            }
-        }
-    },
-    [input, dataType],
-    );
 
     const errorTxt = (value) => {
         const bool = value.length>0;
@@ -40,33 +22,43 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
         }
     };
 
-
     const handleOnChange = ({target}) => {
         const {value} = target;
-        setVal(value);
+        cb(value);
         const err = errorTxt(value);
         setError(err);
     };
 
     const handleArrayItems = (items) => {
         const value = `${items}`;
-        setVal(value);
+        cb(value);
+    };
+
+    const handleRegex = (r) => {
+        cb(`/${r}/`);
+    };
+
+    const handleError = (e) => {
+        cb(`err(${e.errCode}, '${e.errMsg}')`); //check
     };
 
     const handleVal = (v) => {
-        setVal(v);
+        cb(v);
     };
 
 
-    const singleInputField = dataType == 'number' || dataType == 'string';
+    const singleInputField = dataType == 'number' || dataType == 'str' || dataType == 'int' || dataType == 'uint' || dataType == 'float' || dataType == 'utf8' || dataType == 'raw';
     const closureInputField = dataType == 'closure';
     const regexInputField = dataType == 'regex';
     const errorInputField = dataType == 'error';
     const multiInputField = dataType == 'list';
-    const booleanInputField = dataType == 'boolean';
-    const blobInputField = dataType == 'blob';
+    const booleanInputField = dataType == 'bool';
+    const blobInputField = dataType == 'bytes';
     const predefined = dataType == 'thing';
     const predefinedVal = '{ }';
+
+    console.log('inputfieldcomp', input);
+
 
     return(
         <React.Fragment>
@@ -76,7 +68,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
                     name={name}
                     label={name}
                     type="text"
-                    value={val}
+                    value={input}
                     spellCheck={false}
                     onChange={handleOnChange}
                     fullWidth
@@ -88,7 +80,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
             ) : multiInputField ? (
                 <Add1DArray cb={handleArrayItems} />
             ) : booleanInputField ? (
-                <AddBool input={checkType(input) == 'boolean' ?  `${input}` : ''} cb={handleVal} />
+                <AddBool input={`${input}`} cb={handleVal} />
             ) : blobInputField ? (
                 <AddBlob cb={handleVal} />
             ) : predefined ? (
@@ -104,9 +96,9 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
             ) : closureInputField ? (
                 <AddClosure input={input} cb={handleVal} />
             ) : regexInputField ? (
-                <AddRegex input={input} cb={handleVal} />
+                <AddRegex input={input.trim().substring(1, input.length-1)} cb={handleRegex} />
             ) : errorInputField ? (
-                <AddError input={input} cb={handleVal} />
+                <AddError input={input} cb={handleError} />
             ) : null }
         </React.Fragment>
     );

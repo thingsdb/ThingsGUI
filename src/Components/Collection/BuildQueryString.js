@@ -2,17 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) => {
-    const [query, setQuery] = React.useState('');
+const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, query}) => {
 
     React.useEffect(() => {
         handleBuildQuery(action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type);
     }, [action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type]);
-
-    React.useEffect(() => {
-        cb(query);
-    }, [query]);
-
 
     const handleBuildQuery = (action, childVal, childType, childIndex, childId, childName, parentId, parentName, parentType) => {
         let val;
@@ -27,11 +21,10 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
             q = buildQueryAdd(parentId, parentName, parentType, childName, childIndex, val);
             break;
         case 'remove':
-            console.log(childType, parentType, childId);
             q = buildQueryRemove(parentId, parentName, parentType, childId, childName, childIndex);
             break;
         }
-        setQuery(q);
+        cb(q);
     };
 
 
@@ -44,10 +37,11 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
 
     const createArrayInput = (name, type, customTypes, val) => `[${mapArrayInput(name, type, customTypes, val)}]`;
 
+    //TODO add raw
     const setTypeInput = (n, t, customTypes, val) => {
         const v = val&&val.hasOwnProperty('val') ? val.val : val||'';
-        return t.includes('str') ? `'${v}'`
-            : t.includes('int') || t.includes('float') || t.includes('bool') ? `${v}`
+        return t.includes('str') || t.includes('utf8') ? `'${v}'`
+            : t.includes('number') || t.includes('int') || t.includes('uint') || t.includes('float') || t.includes('bool') ? `${v}`
                 : t.includes('thing') ? '{}' // TODO
                     : t.includes('[') ? createArrayInput(n, t, customTypes, v)
                         : t.includes('{') ? `set(${createArrayInput(n, t, customTypes, v)})`//'set([{}])' // TODO
@@ -65,14 +59,15 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
             `${type}{${mapTypeInput(name, type, customTypes, val)}}` : setTypeInput(name, type, customTypes, val);
     };
 
+    //TODO add raw
     const standardInput = (childVal, childType) => {
         return childType === 'list' ? `[${childVal}]`
             : childType == 'thing' ? '{}'
-                : childType == 'string' ? `'${childVal}'`
-                    : childType == 'number' || childType == 'boolean' ? `${childVal}`
+                : childType == 'str'|| childType == 'utf8' ? `'${childVal}'`
+                    : childType == 'number' || childType == 'bool' || childType == 'int'|| childType == 'uint'|| childType == 'float' ? `${childVal}`
                         : childType == 'set' ? 'set({})'
                             : childType == 'nil' ? 'nil'
-                                : childType == 'blob' ? 'blob'
+                                : childType == 'bytes' ? 'blob'
                                     : childType == 'closure' || childType == 'regex' || childType == 'error' ? childVal
                                         : '';
     };
@@ -118,6 +113,10 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery}) =
     );
 };
 
+BuildQueryString.defaultProps = {
+    query: '',
+};
+
 BuildQueryString.propTypes = {
     action: PropTypes.string.isRequired,
     cb: PropTypes.func.isRequired,
@@ -125,6 +124,7 @@ BuildQueryString.propTypes = {
     customTypes: PropTypes.object.isRequired,
     parent: PropTypes.object.isRequired,
     showQuery: PropTypes.bool.isRequired,
+    query: PropTypes.string,
 
 };
 

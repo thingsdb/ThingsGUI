@@ -51,7 +51,7 @@ const JsonTree = ({item, tree, child}) => {
     // type and value
     const type = checkType(thing);
     const val = thingValue(type, thing);
-    const canToggle = type === 'thing' || type === 'object' || type === 'array' || type === 'set';
+    const canToggle = type === 'thing' || type === 'object' || type === 'array';
 
     return (
         <JsonBranch name={child.name} type={type} val={val} onRenderChildren={canToggle ? renderChildren : null} />

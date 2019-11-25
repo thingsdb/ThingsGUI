@@ -14,27 +14,14 @@ const useStyles = makeStyles(() => ({
 
 const AddBool = ({input, cb}) => {
     const classes = useStyles();
-    const [bool, setBool] = React.useState('');
-
-    React.useEffect(() => {
-        cb(bool);
-    },
-    [bool],
-    );
-
-    React.useEffect(() => {
-        setBool(input);
-    },
-    [input],
-    );
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        setBool(value);
+        cb(value);
     };
 
     return(
-        <RadioGroup className={classes.dense} aria-label="position" name="value" value={bool} onChange={handleOnChange} row>
+        <RadioGroup className={classes.dense} aria-label="position" name="value" value={input} onChange={handleOnChange} row>
             <FormControlLabel
                 value="true"
                 control={<Radio color="primary" />}
