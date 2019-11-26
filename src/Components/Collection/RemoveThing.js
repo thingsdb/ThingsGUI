@@ -69,6 +69,7 @@ const RemoveThing = ({scope, thing, child, parent}) => {
                             type: parent.type,
                         }}
                         showQuery
+                        query={query}
                     />
                 </ListItem>
                 <ListItem>

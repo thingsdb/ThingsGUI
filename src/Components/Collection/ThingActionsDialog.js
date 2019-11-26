@@ -120,7 +120,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
     const isChildCustom = customTypes.hasOwnProperty(realChildType);
     const isParentCustom = customTypes.hasOwnProperty(realParentType);
     const canRemove = !(child.name === '/' || parent.isTuple || isRoot || isParentCustom);
-    const canEdit = !(parent.isTuple && child.type !== 'thing' || isChildCustom || child.type==='nil');
+    const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type==='nil');
     const canWatch = thing && thing.hasOwnProperty('#');
 
     const content = (
@@ -143,8 +143,8 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
                             <RemoveThing
                                 scope={scope}
                                 thing={thing}
-                                child={{...child, type: child.type == 'array'?realChildType:child.type}}
-                                parent={{...parent, type: parent.type == 'array'?realParentType:parent.type}}
+                                child={{...child, type: realChildType}}
+                                parent={{...parent, type: realParentType||parent.type}}
                             />
                         </Grid>
                     }
@@ -175,8 +175,8 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
                             customTypes={customTypes}
                             dataTypes={dataTypes}
                             thing={thing}
-                            child={{...child, type: realChildType||child.type}}
-                            parent={parent}
+                            child={{...child, type: realChildType}}
+                            parent={{...parent, type: realParentType||parent.type}}
                         />
                     </Grid>
                 </React.Fragment>

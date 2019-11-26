@@ -14,10 +14,35 @@ const useStyles = makeStyles(theme => ({
 
 const AddError = ({input, cb}) => {
     const classes = useStyles();
+    const [state, setState] = React.useState({
+        errCode:'',
+        errMsg:'',
+    });
+    const {errCode, errMsg} = state;
 
-    const handleOnChange = ({target}) => {
-        const {name, value} = target;
-        cb({...input, [name]: value});
+    React.useEffect(() => {
+        if(typeof(input)=='object'&&(input.error_code!=errCode || input.error_msg!=errMsg)) {
+            setState({
+                errCode:input.error_code,
+                errMsg:input.error_msg,
+            });
+        }
+    },
+    [JSON.stringify(input)],
+    );
+
+    const handleOnChangeCode = ({target}) => {
+        const {value} = target;
+        setState({...state, errCode: value});
+        const c = `err(${value}, '${errMsg}')`;
+        cb(c);
+    };
+
+    const handleOnChangeMsg = ({target}) => {
+        const {value} = target;
+        setState({...state, errMsg: value});
+        const c = `err(${errCode}, '${value}')`;
+        cb(c);
     };
 
     return(
@@ -29,12 +54,12 @@ const AddError = ({input, cb}) => {
             </Grid>
             <Grid item xs={4} container justify="center">
                 <TextField
-                    name="error_code"
+                    name="errCode"
                     label="Code"
                     type="text"
-                    value={input.error_code}
+                    value={errCode}
                     spellCheck={false}
-                    onChange={handleOnChange}
+                    onChange={handleOnChangeCode}
                     fullWidth
                     variant="outlined"
                     helperText="between -127 and -50"
@@ -47,12 +72,12 @@ const AddError = ({input, cb}) => {
             </Grid>
             <Grid item xs={4} container justify="center">
                 <TextField
-                    name="error_msg"
+                    name="errMsg"
                     label="Message"
                     type="text"
-                    value={input.error_msg}
+                    value={errMsg}
                     spellCheck={false}
-                    onChange={handleOnChange}
+                    onChange={handleOnChangeMsg}
                     fullWidth
                     variant="outlined"
                 />

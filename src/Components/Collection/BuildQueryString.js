@@ -22,6 +22,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
             break;
         case 'remove':
             q = buildQueryRemove(parentId, parentName, parentType, childId, childName, childIndex);
+            console.log(parentId, parentName, parentType, childId, childName, childIndex, q);
             break;
         }
         cb(q);
@@ -68,10 +69,8 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
                         : childType == 'set' ? 'set({})'
                             : childType == 'nil' ? 'nil'
                                 : childType == 'bytes' ? 'blob'
-                                    : childType == 'closure' ? childVal
-                                        :childType == 'regex' ? childVal
-                                            : childType == 'error' ? `err(${childVal.error_code}, '${childVal.error_msg}')`
-                                                : '';
+                                    : childType == 'closure' || childType == 'regex' || childType == 'error' ? childVal
+                                        : '';
     };
 
     const buildQueryAdd = (parentId, parentName, parentType, childName, childIndex, value) => {

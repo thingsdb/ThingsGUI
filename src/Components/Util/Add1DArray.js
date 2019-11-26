@@ -30,7 +30,7 @@ const dataTypes = [ // Do not put array first; causes infinite loop
     'str',
     'number',
     'bool',
-    'bytes',
+    // 'bytes',
     'closure',
     'regex',
     'error',
@@ -70,15 +70,13 @@ const Add1DArray = ({cb}) => {
             : type === 'thing' ? '{}'
                 : type === 'set' ? '[{}]'
                     : type === 'str' ? `'${input}'`
-                        : type === 'number' || type === 'bool' || type === 'bytes' || type === 'closure' || type === 'regex'  ? `${input}`
-                            : type === 'error' ? `err(${input.error_code}, '${input.error_msg}')`
-                                : type === 'nil' ? 'nil'
-                                    : '';
+                        : type === 'number' || type === 'bool' || type === 'bytes' || type === 'closure' || type === 'regex' ||  type === 'error'  ? `${input}`
+                            : type === 'nil' ? 'nil'
+                                : '';
     };
 
     const handleAdd = () => {
         // let currentcontent = contentAdd.trim();
-
         const contentTypeChecked = typeControls(dataType, contentAdd);
         setMyItems(prevItems => {
             const newArray = [...prevItems];

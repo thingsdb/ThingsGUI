@@ -21,7 +21,9 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
     );
 
     React.useEffect(() => {
-        cb(state);
+        if (input.length&&(input.propertyName!=state.propertyName || input.propertyType!=state.propertyType || input.propertyVal!=state.propertyVal)) {
+            cb(state);
+        }
     },
     [state.propertyName, state.propertyType, state.propertyVal],
     );

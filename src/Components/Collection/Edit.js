@@ -24,7 +24,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         child.type == 'thing' ? ''
             : child.type == 'closure' ? thing['/']
                 : child.type == 'regex' ? thing['*']
-                    : child.type == 'error' ? thing
+                    : child.type == 'error' ? `err(${thing.error_code}, ${thing.error_msg})`
                         : child.type == 'list' ? ''
                             : thing);
     const [blob, setBlob] = React.useState('');
@@ -77,7 +77,6 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     const addNewProperty = Boolean(child.id);
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set';
     const isCustomType = customTypes.hasOwnProperty(dataType);
-    // console.log(isCustomType,custom,value, child.type);
 
     return(
         <React.Fragment>
@@ -151,7 +150,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                     />
                 ) : (
                     <ListItem className={classes.listItem}>
-                        <InputField name="Value" dataType={dataType} cb={handleVal} input={value} />
+                        <InputField name="Value" dataType={dataType} cb={handleVal} input={child.type=='error'?thing:value} />
                     </ListItem>
                 )}
             </List>

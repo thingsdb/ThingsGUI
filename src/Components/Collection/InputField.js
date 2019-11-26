@@ -125,7 +125,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
 };
 
 InputField.defaultProps = {
-    input: null,
+    input: '',
 },
 
 InputField.propTypes = {
