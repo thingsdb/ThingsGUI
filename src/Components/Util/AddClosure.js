@@ -6,73 +6,71 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {VariablesArray} from '../Util';
+import { makeStyles } from '@material-ui/core/styles';
 
-// import { makeStyles } from '@material-ui/core/styles';
+const useStyles = makeStyles(theme => ({
+    container: {
+        padding: theme.spacing(2),
+        margin: theme.spacing(2),
+    },
+}));
 
-
-
-const initialState = {
-    variables: [],
-    doc: '',
-    body: '',
-    callCB: false,
-};
 
 const AddClosure = ({input, cb}) => {
-    const [state, setState] = React.useState(initialState);
-    const {variables, body, callCB} = state;
-    const [withWse, setWithWse] = React.useState(false);
-    console.log('addclosure', callCB);
+    const classes = useStyles();
+    const [state, setState] = React.useState({
+        variables: [],
+        body: '',
+        withWse: false,
+    });
+    const {withWse, variables, body} = state;
+    console.log('addclosure', input, variables);
 
     React.useEffect(() => {
         const c = withWse ? `|${variables}| wse(${body})` : `|${variables}|${body}`;
         if(input&&input!=c) {
             let endVarArr = input.indexOf('|', 1);
             let vars = input.substring(1, endVarArr).split(',');
-            let b1 = input.substring(endVarArr+1);
-            let b2 = b1;
-            if(b1.indexOf('wse(') != -1) {
-                b2 = b1.substring(4, b1.length-1);
-                setWithWse(true);
+            let b = input.substring(endVarArr+1);
+            let wse = false;
+            if(b.indexOf('wse(') != -1) {
+                b = b.substring(4, b.length-1);
+                wse = true;
             }
-            let b3 = b2[0]=='{' || b2[0]=='(' ? b2.substring(1, b2.length-1) : b2;
+            b = b[0]=='{' || b[0]=='(' ? b.substring(1, b.length-1) : b;
             setState({
                 variables: endVarArr==1?[]:vars,
-                body: b3,
-                callCB: false,
+                body: b,
+                withWse: wse,
             });
         }
     },
     [input],
     );
 
-    React.useEffect(() => {
-        // console.log(variables, body, withWse);
-        const c = withWse ? `|${variables}| wse(${body})` : `|${variables}|${body}`;
-        if (callCB) {
-            cb(c);
-        }
-    },
-    [variables, body, withWse],
-    );
-
-    const handleOnChange = ({target}) => {
-        const {name, value} = target;
-        setState({...state, [name]: value, callCB: true});
+    const handleBody = ({target}) => {
+        const {value} = target;
+        setState({...state, body: value});
+        const c = withWse ? `|${variables}| wse(${value})` : `|${variables}|${value}`;
+        cb(c);
     };
 
     const handleVarArray = (items) => {
-        setState({...state, variables: [...items], callCB: true});
+        console.log('varaaray');
+        setState({...state, variables: items});
+        const c = withWse ? `|${items}| wse(${body})` : `|${items}|${body}`;
+        cb(c);
     };
 
     const handleWse = ({target}) => {
         const {checked} = target;
-        setWithWse(checked);
-        setState({...state, callCB: true});
+        setState({...state, withWse: checked});
+        const c = checked ? `|${variables}| wse(${body})` : `|${variables}|${body}`;
+        cb(c);
     };
 
     return(
-        <Grid container spacing={2}>
+        <Grid className={classes.container} container spacing={2}>
             <Grid item xs={12}>
                 <Typography variant="caption" color="primary">
                     {'Stored closures which can potentially make changes to ThingsDB are called closures with side effects (wse) and must be wrapped with the wse(..) function.'}
@@ -102,7 +100,7 @@ const AddClosure = ({input, cb}) => {
                     </Typography>
                 </Grid>
                 <Grid item xs={10} container >
-                    {React.useMemo(()=><VariablesArray cb={handleVarArray} input={variables} />, [JSON.stringify(variables)])}
+                    <VariablesArray cb={handleVarArray} input={variables} />
                 </Grid>
                 <Grid item xs={1} container justify="flex-end">
                     <Typography variant="h3" color="primary">
@@ -124,13 +122,11 @@ const AddClosure = ({input, cb}) => {
                         type="text"
                         value={body}
                         spellCheck={false}
-                        onChange={handleOnChange}
+                        onChange={handleBody}
                         fullWidth
                         multiline
                         rows="4"
                         variant="outlined"
-                        // helperText={error}
-                        // error={Boolean(error)}
                     />
                 </Grid>
             </Grid>

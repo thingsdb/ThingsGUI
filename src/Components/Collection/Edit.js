@@ -77,7 +77,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     const addNewProperty = Boolean(child.id);
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set';
     const isCustomType = customTypes.hasOwnProperty(dataType);
-    console.log(isCustomType,custom,value, child.type);
+    // console.log(isCustomType,custom,value, child.type);
 
     return(
         <React.Fragment>

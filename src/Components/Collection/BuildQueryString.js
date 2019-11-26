@@ -68,8 +68,10 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
                         : childType == 'set' ? 'set({})'
                             : childType == 'nil' ? 'nil'
                                 : childType == 'bytes' ? 'blob'
-                                    : childType == 'closure' || childType == 'regex' || childType == 'error' ? childVal
-                                        : '';
+                                    : childType == 'closure' ? childVal
+                                        :childType == 'regex' ? childVal
+                                            : childType == 'error' ? `err(${childVal.error_code}, '${childVal.error_msg}')`
+                                                : '';
     };
 
     const buildQueryAdd = (parentId, parentName, parentType, childName, childIndex, value) => {
