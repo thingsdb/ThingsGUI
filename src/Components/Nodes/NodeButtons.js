@@ -2,7 +2,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core';
 
-import AddNode from './AddNode';
+import {Add} from './Config';
 
 
 const useStyles = makeStyles(theme => ({
@@ -24,7 +24,7 @@ const NodeButtons = () => {
             >
                 <Grid item container xs={12} spacing={1} >
                     <Grid item>
-                        <AddNode />
+                        <Add />
                     </Grid>
                 </Grid>
             </Grid>

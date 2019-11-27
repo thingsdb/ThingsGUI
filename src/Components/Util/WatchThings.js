@@ -7,7 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {EventStore, EventActions} from '../../Stores/BaseStore';
+import {EventStore, EventActions} from '../../Stores';
 
 const withStores = withVlow([{
     store: EventStore,

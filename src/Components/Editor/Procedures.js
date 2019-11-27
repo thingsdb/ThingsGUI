@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withVlow} from 'vlow';
 
-import {ProcedureActions, ProcedureStore} from '../../Stores/ProcedureStore';
+import {ProcedureActions, ProcedureStore} from '../../Stores';
 import {ChipsCard} from '../Util';
 
 const withStores = withVlow([{

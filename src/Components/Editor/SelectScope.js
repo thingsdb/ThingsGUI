@@ -5,8 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withVlow} from 'vlow';
 
-import {NodesStore} from '../../Stores/NodesStore';
-import {ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {NodesStore, ThingsdbStore} from '../../Stores';
 import {getScopes2, HarmonicCard} from '../Util';
 
 const withStores = withVlow([{

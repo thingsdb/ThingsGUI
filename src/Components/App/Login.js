@@ -15,7 +15,7 @@ import Switch from '@material-ui/core/Switch';
 import {withVlow} from 'vlow';
 
 import { ErrorMsg } from '../Util';
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+import {ApplicationStore, ApplicationActions} from '../../Stores';
 
 
 const withStores = withVlow([{

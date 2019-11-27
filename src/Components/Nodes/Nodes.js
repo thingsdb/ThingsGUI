@@ -4,9 +4,9 @@ import {withVlow} from 'vlow';
 
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
-import DelNode from './DelNode';
+import {Remove} from './Config';
 import TableWithRowExtend from './TableWithRowExtend';
-import {NodesActions, NodesStore} from '../../Stores/NodesStore';
+import {NodesActions, NodesStore} from '../../Stores';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -39,7 +39,7 @@ const Nodes = ({nodes, connectedNode}) => {
     }];
     const rowExtend = (node) => <Node selectedNode={node} />;
     const handleButtons = (node) => ([
-        <DelNode key={0} node={node} />,
+        <Remove key={0} node={node} />,
     ]);
     return(
         <React.Fragment>

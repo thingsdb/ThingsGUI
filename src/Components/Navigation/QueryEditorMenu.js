@@ -6,7 +6,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {ApplicationActions} from '../../Stores/ApplicationStore';
+import {ApplicationActions} from '../../Stores';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -24,7 +24,6 @@ const useStyles = makeStyles(theme => ({
 const QueryEditorMenu = () => {
     const classes = useStyles();
     const handleClickCollection = () => {
-        // ApplicationActions.openEditor();
         ApplicationActions.navigate({path: 'query', index: 0, item: '', scope:''});
     };
 

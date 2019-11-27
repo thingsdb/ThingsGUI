@@ -3,10 +3,9 @@ import Grid from '@material-ui/core/Grid';
 import {withVlow} from 'vlow';
 
 
-import UserAccess from './UserAccess';
+import {UserAccess} from './Config';
 import Tokens from './Tokens';
-import {ApplicationStore} from '../../Stores/ApplicationStore';
-import {ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {ApplicationStore, ThingsdbStore} from '../../Stores';
 import {findItem, isObjectEmpty, TitlePage} from '../Util';
 
 const withStores = withVlow([{

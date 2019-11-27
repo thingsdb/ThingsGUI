@@ -6,14 +6,10 @@ import Tabs from '@material-ui/core/Tabs';
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 
-import AddBackup from './AddBackup';
-import Backup from './Backup';
-import Counters from './Counters';
-import CountersReset from './CountersReset';
-import Loglevel from './Loglevel';
-import NodeInfo from './NodeInfo';
-import Shutdown from './Shutdown';
-import {NodesActions, NodesStore} from '../../Stores/NodesStore';
+import {Add, Backup} from './Backup';
+import {Counters, CountersReset} from './Counters';
+import {Loglevel, NodeInfo, Shutdown} from './Config';
+import {NodesActions, NodesStore} from '../../Stores';
 
 
 const withStores = withVlow([{
@@ -120,7 +116,7 @@ const Node = ({selectedNode, node, counters, backups}) => {
                     </Grid>
                     {offline ? null : (
                         <Grid item xs={12}>
-                            <AddBackup node={node} />
+                            <Add node={node} />
                         </Grid>
                     )}
                 </Grid>

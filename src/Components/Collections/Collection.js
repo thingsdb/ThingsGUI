@@ -3,13 +3,11 @@ import Grid from '@material-ui/core/Grid';
 import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
 
-import CollectionConfig from './CollectionConfig';
-import CollectionTree from './CollectionTree';
-import CollectionProcedures from './CollectionProcedures';
-import CollectionTypes from './CollectionTypes';
-import {CollectionStore} from '../../Stores/CollectionStore';
-import {ApplicationStore} from '../../Stores/ApplicationStore';
-import {ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {CollectionConfig} from './Config';
+import CollectionTree from './Tree';
+import CollectionProcedures from './Procedures';
+import CollectionTypes from './Types';
+import {CollectionStore, ApplicationStore, ThingsdbStore} from '../../Stores';
 import {findItem, TitlePage} from '../Util';
 
 

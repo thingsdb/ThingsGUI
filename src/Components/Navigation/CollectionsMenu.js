@@ -2,10 +2,9 @@ import React from 'react';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {withVlow} from 'vlow';
 
-import AddCollection from '../Collections/Add';
+import {Add} from '../Collections/Config';
 import {Menu} from '../Util';
-import {ApplicationActions} from '../../Stores/ApplicationStore';
-import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {ApplicationActions, ThingsdbActions, ThingsdbStore} from '../../Stores';
 
 
 const withStores = withVlow([{
@@ -35,7 +34,7 @@ const CollectionsMenu = ({collections}) => {
             title="COLLECTIONS"
             icon={<DashboardIcon />}
             items={collections}
-            addItem={<AddCollection />}
+            addItem={<Add />}
             onClickItem={handleClickCollection}
         />
     );

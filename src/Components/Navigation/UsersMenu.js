@@ -2,10 +2,9 @@ import React from 'react';
 import PersonIcon from '@material-ui/icons/Person';
 import {withVlow} from 'vlow';
 
-import AddUser from '../Users/Add';
+import {Add} from '../Users/Config';
 import {Menu} from '../Util';
-import {ApplicationActions} from '../../Stores/ApplicationStore';
-import {ThingsdbActions, ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {ApplicationActions, ThingsdbActions, ThingsdbStore} from '../../Stores';
 import {isObjectEmpty} from '../Util';
 
 const withStores = withVlow([{
@@ -43,7 +42,7 @@ const UsersMenu = ({user, users}) => {
             title="USERS"
             icon={<PersonIcon />}
             items={users2}
-            addItem={<AddUser />}
+            addItem={<Add />}
             onClickItem={handleClickUser}
         />
     );

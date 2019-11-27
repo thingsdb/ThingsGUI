@@ -11,7 +11,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
-import { ErrorActions, ErrorStore } from '../../Stores/ErrorStore';
+
+import { ErrorActions, ErrorStore } from '../../Stores';
 
 
 const useStyles = makeStyles(theme => ({

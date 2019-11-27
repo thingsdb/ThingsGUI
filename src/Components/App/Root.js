@@ -6,7 +6,7 @@ import {withVlow} from 'vlow';
 import App from './App';
 import AppLoader from './AppLoader';
 import Login from './Login';
-import {ApplicationStore, ApplicationActions} from '../../Stores/ApplicationStore';
+import {ApplicationStore, ApplicationActions} from '../../Stores';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme

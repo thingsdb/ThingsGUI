@@ -10,17 +10,13 @@ import StorageIcon from '@material-ui/icons/Storage';
 import VisibleIcon from '@material-ui/icons/Visibility';
 import {withVlow} from 'vlow';
 
-import BottomBar from '../Navigation/BottomBar';
-import Collection from '../Collections/Collection';
-import CollectionsMenu from '../Navigation/CollectionsMenu';
-import User from '../Users/User';
-import UsersMenu from '../Navigation/UsersMenu';
-import Nodes from '../Nodes/Nodes';
-import TopBar from '../Navigation/TopBar';
-import Query from '../Editor/Query';
-import QueryEditorMenu from '../Navigation/QueryEditorMenu';
-import Watcher from '../Watcher/Watcher';
-import {ApplicationStore} from '../../Stores/ApplicationStore';
+import {BottomBar, CollectionsMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
+import Collection from '../Collections';
+import User from '../Users';
+import Nodes from '../Nodes';
+import Editor from '../Editor';
+import Watcher from '../Watcher';
+import {ApplicationStore} from '../../Stores';
 import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
 
 
@@ -37,7 +33,7 @@ const App = ({match}) => {
     const pages = {
         collection: <Collection />,
         user: <User />,
-        query: <Query />,
+        query: <Editor />,
     };
 
     const handleDrawerOpen = (index) => () => {

@@ -14,7 +14,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { amber } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
-import { ErrorActions, ErrorStore } from '../../Stores/ErrorStore';
+
+import { ErrorActions, ErrorStore } from '../../Stores';
 
 
 const useStyles = makeStyles(theme => ({

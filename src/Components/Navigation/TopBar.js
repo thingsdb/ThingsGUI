@@ -13,8 +13,7 @@ import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {TopBarMenu} from '../Util';
-import {ApplicationActions} from '../../Stores/ApplicationStore';
-import {ThingsdbStore} from '../../Stores/ThingsdbStore';
+import {ApplicationActions, ThingsdbStore} from '../../Stores';
 // import packageJson from '../../'; TODO does not find package.json
 
 const withStores = withVlow([{

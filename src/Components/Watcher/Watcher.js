@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core';
 
-import {EventStore} from '../../Stores/BaseStore';
+import {EventStore} from '../../Stores';
 import {QueryOutput} from '../Util';
 
 const withStores = withVlow([{

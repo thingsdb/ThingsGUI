@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
-import InputField from '../Collection/InputField';
+import InputField from '../Collections/Tree/TreeActions/InputField';
 
 const useStyles = makeStyles(theme => ({
     container: {

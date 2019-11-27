@@ -1,2 +1,14 @@
-import {Menu, TopMenu, SidePanel} from './Navigation';
-export default {Menu, TopMenu, SidePanel};
+import BottomBar from './BottomBar';
+import CollectionsMenu from './CollectionsMenu';
+import QueryEditorMenu from './QueryEditorMenu';
+import TopBar from './TopBar';
+import UsersMenu from './UsersMenu';
+
+
+export {
+    BottomBar,
+    CollectionsMenu,
+    QueryEditorMenu,
+    TopBar,
+    UsersMenu
+};
