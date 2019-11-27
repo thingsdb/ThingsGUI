@@ -38,7 +38,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
 
     const createArrayInput = (name, type, customTypes, val) => `[${mapArrayInput(name, type, customTypes, val)}]`;
 
-    //TODO add raw
+    //TODO add raw and bytes
     const setTypeInput = (n, t, customTypes, val) => {
         const v = val&&val.hasOwnProperty('val') ? val.val : val||'';
         return t.includes('str') || t.includes('utf8') ? `'${v}'`

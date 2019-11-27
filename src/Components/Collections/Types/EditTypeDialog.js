@@ -15,8 +15,9 @@ import Popover from '@material-ui/core/Popover';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {CollectionActions, TypeActions} from '../../../Stores';
-import {AddTypeProperty, ErrorMsg, SimpleModal, TableWithButtons} from '../../Util';
+import AddTypeProperty from './AddTypeProperty';
+import {CollectionActions, ErrorActions, TypeActions} from '../../../Stores';
+import {ErrorMsg, SimpleModal, TableWithButtons} from '../../Util';
 
 
 const tag = '24';
@@ -65,7 +66,10 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
     );
 
     const handleQueryAdd = (p) => {
-        setState({...state, queryString: `mod_type('${customType.name}', 'add', '${p.propertyName}', '${p.propertyType}', '${p.propertyVal}')`});
+        const q = p.propertyType == 'str'||p.propertyType == 'utf8'||p.propertyType == 'raw'||p.propertyType == 'bytes' ?
+            `mod_type('${customType.name}', 'add', '${p.propertyName}', '${p.propertyType}', '${p.propertyVal}')`
+            : `mod_type('${customType.name}', 'add', '${p.propertyName}', '${p.propertyType}', ${p.propertyVal})`;
+        setState({...state, queryString: q});
     };
 
     const handleQueryMod = (p) => {
@@ -93,11 +97,13 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
     };
 
     const handleBack = () => {
+        handleCloseError();
         setState({property: {}, queryString: ''});
         setAction('');
     };
 
     const handleClickOk = () => {
+        handleCloseError();
         CollectionActions.rawQuery(
             scope,
             queryString,
@@ -110,6 +116,11 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
             }
         );
     };
+
+    const handleCloseError = () => {
+        ErrorActions.removeMsgError(tag);
+    };
+
     const overview = action=='';
     const add = action=='add';
     const edit = action=='mod';
@@ -143,7 +154,9 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
                     horizontal: 'left',
                 }}
             >
-                <Typography>{`Are you sure you want to remove '${property.propertyName}'`}</Typography>
+                <Typography>
+                    {`Are you sure you want to remove '${property.propertyName?property.propertyName:''}'`}
+                </Typography>
                 <Button onClick={handleCloseDelete} color="primary">
                     {'Cancel'}
                 </Button>

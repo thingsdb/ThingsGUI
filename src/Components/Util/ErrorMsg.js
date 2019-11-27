@@ -21,7 +21,6 @@ const useStyles = makeStyles(theme => ({
     },
     div: {
         minWidth: 280,
-        maxWidth: 300,
     },
     multiline: {
         whiteSpace: 'pre-wrap',
@@ -53,19 +52,19 @@ const ErrorMsg = ({tag, msgError}) => {
         <React.Fragment>
             <Collapse in={Boolean(msgError[tag])} timeout="auto" unmountOnExit>
                 <Typography className={classes.typography} component="div" variant="caption">
-                    <Grid component="label" container alignItems="center" spacing={1}>
-                        <Grid item>
+                    <Grid component="label" container alignItems="center" spacing={1} item xs={12}>
+                        <Grid item xs={1}>
                             <Avatar className={classes.avatar}>
                                 <WarningIcon className={classes.warning} />
                             </Avatar>
                         </Grid>
-                        <Grid item className={classes.div}>
+                        <Grid item className={classes.div} xs={10}>
                             {msgError[tag] && msgError[tag].includes('https') ? msgError[tag].substring(0, msgError[tag].search(/https/)) : msgError[tag]}
                             <Link href={msgError[tag] && msgError[tag].substring(msgError[tag].search(/https/), msgError[tag].length)}>
                                 {msgError[tag] && msgError[tag].includes('https') ? msgError[tag].substring(msgError[tag].search(/https/), msgError[tag].length) : ''}
                             </Link>
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={1}>
                             <IconButton aria-label="settings" onClick={handleCloseError}>
                                 <CloseIcon />
                             </IconButton>

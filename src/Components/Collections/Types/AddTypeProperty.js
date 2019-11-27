@@ -13,17 +13,19 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
     const {propertyName, propertyType, propertyVal} = state;
 
     React.useEffect(() => {
-        if (input.length&&(input.propertyName!=state.propertyName || input.propertyType!=state.propertyType || input.propertyVal!=state.propertyVal)) {
-            setState(input);
+        if (Object.keys(input).length>1&&(input.propertyName!=state.propertyName || input.propertyType!=state.propertyType)) {
+            setState({
+                propertyName: input.propertyName,
+                propertyType: input.propertyType,
+                propertyVal: '',
+            });
         }
     },
-    [input.propertyName, input.propertyType, input.propertyVal],
+    [input.propertyName, input.propertyType],
     );
 
     React.useEffect(() => {
-        if (input.length&&(input.propertyName!=state.propertyName || input.propertyType!=state.propertyType || input.propertyVal!=state.propertyVal)) {
-            cb(state);
-        }
+        cb(state);
     },
     [state.propertyName, state.propertyType, state.propertyVal],
     );
@@ -36,7 +38,7 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
     return (
         <Grid container item xs={12} spacing={1} alignItems="center" >
             {hasPropName ? (
-                <Grid item>
+                <Grid item xs={4}>
                     <TextField
                         fullWidth
                         label="Name"
@@ -49,7 +51,7 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
                     />
                 </Grid>
             ):null}
-            <Grid item>
+            <Grid item xs={4}>
                 <TextField
                     fullWidth
                     id="propertyType"
@@ -70,7 +72,7 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
                 </TextField>
             </Grid>
             {hasInitVal ? (
-                <Grid item>
+                <Grid item xs={4}>
                     <TextField
                         fullWidth
                         label="Initial value"

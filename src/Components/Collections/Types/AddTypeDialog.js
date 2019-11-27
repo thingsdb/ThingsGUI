@@ -9,8 +9,9 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import AddTypeProperty from './AddTypeProperty';
 import {CollectionActions, TypeActions} from '../../../Stores';
-import {ArrayLayout, AddTypeProperty, ErrorMsg, SimpleModal} from '../../Util';
+import {ArrayLayout, ErrorMsg, SimpleModal} from '../../Util';
 
 
 const tag = '23';
@@ -149,8 +150,6 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
                                     spellCheck={false}
                                     onChange={handleChange}
                                     fullWidth
-                                    // helperText={error}
-                                    // error={Boolean(error)}
                                 />
                             </ListItem>
                             <ListItem>

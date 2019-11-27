@@ -15,7 +15,7 @@ const withStores = withVlow([{
 const tag = '21';
 
 const CollectionTypes = ({scope, customTypes}) => {
-    const dataTypes1 = [
+    const types = [
         'str',
         'utf8',
         'raw',
@@ -30,19 +30,29 @@ const CollectionTypes = ({scope, customTypes}) => {
         ...Object.keys(customTypes)
     ];
 
-    const dataTypes2 = [
-        ...dataTypes1,
-        ...dataTypes1.map((v, i)=>(`[${v}]`)),
+    const typesOptional = [
+        ...types,
+        ...types.map((v, i)=>(`${v}?`)),
     ];
 
-    const dataTypes3 = [
-        ...dataTypes2,
-        ...dataTypes2.map((v, i)=>(`${v}?`)),
+    const list = [
+        '[]',
+        ...typesOptional.map((v, i)=>(`[${v}]`)),
     ];
 
-    const dataTypes4 = [
-        ...dataTypes3,
-        ...dataTypes1.map((v, i)=>(`{${v}}`)),
+    const listOptional = [
+        ...list,
+        ...list.map((v, i)=>(`${v}?`)),
+    ];
+
+    const set = [
+        ...types.map((v, i)=>(`{${v}}`)),
+    ];
+
+    const datatypesMap = [
+        ...typesOptional,
+        ...listOptional,
+        ...set
     ];
 
 
@@ -93,8 +103,8 @@ const CollectionTypes = ({scope, customTypes}) => {
                 onDelete={handleClickDelete}
                 tag={tag}
             />
-            <AddTypeDialog open={openAdd} onClose={handleCloseAdd} dataTypes={dataTypes4} scope={scope} />
-            <EditTypeDialog open={openEdit} onClose={handleCloseEdit} customType={index!=null?typesArr[index]:{}} dataTypes={dataTypes4} scope={scope} />
+            <AddTypeDialog open={openAdd} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} />
+            <EditTypeDialog open={openEdit} onClose={handleCloseEdit} customType={index!=null?typesArr[index]:{}} dataTypes={datatypesMap} scope={scope} />
         </React.Fragment>
     );
 };
