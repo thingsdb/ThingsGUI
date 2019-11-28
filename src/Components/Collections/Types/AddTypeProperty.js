@@ -3,6 +3,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
+import {AutoSelect} from '../../Util';
 
 const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) => {
     const [state, setState] = React.useState({
@@ -35,6 +36,10 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
         setState({...state, [name]: value});
     };
 
+    const handleType = (t) => {
+        setState({...state, propertyType: t});
+    };
+
     return (
         <Grid container item xs={12} spacing={1} alignItems="center" >
             {hasPropName ? (
@@ -52,24 +57,7 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
                 </Grid>
             ):null}
             <Grid item xs={4}>
-                <TextField
-                    fullWidth
-                    id="propertyType"
-                    label="Type"
-                    name="propertyType"
-                    onChange={handleChange}
-                    select
-                    SelectProps={{native: true}}
-                    type="text"
-                    value={propertyType}
-                    variant="outlined"
-                >
-                    {dropdownItems.map((p) => (
-                        <option key={p} value={p}>
-                            {p}
-                        </option>
-                    ))}
-                </TextField>
+                <AutoSelect cb={handleType} dropdownItems={dropdownItems} input={propertyType} label="Type" />
             </Grid>
             {hasInitVal ? (
                 <Grid item xs={4}>

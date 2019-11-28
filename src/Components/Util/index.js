@@ -5,6 +5,7 @@ import AddClosure from './AddClosure';
 import AddError from './AddError';
 import AddRegex from './AddRegex';
 import ArrayLayout from './ArrayLayout';
+import AutoSelect from './AutoSelect';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
 import ChipsCard from './ChipsCard';
@@ -105,6 +106,7 @@ export {
     AddError,
     AddRegex,
     ArrayLayout,
+    AutoSelect,
     Buttons,
     CardButton,
     ChipsCard,
