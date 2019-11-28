@@ -33,7 +33,7 @@ const Editor = ({match}) => {
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState({});
     const [queryInput, setQueryInput] = React.useState('');
-    const [shrink, setShrink] = React.useState(false);
+    const [collapse, setCollapse] = React.useState(false);
 
     React.useEffect(() => {
         setQueryInput(match.item);
@@ -41,12 +41,13 @@ const Editor = ({match}) => {
 
     const handleInput = (value) => {
         handleCloseError();
+        handleShrink();
         setQueryInput('');
         setQuery(value);
     };
 
     const handleSubmit = () => {
-        setShrink(false);
+        setCollapse(false);
         CollectionActions.queryEditor(scope.value, query, scope.collectionId, handleOutput, tag);
         if (scope.value&&!scope.value.includes('@node')) {
             ProcedureActions.getProcedures(scope.value, tag);
@@ -82,7 +83,7 @@ const Editor = ({match}) => {
     };
 
     const handleShrink = () => {
-        setShrink(true);
+        setCollapse(true);
     };
 
     // const element = document.getElementById('editor');
@@ -101,7 +102,7 @@ const Editor = ({match}) => {
                             />
                             <CardContent onKeyDown={handleKeyPress} onClick={handleShrink}>
                                 <ErrorMsg tag={tag} />
-                                <Collapse in={shrink} collapsedHeight="40px">
+                                <Collapse in={collapse} collapsedHeight="40px">
                                     <QueryInput onChange={handleInput} input={queryInput} />
                                 </Collapse>
                             </CardContent>
@@ -124,7 +125,7 @@ const Editor = ({match}) => {
                             content={
                                 <QueryOutput output={output} />
                             }
-                            expand={!shrink}
+                            expand={!collapse}
                         />
                     </Grid>
                 </React.Fragment>
