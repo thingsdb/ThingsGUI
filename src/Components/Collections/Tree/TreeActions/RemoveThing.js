@@ -11,7 +11,7 @@ import { ErrorMsg, SimpleModal } from '../../../Util';
 import {CollectionActions, ThingsdbActions} from '../../../../Stores';
 
 
-const tag = '3';
+const tag = '7';
 const RemoveThing = ({scope, thing, child, parent}) => {
     const [show, setShow] = React.useState(false);
     const [query, setQuery] = React.useState('');

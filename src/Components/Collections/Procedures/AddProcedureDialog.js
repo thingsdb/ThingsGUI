@@ -9,12 +9,11 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import AddTypeProperty from './AddTypeProperty';
-import {CollectionActions, TypeActions} from '../../../Stores';
-import {ArrayLayout, ErrorMsg, SimpleModal} from '../../Util';
+import {CollectionActions, ProcedureActions} from '../../../Stores';
+import {AddClosure, ErrorMsg, SimpleModal} from '../../Util';
 
 
-const tag = '9';
+const tag = '5';
 
 const useStyles = makeStyles(() => ({
     listItem: {
@@ -28,54 +27,42 @@ const useStyles = makeStyles(() => ({
 
 }));
 
-const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
+const AddTypeDialog = ({open, onClose, scope, cb}) => {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
         queryString: '',
-        typeName: '',
+        procedureName: '',
         error: '',
-        properties: [],
+        closure: '',
     });
-    const {queryString, typeName, error, properties} = state;
+    const {queryString, procedureName, error, closure} = state;
 
 
     React.useEffect(() => {
         setState({
             queryString: '',
-            typeName: '',
+            procedureName: '',
             error: '',
-            properties: [],
+            closure: '',
         });
     },
     [open],
     );
 
     React.useEffect(() => {
-        setState({...state, queryString: `set_type("${typeName}", {${properties.map((v, i)=>(`${v.propertyName}: '${v.propertyType}'`))}})`});
+        setState({...state, queryString: `new_procedure("${procedureName}", ${closure})`});
     },
-    [typeName, JSON.stringify(properties)],
+    [procedureName, closure],
     );
 
     const handleChange = ({target}) => {
         const {value} = target;
-        setState({...state, typeName: value});
+        setState({...state, procedureName: value});
     };
 
-    const handleChangeProperty = (index) => (property) => {
-        setState(prevState => {
-            let update = [...prevState.properties];
-            update.splice(index, 1, property);
-            return {...prevState, properties: update};
-        });
-    };
-
-    const handleRemove = (index) => {
-        setState(prevState => {
-            let update = [...prevState.properties];
-            update.splice(index, 1);
-            return {...prevState, properties: update};
-        });
+    const handleClosure = (c) => {
+        setState({...state, closure: c});
     };
 
 
@@ -85,7 +72,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
             queryString,
             tag,
             () => {
-                TypeActions.getTypes(scope, tag, cb);
+                ProcedureActions.getProcedures(scope, tag, cb);
                 onClose();
             }
         );
@@ -105,10 +92,10 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
                     <Grid container spacing={1} item xs={12}>
                         <Grid item xs={8}>
                             <Typography variant="body1" >
-                                {'Customizing ThingDB type:'}
+                                {'Customizing ThingDB procedure:'}
                             </Typography>
                             <Typography variant="h4" color='primary' component='span'>
-                                {'Add new type'}
+                                {'Add new procedure'}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -143,10 +130,10 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
                             </Collapse>
                             <ListItem className={classes.listItem}>
                                 <TextField
-                                    name="typeName"
+                                    name="procedureName"
                                     label="Name"
                                     type="text"
-                                    value={typeName}
+                                    value={procedureName}
                                     spellCheck={false}
                                     onChange={handleChange}
                                     fullWidth
@@ -154,20 +141,11 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
                             </ListItem>
                             <ListItem>
                                 <Typography variant="body1" >
-                                    {'Add properties:'}
+                                    {'Add closure:'}
                                 </Typography>
                             </ListItem>
                             <ListItem>
-                                <ArrayLayout
-                                    child={(i) => (
-                                        <AddTypeProperty
-                                            cb={handleChangeProperty(i)}
-                                            dropdownItems={dataTypes}
-                                            input={properties[i]}
-                                        />
-                                    )}
-                                    onRemove={handleRemove}
-                                />
+                                <AddClosure cb={handleClosure} />
                             </ListItem>
                         </List>
                     </Grid>
@@ -181,7 +159,6 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
 AddTypeDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     scope: PropTypes.string.isRequired,
     cb: PropTypes.func.isRequired,
 };

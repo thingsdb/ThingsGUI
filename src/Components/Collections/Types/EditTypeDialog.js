@@ -20,7 +20,7 @@ import {CollectionActions, ErrorActions, TypeActions} from '../../../Stores';
 import {ErrorMsg, SimpleModal, TableWithButtons} from '../../Util';
 
 
-const tag = '24';
+const tag = '11';
 
 const useStyles = makeStyles(theme => ({
     listItem: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
+const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         queryString: '',
@@ -109,7 +109,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
             queryString,
             tag,
             () => {
-                TypeActions.getTypes(scope, tag);
+                TypeActions.getTypes(scope, tag, cb);
                 setAction('');
                 setAnchorEl(null);
                 setState({property: {}, queryString: ''});
@@ -262,7 +262,8 @@ EditTypeDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     customType: PropTypes.object,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    scope: PropTypes.string.isRequired
+    scope: PropTypes.string.isRequired,
+    cb: PropTypes.func.isRequired,
 };
 
 export default EditTypeDialog;

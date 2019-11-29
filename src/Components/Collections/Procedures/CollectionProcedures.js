@@ -1,22 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from '@material-ui/core/List';
-import {withVlow} from 'vlow';
 
-import {ProcedureActions, ProcedureStore} from '../../../Stores';
+import AddProcedureDialog from './AddProcedureDialog';
+import EditProcedureDialog from './EditProcedureDialog';
+import {ProcedureActions} from '../../../Stores';
 import {ChipsCard} from '../../Util';
 
-const withStores = withVlow([{
-    store: ProcedureStore,
-    keys: ['procedures']
-}]);
-const tag = '21';
+const tag = '6';
 
-const CollectionProcedures = ({scope, procedures}) => {
+const CollectionProcedures = ({scope}) => {
     const [index, setindex] = React.useState(null);
+    const [procedures, setProcedures] = React.useState([]);
 
-    React.useEffect(() => {
-        ProcedureActions.getProcedures(scope, tag);
+    const handleProcedures = (p) => {
+        setProcedures(p);
+    };
+
+    React.useLayoutEffect(() => {
+        ProcedureActions.getProcedures(scope, tag, handleProcedures);
 
     }, [scope]);
 
@@ -41,30 +42,27 @@ const CollectionProcedures = ({scope, procedures}) => {
     };
     const handleClickDelete = (i) => {
         const item = procedures[i];
-        ProcedureActions.deleteType(scope, item.name, tag);
+        ProcedureActions.deleteProcedure(scope, item.name, tag, handleProcedures);
     };
 
     return (
         <React.Fragment>
             <ChipsCard
-                title="custom types"
+                title="procedures"
                 items={procedures}
                 onAdd={handleClickAdd}
                 onClick={handleClickEdit}
                 onDelete={handleClickDelete}
                 tag={tag}
             />
-            {/* <AddTypeDialog open={openAdd} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} />
-            <EditTypeDialog open={openEdit} onClose={handleCloseEdit} customType={index!=null?typesArr[index]:{}} dataTypes={datatypesMap} scope={scope} /> */}
+            <AddProcedureDialog open={openAdd} onClose={handleCloseAdd} scope={scope} cb={handleProcedures} />
+            <EditProcedureDialog open={openEdit} onClose={handleCloseEdit} input={index!=null?procedures[index]:{}} scope={scope} cb={handleProcedures} />
         </React.Fragment>
     );
 };
 
 CollectionProcedures.propTypes = {
     scope: PropTypes.string.isRequired,
-
-    // procedures store
-    procedures: ProcedureStore.types.procedures.isRequired,
 };
 
-export default withStores(CollectionProcedures);
+export default CollectionProcedures;

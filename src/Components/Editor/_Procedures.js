@@ -1,22 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withVlow} from 'vlow';
 
-import {ProcedureActions, ProcedureStore} from '../../Stores';
+import {ProcedureActions} from '../../Stores';
 import {ChipsCard} from '../Util';
 
-const withStores = withVlow([{
-    store: ProcedureStore,
-    keys: ['procedures']
-}]);
+const tag = '14';
 
+const Procedures = ({scope, onSetAsInput}) => {
+    const [procedures, setProcedures] = React.useState([]);
 
-const tag = '8';
+    const handleProcedures = (p) => {
+        setProcedures(p);
+    };
 
-const Procedures = ({scope, onSetAsInput, procedures}) => {
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if (scope&&!scope.includes('@node')) {
-            ProcedureActions.getProcedures(scope, tag);
+            ProcedureActions.getProcedures(scope, tag, handleProcedures);
         }
     }, [scope]);
 
@@ -26,7 +25,7 @@ const Procedures = ({scope, onSetAsInput, procedures}) => {
     };
 
     const handleClickDeleteProcedure = (index) => {
-        ProcedureActions.deleteProcedure(scope, procedures[index].name, tag);
+        ProcedureActions.deleteProcedure(scope, procedures[index].name, tag, handleProcedures);
     };
 
     const handleClickAddProcedure = () => {
@@ -50,9 +49,6 @@ const Procedures = ({scope, onSetAsInput, procedures}) => {
 Procedures.propTypes = {
     scope: PropTypes.string.isRequired,
     onSetAsInput: PropTypes.func.isRequired,
-
-    // procedures store
-    procedures: ProcedureStore.types.procedures.isRequired,
 };
 
-export default withStores(Procedures);
+export default Procedures;

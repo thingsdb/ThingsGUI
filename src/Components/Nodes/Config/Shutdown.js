@@ -6,7 +6,7 @@ import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
 
 
-const tag = '13';
+const tag = '19';
 
 const CountersReset = ({node}) => {
     const [show, setShow] = React.useState(false);

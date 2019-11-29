@@ -16,13 +16,17 @@ import User from '../Users';
 import Nodes from '../Nodes';
 import Editor from '../Editor';
 import Watcher from '../Watcher';
-import {ApplicationStore} from '../../Stores';
+import {ApplicationStore, ProcedureStore, TypeStore} from '../../Stores';
 import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
 
 
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['match']
+}, {
+    store: TypeStore,
+}, {
+    store: ProcedureStore,
 }]);
 
 

@@ -5,22 +5,21 @@ import CodeIcon from '@material-ui/icons/Code';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import {withVlow} from 'vlow';
 
 import Edit from './Edit';
 import RemoveThing from './RemoveThing';
-import {ApplicationActions, CollectionActions, ThingsdbActions, TypeActions, TypeStore} from '../../../../Stores';
+import {ApplicationActions, CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
 import {ErrorMsg, SimpleModal, WatchThings} from '../../../Util';
 
+const tag = '8';
 
-const withStores = withVlow([{
-    store: TypeStore,
-    keys: ['customTypes']
-}]);
+const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
+    const [customTypes, setCustomTypes] = React.useState({});
 
-const tag = '1';
+    const handleTypes = (t) => {
+        setCustomTypes(t);
+    };
 
-const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customTypes}) => {
     const dataTypes = [
         'str',
         'number',
@@ -49,7 +48,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope, customT
     const {query, blob, error, show, realChildType, realParentType} = state;
 
     React.useEffect(() => {
-        TypeActions.getTypes(scope, tag);
+        TypeActions.getTypes(scope, tag, handleTypes);
 
         // Checks for the real type. From here on the array is redefined to list or set. And thing is redefined to its potential custom type.
         // Furthermore we check if the parent has a custom type. In that case we remove the remove button. Custom type instances have no delete options.
@@ -221,9 +220,6 @@ ThingActionsDialog.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
     }).isRequired,
-
-    // types store
-    customTypes: TypeStore.types.customTypes.isRequired,
 };
 
-export default withStores(ThingActionsDialog);
+export default ThingActionsDialog;

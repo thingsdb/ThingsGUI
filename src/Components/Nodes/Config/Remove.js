@@ -8,7 +8,7 @@ import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
 
 
-const tag = '11';
+const tag = '18';
 
 const Remove = ({node}) => {
     const [show, setShow] = React.useState(false);

@@ -9,14 +9,13 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import AddTypeProperty from './AddTypeProperty';
-import {CollectionActions, TypeActions} from '../../../Stores';
-import {ArrayLayout, ErrorMsg, SimpleModal} from '../../Util';
+import {CollectionActions, ProcedureActions} from '../../../Stores';
+import {AddClosure, ErrorMsg, SimpleModal} from '../../Util';
 
 
-const tag = '9';
+const tag = '11';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     listItem: {
         // margin: 0,
         // padding: 0,
@@ -25,72 +24,60 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
+    popover: {
+        padding: theme.spacing(1),
+        backgroundColor: theme.palette.primary.warning,
+    },
 
 }));
 
-const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
+const EditTypeDialog = ({open, onClose, input, scope, cb}) => {
     const classes = useStyles();
-
-    const [state, setState] = React.useState({
-        queryString: '',
-        typeName: '',
-        error: '',
-        properties: [],
-    });
-    const {queryString, typeName, error, properties} = state;
-
+    const [queryString, setQueryString] = React.useState('');
+    const [closure, setClosure] = React.useState('');
 
     React.useEffect(() => {
-        setState({
-            queryString: '',
-            typeName: '',
-            error: '',
-            properties: [],
-        });
+        if (open) {
+            setClosure(input.definition);
+        }
     },
-    [open],
+    [JSON.stringify(input)],
     );
 
     React.useEffect(() => {
-        setState({...state, queryString: `set_type("${typeName}", {${properties.map((v, i)=>(`${v.propertyName}: '${v.propertyType}'`))}})`});
+        setQueryString(`del_procedure("${input.name}"); new_procedure("${input.name}", ${closure});`);
     },
-    [typeName, JSON.stringify(properties)],
+    [input.name, closure],
     );
 
-    const handleChange = ({target}) => {
-        const {value} = target;
-        setState({...state, typeName: value});
+    const handleClosure = (c) => {
+        setClosure(c);
     };
-
-    const handleChangeProperty = (index) => (property) => {
-        setState(prevState => {
-            let update = [...prevState.properties];
-            update.splice(index, 1, property);
-            return {...prevState, properties: update};
-        });
-    };
-
-    const handleRemove = (index) => {
-        setState(prevState => {
-            let update = [...prevState.properties];
-            update.splice(index, 1);
-            return {...prevState, properties: update};
-        });
-    };
-
 
     const handleClickOk = () => {
+        // check if no error in syntax
+        CollectionActions.rawQuery(
+            scope,
+            closure,
+            tag,
+            () => {
+                handleSubmit();
+            }
+        );
+    };
+
+
+    const handleSubmit = () => {
         CollectionActions.rawQuery(
             scope,
             queryString,
             tag,
             () => {
-                TypeActions.getTypes(scope, tag, cb);
+                ProcedureActions.getProcedures(scope, tag, cb);
                 onClose();
             }
         );
     };
-
 
     return (
         <React.Fragment>
@@ -99,16 +86,15 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
                 onClose={onClose}
                 onOk={handleClickOk}
                 maxWidth="sm"
-                disableOk={Boolean(error)}
             >
                 <Grid container spacing={1}>
                     <Grid container spacing={1} item xs={12}>
                         <Grid item xs={8}>
                             <Typography variant="body1" >
-                                {'Customizing ThingDB type:'}
+                                {'Customizing ThingDB procedure:'}
                             </Typography>
                             <Typography variant="h4" color='primary' component='span'>
-                                {'Add new type'}
+                                {input.name||''}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -141,33 +127,13 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
                                     />
                                 </ListItem>
                             </Collapse>
-                            <ListItem className={classes.listItem}>
-                                <TextField
-                                    name="typeName"
-                                    label="Name"
-                                    type="text"
-                                    value={typeName}
-                                    spellCheck={false}
-                                    onChange={handleChange}
-                                    fullWidth
-                                />
-                            </ListItem>
                             <ListItem>
                                 <Typography variant="body1" >
-                                    {'Add properties:'}
+                                    {'Add closure:'}
                                 </Typography>
                             </ListItem>
                             <ListItem>
-                                <ArrayLayout
-                                    child={(i) => (
-                                        <AddTypeProperty
-                                            cb={handleChangeProperty(i)}
-                                            dropdownItems={dataTypes}
-                                            input={properties[i]}
-                                        />
-                                    )}
-                                    onRemove={handleRemove}
-                                />
+                                <AddClosure input={closure} cb={handleClosure} />
                             </ListItem>
                         </List>
                     </Grid>
@@ -177,13 +143,16 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
     );
 };
 
+EditTypeDialog.defaultProps = {
+    input: {},
+};
 
-AddTypeDialog.propTypes = {
+EditTypeDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    input: PropTypes.object,
     scope: PropTypes.string.isRequired,
     cb: PropTypes.func.isRequired,
 };
 
-export default AddTypeDialog;
+export default EditTypeDialog;

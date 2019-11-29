@@ -59,21 +59,6 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
     const setType = (t) => {
         let type = [];
         switch (true) {
-        // case t=='str':
-        //     type=['string', 'str'];
-        //     break;
-        // case t=='int':
-        //     type=['number', 'int'];
-        //     break;
-        // case t=='float':
-        //     type=['number', 'float'];
-        //     break;
-        // case t=='bool':
-        //     type=['boolean', 'bool'];
-        //     break;
-        // case t=='thing':
-        //     type=['thing', 'thing'];
-        //     break;
         case t.includes('['): //array
             type=['list', t];
             break;

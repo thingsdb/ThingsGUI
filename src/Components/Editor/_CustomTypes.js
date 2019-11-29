@@ -1,22 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withVlow} from 'vlow';
 
-import {TypeActions, TypeStore} from '../../Stores';
+import {TypeActions} from '../../Stores';
 import {ChipsCard} from '../Util';
 
-const withStores = withVlow([{
-    store: TypeStore,
-    keys: ['customTypes']
-}]);
+const tag = '12';
 
+const CustomTypes = ({scope, onSetAsInput}) => {
+    const [customTypes, setCustomTypes] = React.useState({});
 
-const tag = '2';
+    const handleTypes = (t) => {
+        setCustomTypes(t);
+    };
 
-const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if (scope&&scope.includes('@collection')) {
-            TypeActions.getTypes(scope, tag);
+            TypeActions.getTypes(scope, tag, handleTypes);
         }
     }, [scope]);
 
@@ -39,7 +38,7 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
 
     const handleClickDelete = (index) => {
         const key = typesArr[index];
-        TypeActions.deleteType(scope, key.name, tag);
+        TypeActions.deleteType(scope, key.name, tag, handleTypes);
     };
 
     const handleClickAdd = () => {
@@ -61,9 +60,6 @@ const CustomTypes = ({scope, onSetAsInput, customTypes}) => {
 CustomTypes.propTypes = {
     scope: PropTypes.string.isRequired,
     onSetAsInput: PropTypes.func.isRequired,
-
-    // types store
-    customTypes: TypeStore.types.customTypes.isRequired,
 };
 
-export default withStores(CustomTypes);
+export default CustomTypes;

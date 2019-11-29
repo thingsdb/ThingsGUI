@@ -22,7 +22,7 @@ const initialState = {
     form: {},
 };
 
-const tag = '16';
+const tag = '21';
 
 const Password = ({user}) => {
     const [state, setState] = React.useState(initialState);

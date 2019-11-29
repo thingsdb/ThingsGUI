@@ -44,7 +44,7 @@ const initialState = {
     form: {},
 };
 
-const tag = '4';
+const tag = '1';
 
 const Add = ({collections}) => {
     const classes = useStyles();
