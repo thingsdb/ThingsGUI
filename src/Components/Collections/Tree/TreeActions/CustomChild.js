@@ -56,21 +56,6 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
     [type],
     );
 
-    const setType = (t) => {
-        let type = [];
-        switch (true) {
-        case t.includes('['): //array
-            type=['list', t];
-            break;
-        case t.includes('{'): // set
-            type=['set', t];
-            break;
-        default:
-            type =[t, t];
-        }
-        return type;
-    };
-
     const handleVal = (val) => {
         setInput({...input, val: val});
     };
@@ -78,14 +63,9 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
     const handleCustom = (c) => {
         setInput(prevInput => {
             let update;
-            if (prevInput.val) {
-                update = [...prevInput.val];
-                const index = update.findIndex((v) => v.name == c.name);
-                index==-1?update.push(c):update.splice(index, 1, c);
-            } else {
-                console.log('hiiiiii');
-                update = [c];
-            }
+            update = [...prevInput.val];
+            const index = update.findIndex((v) => v.name == c.name);
+            index==-1?update.push(c):update.splice(index, 1, c);
             return {...prevInput, val: update};
         });
     };
@@ -114,37 +94,58 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
         });
     };
 
-    const renderThing = ([k, v]) => setType(v)[0] == 'list' || setType(v)[0] == 'set' ? (
-        <React.Fragment key={k}>
-            <ArrayLayout
-                child={(i) => (
-                    <div className={classes.container}>
-                        <CustomChild
-                            cb={handleCustomArray(i, v)}
-                            customTypes={customTypes}
-                            name={k}
-                            type={setType(v)[1].substring(1,setType(v)[1].length-1)}
-                            activeStep={activeStep}
-                            stepId={stepId+1}
-                        />
-                    </div>
-                )}
-                onRemove={handleRemove(v)}
-            />
-        </React.Fragment>
-    ) : (
-        <React.Fragment key={k}>
-            <CustomChild
-                cb={handleCustom}
-                customTypes={customTypes}
-                name={k}
-                type={setType(v)[1]}
-                activeStep={activeStep}
-                stepId={stepId+1}
-            />
-        </React.Fragment>
-    );
 
+
+    const renderThing = ([k, v]) =>  {
+        let t = v.trim();
+        switch (true) {
+        case t[0]=='[' && Boolean(customTypes[t.slice(1, -1)]): // array
+        case t[0]=='{' && Boolean(customTypes[t.slice(1, -1)]): // set
+            return(
+                <React.Fragment key={k}>
+                    <ArrayLayout
+                        child={(i) => (
+                            <div className={classes.container}>
+                                <CustomChild
+                                    cb={handleCustomArray(i, v)}
+                                    customTypes={customTypes}
+                                    name={k}
+                                    type={t.slice(1, -1)}
+                                    activeStep={activeStep}
+                                    stepId={stepId+1}
+                                />
+                            </div>
+                        )}
+                        onRemove={handleRemove(v)}
+                    />
+                </React.Fragment>
+            );
+        case t.includes('?'): // optional
+            return(
+                <React.Fragment key={k}>
+                    <CustomChild
+                        cb={handleCustom}
+                        customTypes={customTypes}
+                        name={k}
+                        type={t.slice(-1)}
+                        activeStep={activeStep}
+                        stepId={stepId+1}
+                    />
+                </React.Fragment>);
+        default:
+            return(
+                <React.Fragment key={k}>
+                    <CustomChild
+                        cb={handleCustom}
+                        customTypes={customTypes}
+                        name={k}
+                        type={t}
+                        activeStep={activeStep}
+                        stepId={stepId+1}
+                    />
+                </React.Fragment>);
+        }
+    };
 
     const renderChildren = () => {
         return (
@@ -161,7 +162,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
                     <ListItem className={classes.listItem}>
                         <ListItemText
                             primary={name}
-                            secondary={setType(type)[0]}
+                            secondary={type}
                             color="primary"
                             primaryTypographyProps={{color:'primary'}}
                         />
@@ -171,7 +172,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
             ) : (
                 <Collapse in={stepId==activeStep} timeout="auto">
                     <ListItem className={classes.listItem}>
-                        <InputField name={name} dataType={setType(type)[0]} cb={handleVal} />
+                        <InputField name={name} dataType={type} cb={handleVal} input={input.val} margin="dense" />
                     </ListItem>
                 </Collapse>
             )}

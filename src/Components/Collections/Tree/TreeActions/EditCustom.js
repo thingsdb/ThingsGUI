@@ -19,7 +19,7 @@ const EditCustom = ({cb, customTypes, name, type}) => {
             let si=0;
             Object.entries(customTypes[type]).map(([k, t]) => {
                 if (t.includes('[') || t.includes('{')) {
-                    t = t.substring(1, t.length-1);
+                    t = t.slice(1, -1);
                 }
                 si = getMaxSteps(customTypes, t, step+1);
                 s = si>s?si:s;

@@ -4,8 +4,6 @@ import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import OpenIcon from '@material-ui/icons/OpenInNewOutlined';
-import DownloadIcon from '@material-ui/icons/SaveAlt';
-import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -16,8 +14,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {SimpleModal, TreeIcon} from '../Util';
-import {CollectionActions} from '../../Stores/CollectionStore';
+import {DownloadBlob, SimpleModal, TreeIcon} from '../Util';
 
 
 const useStyles = makeStyles(theme => ({
@@ -28,6 +25,9 @@ const useStyles = makeStyles(theme => ({
         margin: 0,
         padding: 0,
     },
+    text: {
+        width: '80%',
+    }
 }));
 
 
@@ -35,7 +35,6 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
     const [open, setOpen] = React.useState(false);
-    const [link, setLink] = React.useState('');
 
     const renderChildren = () => {
         return onRenderChildren();
@@ -54,14 +53,6 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
         setOpen(false);
     };
 
-    const handleLink = (link) => {
-        setLink(link);
-    };
-
-    const handleDownload = () => {
-        CollectionActions.download(val, handleLink);
-    };
-
     return (
         <React.Fragment>
             <ListItem className={classes.listItem} button={button?true:false} onClick={onAction}>
@@ -69,7 +60,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                     <TreeIcon type={type} />
                 </ListItemIcon>
                 <ListItemText
-                    className={classes.listItem}
+                    classes={{ root: classes.listItem, primary: classes.text }}
                     primary={
                         <React.Fragment>
                             {name ? (
@@ -81,18 +72,12 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                                     {`${name}   `}
                                 </Typography>
                             ) : null}
-                            {type === 'bytes' ?  link ? (
-                                <Link href={link} download="blob" type="application/octet-stream" color="textPrimary">
-                                    {val}
-                                </Link>
-                            ) : (
-                                '   :   Blob'
-                            ) : `   :  ${val}`}
+                            {type === 'bytes' ?  '   :   Blob' : `   :  ${val}`}
                         </React.Fragment>
                     }
                     primaryTypographyProps={{
                         display: 'block',
-                        noWrap: true
+                        noWrap: true,
                     }}
                 />
                 {children}
@@ -103,26 +88,27 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                                 {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
                             </ButtonBase>
                         ) : null}
-                        {type === 'bytes' ? (
-                            <ButtonBase onClick={handleDownload} >
-                                <DownloadIcon color="primary" />
-                            </ButtonBase>
-                        ) : type === 'str' ? (
-                            <SimpleModal
-                                button={
-                                    <ButtonBase onClick={handleOpenStringDialog} >
-                                        <OpenIcon color="primary" />
-                                    </ButtonBase>
-                                }
-                                title="Show string"
-                                open={open}
-                                onClose={handleCloseStringDialog}
-                            >
-                                <Typography align="justify" variant="body2">
-                                    {val}
-                                </Typography>
-                            </SimpleModal>
-                        ) : null}
+                        {!button ? (
+                            type === 'bytes' ? (
+                                <DownloadBlob val={val} isFab={false} />
+                            ) : type === 'str' ? (
+                                <SimpleModal
+                                    button={
+                                        <ButtonBase onClick={handleOpenStringDialog} >
+                                            <OpenIcon color="primary" />
+                                        </ButtonBase>
+                                    }
+                                    title="Show string"
+                                    open={open}
+                                    onClose={handleCloseStringDialog}
+                                >
+                                    <Typography align="justify" variant="body2">
+                                        {val}
+                                    </Typography>
+                                </SimpleModal>
+                            ) : null
+                        ):null
+                        }
                     </React.Fragment>
                 </ListItemSecondaryAction>
             </ListItem>

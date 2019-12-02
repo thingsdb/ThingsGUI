@@ -150,7 +150,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                     />
                 ) : (
                     <ListItem className={classes.listItem}>
-                        <InputField name="Value" dataType={dataType} cb={handleVal} input={child.type=='error'?thing:value} />
+                        <InputField name="Value" dataType={dataType} cb={handleVal} input={child.type=='error'?thing:value} margin="dense" />
                     </ListItem>
                 )}
             </List>

@@ -46,7 +46,10 @@ const CollectionTypes = ({scope}) => {
     ];
 
     const set = [
-        ...types.map((v, i)=>(`{${v}}`)),
+        '{}',
+        '{any}',
+        '{thing}',
+        ...Object.keys(customTypes).map((v, i)=>(`{${v}}`)),
     ];
 
     const datatypesMap = [

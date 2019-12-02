@@ -16,7 +16,7 @@ const TimePicker = ({cb}) => {
         setTime(value);
     };
 
-    const now = new Date().toISOString().substring(0, 16);
+    const now = new Date().toISOString().slice(0, 16);
 
     return (
         <TextField

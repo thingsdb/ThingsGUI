@@ -22,7 +22,6 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
             break;
         case 'remove':
             q = buildQueryRemove(parentId, parentName, parentType, childId, childName, childIndex);
-            console.log(parentId, parentName, parentType, childId, childName, childIndex, q);
             break;
         }
         cb(q);
@@ -30,22 +29,25 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
 
 
     const mapArrayInput = (n, t, customTypes, value) => {
+        console.log('ARRAY:', Array.isArray(value) , value, t);
         const v = Array.isArray(value) ?
             value.map((v, i) => customTypeInput(name, v.type, customTypes, v))
-            : customTypeInput(name, t.substring(1,t.length-1), customTypes, value);
+            : customTypeInput(name, t.slice(1, -1), customTypes, value);
         return v;
     };
 
-    const createArrayInput = (name, type, customTypes, val) => `[${mapArrayInput(name, type, customTypes, val)}]`;
+    const createArrayInput = (name, type, customTypes, val) => `[${typeof(val)=='string'?val:mapArrayInput(name, type, customTypes, val)}]`;
+    const createSetInput = (name, type, customTypes, val) => `set(${val==''? '{}': createArrayInput(name, type, customTypes, val)})`;
 
     //TODO add raw and bytes
     const setTypeInput = (n, t, customTypes, val) => {
         const v = val&&val.hasOwnProperty('val') ? val.val : val||'';
-        return t.includes('str') || t.includes('utf8') ? `'${v}'`
-            : t.includes('number') || t.includes('int') || t.includes('uint') || t.includes('float') || t.includes('bool') ? `${v}`
-                : t.includes('thing') ? '{}' // TODO
-                    : t.includes('[') ? createArrayInput(n, t, customTypes, v)
-                        : t.includes('{') ? `set(${createArrayInput(n, t, customTypes, v)})`//'set([{}])' // TODO
+        console.log(val, v, t, typeof(v));
+        return t[0]=='['? createArrayInput(n, t, customTypes, v)
+            : t[0]=='{'? createSetInput(n, t, customTypes, v)
+                : t.includes('str') || t.includes('utf8') ? `'${v}'`
+                    : t.includes('number') || t.includes('int') || t.includes('uint') || t.includes('float') || t.includes('bool') ? `${v}`
+                        : t.includes('thing') ? '{}' // TODO
                             : '';
     };
 
@@ -96,6 +98,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
                     value={query}
                     fullWidth
                     multiline
+                    rowsMax={4}
                     InputProps={{
                         readOnly: true,
                         disableUnderline: true,

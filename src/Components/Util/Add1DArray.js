@@ -40,7 +40,7 @@ const dataTypes = [ // Do not put array first; causes infinite loop
     'thing',
 ];
 
-const Add1DArray = ({cb}) => {
+const Add1DArray = ({cb, type}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         contentAdd: '',
@@ -108,7 +108,6 @@ const Add1DArray = ({cb}) => {
         ));
         return elements;
     };
-    console.log('listcomp');
 
     return (
         <div className={classes.container} >
@@ -129,7 +128,7 @@ const Add1DArray = ({cb}) => {
                             SelectProps={{native: true}}
                         >
                             {dataTypes.map((p) => (
-                                <option key={p} value={p}>
+                                <option key={p} value={p} disabled={p!=type}>
                                     {p}
                                 </option>
                             ))}
@@ -155,8 +154,13 @@ const Add1DArray = ({cb}) => {
     );
 };
 
+Add1DArray.defaultProps = {
+    type: '',
+};
+
 Add1DArray.propTypes = {
     cb: PropTypes.func.isRequired,
+    type:PropTypes.string
 };
 
 export default Add1DArray;

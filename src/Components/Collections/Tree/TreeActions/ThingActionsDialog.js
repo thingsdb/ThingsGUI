@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Edit from './Edit';
 import RemoveThing from './RemoveThing';
 import {ApplicationActions, CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
-import {ErrorMsg, SimpleModal, WatchThings} from '../../../Util';
+import {DownloadBlob, ErrorMsg, SimpleModal, WatchThings} from '../../../Util';
 
 const tag = '8';
 
@@ -116,8 +116,9 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
     const isChildCustom = customTypes.hasOwnProperty(realChildType);
     const isParentCustom = customTypes.hasOwnProperty(realParentType);
     const canRemove = !(child.name === '/' || parent.isTuple || isRoot || isParentCustom);
-    const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type==='nil');
+    const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type==='nil' || child.type === 'bytes');
     const canWatch = thing && thing.hasOwnProperty('#');
+    const canDownload = child.type === 'bytes';
 
     const content = (
         <Grid container spacing={1}>
@@ -150,13 +151,20 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
                         </Fab>
                     </Grid>
                     {canWatch &&
-                    <Grid item>
-                        <WatchThings
-                            buttonIsFab
-                            scope={scope}
-                            thingId={child.id||parent.id}
-                        />
-                    </Grid>
+                        <Grid item>
+                            <WatchThings
+                                buttonIsFab
+                                scope={scope}
+                                thingId={child.id||parent.id}
+                            />
+                        </Grid>
+                    }
+                    {canDownload &&
+                        <Grid item>
+                            <DownloadBlob
+                                val={thing}
+                            />
+                        </Grid>
                     }
                 </Grid>
             </Grid>

@@ -9,6 +9,7 @@ import AutoSelect from './AutoSelect';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
 import ChipsCard from './ChipsCard';
+import DownloadBlob from './DownloadBlob';
 import DrawerLayout from './DrawerLayout';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
@@ -111,6 +112,7 @@ export {
     CardButton,
     ChipsCard,
     checkType,
+    DownloadBlob,
     DrawerLayout,
     ErrorMsg,
     ErrorToast,

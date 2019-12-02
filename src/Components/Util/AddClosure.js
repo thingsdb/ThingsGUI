@@ -27,8 +27,8 @@ const AddClosure = ({input, cb}) => {
         const c = `|${variables}|${body}`;
         if(input&&input!=c) {
             let endVarArr = input.indexOf('|', 1);
-            let vars = input.substring(1, endVarArr).split(',');
-            let b = input.substring(endVarArr+1);
+            let vars = input.slice(1, endVarArr).split(',');
+            let b = input.slice(endVarArr+1);
             setState({
                 variables: endVarArr==1?[]:vars,
                 body: b,

@@ -53,6 +53,7 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
                         type="text"
                         value={propertyName}
                         variant="outlined"
+
                     />
                 </Grid>
             ):null}

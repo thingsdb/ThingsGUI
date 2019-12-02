@@ -43,17 +43,33 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
     };
 
     let content;
-    switch(dataType) {
-    case 'str':
-    case 'number':
-    case 'int':
-    case 'uint':
-    case 'float':
-    case 'utf8':
-    case 'raw':
+    switch(true) {
+    case dataType=='str':
         content = (
             <TextField
-                margin="dense"
+                name={name}
+                label={name}
+                type="text"
+                value={input}
+                spellCheck={false}
+                onChange={handleOnChange}
+                fullWidth
+                multiline
+                rowsMax={10}
+                helperText={error}
+                error={Boolean(error)}
+                {...props}
+            />
+        );
+        break;
+    case dataType=='number':
+    case dataType=='int':
+    case dataType=='uint':
+    case dataType=='float':
+    case dataType=='utf8':
+    case dataType=='raw':
+        content = (
+            <TextField
                 name={name}
                 label={name}
                 type="text"
@@ -68,8 +84,8 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
             />
         );
         break;
-    case 'thing':
-    case 'set':
+    case dataType=='thing':
+    case dataType=='set':
         content = (
             <TextField
                 margin="dense"
@@ -82,32 +98,37 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
             />
         );
         break;
-    case 'bool':
+    case dataType=='bool':
         content = (
             <AddBool input={`${input}`} cb={handleVal} />
         );
         break;
-    case 'list':
+    case dataType[0]=='[':
+        content = (
+            <Add1DArray cb={handleArrayItems} type={dataType.slice(1, -1)} />
+        );
+        break;
+    case dataType=='list':
         content = (
             <Add1DArray cb={handleArrayItems} />
         );
         break;
-    case 'closure':
+    case dataType=='closure':
         content = (
             <AddClosure input={input} cb={handleVal} />
         );
         break;
-    case 'regex':
+    case dataType=='regex':
         content = (
-            <AddRegex input={input.trim().substring(1, input.length-1)} cb={handleRegex} />
+            <AddRegex input={input.trim().slice(1, -1)} cb={handleRegex} />
         );
         break;
-    case 'error':
+    case dataType=='error':
         content = (
             <AddError input={input} cb={handleVal} />
         );
         break;
-    case 'bytes':
+    case dataType=='bytes':
         content = (
             <AddBlob cb={handleVal} />
         );
