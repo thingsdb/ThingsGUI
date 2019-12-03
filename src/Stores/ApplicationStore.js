@@ -44,7 +44,6 @@ class ApplicationStore extends BaseStore {
     }
 
     onLogging() {
-        console.log("logging");
         this.push();
     }
 

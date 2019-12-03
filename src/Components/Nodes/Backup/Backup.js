@@ -8,7 +8,6 @@ import Remove from './Remove';
 
 
 const Backup = ({backups, nodeId}) => {
-    console.log(backups);
     const rows = backups;
     const header = [
         {ky: 'id', label: 'ID'},

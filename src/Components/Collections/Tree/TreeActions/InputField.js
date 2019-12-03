@@ -8,6 +8,8 @@ import {Add1DArray, AddBlob, AddBool, AddClosure, AddError, AddRegex, onlyNums} 
 const InputField = ({dataType, cb, name, input, ...props}) => {
     const [error, setError] = React.useState('');
 
+    console.log(dataType, name, input);
+
     const errorTxt = (value) => {
         const bool = value.length>0;
         let errText = bool?'':'is required';
@@ -44,7 +46,12 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
 
     let content;
     switch(true) {
-    case dataType=='str':
+    case dataType[0]=='[':
+        content = (
+            <Add1DArray cb={handleArrayItems} type={dataType.slice(1, -1)} />
+        );
+        break;
+    case dataType.includes('str'):
         content = (
             <TextField
                 name={name}
@@ -62,12 +69,12 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
             />
         );
         break;
-    case dataType=='number':
-    case dataType=='int':
-    case dataType=='uint':
-    case dataType=='float':
-    case dataType=='utf8':
-    case dataType=='raw':
+    case dataType.includes('number'):
+    case dataType.includes('int'):
+    case dataType.includes('uint'):
+    case dataType.includes('float'):
+    case dataType.includes('utf8'):
+    case dataType.includes('raw'):
         content = (
             <TextField
                 name={name}
@@ -79,13 +86,13 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
                 fullWidth
                 helperText={error}
                 error={Boolean(error)}
-                placeholder={dataType=='closure'?'example: |x,y| x+y':''}
+                placeholder={dataType=='closure'?'example): |x,y| x+y':''}
                 {...props}
             />
         );
         break;
-    case dataType=='thing':
-    case dataType=='set':
+    case dataType.includes('thing'):
+    case dataType.includes('set'):
         content = (
             <TextField
                 margin="dense"
@@ -98,37 +105,32 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
             />
         );
         break;
-    case dataType=='bool':
+    case dataType.includes('bool'):
         content = (
             <AddBool input={`${input}`} cb={handleVal} />
         );
         break;
-    case dataType[0]=='[':
-        content = (
-            <Add1DArray cb={handleArrayItems} type={dataType.slice(1, -1)} />
-        );
-        break;
-    case dataType=='list':
+    case dataType.includes('list'):
         content = (
             <Add1DArray cb={handleArrayItems} />
         );
         break;
-    case dataType=='closure':
+    case dataType.includes('closure'):
         content = (
             <AddClosure input={input} cb={handleVal} />
         );
         break;
-    case dataType=='regex':
+    case dataType.includes('regex'):
         content = (
             <AddRegex input={input.trim().slice(1, -1)} cb={handleRegex} />
         );
         break;
-    case dataType=='error':
+    case dataType.includes('error'):
         content = (
             <AddError input={input} cb={handleVal} />
         );
         break;
-    case dataType=='bytes':
+    case dataType.includes('bytes'):
         content = (
             <AddBlob cb={handleVal} />
         );

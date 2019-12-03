@@ -30,6 +30,9 @@ const dataTypes = [ // Do not put array first; causes infinite loop
     'str',
     'number',
     'bool',
+    'int',
+    'uint',
+    'float',
     // 'bytes',
     'closure',
     'regex',
@@ -44,7 +47,7 @@ const Add1DArray = ({cb, type}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         contentAdd: '',
-        dataType: 'str',
+        dataType: type||'str',
         errors: {},
     });
     const {contentAdd, dataType} = state;
@@ -70,7 +73,7 @@ const Add1DArray = ({cb, type}) => {
             : type === 'thing' ? '{}'
                 : type === 'set' ? '[{}]'
                     : type === 'str' ? `'${input}'`
-                        : type === 'number' || type === 'bool' || type === 'bytes' || type === 'closure' || type === 'regex' ||  type === 'error'  ? `${input}`
+                        : type === 'number' || type === 'bool' || type=='int' || type=='uint' || type=='float' || type === 'bytes' || type === 'closure' || type === 'regex' ||  type === 'error'  ? `${input}`
                             : type === 'nil' ? 'nil'
                                 : '';
     };
@@ -128,7 +131,7 @@ const Add1DArray = ({cb, type}) => {
                             SelectProps={{native: true}}
                         >
                             {dataTypes.map((p) => (
-                                <option key={p} value={p} disabled={p!=type}>
+                                <option key={p} value={p} disabled={type==''?false:p!=type}>
                                     {p}
                                 </option>
                             ))}

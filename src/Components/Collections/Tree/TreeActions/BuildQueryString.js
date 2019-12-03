@@ -14,7 +14,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
         switch (action) {
         case 'edit':
             if (customTypes.hasOwnProperty(childType)) { // incase of custom-type
-                val = customTypeInput(childName, childType, customTypes, childVal);
+                val = customTypeInput(childName, childType, customTypes, childVal&&childVal.hasOwnProperty('val') ? childVal.val : childVal);
             } else {
                 val = standardInput(childVal, childType);
             }
@@ -27,40 +27,39 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
         cb(q);
     };
 
+    //CUSTOM\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-    const mapArrayInput = (n, t, customTypes, value) => {
-        console.log('ARRAY:', Array.isArray(value) , value, t);
-        const v = Array.isArray(value) ?
-            value.map((v, i) => customTypeInput(name, v.type, customTypes, v))
-            : customTypeInput(name, t.slice(1, -1), customTypes, value);
-        return v;
+    const mapArrayInput = (customTypes, v) => {
+        console.log(v);
+        return v.map(({name, type, val}) => customTypeInput(name, type, customTypes, val));
     };
 
-    const createArrayInput = (name, type, customTypes, val) => `[${typeof(val)=='string'?val:mapArrayInput(name, type, customTypes, val)}]`;
+    const createArrayInput = (name, type, customTypes, val) => {
+        console.log(val, Array.isArray(val), val.length );
+        return `[${typeof(val)=='string' ? val
+            : Array.isArray(val) && val.length ? mapArrayInput(customTypes, val)
+                : customTypeInput(name, type.slice(1, -1), customTypes, val)
+        }]`;
+    };
+
     const createSetInput = (name, type, customTypes, val) => `set(${val==''? '{}': createArrayInput(name, type, customTypes, val)})`;
 
     //TODO add raw and bytes
-    const setTypeInput = (n, t, customTypes, val) => {
-        const v = val&&val.hasOwnProperty('val') ? val.val : val||'';
-        console.log(val, v, t, typeof(v));
-        return t[0]=='['? createArrayInput(n, t, customTypes, v)
-            : t[0]=='{'? createSetInput(n, t, customTypes, v)
-                : t.includes('str') || t.includes('utf8') ? `'${v}'`
-                    : t.includes('number') || t.includes('int') || t.includes('uint') || t.includes('float') || t.includes('bool') ? `${v}`
-                        : t.includes('thing') ? '{}' // TODO
+    const setTypeInput = (name, type, customTypes, v) =>
+        type[0]=='['? createArrayInput(name, type, customTypes, v)
+            : type[0]=='{'? createSetInput(name, type, customTypes, v)
+                : type.includes('str') || type.includes('utf8') ? `'${v}'`
+                    : type.includes('number') || type.includes('int') || type.includes('uint') || type.includes('float') || type.includes('bool') ? `${v}`
+                        : type.includes('thing') ? '{}' // TODO
                             : '';
-    };
 
-    const mapTypeInput = (nam, typ, customTypes, val) => Object.entries(customTypes[typ]).map(([k, t]) => {
-        const v = val&&val.hasOwnProperty('val') ? val.val : val;
-        const value = Array.isArray(v)&&v.length ? v.find(({ name, type }) => name === k && type === t) : v;
-        return ` ${k}: ${customTypeInput(k, t, customTypes, value)}`;
-    });
+    const mapTypeInput = (v, customTypes) => v.map(({name, type, val}) => `${name}: ${customTypeInput(name, type, customTypes, val)}`);
 
-    const customTypeInput = (name, type, customTypes, val) => {
-        return customTypes[type] ?
-            `${type}{${mapTypeInput(name, type, customTypes, val)}}` : setTypeInput(name, type, customTypes, val);
-    };
+    const customTypeInput = (name, type, customTypes, val) =>
+        customTypes[type] ? `${type}{${Array.isArray(val)&&val.length?mapTypeInput(val, customTypes):''}}`
+            : setTypeInput(name, type, customTypes, val);
+
+    //STANDARD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
     //TODO add raw
     const standardInput = (childVal, childType) => {
