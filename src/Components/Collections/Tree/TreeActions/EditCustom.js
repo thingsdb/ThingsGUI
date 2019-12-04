@@ -1,12 +1,20 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 
 import CustomChild from './CustomChild';
 import {Stepper} from '../../../Util';
 
+const useStyles = makeStyles(() => ({
+    scroll: {
+        maxHeight: 400,
+        overflowY: 'auto',
+    },
+}));
 
 const EditCustom = ({cb, customTypes, name, type}) => {
+    const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
 
     React.useEffect(() => {
@@ -34,7 +42,7 @@ const EditCustom = ({cb, customTypes, name, type}) => {
         return s;
     };
 
-    const maxSteps = getMaxSteps(customTypes, type, 1);
+    const maxSteps = getMaxSteps(customTypes, type, 0);
 
     const handleNext = () => {
         setActiveStep(activeStep+1);
@@ -47,7 +55,9 @@ const EditCustom = ({cb, customTypes, name, type}) => {
     return(
         <React.Fragment>
             <Stepper activeStep={activeStep} maxSteps={maxSteps} onNext={handleNext} onBack={handleBack}>
-                <CustomChild cb={cb} customTypes={customTypes} name={name} type={type} activeStep={activeStep} stepId={0} />
+                <div className={classes.scroll}>
+                    <CustomChild cb={cb} customTypes={customTypes} name={name} type={type} activeStep={activeStep} stepId={0} />
+                </div>
             </Stepper>
         </React.Fragment>
     );

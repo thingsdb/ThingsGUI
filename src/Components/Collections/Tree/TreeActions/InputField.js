@@ -7,9 +7,6 @@ import {Add1DArray, AddBlob, AddBool, AddClosure, AddError, AddRegex, onlyNums} 
 
 const InputField = ({dataType, cb, name, input, ...props}) => {
     const [error, setError] = React.useState('');
-
-    console.log(dataType, name, input);
-
     const errorTxt = (value) => {
         const bool = value.length>0;
         let errText = bool?'':'is required';

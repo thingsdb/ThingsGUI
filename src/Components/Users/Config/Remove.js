@@ -13,7 +13,7 @@ const Remove = ({user}) => {
 
     React.useEffect(() => {
         setName(user.name);
-    }, []);
+    }, [user.name]);
 
     const handleClickOpen = () => {
         setShow(true);

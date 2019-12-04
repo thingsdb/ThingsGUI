@@ -88,7 +88,7 @@ class CollectionStore extends BaseStore {
                     return {things};
                 });
             } else {
-                ThingsdbActions.getCollections();
+                ThingsdbActions.getCollections(); //TODO weghalen
                 ThingsdbActions.getUsers();
                 ThingsdbActions.getUser();
             }

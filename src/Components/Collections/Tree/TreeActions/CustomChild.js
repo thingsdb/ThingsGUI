@@ -3,14 +3,14 @@ import {makeStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
 import Collapse from '@material-ui/core/Collapse';
-import Fab from '@material-ui/core/Fab';
-import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import InputField from './InputField';
+import StandardChild from './StandardChild';
 import {ArrayLayout} from '../../../Util';
 
 const useStyles = makeStyles(theme => ({
@@ -61,11 +61,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
     [type],
     );
 
-    const handleVal = (val) => {
-        setInput({...input, val: val});
-    };
-
-    const handleCustom = (c) => {
+    const handleChild = (c) => {
         setInput(prevInput => {
             let update;
             update = [...prevInput.val];
@@ -75,7 +71,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
         });
     };
 
-    const handleCustomArray = (id, t) => (c) => {
+    const handleChildArray = (id, t) => (c) => {
         setInput(prevInput => {
             let update = [...prevInput.val];
             const index = prevInput.val.findIndex((v) => v && v.name == c.name && v.type == t);
@@ -113,108 +109,85 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
         setOptional({...optional, [k]: false});
     };
 
-    const renderThing = ([k, v]) =>  {
-        let t = v.trim();
-        switch (true) {
-        case t[0]=='[' && (t.slice(1, -1).slice(-1)=='?' ? Boolean(customTypes[t.slice(1, -2)]):Boolean(customTypes[t.slice(1, -1)]) ): // array
-        case t[0]=='{' && (t.slice(1, -1).slice(-1)=='?' ? Boolean(customTypes[t.slice(1, -2)]):Boolean(customTypes[t.slice(1, -1)]) ):// set
-            console.log(k, t);
-            return(
-                <React.Fragment key={k}>
-                    <ArrayLayout
-                        child={(i) => (
-                            <div className={classes.container}>
+    const renderThing = (name, type) =>  {
+        let t = type.trim();
+        return(
+            t.slice(-1)=='?' ? (
+                <React.Fragment>
+                    {optional[name]? null : (
+                        renderThing(name,t.slice(0,-1))
+                    )}
+                </React.Fragment>
+            ) : t[0]=='[' || t[0]=='{' ? (
+                customTypes[t.slice(1, -1).slice(-1)=='?'?type.slice(1, -1).slice(0, -1):type.slice(1, -1)]? (
+                    <div className={classes.container}>
+                        <ArrayLayout
+                            child={(i) => (
                                 <CustomChild
-                                    cb={handleCustomArray(i, v)}
+                                    cb={handleChildArray(i, t)}
                                     customTypes={customTypes}
-                                    name={k}
+                                    name={name}
                                     type={t.slice(1, -1)}
                                     activeStep={activeStep}
                                     stepId={stepId+1}
                                 />
-                            </div>
-                        )}
-                        onRemove={handleRemove(v)}
-                    />
-                </React.Fragment>
-            );
-        case t.slice(-1)=='?': // optional
-            console.log(k, t);
-            return(
-                <Grid container key={k}>
-                    <Grid item xs={10}>
-                        {optional[k]? null : (
-                            renderThing([k,t.slice(0,-1)])
-                        )}
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Fab color="primary" onClick={optional[k]?handleAddOptional(k):handleRemoveOptional(k)} size="small">
-                            {optional[k] ?  <AddIcon /> : <ClearIcon /> }
-                        </Fab>
-                    </Grid>
-                </Grid>
-            );
-        default:
-            console.log(k, t);
-            return(
-                <React.Fragment key={k}>
-                    <CustomChild
-                        cb={handleCustom}
-                        customTypes={customTypes}
-                        name={k}
-                        type={t}
-                        activeStep={activeStep}
-                        stepId={stepId+1}
-                    />
-                </React.Fragment>);
-        }
-    };
-
-    const renderChildren = () => {
-        return (
-            <Collapse in={stepId<activeStep} timeout="auto">
-                {Object.entries(customTypes[type]).map(renderThing)}
-            </Collapse>
-        );
-    };
-    console.log(type);
-    return(
-        <React.Fragment>
-            {customTypes[type] ? (
-                <React.Fragment>
-                    <ListItem className={classes.listItem}>
-                        <ListItemText
-                            primary={name}
-                            secondary={type}
-                            color="primary"
-                            primaryTypographyProps={{color:'primary'}}
+                            )}
+                            onRemove={handleRemove(t)}
                         />
-                    </ListItem>
-                    {renderChildren()}
-                </React.Fragment>
+                    </div>
+                ) : (
+                    <Collapse in={stepId==activeStep} timeout="auto">
+                        <ListItem className={classes.listItem}>
+                            <StandardChild name={name} type={t} cb={handleChild} />
+                        </ListItem>
+                    </Collapse>
+                )
+            ) : customTypes[t] ? (
+                <CustomChild
+                    cb={handleChild}
+                    customTypes={customTypes}
+                    name={name}
+                    type={t}
+                    activeStep={activeStep}
+                    stepId={stepId+1}
+                />
             ) : (
                 <Collapse in={stepId==activeStep} timeout="auto">
                     <ListItem className={classes.listItem}>
-                        {type.slice(-1)=='?' ? (
-                            <Grid container >
-                                <Grid item xs={10}>
-                                    {optional[name]? null : (
-                                        <InputField name={name} dataType={type.slice(0,-1)} cb={handleVal} input={input.val} margin="dense" />
-                                    )}
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Fab color="primary" onClick={optional[name]?handleAddOptional(name):handleRemoveOptional(name)} size="small">
-                                        {optional[name] ?  <AddIcon /> : <ClearIcon /> }
-                                    </Fab>
-                                </Grid>
-                            </Grid>
-                        ) : (
-                            <InputField name={name} dataType={type} cb={handleVal} input={input.val} margin="dense" />
-                        )}
+                        <StandardChild name={name} type={t} cb={handleChild} />
                     </ListItem>
                 </Collapse>
-            )}
+            )
+        );
+    };
+
+    return(
+        <React.Fragment>
+            {( Object.entries(customTypes[type.slice(-1)=='?'?type.slice(0, -1):type]).map (([k,v]) => (
+                <React.Fragment key={k}>
+                    <Collapse in={stepId>=activeStep} timeout="auto">
+                        <ListItem className={classes.listItem}>
+                            <ListItemText
+                                primary={k}
+                                secondary={v}
+                                color="primary"
+                                primaryTypographyProps={{color:'primary'}}
+                                className={classes.listItem}
+                            />
+                            {v.slice(-1)=='?' ? (
+                                <ListItemSecondaryAction className={classes.listItem}>
+                                    <IconButton onClick={optional[k]?handleAddOptional(k):handleRemoveOptional(k)}>
+                                        {optional[k] ?  <AddIcon color="primary" /> : <ClearIcon color="primary" /> }
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            ) : null}
+                        </ListItem>
+                    </Collapse>
+                    {renderThing(k, v)}
+                </React.Fragment>
+            )))}
         </React.Fragment>
+
     );
 };
 

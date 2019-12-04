@@ -10,11 +10,25 @@ import BuildQueryString from './BuildQueryString';
 import EditCustom from './EditCustom';
 import InputField from './InputField';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     listItem: {
         margin: 0,
         padding: 0,
     },
+    list: {
+        '@global': {
+            '*::-webkit-scrollbar': {
+                width: '0.4em'
+            },
+            '*::-webkit-scrollbar-track': {
+                '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+            },
+            '*::-webkit-scrollbar-thumb': {
+                backgroundColor: theme.palette.primary.main,
+                outline: '1px solid slategrey'
+            }
+        },
+    }
 }));
 
 
@@ -73,6 +87,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
             return updatedVal;
         });
     };
+    console.log(custom);
 
     const addNewProperty = Boolean(child.id);
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set';
@@ -80,7 +95,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     return(
         <React.Fragment>
-            <List disablePadding dense>
+            <List disablePadding dense className={classes.list}>
                 <Collapse in={Boolean(queryString)} timeout="auto">
                     <ListItem className={classes.listItem} >
                         <BuildQueryString

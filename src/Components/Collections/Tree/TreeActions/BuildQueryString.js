@@ -56,7 +56,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
     const mapTypeInput = (v, customTypes) => v.map(({name, type, val}) => `${name}: ${customTypeInput(name, type, customTypes, val)}`);
 
     const customTypeInput = (name, type, customTypes, val) =>
-        customTypes[type] ? `${type}{${Array.isArray(val)&&val.length?mapTypeInput(val, customTypes):''}}`
+        customTypes[type.slice(-1)=='?'?type.slice(0, -1):type] ? `${type.slice(-1)=='?'?type.slice(0, -1):type}{${Array.isArray(val)&&val.length?mapTypeInput(val, customTypes):''}}`
             : setTypeInput(name, type, customTypes, val);
 
     //STANDARD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
