@@ -88,9 +88,9 @@ class CollectionStore extends BaseStore {
                     return {things};
                 });
             } else {
-                ThingsdbActions.getCollections(); //TODO weghalen
-                ThingsdbActions.getUsers();
-                ThingsdbActions.getUser();
+                ThingsdbActions.getCollections(); //TODO weghalen??
+                ThingsdbActions.getUsers(); //TODO weghalen??
+                ThingsdbActions.getUser(); //TODO weghalen??
             }
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);

@@ -8,7 +8,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Switch from '@material-ui/core/Switch';
 
-import { ErrorMsg, SimpleModal, TimePeriodPicker } from '../../Util';
+import { ErrorMsg, SimpleModal, TimePicker, TimePeriodPicker } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
 
 
@@ -26,6 +26,7 @@ const tag = '25';
 const Add = ({user}) => {
     const [state, setState] = React.useState(initialState);
     const {show, form, switches} = state;
+    console.log(form);
 
     const handleClickOpen = () => {
         setState({
@@ -72,7 +73,8 @@ const Add = ({user}) => {
         ThingsdbActions.newToken(
             {
                 name: user.name,
-                expirationTime: switches.expirationTime ? '(now() + ' + form.expirationTime + ')' : null,
+                // expirationTime: switches.expirationTime ? '(now() + ' + form.expirationTime + ')' : null,
+                expirationTime: switches.expirationTime ? `'${form.expirationTime}'` : null,
                 description: switches.description ? form.description : null,
             },
             tag,
@@ -134,7 +136,8 @@ const Add = ({user}) => {
                 </ListItem>
                 <Collapse in={switches.expirationTime} timeout="auto" unmountOnExit>
                     <ListItem>
-                        <TimePeriodPicker cb={handleExpirationTime} />
+                        <TimePicker cb={handleExpirationTime} />
+                        {/* <TimePeriodPicker cb={handleExpirationTime} /> */}
                     </ListItem>
                 </Collapse>
             </List>

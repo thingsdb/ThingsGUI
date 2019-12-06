@@ -92,13 +92,13 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
     case dataType.includes('set'):
         content = (
             <TextField
-                margin="dense"
                 name={name}
                 label={name}
                 type="text"
                 value={'{ }'}
+                spellCheck={false}
                 fullWidth
-                disabled
+                onChange={handleOnChange}
             />
         );
         break;

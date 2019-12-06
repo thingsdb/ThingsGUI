@@ -91,9 +91,17 @@ const CollectionTypes = ({scope}) => {
     const handleCloseAdd = () => {
         setOpenAdd(false);
     };
-    const handleClickDelete = (i) => {
+    const handleClickDelete = (i, cb) => {
         const item = typesArr[i];
-        TypeActions.deleteType(scope, item.name, tag, handleTypes);
+        TypeActions.deleteType(
+            scope,
+            item.name,
+            tag,
+            (t) => {
+                cb();
+                handleTypes(t);
+            }
+        );
     };
 
     return (

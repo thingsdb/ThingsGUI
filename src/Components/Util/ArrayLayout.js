@@ -5,9 +5,20 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
+import {makeStyles} from '@material-ui/core/styles';
 
+const useStyles = makeStyles(theme => ({
+    container: {
+        borderLeft: `3px solid ${theme.palette.primary.main}`,
+        borderRight: `3px solid ${theme.palette.primary.main}`,
+        borderRadius: '20px',
+        padding: theme.spacing(2),
+        margin: theme.spacing(2),
+    },
+}));
 
 const ArrayLayout = ({child, onRemove}) => {
+    const classes = useStyles();
     const [items, setItems] = React.useState(1);
 
     const handleAdd = () => {
@@ -32,22 +43,23 @@ const ArrayLayout = ({child, onRemove}) => {
     };
 
     return(
-        <Grid container spacing={2}>
-            {renderChildren()}
-
-            <Grid container item spacing={1} xs={6} justify="center" alignItems="center">
-                <Grid item>
-                    <Fab color="primary" onClick={handleAdd} size="small">
-                        <AddIcon fontSize="small" />
-                    </Fab>
-                </Grid>
-                <Grid item>
-                    <Fab color="primary" onClick={handleRemove} disabled={items==1} size="small">
-                        <RemoveIcon fontSize="small" />
-                    </Fab>
+        <div className={classes.container}>
+            <Grid container spacing={2}>
+                {renderChildren()}
+                <Grid container item spacing={1} xs={6} justify="center" alignItems="center">
+                    <Grid item>
+                        <Fab color="primary" onClick={handleAdd} size="small">
+                            <AddIcon fontSize="small" />
+                        </Fab>
+                    </Grid>
+                    <Grid item>
+                        <Fab color="primary" onClick={handleRemove} disabled={items==1} size="small">
+                            <RemoveIcon fontSize="small" />
+                        </Fab>
+                    </Grid>
                 </Grid>
             </Grid>
-        </Grid>
+        </div>
     );
 };
 

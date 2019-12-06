@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
@@ -11,6 +13,7 @@ const tag = '3';
 const Remove = ({collection}) => {
     const [show, setShow] = React.useState(false);
     const [name, setName] = React.useState('');
+    const [switchDel, setSwitchDel] = React.useState(false);
 
     React.useEffect(() => {
         setName(collection.name);
@@ -18,10 +21,12 @@ const Remove = ({collection}) => {
 
     const handleClickOpen = () => {
         setShow(true);
+        setSwitchDel(false);
     };
 
     const handleClickClose = () => {
         setShow(false);
+
     };
 
     const handleClickOk = () => {
@@ -32,11 +37,9 @@ const Remove = ({collection}) => {
         );
     };
 
-    const handleKeyPress = (event) => {
-        const {key} = event;
-        if (key == 'Enter') {
-            handleClickOk();
-        }
+    const handleSwitch = ({target}) => {
+        const {checked} = target;
+        setSwitchDel(checked);
     };
 
     return(
@@ -48,11 +51,27 @@ const Remove = ({collection}) => {
             }
             title={`Remove collection ${name}?`}
             open={show}
-            onOk={handleClickOk}
+            actionButtons={
+                <Button onClick={handleClickOk} disabled={!switchDel} color="primary">
+                    {'Submit'}
+                </Button>
+            }
             onClose={handleClickClose}
-            onKeyPress={handleKeyPress}
         >
-            <ErrorMsg tag={tag} />
+            <React.Fragment>
+                <ErrorMsg tag={tag} />
+                <FormControlLabel
+                    control={(
+                        <Switch
+                            checked={switchDel}
+                            color="primary"
+                            id="description"
+                            onChange={handleSwitch}
+                        />
+                    )}
+                    label="Are you realy sure?"
+                />
+            </React.Fragment>
         </SimpleModal>
     );
 };

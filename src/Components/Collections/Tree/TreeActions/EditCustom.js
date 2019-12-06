@@ -1,10 +1,14 @@
 /* eslint-disable react/no-multi-comp */
+import {makeStyles} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import MobileStepper from '@material-ui/core/MobileStepper';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
 
 import CustomChild from './CustomChild';
-import {Stepper} from '../../../Util';
 
 const useStyles = makeStyles(() => ({
     scroll: {
@@ -51,15 +55,38 @@ const EditCustom = ({cb, customTypes, name, type}) => {
     const handleBack = () => {
         setActiveStep(activeStep-1);
     };
+    console.log(name, type);
 
     return(
-        <React.Fragment>
-            <Stepper activeStep={activeStep} maxSteps={maxSteps} onNext={handleNext} onBack={handleBack}>
+        <Grid container spacing={1}>
+            <Grid item xs={12}>
                 <div className={classes.scroll}>
                     <CustomChild cb={cb} customTypes={customTypes} name={name} type={type} activeStep={activeStep} stepId={0} />
                 </div>
-            </Stepper>
-        </React.Fragment>
+            </Grid>
+            {maxSteps>1 ? (
+                <Grid item xs={12}>
+                    <MobileStepper
+                        steps={maxSteps}
+                        position="static"
+                        variant="text"
+                        activeStep={activeStep}
+                        nextButton={
+                            <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
+                                {'Next'}
+                                <KeyboardArrowRight />
+                            </Button>
+                        }
+                        backButton={
+                            <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                                <KeyboardArrowLeft />
+                                {'Back'}
+                            </Button>
+                        }
+                    />
+                </Grid>
+            ) : null}
+        </Grid>
     );
 };
 

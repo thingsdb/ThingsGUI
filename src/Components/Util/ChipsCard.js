@@ -1,9 +1,13 @@
+
+import { makeStyles} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
-import React from 'react';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import PropTypes from 'prop-types';
+import React from 'react';
+import Switch from '@material-ui/core/Switch';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles} from '@material-ui/core/styles';
 
 import {ErrorMsg, HarmonicCard, SimpleModal} from '../Util';
 
@@ -22,14 +26,14 @@ const useStyles = makeStyles(theme => ({
 const ChipsCard = ({title, items, onAdd, onClick, onDelete, tag}) => {
     const classes = useStyles();
     const [deleteIndex, setDeleteIndex] = React.useState(null);
+    const [switchDel, setSwitchDel] = React.useState(false);
 
     const handleClick = (index) => () => {
         onClick(index);
     };
 
     const handleClickDelete = () => {
-        setDeleteIndex(null);
-        onDelete(deleteIndex);
+        onDelete(deleteIndex, handleCloseDelete);
     };
 
     const handleClickAdd = () => {
@@ -39,9 +43,13 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, tag}) => {
     const handleOpenDelete = (index) => () => {
         setDeleteIndex(index);
     };
-
+    const handleSwitch = ({target}) => {
+        const {checked} = target;
+        setSwitchDel(checked);
+    };
     const handleCloseDelete = () => {
         setDeleteIndex(null);
+        setSwitchDel(false);
     };
 
     return (
@@ -91,11 +99,28 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, tag}) => {
             <SimpleModal
                 open={deleteIndex!=null}
                 onClose={handleCloseDelete}
-                onOk={handleClickDelete}
+                actionButtons={
+                    <Button onClick={handleClickDelete} disabled={!switchDel} color="primary">
+                        {'Submit'}
+                    </Button>
+                }
                 maxWidth="xs"
                 title={deleteIndex!=null?`Are you sure you want to remove '${items[deleteIndex]&&items[deleteIndex].name}'?`:''}
             >
-                <ErrorMsg tag={tag} />
+                <React.Fragment>
+                    <ErrorMsg tag={tag} />
+                    <FormControlLabel
+                        control={(
+                            <Switch
+                                checked={switchDel}
+                                color="primary"
+                                id="description"
+                                onChange={handleSwitch}
+                            />
+                        )}
+                        label="Are you realy sure?"
+                    />
+                </React.Fragment>
             </SimpleModal>
         </React.Fragment>
     );

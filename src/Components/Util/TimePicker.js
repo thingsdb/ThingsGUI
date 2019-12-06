@@ -3,7 +3,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
 const TimePicker = ({cb}) => {
-    const [time, setTime] = React.useState('');
+    const [time, setTime] = React.useState(new Date().toISOString().slice(0, 16));
 
     React.useEffect(() => {
         cb(time);

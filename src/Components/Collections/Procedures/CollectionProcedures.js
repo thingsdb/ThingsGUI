@@ -40,9 +40,17 @@ const CollectionProcedures = ({scope}) => {
     const handleCloseAdd = () => {
         setOpenAdd(false);
     };
-    const handleClickDelete = (i) => {
+    const handleClickDelete = (i, cb) => {
         const item = procedures[i];
-        ProcedureActions.deleteProcedure(scope, item.name, tag, handleProcedures);
+        ProcedureActions.deleteProcedure(
+            scope,
+            item.name,
+            tag,
+            (p)=> {
+                cb();
+                handleProcedures(p);
+            }
+        );
     };
 
     return (

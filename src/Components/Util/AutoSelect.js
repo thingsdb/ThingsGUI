@@ -94,6 +94,16 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
         cb(v);
     };
 
+    // const handleKeyPress = (event) => {
+    //     if (event.keyCode == 38) {
+    //         console.log('up');
+    //         anchorEl.focus();
+    //     }
+    //     if (event.keyCode == 40) {
+    //         anchorEl.getFocus();
+    //     }
+    // };
+
 
     return (
         <ClickAwayListener onClickAway={handleClose}>
@@ -112,7 +122,7 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
                 />
 
                 <Popper
-                    open={Boolean(anchorEl)}
+                    open={Boolean(anchorEl)&&Boolean(list.length)}
                     anchorEl={() => textRef.current}
                     onClose={handleClose}
                     placement="bottom"
@@ -120,7 +130,7 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
                     style={width?{width:width}:textRef.current?{width:textRef.current.offsetWidth}:null}
                 >
                     <Paper className={classes.paper} elevation={3}>
-                        <List className={classes.list} >
+                        <List className={classes.list}>
                             {list.map((p) => (
                                 <ListItem button key={p} onClick={handleClick(p)}>
                                     {p}

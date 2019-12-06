@@ -312,6 +312,7 @@ class ThingsdbStore extends BaseStore {
     onNewToken(config, tag, cb){ // name [, expirationTime] [, description]
         // TODO CHECK
         const query = `new_token('${config.name}', expiration_time=${config.expirationTime||'nil'}, description='${config.description||''}'); users_info();`;
+        console.log(query);
         this.emit('query', {
             scope,
             query

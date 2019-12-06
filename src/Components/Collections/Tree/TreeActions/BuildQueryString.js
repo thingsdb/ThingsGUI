@@ -30,12 +30,10 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
     //CUSTOM\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
     const mapArrayInput = (customTypes, v) => {
-        console.log(v);
         return v.map(({name, type, val}) => customTypeInput(name, type, customTypes, val));
     };
 
     const createArrayInput = (name, type, customTypes, val) => {
-        console.log(val, Array.isArray(val), val.length );
         return `[${typeof(val)=='string' ? val
             : Array.isArray(val) && val.length ? mapArrayInput(customTypes, val)
                 : customTypeInput(name, type.slice(1, -1), customTypes, val)
@@ -53,10 +51,16 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
                         : type.includes('thing') ? '{}' // TODO
                             : '';
 
-    const mapTypeInput = (v, customTypes) => v.map(({name, type, val}) => `${name}: ${customTypeInput(name, type, customTypes, val)}`);
+    const mapTypeInput = (type, v, customTypes) => v.map(({name, type, val}) => `${name}: ${customTypeInput(name, type, customTypes, val)}`);
+
+    // const mapTypeInput = (type, val, customTypes) => Object.entries(customTypes[type]).map(([k,v]) => {
+    //     const t = val.find(i=> k==i.name&&v==(i.type.slice(-1)=='?'?i.type.slice(0,-1):i.type));
+    //     console.log(val, k, v, t);
+    //     return(t?`${t.name}: ${customTypeInput(t.name, t.type, customTypes, t.val)}`:'');
+    // });
 
     const customTypeInput = (name, type, customTypes, val) =>
-        customTypes[type.slice(-1)=='?'?type.slice(0, -1):type] ? `${type.slice(-1)=='?'?type.slice(0, -1):type}{${Array.isArray(val)&&val.length?mapTypeInput(val, customTypes):''}}`
+        customTypes[type.slice(-1)=='?'?type.slice(0, -1):type] ? `${type.slice(-1)=='?'?type.slice(0, -1):type}{${Array.isArray(val)&&val.length?mapTypeInput(type, val, customTypes):''}}`
             : setTypeInput(name, type, customTypes, val);
 
     //STANDARD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

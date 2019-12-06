@@ -104,8 +104,16 @@ const Editor = ({match}) => {
         setQueryInput(i);
     };
 
-    const handleClickDeleteProcedure = (index) => {
-        ProcedureActions.deleteProcedure(scope.value, procedures[index].name, tag, handleProcedures);
+    const handleClickDeleteProcedure = (index, cb) => {
+        ProcedureActions.deleteProcedure(
+            scope.value,
+            procedures[index].name,
+            tag,
+            (p) => {
+                cb();
+                handleProcedures(p);
+            }
+        );
     };
 
     const handleClickAddProcedure = () => {
@@ -130,9 +138,17 @@ const Editor = ({match}) => {
         setQueryInput(i);
     };
 
-    const handleClickDeleteTypes = (index) => {
+    const handleClickDeleteTypes = (index, cb) => {
         const key = typesArr[index];
-        TypeActions.deleteType(scope.value, key.name, tag, handleTypes);
+        TypeActions.deleteType(
+            scope.value,
+            key.name,
+            tag,
+            (t) => {
+                cb();
+                handleTypes(t);
+            }
+        );
     };
 
     const handleClickAddTypes = () => {
@@ -142,23 +158,19 @@ const Editor = ({match}) => {
 
     return (
         <TitlePage2
-            preTitle='Customize your:'
-            title='Query'
+            preTitle='Customize your query:'
+            title={scope.value||''}
             content={
                 <React.Fragment>
                     <Grid item xs={12}>
                         <Card id='editor'>
-                            <CardHeader
-                                title="INPUT"
-                                titleTypographyProps={{variant: 'body1'}}
-                            />
                             <CardContent onKeyDown={handleKeyPress} onClick={handleShrink}>
                                 <ErrorMsg tag={tag} />
                                 <Collapse in={collapse} collapsedHeight="40px">
                                     <QueryInput onChange={handleInput} input={queryInput} />
                                 </Collapse>
                             </CardContent>
-                            <Divider />
+                            {/* <Divider />
                             <CardActions>
                                 <Button
                                     onClick={handleSubmit}
@@ -168,12 +180,21 @@ const Editor = ({match}) => {
                                 >
                                     {<SendIcon />}
                                 </Button>
-                            </CardActions>
+                            </CardActions> */}
                         </Card>
                     </Grid>
                     <Grid item xs={12}>
                         <HarmonicCard
-                            title="OUTPUT"
+                            title={
+                                <Button
+                                    onClick={handleSubmit}
+                                    variant="text"
+                                    color="primary"
+                                    size="large"
+                                >
+                                    {'Submit'}
+                                </Button>
+                            }//"OUTPUT"
                             content={
                                 <QueryOutput output={output} />
                             }

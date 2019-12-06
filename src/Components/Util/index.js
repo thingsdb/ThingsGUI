@@ -18,7 +18,6 @@ import Info from './Info';
 import Menu from './Menu';
 import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
-import Stepper from './Stepper';
 import TableWithButtons from './TableWithButtons';
 import ThingsTree from './ThingsTree';
 import TimePicker from './TimePicker';
@@ -31,6 +30,7 @@ import TreeIcon from './TreeIcon';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import VariablesArray from './VariablesArray';
+import WarnPopover from './WarnPopover';
 import WatchThings from './WatchThings';
 
 const checkType = (t) => {
@@ -127,7 +127,6 @@ export {
     getScopes2,
     ServerError,
     SimpleModal,
-    Stepper,
     TableWithButtons,
     thingValue,
     TopBarMenu,
@@ -141,5 +140,6 @@ export {
     QueryInput,
     QueryOutput,
     VariablesArray,
+    WarnPopover,
     WatchThings,
 };

@@ -48,15 +48,14 @@ const SimpleModal = ({
                 </DialogContent>
                 <DialogActions>
                     {actionButtons}
-
-                    <Button onClick={handleClose} color="primary">
-                        {'Close'}
-                    </Button>
                     {onOk ? (
                         <Button onClick={handleOk} disabled={disableOk} color="primary">
                             {'Submit'}
                         </Button>
                     ) : null}
+                    <Button onClick={handleClose} color="primary">
+                        {'Close'}
+                    </Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>

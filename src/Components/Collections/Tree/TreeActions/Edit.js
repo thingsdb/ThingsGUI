@@ -87,7 +87,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
             return updatedVal;
         });
     };
-    console.log(custom);
+
 
     const addNewProperty = Boolean(child.id);
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set';

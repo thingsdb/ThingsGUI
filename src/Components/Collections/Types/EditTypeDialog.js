@@ -11,13 +11,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Popover from '@material-ui/core/Popover';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import AddTypeProperty from './AddTypeProperty';
 import {CollectionActions, ErrorActions, TypeActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal, TableWithButtons} from '../../Util';
+import {ErrorMsg, SimpleModal, TableWithButtons, WarnPopover} from '../../Util';
 
 
 const tag = '11';
@@ -126,11 +125,6 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
     const edit = action=='mod';
     const del = action=='del';
 
-    const handleClosePopOver = () => {
-        setAnchorEl(null);
-    };
-
-    const openPopOver = Boolean(anchorEl);
 
     const buttons = (row) => (
         <React.Fragment>
@@ -140,30 +134,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
             <ButtonBase onClick={handleDel(row)} >
                 <DeleteIcon color="primary" />
             </ButtonBase>
-            <Popover
-                classes={{paper: classes.popover}}
-                open={openPopOver}
-                anchorEl={anchorEl}
-                onClose={handleClosePopOver}
-                anchorOrigin={{
-                    vertical: 'center',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'center',
-                    horizontal: 'left',
-                }}
-            >
-                <Typography>
-                    {`Are you sure you want to remove '${property.propertyName?property.propertyName:''}'`}
-                </Typography>
-                <Button onClick={handleCloseDelete} color="primary">
-                    {'Cancel'}
-                </Button>
-                <Button onClick={handleClickOk} color="primary">
-                    {'Ok'}
-                </Button>
-            </Popover>
+            <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} onOk={handleClickOk} description={`Are you sure you want to remove '${property.propertyName?property.propertyName:''}'`} />
         </React.Fragment>
     );
 

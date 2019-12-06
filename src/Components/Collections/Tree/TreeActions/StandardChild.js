@@ -20,7 +20,7 @@ const StandardChild = ({cb, name, type}) => {
 
 
     return(
-        <InputField name={''} dataType={type} cb={handleVal} input={val} margin="dense" />
+        <InputField name="" dataType={type} cb={handleVal} input={val} margin="dense" />
 
     );
 };

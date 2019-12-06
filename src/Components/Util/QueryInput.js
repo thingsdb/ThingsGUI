@@ -267,6 +267,7 @@ class QueryInput extends React.Component {
                 enabled: false,
             },
             lineNumbers: 'on',
+            scrollBeyondLastLine: false
         });
         this._editor.setModel(model);
         // onChange(input);
