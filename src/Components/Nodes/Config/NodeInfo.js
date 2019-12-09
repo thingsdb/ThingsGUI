@@ -14,11 +14,13 @@ const NodeInfo = ({node}) => {
             {ky: 'storage_path', label: 'Storage path'},
             {ky: 'uptime', label: 'Uptime'},
             {ky: 'zone', label: 'Zone'},
+            {ky: 'scheduled_backups', label: 'Scheduled backups'},
         ]},
         {ky: 'title2', title: 'PORTS', labels: [
             {ky: 'client_port', label: 'Client port'},
             {ky: 'node_port', label: 'Node port'},
             {ky: 'http_status_port', label: 'HTTP status port'},
+            {ky: 'http_api_port', label: 'HTTP api port'},
         ]},
         {ky: 'title3', title: 'ARCHIVE', labels: [
             {ky: 'archive_files', label: 'Archived files'},
@@ -43,6 +45,7 @@ const NodeInfo = ({node}) => {
             {ky: 'libpcre2_version', label: 'Libpcre2 version'},
             {ky: 'msgpack_version', label: 'Msgpack version'},
             {ky: 'libuv_version', label: 'Libuv version'},
+            {ky: 'yajl_version', label: 'Yajl version'},
         ]},
 
     ];

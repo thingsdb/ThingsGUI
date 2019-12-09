@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
@@ -50,7 +50,7 @@ const Remove = ({node}) => {
         <SimpleModal
             button={
                 <ButtonBase onClick={handleClickOpen}>
-                    <DeleteIcon />
+                    <DeleteIcon color="primary" />
                 </ButtonBase>
             }
             title="CAUTION"

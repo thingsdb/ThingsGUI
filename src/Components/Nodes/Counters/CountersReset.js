@@ -12,7 +12,7 @@ const CountersReset = ({node}) => {
 
     return (
         <React.Fragment>
-            <Button variant="outlined" onClick={handleClickOk}>
+            <Button variant="outlined" color="primary" onClick={handleClickOk}>
                 {'Reset counters'}
             </Button>
         </React.Fragment>

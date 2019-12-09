@@ -36,7 +36,7 @@ const CountersReset = ({node}) => {
     return(
         <SimpleModal
             button={
-                <Button variant="outlined" onClick={handleClickOpen}>
+                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                     {'Shutdown'}
                 </Button>
             }

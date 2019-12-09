@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
     green: {
         color: theme.palette.primary.green,
+        paddingRight: theme.spacing(1),
     },
 }));
 
@@ -101,23 +102,10 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
             <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick} button={hasActions} onAction={hasActions ? handleClickOpen : ()=>null}>
                 <React.Fragment>
                     {isWatching ? (
-                        <ListItemIcon className={classes.icon}>
+                        <ListItemIcon>
                             <ExploreIcon className={classes.green} />
                         </ListItemIcon>
                     ) : null}
-                    {/* <ListItemIcon>
-                        <ThingActions
-                            child={{
-                                id: thing && thing['#']||null,
-                                index: child.index,
-                                name: child.name,
-                                type: type,
-                            }}
-                            parent={parent}
-                            thing={currThing}
-                            scope={`@collection:${collection.name}`}
-                        />
-                    </ListItemIcon> */}
                 </React.Fragment>
             </TreeBranch>
             {show ? (

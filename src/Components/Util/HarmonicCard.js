@@ -28,7 +28,7 @@ const HarmonicCard = ({title, content, buttons, expand}) => {
             <CardHeader
                 action={
                     <IconButton onClick={handleExpandClick}>
-                        {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                        {expanded ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
                     </IconButton>
                 }
                 title={title}

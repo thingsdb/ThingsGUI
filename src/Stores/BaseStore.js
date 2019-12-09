@@ -329,7 +329,7 @@ class EventStore extends BaseStore {
         });
     }
 
-    onWatch(scope, id) {
+    onWatch(scope, id, tag) {
         const idString = `${id}`;
         this.emit('watch', {
             scope,
@@ -342,10 +342,12 @@ class EventStore extends BaseStore {
                 const update = Object.assign({}, prevState.watchIds, {[scope]: [...copyState]});
                 return {watchIds: update};
             });
-        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
     }
 
-    onUnwatch(scope, id) {
+    onUnwatch(scope, id, tag) {
         const idString = `${id}`;
         this.emit('unwatch', {
             scope,
@@ -360,7 +362,7 @@ class EventStore extends BaseStore {
                 return {watchThings: copyThings, watchIds: update};
             });
         }).fail((event, status, message) => {
-            ErrorActions.setToastError(message.Log);
+            ErrorActions.setMsgError(tag, message.Log);
         });
     }
 

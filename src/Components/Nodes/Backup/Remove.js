@@ -13,7 +13,7 @@ const Remove = ({nodeId, backup}) => {
 
     return (
         <IconButton onClick={handleClickOk}>
-            <DeleteIcon />
+            <DeleteIcon color="primary" />
         </IconButton>
     );
 };

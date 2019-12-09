@@ -15,12 +15,12 @@ const withStores = withVlow([{
 
 const UsersMenu = ({user, users}) => {
     React.useEffect(() => {
-        ThingsdbActions.getUsers();
         ThingsdbActions.getUser();
+        setTimeout(()=>ThingsdbActions.getUsers(), 1000);
         const setPoll = setInterval(
             () => {
                 ThingsdbActions.getUser();
-                // ThingsdbActions.getUsers();
+                ThingsdbActions.getUsers();
             }, 5000);
         return () => {
             clearInterval(setPoll);
@@ -40,7 +40,7 @@ const UsersMenu = ({user, users}) => {
     return (
         <Menu
             title="USERS"
-            icon={<PersonIcon />}
+            icon={<PersonIcon color="primary" />}
             items={users2}
             addItem={<Add />}
             onClickItem={handleClickUser}

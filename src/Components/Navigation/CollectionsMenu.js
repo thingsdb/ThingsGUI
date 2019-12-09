@@ -32,7 +32,7 @@ const CollectionsMenu = ({collections}) => {
     return (
         <Menu
             title="COLLECTIONS"
-            icon={<DashboardIcon />}
+            icon={<DashboardIcon color="primary" />}
             items={collections}
             addItem={<Add />}
             onClickItem={handleClickCollection}

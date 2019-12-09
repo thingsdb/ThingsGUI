@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     icon: {
         marginTop: theme.spacing(0.5),
         marginBottom: theme.spacing(0.5),
-        color: '#eee',
+        color: theme.palette.primary.main,
     },
 }));
 

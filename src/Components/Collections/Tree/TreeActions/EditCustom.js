@@ -55,7 +55,6 @@ const EditCustom = ({cb, customTypes, name, type}) => {
     const handleBack = () => {
         setActiveStep(activeStep-1);
     };
-    console.log(name, type);
 
     return(
         <Grid container spacing={1}>
@@ -74,12 +73,12 @@ const EditCustom = ({cb, customTypes, name, type}) => {
                         nextButton={
                             <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
                                 {'Next'}
-                                <KeyboardArrowRight />
+                                <KeyboardArrowRight color="primary" />
                             </Button>
                         }
                         backButton={
                             <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                                <KeyboardArrowLeft />
+                                <KeyboardArrowLeft color="primary" />
                                 {'Back'}
                             </Button>
                         }

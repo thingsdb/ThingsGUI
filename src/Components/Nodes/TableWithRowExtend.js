@@ -87,7 +87,7 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode}) => {
                                     ) : null}
                                     <TableCell align="right" style={{borderBottom: isopen?'none':null}}>
                                         <IconButton onClick={handleClickRow(ri)}>
-                                            {isopen ? <ExpandLess /> : <ExpandMore />}
+                                            {isopen ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
                                         </IconButton>
                                     </TableCell>
                                 </TableRow>

@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     icon: {
         marginTop: theme.spacing(0.5),
         marginBottom: theme.spacing(0.5),
-        color: '#eee',
+        color: theme.palette.primary.main,
     },
 }));
 
@@ -119,7 +119,7 @@ const Add = ({collections}) => {
         <SimpleModal
             button={
                 <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
-                    <AddBoxIcon className={classes.icon} />
+                    <AddBoxIcon className={classes.icon} color="primary" />
                 </ButtonBase>
             }
             title="New collection"

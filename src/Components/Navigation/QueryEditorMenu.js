@@ -31,7 +31,7 @@ const QueryEditorMenu = () => {
         <List className={classes.root} dense disablePadding>
             <ListItem button onClick={handleClickCollection}>
                 <ListItemIcon>
-                    <CodeIcon />
+                    <CodeIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText primary="EDITOR" />
             </ListItem>

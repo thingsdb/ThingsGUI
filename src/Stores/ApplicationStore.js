@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import {BaseStore, EventActions} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
+import {NodesActions} from './NodesStore';
+import {ThingsdbActions} from './ThingsdbStore';
 
 const ApplicationActions = Vlow.createActions([
     'connected',
@@ -76,6 +78,8 @@ class ApplicationStore extends BaseStore {
                 match: {},
             });
             ErrorActions.resetToastError();
+            ThingsdbActions.resetThingsStore();
+            NodesActions.resetNodesStore();
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 

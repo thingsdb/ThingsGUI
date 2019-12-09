@@ -7,7 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {EventStore, EventActions} from '../../Stores';
+import {EventStore, EventActions} from '../../../../Stores';
 
 const withStores = withVlow([{
     store: EventStore,
@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const WatchThings = ({buttonIsFab, scope, thingId, watchIds}) => {
+const WatchThings = ({buttonIsFab, scope, thingId, tag, watchIds}) => {
     const classes = useStyles();
 
     // stringify thingId
@@ -57,12 +57,14 @@ const WatchThings = ({buttonIsFab, scope, thingId, watchIds}) => {
         if (!onWatch) {
             EventActions.watch(
                 scope,
-                thingId
+                thingId,
+                tag
             );
         } else {
             EventActions.unwatch(
                 scope,
-                thingId
+                thingId,
+                tag
             );
         }
     };
@@ -86,6 +88,7 @@ WatchThings.propTypes = {
     buttonIsFab: PropTypes.bool.isRequired,
     scope: PropTypes.string.isRequired,
     thingId: PropTypes.number.isRequired,
+    tag: PropTypes.string.isRequired,
 
     // Event properties
     watchIds: EventStore.types.watchIds.isRequired,

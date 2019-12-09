@@ -27,6 +27,7 @@ const withStores = withVlow([{
 
 const initialState = {
     showPassword: false,
+    showToken: false,
     errors: {},
     switches: false, //siwtches instead of switch (reserved word)
     form: {
@@ -49,7 +50,7 @@ const tag = '0';
 
 const Login = ({loaded, connected}) => {
     const [state, setState] = React.useState(initialState);
-    const {showPassword, errors, switches, form} = state;
+    const {showPassword, showToken, errors, switches, form} = state;
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -76,6 +77,10 @@ const Login = ({loaded, connected}) => {
 
     const handleClickShowPassword = () => {
         setState({...state, showPassword: !showPassword});
+    };
+
+    const handleClickShowToken = () => {
+        setState({...state, showToken: !showToken});
     };
 
     const handleSwitch = ({target}) => {
@@ -170,12 +175,21 @@ const Login = ({loaded, connected}) => {
                         margin="dense"
                         id="token"
                         label="Token"
-                        type="text"
+                        type={showToken?'text':'password'}
                         value={form.token}
                         spellCheck={false}
                         onChange={handleOnChange}
                         fullWidth
                         error={errors.token}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={handleClickShowToken}>
+                                        {showToken ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </Collapse>
             </DialogContent>

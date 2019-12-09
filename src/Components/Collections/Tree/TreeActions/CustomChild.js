@@ -26,7 +26,6 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
     const classes = useStyles();
     const [val, setVal] = React.useState([]);
     const [optional, setOptional] = React.useState({});
-    console.log('name: ', name, 'type: ', type, 'val: ', val) ;
     React.useEffect(() => {
         cb({name: name, type: type, val: val});
     },

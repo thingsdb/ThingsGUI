@@ -84,7 +84,7 @@ const Loglevel = ({node}) => {
     return(
         <SimpleModal
             button={
-                <Button variant="outlined" onClick={handleClickOpen}>
+                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                     {'Loglevel'}
                 </Button>
             }

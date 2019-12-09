@@ -4,6 +4,7 @@ import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 
 const NodesActions = Vlow.createActions([
+    'resetNodesStore',
     'getNodes',
     'getNode',
     'setLoglevel',
@@ -39,6 +40,17 @@ class NodesStore extends BaseStore {
         super(NodesActions);
         this.state = NodesStore.defaults;
         this.onGetNodes();
+    }
+
+
+    onResetNodesStore() {
+        this.setState({
+            counters: {},
+            nodes: [],
+            node: {},
+            connectedNode: {},
+            backups: [],
+        });
     }
 
     onGetNodes(){
@@ -156,7 +168,6 @@ class NodesStore extends BaseStore {
 
     onAddBackup(nodeId, config, tag, cb) {
         const query = `new_backup('${config.file}'${config.time ? `, '${config.time}'${config.repeat ? `, ${config.repeat}`:''}`:''});`;
-        console.log(query);
         this.emit('query', {
             scope: `@node:${nodeId}`,
             query

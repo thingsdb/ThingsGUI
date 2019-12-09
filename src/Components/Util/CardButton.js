@@ -44,7 +44,7 @@ const CardButton = ({onClick, title, ...other}) => {
                 onClick={handleClick}
                 {...other}
             >
-                <Typography variant="overline" >
+                <Typography variant="overline" color="primary" >
                     {title}
                 </Typography>
             </CardActionArea>

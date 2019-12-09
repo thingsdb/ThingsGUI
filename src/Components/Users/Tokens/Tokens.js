@@ -1,7 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import Box from '@material-ui/core/Box';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Table from '@material-ui/core/Table';
@@ -18,7 +18,7 @@ import Add from './Add';
 import RemoveExpired from './RemoveExpired';
 import Remove from './Remove';
 import RefWrap from './RefWrap';
-import {HarmonicCard} from '../../Util';
+import {ErrorMsg, HarmonicCard} from '../../Util';
 
 
 const useStyles = makeStyles(theme => ({
@@ -33,6 +33,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const tag = '14';
 
 const Tokens = ({user}) => {
     const classes = useStyles();
@@ -52,7 +53,6 @@ const Tokens = ({user}) => {
     }];
 
     const handleRef = (r) => () => {
-        console.log(r);
         r.current.focus();
         r.current.select();
         document.execCommand('copy');
@@ -64,72 +64,75 @@ const Tokens = ({user}) => {
             content={
                 <React.Fragment>
                     {user.tokens.length ? (
-                        <Table padding="none">
-                            <TableHead>
-                                <TableRow>
-                                    {header.map((h, i) => (
-                                        <TableCell key={h.ky} align={i?'right':'left'}>
-                                            <Typography variant="caption" color="primary" align={i?'right':'left'}>
-                                                {h.label}
-                                            </Typography>
-                                        </TableCell>
-                                    ))}
-                                    <TableCell />
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rows.map((row, ri) => (
-                                    <TableRow key={ri}>
+                        <React.Fragment>
+                            <ErrorMsg tag={tag} />
+                            <Table padding="none">
+                                <TableHead>
+                                    <TableRow>
                                         {header.map((h, i) => (
                                             <TableCell key={h.ky} align={i?'right':'left'}>
-                                                <Typography component="div">
-                                                    {h.ky=='key' ? (
-                                                        <RefWrap>
-                                                            {(reference) => (
-                                                                <React.Fragment>
-                                                                    <TextField
-                                                                        className={classes.textfield}
-                                                                        name="queryString"
-                                                                        type="text"
-                                                                        value={row[h.ky]}
-                                                                        InputProps={{
-                                                                            readOnly: true,
-                                                                            disableUnderline: true,
-                                                                        }}
-                                                                        inputProps={{
-                                                                            style: {
-                                                                                fontFamily: 'monospace',
-                                                                                fontSize: 'body1.fontSize'
-                                                                            },
-                                                                        }}
-                                                                        InputLabelProps={{
-                                                                            shrink: true,
-                                                                        }}
-                                                                        inputRef={reference}
-                                                                    />
-                                                                    <Tooltip className={classes.copyButton} disableFocusListener disableTouchListener title="Copy to Clipboard">
-                                                                        <ButtonBase onClick={handleRef(reference)}>
-                                                                            <FileCopyIcon color="primary" />
-                                                                        </ButtonBase>
-                                                                    </Tooltip>
-                                                                </React.Fragment>
-                                                            )}
-                                                        </RefWrap>
-                                                    ) : (
-                                                        <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
-                                                            {row[h.ky]}
-                                                        </Box>
-                                                    )}
+                                                <Typography variant="caption" align={i?'right':'left'}>
+                                                    {h.label}
                                                 </Typography>
                                             </TableCell>
                                         ))}
-                                        <TableCell align='right'>
-                                            <Remove token={row} />
-                                        </TableCell>
+                                        <TableCell />
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHead>
+                                <TableBody>
+                                    {rows.map((row, ri) => (
+                                        <TableRow key={ri}>
+                                            {header.map((h, i) => (
+                                                <TableCell key={h.ky} align={i?'right':'left'}>
+                                                    <Typography component="div">
+                                                        {h.ky=='key' ? (
+                                                            <RefWrap>
+                                                                {(reference) => (
+                                                                    <React.Fragment>
+                                                                        <TextField
+                                                                            className={classes.textfield}
+                                                                            name="queryString"
+                                                                            type="text"
+                                                                            value={row[h.ky]}
+                                                                            InputProps={{
+                                                                                readOnly: true,
+                                                                                disableUnderline: true,
+                                                                            }}
+                                                                            inputProps={{
+                                                                                style: {
+                                                                                    fontFamily: 'monospace',
+                                                                                    fontSize: 'body1.fontSize'
+                                                                                },
+                                                                            }}
+                                                                            InputLabelProps={{
+                                                                                shrink: true,
+                                                                            }}
+                                                                            inputRef={reference}
+                                                                        />
+                                                                        <Tooltip className={classes.copyButton} disableFocusListener disableTouchListener title="Copy to Clipboard">
+                                                                            <ButtonBase onClick={handleRef(reference)}>
+                                                                                <FileCopyIcon color="primary" />
+                                                                            </ButtonBase>
+                                                                        </Tooltip>
+                                                                    </React.Fragment>
+                                                                )}
+                                                            </RefWrap>
+                                                        ) : (
+                                                            <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                                                {row[h.ky]}
+                                                            </Box>
+                                                        )}
+                                                    </Typography>
+                                                </TableCell>
+                                            ))}
+                                            <TableCell align='right'>
+                                                <Remove token={row} tag={tag} />
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </React.Fragment>
                     ) : user.has_password ? (
                         <Typography>
                             {'Not set.'}
@@ -143,7 +146,7 @@ const Tokens = ({user}) => {
             }
             buttons={
                 <React.Fragment>
-                    <RemoveExpired />
+                    <RemoveExpired tag={tag} />
                     <Add user={user} />
                 </React.Fragment>
             }

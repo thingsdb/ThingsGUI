@@ -12,7 +12,7 @@ const Backup = ({backups, nodeId}) => {
     const header = [
         {ky: 'id', label: 'ID'},
         {ky: 'file_template', label: 'File template'},
-        {ky: 'next_run', label: 'Next run at'},
+        {ky: 'next_run', label: 'Next run at (UTC)'},
         {ky: 'repeat', label: 'Repeat after (sec)'},
         {ky: 'result_code', label: 'Result code'},
         {ky: 'result_message', label: 'Result message'},

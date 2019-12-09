@@ -40,10 +40,12 @@ const useStyles = makeStyles(theme => ({
 const AutoSelect = ({cb, label, dropdownItems, input}) => {
     const classes = useStyles();
     const textRef = React.useRef(null);
+    const listRef = React.useRef(null);
     const [text, setText] = React.useState(input);
     const [list, setList] = React.useState(dropdownItems);
     const [anchorEl, setAnchorEl] = React.useState(false);
     const [width, setWidth] = React.useState(null);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
 
 
     React.useEffect(() => {
@@ -79,6 +81,7 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
     const handleClick = (i) => () => {
         handleText(i);
         setAnchorEl(false);
+        setSelectedIndex(0);
     };
 
     const handleOpen = () => {
@@ -87,6 +90,7 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
 
     const handleClose = () => {
         setAnchorEl(false);
+        setSelectedIndex(0);
     };
 
     const handleText = (v) => {
@@ -96,11 +100,23 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
 
     // const handleKeyPress = (event) => {
     //     if (event.keyCode == 38) {
-    //         console.log('up');
-    //         anchorEl.focus();
+    //         console.log('up', e);
+    //         setSelectedIndex(selectedIndex-1);
     //     }
     //     if (event.keyCode == 40) {
-    //         anchorEl.getFocus();
+    //         console.log('down');
+    //         setSelectedIndex(selectedIndex+1);
+    //         setAnchorEl(true);
+    //         listRef.current.childNodes[selectedIndex].focus();
+    //     }
+    // };
+
+    // const handleKeyList = (i) => (event) => {
+    //     const {key} = event;
+    //     console.log(event);
+    //     if (key == 'Enter') {
+    //         console.log('enter');
+    //         handleClick(i);
     //     }
     // };
 
@@ -118,7 +134,8 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
                     type="text"
                     value={text}
                     variant="outlined"
-                    ref={textRef}
+                    inputRef={textRef}
+                    // onKeyDown={handleKeyPress}
                 />
 
                 <Popper
@@ -131,8 +148,8 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
                 >
                     <Paper className={classes.paper} elevation={3}>
                         <List className={classes.list}>
-                            {list.map((p) => (
-                                <ListItem button key={p} onClick={handleClick(p)}>
+                            {list.map((p, i) => (
+                                <ListItem button key={p} onClick={handleClick(p)} >
                                     {p}
                                 </ListItem>
                             ))}

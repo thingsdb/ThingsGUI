@@ -26,7 +26,6 @@ const tag = '25';
 const Add = ({user}) => {
     const [state, setState] = React.useState(initialState);
     const {show, form, switches} = state;
-    console.log(form);
 
     const handleClickOpen = () => {
         setState({
@@ -148,7 +147,7 @@ const Add = ({user}) => {
     return (
         <SimpleModal
             button={
-                <Button variant="outlined" onClick={handleClickOpen}>
+                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                     {'Add token'}
                 </Button>
             }

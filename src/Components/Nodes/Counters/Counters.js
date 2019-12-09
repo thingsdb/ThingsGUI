@@ -4,10 +4,13 @@ import { Info } from '../../Util';
 
 
 const Counters = ({counters}) => {
+
     const header = [
         {ky: 'title1', title: 'QUERIES', labels: [
             {ky: 'queries_success', label: 'Successful queries'},
             {ky: 'queries_with_error', label: 'Queries with error'},
+            {ky: 'average_query_duration', label: 'Average query duration'},
+            {ky: 'longest_query_duration', label: 'Longest query duration'},
         ]},
         {ky: 'title2', title: 'WATCHER', labels: [
             {ky: 'watcher_failed', label: 'Watcher failed'},

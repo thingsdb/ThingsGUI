@@ -31,7 +31,7 @@ const AddTypeDialog = ({open, onClose, scope, cb}) => {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
-        queryString: '',
+        queryString: 'new_procedure("", )',
         procedureName: '',
         error: '',
         closure: '',
@@ -41,7 +41,7 @@ const AddTypeDialog = ({open, onClose, scope, cb}) => {
 
     React.useEffect(() => {
         setState({
-            queryString: '',
+            queryString: 'new_procedure("", )',
             procedureName: '',
             error: '',
             closure: '',

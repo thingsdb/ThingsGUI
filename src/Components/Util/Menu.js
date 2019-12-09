@@ -41,7 +41,7 @@ const Menu = ({title, icon, items, addItem, onClickItem}) => {
             <List className={classes.root} dense disablePadding>
                 <ListItem button onClick={handleClickOpen}>
                     <ListItemIcon>
-                        {open ? <ExpandMore /> : <ChevronRightIcon />}
+                        {open ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
                     </ListItemIcon>
                     <ListItemText primary={title} />
                 </ListItem>

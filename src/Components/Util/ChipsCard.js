@@ -20,6 +20,9 @@ const useStyles = makeStyles(theme => ({
     customWidth: {
         maxWidth: 500,
     },
+    warning: {
+        color: theme.palette.primary.red
+    }
 }));
 
 
@@ -100,7 +103,7 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, tag}) => {
                 open={deleteIndex!=null}
                 onClose={handleCloseDelete}
                 actionButtons={
-                    <Button onClick={handleClickDelete} disabled={!switchDel} color="primary">
+                    <Button onClick={handleClickDelete} disabled={!switchDel} className={classes.warning}>
                         {'Submit'}
                     </Button>
                 }

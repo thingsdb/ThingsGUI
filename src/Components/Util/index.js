@@ -31,7 +31,6 @@ import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import VariablesArray from './VariablesArray';
 import WarnPopover from './WarnPopover';
-import WatchThings from './WatchThings';
 
 const checkType = (t) => {
     if (t === null || t === 'nil') {
@@ -141,5 +140,4 @@ export {
     QueryOutput,
     VariablesArray,
     WarnPopover,
-    WatchThings,
 };

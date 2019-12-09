@@ -104,7 +104,7 @@ const Add = () => {
     return(
         <SimpleModal
             button={
-                <Button variant="outlined" onClick={handleClickOpen}>
+                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                     {'Add node'}
                 </Button>
             }

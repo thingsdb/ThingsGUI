@@ -8,8 +8,9 @@ import Typography from '@material-ui/core/Typography';
 
 import Edit from './Edit';
 import RemoveThing from './RemoveThing';
+import WatchThings from './WatchThings';
 import {ApplicationActions, CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
-import {DownloadBlob, ErrorMsg, SimpleModal, WatchThings} from '../../../Util';
+import {DownloadBlob, ErrorMsg, SimpleModal} from '../../../Util';
 
 const tag = '8';
 
@@ -156,6 +157,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
                                 buttonIsFab
                                 scope={scope}
                                 thingId={child.id||parent.id}
+                                tag={tag}
                             />
                         </Grid>
                     }

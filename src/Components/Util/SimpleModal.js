@@ -16,7 +16,8 @@ const SimpleModal = ({
     onKeyPress,
     onOk,
     open,
-    title}) => {
+    title,
+    ...props}) => {
 
 
     const handleClose = () => {
@@ -37,6 +38,7 @@ const SimpleModal = ({
                 fullWidth
                 maxWidth={maxWidth?maxWidth:'xs'}
                 onKeyDown={onKeyPress}
+                {...props}
             >
                 {title ? (
                     <DialogTitle id="form-dialog-title">
