@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ChipsCard = ({title, items, onAdd, onClick, onDelete, tag}) => {
+const ChipsCard = ({title, items, onAdd, onClick, onDelete, expand, tag}) => {
     const classes = useStyles();
     const [deleteIndex, setDeleteIndex] = React.useState(null);
     const [switchDel, setSwitchDel] = React.useState(false);
@@ -59,6 +59,7 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, tag}) => {
         <React.Fragment>
             <HarmonicCard
                 title={title.toUpperCase()}
+                expand={expand}
                 content={
                     <React.Fragment>
                         {items && items.length ? items.map((listitem, index) => (
@@ -129,12 +130,17 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, tag}) => {
     );
 };
 
+ChipsCard.defaultProps = {
+    expand: null,
+},
+
 ChipsCard.propTypes = {
     title: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
     onAdd: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
+    expand: PropTypes.bool,
     tag: PropTypes.string.isRequired,
 };
 

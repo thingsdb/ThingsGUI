@@ -34,14 +34,14 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.red,
         opacity: '0.6',
         '&:hover': {
-            backgroundColor: theme.palette.primary.red,
+            color: theme.palette.primary.red,
             opacity: '0.4',
         },
     },
     green: {
         color: theme.palette.primary.green,
         '&:hover': {
-            backgroundColor: theme.palette.primary.green,
+            color: theme.palette.primary.green,
             opacity: '0.7',
         },
     },

@@ -7,6 +7,7 @@ import {HarmonicCard} from '../../Util';
 
 const CollectionTree = ({collection}) => (
     <HarmonicCard
+        expand={false}
         title="THINGS TREE"
         content={
             <React.Fragment>

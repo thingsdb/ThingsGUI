@@ -322,14 +322,14 @@ class EventStore extends BaseStore {
     }
 
     nodeStatus(data) {
-        this.setState(prevState => {
-            const update = Object.assign({}, prevState.watchThings[data['#']], set);
-            const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
-            return {watchThings};
-        });
+        // this.setState(prevState => {
+        //     const update = Object.assign({}, prevState.watchThings[data['#']], set);
+        //     const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
+        //     return {watchThings};
+        // });
     }
 
-    onWatch(scope, id, tag) {
+    onWatch(scope, id, tag=null) {
         const idString = `${id}`;
         this.emit('watch', {
             scope,
@@ -343,11 +343,11 @@ class EventStore extends BaseStore {
                 return {watchIds: update};
             });
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
+            tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
         });
     }
 
-    onUnwatch(scope, id, tag) {
+    onUnwatch(scope, id, tag=null) {
         const idString = `${id}`;
         this.emit('unwatch', {
             scope,
@@ -362,7 +362,7 @@ class EventStore extends BaseStore {
                 return {watchThings: copyThings, watchIds: update};
             });
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
+            tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
         });
     }
 

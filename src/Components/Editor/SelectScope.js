@@ -34,6 +34,7 @@ const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
 
     return (
         <HarmonicCard
+            expand={false}
             title="SCOPE"
             content={
                 <RadioGroup aria-label="scope" name="scope" value={`${index}`} onChange={handleOnChangeScope}>

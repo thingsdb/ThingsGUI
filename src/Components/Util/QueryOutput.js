@@ -27,7 +27,7 @@ const QueryOutput = ({output}) => {
         setTabIndex(newValue);
     };
 
-    const jsonOutput = JSON.stringify(output, null, 4).replace(/"http:\/\/.*download\/tmp\/thingsdb-cache-.*"/gi, '<blob data>');
+    const jsonOutput = JSON.stringify(output, (k, v) => v.replace(/"http:\/\/.*download\/tmp\/thingsdb-cache-.*"/gi, '<blob data>'), 4);
 
     return (
         <Paper className={classes.card} >

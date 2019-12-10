@@ -56,12 +56,13 @@ const CollectionProcedures = ({scope}) => {
     return (
         <React.Fragment>
             <ChipsCard
-                title="procedures"
+                expand={false}
                 items={procedures}
                 onAdd={handleClickAdd}
                 onClick={handleClickEdit}
                 onDelete={handleClickDelete}
                 tag={tag}
+                title="procedures"
             />
             <AddProcedureDialog open={openAdd} onClose={handleCloseAdd} scope={scope} cb={handleProcedures} />
             <EditProcedureDialog open={openEdit} onClose={handleCloseEdit} input={index!=null?procedures[index]:{}} scope={scope} cb={handleProcedures} />

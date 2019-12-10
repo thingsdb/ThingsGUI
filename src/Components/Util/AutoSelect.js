@@ -40,12 +40,10 @@ const useStyles = makeStyles(theme => ({
 const AutoSelect = ({cb, label, dropdownItems, input}) => {
     const classes = useStyles();
     const textRef = React.useRef(null);
-    const listRef = React.useRef(null);
     const [text, setText] = React.useState(input);
     const [list, setList] = React.useState(dropdownItems);
     const [anchorEl, setAnchorEl] = React.useState(false);
     const [width, setWidth] = React.useState(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
 
 
     React.useEffect(() => {
@@ -81,7 +79,6 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
     const handleClick = (i) => () => {
         handleText(i);
         setAnchorEl(false);
-        setSelectedIndex(0);
     };
 
     const handleOpen = () => {
@@ -90,7 +87,6 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
 
     const handleClose = () => {
         setAnchorEl(false);
-        setSelectedIndex(0);
     };
 
     const handleText = (v) => {
@@ -101,11 +97,9 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
     // const handleKeyPress = (event) => {
     //     if (event.keyCode == 38) {
     //         console.log('up', e);
-    //         setSelectedIndex(selectedIndex-1);
     //     }
     //     if (event.keyCode == 40) {
     //         console.log('down');
-    //         setSelectedIndex(selectedIndex+1);
     //         setAnchorEl(true);
     //         listRef.current.childNodes[selectedIndex].focus();
     //     }

@@ -20,7 +20,7 @@ const tag = '3';
 const Remove = ({collection}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
-    const [name, setName] = React.useState('');
+    const [name, setName] = React.useState(collection.name);
     const [switchDel, setSwitchDel] = React.useState(false);
 
     React.useEffect(() => {

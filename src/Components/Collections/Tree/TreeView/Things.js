@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+import Divider from '@material-ui/core/Divider';
 import ExploreIcon from '@material-ui/icons/Explore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -43,6 +44,9 @@ const useStyles = makeStyles(theme => ({
     green: {
         color: theme.palette.primary.green,
     },
+    divider: {
+        marginTop: theme.spacing(2),
+    }
 }));
 
 const ThingRoot = ({things, collection, watchIds}) => {
@@ -87,6 +91,7 @@ const ThingRoot = ({things, collection, watchIds}) => {
                             />
                         </React.Fragment>
                     ))}
+                    <Divider className={classes.divider} />
                     <ListItem className={classes.listItem}>
                         {isWatching ? (
                             <ListItemIcon className={classes.icon}>

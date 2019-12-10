@@ -49,12 +49,10 @@ const ErrorMsg = ({tag, msgError}) => {
     const handleCloseError = () => {
         ErrorActions.removeMsgError(tag);
     };
-    console.log(msgError);
-    const link = (msgErr) => {
 
+    const link = (msgErr) => {
         const startIndex = msgErr.search(/https/);
         const length = msgErr.slice(startIndex).search(/;/);
-        console.log(startIndex, length);
         if (length!=-1&&length!=0) {
             return(
                 <React.Fragment>

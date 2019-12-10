@@ -21,17 +21,17 @@ const useStyles = makeStyles(theme => ({
     info: {
         marginTop: theme.spacing(2),
         overflowY: 'auto',
-        maxHeight: '600px',
+        maxHeight: '450px',
     },
     counters: {
         marginTop: theme.spacing(2),
         overflowY: 'auto',
-        maxHeight: '600px',
+        maxHeight: '450px',
     },
     backup: {
         marginTop: theme.spacing(2),
         overflowY: 'auto',
-        maxHeight: '400px',
+        maxHeight: '450px',
     }
 }));
 

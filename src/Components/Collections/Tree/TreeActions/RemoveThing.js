@@ -23,7 +23,6 @@ const RemoveThing = ({scope, thing, child, parent}) => {
         setShow(false);
     };
 
-
     const handleClickOk = () => {
         CollectionActions.queryWithReturn(
             scope,

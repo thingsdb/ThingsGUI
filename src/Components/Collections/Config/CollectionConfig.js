@@ -28,6 +28,7 @@ const CollectionConfig = ({collection}) => {
 
     return (
         <HarmonicCard
+            expand={false}
             title="INFO"
             content={<CollectionInfo collection={collection} />}
             buttons={

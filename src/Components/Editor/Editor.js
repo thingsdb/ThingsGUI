@@ -185,6 +185,7 @@ const Editor = ({match}) => {
                     </Grid>
                     <Grid item xs={12}>
                         <HarmonicCard
+                            expand={false}
                             title={
                                 <Button
                                     onClick={handleSubmit}
@@ -211,24 +212,26 @@ const Editor = ({match}) => {
                     {scope.value && scope.value.includes('@node') ? null : (
                         <Grid item xs={12}>
                             <ChipsCard
-                                title="procedures"
+                                expand={false}
                                 items={procedures}
                                 onAdd={handleClickAddProcedure}
                                 onClick={handleClickProcedure}
                                 onDelete={handleClickDeleteProcedure}
                                 tag={tag}
+                                title="procedures"
                             />
                         </Grid>
                     )}
                     {scope.value && scope.value.includes('@collection') ? (
                         <Grid item xs={12}>
                             <ChipsCard
-                                title="custom types"
+                                expand={false}
                                 items={typesArr}
                                 onAdd={handleClickAddTypes}
                                 onClick={handleClickTypes}
                                 onDelete={handleClickDeleteTypes}
                                 tag={tag}
+                                title="custom types"
                             />
                         </Grid>
                     ): null}

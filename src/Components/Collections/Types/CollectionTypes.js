@@ -107,12 +107,13 @@ const CollectionTypes = ({scope}) => {
     return (
         <React.Fragment>
             <ChipsCard
-                title="custom types"
+                expand={false}
                 items={typesArr}
                 onAdd={handleClickAdd}
                 onClick={handleClickEdit}
                 onDelete={handleClickDelete}
                 tag={tag}
+                title="custom types"
             />
             <AddTypeDialog open={openAdd} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} cb={handleTypes} />
             <EditTypeDialog open={openEdit} onClose={handleCloseEdit} customType={index!=null?typesArr[index]:{}} dataTypes={datatypesMap} scope={scope} cb={handleTypes} />

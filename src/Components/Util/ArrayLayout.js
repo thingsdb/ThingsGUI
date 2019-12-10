@@ -1,11 +1,11 @@
 /* eslint-disable react/no-multi-comp */
-import PropTypes from 'prop-types';
-import React from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
-import {makeStyles} from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import React from 'react';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 const useStyles = makeStyles(theme => ({
     container: {
