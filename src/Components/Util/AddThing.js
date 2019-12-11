@@ -43,18 +43,20 @@ const dataTypes = [ // Do not put array first; causes infinite loop
     'thing',
 ];
 
-const Add1DArray = ({cb, type}) => {
+const AddThing = ({cb, type}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         contentAdd: '',
-        dataType: type||'str',
+        dataType: 'str',
         errors: {},
+        property: '',
     });
-    const {contentAdd, dataType} = state;
+    const {contentAdd, dataType, property} = state;
 
     const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
-        cb(`[${myItems}]`);
+        console.log(`{${myItems}}`);
+        cb(`{${myItems}}`);
     },
     [myItems.length],
     );
@@ -63,24 +65,29 @@ const Add1DArray = ({cb, type}) => {
         setState({...state, contentAdd: val, errors: {}});
     };
 
-    const handleChange = ({target}) => {
+    const handleChangeProperty = ({target}) => {
+        const {value} = target;
+        setState({...state, property: value, errors: {}});
+    };
+
+    const handleChangeType = ({target}) => {
         const {value} = target;
         setState({...state, dataType: value, contentAdd: '', errors: {}});
     };
 
-    const typeControls = (type, input) => {
-        return type === 'list' ? `[${input}]`
-            : type === 'thing' ? `{${input}}`
-                : type === 'set' ? 'set({})'
-                    : type === 'str' ? `'${input}'`
-                        : type === 'number' || type === 'bool' || type=='int' || type=='uint' || type=='float' || type === 'bytes' || type === 'closure' || type === 'regex' ||  type === 'error'  ? `${input}`
-                            : type === 'nil' ? 'nil'
+    const typeControls = (property, type, input) => {
+        return type === 'list' ? `${property}: [${input}]`
+            : type === 'thing' ? `${property}: {${input}}`
+                : type === 'set' ? `${property}: set({})`
+                    : type === 'str' ? `${property}: '${input}'`
+                        : type === 'number' || type === 'bool' || type=='int' || type=='uint' || type=='float' || type === 'bytes' || type === 'closure' || type === 'regex' ||  type === 'error'  ? `${property}: ${input}`
+                            : type === 'nil' ? `${property}: nil`
                                 : '';
     };
 
     const handleAdd = () => {
         // let currentcontent = contentAdd.trim();
-        const contentTypeChecked = typeControls(dataType, contentAdd);
+        const contentTypeChecked = typeControls(property, dataType, contentAdd);
         setMyItems(prevItems => {
             const newArray = [...prevItems];
             newArray.push(contentTypeChecked);
@@ -121,10 +128,22 @@ const Add1DArray = ({cb, type}) => {
                 <Grid container item xs={12} spacing={1} alignItems="center" >
                     <Grid item>
                         <TextField
+                            id="property"
+                            type="text"
+                            name="property"
+                            label="Property"
+                            onChange={handleChangeProperty}
+                            value={property}
+                            variant="outlined"
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
                             id="dataType"
                             type="text"
                             name="dataType"
-                            onChange={handleChange}
+                            label="Data type"
+                            onChange={handleChangeType}
                             value={dataType}
                             variant="outlined"
                             select
@@ -141,7 +160,7 @@ const Add1DArray = ({cb, type}) => {
                         <InputField
                             dataType={dataType}
                             cb={handleInputField}
-                            name=""
+                            name="Input"
                             input={contentAdd}
                             variant="outlined"
                         />
@@ -157,15 +176,15 @@ const Add1DArray = ({cb, type}) => {
     );
 };
 
-Add1DArray.defaultProps = {
+AddThing.defaultProps = {
     type: '',
 };
 
-Add1DArray.propTypes = {
+AddThing.propTypes = {
     cb: PropTypes.func.isRequired,
     type:PropTypes.string
 };
 
-export default Add1DArray;
+export default AddThing;
 
 

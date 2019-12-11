@@ -93,6 +93,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set';
     const isCustomType = customTypes.hasOwnProperty(dataType);
 
+    console.log(custom);
+
     return(
         <React.Fragment>
             <List disablePadding dense className={classes.list}>

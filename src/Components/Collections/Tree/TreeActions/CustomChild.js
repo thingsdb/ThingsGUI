@@ -34,7 +34,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
 
     React.useEffect(() => {
         setVal([]);
-    },[name, type]);
+    },[type]);
 
     const handleChild = (c) => {
         setVal(prevVal => {

@@ -30,52 +30,47 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
     //CUSTOM\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
     const mapArrayInput = (customTypes, v) => {
-        return v.map(({name, type, val}) => customTypeInput(name, type, customTypes, val));
+        return `[${v.map(({name, type, val}) => customTypeInput(name, type, customTypes, val))}]`;
     };
 
     const createArrayInput = (name, type, customTypes, val) => {
-        return `[${typeof(val)=='string' ? val
+        return typeof(val)=='string' ? val
             : Array.isArray(val) && val.length ? mapArrayInput(customTypes, val)
-                : customTypeInput(name, type.slice(1, -1), customTypes, val)
-        }]`;
+                : customTypeInput(name, type.slice(1, -1), customTypes, val);
     };
 
     const createSetInput = (name, type, customTypes, val) => `set(${val==''? '{}': createArrayInput(name, type, customTypes, val)})`;
+
+    // //TODO add raw and bytes
+    // const setTypeInput = (name, type, customTypes, v) =>
+    //     type[0]=='['? createArrayInput(name, type, customTypes, v)
+    //         : type[0]=='{'? createSetInput(name, type, customTypes, v)
+    //             : type.includes('str') || type.includes('utf8') || type.includes('raw') ? `'${v}'`
+    //                 : type.includes('thing') || type.includes('number') || type.includes('int') || type.includes('uint') || type.includes('float') || type.includes('bool') ? `${v}`
+    //                     : '';
 
     //TODO add raw and bytes
     const setTypeInput = (name, type, customTypes, v) =>
         type[0]=='['? createArrayInput(name, type, customTypes, v)
             : type[0]=='{'? createSetInput(name, type, customTypes, v)
-                : type.includes('str') || type.includes('utf8') ? `'${v}'`
-                    : type.includes('number') || type.includes('int') || type.includes('uint') || type.includes('float') || type.includes('bool') ? `${v}`
-                        : type.includes('thing') ? '{}' // TODO
-                            : '';
+                : type.includes('str') || type.includes('utf8') || type.includes('raw') ? `'${v}'`
+                    : `${v}`;
 
-    const mapTypeInput = (type, v, customTypes) => v.map(({name, type, val}) => `${name}: ${customTypeInput(name, type, customTypes, val)}`);
-
-    // const mapTypeInput = (type, val, customTypes) => Object.entries(customTypes[type]).map(([k,v]) => {
-    //     const t = val.find(i=> k==i.name&&v==(i.type.slice(-1)=='?'?i.type.slice(0,-1):i.type));
-    //     console.log(val, k, v, t);
-    //     return(t?`${t.name}: ${customTypeInput(t.name, t.type, customTypes, t.val)}`:'');
-    // });
+    const mapTypeInput = (v, customTypes) => v.map(({name, type, val}) => `${name}: ${customTypeInput(name, type, customTypes, val)}`);
 
     const customTypeInput = (name, type, customTypes, val) =>
-        customTypes[type.slice(-1)=='?'?type.slice(0, -1):type] ? `${type.slice(-1)=='?'?type.slice(0, -1):type}{${Array.isArray(val)&&val.length?mapTypeInput(type, val, customTypes):''}}`
+        customTypes[type.slice(-1)=='?'?type.slice(0, -1):type] ? `${type.slice(-1)=='?'?type.slice(0, -1):type}{${Array.isArray(val)&&val.length?mapTypeInput(val, customTypes):''}}`
             : setTypeInput(name, type, customTypes, val);
 
     //STANDARD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-    //TODO add raw
+    // TODO add raw
     const standardInput = (childVal, childType) => {
-        return childType === 'list' ? `[${childVal}]`
-            : childType == 'thing' ? '{}'
-                : childType == 'str'|| childType == 'utf8' ? `'${childVal}'`
-                    : childType == 'number' || childType == 'bool' || childType == 'int'|| childType == 'uint'|| childType == 'float' ? `${childVal}`
-                        : childType == 'set' ? 'set({})'
-                            : childType == 'nil' ? 'nil'
-                                : childType == 'bytes' ? 'blob'
-                                    : childType == 'closure' || childType == 'regex' || childType == 'error' ? childVal
-                                        : '';
+        return childType == 'str' || childType == 'utf8' || childType == 'raw' ? `'${childVal}'`
+            : childType == 'set' ? 'set({})'
+                : childType == 'nil' ? 'nil'
+                    : childType == 'bytes' ? 'blob'
+                        : `${childVal}`;
     };
 
     const buildQueryAdd = (parentId, parentName, parentType, childName, childIndex, value) => {

@@ -35,6 +35,7 @@ const Editor = ({match}) => {
     const [procedures, setProcedures] = React.useState([]);
     const [customTypes, setCustomTypes] = React.useState({});
 
+
     const handleTypes = (t) => {
         setCustomTypes(t);
     };
@@ -155,7 +156,6 @@ const Editor = ({match}) => {
         setQueryInput('set_type("...", {...})');
     };
 
-
     return (
         <TitlePage2
             preTitle='Customize your query:'
@@ -164,7 +164,7 @@ const Editor = ({match}) => {
                 <React.Fragment>
                     <Grid item xs={12}>
                         <Card id='editor'>
-                            <CardContent onKeyDown={handleKeyPress} onClick={handleShrink}>
+                            <CardContent onKeyDown={handleKeyPress} onClick={handleShrink} >
                                 <ErrorMsg tag={tag} />
                                 <Collapse in={collapse} collapsedHeight="40px">
                                     <QueryInput onChange={handleInput} input={queryInput} />

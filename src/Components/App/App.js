@@ -59,13 +59,13 @@ const App = ({match}) => {
                             <List>
                                 <ListItem button onClick={handleDrawerOpen(0)} >
                                     <ListItemIcon>
-                                        <VisibleIcon />
+                                        <VisibleIcon color="primary" />
                                     </ListItemIcon>
                                     <ListItemText primary="WATCHER" />
                                 </ListItem>
                                 <ListItem button onClick={handleDrawerOpen(1)} >
                                     <ListItemIcon>
-                                        <StorageIcon />
+                                        <StorageIcon color="primary" />
                                     </ListItemIcon>
                                     <ListItemText primary="NODES" />
                                 </ListItem>

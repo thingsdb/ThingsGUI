@@ -15,7 +15,7 @@ const TitlePage = ({preTitle, title, content}) => {
                         <Typography variant="body1" >
                             {preTitle}
                         </Typography>
-                        <Typography variant="h4" color='primary'>
+                        <Typography variant="h4">
                             {title}
                         </Typography>
                     </CardContent>

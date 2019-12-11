@@ -4,6 +4,7 @@ import AddBool from './AddBool';
 import AddClosure from './AddClosure';
 import AddError from './AddError';
 import AddRegex from './AddRegex';
+import AddThing from './AddThing';
 import ArrayLayout from './ArrayLayout';
 import AutoSelect from './AutoSelect';
 import Buttons from './Buttons';
@@ -105,6 +106,7 @@ export {
     AddClosure,
     AddError,
     AddRegex,
+    AddThing,
     ArrayLayout,
     AutoSelect,
     Buttons,

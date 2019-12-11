@@ -76,7 +76,7 @@ const TopBar = ({additionals, user}) => {
                                 </ListItem>
                                 <ListItem button onClick={handleClickLogout}>
                                     <ListItemIcon>
-                                        <ExitToAppIcon />
+                                        <ExitToAppIcon color="primary" />
                                     </ListItemIcon>
                                     <ListItemText primary="Logout" />
                                 </ListItem>

@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { element } from 'prop-types';
 
 import Language from './Language.js';
 import * as monaco from 'monaco-editor';
@@ -101,28 +101,18 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             [/"/, 'string', '@string_double'],
             [/'/, 'string', '@string_single'],
         ],
-
-        whitespace: [
-            [/[ \t\r\n]+/, 'white'],
-            // [/\/\*\*(?!\/)/, 'comment.doc', '@jsdoc'],
-            // [/\/\*/, 'comment', '@comment'],
-            [/\/\/.*$/, 'comment'],
-        ],
-
         comment: [
             [/[^\/*]+/, 'comment' ],
             [/\/\*/,    'comment', '@push' ],    // nested comment
-            [/\*\//,    'comment', '@pop'  ],
+            ["\\*/",    'comment', '@pop'  ],
             [/[\/*]/,   'comment' ]
         ],
 
-
-        // comment: [
-        //     [/\/\/.*$/, 'comment'],
-        //     [/[^\/*]+/, 'comment'],
-        //     [/\*\//, 'comment', '@pop'],
-        //     [/[\/*]/, 'comment']
-        // ],
+        whitespace: [
+            [/[ \t\r\n]+/, 'white'],
+            [/\/\*/,       'comment', '@comment' ],
+            [/\/\/.*$/,    'comment'],
+        ],
 
         // We match regular expression quite precisely
         regexp: [
@@ -227,8 +217,9 @@ const theme = {
         { token: 'identifier', foreground: '4c7fbb', fontStyle: 'bold' },
         { token: 'number', foreground: 'd2a800' },
         { token: 'string', foreground: 'e26d14' },
-        { token: 'keyword', foreground: 'b064bd'},
-        { token: 'comment', foreground: '608b4e'},
+        { token: 'keyword', foreground: 'b064bd' },
+        { token: 'comment', foreground: '608b4e' },
+        { token: 'whitespace', foreground: '608b4e' },
     ],
     colors: {
         'editor.foreground': '#0000002e',
@@ -250,6 +241,7 @@ class QueryInput extends React.Component {
 
     constructor(props) {
         super(props);
+        this.ele = React.createRef();
     }
 
     componentDidMount() {
@@ -257,7 +249,7 @@ class QueryInput extends React.Component {
         const model = monaco.editor.createModel(input, 'mySpecialLanguage');
         monaco.editor.defineTheme('myTheme', theme);
         this._editor = monaco.editor.create(this.ele, {
-            // automaticLayout: true, This will make it that the editor installs a timer and checks every 100ms if its container has changed its size... https://github.com/microsoft/monaco-editor/issues/543
+            automaticLayout: true, //This will make it that the editor installs a timer and checks every 100ms if its container has changed its size... https://github.com/microsoft/monaco-editor/issues/543
             theme: 'myTheme',
             language: 'mySpecialLanguage',
             minimap: {
@@ -297,7 +289,6 @@ class QueryInput extends React.Component {
                     },
                 ]
             );
-
         }
     }
 

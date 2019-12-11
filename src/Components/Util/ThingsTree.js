@@ -53,7 +53,7 @@ const ThingsTree = ({item, tree, child, root}) => {
     const val = thingValue(type, thing);
 
     // buttons
-    const canToggle = (type === 'thing' && Object.keys(thing).length>1) || type === 'object' || type === 'array' || type === 'closure' || type === 'regex'|| type === 'error';
+    const canToggle = (type === 'thing' && Object.keys(thing).length>1) || type === 'object' || (type === 'array' && thing.length>0) || type === 'closure' || type === 'regex'|| type === 'error';
 
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} />

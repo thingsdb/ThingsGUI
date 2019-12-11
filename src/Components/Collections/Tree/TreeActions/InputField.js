@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-import {Add1DArray, AddBlob, AddBool, AddClosure, AddError, AddRegex, onlyNums} from '../../../Util';
+import {Add1DArray, AddBlob, AddBool, AddClosure, AddError, AddRegex, AddThing, onlyNums} from '../../../Util';
 
 
 const InputField = ({dataType, cb, name, input, ...props}) => {
@@ -28,10 +28,10 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
         setError(err);
     };
 
-    const handleArrayItems = (items) => {
-        const value = `${items}`;
-        cb(value);
-    };
+    // const handleArrayItems = (items) => {
+    //     const value = `${items}`;
+    //     cb(value);
+    // };
 
     const handleRegex = (r) => {
         cb(`/${r}/`);
@@ -44,8 +44,9 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
     let content;
     switch(true) {
     case dataType[0]=='[':
+    case dataType[0]=='{':
         content = (
-            <Add1DArray cb={handleArrayItems} type={dataType.slice(1, -1)} />
+            <Add1DArray cb={handleVal} type={dataType.slice(1, -1)} />
         );
         break;
     case dataType.includes('str'):
@@ -89,8 +90,22 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
         );
         break;
     case dataType.includes('thing'):
+        content = (
+            <AddThing cb={handleVal} />
+            // <TextField
+            //     name={name}
+            //     label={name}
+            //     type="text"
+            //     value={'{ }'}
+            //     spellCheck={false}
+            //     fullWidth
+            //     onChange={handleOnChange}
+            // />
+        );
+        break;
     case dataType.includes('set'):
         content = (
+            // <AddThing cb={handleVal} type={dataType} />
             <TextField
                 name={name}
                 label={name}
@@ -99,6 +114,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
                 spellCheck={false}
                 fullWidth
                 onChange={handleOnChange}
+                {...props}
             />
         );
         break;
@@ -109,7 +125,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
         break;
     case dataType.includes('list'):
         content = (
-            <Add1DArray cb={handleArrayItems} />
+            <Add1DArray cb={handleVal} />
         );
         break;
     case dataType.includes('closure'):
