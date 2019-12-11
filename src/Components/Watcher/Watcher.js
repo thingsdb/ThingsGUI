@@ -32,6 +32,7 @@ const useStyles = makeStyles(theme => ({
     card: {
         backgroundColor: '#141719',
         padding: theme.spacing(2),
+        overflowX: 'auto',
     },
     tabs: {
         marginBottom: theme.spacing(2),
@@ -100,18 +101,7 @@ const Watcher = ({watchIds, watchThings, collections}) => {
         );
     };
 
-    console.log(watchIds);
-
-    // const replacer = (key, value) => {
-    //     if (typeof value === 'string') {
-
-    //         value = value.replace(/"http:\/\/.*download\/tmp\/thingsdb-cache-.*"/gi, '<blob data>');
-    //         console.log(value);
-    //         value = value.length>100 ? value.slice(0, 100)+'...': value;
-    //         console.log(value);
-    //     }
-    //     return value;
-    // };
+    const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
 
     return (
         <Grid container spacing={2}>
@@ -186,7 +176,7 @@ const Watcher = ({watchIds, watchThings, collections}) => {
                                     }
                                     {tabIndex === 1 &&
                                         <pre>
-                                            { JSON.stringify(v, null, 4).replace(/"http:\/\/.*download\/tmp\/thingsdb-cache-.*"/gi, '<blob data>')}
+                                            { JSON.stringify(v, replacer, 4)}
                                         </pre>
                                     }
                                 </Grid>

@@ -20,7 +20,7 @@ const Info = ({header, content}) => {
             {header.map((h) => (
                 <React.Fragment key={h.ky}>
                     <Grid item xs={12} className={classes.grid}>
-                        <Typography variant="subtitle2" color="primary">
+                        <Typography variant="subtitle2">
                             {h.title + ':'}
                         </Typography>
                         <Divider />

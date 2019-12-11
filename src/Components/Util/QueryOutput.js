@@ -13,6 +13,8 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#141719',
         //minHeight: 'calc(100vh - 60vh)',
         padding: theme.spacing(2),
+        overflowX: 'auto',
+
     },
     tabs: {
         marginBottom: theme.spacing(2),
@@ -27,7 +29,9 @@ const QueryOutput = ({output}) => {
         setTabIndex(newValue);
     };
 
-    const jsonOutput = JSON.stringify(output, (k, v) => v.replace(/"http:\/\/.*download\/tmp\/thingsdb-cache-.*"/gi, '<blob data>'), 4);
+    // if (value.search(/"http:\/\/.*download\/tmp\/thingsdb-cache-.*"/gi)!=-1)
+    const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
+    const jsonOutput = JSON.stringify(output, replacer, 4);
 
     return (
         <Paper className={classes.card} >

@@ -18,21 +18,11 @@ const withStores = withVlow([{
 }]);
 
 const useStyles = makeStyles(theme => ({
-    info: {
+    overflow: {
         marginTop: theme.spacing(2),
         overflowY: 'auto',
-        maxHeight: '450px',
+        maxHeight: '400px',
     },
-    counters: {
-        marginTop: theme.spacing(2),
-        overflowY: 'auto',
-        maxHeight: '450px',
-    },
-    backup: {
-        marginTop: theme.spacing(2),
-        overflowY: 'auto',
-        maxHeight: '450px',
-    }
 }));
 
 const Node = ({selectedNode, node, counters, backups}) => {
@@ -70,11 +60,10 @@ const Node = ({selectedNode, node, counters, backups}) => {
             </Tabs>
             {tabIndex === 0 &&
                 <Grid
-                    className={classes.info}
                     container
                     spacing={3}
                 >
-                    <Grid item xs={12}>
+                    <Grid item xs={12} className={classes.overflow}>
                         <NodeInfo node={node} />
                     </Grid>
                     {offline ? null : (
@@ -91,11 +80,10 @@ const Node = ({selectedNode, node, counters, backups}) => {
             }
             {tabIndex === 1 &&
                 <Grid
-                    className={classes.counters}
                     container
                     spacing={3}
                 >
-                    <Grid item xs={12}>
+                    <Grid item xs={12} className={classes.overflow}>
                         <Counters counters={counters} />
                     </Grid>
                     {offline ? null : (
@@ -107,11 +95,10 @@ const Node = ({selectedNode, node, counters, backups}) => {
             }
             {tabIndex === 2 &&
                 <Grid
-                    className={classes.backup}
                     container
                     spacing={3}
                 >
-                    <Grid item xs={12}>
+                    <Grid item xs={12} className={classes.overflow}>
                         <Backup nodeId={selectedNode.node_id} backups={backups} />
                     </Grid>
                     {offline ? null : (
