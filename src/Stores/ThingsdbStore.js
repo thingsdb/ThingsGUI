@@ -349,7 +349,6 @@ class ThingsdbStore extends BaseStore {
         });
     }
 
-
     onDelExpired(tag){
         const query = 'del_expired(); users_info();';
         this.emit('query', {

@@ -14,6 +14,7 @@ import {DownloadBlob, ErrorMsg, SimpleModal} from '../../../Util';
 
 const tag = '8';
 
+
 const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
     const [customTypes, setCustomTypes] = React.useState({});
 
@@ -23,7 +24,8 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
 
     const dataTypes = [
         'str',
-        'number',
+        'int',
+        'float',
         'bool',
         'bytes',
         'closure',

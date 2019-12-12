@@ -41,20 +41,11 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
 
     const createSetInput = (name, type, customTypes, val) => `set(${val==''? '{}': createArrayInput(name, type, customTypes, val)})`;
 
-    // //TODO add raw and bytes
-    // const setTypeInput = (name, type, customTypes, v) =>
-    //     type[0]=='['? createArrayInput(name, type, customTypes, v)
-    //         : type[0]=='{'? createSetInput(name, type, customTypes, v)
-    //             : type.includes('str') || type.includes('utf8') || type.includes('raw') ? `'${v}'`
-    //                 : type.includes('thing') || type.includes('number') || type.includes('int') || type.includes('uint') || type.includes('float') || type.includes('bool') ? `${v}`
-    //                     : '';
-
     //TODO add raw and bytes
     const setTypeInput = (name, type, customTypes, v) =>
         type[0]=='['? createArrayInput(name, type, customTypes, v)
             : type[0]=='{'? createSetInput(name, type, customTypes, v)
-                : type.includes('str') || type.includes('utf8') || type.includes('raw') ? `'${v}'`
-                    : `${v}`;
+                : `${v}`;
 
     const mapTypeInput = (v, customTypes) => v.map(({name, type, val}) => `${name}: ${customTypeInput(name, type, customTypes, val)}`);
 
@@ -66,11 +57,9 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
 
     // TODO add raw
     const standardInput = (childVal, childType) => {
-        return childType == 'str' || childType == 'utf8' || childType == 'raw' ? `'${childVal}'`
-            : childType == 'set' ? 'set({})'
-                : childType == 'nil' ? 'nil'
-                    : childType == 'bytes' ? 'blob'
-                        : `${childVal}`;
+        return childType == 'nil' ? 'nil'
+            : childType == 'bytes' ? 'blob'
+                : `${childVal}`;
     };
 
     const buildQueryAdd = (parentId, parentName, parentType, childName, childIndex, value) => {

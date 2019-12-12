@@ -3,7 +3,10 @@ import AddBlob from './AddBlob';
 import AddBool from './AddBool';
 import AddClosure from './AddClosure';
 import AddError from './AddError';
+import AddFloat from './AddFloat';
+import AddInt from './AddInt';
 import AddRegex from './AddRegex';
+import AddStr from './AddStr';
 import AddThing from './AddThing';
 import ArrayLayout from './ArrayLayout';
 import AutoSelect from './AutoSelect';
@@ -69,8 +72,6 @@ const thingValue = (type, thing) => {
                         : '';
 };
 
-const onlyNums = (str) => str.length == str.replace(/[^0-9.,]/g, '').length;
-
 const isObjectEmpty = (obj) => Object.entries(obj).length === 0 && obj.constructor === Object;
 const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
 
@@ -105,7 +106,10 @@ export {
     AddBool,
     AddClosure,
     AddError,
+    AddFloat,
+    AddInt,
     AddRegex,
+    AddStr,
     AddThing,
     ArrayLayout,
     AutoSelect,
@@ -123,7 +127,6 @@ export {
     Info,
     isObjectEmpty,
     Menu,
-    onlyNums,
     getScopes,
     getScopes2,
     ServerError,

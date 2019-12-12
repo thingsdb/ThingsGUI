@@ -5,20 +5,12 @@ import Fab from '@material-ui/core/Fab';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 import InputField from '../Collections/Tree/TreeActions/InputField';
 
 const useStyles = makeStyles(theme => ({
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        borderLeft: `3px solid ${theme.palette.primary.main}`,
-        borderRight: `3px solid ${theme.palette.primary.main}`,
-        borderRadius: '20px',
-        padding: theme.spacing(2),
-        margin: theme.spacing(2),
-    },
     chip: {
         padding: theme.spacing(1),
         margin: theme.spacing(1),
@@ -31,7 +23,6 @@ const dataTypes = [ // Do not put array first; causes infinite loop
     'number',
     'bool',
     'int',
-    'uint',
     'float',
     // 'bytes',
     'closure',
@@ -69,13 +60,8 @@ const Add1DArray = ({cb, type}) => {
     };
 
     const typeControls = (type, input) => {
-        return type === 'list' ? `[${input}]`
-            : type === 'thing' ? `{${input}}`
-                : type === 'set' ? 'set({})'
-                    : type === 'str' ? `'${input}'`
-                        : type === 'number' || type === 'bool' || type=='int' || type=='uint' || type=='float' || type === 'bytes' || type === 'closure' || type === 'regex' ||  type === 'error'  ? `${input}`
-                            : type === 'nil' ? 'nil'
-                                : '';
+        return type === 'nil' ? 'nil'
+            : `${input}`;
     };
 
     const handleAdd = () => {
@@ -113,47 +99,57 @@ const Add1DArray = ({cb, type}) => {
     };
 
     return (
-        <div className={classes.container} >
-            <Grid container spacing={1} >
-                <Grid item xs={12}>
+        <Grid container spacing={1} >
+            <Grid container spacing={1} item xs={12}>
+                <Grid item xs={1} container justify="flex-start">
+                    <Typography variant="h3" color="primary">
+                        {'['}
+                    </Typography>
+                </Grid>
+                <Grid item xs={10} container >
                     {makeAddedList()}
                 </Grid>
-                <Grid container item xs={12} spacing={1} alignItems="center" >
-                    <Grid item>
-                        <TextField
-                            id="dataType"
-                            type="text"
-                            name="dataType"
-                            onChange={handleChange}
-                            value={dataType}
-                            variant="outlined"
-                            select
-                            SelectProps={{native: true}}
-                        >
-                            {dataTypes.map((p) => (
-                                <option key={p} value={p} disabled={type==''?false:p!=type}>
-                                    {p}
-                                </option>
-                            ))}
-                        </TextField>
-                    </Grid>
-                    <Grid item>
-                        <InputField
-                            dataType={dataType}
-                            cb={handleInputField}
-                            name=""
-                            input={contentAdd}
-                            variant="outlined"
-                        />
-                    </Grid>
-                    <Grid item>
-                        <Fab color="primary" onClick={handleAdd} size="small">
-                            <AddIcon fontSize="small" />
-                        </Fab>
-                    </Grid>
+                <Grid item xs={1} container justify="flex-end">
+                    <Typography variant="h3" color="primary">
+                        {']'}
+                    </Typography>
                 </Grid>
             </Grid>
-        </div>
+            <Grid container item xs={12} spacing={1} alignItems="flex-start" >
+                <Grid item xs={2}>
+                    <TextField
+                        id="dataType"
+                        type="text"
+                        name="dataType"
+                        onChange={handleChange}
+                        value={dataType}
+                        variant="outlined"
+                        select
+                        SelectProps={{native: true}}
+                    >
+                        {dataTypes.map((p) => (
+                            <option key={p} value={p} disabled={type==''?false:p!=type}>
+                                {p}
+                            </option>
+                        ))}
+                    </TextField>
+                </Grid>
+                <Grid item xs={9}>
+                    <InputField
+                        dataType={dataType}
+                        cb={handleInputField}
+                        name=""
+                        input={contentAdd}
+                        variant="outlined"
+                    />
+                </Grid>
+                <Grid item xs={1}>
+                    <Fab color="primary" onClick={handleAdd} size="small">
+                        <AddIcon fontSize="small" />
+                    </Fab>
+                </Grid>
+            </Grid>
+        </Grid>
     );
 };
 

@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
                 outline: '1px solid slategrey'
             }
         },
-    }
+    },
 }));
 
 
@@ -66,6 +66,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     const handleOnChangeType = ({target}) => {
         const {value} = target;
+        setValue('');
+        setCustom({});
         setDataType(value);
     };
 
@@ -88,12 +90,9 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         });
     };
 
-
     const addNewProperty = Boolean(child.id);
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set';
     const isCustomType = customTypes.hasOwnProperty(dataType);
-
-    console.log(custom);
 
     return(
         <React.Fragment>

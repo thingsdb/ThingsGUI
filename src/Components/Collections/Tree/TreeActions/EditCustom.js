@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+
 const EditCustom = ({cb, customTypes, name, type}) => {
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);

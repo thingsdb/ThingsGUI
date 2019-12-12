@@ -21,7 +21,6 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-
 const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
     const classes = useStyles();
     const [val, setVal] = React.useState([]);
@@ -152,7 +151,6 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
                         <ListItem className={classes.listItem}>
                             <ListItemText
                                 primary={k}
-                                secondary={v}
                                 color="primary"
                                 primaryTypographyProps={{color:'primary'}}
                                 className={classes.listItem}

@@ -1,149 +1,72 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
 
-import {Add1DArray, AddBlob, AddBool, AddClosure, AddError, AddRegex, AddThing, onlyNums} from '../../../Util';
+import {Add1DArray, AddBlob, AddBool, AddClosure, AddError, AddFloat, AddInt, AddRegex, AddStr, AddThing} from '../../../Util';
 
 
 const InputField = ({dataType, cb, name, input, ...props}) => {
-    const [error, setError] = React.useState('');
-    const errorTxt = (value) => {
-        const bool = value.length>0;
-        let errText = bool?'':'is required';
-        switch (dataType) {
-        case 'number':
-            if (bool) {
-                errText = onlyNums(value) ? '' : 'only numbers';
-            }
-            return(errText);
-        default:
-            return '';
-        }
-    };
-
-    const handleOnChange = ({target}) => {
-        const {value} = target;
-        cb(value);
-        const err = errorTxt(value);
-        setError(err);
-    };
-
-    // const handleArrayItems = (items) => {
-    //     const value = `${items}`;
-    //     cb(value);
-    // };
-
-    const handleRegex = (r) => {
-        cb(`/${r}/`);
-    };
 
     const handleVal = (v) => {
         cb(v);
     };
 
+    const handleSet = (s) => {
+        cb(`set(${s})`);
+    };
+
     let content;
-    switch(true) {
-    case dataType[0]=='[':
-    case dataType[0]=='{':
+    switch(dataType) {
+    case 'str':
         content = (
-            <Add1DArray cb={handleVal} type={dataType.slice(1, -1)} />
+            <AddStr input={input.trim().slice(1, -1)} cb={handleVal} {...props} />
         );
         break;
-    case dataType.includes('str'):
+    case 'int':
         content = (
-            <TextField
-                name={name}
-                label={name}
-                type="text"
-                value={input}
-                spellCheck={false}
-                onChange={handleOnChange}
-                fullWidth
-                multiline
-                rowsMax={10}
-                helperText={error}
-                error={Boolean(error)}
-                {...props}
-            />
+            <AddInt input={input} cb={handleVal} {...props} />
         );
         break;
-    case dataType.includes('number'):
-    case dataType.includes('int'):
-    case dataType.includes('uint'):
-    case dataType.includes('float'):
-    case dataType.includes('utf8'):
-    case dataType.includes('raw'):
+    case 'float':
         content = (
-            <TextField
-                name={name}
-                label={name}
-                type="text"
-                value={input}
-                spellCheck={false}
-                onChange={handleOnChange}
-                fullWidth
-                helperText={error}
-                error={Boolean(error)}
-                placeholder={dataType=='closure'?'example): |x,y| x+y':''}
-                {...props}
-            />
+            <AddFloat input={input} cb={handleVal} {...props} />
         );
         break;
-    case dataType.includes('thing'):
+    case 'thing':
         content = (
             <AddThing cb={handleVal} />
-            // <TextField
-            //     name={name}
-            //     label={name}
-            //     type="text"
-            //     value={'{ }'}
-            //     spellCheck={false}
-            //     fullWidth
-            //     onChange={handleOnChange}
-            // />
         );
         break;
-    case dataType.includes('set'):
+    case 'set':
         content = (
-            // <AddThing cb={handleVal} type={dataType} />
-            <TextField
-                name={name}
-                label={name}
-                type="text"
-                value={'{ }'}
-                spellCheck={false}
-                fullWidth
-                onChange={handleOnChange}
-                {...props}
-            />
+            <Add1DArray cb={handleSet} type="thing" />
         );
         break;
-    case dataType.includes('bool'):
+    case 'bool':
         content = (
             <AddBool input={`${input}`} cb={handleVal} />
         );
         break;
-    case dataType.includes('list'):
+    case 'list':
         content = (
-            <Add1DArray cb={handleVal} />
+            <Add1DArray cb={handleVal} {...props} />
         );
         break;
-    case dataType.includes('closure'):
+    case 'closure':
         content = (
             <AddClosure input={input} cb={handleVal} />
         );
         break;
-    case dataType.includes('regex'):
+    case 'regex':
         content = (
-            <AddRegex input={input.trim().slice(1, -1)} cb={handleRegex} />
+            <AddRegex input={input.trim().slice(1, -1)} cb={handleVal} />
         );
         break;
-    case dataType.includes('error'):
+    case 'error':
         content = (
             <AddError input={input} cb={handleVal} />
         );
         break;
-    case dataType.includes('bytes'):
+    case 'bytes':
         content = (
             <AddBlob cb={handleVal} />
         );
