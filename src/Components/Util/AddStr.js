@@ -6,7 +6,7 @@ const AddStr = ({input, cb, ...props}) => {
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        cb(`'${value}'`);
+        cb(value);
     };
 
     return(

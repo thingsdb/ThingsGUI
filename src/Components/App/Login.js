@@ -1,18 +1,22 @@
-import React from 'react';
+import {withVlow} from 'vlow';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import React from 'react';
 import Switch from '@material-ui/core/Switch';
-import {withVlow} from 'vlow';
+import TextField from '@material-ui/core/TextField';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { ErrorMsg } from '../Util';
 import {ApplicationStore, ApplicationActions} from '../../Stores';
@@ -29,18 +33,20 @@ const initialState = {
     showPassword: false,
     showToken: false,
     errors: {},
-    switches: false, //siwtches instead of switch (reserved word)
+    loginWith: 'credentials',
     form: {
-        host: 'localhost:9200',
+        address: 'localhost:9200',
         user: '',
         password: '',
         token: '',
+        secureConnection: false,
+        insecureSkipVerify: false,
     },
 
 };
 
 const validation = {
-    host: (o) => o.host.length>0,
+    address: (o) => o.address.length>0,
     user: (o) => o.token.length==0 ? o.user.length>0 : true,
     password: (o) => o.token.length==0 ? o.password.length>0 : true,
     token: (o) => o.password.length==0 ? o.token.length>0 : true,
@@ -50,7 +56,7 @@ const tag = '0';
 
 const Login = ({loaded, connected}) => {
     const [state, setState] = React.useState(initialState);
-    const {showPassword, showToken, errors, switches, form} = state;
+    const {showPassword, showToken, errors, loginWith, form} = state;
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -83,20 +89,27 @@ const Login = ({loaded, connected}) => {
         setState({...state, showToken: !showToken});
     };
 
-    const handleSwitch = ({target}) => {
-        const {checked} = target;
-        if (checked) {
+    const handleLoginWith = ({target}) => {
+        const {value} = target;
+        if (value=='credentials') {
             setState(prevState => {
                 const updatedForm = Object.assign({}, prevState.form, {user: '', password: ''});
-                return {...prevState, form: updatedForm, switches: checked, errors: {}};
+                return {...prevState, form: updatedForm, loginWith: value, errors: {}};
             });
         } else {
             setState(prevState => {
                 const updatedForm = Object.assign({}, prevState.form, {token: ''});
-                return {...prevState, form: updatedForm, switches: checked, errors: {}};
+                return {...prevState, form: updatedForm, loginWith: value, errors: {}};
             });
         }
+    };
 
+    const handleSwitchSSL = ({target}) => {
+        const {id, checked} = target;
+        setState(prevState => {
+            const updatedForm = Object.assign({}, prevState.form, {[id]: checked});
+            return {...prevState, form: updatedForm};
+        });
     };
 
 
@@ -114,19 +127,35 @@ const Login = ({loaded, connected}) => {
             </DialogTitle>
             <DialogContent>
                 <ErrorMsg tag={tag} />
+                <FormControl margin="none" size="small" fullWidth>
+                    <RadioGroup aria-label="position" name="position" value={loginWith} onChange={handleLoginWith} row>
+                        <FormControlLabel
+                            value="credentials"
+                            control={<Radio color="primary" />}
+                            label="with credentials"
+                            labelPlacement="end"
+                        />
+                        <FormControlLabel
+                            value="token"
+                            control={<Radio color="primary" />}
+                            label="with token"
+                            labelPlacement="end"
+                        />
+                    </RadioGroup>
+                </FormControl>
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="host"
-                    label="Host"
+                    id="address"
+                    label="Socket Address"
                     type="text"
-                    value={form.host}
+                    value={form.address}
                     spellCheck={false}
                     onChange={handleOnChange}
                     fullWidth
-                    error={errors.host}
+                    error={errors.address}
                 />
-                <Collapse in={!switches} timeout="auto" unmountOnExit>
+                <Collapse in={loginWith=='credentials'} timeout="auto" unmountOnExit>
                     <TextField
                         margin="dense"
                         id="user"
@@ -159,18 +188,7 @@ const Login = ({loaded, connected}) => {
                         }}
                     />
                 </Collapse>
-                <FormControlLabel
-                    control={(
-                        <Switch
-                            checked={switches}
-                            color="primary"
-                            id="swicthToken"
-                            onChange={handleSwitch}
-                        />
-                    )}
-                    label="Use token"
-                />
-                <Collapse in={switches} timeout="auto" unmountOnExit>
+                <Collapse in={loginWith=='token'} timeout="auto" unmountOnExit>
                     <TextField
                         margin="dense"
                         id="token"
@@ -190,6 +208,30 @@ const Login = ({loaded, connected}) => {
                                 </InputAdornment>
                             ),
                         }}
+                    />
+                </Collapse>
+                <FormControlLabel
+                    control={(
+                        <Switch
+                            checked={form.secureConnection}
+                            color="primary"
+                            id="secureConnection"
+                            onChange={handleSwitchSSL}
+                        />
+                    )}
+                    label="Secure connection (TLS)"
+                />
+                <Collapse in={form.secureConnection} component="span" timeout="auto" unmountOnExit>
+                    <FormControlLabel
+                        control={(
+                            <Switch
+                                checked={form.insecureSkipVerify}
+                                color="primary"
+                                id="insecureSkipVerify"
+                                onChange={handleSwitchSSL}
+                            />
+                        )}
+                        label="Allow insecure certificates"
                     />
                 </Collapse>
             </DialogContent>

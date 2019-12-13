@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -16,6 +17,7 @@ type Client struct {
 	EventCh    chan *things.Event
 	LogCh      chan string
 	TmpFiles   *util.TmpFiles
+	Ssl        *tls.Config
 }
 
 type LoginResp struct {
@@ -24,8 +26,17 @@ type LoginResp struct {
 	ConnErr   error
 }
 
-func connect(client *Client, address string, user string, password string, token string) LoginResp {
-	hp := strings.Split(address, ":")
+type LoginData struct {
+	Address            string `json:"address"`
+	User               string `json:"user"`
+	Password           string `json:"password"`
+	Token              string `json:"token"`
+	SecureConnection   bool   `json:"secureConnection"`
+	InsecureSkipVerify bool   `json:"insecureSkipVerify"`
+}
+
+func connect(client *Client, data LoginData) LoginResp {
+	hp := strings.Split(data.Address, ":")
 	if len(hp) != 2 {
 		return LoginResp{Connected: false, ConnErr: fmt.Errorf("invalid address")}
 	}
@@ -35,7 +46,13 @@ func connect(client *Client, address string, user string, password string, token
 	}
 	host := hp[0]
 
-	client.Connection = things.NewConn(host, uint16(port))
+	client.Ssl = nil // if ssl not supported, this will reset the ssl prop
+	if data.SecureConnection {
+		client.Ssl = &tls.Config{}
+		client.Ssl.InsecureSkipVerify = data.InsecureSkipVerify
+	}
+
+	client.Connection = things.NewConn(host, uint16(port), client.Ssl)
 	client.Connection.EventCh = client.EventCh
 	client.Connection.LogCh = client.LogCh
 	client.Connection.OnClose = func() {
@@ -50,13 +67,13 @@ func connect(client *Client, address string, user string, password string, token
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 	}
-	if token == "" {
-		err := client.Connection.AuthPassword(user, password)
+	if data.Token == "" {
+		err := client.Connection.AuthPassword(data.User, data.Password)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 	} else {
-		err := client.Connection.AuthToken(token)
+		err := client.Connection.AuthToken(data.Token)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
@@ -78,15 +95,13 @@ func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
 	return message.Status, resp, message
 }
 
-func Connect(client *Client, data map[string]string) (int, LoginResp, util.Message) {
+func Connect(client *Client, data LoginData) (int, LoginResp, util.Message) {
 	var resp LoginResp
 	var message util.Message
 	resp = connect(
 		client,
-		data["host"],
-		data["user"],
-		data["password"],
-		data["token"])
+		data,
+	)
 
 	if resp.Connected {
 		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}

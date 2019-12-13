@@ -67,6 +67,7 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, expand, tag}) => {
                                 key={index}
                                 disableFocusListener
                                 disableTouchListener
+                                disableHoverListener={Boolean(!(listitem.doc||listitem.definition))}
                                 classes={{ tooltip: classes.customWidth }}
                                 title={
                                     <Typography variant="caption">

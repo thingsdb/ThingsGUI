@@ -64,7 +64,7 @@ func (app *App) SocketRouter() {
 		return handlers.Connected(app.client[s.ID()].Connection)
 	})
 
-	app.server.OnEvent("/", "conn", func(s socketio.Conn, data map[string]string) (int, handlers.LoginResp, util.Message) {
+	app.server.OnEvent("/", "conn", func(s socketio.Conn, data handlers.LoginData) (int, handlers.LoginResp, util.Message) {
 		return handlers.Connect(app.client[s.ID()], data)
 	})
 

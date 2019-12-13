@@ -45,7 +45,8 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
     const setTypeInput = (name, type, customTypes, v) =>
         type[0]=='['? createArrayInput(name, type, customTypes, v)
             : type[0]=='{'? createSetInput(name, type, customTypes, v)
-                : `${v}`;
+                : type=='str' || type=='utf8' || type=='raw' ? `'${v}'`
+                    : `${v}`;
 
     const mapTypeInput = (v, customTypes) => v.map(({name, type, val}) => `${name}: ${customTypeInput(name, type, customTypes, val)}`);
 
@@ -57,8 +58,9 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
 
     // TODO add raw
     const standardInput = (childVal, childType) => {
-        return childType == 'nil' ? 'nil'
-            : childType == 'bytes' ? 'blob'
+        return childType == 'str' ? `'${childVal}'`
+            : childType == 'nil' ? 'nil'
+                // : childType == 'bytes' ? 'blob'
                 : `${childVal}`;
     };
 

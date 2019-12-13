@@ -7,8 +7,10 @@ import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -198,9 +200,14 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
                             </Collapse>
                             <Collapse in={overview||del} timeout="auto" unmountOnExit>
                                 <ListItem>
-                                    <Typography variant="body1" >
-                                        {'Current properties:'}
-                                    </Typography>
+                                    <ListItemText
+                                        primary="Current properties:"
+                                        secondary={
+                                            <Link href="https://docs.thingsdb.net/v0/data-types/type/">
+                                                {'https://docs.thingsdb.net/v0/data-types/type/'}
+                                            </Link>
+                                        }
+                                    />
                                 </ListItem>
                                 <ListItem>
                                     <TableWithButtons

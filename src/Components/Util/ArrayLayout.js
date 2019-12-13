@@ -12,8 +12,8 @@ const useStyles = makeStyles(theme => ({
         borderLeft: `3px solid ${theme.palette.primary.main}`,
         borderRight: `3px solid ${theme.palette.primary.main}`,
         borderRadius: '20px',
-        padding: theme.spacing(2),
-        margin: theme.spacing(2),
+        padding: theme.spacing(1),
+        margin: theme.spacing(1),
     },
 }));
 

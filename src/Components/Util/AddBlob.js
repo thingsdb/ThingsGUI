@@ -6,15 +6,18 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 
-const AddBlob = ({cb}) => {
+const AddBlob = ({onVal, onBlob}) => {
     const [blob, setBlob] = React.useState('');
     const [fileName, setFileName] = React.useState('');
 
     React.useEffect(() => {
-        cb(blob);
+        onVal(fileName);
+        onBlob({[fileName]: blob});
     },
-    [blob],
+    [blob, fileName],
     );
+
+    console.log(fileName)
 
     const handleDropzone = React.useCallback(acceptedFiles => {
         const reader = new FileReader();
@@ -57,7 +60,8 @@ const AddBlob = ({cb}) => {
 };
 
 AddBlob.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onBlob: PropTypes.func.isRequired,
+    onVal: PropTypes.func.isRequired,
 };
 
 export default AddBlob;

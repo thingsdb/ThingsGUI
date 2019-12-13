@@ -11,10 +11,10 @@ import (
 )
 
 type Data struct {
-	Query string   `json:"query"`
-	Scope string   `json:"scope"`
-	Blob  string   `json:"blob"`
-	Ids   []string `json:"ids"`
+	Query string            `json:"query"`
+	Scope string            `json:"scope"`
+	Blob  map[string]string `json:"blob"`
+	Ids   []string          `json:"ids"`
 }
 
 func query(client *Client, data Data, blob map[string]interface{}, timeout uint16) (int, interface{}, util.Message) {
@@ -41,18 +41,31 @@ func Query(client *Client, data Data, timeout uint16) (int, interface{}, util.Me
 }
 
 func QueryBlob(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
-	decodedBlob, err := base64.StdEncoding.DecodeString(data.Blob)
-	if err != nil {
-		message := util.Message{Text: "Query error", Status: http.StatusInternalServerError, Log: err.Error()}
-		return message.Status, "", message
+	blob := make(map[string]interface{})
+	for k, v := range data.Blob {
+		decodedBlob, err := base64.StdEncoding.DecodeString(v)
+		if err != nil {
+			message := util.Message{Text: "Query error", Status: http.StatusInternalServerError, Log: err.Error()}
+			return message.Status, "", message
+		}
+		blob[k] = decodedBlob
 	}
-
-	blob := map[string]interface{}{
-		"blob": decodedBlob,
-	}
-
 	return query(client, data, blob, timeout)
 }
+
+// func QueryBlob(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
+// 	decodedBlob, err := base64.StdEncoding.DecodeString(data.Blob)
+// 	if err != nil {
+// 		message := util.Message{Text: "Query error", Status: http.StatusInternalServerError, Log: err.Error()}
+// 		return message.Status, "", message
+// 	}
+
+// 	blob := map[string]interface{}{
+// 		"blob": decodedBlob,
+// 	}
+
+// 	return query(client, data, blob, timeout)
+// }
 
 func QueryEditor(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
 	var collectionResp = make(map[string]interface{})

@@ -43,8 +43,9 @@ const dataTypes = [ // Do not put array first; causes infinite loop
     'thing',
 ];
 
-const AddThing = ({cb, type}) => {
+const AddThing = ({onBlob, onVal, type}) => {
     const classes = useStyles();
+    const [blob, setBlob] = React.useState({});
     const [state, setState] = React.useState({
         contentAdd: '',
         dataType: 'str',
@@ -55,7 +56,8 @@ const AddThing = ({cb, type}) => {
 
     const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
-        cb(`{${myItems}}`);
+        onVal(`{${myItems}}`);
+        onBlob(blob);
     },
     [myItems.length],
     );
@@ -96,6 +98,10 @@ const AddThing = ({cb, type}) => {
             newArray.splice(index, 1);
             return newArray;
         });
+    };
+
+    const handleBlob = (b) => {
+        setBlob({...blob, ...b});
     };
 
 
@@ -164,9 +170,10 @@ const AddThing = ({cb, type}) => {
                 <Grid item xs={7}>
                     <InputField
                         dataType={dataType}
-                        cb={handleInputField}
-                        name="Input"
                         input={contentAdd}
+                        name="Input"
+                        onVal={handleInputField}
+                        onBlob={handleBlob}
                         variant="outlined"
                     />
                 </Grid>
@@ -185,7 +192,8 @@ AddThing.defaultProps = {
 };
 
 AddThing.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onBlob: PropTypes.func.isRequired,
+    onVal: PropTypes.func.isRequired,
     type:PropTypes.string
 };
 

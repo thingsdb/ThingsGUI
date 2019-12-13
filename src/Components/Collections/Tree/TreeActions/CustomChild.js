@@ -21,12 +21,15 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
+const CustomChild = ({onVal, onBlob, customTypes, name, type, activeStep, stepId}) => {
     const classes = useStyles();
+    const [blob, setBlob] = React.useState({});
+    const [blobArr, setBlobArr] = React.useState({});
     const [val, setVal] = React.useState([]);
     const [optional, setOptional] = React.useState({});
     React.useEffect(() => {
-        cb({name: name, type: type, val: val});
+        onVal({name: name, type: type, val: val});
+        onBlob(blob);
     },
     [JSON.stringify(val)],
     );
@@ -77,10 +80,25 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
             update.splice(index, 1);
             return update;
         });
+        setBlob(prevBlob => {
+            let copyState = JSON.parse(JSON.stringify(prevBlob));
+            let k = Object.keys(blobArr[k]);
+            k.map(i => delete copyState[i]);
+            return {copyState};
+        });
     };
 
     const handleAddOptional = (k) => () => {
         setOptional({...optional, [k]: false});
+    };
+
+    const handleBlob = (b) => {
+        setBlob({...blob, ...b});
+    };
+
+    const handleBlobArr = (t) => (b) => {
+        setBlobArr({...blobArr, [t]: b});
+        setBlob({...blob, ...b});
     };
 
     const renderThing = (name, type) =>  {
@@ -94,15 +112,16 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
 
             ) : t[0]=='[' || t[0]=='{' ? (
 
-                customTypes[t.slice(1, -1).slice(-1)=='?'?type.slice(1, -1).slice(0, -1):type.slice(1, -1)] ? (
+                customTypes[t.slice(1, -1).slice(-1)=='?'?t.slice(1, -1).slice(0, -1):t.slice(1, -1)] ? (
                     <ArrayLayout
                         child={(i) => (
                             <React.Fragment>
                                 <Typography>
-                                    {type.slice(1, -1)}
+                                    {t.slice(1, -1)}
                                 </Typography>
                                 <CustomChild
-                                    cb={handleChildArray(i, t)}
+                                    onVal={handleChildArray(i, t)}
+                                    onBlob={handleBlobArr(t)}
                                     customTypes={customTypes}
                                     name={name}
                                     type={t.slice(1, -1)}
@@ -116,7 +135,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
                 ) : (
                     <Collapse in={stepId==activeStep} timeout="auto">
                         <ListItem className={classes.listItem}>
-                            <StandardChild name={name} type={t} cb={handleChild} />
+                            <StandardChild name={name} type={t.slice(1, -1)} arrayType={t[0]=='[' ? 'list' : t[0]=='{' ? 'set' : ''} onVal={handleChild} onBlob={handleBlob} />
                         </ListItem>
                     </Collapse>
                 )
@@ -124,7 +143,8 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
             ) : customTypes[t] ? (
 
                 <CustomChild
-                    cb={handleChild}
+                    onVal={handleChild}
+                    onBlob={handleBlob}
                     customTypes={customTypes}
                     name={name}
                     type={t}
@@ -136,7 +156,7 @@ const CustomChild = ({cb, customTypes, name, type, activeStep, stepId}) => {
 
                 <Collapse in={stepId==activeStep} timeout="auto">
                     <ListItem className={classes.listItem}>
-                        <StandardChild name={name} type={t} cb={handleChild} />
+                        <StandardChild name={name} type={t} onVal={handleChild} onBlob={handleBlob} />
                     </ListItem>
                 </Collapse>
             )
@@ -176,7 +196,8 @@ CustomChild.defaultProps = {
     customTypes: null,
 };
 CustomChild.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onBlob: PropTypes.func.isRequired,
+    onVal: PropTypes.func.isRequired,
     customTypes: PropTypes.object,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,

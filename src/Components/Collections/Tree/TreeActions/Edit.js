@@ -41,13 +41,14 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                     : child.type == 'error' ? `err(${thing.error_code}, ${thing.error_msg})`
                         : child.type == 'list' ? ''
                             : thing);
-    const [blob, setBlob] = React.useState('');
+    const [blob, setBlob] = React.useState({});
     const [custom, setCustom] = React.useState({});
     const [queryString, setQueryString] = React.useState('');
     const [error, setError] = React.useState('');
     const [newProperty, setNewProperty] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type);
 
+    console.log(value, dataType, blob);
 
     React.useEffect(() => {
         cb(queryString, blob, error);
@@ -76,11 +77,11 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     };
 
     const handleVal = (v) => {
-        if (dataType=='bytes') {
-            setBlob(v);
-        } else {
-            setValue(v);
-        }
+        setValue(v);
+    };
+
+    const handleBlob = (b) => {
+        setBlob({...blob, ...b});
     };
 
     const handleCustom = (c) => {
@@ -162,11 +163,12 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         name={child.id?newProperty:child.name}
                         type={dataType}
                         customTypes={customTypes}
-                        cb={handleCustom}
+                        onVal={handleCustom}
+                        onBlob={handleBlob}
                     />
                 ) : (
                     <ListItem className={classes.listItem}>
-                        <InputField name="Value" dataType={dataType} cb={handleVal} input={child.type=='error'?thing:value} margin="dense" />
+                        <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" />
                     </ListItem>
                 )}
             </List>

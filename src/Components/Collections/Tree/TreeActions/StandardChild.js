@@ -47,21 +47,23 @@ const typeConv = {
     'utf8': ['str'],
     'raw': ['str', 'bytes'],
     'uint': ['int'],
+    'pint': ['int'],
+    'nint': ['int'],
     'number': ['int', 'float'],
-    '[' : ['list'],
-    '{': ['set'],
     'any': [],
 };
 
-const StandardChild = ({cb, name, type}) => {
+const StandardChild = ({onVal, onBlob, name, type, arrayType}) => {
     const classes = useStyles();
+    const [blob, setBlob] = React.useState({});
     const [val, setVal] = React.useState('');
-    const [dataType, setDataType] = React.useState(dataTypes[0]);
+    const [dataType, setDataType] = React.useState(arrayType||typeConv[type][0]);
 
-    console.log(type, dataType);
+    console.log(type, arrayType);
 
     React.useEffect(() => {
-        cb({name: name, type: type, val: val});
+        onVal({name: name, type: type, val: val});
+        onBlob(blob);
     },
     [val],
     );
@@ -70,15 +72,14 @@ const StandardChild = ({cb, name, type}) => {
         setVal(v);
     };
 
+    const handleBlob = (b) => {
+        setBlob({...blob, ...b});
+    };
+
     const handleChangeType = ({target}) => {
         const {value} = target;
         setDataType(value);
     };
-
-    const disable = (p) => type=='any' ? false
-        : type[0]=='[' || type[0]=='{' ? !typeConv[type[0]].includes(p)
-            : !typeConv[type].includes(p);
-
 
     return(
         <Grid className={classes.container} container item xs={12} spacing={1}>
@@ -96,7 +97,7 @@ const StandardChild = ({cb, name, type}) => {
                     SelectProps={{native: true}}
                 >
                     {dataTypes.map((p) => (
-                        <option key={p} value={p} disabled={disable(p)}>
+                        <option key={p} value={p} disabled={arrayType? !(p==arrayType): type=='any' ? false : !typeConv[type].includes(p)}>
                             {p}
                         </option>
                     ))}
@@ -105,21 +106,27 @@ const StandardChild = ({cb, name, type}) => {
             <Grid item xs={12}>
                 <InputField
                     dataType={dataType}
-                    cb={handleVal}
-                    name="Input"
+                    onVal={handleVal}
+                    onBlob={handleBlob}
                     input={val}
                     variant="outlined"
-                    type={type[0]=='['?type.slice(1, -1):null}
+                    type={arrayType?type:null}
                 />
             </Grid>
         </Grid>
     );
 };
 
+StandardChild.defaultProps = {
+    arrayType: '',
+};
+
 StandardChild.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onBlob: PropTypes.func.isRequired,
+    onVal: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
+    arrayType: PropTypes.string
 };
 
 export default StandardChild;

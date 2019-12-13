@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const EditCustom = ({cb, customTypes, name, type}) => {
+const EditCustom = ({onBlob, onVal, customTypes, name, type}) => {
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
 
@@ -61,7 +61,7 @@ const EditCustom = ({cb, customTypes, name, type}) => {
         <Grid container spacing={1}>
             <Grid item xs={12}>
                 <div className={classes.scroll}>
-                    <CustomChild cb={cb} customTypes={customTypes} name={name} type={type} activeStep={activeStep} stepId={0} />
+                    <CustomChild onBlob={onBlob} onVal={onVal} customTypes={customTypes} name={name} type={type} activeStep={activeStep} stepId={0} />
                 </div>
             </Grid>
             {maxSteps>1 ? (
@@ -94,7 +94,8 @@ EditCustom.defaultProps = {
     customTypes: null,
 };
 EditCustom.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onBlob: PropTypes.func.isRequired,
+    onVal: PropTypes.func.isRequired,
     customTypes: PropTypes.object,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,

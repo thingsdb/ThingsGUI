@@ -40,7 +40,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
 
     const initialState = {
         query: '',
-        blob: '',
+        blob: {},
         error: '',
         show: false,
         setOrList: '',
@@ -53,23 +53,31 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
     React.useEffect(() => {
         TypeActions.getTypes(scope, tag, handleTypes);
 
-        // Checks for the real type. From here on the array is redefined to list or set. And thing is redefined to its potential custom type.
+        // Checks for the real type. From here on array is redefined to list or set. And thing is redefined to its potential custom type.
         // Furthermore we check if the parent has a custom type. In that case we remove the remove button. Custom type instances have no delete options.
 
-        // it would also be nice if we could check for potential custom type childern in an array type. To force the datatype of the edit component to that type.
+        // it would also be nice if we could check for potential custom type childern in an array type. To define the datatype of the edit component.
+        // let query='';
+        // if (parent.id==null) {
+        //     query = `{childType: type(#${child.id}), parentType: ''}`; // check if custom type
+        // } else if (child.type == 'thing' && parent.type == 'thing') {
+        //     query = `{childType: type(#${child.id}), parentType: type(#${parent.id})}`; // check if custom type
+        // } else if (child.type == 'thing') {
+        //     query = `{childType: type(#${child.id}), parentType: type(#${parent.id}.${parent.name})}`; // check if custom type
+        // } else if (parent.type == 'thing') {
+        //     query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id})}`; // check if custom type
+        // } else {
+        //     query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}.${parent.name})}`; // check if custom type
+        // }
+
         let query='';
         if (parent.id==null) {
             query = `{childType: type(#${child.id}), parentType: ''}`; // check if custom type
-        } else if (child.type == 'thing' && parent.type == 'thing') {
-            query = `{childType: type(#${child.id}), parentType: type(#${parent.id})}`; // check if custom type
-        } else if (child.type == 'thing') {
-            query = `{childType: type(#${child.id}), parentType: type(#${parent.id}.${parent.name})}`; // check if custom type
         } else if (parent.type == 'thing') {
             query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id})}`; // check if custom type
         } else {
             query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}.${parent.name})}`; // check if custom type
         }
-
         TypeActions.getType(query, scope, tag, setType);
 
     }, []);
@@ -84,7 +92,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
     };
 
     const handleClickOk = () => {
-        if (blob) {
+        if (Object.keys(blob).length) {
             CollectionActions.blob(
                 scope,
                 query,

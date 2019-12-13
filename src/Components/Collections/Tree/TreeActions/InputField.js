@@ -4,21 +4,25 @@ import React from 'react';
 import {Add1DArray, AddBlob, AddBool, AddClosure, AddError, AddFloat, AddInt, AddRegex, AddStr, AddThing} from '../../../Util';
 
 
-const InputField = ({dataType, cb, name, input, ...props}) => {
+const InputField = ({dataType, onVal, onBlob, input, ...props}) => {
 
     const handleVal = (v) => {
-        cb(v);
+        onVal(v);
+    };
+
+    const handleBlob = (b) => {
+        onBlob(b);
     };
 
     const handleSet = (s) => {
-        cb(`set(${s})`);
+        onVal(`set(${s})`);
     };
 
     let content;
     switch(dataType) {
     case 'str':
         content = (
-            <AddStr input={input.trim().slice(1, -1)} cb={handleVal} {...props} />
+            <AddStr input={input} cb={handleVal} {...props} />
         );
         break;
     case 'int':
@@ -33,12 +37,12 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
         break;
     case 'thing':
         content = (
-            <AddThing cb={handleVal} />
+            <AddThing onBlob={handleBlob} onVal={handleVal} />
         );
         break;
     case 'set':
         content = (
-            <Add1DArray cb={handleSet} type="thing" />
+            <Add1DArray onBlob={handleBlob} onVal={handleSet} type="thing" />
         );
         break;
     case 'bool':
@@ -48,7 +52,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
         break;
     case 'list':
         content = (
-            <Add1DArray cb={handleVal} {...props} />
+            <Add1DArray onBlob={handleBlob} onVal={handleVal} {...props} />
         );
         break;
     case 'closure':
@@ -68,7 +72,7 @@ const InputField = ({dataType, cb, name, input, ...props}) => {
         break;
     case 'bytes':
         content = (
-            <AddBlob cb={handleVal} />
+            <AddBlob onBlob={handleBlob} onVal={handleVal} />
         );
         break;
     default:
@@ -89,8 +93,8 @@ InputField.defaultProps = {
 
 InputField.propTypes = {
     dataType: PropTypes.string.isRequired,
-    cb: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
+    onVal: PropTypes.func.isRequired,
+    onBlob: PropTypes.func.isRequired,
     input: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
 };
 

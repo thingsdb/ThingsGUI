@@ -45,6 +45,7 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
             {hasPropName ? (
                 <Grid item xs={hasInitVal?4:6}>
                     <TextField
+                        autoFocus
                         fullWidth
                         label="Name"
                         name="propertyName"
@@ -58,7 +59,7 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
                 </Grid>
             ):null}
             <Grid item xs={hasInitVal?4:6}>
-                <AutoSelect cb={handleType} dropdownItems={dropdownItems} input={propertyType} label="Type" />
+                <AutoSelect cb={handleType} dropdownItems={dropdownItems} input={propertyType} label="Definition" />
             </Grid>
             {hasInitVal ? (
                 <Grid item xs={4}>
