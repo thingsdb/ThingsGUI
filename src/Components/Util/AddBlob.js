@@ -11,13 +11,17 @@ const AddBlob = ({onVal, onBlob}) => {
     const [fileName, setFileName] = React.useState('');
 
     React.useEffect(() => {
-        onVal(fileName);
-        onBlob({[fileName]: blob});
+        let f = fileName;
+        if (fileName.includes('.')) {
+            f = fileName.split('.')[0];
+        }
+        if (f != '' && blob != '') {
+            onVal(f);
+            onBlob({[f]: blob});
+        }
     },
-    [blob, fileName],
+    [fileName],
     );
-
-    console.log(fileName)
 
     const handleDropzone = React.useCallback(acceptedFiles => {
         const reader = new FileReader();

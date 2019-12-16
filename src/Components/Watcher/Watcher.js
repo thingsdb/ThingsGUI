@@ -2,6 +2,7 @@ import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 import AddIcon from '@material-ui/icons/AddCircleOutline';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
@@ -151,46 +152,48 @@ const Watcher = ({watchIds, watchThings, collections}) => {
                 </Grid>
             </Grid>
             <Grid item xs={12}>
-                <Paper className={classes.card} >
-                    <Tabs className={classes.tabs} value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example">
-                        <Tab label="Tree view" />
-                        <Tab label="JSON view" />
-                    </Tabs>
-                    <List
-                        component="nav"
-                        dense
-                        disablePadding
-                    >
-                        {Object.entries(watchThings).map(([k, v]) => k === '#' ? null : (
-                            <Grid container spacing={2} key={k}>
-                                <Grid item xs={11}>
-                                    {tabIndex === 0 &&
-                                        <ThingsTree
-                                            tree={v}
-                                            child={{
-                                                name:'',
-                                                index:null,
-                                            }}
-                                            root
-                                        />
-                                    }
-                                    {tabIndex === 1 &&
-                                        <pre>
-                                            { JSON.stringify(v, replacer, 4)}
-                                        </pre>
-                                    }
+                <Collapse in={Object.keys(watchThings).length>0} timeout="auto">
+                    <Paper className={classes.card} >
+                        <Tabs className={classes.tabs} value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example">
+                            <Tab label="Tree view" />
+                            <Tab label="JSON view" />
+                        </Tabs>
+                        <List
+                            component="nav"
+                            dense
+                            disablePadding
+                        >
+                            {Object.entries(watchThings).map(([k, v]) => k === '#' ? null : (
+                                <Grid container spacing={2} key={k}>
+                                    <Grid item xs={11}>
+                                        {tabIndex === 0 &&
+                                            <ThingsTree
+                                                tree={v}
+                                                child={{
+                                                    name:'',
+                                                    index:null,
+                                                }}
+                                                root
+                                            />
+                                        }
+                                        {tabIndex === 1 &&
+                                            <pre>
+                                                { JSON.stringify(v, replacer, 4)}
+                                            </pre>
+                                        }
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        <Tooltip disableFocusListener disableTouchListener title="Turn watching off">
+                                            <ButtonBase onClick={handleUnwatch(k)}>
+                                                <RemoveIcon className={classes.red} fontSize="small" />
+                                            </ButtonBase>
+                                        </Tooltip>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={1}>
-                                    <Tooltip disableFocusListener disableTouchListener title="Turn watching off">
-                                        <ButtonBase onClick={handleUnwatch(k)}>
-                                            <RemoveIcon className={classes.red} fontSize="small" />
-                                        </ButtonBase>
-                                    </Tooltip>
-                                </Grid>
-                            </Grid>
-                        ))}
-                    </List>
-                </Paper>
+                            ))}
+                        </List>
+                    </Paper>
+                </Collapse>
             </Grid>
         </Grid>
     );

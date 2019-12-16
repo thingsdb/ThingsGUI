@@ -29,11 +29,10 @@ const useStyles = makeStyles(theme => ({
 
 const dataTypes = [ // Do not put array first; causes infinite loop
     'str',
-    'number',
     'bool',
     'int',
     'float',
-    // 'bytes',
+    'bytes',
     'closure',
     'regex',
     'error',
@@ -45,6 +44,7 @@ const dataTypes = [ // Do not put array first; causes infinite loop
 
 const AddThing = ({onBlob, onVal, type}) => {
     const classes = useStyles();
+    const [preBlob, setPreBlob] = React.useState({});
     const [blob, setBlob] = React.useState({});
     const [state, setState] = React.useState({
         contentAdd: '',
@@ -78,21 +78,27 @@ const AddThing = ({onBlob, onVal, type}) => {
 
     const typeControls = (type, input) => {
         return type === 'nil' ? 'nil'
-            : `${input}`;
+            : type === 'str' ? `'${input}'`
+                : `${input}`;
     };
 
     const handleAdd = () => {
-        // let currentcontent = contentAdd.trim();
         const contentTypeChecked = typeControls(dataType, `${property}: ${contentAdd}`);
         setMyItems(prevItems => {
             const newArray = [...prevItems];
             newArray.push(contentTypeChecked);
             return newArray;
         });
-
+        setBlob({...blob, ...preBlob});
     };
 
     const handleClick = (index) => () => {
+        setBlob(prevBlob => {
+            let copyState = JSON.parse(JSON.stringify(prevBlob));
+            let k = myItems[index];
+            delete copyState[k];
+            return copyState;
+        });
         setMyItems(prevItems => {
             const newArray = [...prevItems];
             newArray.splice(index, 1);
@@ -101,7 +107,7 @@ const AddThing = ({onBlob, onVal, type}) => {
     };
 
     const handleBlob = (b) => {
-        setBlob({...blob, ...b});
+        setPreBlob({...b});
     };
 
 
@@ -159,6 +165,7 @@ const AddThing = ({onBlob, onVal, type}) => {
                         variant="outlined"
                         select
                         SelectProps={{native: true}}
+                        fullWidth
                     >
                         {dataTypes.map((p) => (
                             <option key={p} value={p} disabled={type==''?false:p!=type}>

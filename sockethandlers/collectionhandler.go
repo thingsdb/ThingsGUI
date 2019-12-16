@@ -53,20 +53,6 @@ func QueryBlob(client *Client, data Data, timeout uint16) (int, interface{}, uti
 	return query(client, data, blob, timeout)
 }
 
-// func QueryBlob(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
-// 	decodedBlob, err := base64.StdEncoding.DecodeString(data.Blob)
-// 	if err != nil {
-// 		message := util.Message{Text: "Query error", Status: http.StatusInternalServerError, Log: err.Error()}
-// 		return message.Status, "", message
-// 	}
-
-// 	blob := map[string]interface{}{
-// 		"blob": decodedBlob,
-// 	}
-
-// 	return query(client, data, blob, timeout)
-// }
-
 func QueryEditor(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
 	var collectionResp = make(map[string]interface{})
 

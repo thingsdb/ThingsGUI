@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, query}) => {
+const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, query, blob}) => {
 
     React.useEffect(() => {
         handleBuildQuery(action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type);
@@ -45,8 +45,9 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
     const setTypeInput = (name, type, customTypes, v) =>
         type[0]=='['? createArrayInput(name, type, customTypes, v)
             : type[0]=='{'? createSetInput(name, type, customTypes, v)
-                : type=='str' || type=='utf8' || type=='raw' ? `'${v}'`
-                    : `${v}`;
+                : type=='str' || type=='utf8' ? `'${v}'`
+                    : type=='raw' ? (blob[v] ? `${v}` : `'${v}'`)
+                        : `${v}`;
 
     const mapTypeInput = (v, customTypes) => v.map(({name, type, val}) => `${name}: ${customTypeInput(name, type, customTypes, val)}`);
 
@@ -68,7 +69,8 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
         return parentType==='list' ? (childIndex===null ? `#${parentId}.${parentName}.push(${value});` : `#${parentId}.${parentName}[${childIndex}] = ${value};`)
             : parentType==='thing' ? `#${parentId}.${childName} = ${value};`
                 : parentType==='set' ? `#${parentId}.${parentName}.add(${value});`
-                    : '';
+                    : customTypes.hasOwnProperty(parentType) ? `#${parentId}.${childName} = ${value};`
+                        : '';
     };
 
     const buildQueryRemove = (parentId, parentName, parentType, childId, childName, childIndex) => {
@@ -108,10 +110,12 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
 
 BuildQueryString.defaultProps = {
     query: '',
+    blob:{},
 };
 
 BuildQueryString.propTypes = {
     action: PropTypes.string.isRequired,
+    blob: PropTypes.object,
     cb: PropTypes.func.isRequired,
     child: PropTypes.object.isRequired,
     customTypes: PropTypes.object.isRequired,

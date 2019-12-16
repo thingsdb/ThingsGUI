@@ -134,6 +134,9 @@ class _PushNotification {
         socket.emit('log');
         socket.on('logging', (msg) => {
             window.console.log(msg);
+            if (msg.includes('connection lost')) {
+                ErrorActions.setMsgError('0', msg);
+            }
         });
         socket.on('disconnect', () => {
             location.reload();

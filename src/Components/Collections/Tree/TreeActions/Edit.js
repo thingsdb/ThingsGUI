@@ -48,8 +48,6 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     const [newProperty, setNewProperty] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type);
 
-    console.log(value, dataType, blob);
-
     React.useEffect(() => {
         cb(queryString, blob, error);
     },
@@ -81,7 +79,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     };
 
     const handleBlob = (b) => {
-        setBlob({...blob, ...b});
+        setBlob(b);
     };
 
     const handleCustom = (c) => {
@@ -91,8 +89,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         });
     };
 
-    const addNewProperty = Boolean(child.id);
-    const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set';
+    const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
+    const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
     const isCustomType = customTypes.hasOwnProperty(dataType);
 
     return(
@@ -118,6 +116,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                             }}
                             showQuery
                             query={queryString}
+                            blob={blob}
                         />
                     </ListItem>
                 </Collapse>

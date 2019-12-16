@@ -37,7 +37,7 @@ import VariablesArray from './VariablesArray';
 import WarnPopover from './WarnPopover';
 
 const checkType = (t) => {
-    if (t === null || t === 'nil') {
+    if (t === null) {
         return('nil');
     }
     let type = typeof(t);

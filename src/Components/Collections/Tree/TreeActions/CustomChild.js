@@ -62,7 +62,7 @@ const CustomChild = ({onVal, onBlob, customTypes, name, type, activeStep, stepId
         });
     };
 
-    const handleRemove = (t) => (i) => {
+    const handleRemove = (t) => (i) => { //TODO test
         setVal(prevVal => {
             let update = [...prevVal];
             const index = prevVal.findIndex((v) => v && v.type == t);
@@ -70,21 +70,27 @@ const CustomChild = ({onVal, onBlob, customTypes, name, type, activeStep, stepId
             update.splice(index, 1, {name: update[index].name, type: update[index].type, val: update[index].val});
             return update;
         });
+        if (Object.keys(blobArr).length>0) {
+            console.log(blobArr, t);
+            setBlob(prevBlob => {
+                let copyState = JSON.parse(JSON.stringify(prevBlob));
+                let k = Object.keys(blobArr[t])[i];
+                delete copyState[k];
+                console.log(copyState, k);
+                return copyState;
+            });
+        }
     };
 
-    const handleRemoveOptional = (k) => () => {
+    const handleRemoveOptional = (k) => () => { //TODO test potentially multiple un use blob can be stacked in the blob object. Because blob object is not removed in this case.
         setOptional({...optional, [k]: true});
         setVal(prevVal => {
             let update = [...prevVal];
             const index = update.findIndex((v) => v.name == k);
-            update.splice(index, 1);
+            if (index != -1) {
+                update.splice(index, 1);
+            }
             return update;
-        });
-        setBlob(prevBlob => {
-            let copyState = JSON.parse(JSON.stringify(prevBlob));
-            let k = Object.keys(blobArr[k]);
-            k.map(i => delete copyState[i]);
-            return {copyState};
         });
     };
 
@@ -97,7 +103,10 @@ const CustomChild = ({onVal, onBlob, customTypes, name, type, activeStep, stepId
     };
 
     const handleBlobArr = (t) => (b) => {
-        setBlobArr({...blobArr, [t]: b});
+        setBlobArr(prevBlob => {
+            const updatedBlob = Object.assign({}, prevBlob[t], b);
+            return {...prevBlob, [t]: updatedBlob};
+        });
         setBlob({...blob, ...b});
     };
 

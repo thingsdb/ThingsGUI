@@ -51,7 +51,7 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
     const type = checkType(thing);
     const val = thingValue(type, thing);
 
-    const canToggle =  (type === 'thing' && Object.keys(thing).length>1) || (type === 'array' && thing.length>0) || type === 'closure' || type === 'regex'|| type === 'error';
+    const canToggle =  type === 'thing' || (type === 'array' && thing.length>0) || type === 'closure' || type === 'regex'|| type === 'error';
 
     const isTuple = type === 'array' && parent.type === 'array';
     const thingId = thing && thing['#'] || parent.id;

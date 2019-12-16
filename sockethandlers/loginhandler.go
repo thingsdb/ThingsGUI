@@ -55,8 +55,9 @@ func connect(client *Client, data LoginData) LoginResp {
 	client.Connection = things.NewConn(host, uint16(port), client.Ssl)
 	client.Connection.EventCh = client.EventCh
 	client.Connection.LogCh = client.LogCh
-	client.Connection.OnClose = func() {
+	client.Connection.OnClose = func(err error) {
 		go func() {
+			fmt.Println("onClose", err)
 			client.Closed <- true
 		}()
 	}

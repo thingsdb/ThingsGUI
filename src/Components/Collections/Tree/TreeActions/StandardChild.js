@@ -59,8 +59,6 @@ const StandardChild = ({onVal, onBlob, name, type, arrayType}) => {
     const [val, setVal] = React.useState('');
     const [dataType, setDataType] = React.useState(arrayType||typeConv[type][0]);
 
-    console.log(type, arrayType);
-
     React.useEffect(() => {
         onVal({name: name, type: type, val: val});
         onBlob(blob);
