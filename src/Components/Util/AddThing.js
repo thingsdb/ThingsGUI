@@ -77,9 +77,8 @@ const AddThing = ({onBlob, onVal, type}) => {
     };
 
     const typeControls = (type, input) => {
-        return type === 'nil' ? 'nil'
-            : type === 'str' ? `'${input}'`
-                : `${input}`;
+        return type === 'nil' ? `${input} nil`
+            : `${input}`;
     };
 
     const handleAdd = () => {
@@ -92,10 +91,10 @@ const AddThing = ({onBlob, onVal, type}) => {
         setBlob({...blob, ...preBlob});
     };
 
-    const handleClick = (index) => () => {
+    const handleClick = (index, item) => () => {
         setBlob(prevBlob => {
             let copyState = JSON.parse(JSON.stringify(prevBlob));
-            let k = myItems[index];
+            let k = Object.keys(copyState).find(i=>item.includes(i));
             delete copyState[k];
             return copyState;
         });
@@ -118,7 +117,7 @@ const AddThing = ({onBlob, onVal, type}) => {
                 id={listitem}
                 className={classes.chip}
                 label={listitem}
-                onDelete={handleClick(index)}
+                onDelete={handleClick(index, listitem)}
                 color="primary"
             />
         ));
@@ -126,7 +125,7 @@ const AddThing = ({onBlob, onVal, type}) => {
     };
 
     return (
-        <Grid container spacing={1} >
+        <Grid container spacing={1}>
             <Grid container spacing={1} item xs={12}>
                 <Grid item xs={1} container justify="flex-start">
                     <Typography variant="h3" color="primary">

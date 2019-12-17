@@ -7,7 +7,6 @@ import ListItem from '@material-ui/core/ListItem';
 import {makeStyles} from '@material-ui/core/styles';
 
 import BuildQueryString from './BuildQueryString';
-import EditCustom from './EditCustom';
 import InputField from './InputField';
 
 const useStyles = makeStyles(theme => ({
@@ -41,8 +40,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                     : child.type == 'error' ? `err(${thing.error_code}, ${thing.error_msg})`
                         : child.type == 'list' ? ''
                             : thing);
+
     const [blob, setBlob] = React.useState({});
-    const [custom, setCustom] = React.useState({});
     const [queryString, setQueryString] = React.useState('');
     const [error, setError] = React.useState('');
     const [newProperty, setNewProperty] = React.useState('');
@@ -66,7 +65,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     const handleOnChangeType = ({target}) => {
         const {value} = target;
         setValue('');
-        setCustom({});
+        setBlob({});
         setDataType(value);
     };
 
@@ -82,16 +81,10 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         setBlob(b);
     };
 
-    const handleCustom = (c) => {
-        setCustom(prev => {
-            const updatedVal = Object.assign({}, prev, c);
-            return updatedVal;
-        });
-    };
+    console.log(blob);
 
     const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
-    const isCustomType = customTypes.hasOwnProperty(dataType);
 
     return(
         <React.Fragment>
@@ -106,7 +99,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                                 index: child.index,
                                 name: child.id?newProperty:child.name,
                                 type: dataType,
-                                val: isCustomType?custom:value,
+                                val: value,
                             }}
                             customTypes={customTypes}
                             parent={{
@@ -157,19 +150,9 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         </TextField>
                     </ListItem>
                 ) : null}
-                {isCustomType ? (
-                    <EditCustom
-                        name={child.id?newProperty:child.name}
-                        type={dataType}
-                        customTypes={customTypes}
-                        onVal={handleCustom}
-                        onBlob={handleBlob}
-                    />
-                ) : (
-                    <ListItem className={classes.listItem}>
-                        <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" />
-                    </ListItem>
-                )}
+                <ListItem className={classes.listItem}>
+                    <InputField name={child.id?newProperty:child.name} dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} />
+                </ListItem>
             </List>
         </React.Fragment>
     );

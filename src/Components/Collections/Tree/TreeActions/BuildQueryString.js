@@ -13,11 +13,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
         let q = '';
         switch (action) {
         case 'edit':
-            if (customTypes.hasOwnProperty(childType)) { // incase of custom-type
-                val = customTypeInput(childName, childType, customTypes, childVal&&childVal.hasOwnProperty('val') ? childVal.val : childVal);
-            } else {
-                val = standardInput(childVal, childType);
-            }
+            val = input(childVal, childType);
             q = buildQueryAdd(parentId, parentName, parentType, childName, childIndex, val);
             break;
         case 'remove':
@@ -27,41 +23,11 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
         cb(q);
     };
 
-    //CUSTOM\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-    const mapArrayInput = (customTypes, v) => {
-        return `[${v.map(({name, type, val}) => customTypeInput(name, type, customTypes, val))}]`;
-    };
-
-    const createArrayInput = (name, type, customTypes, val) => {
-        return typeof(val)=='string' ? val
-            : Array.isArray(val) && val.length ? mapArrayInput(customTypes, val)
-                : customTypeInput(name, type.slice(1, -1), customTypes, val);
-    };
-
-    const createSetInput = (name, type, customTypes, val) => `set(${val==''? '{}': createArrayInput(name, type, customTypes, val)})`;
-
-    //TODO add raw and bytes
-    const setTypeInput = (name, type, customTypes, v) =>
-        type[0]=='['? createArrayInput(name, type, customTypes, v)
-            : type[0]=='{'? createSetInput(name, type, customTypes, v)
-                : type=='str' || type=='utf8' ? `'${v}'`
-                    : type=='raw' ? (blob[v] ? `${v}` : `'${v}'`)
-                        : `${v}`;
-
-    const mapTypeInput = (v, customTypes) => v.map(({name, type, val}) => `${name}: ${customTypeInput(name, type, customTypes, val)}`);
-
-    const customTypeInput = (name, type, customTypes, val) =>
-        customTypes[type.slice(-1)=='?'?type.slice(0, -1):type] ? `${type.slice(-1)=='?'?type.slice(0, -1):type}{${Array.isArray(val)&&val.length?mapTypeInput(val, customTypes):''}}`
-            : setTypeInput(name, type, customTypes, val);
-
     //STANDARD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-    // TODO add raw
-    const standardInput = (childVal, childType) => {
-        return childType == 'str' ? `'${childVal}'`
+    const input = (childVal, childType) => {
+        return childType == 'str' ? (childVal[0]=='\''? `${childVal}`:`'${childVal}'`)
             : childType == 'nil' ? 'nil'
-                // : childType == 'bytes' ? 'blob'
                 : `${childVal}`;
     };
 

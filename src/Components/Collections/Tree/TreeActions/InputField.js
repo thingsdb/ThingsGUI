@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
 
-import {Add1DArray, AddBlob, AddBool, AddClosure, AddError, AddFloat, AddInt, AddRegex, AddStr, AddThing} from '../../../Util';
+import CustomChild from './CustomChild';
+import {AddArray, AddBlob, AddBool, AddClosure, AddError, AddFloat, AddInt, AddRegex, AddStr, AddThing} from '../../../Util';
 
 
-const InputField = ({dataType, onVal, onBlob, input, ...props}) => {
+const InputField = ({customTypes, dataTypes, name, dataType, onVal, onBlob, input, ...props}) => {
 
     const handleVal = (v) => {
         onVal(v);
@@ -42,7 +44,7 @@ const InputField = ({dataType, onVal, onBlob, input, ...props}) => {
         break;
     case 'set':
         content = (
-            <Add1DArray onBlob={handleBlob} onVal={handleSet} type="thing" />
+            <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={handleBlob} onVal={handleSet} type="thing" />
         );
         break;
     case 'bool':
@@ -52,7 +54,7 @@ const InputField = ({dataType, onVal, onBlob, input, ...props}) => {
         break;
     case 'list':
         content = (
-            <Add1DArray onBlob={handleBlob} onVal={handleVal} {...props} />
+            <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={handleBlob} onVal={handleVal} {...props} />
         );
         break;
     case 'closure':
@@ -75,23 +77,34 @@ const InputField = ({dataType, onVal, onBlob, input, ...props}) => {
             <AddBlob onBlob={handleBlob} onVal={handleVal} />
         );
         break;
-    default:
+    case 'nil':
         content = null;
+        break;
+    default:
+        content = (
+            <CustomChild onBlob={handleBlob} onVal={handleVal} customTypes={customTypes} dataTypes={dataTypes} type={dataType} />
+        );
         break;
     }
 
     return(
-        <React.Fragment>
+        <Grid item xs={12}>
             {content}
-        </React.Fragment>
+        </Grid>
     );
 };
 
 InputField.defaultProps = {
     input: '',
+    customTypes: {},
+    dataTypes: [],
+    name: '',
 },
 
 InputField.propTypes = {
+    customTypes: PropTypes.object,
+    dataTypes: PropTypes.arrayOf(PropTypes.string),
+    name: PropTypes.string,
     dataType: PropTypes.string.isRequired,
     onVal: PropTypes.func.isRequired,
     onBlob: PropTypes.func.isRequired,

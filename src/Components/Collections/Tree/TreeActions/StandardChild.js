@@ -16,21 +16,6 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const dataTypes = [ // Do not put array first; causes infinite loop
-    'str',
-    'bool',
-    'int',
-    'float',
-    'bytes',
-    'closure',
-    'regex',
-    'error',
-    'nil',
-    'list',
-    'set',
-    'thing',
-];
-
 const typeConv = {
     'bool': ['bool'],
     'bytes': ['bytes'],
@@ -50,17 +35,17 @@ const typeConv = {
     'pint': ['int'],
     'nint': ['int'],
     'number': ['int', 'float'],
-    'any': [],
+    'any': ['str'],
 };
 
-const StandardChild = ({onVal, onBlob, name, type, arrayType}) => {
+const StandardChild = ({customTypes, dataTypes, onVal, onBlob, name, type, arrayType}) => {
     const classes = useStyles();
     const [blob, setBlob] = React.useState({});
     const [val, setVal] = React.useState('');
-    const [dataType, setDataType] = React.useState(arrayType||typeConv[type][0]);
+    const [dataType, setDataType] = React.useState(arrayType||(typeConv[type]?typeConv[type][0]:type));
 
     React.useEffect(() => {
-        onVal({name: name, type: type, val: val});
+        onVal(val);
         onBlob(blob);
     },
     [val],
@@ -71,7 +56,7 @@ const StandardChild = ({onVal, onBlob, name, type, arrayType}) => {
     };
 
     const handleBlob = (b) => {
-        setBlob({...blob, ...b});
+        setBlob(b);
     };
 
     const handleChangeType = ({target}) => {
@@ -80,7 +65,7 @@ const StandardChild = ({onVal, onBlob, name, type, arrayType}) => {
     };
 
     return(
-        <Grid className={classes.container} container item xs={12} spacing={1}>
+        <Grid container item xs={12} spacing={2}>
             <Grid item xs={12}>
                 <TextField
                     id="dataType"
@@ -95,7 +80,7 @@ const StandardChild = ({onVal, onBlob, name, type, arrayType}) => {
                     SelectProps={{native: true}}
                 >
                     {dataTypes.map((p) => (
-                        <option key={p} value={p} disabled={arrayType? !(p==arrayType): type=='any' ? false : !typeConv[type].includes(p)}>
+                        <option key={p} value={p} disabled={arrayType? !(p==arrayType): type=='any' ? false : !(typeConv[type]?typeConv[type].includes(p):p==type)}>
                             {p}
                         </option>
                     ))}
@@ -103,12 +88,15 @@ const StandardChild = ({onVal, onBlob, name, type, arrayType}) => {
             </Grid>
             <Grid item xs={12}>
                 <InputField
+                    customTypes={customTypes}
                     dataType={dataType}
-                    onVal={handleVal}
-                    onBlob={handleBlob}
+                    dataTypes={dataTypes}
                     input={val}
-                    variant="outlined"
+                    name={name}
+                    onBlob={handleBlob}
+                    onVal={handleVal}
                     type={arrayType?type:null}
+                    variant="outlined"
                 />
             </Grid>
         </Grid>
@@ -120,6 +108,8 @@ StandardChild.defaultProps = {
 };
 
 StandardChild.propTypes = {
+    customTypes: PropTypes.object.isRequired,
+    dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     onBlob: PropTypes.func.isRequired,
     onVal: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,

@@ -3,10 +3,12 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
 const AddStr = ({input, cb, ...props}) => {
+    const [str, setStr] = React.useState(input);
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        cb(value);
+        setStr(value);
+        cb(`'${value}'`);
     };
 
     return(
@@ -14,7 +16,7 @@ const AddStr = ({input, cb, ...props}) => {
             name="value"
             label="Value"
             type="text"
-            value={input}
+            value={str}
             spellCheck={false}
             onChange={handleOnChange}
             fullWidth

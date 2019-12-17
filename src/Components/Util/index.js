@@ -1,4 +1,4 @@
-import Add1DArray from './Add1DArray';
+import AddArray from './AddArray';
 import AddBlob from './AddBlob';
 import AddBool from './AddBool';
 import AddClosure from './AddClosure';
@@ -101,7 +101,7 @@ const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
 
 export {
-    Add1DArray,
+    AddArray,
     AddBlob,
     AddBool,
     AddClosure,

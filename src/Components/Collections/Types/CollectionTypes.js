@@ -19,7 +19,7 @@ const CollectionTypes = ({scope}) => {
         'str',
         'utf8',
         'raw',
-        // 'bytes',
+        'bytes',
         'bool',
         'int',
         'pint',
