@@ -20,9 +20,15 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
     const [optional, setOptional] = React.useState({});
     const [open, setOpen] = React.useState({});
     React.useEffect(() => {
-        let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        onVal(`${type}{${s}}`);
-        onBlob(blob);
+        // if (open[k]) {
+
+        // }
+        let s = Object.entries(val).map(([k, v])=> open[k]?`${k}: ${v}`:'');
+        if (s.length) {
+            onVal(`${type.slice(-1)=='?'?type.slice(0, -1):type}{${s}}`);
+            onBlob(blob);
+            console.log(s);
+        }
     },
     [JSON.stringify(val)],
     );
@@ -65,17 +71,18 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
         setOpen({...open, [k]: false});
     };
 
-    const renderThing = (name, type) =>  {
+    const renderThing = (name, type, arrayType=null) =>  {
         let t = type.trim();
         return(
-            t.slice(-1)=='?' ? (
-                optional[name] ? null : (
-                    renderThing(name,t.slice(0,-1))
-                )
-            ) : t[0]=='[' || t[0]=='{' ? (
-                <StandardChild name={name} type={t.slice(1, -1)} arrayType={t[0]=='[' ? 'list' : t[0]=='{' ? 'set' : ''} onVal={handleChild(name)} onBlob={handleBlob} customTypes={customTypes} dataTypes={dataTypes} />
+            // t.slice(-1)=='?' ? (
+            //     optional[name] ? null : (
+            //         renderThing(name,t.slice(0,-1), arrayType)
+            //     )
+            // ) :
+            t[0]=='[' || t[0]=='{' ? (
+                <StandardChild name={name} type={t.slice(1, -1)} onVal={handleChild(name)} onBlob={handleBlob} customTypes={customTypes} dataTypes={dataTypes} arrayType={t[0]=='[' ? 'list' : t[0]=='{' ? 'set' : ''} />
             ) : (
-                <StandardChild name={name} type={t} onVal={handleChild(name)} onBlob={handleBlob} customTypes={customTypes} dataTypes={dataTypes} />
+                <StandardChild name={name} type={t} onVal={handleChild(name)} onBlob={handleBlob} customTypes={customTypes} dataTypes={dataTypes} arrayType={arrayType} />
             )
         );
     };
@@ -91,18 +98,18 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
                             </Typography>
                         </Grid>
                         <Grid item xs={4} container alignItems="center" justify="flex-end">
-                            {v.slice(-1)=='?'? (
+                            {/* {v.slice(-1)=='?'? (
                                 <IconButton onClick={optional[k]?handleAddOptional(k):handleRemoveOptional(k)}>
                                     {optional[k] ?  <AddIcon color="primary" /> : <ClearIcon color="primary" /> }
                                 </IconButton>
-                            ) : null}
+                            ) : null} */}
                             <IconButton onClick={open[k]?handleClose(k):handleOpen(k)}>
                                 {open[k] ?  <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> }
                             </IconButton>
                         </Grid>
                     </Grid>
-                    <Divider absolute component="li" />
-                    <Collapse in={open[k]} timeout="auto" unmountOnExit>
+                    <Divider absolute />
+                    <Collapse in={open[k]} timeout="auto">
                         {renderThing(k, v)}
                     </Collapse>
                 </React.Fragment>

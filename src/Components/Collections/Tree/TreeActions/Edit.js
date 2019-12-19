@@ -50,7 +50,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     React.useEffect(() => {
         cb(queryString, blob, error);
     },
-    [queryString, blob],
+    [queryString, JSON.stringify(blob)],
     );
 
     const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
@@ -81,11 +81,10 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         setBlob(b);
     };
 
-    console.log(blob);
-
     const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
 
+    // console.log('edit', thing);
     return(
         <React.Fragment>
             <List disablePadding dense className={classes.list}>
@@ -151,7 +150,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                     </ListItem>
                 ) : null}
                 <ListItem className={classes.listItem}>
-                    <InputField name={child.id?newProperty:child.name} dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} />
+                    <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} />
                 </ListItem>
             </List>
         </React.Fragment>

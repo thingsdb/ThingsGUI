@@ -6,7 +6,7 @@ import CustomChild from './CustomChild';
 import {AddArray, AddBlob, AddBool, AddClosure, AddError, AddFloat, AddInt, AddRegex, AddStr, AddThing} from '../../../Util';
 
 
-const InputField = ({customTypes, dataTypes, name, dataType, onVal, onBlob, input, ...props}) => {
+const InputField = ({customTypes, dataTypes, dataType, onVal, onBlob, input, ...props}) => {
 
     const handleVal = (v) => {
         onVal(v);
@@ -44,7 +44,7 @@ const InputField = ({customTypes, dataTypes, name, dataType, onVal, onBlob, inpu
         break;
     case 'set':
         content = (
-            <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={handleBlob} onVal={handleSet} type="thing" />
+            <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={handleBlob} onVal={handleSet} type={['thing']} />
         );
         break;
     case 'bool':
@@ -98,13 +98,11 @@ InputField.defaultProps = {
     input: '',
     customTypes: {},
     dataTypes: [],
-    name: '',
 },
 
 InputField.propTypes = {
     customTypes: PropTypes.object,
     dataTypes: PropTypes.arrayOf(PropTypes.string),
-    name: PropTypes.string,
     dataType: PropTypes.string.isRequired,
     onVal: PropTypes.func.isRequired,
     onBlob: PropTypes.func.isRequired,

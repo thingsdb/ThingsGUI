@@ -24,7 +24,7 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, type}) => {
     const [blob, setBlob] = React.useState({});
     const [state, setState] = React.useState({
         contentAdd: '',
-        dataType: type||'str',
+        dataType: type[0]||'str',
         errors: {},
     });
     const {contentAdd, dataType} = state;
@@ -33,7 +33,6 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, type}) => {
     React.useEffect(() => {
         onVal(`[${myItems}]`);
         onBlob(blob);
-        console.log(blob);
     },
     [myItems.length],
     );
@@ -128,7 +127,7 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, type}) => {
                         fullWidth
                     >
                         {dataTypes.map((p) => (
-                            <option key={p} value={p} disabled={type==''?false:p!=type}>
+                            <option key={p} value={p} disabled={!type.includes(p)}>
                                 {p}
                             </option>
                         ))}
@@ -156,7 +155,7 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, type}) => {
 };
 
 AddArray.defaultProps = {
-    type: '',
+    type: [],
 };
 
 AddArray.propTypes = {
@@ -164,7 +163,7 @@ AddArray.propTypes = {
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     onBlob: PropTypes.func.isRequired,
     onVal: PropTypes.func.isRequired,
-    type:PropTypes.string
+    type:PropTypes.arrayOf(PropTypes.string),
 };
 
 export default AddArray;

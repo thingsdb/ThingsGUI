@@ -11,8 +11,8 @@ const useStyles = makeStyles(theme => ({
     container: {
         // display: 'flex',
         // flexWrap: 'wrap',
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
+        paddingLeft: theme.spacing(1),
+        marginLeft: theme.spacing(1),
     },
 }));
 
@@ -40,29 +40,28 @@ const typeConv = {
 
 const StandardChild = ({customTypes, dataTypes, onVal, onBlob, name, type, arrayType}) => {
     const classes = useStyles();
-    const [blob, setBlob] = React.useState({});
     const [val, setVal] = React.useState('');
     const [dataType, setDataType] = React.useState(arrayType||(typeConv[type]?typeConv[type][0]:type));
 
-    React.useEffect(() => {
-        onVal(val);
-        onBlob(blob);
-    },
-    [val],
-    );
-
     const handleVal = (v) => {
         setVal(v);
+        onVal(v);
     };
 
     const handleBlob = (b) => {
-        setBlob(b);
+        onBlob(b);
     };
 
     const handleChangeType = ({target}) => {
         const {value} = target;
         setDataType(value);
+        if (value == 'nil') {
+            console.log(dataType, type);
+            setVal('nil');
+        }
     };
+    console.log(val);
+
 
     return(
         <Grid container item xs={12} spacing={2}>
@@ -73,14 +72,14 @@ const StandardChild = ({customTypes, dataTypes, onVal, onBlob, name, type, array
                     name="dataType"
                     label="Data type"
                     onChange={handleChangeType}
-                    value={dataType}
+                    value={dataType.slice(-1)=='?'?dataType.slice(0, -1):dataType}
                     variant="outlined"
                     fullWidth
                     select
                     SelectProps={{native: true}}
                 >
                     {dataTypes.map((p) => (
-                        <option key={p} value={p} disabled={arrayType? !(p==arrayType): type=='any' ? false : !(typeConv[type]?typeConv[type].includes(p):p==type)}>
+                        <option key={p} value={p} disabled={arrayType? !(p==arrayType): type=='any' ? false : type.slice(-1)=='?'?!( type.slice(0, -1)==p || p=='nil' ): !(typeConv[type]?typeConv[type].includes(p):p==type)}>
                             {p}
                         </option>
                     ))}
@@ -92,10 +91,9 @@ const StandardChild = ({customTypes, dataTypes, onVal, onBlob, name, type, array
                     dataType={dataType}
                     dataTypes={dataTypes}
                     input={val}
-                    name={name}
                     onBlob={handleBlob}
                     onVal={handleVal}
-                    type={arrayType?type:null}
+                    type={arrayType?(type.slice(-1)=='?'?[type.slice(0, -1), 'nil']:[type]):null}
                     variant="outlined"
                 />
             </Grid>
