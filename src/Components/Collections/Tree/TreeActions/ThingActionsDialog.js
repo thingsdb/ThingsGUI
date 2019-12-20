@@ -57,19 +57,6 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
         // Furthermore we check if the parent has a custom type. In that case we remove the remove button. Custom type instances have no delete options.
 
         // it would also be nice if we could check for potential custom type childern in an array type. To define the datatype of the edit component.
-        // let query='';
-        // if (parent.id==null) {
-        //     query = `{childType: type(#${child.id}), parentType: ''}`; // check if custom type
-        // } else if (child.type == 'thing' && parent.type == 'thing') {
-        //     query = `{childType: type(#${child.id}), parentType: type(#${parent.id})}`; // check if custom type
-        // } else if (child.type == 'thing') {
-        //     query = `{childType: type(#${child.id}), parentType: type(#${parent.id}.${parent.name})}`; // check if custom type
-        // } else if (parent.type == 'thing') {
-        //     query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id})}`; // check if custom type
-        // } else {
-        //     query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}.${parent.name})}`; // check if custom type
-        // }
-
         let query='';
         if (parent.id==null) {
             query = `{childType: type(#${child.id}), parentType: ''}`; // check if custom type
@@ -130,6 +117,8 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
     const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type === 'bytes');
     const canWatch = thing && thing.hasOwnProperty('#');
     const canDownload = child.type === 'bytes';
+
+    console.log('thingactionsdialog');
 
     const content = (
         <Grid container spacing={1}>

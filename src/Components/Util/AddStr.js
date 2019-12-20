@@ -5,10 +5,15 @@ import TextField from '@material-ui/core/TextField';
 const AddStr = ({input, cb, ...props}) => {
     const [str, setStr] = React.useState(input);
 
+    React.useEffect(() => {
+        cb(`'${str}'`);
+    },
+    [str],
+    );
+
     const handleOnChange = ({target}) => {
         const {value} = target;
         setStr(value);
-        cb(`'${value}'`);
     };
 
     return(

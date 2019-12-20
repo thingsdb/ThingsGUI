@@ -8,73 +8,61 @@ import {AddArray, AddBlob, AddBool, AddClosure, AddError, AddFloat, AddInt, AddR
 
 const InputField = ({customTypes, dataTypes, dataType, onVal, onBlob, input, ...props}) => {
 
-    const handleVal = (v) => {
-        onVal(v);
-    };
-
-    const handleBlob = (b) => {
-        onBlob(b);
-    };
-
-    const handleSet = (s) => {
-        onVal(`set(${s})`);
-    };
-
     let content;
     switch(dataType) {
     case 'str':
         content = (
-            <AddStr input={input} cb={handleVal} {...props} />
+            <AddStr input={input} cb={onVal} {...props} />
         );
         break;
     case 'int':
         content = (
-            <AddInt input={input} cb={handleVal} {...props} />
+            <AddInt input={input} cb={onVal} {...props} />
         );
         break;
     case 'float':
         content = (
-            <AddFloat input={input} cb={handleVal} {...props} />
+            <AddFloat input={input} cb={onVal} {...props} />
         );
         break;
     case 'thing':
         content = (
-            <AddThing onBlob={handleBlob} onVal={handleVal} />
+            <AddThing onBlob={onBlob} onVal={onVal} />
         );
         break;
     case 'set':
         content = (
-            <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={handleBlob} onVal={handleSet} type={['thing']} />
+            <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} type={['thing']} isSet />
         );
         break;
     case 'bool':
         content = (
-            <AddBool input={`${input}`} cb={handleVal} />
+            <AddBool input={`${input}`} cb={onVal} />
         );
         break;
     case 'list':
         content = (
-            <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={handleBlob} onVal={handleVal} {...props} />
+            <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} {...props} />
         );
         break;
     case 'closure':
         content = (
-            <AddClosure input={input} cb={handleVal} />
+            <AddClosure input={input} cb={onVal} />
         );
         break;
     case 'regex':
         content = (
-            <AddRegex input={input.trim().slice(1, -1)} cb={handleVal} />
+            <AddRegex input={input.trim().slice(1, -1)} cb={onVal} />
         );
         break;
     case 'error':
         content = (
-            <AddError input={input} cb={handleVal} />
+            <AddError input={input} cb={onVal} />
         );
         break;
     case 'bytes':
         content = (
-            <AddBlob onBlob={handleBlob} onVal={handleVal} />
+            <AddBlob onBlob={onBlob} onVal={onVal} />
         );
         break;
     case 'nil':
@@ -82,7 +70,7 @@ const InputField = ({customTypes, dataTypes, dataType, onVal, onBlob, input, ...
         break;
     default:
         content = (
-            <CustomChild onBlob={handleBlob} onVal={handleVal} customTypes={customTypes} dataTypes={dataTypes} type={dataType} />
+            <CustomChild onBlob={onBlob} onVal={onVal} customTypes={customTypes} dataTypes={dataTypes} type={dataType} />
         );
         break;
     }

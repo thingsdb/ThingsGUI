@@ -18,20 +18,20 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const AddArray = ({customTypes, dataTypes, onBlob, onVal, type}) => {
+const AddArray = ({customTypes, dataTypes, onBlob, onVal, childType, isSet}) => {
     const classes = useStyles();
     const [preBlob, setPreBlob] = React.useState({});
     const [blob, setBlob] = React.useState({});
     const [state, setState] = React.useState({
         contentAdd: '',
-        dataType: type[0]||'str',
+        dataType: childType[0]||'str',
         errors: {},
     });
     const {contentAdd, dataType} = state;
 
     const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
-        onVal(`[${myItems}]`);
+        onVal(isSet?`set([${myItems}])`:`[${myItems}]`);
         onBlob(blob);
     },
     [myItems.length],
@@ -114,7 +114,7 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, type}) => {
                 </Grid>
             </Grid>
             <Grid container item xs={12} spacing={1} alignItems="flex-start" >
-                <Grid item xs={2}>
+                <Grid item xs={11}>
                     <TextField
                         id="dataType"
                         type="text"
@@ -127,22 +127,11 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, type}) => {
                         fullWidth
                     >
                         {dataTypes.map((p) => (
-                            <option key={p} value={p} disabled={!type.includes(p)}>
+                            <option key={p} value={p} disabled={childType.length?!childType.includes(p):false}>
                                 {p}
                             </option>
                         ))}
                     </TextField>
-                </Grid>
-                <Grid item xs={9}>
-                    <InputField
-                        customTypes={customTypes}
-                        dataType={dataType}
-                        dataTypes={dataTypes}
-                        input={contentAdd}
-                        onBlob={handleBlob}
-                        onVal={handleInputField}
-                        variant="outlined"
-                    />
                 </Grid>
                 <Grid item xs={1}>
                     <Fab color="primary" onClick={handleAdd} size="small">
@@ -150,12 +139,24 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, type}) => {
                     </Fab>
                 </Grid>
             </Grid>
+            <Grid item xs={12}>
+                <InputField
+                    customTypes={customTypes}
+                    dataType={dataType}
+                    dataTypes={dataTypes}
+                    input={contentAdd}
+                    onBlob={handleBlob}
+                    onVal={handleInputField}
+                    variant="outlined"
+                />
+            </Grid>
         </Grid>
     );
 };
 
 AddArray.defaultProps = {
-    type: [],
+    childType: [],
+    isSet: false,
 };
 
 AddArray.propTypes = {
@@ -163,7 +164,8 @@ AddArray.propTypes = {
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     onBlob: PropTypes.func.isRequired,
     onVal: PropTypes.func.isRequired,
-    type:PropTypes.arrayOf(PropTypes.string),
+    childType:PropTypes.arrayOf(PropTypes.string),
+    onBlob: PropTypes.bool
 };
 
 export default AddArray;

@@ -142,7 +142,7 @@ const AddThing = ({onBlob, onVal, type}) => {
                 </Grid>
             </Grid>
             <Grid container item xs={12} spacing={1} alignItems="flex-start" >
-                <Grid item xs={2}>
+                <Grid item xs={6}>
                     <TextField
                         id="property"
                         type="text"
@@ -151,9 +151,10 @@ const AddThing = ({onBlob, onVal, type}) => {
                         onChange={handleChangeProperty}
                         value={property}
                         variant="outlined"
+                        fullWidth
                     />
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={4}>
                     <TextField
                         id="dataType"
                         type="text"
@@ -173,21 +174,21 @@ const AddThing = ({onBlob, onVal, type}) => {
                         ))}
                     </TextField>
                 </Grid>
-                <Grid item xs={7}>
-                    <InputField
-                        dataType={dataType}
-                        input={contentAdd}
-                        name="Input"
-                        onVal={handleInputField}
-                        onBlob={handleBlob}
-                        variant="outlined"
-                    />
-                </Grid>
                 <Grid item xs={1}>
                     <Fab color="primary" onClick={handleAdd} size="small">
                         <AddIcon fontSize="small" />
                     </Fab>
                 </Grid>
+            </Grid>
+            <Grid item xs={12}>
+                <InputField
+                    dataType={dataType}
+                    input={contentAdd}
+                    name="Input"
+                    onVal={handleInputField}
+                    onBlob={handleBlob}
+                    variant="outlined"
+                />
             </Grid>
         </Grid>
     );
