@@ -16,7 +16,7 @@ const tag = '8';
 
 
 const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
-    const [customTypes, setCustomTypes] = React.useState({});
+    const [customTypes, setCustomTypes] = React.useState([]);
 
     const handleTypes = (t) => {
         setCustomTypes(t);
@@ -35,7 +35,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
         'list',
         'set',
         'thing',
-        ...Object.keys(customTypes)
+        ...customTypes.map(c=>c.name)
     ];
 
     const initialState = {
@@ -111,14 +111,12 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
 
     // buttons visible
     const isRoot = child.name == 'root';
-    const isChildCustom = customTypes.hasOwnProperty(realChildType);
-    const isParentCustom = customTypes.hasOwnProperty(realParentType);
+    const isChildCustom = Boolean(customTypes.find(c=>c.name==realChildType));
+    const isParentCustom = Boolean(customTypes.find(c=>c.name==realParentType));
     const canRemove = !(child.name === '/' || parent.isTuple || isRoot || isParentCustom);
-    const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type === 'bytes');
+    const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type === 'bytes' || realChildType[0]=='<');
     const canWatch = thing && thing.hasOwnProperty('#');
     const canDownload = child.type === 'bytes';
-
-    console.log('thingactionsdialog');
 
     const content = (
         <Grid container spacing={1}>

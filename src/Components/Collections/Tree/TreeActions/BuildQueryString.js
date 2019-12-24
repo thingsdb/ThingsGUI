@@ -35,7 +35,7 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
         return parentType==='list' ? (childIndex===null ? `#${parentId}.${parentName}.push(${value});` : `#${parentId}.${parentName}[${childIndex}] = ${value};`)
             : parentType==='thing' ? `#${parentId}.${childName} = ${value};`
                 : parentType==='set' ? `#${parentId}.${parentName}.add(${value});`
-                    : customTypes.hasOwnProperty(parentType) ? `#${parentId}.${childName} = ${value};`
+                    : [...customTypes.map(c=>c.name)].includes(parentType) ? `#${parentId}.${childName} = ${value};`
                         : '';
     };
 
@@ -84,7 +84,7 @@ BuildQueryString.propTypes = {
     blob: PropTypes.object,
     cb: PropTypes.func.isRequired,
     child: PropTypes.object.isRequired,
-    customTypes: PropTypes.object.isRequired,
+    customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     parent: PropTypes.object.isRequired,
     showQuery: PropTypes.bool.isRequired,
     query: PropTypes.string,

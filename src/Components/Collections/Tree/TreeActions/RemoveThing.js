@@ -60,7 +60,7 @@ const RemoveThing = ({scope, thing, child, parent}) => {
                             type: child.type,
                             val: null,
                         }}
-                        customTypes={{}}
+                        customTypes={[]}
                         parent={{
                             id: parent.id,
                             name: parent.hasOwnProperty('name') ? parent.name : null,

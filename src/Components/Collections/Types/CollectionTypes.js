@@ -9,7 +9,7 @@ import {ChipsCard} from '../../Util';
 const tag = '10';
 
 const CollectionTypes = ({scope}) => {
-    const [customTypes, setCustomTypes] = React.useState({});
+    const [customTypes, setCustomTypes] = React.useState([]);
 
     const handleTypes = (t) => {
         setCustomTypes(t);
@@ -29,7 +29,7 @@ const CollectionTypes = ({scope}) => {
         'number',
         'thing',
         'any',
-        ...Object.keys(customTypes)
+        ...customTypes.map(c=>c.name)
     ];
 
     const typesOptional = [
@@ -51,7 +51,7 @@ const CollectionTypes = ({scope}) => {
         '{}',
         '{any}',
         '{thing}',
-        ...Object.keys(customTypes).map((v, i)=>(`{${v}}`)),
+        ...customTypes.map(c=>`{${c.name}}`),
     ];
 
     const datatypesMap = [
@@ -70,14 +70,6 @@ const CollectionTypes = ({scope}) => {
 
     }, [scope]);
 
-    const typesArr = [...Object.keys(customTypes).map((name) => (
-        {
-            name: name,
-            definition: JSON.stringify(customTypes[name]),
-            properties: customTypes[name]
-        }
-    ))];
-
     const handleClickEdit = (i) => {
         setindex(i);
         setOpenEdit(true);
@@ -94,7 +86,7 @@ const CollectionTypes = ({scope}) => {
         setOpenAdd(false);
     };
     const handleClickDelete = (i, cb) => {
-        const item = typesArr[i];
+        const item = customTypes[i];
         TypeActions.deleteType(
             scope,
             item.name,
@@ -110,7 +102,7 @@ const CollectionTypes = ({scope}) => {
         <React.Fragment>
             <ChipsCard
                 expand={false}
-                items={typesArr}
+                items={customTypes}
                 onAdd={handleClickAdd}
                 onClick={handleClickEdit}
                 onDelete={handleClickDelete}
@@ -118,7 +110,7 @@ const CollectionTypes = ({scope}) => {
                 title="custom types"
             />
             <AddTypeDialog open={openAdd} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} cb={handleTypes} />
-            <EditTypeDialog open={openEdit} onClose={handleCloseEdit} customType={index!=null?typesArr[index]:{}} dataTypes={datatypesMap} scope={scope} cb={handleTypes} />
+            <EditTypeDialog open={openEdit} onClose={handleCloseEdit} customType={index!=null?customTypes[index]:{}} dataTypes={datatypesMap} scope={scope} cb={handleTypes} />
         </React.Fragment>
     );
 };

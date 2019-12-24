@@ -17,14 +17,22 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const single = [
+    'bool',
+    'bytes',
+    'float',
+    'int',
+    'nil',
+    'str',
+];
 
-const AddArray = ({customTypes, dataTypes, onBlob, onVal, childType, isSet}) => {
+const AddArray = ({customTypes, dataTypes, onBlob, onVal, childtype, isSet}) => {
     const classes = useStyles();
     const [preBlob, setPreBlob] = React.useState({});
     const [blob, setBlob] = React.useState({});
     const [state, setState] = React.useState({
         contentAdd: '',
-        dataType: childType[0]||'str',
+        dataType: childtype[0]||'str',
         errors: {},
     });
     const {contentAdd, dataType} = state;
@@ -96,6 +104,8 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, childType, isSet}) => 
         setPreBlob({...b});
     };
 
+    const types = childtype.length?childtype:dataTypes;
+
     return (
         <Grid container spacing={1}>
             <Grid container spacing={1} item xs={12}>
@@ -104,7 +114,7 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, childType, isSet}) => 
                         {'['}
                     </Typography>
                 </Grid>
-                <Grid item xs={10} container >
+                <Grid item xs={9} container >
                     {makeAddedList()}
                 </Grid>
                 <Grid item xs={1} container justify="flex-end">
@@ -112,9 +122,14 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, childType, isSet}) => 
                         {']'}
                     </Typography>
                 </Grid>
+                <Grid item xs={1}>
+                    <Fab color="primary" onClick={handleAdd} size="small">
+                        <AddIcon fontSize="small" />
+                    </Fab>
+                </Grid>
             </Grid>
             <Grid container item xs={12} spacing={1} alignItems="flex-start" >
-                <Grid item xs={11}>
+                <Grid item xs={3}>
                     <TextField
                         id="dataType"
                         type="text"
@@ -126,46 +141,41 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, childType, isSet}) => 
                         SelectProps={{native: true}}
                         fullWidth
                     >
-                        {dataTypes.map((p) => (
-                            <option key={p} value={p} disabled={childType.length?!childType.includes(p):false}>
+                        {types.map((p) => (
+                            <option key={p} value={p}>
                                 {p}
                             </option>
                         ))}
                     </TextField>
                 </Grid>
-                <Grid item xs={1}>
-                    <Fab color="primary" onClick={handleAdd} size="small">
-                        <AddIcon fontSize="small" />
-                    </Fab>
+                <Grid item xs={single.includes(dataType)?7:12}>
+                    <InputField
+                        customTypes={customTypes}
+                        dataType={dataType}
+                        dataTypes={dataTypes}
+                        input={contentAdd}
+                        onBlob={handleBlob}
+                        onVal={handleInputField}
+                        variant="outlined"
+                    />
                 </Grid>
-            </Grid>
-            <Grid item xs={12}>
-                <InputField
-                    customTypes={customTypes}
-                    dataType={dataType}
-                    dataTypes={dataTypes}
-                    input={contentAdd}
-                    onBlob={handleBlob}
-                    onVal={handleInputField}
-                    variant="outlined"
-                />
             </Grid>
         </Grid>
     );
 };
 
 AddArray.defaultProps = {
-    childType: [],
+    childtype: [],
     isSet: false,
 };
 
 AddArray.propTypes = {
-    customTypes: PropTypes.object.isRequired,
+    customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     onBlob: PropTypes.func.isRequired,
     onVal: PropTypes.func.isRequired,
-    childType:PropTypes.arrayOf(PropTypes.string),
-    onBlob: PropTypes.bool
+    childtype:PropTypes.arrayOf(PropTypes.string),
+    isSet: PropTypes.bool,
 };
 
 export default AddArray;

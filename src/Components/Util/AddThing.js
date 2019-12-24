@@ -27,22 +27,31 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const dataTypes = [ // Do not put array first; causes infinite loop
-    'str',
+// const dataTypes = [ // Do not put array first; causes infinite loop
+//     'str',
+//     'bool',
+//     'int',
+//     'float',
+//     'bytes',
+//     'closure',
+//     'regex',
+//     'error',
+//     'nil',
+//     'list',
+//     'set',
+//     'thing',
+// ];
+
+const single = [
     'bool',
-    'int',
-    'float',
     'bytes',
-    'closure',
-    'regex',
-    'error',
+    'float',
+    'int',
     'nil',
-    'list',
-    'set',
-    'thing',
+    'str',
 ];
 
-const AddThing = ({onBlob, onVal, type}) => {
+const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
     const classes = useStyles();
     const [preBlob, setPreBlob] = React.useState({});
     const [blob, setBlob] = React.useState({});
@@ -132,7 +141,7 @@ const AddThing = ({onBlob, onVal, type}) => {
                         {'{'}
                     </Typography>
                 </Grid>
-                <Grid item xs={10} container>
+                <Grid item xs={9} container>
                     {makeAddedList()}
                 </Grid>
                 <Grid item xs={1} container justify="flex-end">
@@ -140,9 +149,14 @@ const AddThing = ({onBlob, onVal, type}) => {
                         {'}'}
                     </Typography>
                 </Grid>
+                <Grid item xs={1}>
+                    <Fab color="primary" onClick={handleAdd} size="small">
+                        <AddIcon fontSize="small" />
+                    </Fab>
+                </Grid>
             </Grid>
             <Grid container item xs={12} spacing={1} alignItems="flex-start" >
-                <Grid item xs={6}>
+                <Grid item xs={3}>
                     <TextField
                         id="property"
                         type="text"
@@ -154,7 +168,7 @@ const AddThing = ({onBlob, onVal, type}) => {
                         fullWidth
                     />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <TextField
                         id="dataType"
                         type="text"
@@ -168,40 +182,35 @@ const AddThing = ({onBlob, onVal, type}) => {
                         fullWidth
                     >
                         {dataTypes.map((p) => (
-                            <option key={p} value={p} disabled={type==''?false:p!=type}>
+                            <option key={p} value={p}>
                                 {p}
                             </option>
                         ))}
                     </TextField>
                 </Grid>
-                <Grid item xs={1}>
-                    <Fab color="primary" onClick={handleAdd} size="small">
-                        <AddIcon fontSize="small" />
-                    </Fab>
+                <Grid item xs={single.includes(dataType)?6:12}>
+                    <InputField
+                        customTypes={customTypes}
+                        dataType={dataType}
+                        dataTypes={dataTypes}
+                        input={contentAdd}
+                        name="Input"
+                        onVal={handleInputField}
+                        onBlob={handleBlob}
+                        variant="outlined"
+                    />
                 </Grid>
-            </Grid>
-            <Grid item xs={12}>
-                <InputField
-                    dataType={dataType}
-                    input={contentAdd}
-                    name="Input"
-                    onVal={handleInputField}
-                    onBlob={handleBlob}
-                    variant="outlined"
-                />
             </Grid>
         </Grid>
     );
 };
 
-AddThing.defaultProps = {
-    type: '',
-};
 
 AddThing.propTypes = {
+    customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
+    dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     onBlob: PropTypes.func.isRequired,
     onVal: PropTypes.func.isRequired,
-    type:PropTypes.string
 };
 
 export default AddThing;

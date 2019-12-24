@@ -54,7 +54,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
         {ky: 'propertyName', label: 'Name'},
         {ky: 'propertyType', label: 'Type'},
     ];
-    const rows = customType.properties?Object.entries(customType.properties).map(([k, v])=>({propertyName: k, propertyType: v})):[];
+    const rows = customType.fields? customType.fields.map(c=>({propertyName: c[0], propertyType: c[1]})):[];
 
     React.useEffect(() => {
         setState({

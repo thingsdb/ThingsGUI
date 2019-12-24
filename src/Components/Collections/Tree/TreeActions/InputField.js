@@ -27,7 +27,7 @@ const InputField = ({customTypes, dataTypes, dataType, onVal, onBlob, input, ...
         break;
     case 'thing':
         content = (
-            <AddThing onBlob={onBlob} onVal={onVal} />
+            <AddThing customTypes={customTypes} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} />
         );
         break;
     case 'set':
@@ -70,7 +70,7 @@ const InputField = ({customTypes, dataTypes, dataType, onVal, onBlob, input, ...
         break;
     default:
         content = (
-            <CustomChild onBlob={onBlob} onVal={onVal} customTypes={customTypes} dataTypes={dataTypes} type={dataType} />
+            <CustomChild onBlob={onBlob} onVal={onVal} customTypes={customTypes} dataTypes={dataTypes} type={dataType} {...props} />
         );
         break;
     }
@@ -84,12 +84,12 @@ const InputField = ({customTypes, dataTypes, dataType, onVal, onBlob, input, ...
 
 InputField.defaultProps = {
     input: '',
-    customTypes: {},
+    customTypes: [],
     dataTypes: [],
 },
 
 InputField.propTypes = {
-    customTypes: PropTypes.object,
+    customTypes: PropTypes.arrayOf(PropTypes.object),
     dataTypes: PropTypes.arrayOf(PropTypes.string),
     dataType: PropTypes.string.isRequired,
     onVal: PropTypes.func.isRequired,

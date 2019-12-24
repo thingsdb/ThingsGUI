@@ -83,6 +83,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
+    console.log(blob);
 
     return(
         <React.Fragment>
@@ -141,16 +142,16 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                             SelectProps={{native: true}}
                         >
                             {dataTypes.map(d => (
-                                <option key={d} value={d} disabled={child.type=='set'&&!(d=='thing'||customTypes.hasOwnProperty(d))} >
+                                <option key={d} value={d} disabled={child.type=='set'&&!(d=='thing'||Boolean(customTypes.find(c=>c.name==d)))} >
                                     {d}
                                 </option>
                             ))}
                         </TextField>
                     </ListItem>
                 ) : null}
-                <ListItem className={classes.listItem}>
+                <List className={classes.listItem}>
                     <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} />
-                </ListItem>
+                </List>
             </List>
         </React.Fragment>
     );
@@ -162,7 +163,7 @@ Edit.defaultProps = {
 
 Edit.propTypes = {
     cb: PropTypes.func.isRequired,
-    customTypes: PropTypes.object.isRequired,
+    customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     parent: PropTypes.shape({
         id: PropTypes.number,
         index: PropTypes.number,

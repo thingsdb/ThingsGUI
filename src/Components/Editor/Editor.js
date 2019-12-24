@@ -33,7 +33,7 @@ const Editor = ({match}) => {
     const [queryInput, setQueryInput] = React.useState('');
     const [collapse, setCollapse] = React.useState(false);
     const [procedures, setProcedures] = React.useState([]);
-    const [customTypes, setCustomTypes] = React.useState({});
+    const [customTypes, setCustomTypes] = React.useState([]);
 
 
     const handleTypes = (t) => {
@@ -120,30 +120,19 @@ const Editor = ({match}) => {
     const handleClickAddProcedure = () => {
         setQueryInput('new_procedure("...", ...)');
     };
-
-    // Types
-    const typesArr = [...Object.keys(customTypes).map((name) => (
-        {
-            name: name,
-            definition: JSON.stringify(customTypes[name])
-        }
-    ))];
-
-    const makeTypeInstanceInit = (key) => customTypes[key] ?
-        `${key}{${Object.entries(customTypes[key]).map(([k, v]) =>`${k}: ${makeTypeInstanceInit(v)}` )}}`
-        : `<${key}>`;
+    const customTypeNames = [...customTypes.map(c=>c.name)];
+    const makeTypeInstanceInit = (index) =>
+        `${customTypes[index].name}{${customTypes[index].fields.map(c =>`${c[0]}: ${customTypeNames.includes(c[1]) ? makeTypeInstanceInit(customTypeNames.indexOf(c[1])) : `<${c[1]}>`}` )}}`;
 
     const handleClickTypes = (index) => {
-        const key = typesArr[index];
-        const i = makeTypeInstanceInit(key.name);
+        const i = makeTypeInstanceInit(index);
         setQueryInput(i);
     };
 
     const handleClickDeleteTypes = (index, cb) => {
-        const key = typesArr[index];
         TypeActions.deleteType(
             scope.value,
-            key.name,
+            customTypes[index].name,
             tag,
             (t) => {
                 cb();
@@ -185,7 +174,6 @@ const Editor = ({match}) => {
                     </Grid>
                     <Grid item xs={12}>
                         <HarmonicCard
-                            expand={false}
                             title={
                                 <Button
                                     onClick={handleSubmit}
@@ -226,7 +214,7 @@ const Editor = ({match}) => {
                         <Grid item xs={12}>
                             <ChipsCard
                                 expand={false}
-                                items={typesArr}
+                                items={customTypes}
                                 onAdd={handleClickAddTypes}
                                 onClick={handleClickTypes}
                                 onDelete={handleClickDeleteTypes}
