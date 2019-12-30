@@ -198,6 +198,7 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
                         onVal={handleInputField}
                         onBlob={handleBlob}
                         variant="outlined"
+                        label="Value"
                     />
                 </Grid>
             </Grid>

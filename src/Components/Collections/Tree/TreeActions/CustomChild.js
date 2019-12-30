@@ -37,15 +37,9 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(2),
         paddingBottom: theme.spacing(1),
     },
-    top: {
-        marginTop: theme.spacing(2),
-        paddingTop: theme.spacing(1),
-    },
-    paper: {
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
-        width: '100%',
-        backgroundColor: theme.palette.background.default
+    margin: {
+        padding: 0,
+        margin: 0,
     }
 }));
 
@@ -141,47 +135,8 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
 
     const renderInput = (name, types, childTypes) => {
         return(
-            <Grid className={classes.top} key={name} container item xs={12}>
-                <Grid item xs={12} container alignItems="center" spacing={2}>
-                    <Grid item>
-                        <Typography variant="body1" component='span'>
-                            {name}
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        {types.length>1 ? (
-                            <TextField
-                                margin="dense"
-                                color="primary"
-                                id="dataType"
-                                type="text"
-                                name="dataType"
-                                // label="Type"
-                                onChange={handleChangeType(name)}
-                                value={dataType[name]||types[0]}
-                                variant="standard"
-                                select
-                                SelectProps={{native: true}}
-                                InputProps={{
-                                    readOnly: true,
-                                    disableUnderline: true,
-                                    color: 'primary'
-                                }}
-                            >
-                                {types.map((p) => (
-                                    <option key={p} value={p}>
-                                        {p}
-                                    </option>
-                                ))}
-                            </TextField>
-                        ):(
-                            <Typography variant="body1" component='span'>
-                                {` ${types[0]}`}
-                            </Typography>
-                        )}
-                    </Grid>
-                </Grid>
-                <Grid className={classes.bottom} xs={12} container item>
+            <Grid key={name} container item xs={12} alignItems="center">
+                <Grid xs={12} item>
                     <InputField
                         customTypes={customTypes}
                         dataType={dataType[name]||types[0]}
@@ -190,15 +145,53 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
                         onBlob={handleBlob}
                         onVal={handleVal(name)}
                         childtype={childTypes}
-                        variant="outlined"
-
+                        variant="standard"
+                        label={name}
                     />
                 </Grid>
             </Grid>
         );
     };
 
-    const renderCustom = (name, type) =>  {
+    const renderType = (name, types, childTypes) => {
+        return(
+            <Grid key={name} container item xs={12} alignItems="center">
+                <Grid item xs={12}>
+                    {types.length>1 ? (
+                        <TextField
+                            margin="dense"
+                            color="primary"
+                            id="dataType"
+                            type="text"
+                            name="dataType"
+                            onChange={handleChangeType(name)}
+                            value={dataType[name]||types[0]}
+                            variant="standard"
+                            select
+                            SelectProps={{native: true}}
+                            InputProps={{
+                                readOnly: true,
+                                disableUnderline: true,
+                                color: 'primary'
+                            }}
+                        >
+                            {types.map((p) => (
+                                <option key={p} value={p}>
+                                    {p}
+                                </option>
+                            ))}
+                        </TextField>
+                    ):(
+                        <Typography variant="body1" component='span'>
+                            {` ${types[0]}`}
+                        </Typography>
+                    )}
+                </Grid>
+            </Grid>
+        );
+    };
+
+    const renderCustom = (name, type, fn) =>  {
         let t = type.trim();
         let opt=false;
         let arr=false;
@@ -243,7 +236,7 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
         }
 
         return(
-            renderInput(name, tps, chldTps)
+            fn(name, tps, chldTps)
         );
     };
 
@@ -260,62 +253,65 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
         return elements;
     };
 
-    const typeProps = customTypes.find(c=> c.name==type[0]=='<'?type.slice(1, -1):type);
-    const maxSteps = typeProps.fields.length;
+    const typeProperties = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
+    const maxSteps = typeProperties.fields.length;
+
+    console.log(customTypes, type, typeProperties);
 
     return(
         <Grid container item xs={12}>
-            <Paper className={classes.paper} variant="outlines" >
-                <Grid className={classes.bottom} container item xs={12}>
-                    <Grid item xs={10} container justify="flex-start" alignItems="center">
-                        <Typography variant="h5" color="primary">
-                            {`${type}`}
-                        </Typography>
-                        <Typography variant="h3" color="primary">
-                            {'{'}
-                        </Typography>
-                        {makeAddedList()}
-                        <Typography variant="h3" color="primary">
-                            {'}'}
-                        </Typography>
-                    </Grid>
-                    {maxSteps<2 ? (
-                        <Grid container item xs={1} alignItems="center" justify="flex-end">
-                            <Fab color="primary" onClick={handleAdd} size="small">
-                                <AddIcon fontSize="small" />
-                            </Fab>
-                        </Grid>
-                    ) : null}
-                    <Grid item xs={1} container alignItems="center" justify="flex-end">
-                        <Fab color="primary" onClick={open[type]?handleClose(type):handleOpen(type)} size="small">
-                            {open[type] ?  <ExpandMore /> : <ChevronRightIcon /> }
+            <Grid className={classes.bottom} container item xs={12}>
+                <Grid item xs={10} container justify="flex-start" alignItems="center">
+                    <Typography variant="h5" color="primary">
+                        {`${type}`}
+                    </Typography>
+                    <Typography variant="h3" color="primary">
+                        {'{'}
+                    </Typography>
+                    {makeAddedList()}
+                    <Typography variant="h3" color="primary">
+                        {'}'}
+                    </Typography>
+                </Grid>
+                {maxSteps<2 ? (
+                    <Grid container item xs={1} alignItems="center" justify="flex-end">
+                        <Fab color="primary" onClick={handleAdd} size="small">
+                            <AddIcon fontSize="small" />
                         </Fab>
                     </Grid>
+                ) : null}
+                <Grid item xs={1} container alignItems="center" justify="flex-end">
+                    <Fab color="primary" onClick={open[type]?handleClose(type):handleOpen(type)} size="small">
+                        {open[type] ?  <ExpandMore /> : <ChevronRightIcon /> }
+                    </Fab>
                 </Grid>
-            </Paper>
+            </Grid>
             <Collapse className={classes.fullWidth} in={open[type]} timeout="auto">
                 {maxSteps>1 ? (
                     <React.Fragment>
                         <Divider color="primary" />
                         <Grid container item xs={12} alignItems="center" >
-                            <Grid item xs={1}>
+                            <Grid item xs={2} container justify="flex-start">
                                 <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
                                     <KeyboardArrowLeft color="primary" />
                                     {'Back'}
                                 </Button>
                             </Grid>
-                            <Grid item xs={10}>
-                                <Stepper alternativeLabel activeStep={activeStep}>
-                                    {typeProps.fields.map((c) => (
+                            <Grid item xs={8}>
+                                <Stepper className={classes.margin} activeStep={activeStep}>
+                                    {typeProperties.fields.map((c, i) => (
                                         <Step key={c[0]}>
                                             <StepLabel>
                                                 {c[0]}
+                                                <Collapse key={c[0]} className={classes.fullWidth} in={i==activeStep} timeout="auto">
+                                                    {renderCustom(c[0], c[1], renderType)}
+                                                </Collapse>
                                             </StepLabel>
                                         </Step>
                                     ))}
                                 </Stepper>
                             </Grid>
-                            <Grid item xs={1}>
+                            <Grid item xs={2} container justify="flex-end">
                                 {activeStep === maxSteps - 1 ? (
                                     <Button size="small" onClick={handleAdd}>
                                         {'Finish'}
@@ -333,9 +329,9 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
                         <Divider color="primary" />
                     </React.Fragment>
                 ) : null}
-                {( typeProps.fields.map((c, i) => (
+                {( typeProperties.fields.map((c, i) => (
                     <Collapse key={c[0]} className={classes.fullWidth} in={i==activeStep} timeout="auto">
-                        {renderCustom(c[0], c[1])}
+                        {renderCustom(c[0], c[1], renderInput)}
                     </Collapse>
                 )))}
             </Collapse>

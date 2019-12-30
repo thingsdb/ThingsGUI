@@ -150,7 +150,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                     </ListItem>
                 ) : null}
                 <List className={classes.listItem}>
-                    <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} />
+                    <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" />
                 </List>
             </List>
         </React.Fragment>

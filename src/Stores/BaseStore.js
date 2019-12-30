@@ -179,11 +179,15 @@ class EventStore extends BaseStore {
     static types = {
         watchThings: PropTypes.object,
         watchIds: PropTypes.object,
+        procedures: PropTypes.object,
+        types: PropTypes.object,
     }
 
     static defaults = {
         watchThings: {},
         watchIds: {},
+        procedures: {},
+        types: {},
     }
 
     constructor() {
@@ -207,7 +211,7 @@ class EventStore extends BaseStore {
                 this.nodeStatus(data.Data);
                 break;
             case ProtoMap.ProtoOnWarn:
-                console.log(data.Data);
+                ErrorActions.setMsgError('26', data.Data.warn_msg);
                 break;
             default:
 
@@ -239,6 +243,22 @@ class EventStore extends BaseStore {
                 break;
             case data.jobs[i].hasOwnProperty('remove'):
                 this.remove(data['#'], data.jobs[i].remove);
+                break;
+            case data.jobs[i].hasOwnProperty('new_procedure'):
+                break;
+            case data.jobs[i].hasOwnProperty('del_procedure'):
+                break;
+            case data.jobs[i].hasOwnProperty('mod_type_add'):
+                break;
+            case data.jobs[i].hasOwnProperty('mod_type_mod'):
+                break;
+            case data.jobs[i].hasOwnProperty('mod_type_del'):
+                break;
+            case data.jobs[i].hasOwnProperty('new_type'):
+                break;
+            case data.jobs[i].hasOwnProperty('set_type'):
+                break;
+            case data.jobs[i].hasOwnProperty('del_type'):
                 break;
             default:
 
@@ -285,10 +305,10 @@ class EventStore extends BaseStore {
     }
 
     add(id, add) {
-        const prop = Object.keys(add)[0];
+        const prop = Object.keys(add);
         this.setState(prevState => {
             const copySet = new Set([...prevState.watchThings[id][prop]['$']]);
-            for (let i = 1; i<add[prop].length; i++ ) {
+            for (let i = 0; i<add[prop].length; i++ ) {
                 copySet.add(add[prop][i]);
             }
             const newSet = {'$': [...copySet]};
@@ -299,10 +319,10 @@ class EventStore extends BaseStore {
     }
 
     remove(id, remove) {
-        const prop = Object.keys(remove)[0];
+        const prop = Object.keys(remove);
         this.setState(prevState => {
             const copySet = new Set([...prevState.watchThings[id][prop]['$']]);
-            for (let i = 1; i<remove[prop].length; i++ ) {
+            for (let i = 0; i<remove[prop].length; i++ ) {
                 copySet.forEach(function(t){
                     if (t['#'] == remove[prop][i]) {
                         copySet.delete(t);

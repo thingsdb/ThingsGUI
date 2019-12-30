@@ -110,7 +110,7 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
             </TreeBranch>
             {show ? (
                 <ThingActionsDialog
-                    open={show}
+                    open
                     onClose={handleClickClose}
                     child={{
                         id: thing && thing['#']||null,

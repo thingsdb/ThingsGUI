@@ -10,12 +10,12 @@ const CollectionInfo = ({collection}) => {
             {ky: 'name', label: 'Name'},
             {ky: 'things', label: 'Things stored'},
         ]},
-        {ky: 'title2', title: 'QUOTAS', labels: [
-            {ky: 'quota_array_size', label: 'Quota on array size'},
-            {ky: 'quota_properties', label: 'Quota on properties'},
-            {ky: 'quota_raw_size', label: 'Quota on raw size'},
-            {ky: 'quota_things', label: 'Quota on things'},
-        ]}
+        // {ky: 'title2', title: 'QUOTAS', labels: [
+        //     {ky: 'quota_array_size', label: 'Quota on array size'},
+        //     {ky: 'quota_properties', label: 'Quota on properties'},
+        //     {ky: 'quota_raw_size', label: 'Quota on raw size'},
+        //     {ky: 'quota_things', label: 'Quota on things'},
+        // ]}
     ];
 
     return (

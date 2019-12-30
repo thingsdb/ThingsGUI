@@ -237,6 +237,7 @@ class QueryInput extends React.Component {
     static propTypes = {
         onChange: PropTypes.func.isRequired,
         input: PropTypes.string.isRequired,
+        height: PropTypes.number.isRequired,
     }
 
     constructor(props) {
@@ -274,6 +275,7 @@ class QueryInput extends React.Component {
         this._editor.addCommand([monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter], function() {
             return; // Prevent ctrl+enter from processing the enter key stroke. The idea is that ctrl+enter submits the editor's input.
         });
+        this._editor.layout();
     }
 
     componentDidUpdate(prevProps) {
@@ -305,8 +307,9 @@ class QueryInput extends React.Component {
 
 
     render() {
+        const {height} = this.props;
         return (
-            <div style={{height: 'calc(100vh - 50vh)', width: '100%'}} ref={(ele) => this.ele = ele} />
+            <div style={{height: height, width: '100%'}} ref={(ele) => this.ele = ele} />
         );
     }
 }

@@ -1,18 +1,16 @@
+import {withVlow} from 'vlow';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Collapse from '@material-ui/core/Collapse';
-import Divider from '@material-ui/core/Divider';
+import DragHandleIcon from '@material-ui/icons/DragHandle';
 import Grid from '@material-ui/core/Grid';
-import SendIcon from '@material-ui/icons/Send';
 import React from 'react';
-import {withVlow} from 'vlow';
+import {makeStyles} from '@material-ui/core/styles';
 
-import SelectScope from './SelectScope';
 import {ApplicationStore, CollectionActions, CollectionStore, ErrorActions, ProcedureActions, ProcedureStore, TypeActions} from '../../Stores';
 import {ChipsCard, ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput} from '../Util';
+import SelectScope from './SelectScope';
 
 
 const withStores = withVlow([{
@@ -24,16 +22,53 @@ const withStores = withVlow([{
     store: CollectionStore,
 }]);
 
+const useStyles = makeStyles((theme) => ({
+    dragger: {
+        cursor: 'ns-resize',
+    },
+}));
+
 const tag = '13';
 
 const Editor = ({match}) => {
+    const classes = useStyles();
     const [query, setQuery] = React.useState('');
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState({});
     const [queryInput, setQueryInput] = React.useState('');
-    const [collapse, setCollapse] = React.useState(false);
     const [procedures, setProcedures] = React.useState([]);
     const [customTypes, setCustomTypes] = React.useState([]);
+
+    const [isResizing, setIsResizing] = React.useState(false);
+    const [newHeight, setNewHeight] = React.useState(200);
+
+    React.useEffect(() => {
+        if (isResizing) {
+            window.addEventListener('mousemove', handleMousemove);
+            window.addEventListener('mouseup', handleMouseup);
+        } else {
+            window.removeEventListener('mousemove', handleMousemove);
+            window.removeEventListener('mouseup', handleMouseup);
+        }
+    },[isResizing]);
+
+    const handleMousedown = () => {
+        setIsResizing(true);
+    };
+
+    const handleMousemove = React.useCallback((event) => {
+        let el = document.getElementById('editor');
+
+        let height = event.clientY - el.offsetTop;
+        if (height > 100) {
+            setNewHeight(height);
+        }
+
+    }, []);
+
+    const handleMouseup = React.useCallback(() => {
+        setIsResizing(false);
+    }, []);
 
 
     const handleTypes = (t) => {
@@ -63,13 +98,11 @@ const Editor = ({match}) => {
 
     const handleInput = (value) => {
         handleCloseError();
-        handleShrink();
         setQueryInput('');
         setQuery(value);
     };
 
     const handleSubmit = () => {
-        setCollapse(false);
         setOutput(null);
         CollectionActions.queryEditor(scope.value, query, scope.collectionId, handleOutput, tag);
         handleGetAdditionals();
@@ -93,10 +126,6 @@ const Editor = ({match}) => {
 
     const handleCloseError = () => {
         ErrorActions.removeMsgError(tag);
-    };
-
-    const handleShrink = () => {
-        setCollapse(true);
     };
 
     // Procedures
@@ -152,24 +181,14 @@ const Editor = ({match}) => {
             content={
                 <React.Fragment>
                     <Grid item xs={12}>
-                        <Card id='editor'>
-                            <CardContent onKeyDown={handleKeyPress} onClick={handleShrink} >
+                        <Card id='editor' style={{height: newHeight}}>
+                            <CardContent onKeyDown={handleKeyPress}>
                                 <ErrorMsg tag={tag} />
-                                <Collapse in={collapse} collapsedHeight="40px">
-                                    <QueryInput onChange={handleInput} input={queryInput} />
-                                </Collapse>
+                                <QueryInput onChange={handleInput} input={queryInput} height={newHeight-70} />
                             </CardContent>
-                            {/* <Divider />
-                            <CardActions>
-                                <Button
-                                    onClick={handleSubmit}
-                                    variant="text"
-                                    color="primary"
-                                    size="large"
-                                >
-                                    {<SendIcon />}
-                                </Button>
-                            </CardActions> */}
+                            <Grid container item xs={12} alignItems="flex-end" justify="center">
+                                <DragHandleIcon className={classes.dragger} onMouseDown={handleMousedown} />
+                            </Grid>
                         </Card>
                     </Grid>
                     <Grid item xs={12}>
@@ -187,7 +206,6 @@ const Editor = ({match}) => {
                             content={
                                 <QueryOutput output={output} />
                             }
-                            expand={!collapse}
                         />
                     </Grid>
                 </React.Fragment>

@@ -157,6 +157,7 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, childtype, isSet}) => 
                         onBlob={handleBlob}
                         onVal={handleInputField}
                         variant="outlined"
+                        label="Value"
                     />
                 </Grid>
             </Grid>

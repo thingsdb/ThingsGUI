@@ -16,12 +16,19 @@ const tag = '8';
 
 
 const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
-    const [customTypes, setCustomTypes] = React.useState([]);
 
-    const handleTypes = (t) => {
-        setCustomTypes(t);
+    const initialState = {
+        customTypes: [],
+        query: '',
+        blob: {},
+        error: '',
+        show: false,
+        setOrList: '',
+        realChildType: '',
+        realParentType: '',
     };
-
+    const [state, setState] = React.useState(initialState);
+    const {query, blob, error, show, realChildType, realParentType, customTypes} = state;
     const dataTypes = [
         'str',
         'int',
@@ -38,32 +45,20 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
         ...customTypes.map(c=>c.name)
     ];
 
-    const initialState = {
-        query: '',
-        blob: {},
-        error: '',
-        show: false,
-        setOrList: '',
-        realChildType: '',
-        realParentType: '',
-    };
-    const [state, setState] = React.useState(initialState);
-    const {query, blob, error, show, realChildType, realParentType} = state;
-
     React.useEffect(() => {
-        TypeActions.getTypes(scope, tag, handleTypes);
-
         // Checks for the real type. From here on array is redefined to list or set. And thing is redefined to its potential custom type.
         // Furthermore we check if the parent has a custom type. In that case we remove the remove button. Custom type instances have no delete options.
 
         // it would also be nice if we could check for potential custom type childern in an array type. To define the datatype of the edit component.
         let query='';
         if (parent.id==null) {
-            query = `{childType: type(#${child.id}), parentType: ''}`; // check if custom type
+            query = `{childType: type(#${child.id}), parentType: '', customTypes: types_info()}`; // check if custom type
         } else if (parent.type == 'thing') {
-            query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id})}`; // check if custom type
+            query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}), customTypes: types_info()}`; // check if custom type
+        } else if (child.type == 'thing') {
+            query = `{childType: type(#${child.id}), parentType: type(#${parent.id}.${parent.name}), customTypes: types_info()}`; // in case parent is set than indexing is not supported. Therefore we need to check child type by id.
         } else {
-            query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}.${parent.name})}`; // check if custom type
+            query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}.${parent.name}), customTypes: types_info()}`; // check if custom type
         }
         TypeActions.getType(query, scope, tag, setType);
 
@@ -71,7 +66,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
 
 
     const setType = (t) => {
-        setState({...state, realChildType: t.childType, realParentType: t.parentType, show: true});
+        setState({...state, realChildType: t.childType, realParentType: t.parentType, show: true, customTypes: t.customTypes});
     };
 
     const handleQuery = (q, b, e) => {
@@ -117,6 +112,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
     const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type === 'bytes' || realChildType[0]=='<');
     const canWatch = thing && thing.hasOwnProperty('#');
     const canDownload = child.type === 'bytes';
+
 
     const content = (
         <Grid container spacing={1}>
@@ -191,7 +187,7 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
         <React.Fragment>
             {show ? (
                 <SimpleModal
-                    open={open}
+                    open
                     onClose={onClose}
                     onOk={canEdit ? handleClickOk:null}
                     maxWidth="md"

@@ -19,7 +19,6 @@ const AddInt = ({input, cb, ...props}) => {
     return(
         <TextField
             name="value"
-            label="Value"
             type="text"
             value={input}
             spellCheck={false}

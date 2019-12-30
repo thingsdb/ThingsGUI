@@ -115,11 +115,11 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, toast, bottomBar, dra
             setNewWidth(offsetRight);
         }
 
-    }, [setNewWidth]);
+    }, []);
 
     const handleMouseup = React.useCallback(() => {
         setIsResizing(false);
-    }, [setIsResizing]);
+    }, []);
 
 
     return(

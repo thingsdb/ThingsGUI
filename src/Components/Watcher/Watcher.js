@@ -15,7 +15,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import {EventActions, EventStore, ThingsdbStore} from '../../Stores';
-import {ThingsTree} from '../Util';
+import {ErrorMsg, ThingsTree} from '../Util';
 
 const withStores = withVlow([{
     store: EventStore,
@@ -54,6 +54,8 @@ const useStyles = makeStyles(theme => ({
         },
     },
 }));
+
+const tag = '26';
 
 const Watcher = ({watchIds, watchThings, collections}) => {
     const classes = useStyles();
@@ -110,6 +112,7 @@ const Watcher = ({watchIds, watchThings, collections}) => {
                 <Typography>
                     {'Add a thing ID to watch:'}
                 </Typography>
+                <ErrorMsg tag={tag} />
             </Grid>
             <Grid className={classes.grid} container item xs={12} spacing={1} alignItems="center" >
                 <Grid item>
