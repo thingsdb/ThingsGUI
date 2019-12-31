@@ -2,8 +2,10 @@ package handlers
 
 import (
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -36,10 +38,8 @@ type LoginData struct {
 	InsecureSkipVerify bool   `json:"insecureSkipVerify"`
 }
 
-type SavedConn struct {
-	guiConns map[string]LoginData
-	n        int
-}
+var key = []byte("jdyw3ts4dkflp8orftr7vd6372jqzpta")
+var connFile = "./thingsgui"
 
 func connect(client *Client, data LoginData) LoginResp {
 	hp := strings.Split(data.Address, ":")
@@ -131,24 +131,152 @@ func CloseSingleConn(client *Client) {
 	}
 }
 
-func NewConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
+func GetConnection(client *Client) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
-	err := util.CreateFile()
 
-	return message.Status, nil, message
+	path, err := getHomePath()
+	if err != nil {
+		return internalError(err)
+	}
+
+	mapping, err := readConnFile(path, client.LogCh)
+	if err != nil {
+		return internalError(err)
+	}
+	keys := make([]string, 0, len(mapping))
+	for k := range mapping {
+		keys = append(keys, k)
+	}
+	return message.Status, keys, message
 }
 
-func EditConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
+func NewEditConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	var mapping = make(map[string]LoginData)
+
+	path, err := getHomePath()
+	if err != nil {
+		return internalError(err)
+	}
+	newFile, err := util.CreateFile(path, client.LogCh)
+	if err != nil {
+		return internalError(err)
+	}
+
+	if !newFile {
+		mapping, err = readConnFile(path, client.LogCh)
+		if err != nil {
+			return internalError(err)
+		}
+	}
+
+	mapping[data.Name] = data
+	err = writeConnFile(path, mapping, client.LogCh)
+	if err != nil {
+		return internalError(err)
+	}
+
 	return message.Status, nil, message
 }
 
 func DelConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+
+	path, err := getHomePath()
+	if err != nil {
+		return internalError(err)
+	}
+	fileNotExist := util.FileNotExist(path)
+	if fileNotExist {
+		return internalError(fmt.Errorf("File does not exist"))
+	}
+	mapping, err := readConnFile(path, client.LogCh)
+	if err != nil {
+		return internalError(err)
+	}
+	delete(mapping, data.Name)
+
 	return message.Status, nil, message
 }
 
 func ConnectionToo(client *Client, data LoginData) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	path, err := getHomePath()
+	if err != nil {
+		return internalError(err)
+	}
+	fileNotExist := util.FileNotExist(path)
+	if fileNotExist {
+		return internalError(fmt.Errorf("File does not exist"))
+	}
+	mapping, err := readConnFile(path, client.LogCh)
+	if err != nil {
+		return internalError(err)
+	}
+
+	resp := connect(
+		client,
+		mapping[data.Name],
+	)
+
+	if resp.Connected {
+		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	} else {
+		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
+	}
+	return message.Status, resp, message
+}
+
+func getHomePath() (string, error) {
+	var dir string
+	var err error
+	dir, err = os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	path := fmt.Sprintf("%s/%s", dir, connFile)
+	return path, nil
+}
+
+func readConnFile(path string, logCh chan string) (map[string]LoginData, error) {
+	var mapping = make(map[string]LoginData)
+
+	ciphertext, err := util.ReadFile(path, logCh)
+	if err != nil {
+		return nil, err
+	}
+
+	plaintext, err := util.Decrypt(ciphertext, key)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(plaintext, &mapping)
+	if err != nil {
+		return nil, err
+	}
+	return mapping, nil
+}
+
+func writeConnFile(path string, mapping map[string]LoginData, logCh chan string) error {
+	jsonString, err := json.Marshal(mapping)
+	if err != nil {
+		return err
+	}
+
+	encrypted, err := util.Encrypt(jsonString, key)
+	if err != nil {
+		return err
+	}
+
+	err = util.WriteFile(path, logCh, encrypted)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func internalError(err error) (int, interface{}, util.Message) {
+	message := util.Message{Text: err.Error(), Status: http.StatusInternalServerError, Log: err.Error()}
 	return message.Status, nil, message
 }

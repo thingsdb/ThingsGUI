@@ -6,8 +6,6 @@ import (
 	"os"
 )
 
-var key = []byte("jdyw3ts4dkflp8orftr7vd6372jqzpta")
-
 // buffer is used to read data from a connection.
 type buffer struct {
 	data []byte
@@ -21,21 +19,31 @@ func newBuffer() *buffer {
 	}
 }
 
-func CreateFile(path string, logCh chan string) error {
+func FileNotExist(path string) bool {
 	// check if file exists
+	fileNotExist := false
 	var _, err = os.Stat(path)
 
 	// create file if not exists
 	if os.IsNotExist(err) {
-		var file, err = os.Create(path)
+		fileNotExist = true
+	}
+
+	return fileNotExist
+}
+
+func CreateFile(path string, logCh chan string) (bool, error) {
+	create := FileNotExist(path)
+	if create {
+		file, err := os.Create(path)
 		if err != nil {
-			return err
+			return false, err
 		}
+		logCh <- fmt.Sprintln("File Created Successfully", path)
 		defer file.Close()
 	}
 
-	logCh <- fmt.Sprintln("File Created Successfully", path)
-	return nil
+	return create, nil
 }
 
 func WriteFile(path string, logCh chan string, data []byte) error {

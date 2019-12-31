@@ -33,7 +33,7 @@ import (
 // 	fmt.Printf("%x => %s\n", ciphertext, plaintext)
 // }
 
-func encrypt(plaintext []byte, key []byte) ([]byte, error) {
+func Encrypt(plaintext []byte, key []byte) ([]byte, error) {
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func encrypt(plaintext []byte, key []byte) ([]byte, error) {
 	return gcm.Seal(nonce, nonce, plaintext, nil), nil
 }
 
-func decrypt(ciphertext []byte, key []byte) ([]byte, error) {
+func Decrypt(ciphertext []byte, key []byte) ([]byte, error) {
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
