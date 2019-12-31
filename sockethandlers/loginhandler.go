@@ -27,12 +27,18 @@ type LoginResp struct {
 }
 
 type LoginData struct {
+	Name               string `json:"name"`
 	Address            string `json:"address"`
 	User               string `json:"user"`
 	Password           string `json:"password"`
 	Token              string `json:"token"`
 	SecureConnection   bool   `json:"secureConnection"`
 	InsecureSkipVerify bool   `json:"insecureSkipVerify"`
+}
+
+type SavedConn struct {
+	guiConns map[string]LoginData
+	n        int
 }
 
 func connect(client *Client, data LoginData) LoginResp {
@@ -123,4 +129,26 @@ func CloseSingleConn(client *Client) {
 		client.Connection.Close()
 		<-client.Closed
 	}
+}
+
+func NewConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
+	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	err := util.CreateFile()
+
+	return message.Status, nil, message
+}
+
+func EditConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
+	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	return message.Status, nil, message
+}
+
+func DelConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
+	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	return message.Status, nil, message
+}
+
+func ConnectionToo(client *Client, data LoginData) (int, interface{}, util.Message) {
+	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	return message.Status, nil, message
 }
