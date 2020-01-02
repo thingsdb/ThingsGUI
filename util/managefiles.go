@@ -55,7 +55,10 @@ func WriteFile(path string, logCh chan string, data []byte) error {
 	defer file.Close()
 
 	// Write some text line-by-line to file.
-
+	err = file.Truncate(0)
+	if err != nil {
+		return err
+	}
 	_, err = file.Write(data)
 	if err != nil {
 		return err
@@ -82,8 +85,10 @@ func ReadFile(path string, logCh chan string) ([]byte, error) {
 	// Read file, line by line
 	b := newBuffer()
 	for {
-		n, err := file.Read(b.data[b.len:])
+		wbuf := make([]byte, 1024)
+		n, err := file.Read(wbuf)
 		b.len += n
+		b.data = append(b.data, wbuf[:n]...)
 
 		// Break if finally arrived at end of file
 		if err == io.EOF {

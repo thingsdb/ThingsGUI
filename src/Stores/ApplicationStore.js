@@ -13,7 +13,6 @@ const ApplicationActions = Vlow.createActions([
     'openEditor',
     'closeEditor',
     'logging',
-    'savedConnections',
     'getConn',
     'newConn',
     'editConn',
@@ -30,7 +29,7 @@ class ApplicationStore extends BaseStore {
         match: PropTypes.shape({path: PropTypes.string, index: PropTypes.number, item: PropTypes.string, scope: PropTypes.string}),
         openEditor: PropTypes.bool,
         input: PropTypes.string,
-        savedConnections: PropTypes.array
+        savedConnections: PropTypes.object
     }
 
     static defaults = {
@@ -44,7 +43,7 @@ class ApplicationStore extends BaseStore {
         },
         openEditor: false,
         input: '',
-        savedConnections: []
+        savedConnections: {}
     }
 
     constructor() {
@@ -103,20 +102,22 @@ class ApplicationStore extends BaseStore {
 
     onGetConn(tag) {
         this.emit('getConn').done((data) => {
-            this.setState({savedConnections: data});
+            console.log(data);
+            this.setState({savedConnections: data||{}});
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });
     }
 
-    onNewConn(config, tag) {
+    onNewConn(config, tag, cb) {
         this.emit('newEditConn', config).done((_data) => {
+            console.log(config);
             this.setState(prevState => {
-                const copy = [...prevState.savedConnections];
-                const savedConn = copy.push(config.name);
+                const savedConn = Object.assign({}, prevState.savedConnections, {[config.name]: config});
                 const update = Object.assign({}, prevState, {savedConnections: savedConn});
                 return update;
             });
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });
@@ -131,11 +132,10 @@ class ApplicationStore extends BaseStore {
     }
 
     onDelConn(config, tag) {
-        this.emit('newEditConn', config).done((_data) => {
+        this.emit('delConn', config).done((_data) => {
             this.setState(prevState => {
-                const copy = [...prevState.savedConnections];
-                const i = copy.indexOf(config.name);
-                copy.splice(i, 1);
+                let copy = JSON.parse(JSON.stringify(prevState.savedConnections));
+                delete copy[config.name];
                 const update = Object.assign({}, prevState, {savedConnections: copy});
                 return update;
             });

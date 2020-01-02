@@ -30,7 +30,7 @@ var (
 
 func Init() {
 	flag.StringVar(&host, "host", "localhost", "host")
-	flag.UintVar(&port, "port", 8080, "port")
+	flag.UintVar(&port, "port", 8000, "port")
 	flag.UintVar(&timeout, "timeout", 30, "timeout")
 	flag.BoolVar(&openBrowser, "open", true, "opens a page in your default browser")
 

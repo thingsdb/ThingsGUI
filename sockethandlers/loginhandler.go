@@ -39,7 +39,7 @@ type LoginData struct {
 }
 
 var key = []byte("jdyw3ts4dkflp8orftr7vd6372jqzpta")
-var connFile = "./thingsgui"
+var connFile = ".thingsgui"
 
 func connect(client *Client, data LoginData) LoginResp {
 	hp := strings.Split(data.Address, ":")
@@ -141,13 +141,18 @@ func GetConnection(client *Client) (int, interface{}, util.Message) {
 
 	mapping, err := readConnFile(path, client.LogCh)
 	if err != nil {
-		return internalError(err)
+		client.LogCh <- err.Error()
+		return message.Status, nil, message
 	}
-	keys := make([]string, 0, len(mapping))
-	for k := range mapping {
-		keys = append(keys, k)
+
+	var resp = make(map[string]LoginData)
+	for k, v := range mapping {
+		v.Password = ""
+
+		resp[k] = v
 	}
-	return message.Status, keys, message
+
+	return message.Status, resp, message
 }
 
 func NewEditConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
@@ -194,7 +199,12 @@ func DelConnection(client *Client, data LoginData) (int, interface{}, util.Messa
 	if err != nil {
 		return internalError(err)
 	}
+
 	delete(mapping, data.Name)
+	err = writeConnFile(path, mapping, client.LogCh)
+	if err != nil {
+		return internalError(err)
+	}
 
 	return message.Status, nil, message
 }
@@ -255,6 +265,7 @@ func readConnFile(path string, logCh chan string) (map[string]LoginData, error) 
 	if err != nil {
 		return nil, err
 	}
+
 	return mapping, nil
 }
 
