@@ -2,10 +2,8 @@ package handlers
 
 import (
 	"crypto/tls"
-	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 
@@ -20,6 +18,7 @@ type Client struct {
 	LogCh      chan string
 	TmpFiles   *util.TmpFiles
 	Ssl        *tls.Config
+	HomePath   string
 }
 
 type LoginResp struct {
@@ -37,9 +36,6 @@ type LoginData struct {
 	SecureConnection   bool   `json:"secureConnection"`
 	InsecureSkipVerify bool   `json:"insecureSkipVerify"`
 }
-
-var key = []byte("jdyw3ts4dkflp8orftr7vd6372jqzpta")
-var connFile = ".thingsgui"
 
 func connect(client *Client, data LoginData) LoginResp {
 	hp := strings.Split(data.Address, ":")
@@ -134,12 +130,8 @@ func CloseSingleConn(client *Client) {
 func GetConnection(client *Client) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 
-	path, err := getHomePath()
-	if err != nil {
-		return internalError(err)
-	}
-
-	mapping, err := readConnFile(path, client.LogCh)
+	var mapping = make(map[string]LoginData)
+	err := util.ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
 	if err != nil {
 		client.LogCh <- err.Error()
 		return message.Status, nil, message
@@ -159,24 +151,20 @@ func NewEditConnection(client *Client, data LoginData) (int, interface{}, util.M
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	var mapping = make(map[string]LoginData)
 
-	path, err := getHomePath()
-	if err != nil {
-		return internalError(err)
-	}
-	newFile, err := util.CreateFile(path, client.LogCh)
+	newFile, err := util.CreateFile(client.HomePath, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
 
 	if !newFile {
-		mapping, err = readConnFile(path, client.LogCh)
+		err = util.ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
 		if err != nil {
 			return internalError(err)
 		}
 	}
 
 	mapping[data.Name] = data
-	err = writeConnFile(path, mapping, client.LogCh)
+	err = util.WriteEncryptedFile(client.HomePath, mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
@@ -187,21 +175,19 @@ func NewEditConnection(client *Client, data LoginData) (int, interface{}, util.M
 func DelConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 
-	path, err := getHomePath()
-	if err != nil {
-		return internalError(err)
-	}
-	fileNotExist := util.FileNotExist(path)
+	fileNotExist := util.FileNotExist(client.HomePath)
 	if fileNotExist {
 		return internalError(fmt.Errorf("File does not exist"))
 	}
-	mapping, err := readConnFile(path, client.LogCh)
+
+	var mapping = make(map[string]LoginData)
+	err := util.ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
 
 	delete(mapping, data.Name)
-	err = writeConnFile(path, mapping, client.LogCh)
+	err = util.WriteEncryptedFile(client.HomePath, mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
@@ -211,15 +197,14 @@ func DelConnection(client *Client, data LoginData) (int, interface{}, util.Messa
 
 func ConnectionToo(client *Client, data LoginData) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
-	path, err := getHomePath()
-	if err != nil {
-		return internalError(err)
-	}
-	fileNotExist := util.FileNotExist(path)
+
+	fileNotExist := util.FileNotExist(client.HomePath)
 	if fileNotExist {
 		return internalError(fmt.Errorf("File does not exist"))
 	}
-	mapping, err := readConnFile(path, client.LogCh)
+
+	var mapping = make(map[string]LoginData)
+	err := util.ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
@@ -235,56 +220,6 @@ func ConnectionToo(client *Client, data LoginData) (int, interface{}, util.Messa
 		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
 	}
 	return message.Status, resp, message
-}
-
-func getHomePath() (string, error) {
-	var dir string
-	var err error
-	dir, err = os.UserHomeDir()
-	if err != nil {
-		return "", err
-	}
-	path := fmt.Sprintf("%s/%s", dir, connFile)
-	return path, nil
-}
-
-func readConnFile(path string, logCh chan string) (map[string]LoginData, error) {
-	var mapping = make(map[string]LoginData)
-
-	ciphertext, err := util.ReadFile(path, logCh)
-	if err != nil {
-		return nil, err
-	}
-
-	plaintext, err := util.Decrypt(ciphertext, key)
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(plaintext, &mapping)
-	if err != nil {
-		return nil, err
-	}
-
-	return mapping, nil
-}
-
-func writeConnFile(path string, mapping map[string]LoginData, logCh chan string) error {
-	jsonString, err := json.Marshal(mapping)
-	if err != nil {
-		return err
-	}
-
-	encrypted, err := util.Encrypt(jsonString, key)
-	if err != nil {
-		return err
-	}
-
-	err = util.WriteFile(path, logCh, encrypted)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func internalError(err error) (int, interface{}, util.Message) {

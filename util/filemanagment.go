@@ -39,6 +39,10 @@ func CreateFile(path string, logCh chan string) (bool, error) {
 		if err != nil {
 			return false, err
 		}
+		file.Chmod(0600)
+		if err != nil {
+			return false, err
+		}
 		logCh <- fmt.Sprintln("File Created Successfully", path)
 		defer file.Close()
 	}
@@ -48,17 +52,17 @@ func CreateFile(path string, logCh chan string) (bool, error) {
 
 func WriteFile(path string, logCh chan string, data []byte) error {
 	// Open file using READ & WRITE permission.
-	var file, err = os.OpenFile(path, os.O_RDWR, 0644)
+	var file, err = os.OpenFile(path, os.O_RDWR|os.O_TRUNC, 0600)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 
 	// Write some text line-by-line to file.
-	err = file.Truncate(0)
-	if err != nil {
-		return err
-	}
+	// err = file.Truncate(0)
+	// if err != nil {
+	// 	return err
+	// }
 	_, err = file.Write(data)
 	if err != nil {
 		return err
@@ -76,7 +80,7 @@ func WriteFile(path string, logCh chan string, data []byte) error {
 
 func ReadFile(path string, logCh chan string) ([]byte, error) {
 	// Open file for reading.
-	file, err := os.OpenFile(path, os.O_RDWR, 0644)
+	file, err := os.OpenFile(path, os.O_RDWR, 0600)
 	if err != nil {
 		return nil, err
 	}
@@ -114,4 +118,15 @@ func DeleteFile(path string, logCh chan string) error {
 
 	logCh <- fmt.Sprintln("File Deleted")
 	return nil
+}
+
+func GetHomePath(fileName string) string {
+	var dir string
+	// var err error
+	dir, _ = os.UserHomeDir()
+	// if err != nil {
+	// 	return "", err
+	// }
+	path := fmt.Sprintf("%s/%s", dir, fileName)
+	return path
 }

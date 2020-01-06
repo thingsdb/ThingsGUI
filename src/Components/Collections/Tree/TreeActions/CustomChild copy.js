@@ -1,19 +1,14 @@
 /* eslint-disable react/no-multi-comp */
-import AddIcon from '@material-ui/icons/Add';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import Chip from '@material-ui/core/Chip';
+import { makeStyles } from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
-import Divider from '@material-ui/core/Divider';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 
+import CustomHeader from './CustomHeader';
+import CustomStepper from './CustomStepper';
 import InputField from './InputField';
 
 const useStyles = makeStyles(theme => ({
@@ -21,6 +16,17 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(1),
         margin: theme.spacing(1),
     },
+    fullWidth: {
+        width: '100%',
+    },
+    bottom: {
+        marginBottom: theme.spacing(2),
+        paddingBottom: theme.spacing(1),
+    },
+    margin: {
+        padding: 0,
+        margin: 0,
+    }
 }));
 
 const typeConv = {
@@ -47,21 +53,26 @@ const typeConv = {
 
 const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
     const classes = useStyles();
+    const [activeStep, setActiveStep] = React.useState(0);
     const [blob, setBlob] = React.useState({});
-    const [preBlob, setPreBlob] = React.useState({});
-    const [val, setVal] = React.useState({});
-    const [open, setOpen] = React.useState({});
     const [dataType, setDataType] = React.useState({});
     const [myItems, setMyItems] = React.useState([]);
+    const [open, setOpen] = React.useState({});
+    const [val, setVal] = React.useState({});
 
     React.useEffect(() => {
-        onVal(`${type.slice(-1)=='?'?type.slice(0, -1):type}{${myItems}}`);
+        onVal(`${type}{${myItems}}`);
         onBlob(blob);
     },
     [JSON.stringify(myItems)],
     );
 
     React.useEffect(() => {
+        setActiveStep(0);
+        setBlob({});
+        setDataType({});
+        setMyItems([]);
+        setOpen({});
         setVal([]);
     },[type]);
 
@@ -78,7 +89,7 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
     };
 
     const handleBlob = (b) => {
-        setPreBlob({...preBlob, ...b});
+        setBlob({...blob, ...b});
     };
 
     const handleOpen = (k) => () => {
@@ -91,65 +102,24 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
     const handleAdd = () => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
         setMyItems(s);
-        setBlob({...blob, ...preBlob});
-        setPreBlob({});
+
+        setBlob(prevBlob => {
+            let copy = JSON.parse(JSON.stringify(prevBlob));
+            let b = Object.keys(copy).map((k)=> Object.values(val).includes(k)?null:k);
+            b.map(key=>delete copy[key]);
+            return copy;
+        });
     };
 
-    const renderInput = (name, types, childTypes, index) => {
-        return(
-            <Grid container item xs={12} >
-                <Grid container item xs={12} >
-                    <Grid item xs={8} container alignItems="center">
-                        <Typography color="primary" variant="body1">
-                            {name}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={4} container alignItems="center" justify="flex-end">
-                        <IconButton onClick={open[name]?handleClose(name):handleOpen(name)}>
-                            {open[name] ?  <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> }
-                        </IconButton>
-                    </Grid>
-                </Grid>
-                <Collapse in={open[name]} timeout="auto">
-                    <Grid item xs={12}>
-                        <TextField
-                            id="dataType"
-                            type="text"
-                            name="dataType"
-                            label="Data type"
-                            onChange={handleChangeType(name)}
-                            value={dataType[name]||types[0]}
-                            variant="outlined"
-                            fullWidth
-                            select
-                            SelectProps={{native: true}}
-                        >
-                            {types.map((p) => (
-                                <option key={p} value={p}>
-                                    {p}
-                                </option>
-                            ))}
-                        </TextField>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <InputField
-                            customTypes={customTypes}
-                            dataType={dataType[name]||types[0]}
-                            dataTypes={dataTypes}
-                            input={val[name]||''}
-                            onBlob={handleBlob}
-                            onVal={handleVal(name)}
-                            childtype={childTypes}
-                            variant="outlined"
-
-                        />
-                    </Grid>
-                </Collapse>
-            </Grid>
-        );
+    const handleNext = () => {
+        setActiveStep(activeStep+1);
     };
 
-    const renderCustom = (name, type, index) =>  {
+    const handleBack = () => {
+        setActiveStep(activeStep-1);
+    };
+
+    const renderCustom = (fn) => ([name, type]) =>  {
         let t = type.trim();
         let opt=false;
         let arr=false;
@@ -171,11 +141,11 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
         } else {
             if (opt) {
                 tps= t=='any' ? dataTypes
-                    : typeConv[type] ? [...typeConv[t], 'nil']
+                    : typeConv[t] ? [...typeConv[t], 'nil']
                         : [t, 'nil'];
             } else {
                 tps= t=='any' ? dataTypes
-                    : typeConv[type] ? typeConv[t]
+                    : typeConv[t] ? typeConv[t]
                         : [t];
             }
         }
@@ -184,62 +154,107 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
             if (t.slice(-1)=='?') {
                 t = t.slice(0, -1);
                 chldTps= t=='any' ? dataTypes
-                    : typeConv[type] ? [...typeConv[t], 'nil']
+                    : typeConv[t] ? [...typeConv[t], 'nil']
                         : [t, 'nil'];
             } else {
                 chldTps= t=='any' ? dataTypes
-                    : typeConv[type] ? typeConv[t]
+                    : typeConv[t] ? typeConv[t]
                         : [t];
             }
         }
 
         return(
-            renderInput(name, tps, chldTps, index)
+            fn(name, tps, chldTps)
         );
     };
 
-    const makeAddedList = () => {
-        const elements =  myItems.map((listitem, index) => (
-            <Chip
-                key={index}
-                id={listitem}
-                className={classes.chip}
-                label={listitem}
-                color="primary"
-            />
-        ));
-        return elements;
+    const renderInput = (name, types, childTypes) => {
+        return(
+            <Grid key={name} container item xs={12} alignItems="center">
+                <InputField
+                    customTypes={customTypes}
+                    dataType={dataType[name]||types[0]}
+                    dataTypes={dataTypes}
+                    input={val[name]||''}
+                    onBlob={handleBlob}
+                    onVal={handleVal(name)}
+                    childtype={childTypes}
+                    variant="standard"
+                    label={name}
+                />
+            </Grid>
+        );
     };
 
+    const renderType = (name, types) => {
+        return(
+            <Grid key={name} container item xs={12} alignItems="center">
+                <Grid item xs={12}>
+                    {types.length>1 ? (
+                        <TextField
+                            margin="dense"
+                            color="primary"
+                            id="dataType"
+                            type="text"
+                            name="dataType"
+                            onChange={handleChangeType(name)}
+                            value={dataType[name]||types[0]}
+                            variant="standard"
+                            select
+                            SelectProps={{native: true}}
+                            InputProps={{
+                                readOnly: true,
+                                disableUnderline: true,
+                                color: 'primary'
+                            }}
+                        >
+                            {types.map((p) => (
+                                <option key={p} value={p}>
+                                    {p}
+                                </option>
+                            ))}
+                        </TextField>
+                    ):(
+                        <Typography variant="body1" component='span'>
+                            {` ${types[0]}`}
+                        </Typography>
+                    )}
+                </Grid>
+            </Grid>
+        );
+    };
+
+    const typeProperties = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
+    console.log(typeProperties, customTypes, type);
+    const maxSteps = typeProperties.fields.length;
+
     return(
-        <Grid container >
-            <Grid container item xs={12}>
-                <Grid item xs={11} container justify="flex-start" alignItems="center">
-                    <Typography variant="h5" color="primary">
-                        {`${type}`}
-                    </Typography>
-                    <Typography variant="h3" color="primary">
-                        {'{'}
-                    </Typography>
-                    {makeAddedList()}
-                    <Typography variant="h3" color="primary">
-                        {'}'}
-                    </Typography>
-                </Grid>
-                <Grid item xs={1}>
-                    <Fab color="primary" onClick={handleAdd} size="small">
-                        <AddIcon fontSize="small" />
-                    </Fab>
-                </Grid>
-            </Grid>
-            <Grid container item xs={12} >
-                {( customTypes.find(c=> c.name==type.slice(-1)=='?'?type.slice(0, -1):type).fields.map((c, i) => (
-                    <React.Fragment key={c[0]}>
-                        {renderCustom(c[0], c[1], i)}
-                    </React.Fragment>
+        <Grid container item xs={12}>
+            <CustomHeader onAdd={handleAdd} onOpen={handleOpen(type)} onClose={handleClose(type)} open={open[type]||false} items={myItems} type={type} maxSteps={maxSteps} />
+            <Collapse className={classes.fullWidth} in={open[type]} timeout="auto">
+                <CustomStepper onAdd={handleAdd} onBack={handleBack} onNext={handleNext} items={typeProperties.fields} activeStep={activeStep} maxSteps={maxSteps} renderCustom={renderCustom(renderType)} />
+                {( typeProperties.fields.map((c, i) => (
+                    <Collapse key={c[0]} className={classes.fullWidth} in={i==activeStep} timeout="auto">
+                        {renderCustom(renderInput)(c)}
+                    </Collapse>
                 )))}
-            </Grid>
+            </Collapse>
         </Grid>
+        <ListItem key={k} button onClick={handleConnectToo(k)}>
+            <ListItemText primary={k} secondary={v.address} />
+            <ListItemSecondaryAction>
+                <IconButton onClick={open? handleClose: handleOpen}>
+                    {open ?  <ExpandMore /> : <ChevronRightIcon /> }
+                </IconButton>
+            </ListItemSecondaryAction>
+            <Collapse className={classes.fullWidth} in={open} timeout="auto">
+                <List>
+                    {( typeProperties.fields.map((c, i) => (
+                        renderCustom(renderInput)(c)
+                    )))}
+                </List>
+            </Collapse>
+        </ListItem>
     );
 };
 

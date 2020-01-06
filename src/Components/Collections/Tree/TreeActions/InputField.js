@@ -8,76 +8,24 @@ import {AddArray, AddBlob, AddBool, AddClosure, AddError, AddFloat, AddInt, AddR
 
 const InputField = ({customTypes, dataTypes, dataType, onVal, onBlob, input, ...props}) => {
 
-    let content;
-    switch(dataType) {
-    case 'str':
-        content = (
-            <AddStr input={input} cb={onVal} {...props} />
-        );
-        break;
-    case 'int':
-        content = (
-            <AddInt input={input} cb={onVal} {...props} />
-        );
-        break;
-    case 'float':
-        content = (
-            <AddFloat input={input} cb={onVal} {...props} />
-        );
-        break;
-    case 'thing':
-        content = (
-            <AddThing customTypes={customTypes} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} />
-        );
-        break;
-    case 'set':
-        content = (
-            <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} type={['thing']} isSet />
-        );
-        break;
-    case 'bool':
-        content = (
-            <AddBool input={`${input}`} cb={onVal} />
-        );
-        break;
-    case 'list':
-        content = (
-            <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} {...props} />
-        );
-        break;
-    case 'closure':
-        content = (
-            <AddClosure input={input} cb={onVal} />
-        );
-        break;
-    case 'regex':
-        content = (
-            <AddRegex input={input.trim().slice(1, -1)} cb={onVal} />
-        );
-        break;
-    case 'error':
-        content = (
-            <AddError input={input} cb={onVal} />
-        );
-        break;
-    case 'bytes':
-        content = (
-            <AddBlob onBlob={onBlob} onVal={onVal} />
-        );
-        break;
-    case 'nil':
-        content = null;
-        break;
-    default:
-        content = (
-            <CustomChild onBlob={onBlob} onVal={onVal} customTypes={customTypes} dataTypes={dataTypes} type={dataType} {...props} />
-        );
-        break;
-    }
+    let content = {
+        str:  <AddStr input={input} cb={onVal} {...props} />,
+        int: <AddInt input={input} cb={onVal} {...props} />,
+        float: <AddFloat input={input} cb={onVal} {...props} />,
+        thing: <AddThing customTypes={customTypes} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} />,
+        set: <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} type={['thing']} isSet />,
+        bool: <AddBool input={`${input}`} cb={onVal} />,
+        list: <AddArray customTypes={customTypes} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} {...props} />,
+        closure: <AddClosure input={input} cb={onVal} />,
+        regex: <AddRegex input={input.trim().slice(1, -1)} cb={onVal} />,
+        error: <AddError input={input} cb={onVal} />,
+        bytes: <AddBlob onBlob={onBlob} onVal={onVal} />,
+        nil: null,
+    };
 
     return(
         <Grid item xs={12}>
-            {content}
+            {Object.keys(content).includes(dataType)?content[dataType]: <CustomChild onBlob={onBlob} onVal={onVal} customTypes={customTypes} dataTypes={dataTypes} type={dataType} {...props} />}
         </Grid>
     );
 };

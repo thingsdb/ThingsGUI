@@ -1,28 +1,23 @@
 /* eslint-disable react/no-multi-comp */
 import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Chip from '@material-ui/core/Chip';
 import Collapse from '@material-ui/core/Collapse';
-import Divider from '@material-ui/core/Divider';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import MobileStepper from '@material-ui/core/MobileStepper';
-import Paper from '@material-ui/core/Paper';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import CustomHeader from './CustomHeader';
+import CustomStepper from './CustomStepper';
 import InputField from './InputField';
 
 const useStyles = makeStyles(theme => ({
@@ -40,7 +35,14 @@ const useStyles = makeStyles(theme => ({
     margin: {
         padding: 0,
         margin: 0,
-    }
+    },
+    listItem: {
+        margin: 0,
+        padding: 0,
+    },
+    nested: {
+        paddingLeft: theme.spacing(4),
+    },
 }));
 
 const typeConv = {
@@ -62,12 +64,12 @@ const typeConv = {
     'pint': ['int'],
     'nint': ['int'],
     'number': ['int', 'float'],
-    'any': ['str'],
 };
 
-const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
+const singles = ['bool', 'bytes', 'float', 'int', 'nil', 'str', 'utf8', 'raw', 'uint', 'pint', 'nint', 'number'];
+
+const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type, name}) => {
     const classes = useStyles();
-    const [activeStep, setActiveStep] = React.useState(0);
     const [blob, setBlob] = React.useState({});
     const [dataType, setDataType] = React.useState({});
     const [myItems, setMyItems] = React.useState([]);
@@ -82,7 +84,6 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
     );
 
     React.useEffect(() => {
-        setActiveStep(0);
         setBlob({});
         setDataType({});
         setMyItems([]);
@@ -112,7 +113,6 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
     const handleClose = (k) => () => {
         setOpen({...open, [k]: false});
     };
-
     const handleAdd = () => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
         setMyItems(s);
@@ -125,73 +125,7 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
         });
     };
 
-    const handleNext = () => {
-        setActiveStep(activeStep+1);
-    };
-
-    const handleBack = () => {
-        setActiveStep(activeStep-1);
-    };
-
-    const renderInput = (name, types, childTypes) => {
-        return(
-            <Grid key={name} container item xs={12} alignItems="center">
-                <Grid xs={12} item>
-                    <InputField
-                        customTypes={customTypes}
-                        dataType={dataType[name]||types[0]}
-                        dataTypes={dataTypes}
-                        input={val[name]||''}
-                        onBlob={handleBlob}
-                        onVal={handleVal(name)}
-                        childtype={childTypes}
-                        variant="standard"
-                        label={name}
-                    />
-                </Grid>
-            </Grid>
-        );
-    };
-
-    const renderType = (name, types, childTypes) => {
-        return(
-            <Grid key={name} container item xs={12} alignItems="center">
-                <Grid item xs={12}>
-                    {types.length>1 ? (
-                        <TextField
-                            margin="dense"
-                            color="primary"
-                            id="dataType"
-                            type="text"
-                            name="dataType"
-                            onChange={handleChangeType(name)}
-                            value={dataType[name]||types[0]}
-                            variant="standard"
-                            select
-                            SelectProps={{native: true}}
-                            InputProps={{
-                                readOnly: true,
-                                disableUnderline: true,
-                                color: 'primary'
-                            }}
-                        >
-                            {types.map((p) => (
-                                <option key={p} value={p}>
-                                    {p}
-                                </option>
-                            ))}
-                        </TextField>
-                    ):(
-                        <Typography variant="body1" component='span'>
-                            {` ${types[0]}`}
-                        </Typography>
-                    )}
-                </Grid>
-            </Grid>
-        );
-    };
-
-    const renderCustom = (name, type, fn) =>  {
+    const typing = ([name, type]) =>  {
         let t = type.trim();
         let opt=false;
         let arr=false;
@@ -213,11 +147,12 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
         } else {
             if (opt) {
                 tps= t=='any' ? dataTypes
-                    : typeConv[type] ? [...typeConv[t], 'nil']
+                    : typeConv[t] ? [...typeConv[t], 'nil']
                         : [t, 'nil'];
+
             } else {
                 tps= t=='any' ? dataTypes
-                    : typeConv[type] ? typeConv[t]
+                    : typeConv[t] ? typeConv[t]
                         : [t];
             }
         }
@@ -226,121 +161,120 @@ const CustomChild = ({onVal, onBlob, customTypes, dataTypes, type}) => {
             if (t.slice(-1)=='?') {
                 t = t.slice(0, -1);
                 chldTps= t=='any' ? dataTypes
-                    : typeConv[type] ? [...typeConv[t], 'nil']
+                    : typeConv[t] ? [...typeConv[t], 'nil']
                         : [t, 'nil'];
             } else {
                 chldTps= t=='any' ? dataTypes
-                    : typeConv[type] ? typeConv[t]
+                    : typeConv[t] ? typeConv[t]
                         : [t];
             }
         }
-
         return(
-            fn(name, tps, chldTps)
+            [name, tps, chldTps]
         );
     };
 
-    const makeAddedList = () => {
-        const elements =  myItems.map((listitem, index) => (
-            <Chip
-                key={index}
-                id={listitem}
-                className={classes.chip}
-                label={listitem}
-                color="primary"
-            />
-        ));
-        return elements;
+    const renderInput = ([name, types, childTypes]) => {
+        return(
+            <React.Fragment key={name}>
+                <InputField
+                    customTypes={customTypes}
+                    dataType={dataType[name]||types[0]}
+                    dataTypes={dataTypes}
+                    input={val[name]||''}
+                    onBlob={handleBlob}
+                    onVal={handleVal(name)}
+                    childtype={childTypes}
+                    variant="standard"
+                    label={name}
+                />
+            </React.Fragment>
+        );
+    };
+
+    const renderType = (name, types) => {
+        return(
+            <React.Fragment>
+                {types.length>1 ? (
+                    <TextField
+                        margin="dense"
+                        color="primary"
+                        id="dataType"
+                        type="text"
+                        name="dataType"
+                        onChange={handleChangeType(name)}
+                        value={dataType[name]||types[0]}
+                        variant="standard"
+                        select
+                        SelectProps={{native: true}}
+                        InputProps={{
+                            readOnly: true,
+                            disableUnderline: true,
+                            color: 'primary'
+                        }}
+                    >
+                        {types.map((p) => (
+                            <option key={p} value={p}>
+                                {p}
+                            </option>
+                        ))}
+                    </TextField>
+                ):(
+                    <Typography variant="body1" component='span'>
+                        {` ${types[0]}`}
+                    </Typography>
+                )}
+            </React.Fragment>
+        );
     };
 
     const typeProperties = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
-    const maxSteps = typeProperties.fields.length;
-
-    console.log(customTypes, type, typeProperties);
+    const typesFields = typeProperties?typeProperties.fields.map(c=>typing(c)):[];
 
     return(
-        <Grid container item xs={12}>
-            <Grid className={classes.bottom} container item xs={12}>
-                <Grid item xs={10} container justify="flex-start" alignItems="center">
-                    <Typography variant="h5" color="primary">
-                        {`${type}`}
-                    </Typography>
-                    <Typography variant="h3" color="primary">
-                        {'{'}
-                    </Typography>
-                    {makeAddedList()}
-                    <Typography variant="h3" color="primary">
-                        {'}'}
-                    </Typography>
-                </Grid>
-                {maxSteps<2 ? (
-                    <Grid container item xs={1} alignItems="center" justify="flex-end">
-                        <Fab color="primary" onClick={handleAdd} size="small">
-                            <AddIcon fontSize="small" />
-                        </Fab>
-                    </Grid>
-                ) : null}
-                <Grid item xs={1} container alignItems="center" justify="flex-end">
-                    <Fab color="primary" onClick={open[type]?handleClose(type):handleOpen(type)} size="small">
-                        {open[type] ?  <ExpandMore /> : <ChevronRightIcon /> }
-                    </Fab>
-                </Grid>
-            </Grid>
-            <Collapse className={classes.fullWidth} in={open[type]} timeout="auto">
-                {maxSteps>1 ? (
-                    <React.Fragment>
-                        <Divider color="primary" />
-                        <Grid container item xs={12} alignItems="center" >
-                            <Grid item xs={2} container justify="flex-start">
-                                <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                                    <KeyboardArrowLeft color="primary" />
-                                    {'Back'}
-                                </Button>
-                            </Grid>
-                            <Grid item xs={8}>
-                                <Stepper className={classes.margin} activeStep={activeStep}>
-                                    {typeProperties.fields.map((c, i) => (
-                                        <Step key={c[0]}>
-                                            <StepLabel>
-                                                {c[0]}
-                                                <Collapse key={c[0]} className={classes.fullWidth} in={i==activeStep} timeout="auto">
-                                                    {renderCustom(c[0], c[1], renderType)}
-                                                </Collapse>
-                                            </StepLabel>
-                                        </Step>
-                                    ))}
-                                </Stepper>
-                            </Grid>
-                            <Grid item xs={2} container justify="flex-end">
-                                {activeStep === maxSteps - 1 ? (
-                                    <Button size="small" onClick={handleAdd}>
-                                        {'Finish'}
-                                        <AddIcon color="primary" />
-                                    </Button>
-
-                                ):(
-                                    <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
-                                        {'Next'}
-                                        <KeyboardArrowRight color="primary" />
-                                    </Button>
+        <React.Fragment>
+            {typesFields&&(
+                <List component="div" disablePadding dense>
+                    {( typesFields.map((c, i) => (
+                        <React.Fragment key={i}>
+                            <ListItem className={classes.listItem} >
+                                <ListItemText
+                                    primary={c[0]}
+                                    secondary={renderType(c[0], c[1])}
+                                    primaryTypographyProps={{
+                                        display: 'block',
+                                        noWrap: true,
+                                    }}
+                                    secondaryTypographyProps={{
+                                        component:'div',
+                                        color: 'primary'
+                                    }}
+                                    className={classes.listItem}
+                                />
+                                {!singles.includes(dataType[c[0]]||c[1][0]) && (
+                                    <ListItemSecondaryAction>
+                                        <IconButton onClick={open[c[0]]? handleClose(c[0]): handleOpen(c[0])}>
+                                            {open[c[0]] ?  <ExpandMore /> : <ChevronRightIcon /> }
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
                                 )}
-                            </Grid>
-                        </Grid>
-                        <Divider color="primary" />
-                    </React.Fragment>
-                ) : null}
-                {( typeProperties.fields.map((c, i) => (
-                    <Collapse key={c[0]} className={classes.fullWidth} in={i==activeStep} timeout="auto">
-                        {renderCustom(c[0], c[1], renderInput)}
-                    </Collapse>
-                )))}
-            </Collapse>
-        </Grid>
+                            </ListItem>
+                            <Collapse in={singles.includes(dataType[c[0]]||c[1][0])||open[c[0]]} timeout="auto">
+                                <div className={classes.nested}>
+                                    {renderInput(c)}
+                                </div>
+                            </Collapse>
+                        </React.Fragment>
+                    )))}
+                </List>
+            )}
+        </React.Fragment>
     );
 };
 
 CustomChild.defaultProps = {
     customTypes: null,
+    name: '',
 };
 CustomChild.propTypes = {
     onBlob: PropTypes.func.isRequired,
@@ -348,6 +282,7 @@ CustomChild.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     type: PropTypes.string.isRequired,
+    name: PropTypes.string,
 };
 
 export default CustomChild;

@@ -48,14 +48,14 @@ const initialState = {
         user: '',
     },
     loginWith: 'credentials',
-    notifySaved: false,
-    showOther: true,
+    showOther: false,
     showPassword: false,
     showToken: false,
     disableName: false,
 };
 
 const validation = {
+    name: (o) => o.name.length>0,
     address: (o) => o.address.length>0,
     user: (o) => o.token.length==0 ? o.user.length>0 : true,
     password: (o) => o.token.length==0 ? o.password.length>0 : true,
@@ -66,21 +66,21 @@ const tag = '0';
 
 const Login = ({loaded, connected, savedConnections}) => {
     const [state, setState] = React.useState(initialState);
-    const {showPassword, showToken, errors, loginWith, form, showOther, notifySaved, disableName} = state;
-
+    const {showPassword, showToken, errors, loginWith, form, showOther, disableName} = state;
+    const [notifySaved, setNotifySaved] = React.useState(false);
     React.useEffect(() => {
         ApplicationActions.getConn(tag);
     },
     [],
     );
 
-    React.useEffect(() => {
-        if(savedConnections&&Object.keys(savedConnections).length) {
-            setState({...state, showOther: false});
-        }
-    },
-    [JSON.stringify(savedConnections)],
-    );
+    // React.useEffect(() => {
+    //     if(savedConnections&&Object.keys(savedConnections).length) {
+    //         setState({...state, showOther: false});
+    //     }
+    // },
+    // [JSON.stringify(savedConnections)],
+    // );
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -173,8 +173,8 @@ const Login = ({loaded, connected, savedConnections}) => {
     };
 
     const handleTooltip = () => {
-        setState({...state, notifySaved: true});
-        setTimeout(()=> setState({...state, notifySaved: false}), 1000);
+        setNotifySaved(true);
+        setTimeout(()=> setNotifySaved(false), 1000);
     };
 
     const handleClickSave = () => {
@@ -226,10 +226,11 @@ const Login = ({loaded, connected, savedConnections}) => {
                                 </ListItemSecondaryAction>
                             </ListItem>
                         ))}
+                        {Object.entries(savedConnections).length==0 &&
+                            <ListItem>
+                                <ListItemText secondary="No saved connections" secondaryTypographyProps={{variant: 'caption'}} />
+                            </ListItem>}
                         <ListItem button onClick={handleOther}>
-                            {/* <ListItemIcon>
-
-                            </ListItemIcon> */}
                             <ListItemText primary="Use another connection" />
                         </ListItem>
                     </List>
@@ -262,7 +263,7 @@ const Login = ({loaded, connected, savedConnections}) => {
                         onChange={handleOnChange}
                         fullWidth
                         disabled={disableName}
-                        // error={errors.name}
+                        error={errors.name}
                     />
                     <TextField
                         autoFocus
@@ -361,10 +362,14 @@ const Login = ({loaded, connected, savedConnections}) => {
                 <DialogActions>
                     <Grid container>
                         <Grid item xs={6} container justify="flex-start" >
-                            <Grid item xs={6}>
-                                <Button onClick={handleClickBack} color="primary" disabled={Object.values(errors).some(d => d)}>
-                                    {'Back'}
-                                </Button>
+                            <Collapse in={Boolean(savedConnections&&Object.keys(savedConnections).length)} timeout="auto" unmountOnExit>
+                                <Grid item xs={3}>
+                                    <Button onClick={handleClickBack} color="primary">
+                                        {'Connections'}
+                                    </Button>
+                                </Grid>
+                            </Collapse>
+                            <Grid item xs={3}>
                                 <Tooltip open={notifySaved} disableFocusListener disableTouchListener disableHoverListener title="Saved!">
                                     <Button onClick={handleClickSave} color="primary" disabled={Object.values(errors).some(d => d)}>
                                         {'Save'}

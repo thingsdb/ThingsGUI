@@ -19,6 +19,8 @@ import (
 // AppVersion exposes version information
 const AppVersion = "0.0.1-alpha5"
 
+var connFile = ".thingsgui"
+
 const retryConnectTime = 5
 
 var (
@@ -30,7 +32,7 @@ var (
 
 func Init() {
 	flag.StringVar(&host, "host", "localhost", "host")
-	flag.UintVar(&port, "port", 8000, "port")
+	flag.UintVar(&port, "port", 8080, "port")
 	flag.UintVar(&timeout, "timeout", 30, "timeout")
 	flag.BoolVar(&openBrowser, "open", true, "opens a page in your default browser")
 
@@ -55,6 +57,7 @@ func (app *App) SocketRouter() {
 			EventCh:  make(chan *things.Event),
 			LogCh:    make(chan string, 1),
 			TmpFiles: util.NewTmpFiles(),
+			HomePath: util.GetHomePath(connFile),
 		}
 		app.client[s.ID()].LogCh <- fmt.Sprintf("connected: %s", s.ID())
 		return nil
