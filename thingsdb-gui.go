@@ -31,8 +31,8 @@ var (
 )
 
 func Init() {
-	flag.StringVar(&host, "host", "localhost", "host")
-	flag.UintVar(&port, "port", 8080, "port")
+	flag.StringVar(&host, "host", "0.0.0.0", "host")
+	flag.UintVar(&port, "port", 5000, "port")
 	flag.UintVar(&timeout, "timeout", 30, "timeout")
 	flag.BoolVar(&openBrowser, "open", true, "opens a page in your default browser")
 
@@ -208,9 +208,9 @@ func (app *App) Start() {
 	log.Printf("Serving at %s:%d...", app.host, app.port)
 
 	if app.openBrowser {
-		go open(fmt.Sprintf("http://localhost:%d/", app.port))
+		go open(fmt.Sprintf("http://%s:%d/", app.host, app.port))
 	}
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", app.port), nil))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%d", app.host, app.port), nil))
 }
 
 func main() {

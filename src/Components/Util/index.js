@@ -1,13 +1,3 @@
-import AddArray from './AddArray';
-import AddBlob from './AddBlob';
-import AddBool from './AddBool';
-import AddClosure from './AddClosure';
-import AddError from './AddError';
-import AddFloat from './AddFloat';
-import AddInt from './AddInt';
-import AddRegex from './AddRegex';
-import AddStr from './AddStr';
-import AddThing from './AddThing';
 import ArrayLayout from './ArrayLayout';
 import AutoSelect from './AutoSelect';
 import Buttons from './Buttons';
@@ -19,20 +9,21 @@ import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
 import HarmonicCard from './HarmonicCard';
 import Info from './Info';
+import ListHeader from './ListHeader';
 import Menu from './Menu';
+import QueryInput from './QueryInput';
+import QueryOutput from './QueryOutput';
 import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import TableWithButtons from './TableWithButtons';
 import ThingsTree from './ThingsTree';
-import TimePicker from './TimePicker';
 import TimePeriodPicker from './TimePeriodPicker';
+import TimePicker from './TimePicker';
 import TitlePage from './TitlePage';
 import TitlePage2 from './TitlePage2';
 import TopBarMenu from './TopBarMenu';
 import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
-import QueryInput from './QueryInput';
-import QueryOutput from './QueryOutput';
 import VariablesArray from './VariablesArray';
 import WarnPopover from './WarnPopover';
 
@@ -53,7 +44,9 @@ const checkType = (t) => {
                 : kindOfObject === '/' ? 'closure'
                     : kindOfObject === '*' ? 'regex'
                         : kindOfObject === '!' ? 'error'
-                            : 'object' ; // todo maak onderscheid tussen thing object?
+                            : kindOfObject === '$' ? 'set' //set
+                                : kindOfObject === '&' ? 'wrap'
+                                    : 'object' ;
         }
     }
 
@@ -63,13 +56,15 @@ const checkType = (t) => {
     return(type);
 };
 
-const thingValue = (type, thing) => {
+const thingValue = (type, thing, customTypes=[]) => {
     return type === 'array' ? `[${thing.length}]`
         : type === 'thing' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
             : type === 'str' || type === 'number' || type === 'bool' || type === 'bytes' ? `${thing}`
                 : type === 'closure' || type === 'regex' || type === 'error' ? `{${Object.keys(thing)[0]}}`
                     : type === null || type === 'nil' ? 'nil'
-                        : '';
+                        : type === 'wrap' ? `<${customTypes.length?customTypes.find(t=> t.type_id==thing['&'][0]).name:thing['&'][0]}, #${thing['&'][1]['#']}>`
+                            : type === 'set' ? `[${thing['$'].length}]`
+                                : '';
 };
 
 const isObjectEmpty = (obj) => Object.entries(obj).length === 0 && obj.constructor === Object;
@@ -101,48 +96,39 @@ const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
 
 export {
-    AddArray,
-    AddBlob,
-    AddBool,
-    AddClosure,
-    AddError,
-    AddFloat,
-    AddInt,
-    AddRegex,
-    AddStr,
-    AddThing,
     ArrayLayout,
     AutoSelect,
     Buttons,
     CardButton,
-    ChipsCard,
     checkType,
+    ChipsCard,
     DownloadBlob,
     DrawerLayout,
     ErrorMsg,
     ErrorToast,
     fancyName,
     findItem,
+    getScopes,
+    getScopes2,
     HarmonicCard,
     Info,
     isObjectEmpty,
+    ListHeader,
     Menu,
-    getScopes,
-    getScopes2,
+    QueryInput,
+    QueryOutput,
     ServerError,
     SimpleModal,
     TableWithButtons,
+    ThingsTree,
     thingValue,
-    TopBarMenu,
-    TimePicker,
     TimePeriodPicker,
+    TimePicker,
     TitlePage,
     TitlePage2,
+    TopBarMenu,
     TreeBranch,
-    ThingsTree,
     TreeIcon,
-    QueryInput,
-    QueryOutput,
     VariablesArray,
     WarnPopover,
 };

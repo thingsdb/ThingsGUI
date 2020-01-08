@@ -25,6 +25,9 @@ const useStyles = makeStyles(theme => ({
     pink: {
         color: theme.palette.primary.pink,
     },
+    lightPink: {
+        color: theme.palette.primary.lightPink,
+    },
     purple: {
         color: theme.palette.primary.purple,
     },
@@ -55,8 +58,10 @@ const TreeIcon = ({type}) => {
                                     : type == 'closure' ? ['/', 'cyan']
                                         : type == 'regex' ? ['*', 'cyan']
                                             : type == 'error' ? ['!', 'cyan']
-                                                : type == 'object' ? ['{ }', 'white']
-                                                    : '';
+                                                : type == 'wrap' ? ['< >', 'lightPink']
+                                                    : type == 'set' ? ['[ ]', 'green']
+                                                        : type == 'object' ? ['{ }', 'white']
+                                                            : '';
     };
     const [icon, color] = treeIcon(type);
 

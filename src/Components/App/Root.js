@@ -20,6 +20,7 @@ const theme = createMuiTheme({
             green: '#4ca024',
             blue: '#3392ff',
             pink: '#c523a0',
+            lightPink: '#ff5a8f',
             purple: '#9256bd',
             cyan: '#16c3b6',
             beige: '#ead0ae',

@@ -27,6 +27,10 @@ const useStyles = makeStyles(theme => ({
                 outline: '1px solid slategrey'
             }
         },
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            // width: 200,
+        },
     },
 }));
 
@@ -112,8 +116,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         />
                     </ListItem>
                 </Collapse>
-                {addNewProperty ? (
-                    <ListItem className={classes.listItem}>
+                <ListItem className={classes.listItem}>
+                    {addNewProperty && (
                         <TextField
                             margin="dense"
                             name="newProperty"
@@ -122,14 +126,11 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                             value={newProperty}
                             spellCheck={false}
                             onChange={handleOnChangeName}
-                            fullWidth
                             helperText={error}
                             error={Boolean(error)}
                         />
-                    </ListItem>
-                ) : null}
-                {canChangeType ? (
-                    <ListItem className={classes.listItem}>
+                    )}
+                    {canChangeType && (
                         <TextField
                             margin="dense"
                             autoFocus
@@ -137,7 +138,6 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                             label="Data type"
                             value={dataType}
                             onChange={handleOnChangeType}
-                            fullWidth
                             select
                             SelectProps={{native: true}}
                         >
@@ -147,11 +147,9 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                                 </option>
                             ))}
                         </TextField>
-                    </ListItem>
-                ) : null}
-                <List className={classes.listItem}>
-                    <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" />
-                </List>
+                    )}
+                </ListItem>
+                <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
             </List>
         </React.Fragment>
     );

@@ -1,20 +1,21 @@
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
-import AddIcon from '@material-ui/icons/AddCircleOutline';
+import AddIcon from '@material-ui/icons/Add';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Fab from '@material-ui/core/Fab';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import React from 'react';
-import RemoveIcon from '@material-ui/icons/HighlightOff';
+import RemoveIcon from '@material-ui/icons/RemoveCircleRounded';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
-import {EventActions, EventStore, ThingsdbStore} from '../../Stores';
+import {EventActions, EventStore, ThingsdbStore, TypeActions, TypeStore} from '../../Stores';
 import {ErrorMsg, ThingsTree} from '../Util';
 
 const withStores = withVlow([{
@@ -23,6 +24,9 @@ const withStores = withVlow([{
 }, {
     store: ThingsdbStore,
     keys: ['collections']
+}, {
+    store: TypeStore,
+    keys: ['customTypes']
 }]);
 
 const useStyles = makeStyles(theme => ({
@@ -57,9 +61,10 @@ const useStyles = makeStyles(theme => ({
 
 const tag = '26';
 
-const Watcher = ({watchIds, watchThings, collections}) => {
+const Watcher = ({watchIds, watchThings, collections, customTypes}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
+    // const [customTypes, setCustomTypes] = React.useState([]);
     const [state, setState] = React.useState({
         scope: '',
         thingId: 3,
@@ -82,6 +87,7 @@ const Watcher = ({watchIds, watchThings, collections}) => {
             scope,
             thingId,
         );
+        TypeActions.getTypes(scope, tag);
     };
 
     const handleChange = ({target}) => {
@@ -105,6 +111,7 @@ const Watcher = ({watchIds, watchThings, collections}) => {
     };
 
     const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
+
 
     return (
         <Grid container spacing={2}>
@@ -148,9 +155,9 @@ const Watcher = ({watchIds, watchThings, collections}) => {
                 </Grid>
                 <Grid item>
                     <Tooltip disableFocusListener disableTouchListener title="Turn watching on">
-                        <ButtonBase onClick={handleWatch}>
-                            <AddIcon color="primary" fontSize="large" />
-                        </ButtonBase>
+                        <Fab onClick={handleWatch} color="primary" size="small">
+                            <AddIcon size="small" />
+                        </Fab>
                     </Tooltip>
                 </Grid>
             </Grid>
@@ -177,6 +184,7 @@ const Watcher = ({watchIds, watchThings, collections}) => {
                                                     index:null,
                                                 }}
                                                 root
+                                                customTypes={customTypes[scope]}
                                             />
                                         }
                                         {tabIndex === 1 &&
@@ -187,8 +195,8 @@ const Watcher = ({watchIds, watchThings, collections}) => {
                                     </Grid>
                                     <Grid item xs={1}>
                                         <Tooltip disableFocusListener disableTouchListener title="Turn watching off">
-                                            <ButtonBase onClick={handleUnwatch(k)}>
-                                                <RemoveIcon className={classes.red} fontSize="small" />
+                                            <ButtonBase onClick={handleUnwatch(k)} size="small" >
+                                                <RemoveIcon size="small" className={classes.red} />
                                             </ButtonBase>
                                         </Tooltip>
                                     </Grid>
@@ -203,12 +211,15 @@ const Watcher = ({watchIds, watchThings, collections}) => {
 };
 
 Watcher.propTypes = {
-    /* event properties */
+    /* event store properties */
     watchThings: EventStore.types.watchThings.isRequired,
     watchIds: EventStore.types.watchIds.isRequired,
 
-    /* event properties */
+    /* thingsdb store properties */
     collections: ThingsdbStore.types.collections.isRequired,
+
+    /* type store properties */
+    customTypes: TypeStore.types.customTypes.isRequired,
 };
 
 export default withStores(Watcher);

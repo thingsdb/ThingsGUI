@@ -10,7 +10,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ProcedureActions} from '../../../Stores';
-import {AddClosure, ErrorMsg, SimpleModal} from '../../Util';
+import {ErrorMsg, SimpleModal} from '../../Util';
+import {AddClosure} from '../Tree/TreeUtils';
 
 
 const tag = '5';
@@ -27,7 +28,7 @@ const useStyles = makeStyles(() => ({
 
 }));
 
-const AddTypeDialog = ({open, onClose, scope, cb}) => {
+const AddProcedureDialog = ({open, onClose, scope, cb}) => {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
@@ -156,11 +157,11 @@ const AddTypeDialog = ({open, onClose, scope, cb}) => {
 };
 
 
-AddTypeDialog.propTypes = {
+AddProcedureDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
     cb: PropTypes.func.isRequired,
 };
 
-export default AddTypeDialog;
+export default AddProcedureDialog;

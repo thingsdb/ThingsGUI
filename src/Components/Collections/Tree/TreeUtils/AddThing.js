@@ -1,50 +1,29 @@
+import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
-import AddIcon from '@material-ui/icons/Add';
-import Fab from '@material-ui/core/Fab';
-import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 
-import InputField from '../Collections/Tree/TreeActions/InputField';
+import InputField from '../TreeActions/InputField';
+import {ListHeader} from '../../../Util';
 
 const useStyles = makeStyles(theme => ({
-    // container: {
-    //     // display: 'flex',
-    //     // flexWrap: 'wrap',
-    //     borderLeft: `3px solid ${theme.palette.primary.main}`,
-    //     borderRight: `3px solid ${theme.palette.primary.main}`,
-    //     borderRadius: '20px',
-    //     padding: theme.spacing(2),
-    //     margin: theme.spacing(2),
-    // },
-    chip: {
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
+    container: {
+        // display: 'flex',
+        // flexWrap: 'wrap',
+        borderLeft: `3px solid ${theme.palette.primary.main}`,
+        borderRight: `3px solid ${theme.palette.primary.main}`,
+        borderRadius: '20px',
+        padding: theme.spacing(2),
+        margin: theme.spacing(2),
+    },
+    nested: {
+        paddingLeft: theme.spacing(6),
     },
 }));
 
-
-// const dataTypes = [ // Do not put array first; causes infinite loop
-//     'str',
-//     'bool',
-//     'int',
-//     'float',
-//     'bytes',
-//     'closure',
-//     'regex',
-//     'error',
-//     'nil',
-//     'list',
-//     'set',
-//     'thing',
-// ];
-
 const single = [
     'bool',
-    'bytes',
     'float',
     'int',
     'nil',
@@ -118,44 +97,10 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
         setPreBlob({...b});
     };
 
-
-    const makeAddedList = () => {
-        const elements =  myItems.map((listitem, index) => (
-            <Chip
-                key={index}
-                id={listitem}
-                className={classes.chip}
-                label={listitem}
-                onDelete={handleClick(index, listitem)}
-                color="primary"
-            />
-        ));
-        return elements;
-    };
-
     return (
-        <Grid container spacing={1}>
-            <Grid container spacing={1} item xs={12}>
-                <Grid item xs={1} container justify="flex-start">
-                    <Typography variant="h3" color="primary">
-                        {'{'}
-                    </Typography>
-                </Grid>
-                <Grid item xs={9} container>
-                    {makeAddedList()}
-                </Grid>
-                <Grid item xs={1} container justify="flex-end">
-                    <Typography variant="h3" color="primary">
-                        {'}'}
-                    </Typography>
-                </Grid>
-                <Grid item xs={1}>
-                    <Fab color="primary" onClick={handleAdd} size="small">
-                        <AddIcon fontSize="small" />
-                    </Fab>
-                </Grid>
-            </Grid>
-            <Grid container item xs={12} spacing={1} alignItems="flex-start" >
+        <Grid container>
+            <ListHeader onAdd={handleAdd} onDelete={handleClick} items={myItems} groupSign="{" />
+            <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
                 <Grid item xs={3}>
                     <TextField
                         id="property"
@@ -164,7 +109,7 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
                         label="Property"
                         onChange={handleChangeProperty}
                         value={property}
-                        variant="outlined"
+                        variant="standard"
                         fullWidth
                     />
                 </Grid>
@@ -176,7 +121,7 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
                         label="Data type"
                         onChange={handleChangeType}
                         value={dataType}
-                        variant="outlined"
+                        variant="standard"
                         select
                         SelectProps={{native: true}}
                         fullWidth
@@ -197,7 +142,7 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
                         name="Input"
                         onVal={handleInputField}
                         onBlob={handleBlob}
-                        variant="outlined"
+                        variant="standard"
                         label="Value"
                     />
                 </Grid>

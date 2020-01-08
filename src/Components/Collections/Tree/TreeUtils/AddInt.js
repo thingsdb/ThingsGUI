@@ -2,13 +2,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
+const onlyInts = (str) => str.length == str.replace(/[^0-9]/g, '').length;
 
-const onlyFloats = (str) => str.length == str.replace(/[^0-9.]/g, '').length && str.includes('.');
-const AddFloat = ({input, cb, ...props}) => {
+const AddInt = ({input, cb, ...props}) => {
     const [error, setError] = React.useState('');
     const errorTxt = (value) => {
-        setError(onlyFloats(value) ? '' : 'only floats');
+        setError(onlyInts(value) ? '' : 'only integers');
     };
+
     const handleOnChange = ({target}) => {
         const {value} = target;
         errorTxt(value);
@@ -22,7 +23,7 @@ const AddFloat = ({input, cb, ...props}) => {
             value={input}
             spellCheck={false}
             onChange={handleOnChange}
-            fullWidth
+            // fullWidth
             multiline
             rowsMax={10}
             helperText={error}
@@ -32,13 +33,13 @@ const AddFloat = ({input, cb, ...props}) => {
     );
 };
 
-AddFloat.defaultProps = {
+AddInt.defaultProps = {
     input: '',
 };
 
-AddFloat.propTypes = {
+AddInt.propTypes = {
     cb: PropTypes.func.isRequired,
     input: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-export default AddFloat;
+export default AddInt;

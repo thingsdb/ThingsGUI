@@ -23,7 +23,7 @@ const AddStr = ({input, cb, ...props}) => {
             value={str}
             spellCheck={false}
             onChange={handleOnChange}
-            fullWidth
+            // fullWidth
             multiline
             rowsMax={10}
             {...props}

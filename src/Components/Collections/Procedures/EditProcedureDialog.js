@@ -10,7 +10,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ProcedureActions} from '../../../Stores';
-import {AddClosure, ErrorMsg, SimpleModal} from '../../Util';
+import {ErrorMsg, SimpleModal} from '../../Util';
+import {AddClosure} from '../Tree/TreeUtils';
 
 
 const tag = '12';
@@ -31,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-const EditTypeDialog = ({open, onClose, input, scope, cb}) => {
+const EditProcedureDialog = ({open, onClose, input, scope, cb}) => {
     const classes = useStyles();
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');
@@ -143,11 +144,11 @@ const EditTypeDialog = ({open, onClose, input, scope, cb}) => {
     );
 };
 
-EditTypeDialog.defaultProps = {
+EditProcedureDialog.defaultProps = {
     input: {},
 };
 
-EditTypeDialog.propTypes = {
+EditProcedureDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     input: PropTypes.object,
@@ -155,4 +156,4 @@ EditTypeDialog.propTypes = {
     cb: PropTypes.func.isRequired,
 };
 
-export default EditTypeDialog;
+export default EditProcedureDialog;
