@@ -177,17 +177,17 @@ const ProtoMap = {
 class EventStore extends BaseStore {
 
     static types = {
-        watchThings: PropTypes.object,
         watchIds: PropTypes.object,
-        procedures: PropTypes.object,
-        types: PropTypes.object,
+        watchProcedures: PropTypes.object,
+        watchThings: PropTypes.object,
+        watchTypes: PropTypes.object,
     }
 
     static defaults = {
-        watchThings: {},
         watchIds: {},
-        procedures: {},
-        types: {},
+        watchProcedures: {},
+        watchThings: {},
+        watchTypes: {},
     }
 
     constructor() {
@@ -220,10 +220,22 @@ class EventStore extends BaseStore {
     }
 
     watchInit(data) {
-        this.setState(prevState => {
-            const watchThings = Object.assign({}, prevState.watchThings, {[data.thing['#']]: data.thing});
-            return {watchThings};
-        });
+        if (data.procedures) {
+            let proc = data.procedures.reduce((res, item) => { res[item.name] = item; return res;}, {});
+            let typ = data.types.reduce((res, item) => { res[item.name] = item; return res;}, {});
+            console.log(proc, typ);
+            this.setState(prevState => {
+                const watchThings = Object.assign({}, prevState.watchThings, {[data.thing['#']]: data.thing});
+                const watchProcedures = Object.assign({}, prevState.watchProcedures, {[data.thing['#']]: proc});
+                const watchTypes = Object.assign({}, prevState.watchTypes, {[data.thing['#']]: typ});
+                return {watchThings, watchProcedures, watchTypes};
+            });
+        } else {
+            this.setState(prevState => {
+                const watchThings = Object.assign({}, prevState.watchThings, {[data.thing['#']]: data.thing});
+                return {watchThings};
+            });
+        }
     }
 
     watchUpdate(data) {
@@ -377,12 +389,21 @@ class EventStore extends BaseStore {
             ids: [idString]
         }).done(() => {
             this.setState(prevState => {
+
                 let copyThings = JSON.parse(JSON.stringify(prevState.watchThings));
                 delete copyThings[id];
+
                 let copyIds = new Set([...prevState.watchIds[scope]]);
                 copyIds.delete(idString);
                 const update = Object.assign({}, prevState.watchIds, {[scope]: [...copyIds]});
-                return {watchThings: copyThings, watchIds: update};
+
+                let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures));
+                delete copyProcedures[id];
+
+                let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes));
+                delete copyTypes[id];
+
+                return {watchThings: copyThings, watchIds: update, watchProcedures: copyProcedures, watchTypes: copyTypes};
             });
         }).fail((event, status, message) => {
             tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);

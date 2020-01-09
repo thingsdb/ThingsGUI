@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const WatchThings = ({buttonIsFab, scope, thingId, tag, watchIds}) => {
+const WatchThings = ({buttonIsFab, scope, tag, thingId, watchIds}) => {
     const classes = useStyles();
 
     // stringify thingId
@@ -87,8 +87,8 @@ const WatchThings = ({buttonIsFab, scope, thingId, tag, watchIds}) => {
 WatchThings.propTypes = {
     buttonIsFab: PropTypes.bool.isRequired,
     scope: PropTypes.string.isRequired,
-    thingId: PropTypes.number.isRequired,
     tag: PropTypes.string.isRequired,
+    thingId: PropTypes.number.isRequired,
 
     // Event properties
     watchIds: EventStore.types.watchIds.isRequired,

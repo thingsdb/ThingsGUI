@@ -81,7 +81,7 @@ const typeConv = {
 
 const single = ['bool', 'bytes', 'float', 'int', 'nil', 'str', 'utf8', 'raw', 'uint', 'pint', 'nint', 'number'];
 
-const AddCustomType = ({onVal, onBlob, customTypes, dataTypes, type, name}) => {
+const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
     const classes = useStyles();
     const [blob, setBlob] = React.useState({});
     const [dataType, setDataType] = React.useState({});
@@ -129,8 +129,6 @@ const AddCustomType = ({onVal, onBlob, customTypes, dataTypes, type, name}) => {
     const handleAdd = () => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
         setMyItems(s);
-        console.log(blob, val);
-
         setBlob(prevBlob => {
             let copy = JSON.parse(JSON.stringify(prevBlob));
             let keys={};
@@ -143,7 +141,6 @@ const AddCustomType = ({onVal, onBlob, customTypes, dataTypes, type, name}) => {
                     }
                 });
             });
-            console.log(keys, copy);
             Object.entries(keys).map(([k, v]) => !v&&delete copy[k]);
 
             return copy;
@@ -270,12 +267,12 @@ AddCustomType.defaultProps = {
     name: '',
 };
 AddCustomType.propTypes = {
-    onBlob: PropTypes.func.isRequired,
-    onVal: PropTypes.func.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    type: PropTypes.string.isRequired,
     name: PropTypes.string,
+    onBlob: PropTypes.func.isRequired,
+    onVal: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
 };
 
 export default AddCustomType;

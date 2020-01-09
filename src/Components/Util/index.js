@@ -8,6 +8,7 @@ import DrawerLayout from './DrawerLayout';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
 import HarmonicCard from './HarmonicCard';
+import HarmonicTree from './HarmonicTree';
 import Info from './Info';
 import ListHeader from './ListHeader';
 import Menu from './Menu';
@@ -111,6 +112,7 @@ export {
     getScopes,
     getScopes2,
     HarmonicCard,
+    HarmonicTree,
     Info,
     isObjectEmpty,
     ListHeader,

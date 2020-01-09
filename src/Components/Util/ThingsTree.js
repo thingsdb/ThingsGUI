@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ThingsTree = ({item, tree, child, root, customTypes}) => {
+const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
     const classes = useStyles();
 
     // is root if item is still null
@@ -35,6 +35,7 @@ const ThingsTree = ({item, tree, child, root, customTypes}) => {
                     }}
                     root={false}
                     customTypes={customTypes}
+                    onAction={onAction}
                 />
             </div>
         );
@@ -46,7 +47,7 @@ const ThingsTree = ({item, tree, child, root, customTypes}) => {
         return isArray ?
             t.map((t, i) => renderThing([child ? `${child.name}` : `${i}`, t, i]))
             :
-            Object.entries((item && tree[item['#']]) || t || {}).map(renderThing);
+            Object.entries((t && tree && tree[t['#']]) || t || {}).map(renderThing);
     };
 
 
@@ -58,14 +59,15 @@ const ThingsTree = ({item, tree, child, root, customTypes}) => {
     const canToggle = (type === 'thing' && Object.keys(thing).length>1) || type === 'object' || (type === 'array' && thing.length>0) || type === 'closure' || type === 'regex'|| type === 'error' || (type === 'set' && thing['$'].length>0);
 
     return (
-        <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} />
+        <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onAction={onAction} />
     );
 };
 
 ThingsTree.defaultProps = {
-    item: null,
-    tree: null,
     customTypes: [],
+    item: null,
+    onAction: ()=>null,
+    tree: null,
 };
 
 ThingsTree.propTypes = {
@@ -75,6 +77,7 @@ ThingsTree.propTypes = {
         name: PropTypes.string,
         index: PropTypes.number,
     }).isRequired,
+    onAction: PropTypes.func,
     root: PropTypes.bool.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object),
 };

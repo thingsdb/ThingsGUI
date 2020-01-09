@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const Thing = ({thing, collection, things, parent, child, watchIds}) => {
+const Thing = ({child, collection, parent, thing, things, watchIds}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
 
@@ -37,11 +37,11 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
     [JSON.stringify(thing)],
     );
 
-    const handleClickOpen = () => {
+    const handleOpenDialog = () => {
         setShow(true);
     };
 
-    const handleClickClose = () => {
+    const handleCloseDialog = () => {
         setShow(false);
     };
 
@@ -58,7 +58,7 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
     const currThing = thing && things[thing['#']] || thing;
     const isWatching = type === 'thing' && watchIds && watchIds.hasOwnProperty([`@collection:${collection.name}`]) && watchIds[`@collection:${collection.name}`].includes(`${thing && thing['#']}`);
 
-    const hasActions = !(parent.type === 'closure' || parent.type === 'regex' || parent.type === 'error');
+    const hasDialog = !(parent.type === 'closure' || parent.type === 'regex' || parent.type === 'error');
 
     const renderThing = ([k, v, i=null]) => {
         return k === '#' ? null : (
@@ -91,7 +91,7 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
             Object.entries(currThing || {}).map(renderThing);
     };
 
-    const handleClick = () => {
+    const handleOpen = () => {
         if (thing && thing['#']) {
             CollectionActions.queryWithReturnDepth(collection, thing['#']);
         }
@@ -99,7 +99,7 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
 
     return (
         <React.Fragment>
-            <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onClick={handleClick} button={hasActions} onAction={hasActions ? handleClickOpen : ()=>null}>
+            <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpen} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null}>
                 <React.Fragment>
                     {isWatching ? (
                         <ListItemIcon>
@@ -111,7 +111,7 @@ const Thing = ({thing, collection, things, parent, child, watchIds}) => {
             {show ? (
                 <ThingActionsDialog
                     open
-                    onClose={handleClickClose}
+                    onClose={handleCloseDialog}
                     child={{
                         id: thing && thing['#']||null,
                         index: child.index,

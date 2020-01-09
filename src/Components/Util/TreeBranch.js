@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onClick, button, onAction}) => {
+const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpen, onRenderChildren, type, val}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
     const [open, setOpen] = React.useState(false);
@@ -42,7 +42,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
 
     const handleClick = () => {
         setShow(!show);
-        onClick();
+        onOpen();
     };
 
     const handleOpenStringDialog = () => {
@@ -55,7 +55,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
 
     return (
         <React.Fragment>
-            <ListItem className={classes.listItem} button={button?true:false} onClick={onAction}>
+            <ListItem className={classes.listItem} button={button?true:false} onClick={onClick}>
                 <ListItemIcon>
                     <TreeIcon type={type} />
                 </ListItemIcon>
@@ -83,11 +83,12 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                 {children}
                 <ListItemSecondaryAction>
                     <React.Fragment>
-                        {canToggle ? (
+                        {onAction(name, type, val)}
+                        {canToggle&& (
                             <ButtonBase onClick={handleClick} >
                                 {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
                             </ButtonBase>
-                        ) : null}
+                        )}
                         {!button ? (
                             type === 'bytes' ? (
                                 <DownloadBlob val={val} isFab={false} />
@@ -107,8 +108,7 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
                                     </Typography>
                                 </SimpleModal>
                             ) : null
-                        ):null
-                        }
+                        ):null}
                     </React.Fragment>
                 </ListItemSecondaryAction>
             </ListItem>
@@ -123,23 +123,25 @@ const TreeBranch = ({children, name, type, val, canToggle, onRenderChildren, onC
 };
 
 TreeBranch.defaultProps = {
+    button: false,
     children: null,
     name: null,
-    button: false,
-    onClick: () => null,
     onAction: () => null,
+    onClick: () => null,
+    onOpen: () => null,
 };
 
 TreeBranch.propTypes = {
-    children: PropTypes.object,
     button: PropTypes.bool,
-    onAction: PropTypes.func,
+    canToggle: PropTypes.bool.isRequired,
+    children: PropTypes.object,
     name: PropTypes.string,
+    onAction: PropTypes.func,
+    onClick: PropTypes.func,
+    onOpen: PropTypes.func,
+    onRenderChildren: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
     val: PropTypes.string.isRequired,
-    canToggle: PropTypes.bool.isRequired,
-    onRenderChildren: PropTypes.func.isRequired,
-    onClick: PropTypes.func,
 };
 
 export default TreeBranch;

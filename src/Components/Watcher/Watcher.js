@@ -16,11 +16,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import {EventActions, EventStore, ThingsdbStore, TypeActions, TypeStore} from '../../Stores';
-import {ErrorMsg, ThingsTree} from '../Util';
+import {ErrorMsg, ThingsTree, HarmonicTree} from '../Util';
 
 const withStores = withVlow([{
     store: EventStore,
-    keys: ['watchIds', 'watchThings']
+    keys: ['watchIds', 'watchThings', 'watchProcedures', 'watchTypes']
 }, {
     store: ThingsdbStore,
     keys: ['collections']
@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
 
 const tag = '26';
 
-const Watcher = ({watchIds, watchThings, collections, customTypes}) => {
+const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThings, watchTypes}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
     // const [customTypes, setCustomTypes] = React.useState([]);
@@ -110,8 +110,40 @@ const Watcher = ({watchIds, watchThings, collections, customTypes}) => {
         );
     };
 
-    const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
+    const handleClickWatch = (id) => () => {
+        EventActions.watch(
+            scope,
+            id,
+        );
+        TypeActions.getTypes(scope, tag);
+    };
 
+
+    const handleWatchButton = (_, t, v) => {
+        const id = v.slice(2, -1);
+        let s;
+        let onWatch=false;
+        Object.entries(watchIds).map(
+            ([k, v]) =>  {
+                if(v.includes(id)){
+                    s = k;
+                    onWatch=true;
+                }
+            }
+        );
+        return(t=='thing'&& onWatch && (
+            // <ButtonBase onClick={handleClickWatch(id)} size="small" >
+            //     <AddIcon size="small" color="primary" />
+            // </ButtonBase>
+            <Tooltip disableFocusListener disableTouchListener title="Turn watching off">
+                <ButtonBase onClick={handleUnwatch(id, s)} size="small" >
+                    <RemoveIcon size="small" className={classes.red} />
+                </ButtonBase>
+            </Tooltip>
+        ));
+    }; // v = '{#123}'
+
+    const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
 
     return (
         <Grid container spacing={2}>
@@ -173,35 +205,19 @@ const Watcher = ({watchIds, watchThings, collections, customTypes}) => {
                             dense
                             disablePadding
                         >
-                            {Object.entries(watchThings).map(([k, v]) => k === '#' ? null : (
-                                <Grid container spacing={2} key={k}>
-                                    <Grid item xs={11}>
-                                        {tabIndex === 0 &&
-                                            <ThingsTree
-                                                tree={v}
-                                                child={{
-                                                    name:'',
-                                                    index:null,
-                                                }}
-                                                root
-                                                customTypes={customTypes[scope]}
-                                            />
-                                        }
-                                        {tabIndex === 1 &&
-                                            <pre>
-                                                { JSON.stringify(v, replacer, 4)}
-                                            </pre>
-                                        }
-                                    </Grid>
-                                    <Grid item xs={1}>
-                                        <Tooltip disableFocusListener disableTouchListener title="Turn watching off">
-                                            <ButtonBase onClick={handleUnwatch(k)} size="small" >
-                                                <RemoveIcon size="small" className={classes.red} />
-                                            </ButtonBase>
-                                        </Tooltip>
-                                    </Grid>
-                                </Grid>
-                            ))}
+                            <HarmonicTree
+                                items={watchThings}
+                                jsonReplacer={replacer}
+                                jsonView={tabIndex === 1}
+                                onAction={handleWatchButton}
+                                title="THINGS"
+                            />
+                            {Object.keys(watchProcedures).length>0&& (
+                                <HarmonicTree items={watchProcedures} title="PROCEDURES" jsonView={tabIndex === 1} />
+                            )}
+                            {Object.keys(watchTypes).length>0&& (
+                                <HarmonicTree items={watchTypes} title="TYPES" jsonView={tabIndex === 1} />
+                            )}
                         </List>
                     </Paper>
                 </Collapse>
@@ -214,6 +230,8 @@ Watcher.propTypes = {
     /* event store properties */
     watchThings: EventStore.types.watchThings.isRequired,
     watchIds: EventStore.types.watchIds.isRequired,
+    watchProcedures: EventStore.types.watchProcedures.isRequired,
+    watchTypes: EventStore.types.watchTypes.isRequired,
 
     /* thingsdb store properties */
     collections: ThingsdbStore.types.collections.isRequired,

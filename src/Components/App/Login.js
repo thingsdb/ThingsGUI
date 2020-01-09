@@ -64,7 +64,7 @@ const validation = {
 
 const tag = '0';
 
-const Login = ({loaded, connected, savedConnections}) => {
+const Login = ({connected, loaded, savedConnections}) => {
     const [state, setState] = React.useState(initialState);
     const {showPassword, showToken, errors, loginWith, form, showOther, disableName} = state;
     const [notifySaved, setNotifySaved] = React.useState(false);
@@ -91,7 +91,7 @@ const Login = ({loaded, connected, savedConnections}) => {
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = ky=='name'?false:!validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => d)) {
             ApplicationActions.connect(form, tag);
@@ -390,8 +390,8 @@ const Login = ({loaded, connected, savedConnections}) => {
 };
 
 Login.propTypes = {
-    loaded: ApplicationStore.types.loaded.isRequired,
     connected: ApplicationStore.types.connected.isRequired,
+    loaded: ApplicationStore.types.loaded.isRequired,
     savedConnections: ApplicationStore.types.savedConnections.isRequired,
 };
 
