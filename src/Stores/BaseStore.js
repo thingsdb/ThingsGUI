@@ -220,22 +220,39 @@ class EventStore extends BaseStore {
     }
 
     watchInit(data) {
-        if (data.procedures) {
-            let proc = data.procedures.reduce((res, item) => { res[item.name] = item; return res;}, {});
-            let typ = data.types.reduce((res, item) => { res[item.name] = item; return res;}, {});
-            console.log(proc, typ);
-            this.setState(prevState => {
-                const watchThings = Object.assign({}, prevState.watchThings, {[data.thing['#']]: data.thing});
-                const watchProcedures = Object.assign({}, prevState.watchProcedures, {[data.thing['#']]: proc});
-                const watchTypes = Object.assign({}, prevState.watchTypes, {[data.thing['#']]: typ});
-                return {watchThings, watchProcedures, watchTypes};
-            });
-        } else {
-            this.setState(prevState => {
-                const watchThings = Object.assign({}, prevState.watchThings, {[data.thing['#']]: data.thing});
-                return {watchThings};
-            });
-        }
+        const {watchIds} = this.state;
+        let scope;
+        Object.entries(watchIds).map(
+            ([k, v]) =>  {
+                if(v.includes(`${data.thing['#']}`)){
+                    scope = k;
+                }
+            }
+        );
+
+        this.setState(prevState => {
+            const wt = Object.assign({}, prevState.watchThings[scope], {[data.thing['#']]: data.thing});
+            const watchThings = Object.assign({}, prevState.watchThings, {[scope]: wt});
+
+            let res = {watchThings: watchThings};
+
+            if (data.procedures) {
+                let proc = data.procedures.reduce((res, item) => { res[item.name] = item; return res;}, {});
+                let typ = data.types.reduce((res, item) => { res[item.name] = item; return res;}, {});
+
+                const pt = Object.assign({}, prevState.watchProcedures[scope], {[data.thing['#']]: proc});
+                const watchProcedures = Object.assign({}, prevState.watchProcedures, {[scope]: pt});
+
+                const tt = Object.assign({}, prevState.watchTypes[scope], {[data.thing['#']]: typ});
+                const watchTypes = Object.assign({}, prevState.watchTypes, {[scope]: tt});
+
+                res['watchProcedures'] = watchProcedures;
+                res['watchTypes'] = watchTypes;
+            }
+
+            return res;
+        });
+
     }
 
     watchUpdate(data) {
@@ -365,6 +382,7 @@ class EventStore extends BaseStore {
     }
 
     onWatch(scope, id, tag=null) {
+        console.log(scope);
         const idString = `${id}`;
         this.emit('watch', {
             scope,
@@ -391,19 +409,25 @@ class EventStore extends BaseStore {
             this.setState(prevState => {
 
                 let copyThings = JSON.parse(JSON.stringify(prevState.watchThings));
-                delete copyThings[id];
+                Object.keys(copyThings[scope]).length<2 ? delete copyThings[scope] : delete copyThings[scope][id];
 
                 let copyIds = new Set([...prevState.watchIds[scope]]);
                 copyIds.delete(idString);
                 const update = Object.assign({}, prevState.watchIds, {[scope]: [...copyIds]});
 
+                let res = {watchThings: copyThings, watchIds: update};
+
                 let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures));
-                delete copyProcedures[id];
+                if (copyProcedures[scope]) {
+                    Object.keys(copyProcedures[scope]).length<2? delete copyProcedures[scope] : delete copyProcedures[scope][id];
 
-                let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes));
-                delete copyTypes[id];
+                    let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes));
+                    Object.keys(copyTypes[scope]).length<2? delete copyTypes[scope] : delete copyTypes[scope][id];
 
-                return {watchThings: copyThings, watchIds: update, watchProcedures: copyProcedures, watchTypes: copyTypes};
+                    res['watchProcedures'] = copyProcedures;
+                    res['watchTypes'] = copyTypes;
+                }
+                return res;
             });
         }).fail((event, status, message) => {
             tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
