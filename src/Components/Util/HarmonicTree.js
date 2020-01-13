@@ -39,7 +39,7 @@ const HarmonicTree = ({items, jsonView, title, onAction, jsonReplacer}) => {
                                 index:null,
                             }}
                             root={false}
-                            onAction={onAction}
+                            onAction={onAction(k)}
                         />
                     </React.Fragment>
                 ))}
@@ -55,7 +55,7 @@ const HarmonicTree = ({items, jsonView, title, onAction, jsonReplacer}) => {
 
 HarmonicTree.defaultProps = {
     jsonView: false,
-    onAction: ()=>null,
+    onAction: ()=>()=>null,
     jsonReplacer: ()=>null,
 };
 

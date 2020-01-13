@@ -26,8 +26,6 @@ class _SocketRequest {
     }
 
     constructor(event, ...data) {
-        window.console.debug(`Socket request: "${event}"`, data);
-
         var warnOnLong = setTimeout(() => {
             window.console.warn(`No result for request "${event}" within 3 seconds.`);
         }, 3000);
@@ -39,7 +37,6 @@ class _SocketRequest {
 
             this._alwaysCb(status, data);
             if (status === 200) {
-                window.console.debug(`Socket response ("${event}"):`, data);
                 this._doneCb(data);
             } else if (status === 125) {
                 // this._triggerSessionError();
@@ -195,7 +192,6 @@ class EventStore extends BaseStore {
         this.state = EventStore.defaults;
         socket.emit('getEvent', 'hoi');
         socket.on('event', (data) => {
-            window.console.log(data);
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);
@@ -221,14 +217,7 @@ class EventStore extends BaseStore {
 
     watchInit(data) {
         const {watchIds} = this.state;
-        let scope;
-        Object.entries(watchIds).map(
-            ([k, v]) =>  {
-                if(v.includes(`${data.thing['#']}`)){
-                    scope = k;
-                }
-            }
-        );
+        let scope = watchIds[data.thing['#']];
 
         this.setState(prevState => {
             const wt = Object.assign({}, prevState.watchThings[scope], {[data.thing['#']]: data.thing});
@@ -237,7 +226,7 @@ class EventStore extends BaseStore {
             let res = {watchThings: watchThings};
 
             if (data.procedures) {
-                let proc = data.procedures.reduce((res, item) => { res[item.name] = item; return res;}, {});
+                let proc = data.procedures.reduce((res, item) => { res[item.name] = item.definition; return res;}, {});
                 let typ = data.types.reduce((res, item) => { res[item.name] = item; return res;}, {});
 
                 const pt = Object.assign({}, prevState.watchProcedures[scope], {[data.thing['#']]: proc});
@@ -274,20 +263,28 @@ class EventStore extends BaseStore {
                 this.remove(data['#'], data.jobs[i].remove);
                 break;
             case data.jobs[i].hasOwnProperty('new_procedure'):
+                this.new_procedure(data['#'], data.jobs[i].new_procedure);
                 break;
             case data.jobs[i].hasOwnProperty('del_procedure'):
+                this.del_procedure(data['#'], data.jobs[i].del_procedure);
                 break;
             case data.jobs[i].hasOwnProperty('mod_type_add'):
+                this.mod_type_add(data['#'], data.jobs[i].mod_type_add);
                 break;
             case data.jobs[i].hasOwnProperty('mod_type_mod'):
+                this.mod_type_mod(data['#'], data.jobs[i].mod_type_mod);
                 break;
             case data.jobs[i].hasOwnProperty('mod_type_del'):
+                this.mod_type_del(data['#'], data.jobs[i].mod_type_del);
                 break;
             case data.jobs[i].hasOwnProperty('new_type'):
+                this.new_type(data['#'], data.jobs[i].new_type);
                 break;
             case data.jobs[i].hasOwnProperty('set_type'):
+                this.set_type(data['#'], data.jobs[i].set_type);
                 break;
             case data.jobs[i].hasOwnProperty('del_type'):
+                this.del_type(data['#'], data.jobs[i].del_type);
                 break;
             default:
 
@@ -295,30 +292,172 @@ class EventStore extends BaseStore {
         }
     }
 
-    set(id, set) {
+    new_procedure(id, newProcedure) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
+        let name = Object.keys(newProcedure)[0];
+        let def = newProcedure[name]['/'];
+
         this.setState(prevState => {
-            const update = Object.assign({}, prevState.watchThings[id], set);
-            const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
+            const update = Object.assign({}, prevState.watchProcedures[scope][id], {[name]: def});
+            const update2 = Object.assign({}, prevState.watchProcedures[scope], {[id]: update});
+            const watchProcedures = Object.assign({}, prevState.watchProcedures, {[scope]: update2});
+            return {watchProcedures};
+        });
+    }
+    del_procedure(id, del) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
+
+        this.setState(prevState => {
+            let copyState = JSON.parse(JSON.stringify(prevState.watchProcedures[scope][id]));
+            delete copyState[del];
+            const update = Object.assign({}, prevState.watchProcedures[scope], {[id]: copyState});
+            const watchProcedures = Object.assign({}, prevState.watchProcedures, {[scope]: update});
+            return {watchProcedures};
+        });
+    }
+
+
+    mod_type_add(id, add) {
+        const {watchIds, watchTypes} = this.state;
+        let scope = watchIds[id];
+        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == add.type_id);
+        type.fields.push([add.name, add.spec]);
+        let obj = {
+            name: type.name,
+            type_id: add.type_id,
+            fields: type.fields,
+        };
+
+        this.setState(prevState => {
+            const update = Object.assign({}, prevState.watchTypes[scope][id], {[type.name]: obj});
+            const update2 = Object.assign({}, prevState.watchTypes[scope], {[id]: update});
+            const watchTypes = Object.assign({}, prevState.watchTypes, {[scope]: update2});
+            return {watchTypes};
+        });
+    }
+    mod_type_mod(id, mod) {
+        const {watchIds, watchTypes} = this.state;
+        let scope = watchIds[id];
+        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == mod.type_id);
+        let fieldsIndex = type.fields.findIndex(f => f[0]==mod.name);
+        type.fields.splice(fieldsIndex, 1, [mod.name, mod.spec]);
+        let obj = {
+            name: type.name,
+            type_id: mod.type_id,
+            fields: type.fields,
+        };
+
+        this.setState(prevState => {
+            const update = Object.assign({}, prevState.watchTypes[scope][id], {[type.name]: obj});
+            const update2 = Object.assign({}, prevState.watchTypes[scope], {[id]: update});
+            const watchTypes = Object.assign({}, prevState.watchTypes, {[scope]: update2});
+            return {watchTypes};
+        });
+    }
+    mod_type_del(id, del) {
+        const {watchIds, watchTypes} = this.state;
+        let scope = watchIds[id];
+        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == del.type_id);
+        let fieldsIndex = type.fields.findIndex(f => f[0]==del.name);
+        type.fields.splice(fieldsIndex, 1);
+        let obj = {
+            name: type.name,
+            type_id: del.type_id,
+            fields: type.fields,
+        };
+
+        this.setState(prevState => {
+            const update = Object.assign({}, prevState.watchTypes[scope][id], {[type.name]: obj});
+            const update2 = Object.assign({}, prevState.watchTypes[scope], {[id]: update});
+            const watchTypes = Object.assign({}, prevState.watchTypes, {[scope]: update2});
+            return {watchTypes};
+        });
+    }
+    new_type(id, newType) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
+        let name = newType.name;
+        let obj = {
+            name: newType.name,
+            type_id: newType.type_id,
+            fields: [],
+        };
+
+        this.setState(prevState => {
+            const update = Object.assign({}, prevState.watchTypes[scope][id], {[name]: obj});
+            const update2 = Object.assign({}, prevState.watchTypes[scope], {[id]: update});
+            const watchTypes = Object.assign({}, prevState.watchTypes, {[scope]: update2});
+            return {watchTypes};
+        });
+    }
+    set_type(id, set) {
+        const {watchIds, watchTypes} = this.state;
+        let scope = watchIds[id];
+        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == set.type_id);
+        let obj = {
+            name: type.name,
+            type_id: set.type_id,
+            fields: set.fields,
+        };
+
+        this.setState(prevState => {
+            const update = Object.assign({}, prevState.watchTypes[scope][id], {[type.name]: obj});
+            const update2 = Object.assign({}, prevState.watchTypes[scope], {[id]: update});
+            const watchTypes = Object.assign({}, prevState.watchTypes, {[scope]: update2});
+            return {watchTypes};
+        });
+    }
+    del_type(id, del) {
+        const {watchIds, watchTypes} = this.state;
+        let scope = watchIds[id];
+        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == del);
+
+        this.setState(prevState => {
+            let copyState = JSON.parse(JSON.stringify(prevState.watchTypes[scope][id]));
+            delete copyState[type.name];
+            const update = Object.assign({}, prevState.watchTypes[scope], {[id]: copyState});
+            const watchTypes = Object.assign({}, prevState.watchTypes, {[scope]: update});
+            return {watchTypes};
+        });
+    }
+
+
+
+    set(id, set) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
+        this.setState(prevState => {
+            const update = Object.assign({}, prevState.watchThings[scope][id], set);
+            const update2 = Object.assign({}, prevState.watchThings[scope], {[id]: update});
+            const watchThings = Object.assign({}, prevState.watchThings, {[scope]: update2});
             return {watchThings};
         });
     }
 
     del(id, del) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
         this.setState(prevState => {
-            let copyState = JSON.parse(JSON.stringify(prevState.watchThings[id]));
+            let copyState = JSON.parse(JSON.stringify(prevState.watchThings[scope][id]));
             delete copyState[del];
-            const watchThings = Object.assign({}, prevState.watchThings, {[id]: copyState});
+            const update = Object.assign({}, prevState.watchThings[scope], {[id]: copyState});
+            const watchThings = Object.assign({}, prevState.watchThings, {[scope]: update});
             return {watchThings};
         });
     }
 
     splice(id, splice) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
+
         const prop = Object.keys(splice)[0];
         const index = splice[prop][0];
         const deleteCount = splice[prop][1];
         const length = splice[prop].length;
         this.setState(prevState => {
-            const copyArr = [...prevState.watchThings[id][prop]];
+            const copyArr = [...prevState.watchThings[scope][id][prop]];
 
             if (length>2) {
                 copyArr.splice(index, deleteCount, ...splice[prop].slice(2));
@@ -326,31 +465,39 @@ class EventStore extends BaseStore {
                 copyArr.splice(index, deleteCount);
             }
 
-            const update = Object.assign({}, prevState.watchThings[id], {[prop]: copyArr});
-            const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
+            const update = Object.assign({}, prevState.watchThings[scope][id], {[prop]: copyArr});
+            const update2 = Object.assign({}, prevState.watchThings[scope], {[id]: update});
+            const watchThings = Object.assign({}, prevState.watchThings, {[scope]: update2});
             return {watchThings};
         });
 
     }
 
     add(id, add) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
+
         const prop = Object.keys(add);
         this.setState(prevState => {
-            const copySet = new Set([...prevState.watchThings[id][prop]['$']]);
+            const copySet = new Set([...prevState.watchThings[scope][id][prop]['$']]);
             for (let i = 0; i<add[prop].length; i++ ) {
                 copySet.add(add[prop][i]);
             }
             const newSet = {'$': [...copySet]};
-            const update = Object.assign({}, prevState.watchThings[id], {[prop]: newSet});
-            const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
+            const update = Object.assign({}, prevState.watchThings[scope][id], {[prop]: newSet});
+            const update2 = Object.assign({}, prevState.watchThings[scope], {[id]: update});
+            const watchThings = Object.assign({}, prevState.watchThings, {[scope]: update2});
             return {watchThings};
         });
     }
 
     remove(id, remove) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
+
         const prop = Object.keys(remove);
         this.setState(prevState => {
-            const copySet = new Set([...prevState.watchThings[id][prop]['$']]);
+            const copySet = new Set([...prevState.watchThings[scope][id][prop]['$']]);
             for (let i = 0; i<remove[prop].length; i++ ) {
                 copySet.forEach(function(t){
                     if (t['#'] == remove[prop][i]) {
@@ -359,17 +506,22 @@ class EventStore extends BaseStore {
                 });
             }
             const newSet = {'$': [...copySet]};
-            const update = Object.assign({}, prevState.watchThings[id], {[prop]: newSet});
-            const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
+            const update = Object.assign({}, prevState.watchThings[scope][id], {[prop]: newSet});
+            const update2 = Object.assign({}, prevState.watchThings[scope], {[id]: update});
+            const watchThings = Object.assign({}, prevState.watchThings, {[scope]: update2});
             return {watchThings};
         });
     }
 
     watchDel(data) {
+        const {watchIds} = this.state;
+        let scope = watchIds[data['#']];
+
         this.setState(prevState => {
-            let copyState = JSON.parse(JSON.stringify(prevState.watchThings));
+            let copyState = JSON.parse(JSON.stringify(prevState.watchThings[scope]));
             delete copyState[data['#']];
-            return {watchThings: copyState};
+            const watchThings = Object.assign({}, prevState.watchThings, {[scope]: copyState});
+            return {watchThings};
         });
     }
 
@@ -382,17 +534,13 @@ class EventStore extends BaseStore {
     }
 
     onWatch(scope, id, tag=null) {
-        console.log(scope);
         const idString = `${id}`;
         this.emit('watch', {
             scope,
             ids: [idString]
         }).done(() => {
             this.setState(prevState => {
-                let copyState = prevState.watchIds.hasOwnProperty(scope) ? new Set([...prevState.watchIds[scope]])
-                    : new Set();
-                copyState.add(idString);
-                const update = Object.assign({}, prevState.watchIds, {[scope]: [...copyState]});
+                const update = Object.assign({}, prevState.watchIds, {[id]: scope});
                 return {watchIds: update};
             });
         }).fail((event, status, message) => {
@@ -400,7 +548,9 @@ class EventStore extends BaseStore {
         });
     }
 
-    onUnwatch(scope, id, tag=null) {
+    onUnwatch(id, tag=null) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
         const idString = `${id}`;
         this.emit('unwatch', {
             scope,
@@ -411,11 +561,10 @@ class EventStore extends BaseStore {
                 let copyThings = JSON.parse(JSON.stringify(prevState.watchThings));
                 Object.keys(copyThings[scope]).length<2 ? delete copyThings[scope] : delete copyThings[scope][id];
 
-                let copyIds = new Set([...prevState.watchIds[scope]]);
-                copyIds.delete(idString);
-                const update = Object.assign({}, prevState.watchIds, {[scope]: [...copyIds]});
+                let copyIds = JSON.parse(JSON.stringify(prevState.watchIds));
+                delete copyIds[id];
 
-                let res = {watchThings: copyThings, watchIds: update};
+                let res = {watchThings: copyThings, watchIds: copyIds};
 
                 let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures));
                 if (copyProcedures[scope]) {

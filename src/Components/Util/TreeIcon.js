@@ -60,7 +60,7 @@ const TreeIcon = ({type}) => {
                                             : type == 'error' ? ['!', 'cyan']
                                                 : type == 'wrap' ? ['< >', 'lightPink']
                                                     : type == 'set' ? ['[ ]', 'green']
-                                                        : type == 'object' ? ['{ }', 'white']
+                                                        : type == 'object' ? ['o', 'white']
                                                             : '';
     };
     const [icon, color] = treeIcon(type);

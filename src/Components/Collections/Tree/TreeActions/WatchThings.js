@@ -51,7 +51,7 @@ const WatchThings = ({buttonIsFab, scope, tag, thingId, watchIds}) => {
     const classes = useStyles();
 
     // stringify thingId
-    const onWatch = watchIds.hasOwnProperty(scope) && watchIds[scope].includes(`${thingId}`);
+    const onWatch = Boolean(watchIds[`${thingId}`]);
 
     const handleWatcher = () => {
         if (!onWatch) {
@@ -62,7 +62,6 @@ const WatchThings = ({buttonIsFab, scope, tag, thingId, watchIds}) => {
             );
         } else {
             EventActions.unwatch(
-                scope,
                 thingId,
                 tag
             );

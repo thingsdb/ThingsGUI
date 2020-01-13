@@ -64,7 +64,6 @@ const tag = '26';
 const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThings, watchTypes}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
-    // const [customTypes, setCustomTypes] = React.useState([]);
     const [state, setState] = React.useState({
         scope: '',
         thingId: 3,
@@ -96,21 +95,13 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
     };
 
     const handleUnwatch = (id) => () => {
-        let s;
-        Object.entries(watchIds).map(
-            ([k, v]) =>  {
-                if(v.includes(id)){
-                    s = k;
-                }
-            }
-        );
         EventActions.unwatch(
-            s,
             id,
         );
     };
 
-    const handleClickWatch = (id) => () => {
+    const handleClickWatch = (scope, id) => () => {
+        console.log(scope, id);
         EventActions.watch(
             scope,
             id,
@@ -119,32 +110,26 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
     };
 
 
-    const handleWatchButton = (_, t, v) => {
+    const handleWatchButton = (s) => (_, t, v) => {
         const id = v.slice(2, -1);
-        let s;
-        let onWatch=false;
-        Object.entries(watchIds).map(
-            ([k, v]) =>  {
-                if(v.includes(id)){
-                    s = k;
-                    onWatch=true;
-                }
-            }
-        );
-        return(t=='thing'&& onWatch && (
-            // <ButtonBase onClick={handleClickWatch(id)} size="small" >
-            //     <AddIcon size="small" color="primary" />
-            // </ButtonBase>
+        let onWatch=Boolean(watchIds[id]);
+        // let scope = watchIds[id];
+
+        return(t=='thing'&& (onWatch ? (
             <Tooltip disableFocusListener disableTouchListener title="Turn watching off">
-                <ButtonBase onClick={handleUnwatch(id, s)} size="small" >
+                <ButtonBase onClick={handleUnwatch(id)} size="small" >
                     <RemoveIcon size="small" className={classes.red} />
                 </ButtonBase>
             </Tooltip>
-        ));
+        ): (
+            <ButtonBase onClick={handleClickWatch(s, id)} size="small" >
+                <AddIcon size="small" color="primary" />
+            </ButtonBase>
+        )));
     }; // v = '{#123}'
 
     const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
-    console.log(watchProcedures, watchThings, watchTypes);
+
     return (
         <Grid container spacing={2}>
             <Grid className={classes.grid} container item xs={12} spacing={1} alignItems="center" >

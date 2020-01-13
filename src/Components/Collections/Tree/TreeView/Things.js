@@ -58,7 +58,7 @@ const ThingRoot = ({things, collection, watchIds}) => {
         // return () => CollectionActions.cleanupTmp();
     }, [collection.name]);
 
-    const isWatching = watchIds && watchIds.hasOwnProperty([`@collection:${collection.name}`]) && watchIds[`@collection:${collection.name}`].includes(`${collection.collection_id}`);
+    const isWatching = Boolean(watchIds[collection.collection_id]);
 
     return (
         <React.Fragment>

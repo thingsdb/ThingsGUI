@@ -181,11 +181,11 @@ const Editor = ({match}) => {
             content={
                 <React.Fragment>
                     <Grid item xs={12}>
+                        <ErrorMsg tag={tag} />
                         <Card id='editor' style={{height: newHeight}}>
-                            <CardContent onKeyDown={handleKeyPress}>
-                                <ErrorMsg tag={tag} />
-                                <QueryInput onChange={handleInput} input={queryInput} height={newHeight-70} />
-                            </CardContent>
+                            <div onKeyDown={handleKeyPress}>
+                                <QueryInput onChange={handleInput} input={queryInput} height={newHeight-25} />
+                            </div>
                             <Grid container item xs={12} alignItems="flex-end" justify="center">
                                 <DragHandleIcon className={classes.dragger} onMouseDown={handleMousedown} />
                             </Grid>
@@ -206,6 +206,7 @@ const Editor = ({match}) => {
                             content={
                                 <QueryOutput output={output} />
                             }
+                            noPadding
                         />
                     </Grid>
                 </React.Fragment>

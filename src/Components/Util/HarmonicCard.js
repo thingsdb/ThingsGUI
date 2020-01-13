@@ -8,9 +8,19 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import {makeStyles} from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+    padding: {
+        paddingTop: 0,
+        paddingBottom: 0,
+        paddingLeft: 0,
+        paddingRight: 0,
+    },
+}));
 
-const HarmonicCard = ({title, content, buttons, expand}) => {
+const HarmonicCard = ({title, content, buttons, expand, noPadding}) => {
+    const classes = useStyles();
     const [expanded, setExpanded] = React.useState(expand);
 
     function handleExpandClick() {
@@ -27,13 +37,14 @@ const HarmonicCard = ({title, content, buttons, expand}) => {
                 }
                 title={title}
                 titleTypographyProps={{variant: 'body1'}}
+                className={noPadding?classes.padding:null}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
+                <CardContent className={noPadding?classes.padding:null}>
                     {content}
                 </CardContent>
                 {buttons ? (
-                    <CardActions>
+                    <CardActions className={noPadding?classes.padding:null}>
                         {buttons}
                     </CardActions>
                 ) : null}
@@ -45,6 +56,7 @@ const HarmonicCard = ({title, content, buttons, expand}) => {
 HarmonicCard.defaultProps = {
     expand: true,
     buttons: null,
+    noPadding: false,
 },
 
 HarmonicCard.propTypes = {
@@ -52,6 +64,7 @@ HarmonicCard.propTypes = {
     content: PropTypes.object.isRequired,
     buttons: PropTypes.object,
     expand: PropTypes.bool,
+    noPadding: PropTypes.bool,
 };
 
 export default HarmonicCard;

@@ -56,7 +56,7 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
     const isTuple = type === 'array' && parent.type === 'array';
     const thingId = thing && thing['#'] || parent.id;
     const currThing = thing && things[thing['#']] || thing;
-    const isWatching = type === 'thing' && watchIds && watchIds.hasOwnProperty([`@collection:${collection.name}`]) && watchIds[`@collection:${collection.name}`].includes(`${thing && thing['#']}`);
+    const isWatching = type === 'thing' && thing && watchIds[thing['#']];
 
     const hasDialog = !(parent.type === 'closure' || parent.type === 'regex' || parent.type === 'error');
 
