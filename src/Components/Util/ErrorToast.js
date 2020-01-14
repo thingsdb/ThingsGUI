@@ -56,7 +56,7 @@ const ErrorToast = ({toastErrors}) => {
                         <Card className={classes.card}>
                             <ExpansionPanel className={classes.panel}>
                                 <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon color="primary" />}
+                                    expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
                                 >

@@ -222,10 +222,10 @@ const theme = {
         { token: 'whitespace', foreground: '608b4e' },
     ],
     colors: {
-        'editor.foreground': '#0000002e',
-        'editor.background': '#0000002e',
+        'editor.foreground': '#000',
+        'editor.background': '#000',
         'editorCursor.foreground': '#c6c6c6',
-        'editor.lineHighlightBackground': '#141719',
+        'editor.lineHighlightBackground': '#000',
         'editorLineNumber.foreground': '#c6c6c6',
         'editor.selectionBackground': '#20344b',
         'editor.inactiveSelectionBackground': '#c6c6c6'

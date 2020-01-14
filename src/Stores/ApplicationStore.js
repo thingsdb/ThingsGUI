@@ -6,18 +6,19 @@ import {NodesActions} from './NodesStore';
 import {ThingsdbActions} from './ThingsdbStore';
 
 const ApplicationActions = Vlow.createActions([
-    'connected',
-    'connect',
-    'disconnect',
-    'navigate',
-    'openEditor',
     'closeEditor',
-    'logging',
-    'getConn',
-    'newConn',
-    'editConn',
-    'delConn',
+    'connect',
+    'connected',
     'connectToo',
+    'delConn',
+    'disconnect',
+    'editConn',
+    'getConn',
+    'logging',
+    'navigate',
+    'newConn',
+    'openEditor',
+    'reconnect',
 ]);
 
 // TODO: CALLBACKS
@@ -76,6 +77,17 @@ class ApplicationStore extends BaseStore {
         });
     }
 
+    onReconnect(tag) {
+        console.log('about to reconnect');
+        this.emit('reconn').done((data) => {
+            this.setState({
+                connected: data.Connected,
+            });
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
     onDisconnect() {
         EventActions.resetWatch();
         this.emit('disconn').done((data) => {
@@ -102,7 +114,6 @@ class ApplicationStore extends BaseStore {
 
     onGetConn(tag) {
         this.emit('getConn').done((data) => {
-            console.log(data);
             this.setState({savedConnections: data||{}});
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
@@ -111,7 +122,6 @@ class ApplicationStore extends BaseStore {
 
     onNewConn(config, tag, cb) {
         this.emit('newEditConn', config).done((_data) => {
-            console.log(config);
             this.setState(prevState => {
                 const savedConn = Object.assign({}, prevState.savedConnections, {[config.name]: config});
                 const update = Object.assign({}, prevState, {savedConnections: savedConn});

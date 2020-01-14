@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	util "../util"
 	things "github.com/thingsdb/go/client"
@@ -14,11 +15,13 @@ import (
 type Client struct {
 	Connection *things.Conn
 	Closed     chan bool
-	EventCh    chan *things.Event
 	LogCh      chan string
 	TmpFiles   *util.TmpFiles
 	Ssl        *tls.Config
 	HomePath   string
+	User       string
+	Pass       string
+	Token      string
 }
 
 type LoginResp struct {
@@ -55,7 +58,7 @@ func connect(client *Client, data LoginData) LoginResp {
 	}
 
 	client.Connection = things.NewConn(host, uint16(port), client.Ssl)
-	client.Connection.EventCh = client.EventCh
+	client.Connection.EventCh = make(chan *things.Event)
 	client.Connection.LogCh = client.LogCh
 	client.Connection.OnClose = func(err error) {
 		go func() {
@@ -75,11 +78,14 @@ func connect(client *Client, data LoginData) LoginResp {
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
+		client.User = data.User
+		client.Pass = data.Password
 	} else {
 		err := client.Connection.AuthToken(data.Token)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
+		client.Token = data.Token
 	}
 	return LoginResp{Connected: true}
 }
@@ -110,6 +116,52 @@ func Connect(client *Client, data LoginData) (int, LoginResp, util.Message) {
 		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	} else {
 		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
+	}
+	return message.Status, resp, message
+}
+
+func Reconnect(client *Client) (int, LoginResp, util.Message) {
+	resp := LoginResp{Connected: true}
+	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+
+	maxInterval := 240
+	interval := 1
+	fmt.Println(client.Connection.IsConnected(), "hi", client.Connection)
+	for interval < maxInterval && client.Connection.IsConnected() {
+		err := client.Connection.Connect()
+		fmt.Println("errorrrr:", err)
+		if err != nil {
+			client.LogCh <- fmt.Sprintf("connecting to %s:%d failed, \ntry next connect in %d seconds", client.Connection.Host, client.Connection.Port, interval)
+			message = util.Message{Text: err.Error(), Status: http.StatusInternalServerError, Log: err.Error()}
+			resp = LoginResp{Connected: false}
+		} else {
+			if client.Token == "" {
+				err := client.Connection.AuthPassword(client.User, client.Pass)
+				if err != nil {
+					resp = LoginResp{Connected: true}
+					message = util.Message{Text: err.Error(), Status: http.StatusInternalServerError, Log: err.Error()}
+				}
+			} else {
+				err := client.Connection.AuthToken(client.Token)
+				if err != nil {
+					resp = LoginResp{Connected: true}
+					message = util.Message{Text: err.Error(), Status: http.StatusInternalServerError, Log: err.Error()}
+				}
+			}
+			return message.Status, resp, message
+		}
+
+		interval *= 2
+		timeoutCh := make(chan bool, 1)
+		fmt.Println(interval)
+
+		go func() {
+			fmt.Println("hoi")
+			time.Sleep(time.Duration(interval) * time.Second)
+			timeoutCh <- true
+		}()
+
+		<-timeoutCh
 	}
 	return message.Status, resp, message
 }

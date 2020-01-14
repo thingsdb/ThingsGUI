@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     dragger: {
         cursor: 'ns-resize',
     },
+    background: {
+        backgroundColor: '#000',
+    },
 }));
 
 const tag = '13';
@@ -182,11 +185,11 @@ const Editor = ({match}) => {
                 <React.Fragment>
                     <Grid item xs={12}>
                         <ErrorMsg tag={tag} />
-                        <Card id='editor' style={{height: newHeight}}>
+                        <Card id='editor' style={{height: newHeight}} className={classes.background}>
                             <div onKeyDown={handleKeyPress}>
                                 <QueryInput onChange={handleInput} input={queryInput} height={newHeight-25} />
                             </div>
-                            <Grid container item xs={12} alignItems="flex-end" justify="center">
+                            <Grid container item xs={12} alignItems="flex-end" justify="center" >
                                 <DragHandleIcon className={classes.dragger} onMouseDown={handleMousedown} />
                             </Grid>
                         </Card>

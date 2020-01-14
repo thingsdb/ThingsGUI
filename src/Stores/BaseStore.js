@@ -4,6 +4,7 @@ import Vlow from 'vlow';
 import io from 'socket.io-client';
 import PropTypes from 'prop-types';
 import {ErrorActions} from './ErrorStore';
+import {ApplicationActions} from './ApplicationStore';
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
     reconnection: true,
@@ -191,6 +192,7 @@ class EventStore extends BaseStore {
         super(EventActions);
         this.state = EventStore.defaults;
         socket.emit('getEvent', 'hoi');
+        this.onWatch('@n', '9999');
         socket.on('event', (data) => {
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
@@ -525,16 +527,21 @@ class EventStore extends BaseStore {
         });
     }
 
-    nodeStatus(data) {
-        // this.setState(prevState => {
-        //     const update = Object.assign({}, prevState.watchThings[data['#']], set);
-        //     const watchThings = Object.assign({}, prevState.watchThings, {[id]: update});
-        //     return {watchThings};
-        // });
+    timer(t) {
+        console.log(t);
+        setTimeout(()=> ApplicationActions.reconnect(this.timer(t*2)), t);
     }
 
-    onWatch(scope, id, tag=null) {
+    nodeStatus(data) {
+        console.log(data);
+        if (data=='OFFLINE') {
+            ApplicationActions.reconnect();
+        }
+    }
+
+    onWatch(scope, id='', tag=null) {
         const idString = `${id}`;
+        console.log(idString);
         this.emit('watch', {
             scope,
             ids: [idString]

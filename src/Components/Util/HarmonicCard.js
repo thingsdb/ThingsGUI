@@ -37,12 +37,14 @@ const HarmonicCard = ({title, content, buttons, expand, noPadding}) => {
                 }
                 title={title}
                 titleTypographyProps={{variant: 'body1'}}
-                className={noPadding?classes.padding:null}
+                // className={noPadding?classes.padding:null}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent className={noPadding?classes.padding:null}>
-                    {content}
-                </CardContent>
+                {noPadding? content : (
+                    <CardContent>
+                        {content}
+                    </CardContent>
+                )}
                 {buttons ? (
                     <CardActions className={noPadding?classes.padding:null}>
                         {buttons}
