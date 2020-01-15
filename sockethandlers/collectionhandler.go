@@ -92,7 +92,6 @@ func Watch(client *Client, data Data, timeout uint16) (int, interface{}, util.Me
 		idsInt = append(idsInt, id)
 	}
 	resp, err := client.Connection.Watch(scope, idsInt, timeout)
-	fmt.Println(resp, err)
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
 }

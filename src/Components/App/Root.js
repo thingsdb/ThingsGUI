@@ -6,7 +6,7 @@ import {withVlow} from 'vlow';
 import App from './App';
 import AppLoader from './AppLoader';
 import Login from './Login';
-import {ApplicationStore, ApplicationActions} from '../../Stores';
+import {ApplicationActions, ApplicationStore, EventActions, EventStore} from '../../Stores';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -51,11 +51,14 @@ const theme = createMuiTheme({
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['loaded', 'connected']
+}, {
+    store: EventStore,
 }]);
 
 const Root = ({loaded, connected}) => {
     React.useEffect(() => {
-        ApplicationActions.logging();
+        ApplicationActions.pushNotifications();
+        EventActions.openEventChannel();
     },
     [],
     );

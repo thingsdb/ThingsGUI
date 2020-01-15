@@ -16,6 +16,7 @@ type Client struct {
 	Connection *things.Conn
 	Closed     chan bool
 	LogCh      chan string
+	EventCh    chan *things.Event
 	TmpFiles   *util.TmpFiles
 	Ssl        *tls.Config
 	HomePath   string
@@ -58,7 +59,7 @@ func connect(client *Client, data LoginData) LoginResp {
 	}
 
 	client.Connection = things.NewConn(host, uint16(port), client.Ssl)
-	client.Connection.EventCh = make(chan *things.Event)
+	client.Connection.EventCh = client.EventCh
 	client.Connection.LogCh = client.LogCh
 	client.Connection.OnClose = func(err error) {
 		go func() {
@@ -92,13 +93,14 @@ func connect(client *Client, data LoginData) LoginResp {
 
 func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
 	var resp LoginResp
+	resp.Loaded = true
 	switch {
 	case conn == nil:
-		resp = LoginResp{Loaded: true, Connected: false}
+		resp.Connected = false
 	case conn.IsConnected():
-		resp = LoginResp{Loaded: true, Connected: true}
+		resp.Connected = true
 	default:
-		resp = LoginResp{Loaded: true, Connected: false}
+		resp.Connected = false
 	}
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	return message.Status, resp, message
@@ -121,48 +123,75 @@ func Connect(client *Client, data LoginData) (int, LoginResp, util.Message) {
 }
 
 func Reconnect(client *Client) (int, LoginResp, util.Message) {
-	resp := LoginResp{Connected: true}
+	resp := LoginResp{Connected: false}
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 
-	maxInterval := 240
+	maxInterval := 16
 	interval := 1
-	fmt.Println(client.Connection.IsConnected(), "hi", client.Connection)
-	for interval < maxInterval && client.Connection.IsConnected() {
-		err := client.Connection.Connect()
-		fmt.Println("errorrrr:", err)
-		if err != nil {
-			client.LogCh <- fmt.Sprintf("connecting to %s:%d failed, \ntry next connect in %d seconds", client.Connection.Host, client.Connection.Port, interval)
-			message = util.Message{Text: err.Error(), Status: http.StatusInternalServerError, Log: err.Error()}
-			resp = LoginResp{Connected: false}
-		} else {
-			if client.Token == "" {
-				err := client.Connection.AuthPassword(client.User, client.Pass)
-				if err != nil {
-					resp = LoginResp{Connected: true}
-					message = util.Message{Text: err.Error(), Status: http.StatusInternalServerError, Log: err.Error()}
-				}
+	fmt.Println("before reconnect loop")
+	for interval < maxInterval {
+		if !client.Connection.IsConnected() {
+			fmt.Println("not connected")
+			err := client.Connection.Connect()
+
+			if err != nil {
+				fmt.Println("failed")
+				client.LogCh <- fmt.Sprintf("connecting to %s:%d failed, \ntry next connect in %d seconds", client.Connection.Host, client.Connection.Port, interval)
+				message.Text = err.Error()
+				message.Status = http.StatusInternalServerError
+				message.Log = err.Error()
+
+				interval *= 2
+				timeoutCh := make(chan bool, 1)
+				fmt.Println(interval)
+
+				go func() {
+					fmt.Println("hoi")
+					time.Sleep(time.Duration(interval) * time.Second)
+					timeoutCh <- true
+				}()
+
+				<-timeoutCh
+
 			} else {
-				err := client.Connection.AuthToken(client.Token)
-				if err != nil {
-					resp = LoginResp{Connected: true}
-					message = util.Message{Text: err.Error(), Status: http.StatusInternalServerError, Log: err.Error()}
+				fmt.Println("succeed")
+				resp.Connected = true
+				message.Text = ""
+				message.Status = http.StatusOK
+				message.Log = ""
+
+				if client.Token == "" {
+					fmt.Println("user-pass")
+					err := client.Connection.AuthPassword(client.User, client.Pass)
+
+					if err != nil {
+						fmt.Println("error auth 1")
+						resp.Connected = false
+						message.Text = err.Error()
+						message.Status = http.StatusInternalServerError
+						message.Log = err.Error()
+					}
+				} else {
+					fmt.Println("token")
+					err := client.Connection.AuthToken(client.Token)
+
+					if err != nil {
+						fmt.Println("error auth 2")
+						resp.Connected = false
+						message.Text = err.Error()
+						message.Status = http.StatusInternalServerError
+						message.Log = err.Error()
+					}
 				}
+				fmt.Println("connected", resp, message)
+				return message.Status, resp, message
 			}
-			return message.Status, resp, message
 		}
-
-		interval *= 2
-		timeoutCh := make(chan bool, 1)
-		fmt.Println(interval)
-
-		go func() {
-			fmt.Println("hoi")
-			time.Sleep(time.Duration(interval) * time.Second)
-			timeoutCh <- true
-		}()
-
-		<-timeoutCh
 	}
+	fmt.Println("timeout", resp)
+	message.Text = "Reconnecting has stopped. Timeout reached."
+	message.Status = http.StatusInternalServerError
+	message.Log = "Reconnecting has stopped. Timeout reached."
 	return message.Status, resp, message
 }
 

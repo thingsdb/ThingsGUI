@@ -142,7 +142,6 @@ class _PushNotification {
     }
 }
 
-
 class BaseStore extends Vlow.Store {
 
     emit(name, data) {
@@ -162,6 +161,7 @@ const EventActions = Vlow.createActions([
     'watch',
     'unwatch',
     'resetWatch',
+    'openEventChannel',
 ]);
 
 const ProtoMap = {
@@ -191,8 +191,11 @@ class EventStore extends BaseStore {
     constructor() {
         super(EventActions);
         this.state = EventStore.defaults;
+    }
+
+    onOpenEventChannel() {
+        console.log('Eventchn');
         socket.emit('getEvent', 'hoi');
-        this.onWatch('@n', '9999');
         socket.on('event', (data) => {
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
@@ -214,6 +217,64 @@ class EventStore extends BaseStore {
             default:
 
             }
+        });
+    }
+
+    onWatch(scope, id='', tag=null) {
+        const idString = `${id}`;
+        console.log(idString);
+        this.emit('watch', {
+            scope,
+            ids: [idString]
+        }).done(() => {
+            this.setState(prevState => {
+                const update = Object.assign({}, prevState.watchIds, {[id]: scope});
+                return {watchIds: update};
+            });
+        }).fail((event, status, message) => {
+            tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
+        });
+    }
+
+    onUnwatch(id, tag=null) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
+        const idString = `${id}`;
+        this.emit('unwatch', {
+            scope,
+            ids: [idString]
+        }).done(() => {
+            this.setState(prevState => {
+
+                let copyThings = JSON.parse(JSON.stringify(prevState.watchThings));
+                Object.keys(copyThings[scope]).length<2 ? delete copyThings[scope] : delete copyThings[scope][id];
+
+                let copyIds = JSON.parse(JSON.stringify(prevState.watchIds));
+                delete copyIds[id];
+
+                let res = {watchThings: copyThings, watchIds: copyIds};
+
+                let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures));
+                if (copyProcedures[scope]) {
+                    Object.keys(copyProcedures[scope]).length<2? delete copyProcedures[scope] : delete copyProcedures[scope][id];
+
+                    let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes));
+                    Object.keys(copyTypes[scope]).length<2? delete copyTypes[scope] : delete copyTypes[scope][id];
+
+                    res['watchProcedures'] = copyProcedures;
+                    res['watchTypes'] = copyTypes;
+                }
+                return res;
+            });
+        }).fail((event, status, message) => {
+            tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
+        });
+    }
+
+    onResetWatch() {
+        this.setState({
+            watchThings: {},
+            watchIds: {}
         });
     }
 
@@ -527,74 +588,11 @@ class EventStore extends BaseStore {
         });
     }
 
-    timer(t) {
-        console.log(t);
-        setTimeout(()=> ApplicationActions.reconnect(this.timer(t*2)), t);
-    }
-
     nodeStatus(data) {
-        console.log(data);
         if (data=='OFFLINE') {
             ApplicationActions.reconnect();
+            ErrorActions.setToastError('Lost connection with ThingsDB. Trying to reconnect.');
         }
-    }
-
-    onWatch(scope, id='', tag=null) {
-        const idString = `${id}`;
-        console.log(idString);
-        this.emit('watch', {
-            scope,
-            ids: [idString]
-        }).done(() => {
-            this.setState(prevState => {
-                const update = Object.assign({}, prevState.watchIds, {[id]: scope});
-                return {watchIds: update};
-            });
-        }).fail((event, status, message) => {
-            tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
-        });
-    }
-
-    onUnwatch(id, tag=null) {
-        const {watchIds} = this.state;
-        let scope = watchIds[id];
-        const idString = `${id}`;
-        this.emit('unwatch', {
-            scope,
-            ids: [idString]
-        }).done(() => {
-            this.setState(prevState => {
-
-                let copyThings = JSON.parse(JSON.stringify(prevState.watchThings));
-                Object.keys(copyThings[scope]).length<2 ? delete copyThings[scope] : delete copyThings[scope][id];
-
-                let copyIds = JSON.parse(JSON.stringify(prevState.watchIds));
-                delete copyIds[id];
-
-                let res = {watchThings: copyThings, watchIds: copyIds};
-
-                let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures));
-                if (copyProcedures[scope]) {
-                    Object.keys(copyProcedures[scope]).length<2? delete copyProcedures[scope] : delete copyProcedures[scope][id];
-
-                    let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes));
-                    Object.keys(copyTypes[scope]).length<2? delete copyTypes[scope] : delete copyTypes[scope][id];
-
-                    res['watchProcedures'] = copyProcedures;
-                    res['watchTypes'] = copyTypes;
-                }
-                return res;
-            });
-        }).fail((event, status, message) => {
-            tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
-        });
-    }
-
-    onResetWatch() {
-        this.setState({
-            watchThings: {},
-            watchIds: {}
-        });
     }
 }
 

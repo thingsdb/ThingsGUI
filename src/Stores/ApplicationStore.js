@@ -14,7 +14,7 @@ const ApplicationActions = Vlow.createActions([
     'disconnect',
     'editConn',
     'getConn',
-    'logging',
+    'pushNotifications',
     'navigate',
     'newConn',
     'openEditor',
@@ -52,7 +52,21 @@ class ApplicationStore extends BaseStore {
         this.state = ApplicationStore.defaults;
     }
 
-    onLogging() {
+    connect(api, config, tag) {
+        this.emit(api, config).done((data) => {
+            this.setState({
+                connected: data.Connected,
+            });
+            EventActions.watch(
+                '@n',
+                '9999',
+            );
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onPushNotifications() {
         this.push();
     }
 
@@ -68,23 +82,23 @@ class ApplicationStore extends BaseStore {
     }
 
     onConnect(config, tag) {
-        this.emit('conn', config).done((data) => {
-            this.setState({
-                connected: data.Connected,
-            });
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
+        this.connect('conn', config, tag);
     }
 
-    onReconnect(tag) {
+    onReconnect() {
         console.log('about to reconnect');
         this.emit('reconn').done((data) => {
             this.setState({
                 connected: data.Connected,
             });
+            EventActions.watch(
+                '@n',
+                '9999',
+            );
         }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
+            console.log(message);
+            // ErrorActions.setToastError(message.Log); //Tag naar login scherm
+            this.onDisconnect();
         });
     }
 
@@ -155,13 +169,7 @@ class ApplicationStore extends BaseStore {
     }
 
     onConnectToo(config, tag) {
-        this.emit('connToo', config).done((data) => {
-            this.setState({
-                connected: data.Connected,
-            });
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
+        this.connect('connToo', config, tag);
     }
 }
 

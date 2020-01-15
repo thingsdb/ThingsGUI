@@ -13,6 +13,7 @@ import (
 	handlers "./sockethandlers"
 	util "./util"
 	socketio "github.com/googollee/go-socket.io"
+	things "github.com/thingsdb/go/client"
 )
 
 // AppVersion exposes version information
@@ -54,6 +55,7 @@ func (app *App) SocketRouter() {
 		app.client[s.ID()] = &handlers.Client{
 			Closed:   make(chan bool),
 			LogCh:    make(chan string, 1),
+			EventCh:  make(chan *things.Event),
 			TmpFiles: util.NewTmpFiles(),
 			HomePath: util.GetHomePath(connFile),
 		}
@@ -127,7 +129,7 @@ func (app *App) SocketRouter() {
 	})
 
 	app.server.OnEvent("/", "getEvent", func(s socketio.Conn, data string) {
-		eCh := app.client[s.ID()].Connection.EventCh
+		eCh := app.client[s.ID()].EventCh
 		lCh := app.client[s.ID()].LogCh
 		go func() {
 			for p := range eCh {
