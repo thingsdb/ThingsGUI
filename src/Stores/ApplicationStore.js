@@ -91,10 +91,8 @@ class ApplicationStore extends BaseStore {
             this.setState({
                 connected: data.Connected,
             });
-            EventActions.watch(
-                '@n',
-                '9999',
-            );
+            EventActions.reWatch();
+            ErrorActions.resetToastError();
         }).fail((event, status, message) => {
             console.log(message);
             // ErrorActions.setToastError(message.Log); //Tag naar login scherm

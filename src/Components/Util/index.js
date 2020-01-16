@@ -95,6 +95,15 @@ const getScopes2 = (collections, nodes) => [
 
 const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
+const duration = (n) => {
+    let [time, unit] =  n<60 ? [n, 'second'] :
+        n < 3600 ? [n/60, 'minute'] :
+            n < 86400 ? [n/3600, 'hour'] :
+                [n/86400, 'day'];
+    time = Math.round(time);
+    return `${time} ${unit}${time>1?'s':''}`;
+};
+
 
 export {
     ArrayLayout,
@@ -105,6 +114,7 @@ export {
     ChipsCard,
     DownloadBlob,
     DrawerLayout,
+    duration,
     ErrorMsg,
     ErrorToast,
     fancyName,

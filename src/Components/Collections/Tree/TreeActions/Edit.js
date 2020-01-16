@@ -87,7 +87,6 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
-    console.log(blob);
 
     return(
         <React.Fragment>

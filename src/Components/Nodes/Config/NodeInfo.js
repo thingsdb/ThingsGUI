@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Info } from '../../Util';
 
+
 const NodeInfo = ({node}) => {
 
     const header = [
@@ -49,6 +50,7 @@ const NodeInfo = ({node}) => {
         ]},
 
     ];
+
 
     return (
         <Info header={header} content={node} />

@@ -5,6 +5,8 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 
+import {duration} from '../Util';
+
 const useStyles = makeStyles(theme => ({
     grid: {
         marginTop: theme.spacing(1),
@@ -35,7 +37,7 @@ const Info = ({header, content}) => {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Typography variant="subtitle2">
-                                        {content[l.ky]}
+                                        {l.ky=='uptime'? duration(content[l.ky]):content[l.ky]}
                                     </Typography>
                                 </Grid>
                             </Grid>

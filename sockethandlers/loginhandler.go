@@ -68,6 +68,9 @@ func connect(client *Client, data LoginData) LoginResp {
 		}()
 	}
 
+	client.User = ""
+	client.Pass = ""
+	client.Token = ""
 	if !client.Connection.IsConnected() {
 		err := client.Connection.Connect()
 		if err != nil {
@@ -126,7 +129,7 @@ func Reconnect(client *Client) (int, LoginResp, util.Message) {
 	resp := LoginResp{Connected: false}
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 
-	maxInterval := 16
+	maxInterval := 65
 	interval := 1
 	fmt.Println("before reconnect loop")
 	for interval < maxInterval {
@@ -159,7 +162,7 @@ func Reconnect(client *Client) (int, LoginResp, util.Message) {
 				message.Text = ""
 				message.Status = http.StatusOK
 				message.Log = ""
-
+				fmt.Println(client)
 				if client.Token == "" {
 					fmt.Println("user-pass")
 					err := client.Connection.AuthPassword(client.User, client.Pass)

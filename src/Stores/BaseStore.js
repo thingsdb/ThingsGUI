@@ -160,6 +160,7 @@ class BaseStore extends Vlow.Store {
 const EventActions = Vlow.createActions([
     'watch',
     'unwatch',
+    'reWatch',
     'resetWatch',
     'openEventChannel',
 ]);
@@ -197,6 +198,7 @@ class EventStore extends BaseStore {
         console.log('Eventchn');
         socket.emit('getEvent', 'hoi');
         socket.on('event', (data) => {
+            console.log(data.Data);
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);
@@ -222,7 +224,6 @@ class EventStore extends BaseStore {
 
     onWatch(scope, id='', tag=null) {
         const idString = `${id}`;
-        console.log(idString);
         this.emit('watch', {
             scope,
             ids: [idString]
@@ -255,11 +256,11 @@ class EventStore extends BaseStore {
                 let res = {watchThings: copyThings, watchIds: copyIds};
 
                 let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures));
-                if (copyProcedures[scope]) {
-                    Object.keys(copyProcedures[scope]).length<2? delete copyProcedures[scope] : delete copyProcedures[scope][id];
+                if (copyProcedures[scope][id]) {
+                    delete copyProcedures[scope];
 
                     let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes));
-                    Object.keys(copyTypes[scope]).length<2? delete copyTypes[scope] : delete copyTypes[scope][id];
+                    delete copyTypes[scope];
 
                     res['watchProcedures'] = copyProcedures;
                     res['watchTypes'] = copyTypes;
@@ -268,6 +269,14 @@ class EventStore extends BaseStore {
             });
         }).fail((event, status, message) => {
             tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
+        });
+    }
+
+    onReWatch() {
+        const {watchIds} = this.state;
+        this.onWatch('@n', '9999');
+        Object.entries(watchIds).map(([id, scope]) => {
+            this.onWatch(scope, id);
         });
     }
 
@@ -491,8 +500,10 @@ class EventStore extends BaseStore {
     set(id, set) {
         const {watchIds} = this.state;
         let scope = watchIds[id];
+        let key = Object.keys(set)[0];
+        let obj = {'#': set[key]['#']};
         this.setState(prevState => {
-            const update = Object.assign({}, prevState.watchThings[scope][id], set);
+            const update = Object.assign({}, prevState.watchThings[scope][id], {[key]: obj});
             const update2 = Object.assign({}, prevState.watchThings[scope], {[id]: update});
             const watchThings = Object.assign({}, prevState.watchThings, {[scope]: update2});
             return {watchThings};
@@ -589,7 +600,7 @@ class EventStore extends BaseStore {
     }
 
     nodeStatus(data) {
-        if (data=='OFFLINE') {
+        if (data=='SHUTTING_DOWN') {
             ApplicationActions.reconnect();
             ErrorActions.setToastError('Lost connection with ThingsDB. Trying to reconnect.');
         }
