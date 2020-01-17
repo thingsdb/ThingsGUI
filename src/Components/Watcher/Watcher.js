@@ -196,6 +196,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
                                 jsonView={tabIndex === 1}
                                 onAction={handleWatchButton}
                                 title="THINGS"
+                                customTypes={customTypes}
                             />
                             {Object.keys(watchProcedures).length>0&& (
                                 <HarmonicTree items={watchProcedures} title="PROCEDURES" jsonView={tabIndex === 1} />

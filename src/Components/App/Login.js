@@ -55,11 +55,36 @@ const initialState = {
 };
 
 const validation = {
-    name: (o) => o.name.length>0,
-    address: (o) => o.address.length>0,
-    user: (o) => o.token.length==0 ? o.user.length>0 : true,
-    password: (o) => o.token.length==0 ? o.password.length>0 : true,
-    token: (o) => o.password.length==0 ? o.token.length>0 : true,
+    name: (f) => {
+        if (f.name.length==0) {
+            return 'is required';
+        }
+        return '';
+    },
+    address: (f) => {
+        if (f.address.length==0) {
+            return 'is required';
+        }
+        return '';
+    },
+    user: (f) => {
+        if (f.token.length==0 && f.user.length==0 ) {
+            return 'is required';
+        }
+        return '';
+    },
+    password: (f) => {
+        if (f.token.length==0 && f.password.length==0 ) {
+            return 'is required';
+        }
+        return '';
+    },
+    token: (f) => {
+        if (f.password.length==0 && f.token.length==0 ) {
+            return 'is required';
+        }
+        return '';
+    },
 };
 
 const tag = '0';
@@ -74,13 +99,7 @@ const Login = ({connected, loaded, savedConnections}) => {
     [],
     );
 
-    // React.useEffect(() => {
-    //     if(savedConnections&&Object.keys(savedConnections).length) {
-    //         setState({...state, showOther: false});
-    //     }
-    // },
-    // [JSON.stringify(savedConnections)],
-    // );
+
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -91,9 +110,9 @@ const Login = ({connected, loaded, savedConnections}) => {
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = ky=='name'?false:!validation[ky](form);  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = ky=='name'?false:validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
-        if (!Object.values(err).some(d => d)) {
+        if (!Object.values(err).some(d => Boolean(d))) {
             ApplicationActions.connect(form, tag);
         }
     };
@@ -178,9 +197,9 @@ const Login = ({connected, loaded, savedConnections}) => {
     };
 
     const handleClickSave = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky](form);  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
-        if (!Object.values(err).some(d => d)) {
+        if (!Object.values(err).some(d => Boolean(d))) {
             ApplicationActions.newConn(form, tag, handleTooltip);
         }
     };
@@ -263,7 +282,8 @@ const Login = ({connected, loaded, savedConnections}) => {
                         onChange={handleOnChange}
                         fullWidth
                         disabled={disableName}
-                        error={errors.name}
+                        error={Boolean(errors.name)}
+                        helperText={errors.name}
                     />
                     <TextField
                         autoFocus
@@ -275,7 +295,8 @@ const Login = ({connected, loaded, savedConnections}) => {
                         spellCheck={false}
                         onChange={handleOnChange}
                         fullWidth
-                        error={errors.address}
+                        error={Boolean(errors.address)}
+                        helperText={errors.address}
                     />
                     <Collapse in={loginWith=='credentials'} timeout="auto" unmountOnExit>
                         <TextField
@@ -287,7 +308,8 @@ const Login = ({connected, loaded, savedConnections}) => {
                             spellCheck={false}
                             onChange={handleOnChange}
                             fullWidth
-                            error={errors.user}
+                            error={Boolean(errors.user)}
+                            helperText={errors.user}
                         />
                         <TextField
                             margin="dense"
@@ -298,7 +320,8 @@ const Login = ({connected, loaded, savedConnections}) => {
                             spellCheck={false}
                             onChange={handleOnChange}
                             fullWidth
-                            error={errors.password}
+                            error={Boolean(errors.password)}
+                            helperText={errors.password}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
@@ -320,7 +343,8 @@ const Login = ({connected, loaded, savedConnections}) => {
                             spellCheck={false}
                             onChange={handleOnChange}
                             fullWidth
-                            error={errors.token}
+                            error={Boolean(errors.token)}
+                            helperText={errors.token}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">

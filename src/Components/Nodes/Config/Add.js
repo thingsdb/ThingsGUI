@@ -12,17 +12,32 @@ const initialState = {
     form: {},
 };
 
+const validation = {
+    secret: (f) => {
+        if (f.secret.length==0) {
+            return 'is required';
+        }
+        return '';
+    },
+    address: (f) => {
+        if (f.address.length==0) {
+            return 'is required';
+        }
+        return '';
+    },
+    port: (f) => {
+        // if (form.name.length==0) {
+        //     return 'is required';
+        // }
+        return '';
+    },
+};
+
 const tag = '16';
 
 const Add = () => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
-
-    const validation = {
-        secret: () => form.secret.length>0,
-        address: () => form.address.length>0, // TODOs validate regex
-        port: () => true,
-    };
 
     const handleClickOpen = () => {
         setState({...state, show: true, errors: {}, form: {secret: '', address: '', port: ''}});
@@ -42,9 +57,9 @@ const Add = () => {
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
-        if (!Object.values(err).some(d => d)) {
+        if (!Object.values(err).some(d => Boolean(d))) {
             NodesActions.addNode(
                 form,
                 tag,
@@ -74,7 +89,8 @@ const Add = () => {
                 spellCheck={false}
                 onChange={handleOnChange}
                 fullWidth
-                error={errors.secret}
+                error={Boolean(errors.secret)}
+                helperText={errors.secret}
             />
             <TextField
                 margin="dense"
@@ -85,7 +101,8 @@ const Add = () => {
                 spellCheck={false}
                 onChange={handleOnChange}
                 fullWidth
-                error={errors.address}
+                error={Boolean(errors.address)}
+                helperText={errors.address}
             />
             <TextField
                 margin="dense"
@@ -96,7 +113,8 @@ const Add = () => {
                 spellCheck={false}
                 onChange={handleOnChange}
                 fullWidth
-                error={errors.port}
+                error={Boolean(errors.port)}
+                helperText={errors.port}
             />
         </React.Fragment>
     );

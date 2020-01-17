@@ -44,17 +44,24 @@ const initialState = {
     form: {},
 };
 
+const validation = {
+    name: (f, users) => {
+        if (f.name.length==0) {
+            return 'is required';
+        }
+        if (users.some((u) => u.name===f.name)) {
+            return 'username is already in use';
+        }
+        return '';
+    },
+};
+
 const tag = '20';
 
 const Add = ({users}) => {
     const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
-
-    const validation = {
-        name: () => form.name.length>0&&users.every((u) => u.name!==form.name),
-        //password: () => form.password.length>0,
-    };
 
     const handleClickOpen = () => {
         setState({
@@ -79,9 +86,9 @@ const Add = ({users}) => {
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, users);  return d; }, {});
         setState({...state, errors: err});
-        if (!Object.values(err).some(d => d)) {
+        if (!Object.values(err).some(d => Boolean(d))) {
             ThingsdbActions.addUser(form.name, tag, () => setState({...state, show: false}));
         }
     };
@@ -107,7 +114,8 @@ const Add = ({users}) => {
                 spellCheck={false}
                 onChange={handleOnChange}
                 fullWidth
-                error={errors.name}
+                error={Boolean(errors.name)}
+                helperText={errors.name}
             />
         </React.Fragment>
     );

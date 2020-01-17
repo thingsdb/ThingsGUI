@@ -13,7 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import {ThingsTree} from '.';
 
 
-const HarmonicTree = ({items, jsonView, title, onAction, jsonReplacer}) => {
+const HarmonicTree = ({customTypes, items, jsonView, title, onAction, jsonReplacer}) => {
     const [show, setShow] = React.useState(false);
 
     const handleClick = () => {
@@ -38,6 +38,7 @@ const HarmonicTree = ({items, jsonView, title, onAction, jsonReplacer}) => {
                                 name:v.name||k,
                                 index:null,
                             }}
+                            customTypes={customTypes[k]}
                             root={false}
                             onAction={onAction(k)}
                         />
@@ -54,12 +55,14 @@ const HarmonicTree = ({items, jsonView, title, onAction, jsonReplacer}) => {
 };
 
 HarmonicTree.defaultProps = {
+    customTypes: {},
     jsonView: false,
     onAction: ()=>()=>null,
     jsonReplacer: ()=>null,
 };
 
 HarmonicTree.propTypes = {
+    customTypes: PropTypes.object,
     items: PropTypes.object.isRequired,
     jsonView: PropTypes.bool,
     onAction: PropTypes.func,

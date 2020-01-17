@@ -22,15 +22,20 @@ const initialState = {
     form: {},
 };
 
+const validation = {
+    password: (f) => {
+        if (f.password.length==0) {
+            return 'is required';
+        }
+        return '';
+    },
+};
+
 const tag = '21';
 
 const Password = ({user}) => {
     const [state, setState] = React.useState(initialState);
     const {show, showPassword, errors, form} = state;
-
-    const validation = {
-        password: () => form.password.length>0,
-    };
 
     const handleClickOpen = () => {
         setState({...state, show: true, showPassword: false, errors: {}, form: {password: '', set: user.has_password}});
@@ -49,9 +54,9 @@ const Password = ({user}) => {
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
-        if (!Object.values(err).some(d => d)) {
+        if (!Object.values(err).some(d => Boolean(d))) {
             if (form.set) {
                 ThingsdbActions.password(
                     user.name,
@@ -125,7 +130,8 @@ const Password = ({user}) => {
                     spellCheck={false}
                     onChange={handleOnChange}
                     fullWidth
-                    error={errors.password}
+                    error={Boolean(errors.password)}
+                    helperText={errors.password}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">

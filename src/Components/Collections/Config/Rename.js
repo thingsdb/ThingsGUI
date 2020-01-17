@@ -18,6 +18,18 @@ const initialState = {
     form: {},
 };
 
+const validation = {
+    name: (f, collections) => {
+        if (f.name.length==0) {
+            return 'is required';
+        }
+        if (collections.some((c) => c.name===f.name)) {
+            return 'collection name is already in use';
+        }
+        return '';
+    },
+};
+
 const tag = '4';
 
 const Rename = ({collection, collections}) => {
@@ -36,10 +48,6 @@ const Rename = ({collection, collections}) => {
         setState({...state, show: false});
     };
 
-    const validation = {
-        name: () => form.name.length>0&&collections.every((c) => c.name!==form.name),
-    };
-
     const handleOnChange = ({target}) => {
         const {id, value} = target;
         setState(prevState => {
@@ -49,9 +57,9 @@ const Rename = ({collection, collections}) => {
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = !validation[ky]();  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, collections);  return d; }, {});
         setState({...state, errors: err});
-        if (!Object.values(err).some(d => d)) {
+        if (!Object.values(err).some(d => Boolean(d))) {
             ThingsdbActions.renameCollection(
                 collection.name,
                 form.name,
@@ -81,7 +89,8 @@ const Rename = ({collection, collections}) => {
                 spellCheck={false}
                 onChange={handleOnChange}
                 fullWidth
-                error={errors.name}
+                error={Boolean(errors.name)}
+                helperText={errors.name}
             />
         </React.Fragment>
     );

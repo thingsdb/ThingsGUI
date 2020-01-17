@@ -367,8 +367,9 @@ class EventStore extends BaseStore {
     new_procedure(id, newProcedure) {
         const {watchIds} = this.state;
         let scope = watchIds[id];
-        let name = Object.keys(newProcedure)[0];
-        let def = newProcedure[name]['/'];
+        console.log(newProcedure);
+        let name = newProcedure.name;
+        let def = newProcedure['/']['/'];
 
         this.setState(prevState => {
             const update = Object.assign({}, prevState.watchProcedures[scope][id], {[name]: def});
@@ -501,7 +502,7 @@ class EventStore extends BaseStore {
         const {watchIds} = this.state;
         let scope = watchIds[id];
         let key = Object.keys(set)[0];
-        let obj = {'#': set[key]['#']};
+        let obj = set[key].hasOwnProperty('&') ? set[key] : {'#': set[key]['#']};
         this.setState(prevState => {
             const update = Object.assign({}, prevState.watchThings[scope][id], {[key]: obj});
             const update2 = Object.assign({}, prevState.watchThings[scope], {[id]: update});
