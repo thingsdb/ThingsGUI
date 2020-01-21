@@ -87,10 +87,14 @@ func Watch(client *Client, data Data, timeout uint16) (int, interface{}, util.Me
 	scope := data.Scope
 	ids := data.Ids // strings.Split(data.Ids, ",")
 	idsInt := make([]uint64, 0)
-	for _, v := range ids {
-		id, _ := strconv.ParseUint(v, 10, 64)
-		idsInt = append(idsInt, id)
+
+	if len(ids) > 0 {
+		for _, v := range ids {
+			id, _ := strconv.ParseUint(v, 10, 64)
+			idsInt = append(idsInt, id)
+		}
 	}
+
 	resp, err := client.Connection.Watch(scope, idsInt, timeout)
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
@@ -100,12 +104,15 @@ func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, util.
 	scope := data.Scope
 	ids := data.Ids //s strings.Split(data.Ids, ",")
 	idsInt := make([]uint64, 0)
-	for _, v := range ids {
-		id, _ := strconv.ParseUint(v, 10, 64)
-		idsInt = append(idsInt, id)
-	}
-	resp, err := client.Connection.Unwatch(scope, idsInt, timeout)
 
+	if len(ids) > 0 {
+		for _, v := range ids {
+			id, _ := strconv.ParseUint(v, 10, 64)
+			idsInt = append(idsInt, id)
+		}
+	}
+
+	resp, err := client.Connection.Unwatch(scope, idsInt, timeout)
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
 }

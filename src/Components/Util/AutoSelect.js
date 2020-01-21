@@ -94,27 +94,6 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
         cb(v);
     };
 
-    // const handleKeyPress = (event) => {
-    //     if (event.keyCode == 38) {
-    //         console.log('up', e);
-    //     }
-    //     if (event.keyCode == 40) {
-    //         console.log('down');
-    //         setAnchorEl(true);
-    //         listRef.current.childNodes[selectedIndex].focus();
-    //     }
-    // };
-
-    // const handleKeyList = (i) => (event) => {
-    //     const {key} = event;
-    //     console.log(event);
-    //     if (key == 'Enter') {
-    //         console.log('enter');
-    //         handleClick(i);
-    //     }
-    // };
-
-
     return (
         <ClickAwayListener onClickAway={handleClose}>
             <Grid>
@@ -129,7 +108,6 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
                     value={text}
                     variant="outlined"
                     inputRef={textRef}
-                    // onKeyDown={handleKeyPress}
                 />
 
                 <Popper

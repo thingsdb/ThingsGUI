@@ -9,9 +9,9 @@ import RemoveIcon from '@material-ui/icons/Remove';
 
 const useStyles = makeStyles(theme => ({
     container: {
-        borderLeft: `3px solid ${theme.palette.primary.main}`,
-        borderRight: `3px solid ${theme.palette.primary.main}`,
-        borderRadius: '20px',
+        // borderLeft: `3px solid ${theme.palette.primary.main}`,
+        // borderRight: `3px solid ${theme.palette.primary.main}`,
+        // borderRadius: '20px',
         padding: theme.spacing(1),
         margin: theme.spacing(1),
     },

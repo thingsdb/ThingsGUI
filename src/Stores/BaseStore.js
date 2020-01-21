@@ -197,6 +197,7 @@ class EventStore extends BaseStore {
     onOpenEventChannel() {
         console.log('Eventchn');
         socket.emit('getEvent', 'hoi');
+
         socket.on('event', (data) => {
             console.log(data.Data);
             switch(data.Proto){
@@ -274,7 +275,7 @@ class EventStore extends BaseStore {
 
     onReWatch() {
         const {watchIds} = this.state;
-        this.onWatch('@n', '9999');
+        this.onWatch('@n');
         Object.entries(watchIds).map(([id, scope]) => {
             this.onWatch(scope, id);
         });

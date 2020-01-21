@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import { makeStyles } from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
+import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -13,8 +14,8 @@ const useStyles = makeStyles(theme => ({
     container: {
         // display: 'flex',
         // flexWrap: 'wrap',
-        borderLeft: `3px solid ${theme.palette.primary.main}`,
-        borderRight: `3px solid ${theme.palette.primary.main}`,
+        borderLeft: `1px solid ${theme.palette.primary.main}`,
+        borderRight: `1px solid ${theme.palette.primary.main}`,
         borderRadius: '20px',
         padding: theme.spacing(2),
         margin: theme.spacing(2),
@@ -40,10 +41,10 @@ const useStyles = makeStyles(theme => ({
     },
     nested: {
         paddingLeft: theme.spacing(6),
-        border: `3px solid ${theme.palette.primary.main}`,
-        borderRadius: '20px',
-        padding: theme.spacing(2),
-        margin: theme.spacing(2),
+        // borderBottom: `2px solid ${theme.palette.primary.main}`,
+        // borderRadius: '30px',
+        paddingBottom: theme.spacing(1),
+        // marginBottom: theme.spacing(1),
     },
     textfield: {
         paddingTop: 0,
@@ -209,7 +210,10 @@ const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
                     <Collapse className={classes.fullWidth} in={open} timeout="auto">
                         {( typesFields.map((c, i) => (
                             <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
-                                <Grid item xs={3}>
+                                <Grid item xs={1}>
+                                    <FiberManualRecord color="primary" fontSize="small" />
+                                </Grid>
+                                <Grid item xs={2}>
                                     <TextField
                                         type="text"
                                         name="property"
@@ -220,7 +224,7 @@ const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
                                         disabled
                                     />
                                 </Grid>
-                                <Grid item xs={3}>
+                                <Grid item xs={2}>
                                     <TextField
                                         type="text"
                                         name="dataType"
@@ -240,7 +244,7 @@ const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
                                         ))}
                                     </TextField>
                                 </Grid>
-                                <Grid item xs={single.includes(dataType[c[0]]||c[1][0])?3:12}>
+                                <Grid item xs={single.includes(dataType[c[0]]||c[1][0])?7:12}>
                                     <InputField
                                         customTypes={customTypes}
                                         dataType={dataType[c[0]]||c[1][0]}

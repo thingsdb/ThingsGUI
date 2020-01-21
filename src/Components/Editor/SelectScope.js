@@ -21,7 +21,7 @@ const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
     const [scopesObj, scopeNames] = getScopes2(collections, nodes);
 
     React.useEffect(() => {
-        const index = scope==''?0:scopeNames.indexOf(scope);
+        const index = scope==''?scopeNames.findIndex(i=>i.includes('collection')):scopeNames.indexOf(scope);
         setIndex(index);
         onChangeScope(scopesObj[index]);
     }, []);

@@ -16,11 +16,14 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         ...Object.keys(Language.node),
         ...Object.keys(Language.thingsdb),
         ...Object.keys(Language.procedures),
-        ...Object.keys(Language.types.array),
+        ...Object.keys(Language.types.bytes),
+        ...Object.keys(Language.types.closure),
+        ...Object.keys(Language.types.error),
+        ...Object.keys(Language.types.list),
         ...Object.keys(Language.types.set),
         ...Object.keys(Language.types.string),
         ...Object.keys(Language.types.thing),
-
+        ...Object.keys(Language.types.type),
     ],
 
     // typeKeywords: [
@@ -158,20 +161,29 @@ monaco.languages.setLanguageConfiguration('mySpecialLanguage', {
 });
 
 monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
-    provideCompletionItems: (model, position) => {
-        const textUntilPosition = model.getValueInRange({startLineNumber: 1, startColumn: 1, endLineNumber: position.lineNumber, endColumn: position.column});
-        const re_str = new RegExp('(?:\'(?:[^\']*)\')+\\.$');
+    triggerCharacters: ['.'],
+    provideCompletionItems: (model, position, token) => {
+        const textUntilPosition = model.getValueInRange({startLineNumber: 1, startColumn: position.column-1, endLineNumber: position.lineNumber, endColumn: position.column}); // En wanneer value in variabel zit? Hoe herken je het type dan?
 
+        //const re_str = new RegExp('^[\'\"].*[\'|\"]$');
         const suggestions = [];
-        if (re_str.test(textUntilPosition)) {
-            suggestions.push(...Object.entries(Language.types.string)
-                .map(([k, v]) => ({
-                    label: k,
-                    kind: monaco.languages.CompletionItemKind.Function,
-                    insertText: k+'()',
-                    documentation: v,
-                }))
-            );
+        // if (re_str.test(textUntilPosition)) {
+        if (textUntilPosition=='.') {
+            suggestions.push(...[
+                ...Object.entries(Language.types.bytes),
+                ...Object.entries(Language.types.closure),
+                ...Object.entries(Language.types.error),
+                ...Object.entries(Language.types.list),
+                ...Object.entries(Language.types.set),
+                ...Object.entries(Language.types.string),
+                ...Object.entries(Language.types.thing),
+                ...Object.entries(Language.types.type)
+            ].map(([k, v]) => ({
+                label: k,
+                kind: monaco.languages.CompletionItemKind.Function,
+                insertText: k+'()',
+                documentation: v,
+            })));
         } else {
             suggestions.push(...Object.entries(Language.noType)
                 .map(([k, v]) => ({

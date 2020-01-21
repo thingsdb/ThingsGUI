@@ -111,6 +111,7 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
                         value={property}
                         variant="standard"
                         fullWidth
+                        autoFocus
                     />
                 </Grid>
                 <Grid item xs={3}>

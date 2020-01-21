@@ -1,9 +1,9 @@
 /* eslint-disable react/no-multi-comp */
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Chip from '@material-ui/core/Chip';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
@@ -73,7 +73,7 @@ const ListHeader = ({collapse, onAdd, onDelete, onOpen, onClose, open, items, na
                 </IconButton>
                 {collapse && (
                     <IconButton onClick={open ? onClose : onOpen}>
-                        {open ?  <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> }
+                        {open ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
                     </IconButton>
                 )}
             </Grid>

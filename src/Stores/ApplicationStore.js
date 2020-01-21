@@ -59,7 +59,6 @@ class ApplicationStore extends BaseStore {
             });
             EventActions.watch(
                 '@n',
-                '9999',
             );
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
