@@ -15,7 +15,7 @@ Tool for managing ThingsDB user accounts, nodes and collections. ThingsGUI is a 
         * [Authentication](#authentication)
         * [Secure connection (TLS)](#secure-connection-tls)
         * [Saving connections](#save-connections)
-  * [ThingsGUI environment tour](#thingsgui-environment-tour)
+  * [ThingsGUI tour](#thingsgui-tour)
     * [Collections](#collections)
         * [Configuration](#configuration)
         * [Things tree](#things-tree)
@@ -25,11 +25,11 @@ Tool for managing ThingsDB user accounts, nodes and collections. ThingsGUI is a 
         * [Configuration](#configuration)
         * [Access rules](#access-rule)
         * [Tokens](#tokens)
-    * [Editor](#editor)
     * [Nodes](#nodes)
         * [Configuration](#configuration)
         * [Backups](#Backups)
     * [Watcher](#watcher)
+    * [Editor](#editor)
 ---------------------------------------
 ## Requirements
 ThingsGUI works with ThingsDB version 0.4.4 and higher.
@@ -100,28 +100,66 @@ The __secure connection (TLS)__ has to be switched on if the connection with Thi
 You can save the connection configuration locally if you like to speed up the process next time. To do this you need to click the _SAVE_ button that you can find in the bottom left corner of the login dialog. This will open a dialog where you can enter a recognizable name that will serve as an alias for the connection configuration. The saved connections can be altered as well as deleted.
 
 
-## ThingsGUI environment tour
+## ThingsGUI tour
+Next follows a brief tour of ThingsGUI. A more detailed tour can be found here [here](LINK). We assume you have already a basic understanding of ThingsDB. If not we suggest you first read [ThingsDocs](https://docs.thingsdb.net/v0/).
+
+Note that your personal [access rules](https://docs.thingsdb.net/v0/thingsdb-api/grant/) may restrict you from some of the views and actions we will summarize here.
 
 ### Collections
+ThingsDB can contain multiple collections. Each collection can be thought of as an object to which properties can be assigned. We call such an object a Thing.
+
+Each collection has its own overview containing the following elements.
 
 #### Configuration
+Basic information about the collection can be found in the __INFO__ container. It is possible to create, rename and delete a collection depending on your personal access rules.
+
 #### Things tree
+The __THINGS TREE__ panel contains a tree-like overview of all the properties stored in the selected collection.
+
+Clicking a property will open a dialog where you can add, edit, delete and watch a property. It really depends on the type (e.g. string, integer, list, thing etc.) of the property what action is possible. A link to the code editor is also included.
+
+To modify the __root thing__ you need to click on the key tool icon.
+
 #### Procedures
-#### Type(#types)
+The __PROCEDURES__ panel shows all the procedures within the selected collection. A procedure in ThingsDB is a prepared piece of code that you can save, so it can be reused.
+
+It is possible to add, edit and delete a procedure.
+
+#### Types
+The __TYPES__ panel shows all the collection-specific types. The types are like things but with pre-defined properties.
+
+It is possible to add, edit and delete such a type.
+
 
 ### Users
+The __USERS__ panel shows all the users if you have `GRANT` rights. Otherwise the list will only contain you.
 
 #### Configuration
-#### Access rules
-#### Tokens
+If you have `GRANT` rights it is possible to add, rename and delete a user and to set and reset the password.
+If you have `READ` rights it is still possible to set and reset your password.
 
-### Editor
+#### Access rules
+
+If you have `GRANT` rights it is possible to modify the __ACCESS RULES__ of yourself and others.
+
+#### Tokens
+If you have `GRANT` rights it is possible to add and delete tokens.
 
 ### Nodes
-
 #### Configuration
+
 #### Backups
 
 ### Watcher
+
+### Editor
+The editor provides a way to interact with ThingsDB on a more lower level by using ThingsDB's own language. You can choose to code instead of using the graphical interface and build scripts that to a bunch of things. It is even possible to store these scripts in a procedure. To help a bit with learning the language, ThingsGUI often provides the query that goes along with an action when done using the graphical interface.
+
+When sending a query, calling a procedure or subscribing to a thing, the request will require you to provide a scope. ThingsDB has three main scopes: @thingsdb, @node and @collection. Next to the editor you find the __SCOPES__ panel where you can change the scope.
+
+Depending on the scope you may also see a __PROCEDURES__ and __TYPES__ panel including the procedures and types that are stored.
+
+
+
 
 
