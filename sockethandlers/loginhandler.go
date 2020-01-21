@@ -9,7 +9,7 @@ import (
 	"time"
 
 	util "../util"
-	things "github.com/thingsdb/go/client"
+	things "github.com/thingsdb/go-thingsdb"
 )
 
 type Client struct {
@@ -23,6 +23,8 @@ type Client struct {
 	User       string
 	Pass       string
 	Token      string
+	Host       string
+	Port       uint16
 }
 
 type LoginResp struct {
@@ -57,7 +59,8 @@ func connect(client *Client, data LoginData) LoginResp {
 		client.Ssl = &tls.Config{}
 		client.Ssl.InsecureSkipVerify = data.InsecureSkipVerify
 	}
-
+	client.Host = host
+	client.Port = uint16(port)
 	client.Connection = things.NewConn(host, uint16(port), client.Ssl)
 	client.Connection.EventCh = client.EventCh
 	client.Connection.LogCh = client.LogCh
@@ -131,25 +134,20 @@ func Reconnect(client *Client) (int, LoginResp, util.Message) {
 
 	maxInterval := 65
 	interval := 1
-	fmt.Println("before reconnect loop")
 	for interval < maxInterval {
 		if !client.Connection.IsConnected() {
-			fmt.Println("not connected")
 			err := client.Connection.Connect()
 
 			if err != nil {
-				fmt.Println("failed")
-				client.LogCh <- fmt.Sprintf("connecting to %s:%d failed, \ntry next connect in %d seconds", client.Connection.Host, client.Connection.Port, interval)
+				client.LogCh <- fmt.Sprintf("connecting to %s:%d failed, \ntry next connect in %d seconds", client.Host, client.Port, interval)
 				message.Text = err.Error()
 				message.Status = http.StatusInternalServerError
 				message.Log = err.Error()
 
 				interval *= 2
 				timeoutCh := make(chan bool, 1)
-				fmt.Println(interval)
 
 				go func() {
-					fmt.Println("hoi")
 					time.Sleep(time.Duration(interval) * time.Second)
 					timeoutCh <- true
 				}()
@@ -157,41 +155,33 @@ func Reconnect(client *Client) (int, LoginResp, util.Message) {
 				<-timeoutCh
 
 			} else {
-				fmt.Println("succeed")
 				resp.Connected = true
 				message.Text = ""
 				message.Status = http.StatusOK
 				message.Log = ""
-				fmt.Println(client)
 				if client.Token == "" {
-					fmt.Println("user-pass")
 					err := client.Connection.AuthPassword(client.User, client.Pass)
 
 					if err != nil {
-						fmt.Println("error auth 1")
 						resp.Connected = false
 						message.Text = err.Error()
 						message.Status = http.StatusInternalServerError
 						message.Log = err.Error()
 					}
 				} else {
-					fmt.Println("token")
 					err := client.Connection.AuthToken(client.Token)
 
 					if err != nil {
-						fmt.Println("error auth 2")
 						resp.Connected = false
 						message.Text = err.Error()
 						message.Status = http.StatusInternalServerError
 						message.Log = err.Error()
 					}
 				}
-				fmt.Println("connected", resp, message)
 				return message.Status, resp, message
 			}
 		}
 	}
-	fmt.Println("timeout", resp)
 	message.Text = "Reconnecting has stopped. Timeout reached."
 	message.Status = http.StatusInternalServerError
 	message.Log = "Reconnecting has stopped. Timeout reached."

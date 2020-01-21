@@ -26,7 +26,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
-import { ErrorMsg } from '../Util';
+import { ErrorMsg, SimpleModal } from '../Util';
 import {ApplicationStore, ApplicationActions} from '../../Stores';
 
 const withStores = withVlow([{
@@ -52,6 +52,7 @@ const initialState = {
     showPassword: false,
     showToken: false,
     disableName: false,
+    openSaveConn: false
 };
 
 const validation = {
@@ -91,15 +92,14 @@ const tag = '0';
 
 const Login = ({connected, loaded, savedConnections}) => {
     const [state, setState] = React.useState(initialState);
-    const {showPassword, showToken, errors, loginWith, form, showOther, disableName} = state;
+    const {showPassword, showToken, errors, loginWith, form, openSaveConn, showOther, disableName} = state;
     const [notifySaved, setNotifySaved] = React.useState(false);
+
     React.useEffect(() => {
         ApplicationActions.getConn(tag);
     },
     [],
     );
-
-
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -192,8 +192,22 @@ const Login = ({connected, loaded, savedConnections}) => {
     };
 
     const handleTooltip = () => {
+        handleClickCloseSaveConn();
         setNotifySaved(true);
         setTimeout(()=> setNotifySaved(false), 1000);
+    };
+
+    const handleClickOpenSaveConn = () => {
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = ky=='name'?false:validation[ky](form);  return d; }, {});
+        if (!Object.values(err).some(d => Boolean(d))) {
+            setState({...state, openSaveConn: true});
+        } else {
+            setState({...state, errors: err});
+        }
+    };
+
+    const handleClickCloseSaveConn = () => {
+        setState({...state, openSaveConn: false});
     };
 
     const handleClickSave = () => {
@@ -209,207 +223,216 @@ const Login = ({connected, loaded, savedConnections}) => {
     };
 
     return (
-        <Dialog
-            open={loaded && !connected}
-            onClose={() => null}
-            aria-labelledby="form-dialog-title"
-            fullWidth
-            maxWidth="sm"
-            onKeyDown={handleKeyPress}
-        >
-            <DialogTitle id="form-dialog-title">
-                {'Login'}
-            </DialogTitle>
-            <DialogContent>
-                <ErrorMsg tag={tag} />
-                <Collapse in={!showOther} timeout="auto" unmountOnExit>
-                    <List>
-                        {Object.entries(savedConnections).map(([k, v]) => (
-                            <ListItem key={k} button onClick={handleConnectToo(k)}>
-                                <ListItemIcon>
-                                    <img
-                                        alt="ThingsDB Logo"
-                                        src="/img/thingsdb-logo.png"
-                                        draggable='false'
-                                        height="25px"
-                                    />
-                                </ListItemIcon>
-                                <ListItemText primary={k} secondary={v.address} />
-                                <ListItemSecondaryAction>
-                                    <IconButton onClick={handleEditConn(v)}>
-                                        <EditIcon color="primary" />
-                                    </IconButton>
-                                    <IconButton onClick={handleDeleteConn(k)}>
-                                        <DeleteIcon color="primary" />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
+        <React.Fragment>
+            <SimpleModal
+                title="Save connection configuration"
+                onOk={handleClickSave}
+                open={openSaveConn}
+                onClose={handleClickCloseSaveConn}
+            >
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Name"
+                    type="text"
+                    value={form.name}
+                    spellCheck={false}
+                    onChange={handleOnChange}
+                    fullWidth
+                    disabled={disableName}
+                    error={Boolean(errors.name)}
+                    helperText={errors.name}
+                />
+            </SimpleModal>
+            <Dialog
+                open={loaded && !connected}
+                onClose={() => null}
+                aria-labelledby="form-dialog-title"
+                fullWidth
+                maxWidth="sm"
+                onKeyDown={handleKeyPress}
+            >
+                <DialogTitle id="form-dialog-title">
+                    {'Login'}
+                </DialogTitle>
+                <DialogContent>
+                    <ErrorMsg tag={tag} />
+                    <Collapse in={!showOther} timeout="auto" unmountOnExit>
+                        <List>
+                            {Object.entries(savedConnections).map(([k, v]) => (
+                                <ListItem key={k} button onClick={handleConnectToo(k)}>
+                                    <ListItemIcon>
+                                        <img
+                                            alt="ThingsDB Logo"
+                                            src="/img/thingsdb-logo.png"
+                                            draggable='false'
+                                            height="25px"
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText primary={k} secondary={v.address} />
+                                    <ListItemSecondaryAction>
+                                        <IconButton onClick={handleEditConn(v)}>
+                                            <EditIcon color="primary" />
+                                        </IconButton>
+                                        <IconButton onClick={handleDeleteConn(k)}>
+                                            <DeleteIcon color="primary" />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            ))}
+                            {Object.entries(savedConnections).length==0 &&
+                                <ListItem>
+                                    <ListItemText secondary="No saved connections" secondaryTypographyProps={{variant: 'caption'}} />
+                                </ListItem>}
+                            <ListItem button onClick={handleOther}>
+                                <ListItemText primary="Use another connection" />
                             </ListItem>
-                        ))}
-                        {Object.entries(savedConnections).length==0 &&
-                            <ListItem>
-                                <ListItemText secondary="No saved connections" secondaryTypographyProps={{variant: 'caption'}} />
-                            </ListItem>}
-                        <ListItem button onClick={handleOther}>
-                            <ListItemText primary="Use another connection" />
-                        </ListItem>
-                    </List>
-                </Collapse>
-                <Collapse in={showOther} timeout="auto" unmountOnExit>
-                    <FormControl margin="none" size="small" fullWidth>
-                        <RadioGroup aria-label="position" name="position" value={loginWith} onChange={handleLoginWith} row>
-                            <FormControlLabel
-                                value="credentials"
-                                control={<Radio color="primary" />}
-                                label="with credentials"
-                                labelPlacement="end"
-                            />
-                            <FormControlLabel
-                                value="token"
-                                control={<Radio color="primary" />}
-                                label="with token"
-                                labelPlacement="end"
-                            />
-                        </RadioGroup>
-                    </FormControl>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Name"
-                        type="text"
-                        value={form.name}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        disabled={disableName}
-                        error={Boolean(errors.name)}
-                        helperText={errors.name}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="address"
-                        label="Socket Address"
-                        type="text"
-                        value={form.address}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        error={Boolean(errors.address)}
-                        helperText={errors.address}
-                    />
-                    <Collapse in={loginWith=='credentials'} timeout="auto" unmountOnExit>
+                        </List>
+                    </Collapse>
+                    <Collapse in={showOther} timeout="auto" unmountOnExit>
+                        <FormControl margin="none" size="small" fullWidth>
+                            <RadioGroup aria-label="position" name="position" value={loginWith} onChange={handleLoginWith} row>
+                                <FormControlLabel
+                                    value="credentials"
+                                    control={<Radio color="primary" />}
+                                    label="with credentials"
+                                    labelPlacement="end"
+                                />
+                                <FormControlLabel
+                                    value="token"
+                                    control={<Radio color="primary" />}
+                                    label="with token"
+                                    labelPlacement="end"
+                                />
+                            </RadioGroup>
+                        </FormControl>
                         <TextField
+                            autoFocus
                             margin="dense"
-                            id="user"
-                            label="User"
+                            id="address"
+                            label="Socket Address"
                             type="text"
-                            value={form.user}
+                            value={form.address}
                             spellCheck={false}
                             onChange={handleOnChange}
                             fullWidth
-                            error={Boolean(errors.user)}
-                            helperText={errors.user}
+                            error={Boolean(errors.address)}
+                            helperText={errors.address}
                         />
-                        <TextField
-                            margin="dense"
-                            id="password"
-                            label="Password"
-                            type={showPassword?'text':'password'}
-                            value={form.password}
-                            spellCheck={false}
-                            onChange={handleOnChange}
-                            fullWidth
-                            error={Boolean(errors.password)}
-                            helperText={errors.password}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton onClick={handleClickShowPassword}>
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                    </Collapse>
-                    <Collapse in={loginWith=='token'} timeout="auto" unmountOnExit>
-                        <TextField
-                            margin="dense"
-                            id="token"
-                            label="Token"
-                            type={showToken?'text':'password'}
-                            value={form.token}
-                            spellCheck={false}
-                            onChange={handleOnChange}
-                            fullWidth
-                            error={Boolean(errors.token)}
-                            helperText={errors.token}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton onClick={handleClickShowToken}>
-                                            {showToken ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                    </Collapse>
-                    <FormControlLabel
-                        control={(
-                            <Switch
-                                checked={form.secureConnection}
-                                color="primary"
-                                id="secureConnection"
-                                onChange={handleSwitchSSL}
+                        <Collapse in={loginWith=='credentials'} timeout="auto" unmountOnExit>
+                            <TextField
+                                margin="dense"
+                                id="user"
+                                label="User"
+                                type="text"
+                                value={form.user}
+                                spellCheck={false}
+                                onChange={handleOnChange}
+                                fullWidth
+                                error={Boolean(errors.user)}
+                                helperText={errors.user}
                             />
-                        )}
-                        label="Secure connection (TLS)"
-                    />
-                    <Collapse in={form.secureConnection} component="span" timeout="auto" unmountOnExit>
+                            <TextField
+                                margin="dense"
+                                id="password"
+                                label="Password"
+                                type={showPassword?'text':'password'}
+                                value={form.password}
+                                spellCheck={false}
+                                onChange={handleOnChange}
+                                fullWidth
+                                error={Boolean(errors.password)}
+                                helperText={errors.password}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={handleClickShowPassword}>
+                                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Collapse>
+                        <Collapse in={loginWith=='token'} timeout="auto" unmountOnExit>
+                            <TextField
+                                margin="dense"
+                                id="token"
+                                label="Token"
+                                type={showToken?'text':'password'}
+                                value={form.token}
+                                spellCheck={false}
+                                onChange={handleOnChange}
+                                fullWidth
+                                error={Boolean(errors.token)}
+                                helperText={errors.token}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={handleClickShowToken}>
+                                                {showToken ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Collapse>
                         <FormControlLabel
                             control={(
                                 <Switch
-                                    checked={form.insecureSkipVerify}
+                                    checked={form.secureConnection}
                                     color="primary"
-                                    id="insecureSkipVerify"
+                                    id="secureConnection"
                                     onChange={handleSwitchSSL}
                                 />
                             )}
-                            label="Allow insecure certificates"
+                            label="Secure connection (TLS)"
                         />
+                        <Collapse in={form.secureConnection} component="span" timeout="auto" unmountOnExit>
+                            <FormControlLabel
+                                control={(
+                                    <Switch
+                                        checked={form.insecureSkipVerify}
+                                        color="primary"
+                                        id="insecureSkipVerify"
+                                        onChange={handleSwitchSSL}
+                                    />
+                                )}
+                                label="Allow insecure certificates"
+                            />
+                        </Collapse>
                     </Collapse>
-                </Collapse>
-            </DialogContent>
-            <Collapse in={showOther} timeout="auto" unmountOnExit>
-                <DialogActions>
-                    <Grid container>
-                        <Grid item xs={6} container justify="flex-start" >
-                            <Collapse in={Boolean(savedConnections&&Object.keys(savedConnections).length)} timeout="auto" unmountOnExit>
+                </DialogContent>
+                <Collapse in={showOther} timeout="auto" unmountOnExit>
+                    <DialogActions>
+                        <Grid container>
+                            <Grid item xs={6} container justify="flex-start" >
+                                <Collapse in={Boolean(savedConnections&&Object.keys(savedConnections).length)} timeout="auto" unmountOnExit>
+                                    <Grid item xs={3}>
+                                        <Button onClick={handleClickBack} color="primary">
+                                            {'Connections'}
+                                        </Button>
+                                    </Grid>
+                                </Collapse>
                                 <Grid item xs={3}>
-                                    <Button onClick={handleClickBack} color="primary">
-                                        {'Connections'}
-                                    </Button>
+                                    <Tooltip open={notifySaved} disableFocusListener disableTouchListener disableHoverListener title="Saved!">
+                                        <Button onClick={handleClickOpenSaveConn} color="primary" disabled={Object.values(errors).some(d => d)}>
+                                            {'Save'}
+                                        </Button>
+                                    </Tooltip>
                                 </Grid>
-                            </Collapse>
-                            <Grid item xs={3}>
-                                <Tooltip open={notifySaved} disableFocusListener disableTouchListener disableHoverListener title="Saved!">
-                                    <Button onClick={handleClickSave} color="primary" disabled={Object.values(errors).some(d => d)}>
-                                        {'Save'}
-                                    </Button>
-                                </Tooltip>
+                            </Grid>
+                            <Grid item xs={6} container justify="flex-end">
+                                <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
+                                    {'Connect'}
+                                </Button>
                             </Grid>
                         </Grid>
-                        <Grid item xs={6} container justify="flex-end">
-                            <Button onClick={handleClickOk} color="primary" disabled={Object.values(errors).some(d => d)}>
-                                {'Connect'}
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </DialogActions>
-            </Collapse>
-        </Dialog>
+                    </DialogActions>
+                </Collapse>
+            </Dialog>
+        </React.Fragment>
     );
 };
 

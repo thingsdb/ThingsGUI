@@ -13,7 +13,7 @@ import (
 	handlers "./sockethandlers"
 	util "./util"
 	socketio "github.com/googollee/go-socket.io"
-	things "github.com/thingsdb/go/client"
+	things "github.com/thingsdb/go-thingsdb"
 )
 
 // AppVersion exposes version information
@@ -31,10 +31,10 @@ var (
 )
 
 func Init() {
-	flag.StringVar(&host, "host", "0.0.0.0", "host")
-	flag.UintVar(&port, "port", 5000, "port")
-	flag.UintVar(&timeout, "timeout", 30, "timeout")
-	flag.BoolVar(&openBrowser, "open", true, "opens a page in your default browser")
+	flag.StringVar(&host, "host", "0.0.0.0", "Specific host for the http webserver.")
+	flag.UintVar(&port, "port", 5000, "Specific port for the http webserver.")
+	flag.UintVar(&timeout, "timeout", 30, "Connect and query timeout in seconds")
+	flag.BoolVar(&openBrowser, "open", true, "opens ThingsGUI in your default browser")
 
 	flag.Parse()
 }
