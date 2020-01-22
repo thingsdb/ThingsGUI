@@ -3,24 +3,17 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
 const AddStr = ({input, cb, ...props}) => {
-    const [str, setStr] = React.useState(input);
-
-    React.useEffect(() => {
-        cb(`'${str}'`);
-    },
-    [str],
-    );
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        setStr(value);
+        cb(`'${value}'`);
     };
 
     return(
         <TextField
             name="value"
             type="text"
-            value={str}
+            value={input[0]=='\''?input.trim().slice(1, -1):input}
             spellCheck={false}
             onChange={handleOnChange}
             // fullWidth

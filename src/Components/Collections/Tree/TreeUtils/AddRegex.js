@@ -33,7 +33,7 @@ const AddRegex = ({input, cb}) => {
                         name="regex"
                         label="Regex"
                         type="text"
-                        value={input}
+                        value={input.trim().slice(1, -1)}
                         spellCheck={false}
                         onChange={handleOnChange}
                         fullWidth

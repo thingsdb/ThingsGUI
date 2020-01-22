@@ -8,7 +8,7 @@ Tool for managing ThingsDB user accounts, nodes and collections. ThingsGUI is a 
 * [Installation](#installation)
   * [Pre-compiled](#pre-compiled)
   * [Compile from source](#compile-from-source)
-* [Startup ThingsGUI](#starting-thingsgui)
+* [Start ThingsGUI](#starting-thingsgui)
   * [Command-line arguments](#command-line-arguments)
   * [Login](#login)
     * [Socket Address](#socket-address)
@@ -21,7 +21,6 @@ Tool for managing ThingsDB user accounts, nodes and collections. ThingsGUI is a 
     * [Things tree](#things-tree)
     * [Procedures](#procedures)
     * [Types](#types)
-      * [Need-to-know](#need-to-know)
   * [Users](#users)
     * [Configuration](#configuration)
     * [Access rules](#access-rule)
@@ -29,11 +28,8 @@ Tool for managing ThingsDB user accounts, nodes and collections. ThingsGUI is a 
   * [Nodes](#nodes)
     * [Configuration](#configuration)
     * [Backups](#Backups)
-      * [Need-to-know](#need-to-know)
   * [Watcher](#watcher)
-    * [Need-to-know](#need-to-know)
   * [Editor](#editor)
-    * [Need-to-know](#need-to-know)
 
 ---------------------------------------
 
@@ -83,7 +79,7 @@ $ ./gobuild.py -o ./thingsdb-gui
 
 ---------------------------------------
 
-## Startup ThingsGUI
+## Start ThingsGUI
 
 ### Command line with related argument flags
 
@@ -106,7 +102,7 @@ For example:
 
 ### Login
 
-![alt Login](markdownImg/loginScreenshot.png?raw=true)
+<img src="markdownImg/loginScreenshot.png?" alt="alt Login" style="zoom:80%;" />
 
 Once ThingsDB is running you can connect to a node. This just takes a couple of steps and then you will enter your personal environment.
 
@@ -134,6 +130,8 @@ Note that your personal [access rules](https://docs.thingsdb.net/v0/thingsdb-api
 
 ### Collections
 
+<img src="markdownImg/collections.png?" alt="alt Login" style="zoom:100%;" />
+
 ThingsDB can contain multiple [collections](https://docs.thingsdb.net/v0/overview/collections/). Each collection can be thought of as an object to which properties can be assigned. We call such an object a Thing.
 
 Each collection has its own overview containing the following elements.
@@ -143,6 +141,8 @@ Each collection has its own overview containing the following elements.
 Basic information about the collection can be found in the __INFO__ container. It is possible to create, rename and delete a collection depending on your personal access rules. A collection name must conform to certain [naming rules](https://docs.thingsdb.net/v0/overview/names/).
 
 #### Things tree
+
+<img src="markdownImg/thingsTreeDialog.png?" alt="alt Login" style="zoom:70%;" />
 
 The __THINGS TREE__ panel contains a tree-like overview of all the [properties](https://docs.thingsdb.net/v0/overview/properties/) stored in the selected collection.
 
@@ -162,7 +162,7 @@ The __TYPES__ panel shows all the collection-specific types. The [types](https:/
 
 It is possible to add, edit and delete such a type.
 
-##### Need-to-know
+__Need-to-know__
 
 * If there are still instances of the type you delete, then all instances will be converted to normal things. No properties will be removed in this process. With type_count(..) you can view the number of instances of a certain type.
 
@@ -203,7 +203,7 @@ Backups are created using tar and gzip. Once a backup is made, the .tar.gz backu
 
 Under `result code` and `result message` you can see if a backup went successful.
 
-##### Need-to-know
+__Need-to-know__
 
 * At least two nodes are required to create a new backup schedule. This is required because ThingsDB needs to enter away mode to actually create the backup and this happens only with two or more nodes.
 
@@ -211,11 +211,11 @@ Under `result code` and `result message` you can see if a backup went successful
 
 The [watcher](https://docs.thingsdb.net/v0/watching/) can be found in the side panel, clicking .... icon. The side panel can be dragged left and right to meet your needs.
 
-You can add things to the watcher by providing the thing's id and scope. However it is also possible to add things from within the __THINGS TREE__. As mentioned before, clicking a property opens up a dialog, if this property is of type `thing` or a `custom type`, you find a watch button ![alt watch](markdownImg/watchIcon.png?raw=true). It turn green if you turn on watching. The same green icon also appears in the things tree.
+You can add things to the watcher by providing the thing's id and scope. However it is also possible to add things from within the __THINGS TREE__. As mentioned before, clicking a property opens up a dialog, if this property is of type `thing` or a `custom type`, you find a watch button <img src="markdownImg/watchIcon.png" alt="alt watch" style="zoom:70%;" />. It turn green if you turn on watching. The same green icon also appears in the things tree.
 
 What does it mean if you add a thing to the watcher? Now you will get real time updates of that thing. You see every change within the thing that you maybe did yourself or others. However the watching goes as far (or actually as deep) as the next thing you encounter within the watched thing. So if the thing you are watching includes 3 properties `name`, `employees` and `address`, which are of type `string`, `list` and `thing` respectively. You will get in this case the changes in `name` and`employee`, but not in `address`, because `address` is another thing, with another id. To watch the changes in `address` you can add `address` to the watch list directly by clicking the ... icon (or off course you can add it in any of the other ways mentioned previously). Now you have two things in your watch list, which you can watch closely.
 
-#### Need-to-know
+__Need-to-know__
 
 * The watched things can be displayed in either the __THINGS TREE__ view or in plain __JSON__ text.
 * It is also possible to watch the procedures and types of a collection. Watching the root thing of a collection includes the procedures and types as well. You will find them in the watch list under __PROCEDURES__ and __TYPES__.
@@ -231,7 +231,7 @@ Next to the editor you find the __SCOPES__ panel where you can change the scope 
 
 Depending on the selected scope you may also see a __PROCEDURES__ and __TYPES__ panel.
 
-#### Need-to-know
+__Need-to-know__
 
 * The header above the editor also indicates which scope you are in.
 * Hitting `Ctrl+Enter` will send the request

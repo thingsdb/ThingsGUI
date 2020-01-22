@@ -146,6 +146,7 @@ const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
 
             return copy;
         });
+        setVal({});
     };
 
     const typing = ([name, type]) =>  {

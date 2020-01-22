@@ -31,21 +31,21 @@ const single = [
     'str',
 ];
 
-const AddArray = ({customTypes, dataTypes, onBlob, onVal, isSet}) => {
+const AddArray = ({childTypes, customTypes, dataTypes, onBlob, onVal, isSet}) => {
     const classes = useStyles();
     const [preBlob, setPreBlob] = React.useState({});
     const [blob, setBlob] = React.useState({});
     const [state, setState] = React.useState({
         contentAdd: '',
-        dataType: dataTypes[0]||'str',
+        dataType: childTypes[0]||dataTypes[0]||'str',
         errors: {},
     });
     const {contentAdd, dataType} = state;
 
     React.useEffect(() => {
-        setState({...state, dataType: dataTypes[0]});
+        setState({...state, dataType: childTypes[0]||dataTypes[0]});
     },
-    [dataTypes.length],
+    [childTypes.length, dataTypes.length],
     );
 
     const [myItems, setMyItems] = React.useState([]);
@@ -79,7 +79,7 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, isSet}) => {
             return newArray;
         });
         setBlob({...blob, ...preBlob});
-
+        setState({...state,  contentAdd: '', errors: {}});
     };
 
     const handleClick = (index, item) => () => {
@@ -100,32 +100,29 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, isSet}) => {
         setPreBlob({...b});
     };
 
-    console.log(dataType, dataTypes)
-
+    console.log(contentAdd)
     return (
         <Grid container>
             <ListHeader onAdd={handleAdd} onDelete={handleClick} items={myItems} groupSign="[" />
             <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="flex-end" >
-                {dataTypes.length>1&&(
-                    <Grid item xs={2}>
-                        <TextField
-                            id="dataType"
-                            type="text"
-                            name="dataType"
-                            onChange={handleChange}
-                            value={dataType}
-                            variant="standard"
-                            select
-                            SelectProps={{native: true}}
-                        >
-                            {dataTypes.map((p) => (
-                                <option key={p} value={p}>
-                                    {p}
-                                </option>
-                            ))}
-                        </TextField>
-                    </Grid>
-                )}
+                <Grid item xs={2}>
+                    <TextField
+                        id="dataType"
+                        type="text"
+                        name="dataType"
+                        onChange={handleChange}
+                        value={dataType}
+                        variant="standard"
+                        select
+                        SelectProps={{native: true}}
+                    >
+                        {(childTypes.length?childTypes:dataTypes).map((p) => (
+                            <option key={p} value={p}>
+                                {p}
+                            </option>
+                        ))}
+                    </TextField>
+                </Grid>
                 <Grid item xs={single.includes(dataType)?10:12}>
                     <InputField
                         customTypes={customTypes}
@@ -144,10 +141,12 @@ const AddArray = ({customTypes, dataTypes, onBlob, onVal, isSet}) => {
 };
 
 AddArray.defaultProps = {
+    childTypes: [],
     isSet: false,
 };
 
 AddArray.propTypes = {
+    childTypes: PropTypes.arrayOf(PropTypes.string),
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     onBlob: PropTypes.func.isRequired,

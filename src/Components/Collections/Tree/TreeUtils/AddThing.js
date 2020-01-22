@@ -77,6 +77,7 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
             return newArray;
         });
         setBlob({...blob, ...preBlob});
+        setState({...state,  contentAdd: '', property: '', errors: {}});
     };
 
     const handleClick = (index, item) => () => {
