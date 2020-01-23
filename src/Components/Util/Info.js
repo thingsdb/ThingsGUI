@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import React from 'react';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import moment from 'moment';
+// import m from 'moment-locales-webpack-plugin'
+import PropTypes from 'prop-types';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
 
 import {duration} from '../Util';
 
@@ -37,7 +39,10 @@ const Info = ({header, content}) => {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Typography variant="subtitle2">
-                                        {l.ky=='uptime'? duration(content[l.ky]):content[l.ky]}
+                                        {l.ky=='uptime' ? moment.duration(content[l.ky], 'second').humanize()
+                                            : l.ky=='created_at' ? moment(content[l.ky]*1000).format('YYYY-MM-DD HH:mm:ss')
+                                                : content[l.ky]
+                                        }
                                     </Typography>
                                 </Grid>
                             </Grid>

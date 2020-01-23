@@ -44,6 +44,7 @@ const Editor = ({match}) => {
 
     const [isResizing, setIsResizing] = React.useState(false);
     const [newHeight, setNewHeight] = React.useState(200);
+    const [expandOutput, setExpandOutput] = React.useState(false);
 
     React.useEffect(() => {
         if (isResizing) {
@@ -106,9 +107,12 @@ const Editor = ({match}) => {
     };
 
     const handleSubmit = () => {
-        setOutput(null);
-        CollectionActions.queryEditor(scope.value, query, scope.collectionId, handleOutput, tag);
-        handleGetAdditionals();
+        setExpandOutput(false);
+        setTimeout(()=> {
+            setOutput(null);
+            CollectionActions.queryEditor(scope.value, query, scope.collectionId, handleOutput, tag);
+            handleGetAdditionals();
+        }, 300);
     };
 
     const handleKeyPress = (e) => {
@@ -119,6 +123,7 @@ const Editor = ({match}) => {
     };
 
     const handleOutput = (out) => {
+        setExpandOutput(true);
         setOutput(out);
     };
 
@@ -210,6 +215,7 @@ const Editor = ({match}) => {
                                 <QueryOutput output={output} />
                             }
                             noPadding
+                            expand={expandOutput}
                         />
                     </Grid>
                 </React.Fragment>

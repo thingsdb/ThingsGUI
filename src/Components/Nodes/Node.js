@@ -122,4 +122,12 @@ Node.propTypes = {
 
 };
 
+// const areEqual = (prevProps, nextProps) => {
+//     console.log(prevProps, nextProps);
+//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+// };
+
+
+// export default withStores(React.memo(Node, areEqual));
+
 export default withStores(Node);

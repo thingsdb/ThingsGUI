@@ -48,6 +48,7 @@ const App = ({match}) => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    console.log('app');
     return(
         <DrawerLayout
             open={open}
@@ -113,5 +114,10 @@ App.propTypes = {
     // openEditor: ApplicationStore.types.openEditor.isRequired,
 
 };
+
+// const areEqual = (prevProps, nextProps) => {
+//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+// };
+
 
 export default withStores(App);

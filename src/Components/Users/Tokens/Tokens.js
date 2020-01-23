@@ -39,11 +39,14 @@ const Tokens = ({user}) => {
     const classes = useStyles();
     const rows = user.tokens;
     const header = [{
+        ky: 'created_on',
+        label: 'Created on (UTC time)',
+    }, {
         ky: 'description',
         label: 'Description',
     }, {
         ky: 'expiration_time',
-        label: 'Expiration UTC time',
+        label: 'Expiration (UTC time)',
     }, {
         ky: 'key',
         label: 'Key',
@@ -57,6 +60,8 @@ const Tokens = ({user}) => {
         r.current.select();
         document.execCommand('copy');
     };
+
+    console.log('tokens');
 
     return (
         <HarmonicCard

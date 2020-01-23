@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const VERSION = require(path.resolve(__dirname, './package.json')).version;
 const BUILD_DIR = path.resolve(__dirname, '../static/js');
@@ -39,7 +40,9 @@ const config = {
              *      npm run analyze
              */
             'analyzerMode': process.env.NODE_ENV === 'analyze' ? 'static' : 'disabled'
-        })
+        }),
+        // To strip all locales except “en”
+        new MomentLocalesPlugin(),
     ],
     optimization: {
         splitChunks: {

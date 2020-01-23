@@ -54,15 +54,18 @@ class NodesStore extends BaseStore {
     }
 
     onGetNodes(){
+        const {node, nodes} = this.state;
         const query = '{nodes: nodes_info(), connectedNode: node_info()};';
         this.emit('query', {
             scope: '@node',
             query
         }).done((data) => {
-            this.setState({
-                nodes: data.nodes,
-                connectedNode: data.connectedNode
-            });
+            if (JSON.stringify(data.nodes) != JSON.stringify(nodes) || JSON.stringify(data.connectedNode) != JSON.stringify(node)){
+                this.setState({
+                    nodes: data.nodes,
+                    connectedNode: data.connectedNode
+                });
+            }
         }).fail((event, status, message) => {
             this.setState({
                 counters: {},
@@ -74,15 +77,18 @@ class NodesStore extends BaseStore {
     }
 
     onGetNode(nodeId) {
+        const {node, counters} = this.state;
         const query = '{counters: counters(), node: node_info()};';
         this.emit('query', {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            this.setState({
-                node: data.node,
-                counters: data.counters
-            });
+            if (JSON.stringify(data.node) != JSON.stringify(node) || JSON.stringify(data.counters) != JSON.stringify(counters)){
+                this.setState({
+                    node: data.node,
+                    counters: data.counters
+                });
+            }
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
@@ -155,14 +161,17 @@ class NodesStore extends BaseStore {
     }
 
     onGetBackups(nodeId) {
+        const {backups} = this.state;
         const query = 'backups_info();';
         this.emit('query', {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            this.setState({
-                backups: data,
-            });
+            if (JSON.stringify(data) != JSON.stringify(backups)){
+                this.setState({
+                    backups: data,
+                });
+            }
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 

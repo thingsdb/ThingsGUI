@@ -93,11 +93,11 @@ The ThingsGUI web interface will be opened in your default browser and the webse
 
 You might want to use a different host and port for the webserver. This can be done by adding the following argument flags `-host` and `-port`. If you don't want ThingsGUI to open in a browser automatically, you can set the argument flag `-open`.
 
-The last argument is `-timeout`. This flag can be used to change the connect and query timeout. The time unit is in seconds and by default the timeout is set to 30 seconds.
+The last argument is `-timeout`. This flag can be used to change the connect and query timeout. The time unit is in seconds and by default the timeout is set to 60 seconds.
 
 For example:
 ```
-./thingsdb-gui -host localhost -port 8080 -open false -timeout 60
+./thingsdb-gui -host localhost -port 8080 -open false -timeout 30
 ```
 
 ### Login

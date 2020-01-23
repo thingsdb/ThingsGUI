@@ -55,4 +55,11 @@ UsersMenu.propTypes = {
     users: ThingsdbStore.types.users.isRequired,
 };
 
+// const areEqual = (prevProps, nextProps) => {
+//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+// };
+
+
+// export default withStores(React.memo(UsersMenu, areEqual));
+
 export default withStores(UsersMenu);

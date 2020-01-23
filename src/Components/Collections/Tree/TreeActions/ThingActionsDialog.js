@@ -183,6 +183,8 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
         </Grid>
     );
 
+    console.log('thingsdialog');
+
     return (
         <React.Fragment>
             {show ? (

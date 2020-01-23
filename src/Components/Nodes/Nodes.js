@@ -55,4 +55,11 @@ Nodes.propTypes = {
     connectedNode: NodesStore.types.connectedNode.isRequired,
 };
 
+// const areEqual = (prevProps, nextProps) => {
+//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+// };
+
+
+// export default withStores(React.memo(Nodes, areEqual));
+
 export default withStores(Nodes);

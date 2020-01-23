@@ -128,60 +128,54 @@ func Connect(client *Client, data LoginData) (int, LoginResp, util.Message) {
 	return message.Status, resp, message
 }
 
-func Reconnect(client *Client) (int, LoginResp, util.Message) {
-	resp := LoginResp{Connected: false}
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
-
-	maxInterval := 65
-	interval := 1
-	for interval < maxInterval {
-		if !client.Connection.IsConnected() {
-			err := client.Connection.Connect()
-
+func reconnect(client *Client) bool {
+	if client.Connection.IsConnected() {
+		client.LogCh <- fmt.Sprintf("Node is still closing.")
+		return false
+	}
+	err := client.Connection.Connect()
+	if err != nil {
+		client.LogCh <- err.Error()
+		return false
+	} else {
+		if client.Token == "" {
+			err := client.Connection.AuthPassword(client.User, client.Pass)
 			if err != nil {
-				client.LogCh <- fmt.Sprintf("connecting to %s:%d failed, \ntry next connect in %d seconds", client.Host, client.Port, interval)
-				message.Text = err.Error()
-				message.Status = http.StatusInternalServerError
-				message.Log = err.Error()
-
-				interval *= 2
-				timeoutCh := make(chan bool, 1)
-
-				go func() {
-					time.Sleep(time.Duration(interval) * time.Second)
-					timeoutCh <- true
-				}()
-
-				<-timeoutCh
-
-			} else {
-				resp.Connected = true
-				message.Text = ""
-				message.Status = http.StatusOK
-				message.Log = ""
-				if client.Token == "" {
-					err := client.Connection.AuthPassword(client.User, client.Pass)
-
-					if err != nil {
-						resp.Connected = false
-						message.Text = err.Error()
-						message.Status = http.StatusInternalServerError
-						message.Log = err.Error()
-					}
-				} else {
-					err := client.Connection.AuthToken(client.Token)
-
-					if err != nil {
-						resp.Connected = false
-						message.Text = err.Error()
-						message.Status = http.StatusInternalServerError
-						message.Log = err.Error()
-					}
-				}
-				return message.Status, resp, message
+				client.LogCh <- err.Error()
+				return false
+			}
+		} else {
+			err := client.Connection.AuthToken(client.Token)
+			if err != nil {
+				client.LogCh <- err.Error()
+				return false
 			}
 		}
+		return true
 	}
+}
+
+func Reconnect(client *Client) (int, LoginResp, util.Message) {
+	resp := LoginResp{Connected: true}
+	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+
+	maxInterval := 60
+	interval := 1
+	timeoutCh := make(chan bool, 1)
+	for interval < maxInterval {
+		if success := reconnect(client); success {
+			return message.Status, resp, message
+		} else {
+			interval *= 2
+			client.LogCh <- fmt.Sprintf("connecting to %s:%d failed, \ntry next connect in %d seconds", client.Host, client.Port, interval)
+			go func() {
+				time.Sleep(time.Duration(interval) * time.Second)
+				timeoutCh <- true
+			}()
+			<-timeoutCh
+		}
+	}
+
 	message.Text = "Reconnecting has stopped. Timeout reached."
 	message.Status = http.StatusInternalServerError
 	message.Log = "Reconnecting has stopped. Timeout reached."

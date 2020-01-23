@@ -9,9 +9,11 @@ import (
 	"os/exec"
 	"os/signal"
 	"runtime"
+	"time"
 
 	handlers "./sockethandlers"
 	util "./util"
+	engineio "github.com/googollee/go-engine.io"
 	socketio "github.com/googollee/go-socket.io"
 	things "github.com/thingsdb/go-thingsdb"
 )
@@ -20,8 +22,6 @@ import (
 const AppVersion = "0.0.1-alpha8"
 
 var connFile = ".thingsgui"
-
-const retryConnectTime = 5
 
 var (
 	host        string
@@ -33,7 +33,7 @@ var (
 func Init() {
 	flag.StringVar(&host, "host", "0.0.0.0", "Specific host for the http webserver.")
 	flag.UintVar(&port, "port", 5000, "Specific port for the http webserver.")
-	flag.UintVar(&timeout, "timeout", 30, "Connect and query timeout in seconds")
+	flag.UintVar(&timeout, "timeout", 60, "Connect and query timeout in seconds")
 	flag.BoolVar(&openBrowser, "open", true, "opens ThingsGUI in your default browser")
 
 	flag.Parse()
@@ -227,7 +227,11 @@ func main() {
 	a.timeout = uint16(timeout)
 	a.openBrowser = openBrowser
 	a.client = make(map[string]*handlers.Client)
-	a.server, err = socketio.NewServer(nil)
+
+	options := &engineio.Options{
+		PingTimeout: time.Duration(timeout+120) * time.Second,
+	}
+	a.server, err = socketio.NewServer(options)
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -85,7 +85,6 @@ class ApplicationStore extends BaseStore {
     }
 
     onReconnect() {
-        console.log('about to reconnect');
         this.emit('reconn').done((data) => {
             this.setState({
                 connected: data.Connected,
@@ -93,7 +92,6 @@ class ApplicationStore extends BaseStore {
             EventActions.reWatch();
             ErrorActions.resetToastError();
         }).fail((event, status, message) => {
-            console.log(message);
             // ErrorActions.setToastError(message.Log); //Tag naar login scherm
             this.onDisconnect();
         });

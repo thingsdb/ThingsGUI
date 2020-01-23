@@ -23,9 +23,13 @@ const HarmonicCard = ({title, content, buttons, expand, noPadding}) => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(expand);
 
-    function handleExpandClick() {
+    const handleExpandClick = () => {
         setExpanded(!expanded);
-    }
+    };
+
+    React.useEffect(() => {
+        setExpanded(expand);
+    }, [expand]);
 
     return (
         <Card>

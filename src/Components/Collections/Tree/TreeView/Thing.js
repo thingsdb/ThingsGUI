@@ -97,6 +97,8 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
         }
     };
 
+    console.log('thing');
+
     return (
         <React.Fragment>
             <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpen} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null}>

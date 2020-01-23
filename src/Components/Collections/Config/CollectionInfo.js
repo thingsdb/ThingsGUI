@@ -9,7 +9,7 @@ const CollectionInfo = ({collection}) => {
             {ky: 'collection_id', label: 'Collection ID'},
             {ky: 'name', label: 'Name'},
             {ky: 'things', label: 'Things stored'},
-            {ky: 'created_at', label: 'Created at'},
+            {ky: 'created_at', label: 'Created on'},
         ]},
         // {ky: 'title2', title: 'QUOTAS', labels: [
         //     {ky: 'quota_array_size', label: 'Quota on array size'},

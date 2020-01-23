@@ -101,7 +101,6 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
     };
 
     const handleClickWatch = (scope, id) => () => {
-        console.log(scope, id);
         EventActions.watch(
             scope,
             id,
@@ -113,7 +112,6 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
     const handleWatchButton = (s) => (_, t, v) => {
         const id = v.slice(2, -1);
         let onWatch=Boolean(watchIds[id]);
-        // let scope = watchIds[id];
 
         return(t=='thing'&& (onWatch ? (
             <Tooltip disableFocusListener disableTouchListener title="Turn watching off">
@@ -129,6 +127,8 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
     }; // v = '{#123}'
 
     const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
+
+    console.log('watcher');
 
     return (
         <Grid container spacing={2}>
@@ -225,5 +225,13 @@ Watcher.propTypes = {
     /* type store properties */
     customTypes: TypeStore.types.customTypes.isRequired,
 };
+
+
+// const areEqual = (prevProps, nextProps) => {
+//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+// };
+
+
+// export default withStores(React.memo(Watcher, areEqual));
 
 export default withStores(Watcher);

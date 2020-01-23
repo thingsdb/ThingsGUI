@@ -14,7 +14,6 @@ const ThingsdbActions = Vlow.createActions([
     'addCollection',
     'renameCollection',
     'removeCollection',
-    'setQuota',
 
     //USER ACTIONS
     'getUser',
@@ -65,12 +64,15 @@ class ThingsdbStore extends BaseStore {
     //COLLECTIONS
 
     onGetCollection() {
+        const {collection} = this.state;
         const query='collection_info();';
         this.emit('query', {
             scope,
             query
         }).done((data) => {
-            this.setState({collection: data});
+            if (JSON.stringify(data) != JSON.stringify(collection)){
+                this.setState({collections: data});
+            }
         }).fail((event, status, message) => {
             this.setState({
                 collection: {},
@@ -80,12 +82,15 @@ class ThingsdbStore extends BaseStore {
     }
 
     onGetCollections() {
+        const {collections} = this.state;
         const query='collections_info();';
         this.emit('query', {
             scope,
             query
         }).done((data) => {
-            this.setState({collections: data});
+            if (JSON.stringify(data) != JSON.stringify(collections)){
+                this.setState({collections: data});
+            }
         }).fail((event, status, message) => {
             this.setState({
                 collections: [],
@@ -95,13 +100,14 @@ class ThingsdbStore extends BaseStore {
     }
 
     returnCollections(scope, query, tag, cb) {
+        const {collections} = this.state;
         this.emit('query', {
             scope,
             query
         }).done((data) => {
-            this.setState({
-                collections: data,
-            });
+            if (JSON.stringify(data) != JSON.stringify(collections)){
+                this.setState({collections: data});
+            }
             cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
@@ -109,14 +115,17 @@ class ThingsdbStore extends BaseStore {
     }
 
     returnCollectionsUsers(scope, query, tag, cb) {
+        const {collections, users} = this.state;
         this.emit('query', {
             scope,
             query
         }).done((data) => {
-            this.setState({
-                collections: data.collections,
-                users: data.users,
-            });
+            if (JSON.stringify(data.collections) != JSON.stringify(collections) || JSON.stringify(data.users) != JSON.stringify(users)){
+                this.setState({
+                    collections: data.collections,
+                    users: data.users,
+                });
+            }
             cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
@@ -159,30 +168,20 @@ class ThingsdbStore extends BaseStore {
         }
     }
 
-    onSetQuota(name, quotaType, quota, tag, cb) {
-        const query = `set_quota('${name}', '${quotaType}', ${quota}); collections_info();`;
-        this.emit('query', {
-            scope,
-            query
-        }).done((data) => {
-            this.setState({
-                collections: data
-            });
-            cb();
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
     //USERS
 
     onGetUser(){
+        const {user} = this.state;
         const query = 'user_info();';
         this.emit('query', {
             scope,
             query
         }).done((data) => {
-            this.setState({user: data});
+            if (JSON.stringify(data) != JSON.stringify(user)){
+                this.setState({
+                    user: data,
+                });
+            }
         }).fail((event, status, message) => {
             this.setState({
                 user: {},
@@ -192,7 +191,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onGetUsers(){
-        const {user} = this.state;
+        const {user, users} = this.state;
         if (user.access&&(user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
         user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT')) ) {
             const query = 'users_info();';
@@ -200,7 +199,11 @@ class ThingsdbStore extends BaseStore {
                 scope,
                 query
             }).done((data) => {
-                this.setState({users: data});
+                if (JSON.stringify(data) != JSON.stringify(users)){
+                    this.setState({
+                        users: data,
+                    });
+                }
             }).fail((event, status, message) => {
                 this.setState({
                     users: [],
