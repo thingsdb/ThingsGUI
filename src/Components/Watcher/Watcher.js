@@ -1,6 +1,7 @@
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 import AddIcon from '@material-ui/icons/Add';
+import AddOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Fab from '@material-ui/core/Fab';
 import Collapse from '@material-ui/core/Collapse';
@@ -8,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import React from 'react';
-import RemoveIcon from '@material-ui/icons/RemoveCircleRounded';
+import RemoveIcon from '@material-ui/icons/RemoveCircleOutlined';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import TextField from '@material-ui/core/TextField';
@@ -121,7 +122,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
             </Tooltip>
         ): (
             <ButtonBase onClick={handleClickWatch(s, id)} size="small" >
-                <AddIcon size="small" color="primary" />
+                <AddOutlinedIcon size="small" className={classes.green}  />
             </ButtonBase>
         )));
     }; // v = '{#123}'

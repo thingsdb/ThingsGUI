@@ -1,12 +1,14 @@
-import PropTypes from 'prop-types';
-import Vlow from 'vlow';
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import Vlow from 'vlow';
 
 const NodesActions = Vlow.createActions([
     'resetNodesStore',
     'getNodes',
     'getNode',
+    'getCounters',
     'setLoglevel',
     'resetCounters',
     'shutdown',
@@ -60,7 +62,8 @@ class NodesStore extends BaseStore {
             scope: '@node',
             query
         }).done((data) => {
-            if (JSON.stringify(data.nodes) != JSON.stringify(nodes) || JSON.stringify(data.connectedNode) != JSON.stringify(node)){
+            data.connectedNode.uptime =  moment.duration(data.connectedNode.uptime , 'second').humanize();
+            if (JSON.stringify(data.nodes) != JSON.stringify(nodes) || JSON.stringify(data.connectedNode.node_id) != JSON.stringify(node.node_id)){
                 this.setState({
                     nodes: data.nodes,
                     connectedNode: data.connectedNode
@@ -77,16 +80,31 @@ class NodesStore extends BaseStore {
     }
 
     onGetNode(nodeId) {
-        const {node, counters} = this.state;
-        const query = '{counters: counters(), node: node_info()};';
+        const {node} = this.state;
+        const query = ' node_info();';
         this.emit('query', {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            if (JSON.stringify(data.node) != JSON.stringify(node) || JSON.stringify(data.counters) != JSON.stringify(counters)){
+            data.uptime =  moment.duration(data.uptime , 'second').humanize();
+            if (JSON.stringify(data) != JSON.stringify(node)){
                 this.setState({
-                    node: data.node,
-                    counters: data.counters
+                    node: data,
+                });
+            }
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+    onGetCounters(nodeId) {
+        const {counters} = this.state;
+        const query = ' counters();';
+        this.emit('query', {
+            scope: `@node:${nodeId}`,
+            query
+        }).done((data) => {
+            if (JSON.stringify(data) != JSON.stringify(counters)){
+                this.setState({
+                    counters: data
                 });
             }
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
@@ -98,6 +116,7 @@ class NodesStore extends BaseStore {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
+            data.uptime =  moment.duration(data.uptime , 'second').humanize();
             this.setState({
                 node: data
             });
@@ -168,6 +187,7 @@ class NodesStore extends BaseStore {
             query
         }).done((data) => {
             if (JSON.stringify(data) != JSON.stringify(backups)){
+                console.log(data, backups);
                 this.setState({
                     backups: data,
                 });

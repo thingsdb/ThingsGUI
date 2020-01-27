@@ -1,6 +1,6 @@
 import Add from './Add'
 import Loglevel from './Loglevel';
-import NodeInfo from './NodeInfo';
+import NodeConfig from './NodeConfig';
 import Remove from './Remove';
 import Shutdown from './Shutdown';
 
@@ -8,7 +8,7 @@ import Shutdown from './Shutdown';
 export {
     Add,
     Loglevel,
-    NodeInfo,
+    NodeConfig,
     Remove,
     Shutdown
 };

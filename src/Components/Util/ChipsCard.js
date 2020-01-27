@@ -123,7 +123,7 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, expand, tag}) => {
                                 onChange={handleSwitch}
                             />
                         )}
-                        label="Are you realy sure?"
+                        label="Are you really sure?"
                     />
                 </React.Fragment>
             </SimpleModal>

@@ -146,7 +146,7 @@ const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
 
             return copy;
         });
-        setVal({});
+        // setVal({});
     };
 
     const typing = ([name, type]) =>  {
@@ -162,17 +162,17 @@ const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
 
         if (t[0]=='[') {
             arr=true;
-            tps = opt?['list','nil']:['list'];
+            tps = opt?['nil', 'list']:['list'];
             t = t.slice(1, -1)?t.slice(1, -1):'any';
         } else if (t[0]=='{') {
             arr=true;
-            tps = opt?['set','nil']:['set'];
+            tps = opt?['nil', 'set']:['set'];
             t = t.slice(1, -1)?t.slice(1, -1):'thing';
         } else {
             if (opt) {
                 tps= t=='any' ? dataTypes
-                    : typeConv[t] ? [...typeConv[t], 'nil']
-                        : [t, 'nil'];
+                    : typeConv[t] ? ['nil', ...typeConv[t]]
+                        : ['nil', t];
 
             } else {
                 tps= t=='any' ? dataTypes
@@ -185,8 +185,8 @@ const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
             if (t.slice(-1)=='?') {
                 t = t.slice(0, -1);
                 chldTps= t=='any' ? dataTypes
-                    : typeConv[t] ? [...typeConv[t], 'nil']
-                        : [t, 'nil'];
+                    : typeConv[t] ? ['nil', ...typeConv[t]]
+                        : ['nil', t];
             } else {
                 chldTps= t=='any' ? dataTypes
                     : typeConv[t] ? typeConv[t]
@@ -207,60 +207,61 @@ const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
         <React.Fragment>
             {typesFields&&(
                 <Grid container>
-                    <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={myItems} name={type} groupSign="{" />
-                    <Collapse className={classes.fullWidth} in={open} timeout="auto">
-                        {( typesFields.map((c, i) => (
-                            <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
-                                <Grid item xs={1}>
-                                    <FiberManualRecord color="primary" fontSize="small" />
+                    <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={myItems} name={type} groupSign="{">
+                        <Collapse className={classes.fullWidth} in={open} timeout="auto">
+                            {( typesFields.map((c, i) => (
+                                <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
+                                    {/* <Grid item xs={1}>
+                                        <FiberManualRecord color="primary" fontSize="small" />
+                                    </Grid> */}
+                                    <Grid item xs={2}>
+                                        <TextField
+                                            type="text"
+                                            name="property"
+                                            label="Property"
+                                            value={c[0]}
+                                            variant="standard"
+                                            fullWidth
+                                            disabled
+                                        />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <TextField
+                                            type="text"
+                                            name="dataType"
+                                            label="Data type"
+                                            onChange={handleChangeType(c[0])}
+                                            value={dataType[c[0]]||c[1][0]}
+                                            variant="standard"
+                                            select
+                                            SelectProps={{native: true}}
+                                            fullWidth
+                                            disabled={c[1].length<2}
+                                        >
+                                            {c[1].map((p) => (
+                                                <option key={p} value={p}>
+                                                    {p}
+                                                </option>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item xs={single.includes(dataType[c[0]]||c[1][0])?7:12}>
+                                        <InputField
+                                            customTypes={customTypes}
+                                            dataType={dataType[c[0]]||c[1][0]}
+                                            dataTypes={dataTypes}
+                                            childTypes={c[2]}
+                                            input={val[c[0]]||''}
+                                            onBlob={handleBlob}
+                                            onVal={handleVal(c[0])}
+                                            variant="standard"
+                                            label="Value"
+                                        />
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={2}>
-                                    <TextField
-                                        type="text"
-                                        name="property"
-                                        label="Property"
-                                        value={c[0]}
-                                        variant="standard"
-                                        fullWidth
-                                        disabled
-                                    />
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <TextField
-                                        type="text"
-                                        name="dataType"
-                                        label="Data type"
-                                        onChange={handleChangeType(c[0])}
-                                        value={dataType[c[0]]||c[1][0]}
-                                        variant="standard"
-                                        select
-                                        SelectProps={{native: true}}
-                                        fullWidth
-                                        disabled={c[1].length<2}
-                                    >
-                                        {c[1].map((p) => (
-                                            <option key={p} value={p}>
-                                                {p}
-                                            </option>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-                                <Grid item xs={single.includes(dataType[c[0]]||c[1][0])?7:12}>
-                                    <InputField
-                                        customTypes={customTypes}
-                                        dataType={dataType[c[0]]||c[1][0]}
-                                        dataTypes={dataTypes}
-                                        childTypes={c[2]}
-                                        input={val[c[0]]||''}
-                                        onBlob={handleBlob}
-                                        onVal={handleVal(c[0])}
-                                        variant="standard"
-                                        label="Value"
-                                    />
-                                </Grid>
-                            </Grid>
-                        )))}
-                    </Collapse>
+                            )))}
+                        </Collapse>
+                    </ListHeader>
                 </Grid>
             )}
         </React.Fragment>

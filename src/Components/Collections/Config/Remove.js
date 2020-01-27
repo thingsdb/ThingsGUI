@@ -78,7 +78,7 @@ const Remove = ({collection}) => {
                             onChange={handleSwitch}
                         />
                     )}
-                    label="Are you realy sure?"
+                    label="Are you really sure?"
                 />
             </React.Fragment>
         </SimpleModal>

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@material-ui/icons/AddCircleOutlined';
 import Chip from '@material-ui/core/Chip';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -33,7 +33,7 @@ const groupSigning = {
     '(' : ['(', ')'],
 };
 
-const ListHeader = ({collapse, onAdd, onDelete, onOpen, onClose, open, items, name, groupSign}) => {
+const ListHeader = ({children, collapse, onAdd, onDelete, onOpen, onClose, open, items, name, groupSign}) => {
     const classes = useStyles();
 
 
@@ -53,7 +53,7 @@ const ListHeader = ({collapse, onAdd, onDelete, onOpen, onClose, open, items, na
 
     return(
         <Grid className={classes.top} container item xs={12}>
-            <Grid item xs={10} container justify="flex-start" alignItems="center">
+            <Grid item xs={collapse&&!open?3:12} container justify="flex-start" alignItems="center">
                 {name&&(
                     <Typography variant="h5" color="primary" >
                         {`${name}`}
@@ -62,12 +62,15 @@ const ListHeader = ({collapse, onAdd, onDelete, onOpen, onClose, open, items, na
                 <Typography variant="h3" className={classes.sidepadding} color="primary">
                     {groupSigning[groupSign][0]}
                 </Typography>
+            </Grid>
+            <Grid item xs={collapse&&!open?1:12} container justify="flex-start" alignItems="center">
                 {makeAddedList()}
+                {children}
+            </Grid>
+            <Grid item xs={collapse&&!open?6:12} container justify="flex-start" alignItems="center">
                 <Typography variant="h3" className={classes.sidepadding} color="primary">
                     {groupSigning[groupSign][1]}
                 </Typography>
-            </Grid>
-            <Grid item xs={2} container justify="flex-start" alignItems="center">
                 <IconButton onClick={onAdd}>
                     <AddIcon color="primary" />
                 </IconButton>

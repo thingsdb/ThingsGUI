@@ -1,18 +1,29 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import { makeStyles} from '@material-ui/core/styles';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
 
+const useStyles = makeStyles(theme => ({
+    warning: {
+        color: theme.palette.primary.red
+    },
+}));
 
 const tag = '19';
 
-const CountersReset = ({node}) => {
+const Shutdown = ({node}) => {
+    const classes = useStyles();
     const [show, setShow] = React.useState(false);
+    const [switchDel, setSwitchDel] = React.useState(false);
 
     const handleClickOpen = () => {
         setShow(true);
+        setSwitchDel(false);
     };
 
     const handleClickClose = () => {
@@ -26,11 +37,9 @@ const CountersReset = ({node}) => {
             () => setShow(false));
     };
 
-    const handleKeyPress = (event) => {
-        const {key} = event;
-        if (key == 'Enter') {
-            handleClickOk();
-        }
+    const handleSwitch = ({target}) => {
+        const {checked} = target;
+        setSwitchDel(checked);
     };
 
     return(
@@ -42,17 +51,34 @@ const CountersReset = ({node}) => {
             }
             title="Shutdown node?"
             open={show}
-            onOk={handleClickOk}
+            actionButtons={
+                <Button onClick={handleClickOk} disabled={!switchDel} className={classes.warning} >
+                    {'Submit'}
+                </Button>
+            }
             onClose={handleClickClose}
-            onKeyPress={handleKeyPress}
+            // classes={{paper: classes.background}}
         >
-            <ErrorMsg tag={tag} />
+            <React.Fragment>
+                <ErrorMsg tag={tag} />
+                <FormControlLabel
+                    control={(
+                        <Switch
+                            checked={switchDel}
+                            color="primary"
+                            id="description"
+                            onChange={handleSwitch}
+                        />
+                    )}
+                    label="Are you really sure?"
+                />
+            </React.Fragment>
         </SimpleModal>
     );
 };
 
-CountersReset.propTypes = {
+Shutdown.propTypes = {
     node: PropTypes.object.isRequired,
 };
 
-export default CountersReset;
+export default Shutdown;

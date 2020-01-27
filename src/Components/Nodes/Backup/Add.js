@@ -22,7 +22,7 @@ const initialState = {
 
 const tag = '15';
 
-const Add = ({node}) => {
+const Add = ({nodeId}) => {
     const [state, setState] = React.useState(initialState);
     const {show, form, switches} = state;
 
@@ -77,7 +77,7 @@ const Add = ({node}) => {
 
     const handleClickOk = () => {
         NodesActions.addBackup(
-            node.node_id,
+            nodeId,
             {
                 file: form.file,
                 time: switches.time ? form.time : null,
@@ -173,7 +173,7 @@ const Add = ({node}) => {
 };
 
 Add.propTypes = {
-    node: PropTypes.object.isRequired,
+    nodeId: PropTypes.number.isRequired,
 };
 
 export default Add;

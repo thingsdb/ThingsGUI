@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import {duration} from '../Util';
 
 const useStyles = makeStyles(theme => ({
     grid: {
@@ -39,9 +38,8 @@ const Info = ({header, content}) => {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Typography variant="subtitle2">
-                                        {l.ky=='uptime' ? moment.duration(content[l.ky], 'second').humanize()
-                                            : l.ky=='created_at' ? moment(content[l.ky]*1000).format('YYYY-MM-DD HH:mm:ss')
-                                                : content[l.ky]
+                                        {l.ky=='created_at' ? moment(content[l.ky]*1000).format('YYYY-MM-DD HH:mm:ss')
+                                            : content[l.ky]
                                         }
                                     </Typography>
                                 </Grid>

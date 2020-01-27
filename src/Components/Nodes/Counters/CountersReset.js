@@ -4,10 +4,10 @@ import Button from '@material-ui/core/Button';
 import {NodesActions} from '../../../Stores';
 
 
-const CountersReset = ({node}) => {
+const CountersReset = ({nodeId}) => {
 
     const handleClickOk = () => {
-        NodesActions.resetCounters(node.node_id);
+        NodesActions.resetCounters(nodeId);
     };
 
     return (
@@ -20,7 +20,7 @@ const CountersReset = ({node}) => {
 };
 
 CountersReset.propTypes = {
-    node: PropTypes.object.isRequired,
+    nodeId: PropTypes.number.isRequired,
 };
 
 export default CountersReset;

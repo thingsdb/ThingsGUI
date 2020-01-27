@@ -1,5 +1,4 @@
 import Box from '@material-ui/core/Box';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Table from '@material-ui/core/Table';
@@ -37,9 +36,7 @@ const TableWithButtons = ({header, rows, rowClick, buttons}) => {
                                 <TableCell key={h.ky} align={i?'right':'left'}>
                                     <Typography component="div">
                                         <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
-                                            {h.ky=='created_at' ? moment(row[h.ky]*1000).format('YYYY-MM-DD HH:mm:ss')
-                                                : row[h.ky]
-                                            }
+                                            {row[h.ky]}
                                         </Box>
                                     </Typography>
                                 </TableCell>
