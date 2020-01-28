@@ -25,6 +25,9 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1),
     },
+    inset: {
+        paddingLeft: theme.spacing(3),
+    },
 }));
 
 const groupSigning = {
@@ -62,9 +65,11 @@ const ListHeader = ({children, collapse, onAdd, onDelete, onOpen, onClose, open,
                 <Typography variant="h3" className={classes.sidepadding} color="primary">
                     {groupSigning[groupSign][0]}
                 </Typography>
+                <Grid className={classes.inset}>
+                    {makeAddedList()}
+                </Grid>
             </Grid>
             <Grid item xs={collapse&&!open?1:12} container justify="flex-start" alignItems="center">
-                {makeAddedList()}
                 {children}
             </Grid>
             <Grid item xs={collapse&&!open?6:12} container justify="flex-start" alignItems="center">
