@@ -5,7 +5,6 @@ import ExploreOffIcon from '@material-ui/icons/ExploreOff';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 import {withVlow} from 'vlow';
-import {makeStyles} from '@material-ui/core/styles';
 
 import {EventStore, EventActions} from '../../../../Stores';
 
@@ -14,41 +13,7 @@ const withStores = withVlow([{
     keys: ['watchIds']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    fabRed: {
-        backgroundColor: theme.palette.primary.red,
-        opacity: '0.6',
-        '&:hover': {
-            backgroundColor: theme.palette.primary.red,
-            opacity: '0.4',
-        },
-    },
-    fabGreen: {
-        backgroundColor: theme.palette.primary.green,
-        '&:hover': {
-            backgroundColor: theme.palette.primary.green,
-            opacity: '0.7',
-        },
-    },
-    red: {
-        color: theme.palette.primary.red,
-        opacity: '0.6',
-        '&:hover': {
-            color: theme.palette.primary.red,
-            opacity: '0.4',
-        },
-    },
-    green: {
-        color: theme.palette.primary.green,
-        '&:hover': {
-            color: theme.palette.primary.green,
-            opacity: '0.7',
-        },
-    },
-}));
-
 const WatchThings = ({buttonIsFab, scope, tag, thingId, watchIds}) => {
-    const classes = useStyles();
 
     // stringify thingId
     const onWatch = Boolean(watchIds[`${thingId}`]);
@@ -72,11 +37,11 @@ const WatchThings = ({buttonIsFab, scope, tag, thingId, watchIds}) => {
         <React.Fragment>
             <Tooltip disableFocusListener disableTouchListener title={onWatch ? 'Turn watching off' : 'Turn watching on'}>
                 {buttonIsFab ? (
-                    <Fab className={onWatch ? classes.fabGreen:classes.fabRed} onClick={handleWatcher} >
-                        {onWatch ? <ExploreIcon fontSize="large" /> : <ExploreOffIcon fontSize="large" />}
+                    <Fab onClick={handleWatcher} color="primary">
+                        {onWatch ? <ExploreOffIcon fontSize="large" /> : <ExploreIcon fontSize="large" /> }
                     </Fab>
                 ): (
-                    onWatch ? <ExploreIcon className={classes.green} /> : <ExploreOffIcon className={classes.red} />
+                    onWatch ? <ExploreOffIcon color="primary" /> : <ExploreIcon color="primary" />
                 )}
             </Tooltip>
         </React.Fragment>
