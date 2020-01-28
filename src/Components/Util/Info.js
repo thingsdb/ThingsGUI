@@ -1,8 +1,6 @@
 import { makeStyles} from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import moment from 'moment';
-// import m from 'moment-locales-webpack-plugin'
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -38,9 +36,7 @@ const Info = ({header, content}) => {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Typography variant="subtitle2">
-                                        {l.ky=='created_at' ? moment(content[l.ky]*1000).format('YYYY-MM-DD HH:mm:ss')
-                                            : content[l.ky]
-                                        }
+                                        {content[l.ky]}
                                     </Typography>
                                 </Grid>
                             </Grid>

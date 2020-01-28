@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
@@ -11,6 +12,7 @@ import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -49,6 +51,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
     const [action, setAction] = React.useState('');
 
     const [anchorEl, setAnchorEl] = React.useState(null);
+
 
     const header = [
         {ky: 'propertyName', label: 'Name'},
@@ -218,9 +221,18 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
                                     />
                                 </ListItem>
                                 <ListItem>
-                                    <ButtonBase onClick={handleAdd} >
-                                        <AddIcon color="primary" />
-                                    </ButtonBase>
+                                    <Grid container>
+                                        <Grid item xs={1}>
+                                            <ButtonBase onClick={handleAdd} >
+                                                <AddIcon color="primary" />
+                                            </ButtonBase>
+                                        </Grid>
+                                        <Grid container item xs={11} justify="flex-end">
+                                            <Box fontSize={10} fontStyle="italic" m={1}>
+                                                {`Created on: ${moment(customType.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}, last modified on: ${moment(customType.modified_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
                                 </ListItem>
                             </Collapse>
                         </List>

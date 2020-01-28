@@ -1,6 +1,7 @@
+import { Info } from '../../Util';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Info } from '../../Util';
 
 
 const CollectionInfo = ({collection}) => {
@@ -11,16 +12,12 @@ const CollectionInfo = ({collection}) => {
             {ky: 'things', label: 'Things stored'},
             {ky: 'created_at', label: 'Created on'},
         ]},
-        // {ky: 'title2', title: 'QUOTAS', labels: [
-        //     {ky: 'quota_array_size', label: 'Quota on array size'},
-        //     {ky: 'quota_properties', label: 'Quota on properties'},
-        //     {ky: 'quota_raw_size', label: 'Quota on raw size'},
-        //     {ky: 'quota_things', label: 'Quota on things'},
-        // ]}
     ];
+    const rows = JSON.parse(JSON.stringify(collection));
+    rows.created_at = moment(rows.created_at*1000).format('YYYY-MM-DD HH:mm:ss');
 
     return (
-        <Info header={header} content={collection} />
+        <Info header={header} content={rows} />
     );
 };
 

@@ -8,7 +8,7 @@ import CollectionTree from './Tree';
 import CollectionProcedures from './Procedures';
 import CollectionTypes from './Types';
 import {CollectionStore, ApplicationStore, ThingsdbStore} from '../../Stores';
-import {findItem, TitlePage} from '../Util';
+import {findItem, isObjectEmpty, TitlePage} from '../Util';
 
 
 const withStores = withVlow([{
@@ -33,30 +33,34 @@ const Collection = ({match, collections}) => {
     const selectedCollection = findItem(match.index, collections);
 
     return (
-        <TitlePage
-            preTitle='Overview of:'
-            title={selectedCollection.name}
-            content={
-                <React.Fragment>
-                    <Grid container item md={7} xs={12}>
-                        <Grid className={classes.spacing} item xs={12}>
-                            <CollectionConfig collection={selectedCollection} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <CollectionTree collection={selectedCollection} />
-                        </Grid>
-                    </Grid>
-                    <Grid container item md={5} xs={12}>
-                        <Grid className={classes.spacing} item xs={12}>
-                            <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <CollectionTypes scope={`@collection:${selectedCollection.name}`} />
-                        </Grid>
-                    </Grid>
-                </React.Fragment>
-            }
-        />
+        <React.Fragment>
+            {isObjectEmpty(selectedCollection) ? null : (
+                <TitlePage
+                    preTitle='Overview of:'
+                    title={selectedCollection.name}
+                    content={
+                        <React.Fragment>
+                            <Grid container item md={7} xs={12}>
+                                <Grid className={classes.spacing} item xs={12}>
+                                    <CollectionConfig collection={selectedCollection} />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <CollectionTree collection={selectedCollection} />
+                                </Grid>
+                            </Grid>
+                            <Grid container item md={5} xs={12}>
+                                <Grid className={classes.spacing} item xs={12}>
+                                    <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <CollectionTypes scope={`@collection:${selectedCollection.name}`} />
+                                </Grid>
+                            </Grid>
+                        </React.Fragment>
+                    }
+                />
+            )}
+        </React.Fragment>
     );
 };
 

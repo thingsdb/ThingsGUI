@@ -27,7 +27,7 @@ const Remove = ({user}) => {
         ThingsdbActions.removeUser(
             user.name,
             tag,
-            () => setShow(false)
+            () => null,
         );
     };
 

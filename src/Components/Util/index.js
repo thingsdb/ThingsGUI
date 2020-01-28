@@ -68,8 +68,8 @@ const thingValue = (type, thing, customTypes=[]) => {
                                 : '';
 };
 
-const isObjectEmpty = (obj) => Object.entries(obj).length === 0 && obj.constructor === Object;
-const findItem = (index, target) => target.length ? (index+1 > target.length ? findItem(index-1, target) : target[index]) : {};
+const isObjectEmpty = (obj) => obj.constructor === Object && Object.entries(obj).length === 0;
+const findItem = (index, target) => target.length ? (index+1 > target.length ? {}: target[index]) : {}; //findItem(index-1, target) : target[index]) : {};
 
 const getScopes = (collections) => [
     [

@@ -41,7 +41,7 @@ const Remove = ({collection}) => {
         ThingsdbActions.removeCollection(
             collection.name,
             tag,
-            () => setShow(false)
+            ()=>null,
         );
     };
 

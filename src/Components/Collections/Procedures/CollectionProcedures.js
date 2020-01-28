@@ -65,7 +65,7 @@ const CollectionProcedures = ({scope}) => {
                 title="procedures"
             />
             <AddProcedureDialog open={openAdd} onClose={handleCloseAdd} scope={scope} cb={handleProcedures} />
-            <EditProcedureDialog open={openEdit} onClose={handleCloseEdit} input={index!=null?procedures[index]:{}} scope={scope} cb={handleProcedures} />
+            <EditProcedureDialog open={openEdit} onClose={handleCloseEdit} procedure={index!=null?procedures[index]:{}} scope={scope} cb={handleProcedures} />
         </React.Fragment>
     );
 };

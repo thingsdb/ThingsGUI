@@ -140,6 +140,8 @@ The __secure connection (TLS)__ has to be switched on if the connection with Thi
 
 You can save the connection configuration locally if you like to speed up the process next time. To do this you need to click the __SAVE__ button that you can find in the bottom left corner of the login dialog. This opens a dialog where you can enter a recognizable name that will serve as an alias for the connection configuration. The saved connections can be altered as well as deleted.
 
+<img src="markdownImg/savedConnections.png?" alt="alt Login" style="zoom:80%;" />
+
 
 
 ## ThingsGUI tour

@@ -26,34 +26,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
-import { ErrorMsg, SimpleModal } from '../Util';
+import { ErrorMsg, isObjectEmpty, SimpleModal } from '../Util';
 import {ApplicationStore, ApplicationActions} from '../../Stores';
 
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['loaded', 'connected', 'savedConnections']
 }]);
-
-
-
-const initialState = {
-    errors: {},
-    form: {
-        address: 'localhost:9200',
-        insecureSkipVerify: false,
-        name: '',
-        password: '',
-        secureConnection: false,
-        token: '',
-        user: '',
-    },
-    loginWith: 'credentials',
-    showOther: false,
-    showPassword: false,
-    showToken: false,
-    disableName: false,
-    openSaveConn: false
-};
 
 const validation = {
     name: (f) => {
@@ -91,15 +70,27 @@ const validation = {
 const tag = '0';
 
 const Login = ({connected, loaded, savedConnections}) => {
+    const initialState = {
+        errors: {},
+        form: {
+            address: 'localhost:9200',
+            insecureSkipVerify: false,
+            name: '',
+            password: '',
+            secureConnection: false,
+            token: '',
+            user: '',
+        },
+        loginWith: 'credentials',
+        showOther: isObjectEmpty(savedConnections),
+        showPassword: false,
+        showToken: false,
+        disableName: false,
+        openSaveConn: false
+    };
     const [state, setState] = React.useState(initialState);
     const {showPassword, showToken, errors, loginWith, form, openSaveConn, showOther, disableName} = state;
     const [notifySaved, setNotifySaved] = React.useState(false);
-
-    React.useEffect(() => {
-        ApplicationActions.getConn(tag);
-    },
-    [],
-    );
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -281,7 +272,7 @@ const Login = ({connected, loaded, savedConnections}) => {
                                     </ListItemSecondaryAction>
                                 </ListItem>
                             ))}
-                            {Object.entries(savedConnections).length==0 &&
+                            {isObjectEmpty(savedConnections) &&
                                 <ListItem>
                                     <ListItemText secondary="No saved connections" secondaryTypographyProps={{variant: 'caption'}} />
                                 </ListItem>}

@@ -59,6 +59,7 @@ const Root = ({loaded, connected}) => {
     React.useEffect(() => {
         ApplicationActions.pushNotifications();
         EventActions.openEventChannel();
+        ApplicationActions.getConn('0'); // errmsg shown at Login dialog
     },
     [],
     );

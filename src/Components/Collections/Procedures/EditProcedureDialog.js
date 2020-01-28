@@ -1,14 +1,16 @@
 /* eslint-disable react/no-multi-comp */
+
 import {makeStyles} from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-
 import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {ErrorMsg, SimpleModal} from '../../Util';
 import {AddClosure} from '../Tree/TreeUtils';
@@ -32,23 +34,23 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-const EditProcedureDialog = ({open, onClose, input, scope, cb}) => {
+const EditProcedureDialog = ({open, onClose, procedure, scope, cb}) => {
     const classes = useStyles();
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');
 
     React.useEffect(() => {
         if (open) {
-            setClosure(input.definition);
+            setClosure(procedure.definition);
         }
     },
-    [JSON.stringify(input)],
+    [JSON.stringify(procedure)],
     );
 
     React.useEffect(() => {
-        setQueryString(`del_procedure("${input.name}"); new_procedure("${input.name}", ${closure});`);
+        setQueryString(`del_procedure("${procedure.name}"); new_procedure("${procedure.name}", ${closure});`);
     },
-    [input.name, closure],
+    [procedure.name, closure],
     );
 
     const handleClosure = (c) => {
@@ -95,7 +97,7 @@ const EditProcedureDialog = ({open, onClose, input, scope, cb}) => {
                                 {'Customizing ThingDB procedure:'}
                             </Typography>
                             <Typography variant="h4" color='primary' component='span'>
-                                {input.name||''}
+                                {procedure.name||''}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -136,6 +138,13 @@ const EditProcedureDialog = ({open, onClose, input, scope, cb}) => {
                             <ListItem>
                                 <AddClosure input={closure} cb={handleClosure} />
                             </ListItem>
+                            <ListItem>
+                                <Grid container item xs={11} justify="flex-end">
+                                    <Box fontSize={10} fontStyle="italic" m={1}>
+                                        {`Created on: ${moment(procedure.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                                    </Box>
+                                </Grid>
+                            </ListItem>
                         </List>
                     </Grid>
                 </Grid>
@@ -145,13 +154,13 @@ const EditProcedureDialog = ({open, onClose, input, scope, cb}) => {
 };
 
 EditProcedureDialog.defaultProps = {
-    input: {},
+    procedure: {},
 };
 
 EditProcedureDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    input: PropTypes.object,
+    procedure: PropTypes.object,
     scope: PropTypes.string.isRequired,
     cb: PropTypes.func.isRequired,
 };
