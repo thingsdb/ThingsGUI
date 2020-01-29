@@ -13,7 +13,15 @@ const Node = ({selectedNode}) => {
     const [tabIndex, setTabIndex] = React.useState(0);
 
     React.useEffect(() => {
-        switch(tabIndex){
+        NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
+        NodesActions.getCounters(selectedNode.node_id); // update of the selected node; to get the latest info
+        NodesActions.getBackups(selectedNode.node_id);
+    }, [selectedNode.node_id]);
+
+    const handleChangeTab = (_event, newValue) => {
+        setTabIndex(newValue);
+
+        switch(newValue){
         case 0:
             NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
             break;
@@ -24,16 +32,6 @@ const Node = ({selectedNode}) => {
             NodesActions.getBackups(selectedNode.node_id);
             break;
         }
-    }, [tabIndex]);
-
-    React.useEffect(() => {
-        NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
-        NodesActions.getCounters(selectedNode.node_id); // update of the selected node; to get the latest info
-        NodesActions.getBackups(selectedNode.node_id);
-    }, [selectedNode.node_id]);
-
-    const handleChangeTab = (_event, newValue) => {
-        setTabIndex(newValue);
     };
 
     const offline = selectedNode.status == 'OFFLINE';

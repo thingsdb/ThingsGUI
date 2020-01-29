@@ -1,15 +1,13 @@
 import {withVlow} from 'vlow';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {ApplicationStore, CollectionActions, CollectionStore, ErrorActions, ProcedureActions, ProcedureStore, TypeActions} from '../../Stores';
-import {ChipsCard, ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput} from '../Util';
+import {ChipsCard, ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput, WarnPopover} from '../Util';
 import SelectScope from './SelectScope';
 
 
@@ -45,6 +43,8 @@ const Editor = ({match}) => {
     const [isResizing, setIsResizing] = React.useState(false);
     const [newHeight, setNewHeight] = React.useState(200);
     const [expandOutput, setExpandOutput] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [warnDescription, setWarnDescription] = React.useState('');
 
     React.useEffect(() => {
         if (isResizing) {
@@ -146,7 +146,7 @@ const Editor = ({match}) => {
         ProcedureActions.deleteProcedure(
             scope.value,
             procedures[index].name,
-            tag,
+            '27',
             (p) => {
                 cb();
                 handleProcedures(p);
@@ -158,11 +158,20 @@ const Editor = ({match}) => {
         setQueryInput('new_procedure("...", ...)');
     };
     const customTypeNames = [...customTypes.map(c=>c.name)];
-    const makeTypeInstanceInit = (index) =>
-        `${customTypes[index].name}{${customTypes[index].fields.map(c =>`${c[0]}: ${customTypeNames.includes(c[1]) ? makeTypeInstanceInit(customTypeNames.indexOf(c[1])) : `<${c[1]}>`}` )}}`;
+    const makeTypeInstanceInit = (index, circularRefFlag, target) => {
+        if (circularRefFlag[customTypes[index].name]) {
+            setAnchorEl(target);
+            setWarnDescription(`Circular reference detected in type ${customTypes[index].name}`);
+            return '';
+        } else {
+            circularRefFlag[customTypes[index].name] = true;
+        }
+        return `${customTypes[index].name}{${customTypes[index].fields.map(c =>`${c[0]}: ${customTypeNames.includes(c[1]) ? makeTypeInstanceInit(customTypeNames.indexOf(c[1]), circularRefFlag, target) : `<${c[1]}>`}` )}}`;
+    };
 
-    const handleClickTypes = (index) => {
-        const i = makeTypeInstanceInit(index);
+    const handleClickTypes = (index, target) => {
+        const circularRefFlag = {};
+        const i = makeTypeInstanceInit(index, circularRefFlag, target);
         setQueryInput(i);
     };
 
@@ -170,7 +179,7 @@ const Editor = ({match}) => {
         TypeActions.deleteType(
             scope.value,
             customTypes[index].name,
-            tag,
+            '27',
             (t) => {
                 cb();
                 handleTypes(t);
@@ -182,10 +191,14 @@ const Editor = ({match}) => {
         setQueryInput('set_type("...", {...})');
     };
 
+    const handleCloseDelete = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <TitlePage2
             preTitle='Customize your query:'
-            title={scope.value||''}
+            title={scope&&scope.value||''}
             content={
                 <React.Fragment>
                     <Grid item xs={12}>
@@ -222,10 +235,11 @@ const Editor = ({match}) => {
             }
             sideContent={
                 <React.Fragment>
+                    <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} description={warnDescription} />
                     <Grid item xs={12}>
                         <SelectScope scope={match.scope} onChangeScope={handleOnChangeScope} />
                     </Grid>
-                    {scope.value && scope.value.includes('@node') ? null : (
+                    {scope&&scope.value && scope.value.includes('@node') ? null : (
                         <Grid item xs={12}>
                             <ChipsCard
                                 expand={false}
@@ -233,12 +247,11 @@ const Editor = ({match}) => {
                                 onAdd={handleClickAddProcedure}
                                 onClick={handleClickProcedure}
                                 onDelete={handleClickDeleteProcedure}
-                                tag={tag}
                                 title="procedures"
                             />
                         </Grid>
                     )}
-                    {scope.value && scope.value.includes('@collection') ? (
+                    {scope&&scope.value && scope.value.includes('@collection') ? (
                         <Grid item xs={12}>
                             <ChipsCard
                                 expand={false}
@@ -246,7 +259,6 @@ const Editor = ({match}) => {
                                 onAdd={handleClickAddTypes}
                                 onClick={handleClickTypes}
                                 onDelete={handleClickDeleteTypes}
-                                tag={tag}
                                 title="custom types"
                             />
                         </Grid>

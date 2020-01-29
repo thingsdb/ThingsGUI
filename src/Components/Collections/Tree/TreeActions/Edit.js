@@ -8,6 +8,7 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import BuildQueryString from './BuildQueryString';
 import InputField from './InputField';
+import {LocalErrorMsg} from '../../../Util';
 
 const useStyles = makeStyles(theme => ({
     listItem: {
@@ -50,12 +51,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     const [error, setError] = React.useState('');
     const [newProperty, setNewProperty] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type);
-
-    React.useEffect(() => {
-        cb(queryString, blob, error);
-    },
-    [queryString, JSON.stringify(blob)],
-    );
+    const [warnDescription, setWarnDescription] = React.useState('');
 
     const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
 
@@ -68,6 +64,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     const handleOnChangeType = ({target}) => {
         const {value} = target;
+        setWarnDescription('');
+        checkCircularRef(value, {});
         setValue('');
         setBlob({});
         setDataType(value);
@@ -75,6 +73,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     const handleQuery = (q) => {
         setQueryString(q);
+        cb(queryString, blob, error);
     };
 
     const handleVal = (v) => {
@@ -83,10 +82,28 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     const handleBlob = (b) => {
         setBlob(b);
+        cb(queryString, blob, error);
     };
 
     const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
+
+    const customTypeNames = [...customTypes.map(c=>c.name)];
+
+
+    const checkCircularRef = (type, circularRefFlag) => {
+        if (type[0] === '[' || type[0] === '{') {
+            type = type.slice(1, -1);
+        }
+        if (customTypeNames.includes(type)) {
+            if (circularRefFlag[type]) {
+                setWarnDescription(`Circular reference detected in type ${type}. `);
+            } else {
+                circularRefFlag[type] = true;
+                customTypes.find(c=> c.name == type).fields.map(f=>checkCircularRef(f[1], circularRefFlag));
+            }
+        }
+    };
 
     return(
         <React.Fragment>
@@ -148,7 +165,11 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                         </TextField>
                     )}
                 </ListItem>
-                <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
+                {warnDescription ? (
+                    <LocalErrorMsg msgError={warnDescription} />
+                ) : (
+                    <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
+                )}
             </List>
         </React.Fragment>
     );

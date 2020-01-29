@@ -47,6 +47,7 @@ class ErrorStore extends Vlow.Store {
     }
 
     onSetMsgError(tag, error) {
+        console.log(tag, error);
         this.setState(prevState => {
             const err = Object.assign({}, prevState.msgError, {[tag]: error});
             return {msgError: err};

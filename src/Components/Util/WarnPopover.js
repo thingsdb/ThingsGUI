@@ -39,23 +39,26 @@ const WarnPopover = ({anchorEl, onClose, onOk, description}) => {
                 {description}
             </Typography>
             <Button onClick={onClose}>
-                {'Cancel'}
+                {'Close'}
             </Button>
-            <Button onClick={onOk}>
-                {'Ok'}
-            </Button>
+            {onOk && (
+                <Button onClick={onOk}>
+                    {'Ok'}
+                </Button>
+            )}
         </Popover>
     );
 };
 
 WarnPopover.defaultProps = {
     anchorEl: {},
+    onOk: null,
 };
 
 WarnPopover.propTypes = {
     anchorEl: PropTypes.object,
     onClose: PropTypes.func.isRequired,
-    onOk: PropTypes.func.isRequired,
+    onOk: PropTypes.func,
     description: PropTypes.string.isRequired,
 };
 

@@ -53,7 +53,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
     [open],
     );
 
-    React.useEffect(() => {
+    React.useEffect(() => { // keep this useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
         setState({...state, queryString: `set_type("${typeName}", {${properties.map((v, i)=>(`${v.propertyName}: '${v.propertyType}'`))}})`});
     },
     [typeName, JSON.stringify(properties)],
@@ -66,7 +66,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
 
     const handleChangeProperty = (index) => (property) => {
         setState(prevState => {
-            let update = [...prevState.properties];
+            let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
             update.splice(index, 1, property);
             return {...prevState, properties: update};
         });

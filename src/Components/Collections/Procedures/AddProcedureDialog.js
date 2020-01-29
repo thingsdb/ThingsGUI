@@ -51,19 +51,13 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
     [open],
     );
 
-    React.useEffect(() => {
-        setState({...state, queryString: `new_procedure("${procedureName}", ${closure})`});
-    },
-    [procedureName, closure],
-    );
-
     const handleChange = ({target}) => {
         const {value} = target;
-        setState({...state, procedureName: value});
+        setState({...state, procedureName: value, queryString: `new_procedure("${value}", ${closure})`});
     };
 
     const handleClosure = (c) => {
-        setState({...state, closure: c});
+        setState({...state, queryString: `new_procedure("${procedureName}", ${c})`});
     };
 
 

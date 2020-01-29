@@ -17,19 +17,18 @@ const withStores = withVlow([{
 }]);
 
 const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
-    const [index, setIndex] = React.useState(0);
-    const [scopesObj, scopeNames] = getScopes2(collections, nodes);
+    const [name, setName] = React.useState(scope||`@collection:${collections[0].name}`);
+    const [scopesObj] = getScopes2(collections, nodes);
 
-    React.useEffect(() => {
-        const index = scope==''?scopeNames.findIndex(i=>i.includes('collection')):scopeNames.indexOf(scope);
-        setIndex(index);
-        onChangeScope(scopesObj[index]);
+    React.useEffect(()=> {
+        let name = scope||`@collection:${collections[0].name}`;
+        onChangeScope(scopesObj.find(i=>i.value===name));
     }, []);
 
     const handleOnChangeScope = ({target}) => {
         const {value} = target;
-        setIndex(value);
-        onChangeScope(scopesObj[value]);
+        setName(value);
+        onChangeScope(scopesObj.find(i=>i.value===value));
     };
 
     return (
@@ -37,9 +36,9 @@ const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
             expand={false}
             title="SCOPE"
             content={
-                <RadioGroup aria-label="scope" name="scope" value={`${index}`} onChange={handleOnChangeScope}>
+                <RadioGroup aria-label="scope" name="scope" value={name} onChange={handleOnChangeScope}>
                     {scopesObj.map((s, i) => (
-                        <FormControlLabel key={s.value} value={`${i}`} control={<Radio color='primary' />} label={s.value} />
+                        <FormControlLabel key={s.value} value={s.value} control={<Radio color='primary' />} label={s.value} />
                     ))}
                 </RadioGroup>
             }

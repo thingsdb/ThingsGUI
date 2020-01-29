@@ -90,7 +90,7 @@ const CollectionTypes = ({scope}) => {
         TypeActions.deleteType(
             scope,
             item.name,
-            tag,
+            '27',
             (t) => {
                 cb();
                 handleTypes(t);
@@ -106,7 +106,6 @@ const CollectionTypes = ({scope}) => {
                 onAdd={handleClickAdd}
                 onClick={handleClickEdit}
                 onDelete={handleClickDelete}
-                tag={tag}
                 title="custom types"
             />
             <AddTypeDialog open={openAdd} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} cb={handleTypes} />

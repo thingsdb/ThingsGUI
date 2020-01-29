@@ -45,7 +45,7 @@ const CollectionProcedures = ({scope}) => {
         ProcedureActions.deleteProcedure(
             scope,
             item.name,
-            tag,
+            '27',
             (p)=> {
                 cb();
                 handleProcedures(p);
@@ -61,7 +61,6 @@ const CollectionProcedures = ({scope}) => {
                 onAdd={handleClickAdd}
                 onClick={handleClickEdit}
                 onDelete={handleClickDelete}
-                tag={tag}
                 title="procedures"
             />
             <AddProcedureDialog open={openAdd} onClose={handleCloseAdd} scope={scope} cb={handleProcedures} />

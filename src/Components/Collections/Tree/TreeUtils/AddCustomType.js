@@ -82,7 +82,7 @@ const typeConv = {
 
 const single = ['bool', 'bytes', 'float', 'int', 'nil', 'str', 'utf8', 'raw', 'uint', 'pint', 'nint', 'number'];
 
-const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
+const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
     const classes = useStyles();
     const [blob, setBlob] = React.useState({});
     const [dataType, setDataType] = React.useState({});
@@ -270,12 +270,10 @@ const AddCustomType = ({customTypes, dataTypes, name, onBlob, onVal, type}) => {
 
 AddCustomType.defaultProps = {
     customTypes: null,
-    name: '',
 };
 AddCustomType.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    name: PropTypes.string,
     onBlob: PropTypes.func.isRequired,
     onVal: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,

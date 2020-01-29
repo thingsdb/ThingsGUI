@@ -25,14 +25,15 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+const tag = '27';
 
-const ChipsCard = ({title, items, onAdd, onClick, onDelete, expand, tag}) => {
+const ChipsCard = ({title, items, onAdd, onClick, onDelete, expand}) => {
     const classes = useStyles();
     const [deleteIndex, setDeleteIndex] = React.useState(null);
     const [switchDel, setSwitchDel] = React.useState(false);
 
-    const handleClick = (index) => () => {
-        onClick(index);
+    const handleClick = (index) => ({target}) => {
+        onClick(index, target);
     };
 
     const handleClickDelete = () => {
@@ -142,7 +143,6 @@ ChipsCard.propTypes = {
     onClick: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
     expand: PropTypes.bool,
-    tag: PropTypes.string.isRequired,
 };
 
 export default ChipsCard;
