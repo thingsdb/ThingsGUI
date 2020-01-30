@@ -195,11 +195,10 @@ class EventStore extends BaseStore {
     }
 
     onOpenEventChannel() {
-        console.log('Eventchn');
         socket.emit('getEvent', 'hoi');
 
         socket.on('event', (data) => {
-            console.log(data.Data);
+            console.log(data);
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);
@@ -211,7 +210,6 @@ class EventStore extends BaseStore {
                 this.watchDel(data.Data);
                 break;
             case ProtoMap.ProtoOnNodeStatus:
-                console.log(data.Data);
                 this.nodeStatus(data.Data);
                 break;
             case ProtoMap.ProtoOnWarn:
@@ -368,9 +366,8 @@ class EventStore extends BaseStore {
     new_procedure(id, newProcedure) {
         const {watchIds} = this.state;
         let scope = watchIds[id];
-        console.log(newProcedure);
         let name = newProcedure.name;
-        let def = newProcedure['/']['/'];
+        let def = newProcedure['closure']['/'];
 
         this.setState(prevState => {
             const update = Object.assign({}, prevState.watchProcedures[scope][id], {[name]: def});
@@ -503,7 +500,7 @@ class EventStore extends BaseStore {
         const {watchIds} = this.state;
         let scope = watchIds[id];
         let key = Object.keys(set)[0];
-        let obj = set[key].hasOwnProperty('&') ? set[key] : {'#': set[key]['#']};
+        let obj = set[key].hasOwnProperty('#') ? {'#': set[key]['#']} : set[key];
         this.setState(prevState => {
             const update = Object.assign({}, prevState.watchThings[scope][id], {[key]: obj});
             const update2 = Object.assign({}, prevState.watchThings[scope], {[id]: update});

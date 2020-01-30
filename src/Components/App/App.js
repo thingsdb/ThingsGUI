@@ -48,7 +48,7 @@ const App = ({match}) => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    console.log('app');
+
     return(
         <DrawerLayout
             open={open}

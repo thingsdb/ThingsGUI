@@ -61,8 +61,6 @@ const Tokens = ({user}) => {
         document.execCommand('copy');
     };
 
-    console.log('tokens');
-
     return (
         <HarmonicCard
             expand={false}

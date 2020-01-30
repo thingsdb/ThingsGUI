@@ -80,8 +80,6 @@ const NodeConfig = ({nodeId, offline, node}) => {
         };
     }, []);
 
-    console.log('nodeconfig');
-
     return (
         <Grid
             container

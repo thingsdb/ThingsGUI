@@ -59,8 +59,6 @@ const Counters = ({nodeId, offline, counters}) => {
         };
     }, []);
 
-    console.log('counters');
-
     return (
         <Grid
             container

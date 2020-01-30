@@ -187,7 +187,6 @@ class NodesStore extends BaseStore {
             query
         }).done((data) => {
             if (JSON.stringify(data) != JSON.stringify(backups)){
-                console.log(data, backups);
                 this.setState({
                     backups: data,
                 });

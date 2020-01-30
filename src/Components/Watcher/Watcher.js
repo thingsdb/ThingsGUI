@@ -129,8 +129,6 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
 
     const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
 
-    console.log('watcher');
-
     return (
         <Grid container spacing={2}>
             <Grid className={classes.grid} container item xs={12} spacing={1} alignItems="center" >

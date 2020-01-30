@@ -99,8 +99,6 @@ const AddArray = ({childTypes, customTypes, dataTypes, onBlob, onVal, isSet}) =>
         setPreBlob({...b});
     };
 
-
-
     return (
         <Grid container>
             <ListHeader onAdd={handleAdd} onDelete={handleClick} items={myItems} groupSign="[">

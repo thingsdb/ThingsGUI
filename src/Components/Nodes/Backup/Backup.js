@@ -64,7 +64,7 @@ const Backup = ({nodeId, offline, backups}) => {
     const handleRowClick = () => null;
 
     const handleButtons = (backup) => <Remove nodeId={nodeId} backup={backup} />;
-    console.log('backups', backups);
+
     const rows = JSON.parse(JSON.stringify(backups));
 
     rows.map(b=> {
@@ -75,7 +75,6 @@ const Backup = ({nodeId, offline, backups}) => {
             </Tooltip>
         ) : b.next_run;
         const res_code = b.result_code;
-        console.log(res_code);
         b.result_code = b.result_code==undefined ? (
             b.result_code
         ) : b.result_code == 0 ? (
@@ -87,8 +86,6 @@ const Backup = ({nodeId, offline, backups}) => {
                 <FailedIcon color="error" />
             </Tooltip>
         );
-
-        console.log(b);
         return b;
     });
 

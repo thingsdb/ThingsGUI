@@ -36,8 +36,6 @@ const Node = ({selectedNode}) => {
 
     const offline = selectedNode.status == 'OFFLINE';
 
-    console.log('node');
-
     return selectedNode ? (
         <React.Fragment>
             <Tabs value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example">
