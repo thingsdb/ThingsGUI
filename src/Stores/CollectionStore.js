@@ -50,6 +50,7 @@ class CollectionStore extends BaseStore {
 
     onQueryWithReturn(scope, q, thingId, tag, cb) {
         const query = `${q} #${thingId}`;
+        console.log(query);
         this.emit('query', {
             query,
             scope

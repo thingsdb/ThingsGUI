@@ -60,12 +60,14 @@ const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
         } else {
             query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}.${parent.name}), customTypes: types_info()}`; // check if custom type
         }
+        console.log(query, scope);
         TypeActions.getType(query, scope, tag, setType);
 
     }, []);
 
-
+    console.log(customTypes);
     const setType = (t) => {
+        console.log(t);
         setState({...state, realChildType: t.childType, realParentType: t.parentType, show: true, customTypes: t.customTypes});
     };
 

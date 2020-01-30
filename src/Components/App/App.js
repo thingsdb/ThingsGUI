@@ -111,13 +111,6 @@ App.propTypes = {
 
     /* Application properties */
     match: ApplicationStore.types.match.isRequired,
-    // openEditor: ApplicationStore.types.openEditor.isRequired,
-
 };
-
-// const areEqual = (prevProps, nextProps) => {
-//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-// };
-
 
 export default withStores(App);

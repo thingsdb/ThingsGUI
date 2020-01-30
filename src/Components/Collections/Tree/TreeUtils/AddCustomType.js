@@ -1,7 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import { makeStyles } from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
-import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -82,6 +81,59 @@ const typeConv = {
 
 const single = ['bool', 'bytes', 'float', 'int', 'nil', 'str', 'utf8', 'raw', 'uint', 'pint', 'nint', 'number'];
 
+const typing = ([fprop, type], dataTypes) =>  {
+    let t = type.trim();
+    let opt=false;
+    let arr=false;
+    let ftype = [];
+    let fchldtype = null;
+
+
+    if (t.slice(-1)=='?') {
+        opt = true;
+        t = t.slice(0, -1);
+    }
+
+    if (t[0]=='[') {
+        arr=true;
+        ftype = opt?['nil', 'list']:['list'];
+        t = t.slice(1, -1)?t.slice(1, -1):'any';
+    } else if (t[0]=='{') {
+        arr=true;
+        ftype = opt?['nil', 'set']:['set'];
+        t = t.slice(1, -1)?t.slice(1, -1):'thing';
+    } else {
+        if (opt) {
+            ftype= t=='any' ? dataTypes
+                : typeConv[t] ? ['nil', ...typeConv[t]]
+                    : ['nil', t];
+
+        } else {
+            ftype= t=='any' ? dataTypes
+                : typeConv[t] ? typeConv[t]
+                    : [t];
+        }
+    }
+
+    // if array set childtypes
+    if (arr) {
+        if (t.slice(-1)=='?') {
+            t = t.slice(0, -1);
+            fchldtype= t=='any' ? dataTypes
+                : typeConv[t] ? ['nil', ...typeConv[t]]
+                    : ['nil', t];
+        } else {
+            fchldtype= t=='any' ? dataTypes
+                : typeConv[t] ? typeConv[t]
+                    : [t];
+        }
+    }
+
+    return(
+        [fprop, ftype, fchldtype]
+    );
+};
+
 const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
     const classes = useStyles();
     const [blob, setBlob] = React.useState({});
@@ -149,67 +201,17 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
         // setVal({});
     };
 
-    const typing = ([name, type]) =>  {
-        let t = type.trim();
-        let opt=false;
-        let arr=false;
-        let tps = [];
-        let chldTps = null;
-        if (t.slice(-1)=='?') {
-            opt = true;
-            t = t.slice(0, -1);
-        }
-
-        if (t[0]=='[') {
-            arr=true;
-            tps = opt?['nil', 'list']:['list'];
-            t = t.slice(1, -1)?t.slice(1, -1):'any';
-        } else if (t[0]=='{') {
-            arr=true;
-            tps = opt?['nil', 'set']:['set'];
-            t = t.slice(1, -1)?t.slice(1, -1):'thing';
-        } else {
-            if (opt) {
-                tps= t=='any' ? dataTypes
-                    : typeConv[t] ? ['nil', ...typeConv[t]]
-                        : ['nil', t];
-
-            } else {
-                tps= t=='any' ? dataTypes
-                    : typeConv[t] ? typeConv[t]
-                        : [t];
-            }
-        }
-
-        if (arr) {
-            if (t.slice(-1)=='?') {
-                t = t.slice(0, -1);
-                chldTps= t=='any' ? dataTypes
-                    : typeConv[t] ? ['nil', ...typeConv[t]]
-                        : ['nil', t];
-            } else {
-                chldTps= t=='any' ? dataTypes
-                    : typeConv[t] ? typeConv[t]
-                        : [t];
-            }
-        }
-
-        return(
-            [name, tps, chldTps]
-        );
-    };
-
-    const typeProperties = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
-    const typesFields = typeProperties?typeProperties.fields.map(c=>typing(c)):[];
+    const typeObj = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
+    const typeFields = typeObj?typeObj.fields.map(c=>typing(c, dataTypes)):[];
 
 
     return(
         <React.Fragment>
-            {typesFields&&(
+            {typeFields&&(
                 <Grid container>
                     <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={myItems} name={type} groupSign="{">
                         <Collapse className={classes.fullWidth} in={open} timeout="auto">
-                            {( typesFields.map((c, i) => (
+                            {( typeFields.map(([fprop, ftype, fchldtype], i) => (
                                 <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
                                     {/* <Grid item xs={1}>
                                         <FiberManualRecord color="primary" fontSize="small" />
@@ -219,7 +221,7 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
                                             type="text"
                                             name="property"
                                             label="Property"
-                                            value={c[0]}
+                                            value={fprop}
                                             variant="standard"
                                             fullWidth
                                             disabled
@@ -230,30 +232,30 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
                                             type="text"
                                             name="dataType"
                                             label="Data type"
-                                            onChange={handleChangeType(c[0])}
-                                            value={dataType[c[0]]||c[1][0]}
+                                            onChange={handleChangeType(fprop)}
+                                            value={dataType[fprop]||ftype[0]}
                                             variant="standard"
                                             select
                                             SelectProps={{native: true}}
                                             fullWidth
-                                            disabled={c[1].length<2}
+                                            disabled={ftype.length<2}
                                         >
-                                            {c[1].map((p) => (
+                                            {ftype.map((p) => (
                                                 <option key={p} value={p}>
                                                     {p}
                                                 </option>
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={single.includes(dataType[c[0]]||c[1][0])?7:12}>
+                                    <Grid item xs={single.includes(dataType[fprop]||ftype[0])?7:12}>
                                         <InputField
                                             customTypes={customTypes}
-                                            dataType={dataType[c[0]]||c[1][0]}
+                                            dataType={dataType[fprop]||ftype[0]}
                                             dataTypes={dataTypes}
-                                            childTypes={c[2]}
-                                            input={val[c[0]]||''}
+                                            childTypes={fchldtype}
+                                            input={val[fprop]||''}
                                             onBlob={handleBlob}
-                                            onVal={handleVal(c[0])}
+                                            onVal={handleVal(fprop)}
                                             variant="standard"
                                             label="Value"
                                         />

@@ -82,37 +82,40 @@ const Login = ({connected, loaded, savedConnections}) => {
             user: '',
         },
         loginWith: 'credentials',
-        showOther: isObjectEmpty(savedConnections),
+        showNewConn: isObjectEmpty(savedConnections),
         showPassword: false,
         showToken: false,
         disableName: false,
         openSaveConn: false
     };
     const [state, setState] = React.useState(initialState);
-    const {showPassword, showToken, errors, loginWith, form, openSaveConn, showOther, disableName} = state;
+    const {showPassword, showToken, errors, loginWith, form, openSaveConn, showNewConn, disableName} = state;
     const [notifySaved, setNotifySaved] = React.useState(false);
+
+    const handleNewConn = () => {
+        setState({
+            ...state,
+            disableName: false,
+            form: {
+                address: 'localhost:9200',
+                insecureSkipVerify: false,
+                name: '',
+                password: '',
+                secureConnection: false,
+                token: '',
+                user: '',
+            },
+            showNewConn: true,
+            showToken: false,
+        });
+    };
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
         setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
+            const updatedForm = {...prevState.form, [id]: value};
             return {...prevState, form: updatedForm, errors: {}};
         });
-    };
-
-    const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = ky=='name'?false:validation[ky](form);  return d; }, {});
-        setState({...state, errors: err});
-        if (!Object.values(err).some(d => Boolean(d))) {
-            ApplicationActions.connect(form, tag);
-        }
-    };
-
-    const handleKeyPress = (event) => {
-        const {key} = event;
-        if (key == 'Enter') {
-            handleClickOk();
-        }
     };
 
     const handleClickShowPassword = () => {
@@ -127,12 +130,12 @@ const Login = ({connected, loaded, savedConnections}) => {
         const {value} = target;
         if (value=='credentials') {
             setState(prevState => {
-                const updatedForm = Object.assign({}, prevState.form, {user: '', password: ''});
+                const updatedForm = {...prevState.form, user: '', password: ''}; // Object.assign({}, prevState.form, {user: '', password: ''});
                 return {...prevState, form: updatedForm, loginWith: value, errors: {}};
             });
         } else {
             setState(prevState => {
-                const updatedForm = Object.assign({}, prevState.form, {token: ''});
+                const updatedForm = {...prevState.form, token: ''};
                 return {...prevState, form: updatedForm, loginWith: value, errors: {}};
             });
         }
@@ -154,32 +157,13 @@ const Login = ({connected, loaded, savedConnections}) => {
         const login = c.token?'token':'credentials';
 
         setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, c);
-            return {...prevState, showOther: true, disableName: true, loginWith: login, form: updatedForm};
+            const updatedForm = {...prevState.form, ...c};
+            return {...prevState, showNewConn: true, disableName: true, loginWith: login, form: updatedForm};
         });
     };
 
     const handleDeleteConn = (name) => () => {
         ApplicationActions.delConn({name: name}, tag);
-    };
-
-
-    const handleOther = () => {
-        setState({
-            ...state,
-            disableName: false,
-            form: {
-                address: 'localhost:9200',
-                insecureSkipVerify: false,
-                name: '',
-                password: '',
-                secureConnection: false,
-                token: '',
-                user: '',
-            },
-            showOther: true,
-            showToken: false,
-        });
     };
 
     const handleTooltip = () => {
@@ -210,7 +194,22 @@ const Login = ({connected, loaded, savedConnections}) => {
     };
 
     const handleClickBack = () => {
-        setState({...state, showOther: false});
+        setState({...state, showNewConn: false});
+    };
+
+    const handleClickOk = () => {
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = ky=='name'?false:validation[ky](form);  return d; }, {});
+        setState({...state, errors: err});
+        if (!Object.values(err).some(d => Boolean(d))) {
+            ApplicationActions.connect(form, tag);
+        }
+    };
+
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
     };
 
     return (
@@ -249,7 +248,7 @@ const Login = ({connected, loaded, savedConnections}) => {
                 </DialogTitle>
                 <DialogContent>
                     <ErrorMsg tag={tag} />
-                    <Collapse in={!showOther} timeout="auto" unmountOnExit>
+                    <Collapse in={!showNewConn} timeout="auto" unmountOnExit>
                         <List>
                             {Object.entries(savedConnections).map(([k, v]) => (
                                 <ListItem key={k} button onClick={handleConnectToo(k)}>
@@ -276,12 +275,12 @@ const Login = ({connected, loaded, savedConnections}) => {
                                 <ListItem>
                                     <ListItemText secondary="No saved connections" secondaryTypographyProps={{variant: 'caption'}} />
                                 </ListItem>}
-                            <ListItem button onClick={handleOther}>
+                            <ListItem button onClick={handleNewConn}>
                                 <ListItemText primary="Use another connection" />
                             </ListItem>
                         </List>
                     </Collapse>
-                    <Collapse in={showOther} timeout="auto" unmountOnExit>
+                    <Collapse in={showNewConn} timeout="auto" unmountOnExit>
                         <FormControl margin="none" size="small" fullWidth>
                             <RadioGroup aria-label="position" name="position" value={loginWith} onChange={handleLoginWith} row>
                                 <FormControlLabel
@@ -395,7 +394,7 @@ const Login = ({connected, loaded, savedConnections}) => {
                         </Collapse>
                     </Collapse>
                 </DialogContent>
-                <Collapse in={showOther} timeout="auto" unmountOnExit>
+                <Collapse in={showNewConn} timeout="auto" unmountOnExit>
                     <DialogActions>
                         <Grid container>
                             <Grid item xs={6} container justify="flex-start" >

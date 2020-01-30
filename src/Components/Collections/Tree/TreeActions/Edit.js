@@ -73,7 +73,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     const handleQuery = (q) => {
         setQueryString(q);
-        cb(queryString, blob, error);
+        cb(q, blob, error);
     };
 
     const handleVal = (v) => {
@@ -82,7 +82,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
 
     const handleBlob = (b) => {
         setBlob(b);
-        cb(queryString, blob, error);
+        cb(queryString, b, error);
     };
 
     const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
