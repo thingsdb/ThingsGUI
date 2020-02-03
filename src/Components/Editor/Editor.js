@@ -20,7 +20,7 @@ const withStores = withVlow([{
     store: CollectionStore,
 }]);
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     dragger: {
         cursor: 'ns-resize',
     },
@@ -138,7 +138,7 @@ const Editor = ({match}) => {
 
     // Procedures
     const handleClickProcedure = (index) => {
-        const i = procedures[index].with_side_effects ? `wse(run('${procedures[index].name}', ${procedures[index].arguments.map(a=>` <${a}>` )}))` : `run('${procedures[index].name}', ${procedures[index].arguments.map(a=>` <${a}>` )})`;
+        const i = procedures[index].with_side_effects ? `wse(run('${procedures[index].name}',${procedures[index].arguments.map(a=>` <${a}>` )}))` : `run('${procedures[index].name}',${procedures[index].arguments.map(a=>` <${a}>` )})`;
         setQueryInput(i);
     };
 

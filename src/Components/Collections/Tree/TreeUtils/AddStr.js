@@ -1,3 +1,5 @@
+/*eslint-disable react/jsx-props-no-spreading*/
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -16,12 +18,9 @@ const AddStr = ({input, cb, ...props}) => {
             value={input[0]=='\''?input.trim().slice(1, -1):input}
             spellCheck={false}
             onChange={handleOnChange}
-            // fullWidth
             multiline
             rowsMax={10}
             {...props}
-            // helperText={error}
-            // error={Boolean(error)}
         />
     );
 };

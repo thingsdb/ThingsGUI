@@ -17,7 +17,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import {EventActions, EventStore, ThingsdbStore, TypeActions, TypeStore} from '../../Stores';
-import {ErrorMsg, ThingsTree, HarmonicTree} from '../Util';
+import {ErrorMsg, HarmonicTree} from '../Util';
 
 const withStores = withVlow([{
     store: EventStore,

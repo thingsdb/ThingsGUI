@@ -1,5 +1,3 @@
-/* global process */
-
 import Vlow from 'vlow';
 import io from 'socket.io-client';
 import PropTypes from 'prop-types';
@@ -198,7 +196,6 @@ class EventStore extends BaseStore {
         socket.emit('getEvent', 'hoi');
 
         socket.on('event', (data) => {
-            console.log(data);
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);

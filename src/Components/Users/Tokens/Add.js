@@ -8,7 +8,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Switch from '@material-ui/core/Switch';
 
-import { ErrorMsg, SimpleModal, TimePicker, TimePeriodPicker } from '../../Util';
+import { ErrorMsg, SimpleModal, TimePicker } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
 
 

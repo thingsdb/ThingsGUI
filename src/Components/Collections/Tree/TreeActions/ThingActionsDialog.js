@@ -15,7 +15,7 @@ import {DownloadBlob, ErrorMsg, SimpleModal} from '../../../Util';
 const tag = '8';
 
 
-const ThingActionsDialog = ({open, onClose, child, parent, thing, scope}) => {
+const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
 
     const initialState = {
         customTypes: [],
@@ -205,7 +205,6 @@ ThingActionsDialog.defaultProps = {
 
 
 ThingActionsDialog.propTypes = {
-    open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),

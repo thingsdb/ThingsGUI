@@ -120,7 +120,7 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
                 >
                     <Paper className={classes.paper} elevation={3}>
                         <List className={classes.list}>
-                            {list.map((p, i) => (
+                            {list.map((p) => (
                                 <ListItem button key={p} onClick={handleClick(p)} >
                                     {p}
                                 </ListItem>

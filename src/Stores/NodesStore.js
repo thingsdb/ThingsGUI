@@ -1,3 +1,5 @@
+/*eslint-disable no-unused-vars */
+
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 import moment from 'moment';

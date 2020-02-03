@@ -33,6 +33,7 @@ const header = [
         {ky: 'uptime', label: 'Uptime'},
         {ky: 'zone', label: 'Zone'},
         {ky: 'scheduled_backups', label: 'Scheduled backups'},
+        {ky: 'connected_clients', label: 'Connected clients'},
     ]},
     {ky: 'title2', title: 'PORTS', labels: [
         {ky: 'client_port', label: 'Client port'},

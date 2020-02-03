@@ -77,6 +77,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     };
 
     const handleVal = (v) => {
+        console.log(v);
         setValue(v);
     };
 

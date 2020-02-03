@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, query, blob}) => {
+const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, query}) => {
 
     React.useEffect(() => {
         handleBuildQuery(action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type);
@@ -76,12 +76,10 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
 
 BuildQueryString.defaultProps = {
     query: '',
-    blob:{},
 };
 
 BuildQueryString.propTypes = {
     action: PropTypes.string.isRequired,
-    blob: PropTypes.object,
     cb: PropTypes.func.isRequired,
     child: PropTypes.object.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,

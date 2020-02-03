@@ -24,28 +24,28 @@ const AppVersion = "0.0.1-beta"
 var connFile = ".thingsgui"
 
 var (
-	host        string
-	port        uint
-	timeout     uint
-	openBrowser bool
+	host               string
+	port               uint
+	timeout            uint
+	disableOpenBrowser bool
 )
 
 func Init() {
 	flag.StringVar(&host, "host", "0.0.0.0", "Specific host for the http webserver.")
 	flag.UintVar(&port, "port", 5000, "Specific port for the http webserver.")
 	flag.UintVar(&timeout, "timeout", 60, "Connect and query timeout in seconds")
-	flag.BoolVar(&openBrowser, "open", true, "opens ThingsGUI in your default browser")
+	flag.BoolVar(&disableOpenBrowser, "disable-open-browser", false, "opens ThingsGUI in your default browser")
 
 	flag.Parse()
 }
 
 type App struct {
-	host        string
-	port        uint16
-	server      *socketio.Server
-	openBrowser bool
-	timeout     uint16
-	client      map[string]*handlers.Client
+	host               string
+	port               uint16
+	server             *socketio.Server
+	disableOpenBrowser bool
+	timeout            uint16
+	client             map[string]*handlers.Client
 }
 
 func (app *App) SocketRouter() {
@@ -211,7 +211,7 @@ func (app *App) Start() {
 
 	log.Printf("Serving at %s:%d...", app.host, app.port)
 
-	if app.openBrowser {
+	if !app.disableOpenBrowser {
 		go open(fmt.Sprintf("http://%s:%d/", app.host, app.port))
 	}
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%d", app.host, app.port), nil))
@@ -225,7 +225,7 @@ func main() {
 	a.host = host
 	a.port = uint16(port)
 	a.timeout = uint16(timeout)
-	a.openBrowser = openBrowser
+	a.disableOpenBrowser = disableOpenBrowser
 	a.client = make(map[string]*handlers.Client)
 
 	options := &engineio.Options{

@@ -37,7 +37,7 @@ const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
             title="SCOPE"
             content={
                 <RadioGroup aria-label="scope" name="scope" value={name} onChange={handleOnChangeScope}>
-                    {scopesObj.map((s, i) => (
+                    {scopesObj.map((s) => (
                         <FormControlLabel key={s.value} value={s.value} control={<Radio color='primary' />} label={s.value} />
                     ))}
                 </RadioGroup>

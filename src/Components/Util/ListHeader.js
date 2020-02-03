@@ -36,7 +36,7 @@ const groupSigning = {
     '(' : ['(', ')'],
 };
 
-const ListHeader = ({children, collapse, onAdd, onDelete, onOpen, onClose, open, items, name, groupSign}) => {
+const ListHeader = ({children, collapse, groupSign, items, name, onAdd, onClose, onDelete, onOpen, open}) => {
     const classes = useStyles();
 
 
@@ -99,6 +99,7 @@ ListHeader.defaultProps = {
 };
 
 ListHeader.propTypes = {
+    children: PropTypes.object.isRequired,
     collapse: PropTypes.bool,
     groupSign: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(PropTypes.string).isRequired,

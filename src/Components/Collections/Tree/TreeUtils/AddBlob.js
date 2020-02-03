@@ -1,3 +1,5 @@
+/*eslint-disable react/jsx-props-no-spreading*/
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import Collapse from '@material-ui/core/Collapse';
@@ -25,8 +27,8 @@ const AddBlob = ({onVal, onBlob}) => {
 
     const handleDropzone = React.useCallback(acceptedFiles => {
         const reader = new FileReader();
-        reader.onabort = () => console.log('file reading was aborted');
-        reader.onerror = () => console.log('file reading has failed');
+        reader.onabort = () => window.log('file reading was aborted');
+        reader.onerror = () => window.log('file reading has failed');
         reader.onload = () => {
             const binaryStr = reader.result;
             var encodedData = btoa(binaryStr);
