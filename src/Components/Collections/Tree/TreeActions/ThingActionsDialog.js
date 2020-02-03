@@ -1,16 +1,13 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
-import CodeIcon from '@material-ui/icons/Code';
-import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+import DialogButtons from './DialogButtons';
 import Edit from './Edit';
-import RemoveThing from './RemoveThing';
-import WatchThings from './WatchThings';
-import {ApplicationActions, CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
-import {DownloadBlob, ErrorMsg, SimpleModal} from '../../../Util';
+import {CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
+import {ErrorMsg, SimpleModal} from '../../../Util';
 
 const tag = '8';
 
@@ -99,18 +96,10 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
         }
     };
 
-    const handleClickOpenEditor = () => {
-        ApplicationActions.navigate({path: 'query', index: 0, item: child.type==='thing' ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
-    };
-
     // buttons visible
-    const isRoot = child.name == 'root';
     const isChildCustom = Boolean(customTypes.find(c=>c.name==realChildType));
-    const isParentCustom = Boolean(customTypes.find(c=>c.name==realParentType));
-    const canRemove = !(child.name === '/' || parent.isTuple || isRoot || isParentCustom);
     const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type === 'bytes' || realChildType[0]=='<');
-    const canWatch = thing && thing.hasOwnProperty('#');
-    const canDownload = child.type === 'bytes';
+
 
 
     const content = (
@@ -128,38 +117,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
                     </Typography>
                 </Grid>
                 <Grid container spacing={1} item xs={4} justify="flex-end">
-                    {canRemove &&
-                        <Grid item>
-                            <RemoveThing
-                                scope={scope}
-                                thing={thing}
-                                child={{...child, type: realChildType}}
-                                parent={{...parent, type: realParentType||parent.type}}
-                            />
-                        </Grid>
-                    }
-                    <Grid item>
-                        <Fab color="primary" onClick={handleClickOpenEditor} >
-                            <CodeIcon fontSize="large" />
-                        </Fab>
-                    </Grid>
-                    {canWatch &&
-                        <Grid item>
-                            <WatchThings
-                                buttonIsFab
-                                scope={scope}
-                                thingId={child.id||parent.id}
-                                tag={tag}
-                            />
-                        </Grid>
-                    }
-                    {canDownload &&
-                        <Grid item>
-                            <DownloadBlob
-                                val={thing}
-                            />
-                        </Grid>
-                    }
+                    <DialogButtons child={child} customTypes={customTypes} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} thing={thing} tag={tag} />
                 </Grid>
             </Grid>
             {canEdit ? (

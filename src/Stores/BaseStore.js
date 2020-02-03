@@ -252,7 +252,7 @@ class EventStore extends BaseStore {
                 let res = {watchThings: copyThings, watchIds: copyIds};
 
                 let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures));
-                if (copyProcedures[scope][id]) {
+                if (copyProcedures[scope]&&copyProcedures[scope][id]) {
                     delete copyProcedures[scope];
 
                     let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes));
