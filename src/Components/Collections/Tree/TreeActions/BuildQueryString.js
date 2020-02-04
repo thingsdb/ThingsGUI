@@ -2,7 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, query}) => {
+import {EditActions, useEdit} from './Context';
+
+const BuildQueryString = ({action, child, customTypes, parent, showQuery}) => {
+    const [editState, dispatch] = useEdit();
+    const {query} = editState;
 
     React.useEffect(() => {
         handleBuildQuery(action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type);
@@ -20,7 +24,10 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
             q = buildQueryRemove(parentId, parentName, parentType, childId, childName, childIndex);
             break;
         }
-        cb(q);
+        EditActions.update(dispatch, {
+            query: q,
+        });
+
     };
 
     //STANDARD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -74,19 +81,12 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
     );
 };
 
-BuildQueryString.defaultProps = {
-    query: '',
-};
-
 BuildQueryString.propTypes = {
     action: PropTypes.string.isRequired,
-    cb: PropTypes.func.isRequired,
     child: PropTypes.object.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     parent: PropTypes.object.isRequired,
     showQuery: PropTypes.bool.isRequired,
-    query: PropTypes.string,
-
 };
 
 export default BuildQueryString;

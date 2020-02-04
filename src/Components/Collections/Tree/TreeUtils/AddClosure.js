@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {VariablesArray} from '../../../Util';
 import { makeStyles } from '@material-ui/core/styles';
+import {EditActions, useEdit} from '../TreeActions/Context';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -15,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const AddClosure = ({input, cb}) => {
+const AddClosure = ({name}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         variables: [],
@@ -23,39 +24,41 @@ const AddClosure = ({input, cb}) => {
     });
     const {variables, body} = state;
 
+    const [editState, dispatch] = useEdit();
+    const {val} = editState;
     React.useEffect(() => {
         const c = `|${variables}|${body}`;
-        if(input&&input!=c) {
-            let endVarArr = input.indexOf('|', 1);
-            let vars = input.slice(1, endVarArr).split(',');
-            let b = input.slice(endVarArr+1);
+
+        if(val[name]&&val[name]!=c) {
+            let endVarArr = val[name].indexOf('|', 1);
+            let vars = val[name].slice(1, endVarArr).split(',');
+            let b = val[name].slice(endVarArr+1);
             setState({
                 variables: endVarArr==1?[]:vars,
                 body: b,
             });
         }
     },
-    [input],
+    [val[name]],
     );
 
     const handleBody = ({target}) => {
         const {value} = target;
         setState({...state, body: value});
-        cb(`|${variables}|${value}`);
+        EditActions.update(dispatch, {
+            val: {...val, [name]: `|${variables}|${value}`},
+        });
     };
 
     const handleVarArray = (items) => {
         setState({...state, variables: items});
-        cb(`|${items}|${body}`);
+        EditActions.update(dispatch, {
+            val: {...val, [name]: `|${items}|${body}`},
+        });
     };
 
     return(
         <Grid className={classes.container} container spacing={2}>
-            {/* <Grid item xs={12}>
-                <Typography variant="caption" color="primary">
-                    {'Stored closures which can potentially make changes to ThingsDB are called closures with side effects (wse) and must be wrapped with the wse(..) function.'}
-                </Typography>
-            </Grid> */}
             <Grid container item xs={12}>
                 <Grid item xs={1} container justify="flex-start">
                     <Typography variant="h3" color="primary">
@@ -89,13 +92,8 @@ const AddClosure = ({input, cb}) => {
     );
 };
 
-AddClosure.defaultProps = {
-    input: '',
-};
-
 AddClosure.propTypes = {
-    cb: PropTypes.func.isRequired,
-    input: PropTypes.string,
+    name: PropTypes.string.isRequired,
 };
 
 export default AddClosure;

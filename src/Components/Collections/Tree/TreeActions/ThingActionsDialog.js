@@ -1,9 +1,11 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from "react";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+
+import {useEdit} from './Context';
 import DialogButtons from './DialogButtons';
 import Edit from './Edit';
 import {CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
@@ -13,6 +15,9 @@ const tag = '8';
 
 
 const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
+    const [editState] = useEdit();
+    const {query, blob, error} = editState;
+    console.log(query, blob, error);
 
     const initialState = {
         customTypes: [],
@@ -24,8 +29,9 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
         realChildType: '',
         realParentType: '',
     };
+
     const [state, setState] = React.useState(initialState);
-    const {query, blob, error, show, realChildType, realParentType, customTypes} = state;
+    const {show, realChildType, realParentType, customTypes} = state;
     const dataTypes = [
         'str',
         'int',
@@ -63,10 +69,6 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
 
     const setType = (t) => {
         setState({...state, realChildType: t.childType, realParentType: t.parentType, show: true, customTypes: t.customTypes});
-    };
-
-    const handleQuery = (q, b, e) => {
-        setState({...state, query: q, blob: b, error: e});
     };
 
     const handleClickOk = () => {
@@ -127,7 +129,6 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
                     </Grid>
                     <Grid item xs={12}>
                         <Edit
-                            cb={handleQuery}
                             customTypes={customTypes}
                             dataTypes={dataTypes}
                             thing={thing}
@@ -154,6 +155,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
                 </SimpleModal>
             ) : null}
         </React.Fragment>
+
     );
 };
 

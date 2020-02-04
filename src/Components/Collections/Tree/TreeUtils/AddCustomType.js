@@ -8,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 
 import InputField from '../TreeActions/InputField';
 import {ListHeader} from '../../../Util';
+import {EditActions, useEdit} from '../TreeActions/Context';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -134,43 +135,35 @@ const typing = ([fprop, type], dataTypes) =>  {
     );
 };
 
-const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
+const AddCustomType = ({customTypes, dataTypes, type, parentDispatch}) => {
     const classes = useStyles();
-    const [blob, setBlob] = React.useState({});
     const [dataType, setDataType] = React.useState({});
-    const [myItems, setMyItems] = React.useState([]);
     const [open, setOpen] = React.useState(false);
-    const [val, setVal] = React.useState({});
+
+    const [editState, dispatch] = useEdit();
+    const {array, val, blob} = editState;
 
     React.useEffect(() => {
-        onVal(`${type}{${myItems}}`);
-        onBlob(blob);
+        EditActions.update(parentDispatch, {
+            val:  `${type}{${array}}`,
+        });
+        EditActions.updateBlob(parentDispatch, array, blob);
     },
-    [JSON.stringify(myItems)],
+    [JSON.stringify(array)],
     );
 
     React.useEffect(() => {
-        setBlob({});
         setDataType({});
-        setMyItems([]);
         setOpen(false);
-        setVal([]);
+        EditActions.update(dispatch, {val: '', array: [], blob: {}});
     },[type]);
-
-    const handleVal = (n) => (c) => {
-        setVal({...val, [n]: c});
-    };
 
     const handleChangeType = (n) => ({target}) => {
         const {value} = target;
         setDataType({...dataType, [n]: value});
         if (value == 'nil') {
-            setVal({...val, [n]: 'nil'});
+            EditActions.update(dispatch, {val: {...val, [n]: 'nil'}});
         }
-    };
-
-    const handleBlob = (b) => {
-        setBlob({...blob, ...b});
     };
 
     const handleOpen = () => {
@@ -181,25 +174,14 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
     };
     const handleAdd = () => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        setMyItems(s);
-        setBlob(prevBlob => {
-            let copy = JSON.parse(JSON.stringify(prevBlob));
-            let keys={};
-            Object.keys(copy).map((k)=> {
-                Object.values(val).map(v=> {
-                    if (v.includes(k)){
-                        keys[k]=true;
-                    } else {
-                        keys[k]=false;
-                    }
-                });
-            });
-            Object.entries(keys).map(([k, v]) => !v&&delete copy[k]);
-
-            return copy;
+        EditActions.update(parentDispatch, {
+            array:  s,
         });
-        // setVal({});
     };
+
+
+    // {...val, [n]: c}
+
 
     const typeObj = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
     const typeFields = typeObj?typeObj.fields.map(c=>typing(c, dataTypes)):[];
@@ -209,7 +191,7 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
         <React.Fragment>
             {typeFields&&(
                 <Grid container>
-                    <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={myItems} name={type} groupSign="{">
+                    <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={array} name={type} groupSign="{">
                         <Collapse className={classes.fullWidth} in={open} timeout="auto">
                             {( typeFields.map(([fprop, ftype, fchldtype], i) => (
                                 <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
@@ -254,8 +236,6 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
                                             dataTypes={dataTypes}
                                             childTypes={fchldtype}
                                             input={val[fprop]||''}
-                                            onBlob={handleBlob}
-                                            onVal={handleVal(fprop)}
                                             variant="standard"
                                             label="Value"
                                         />
@@ -276,8 +256,6 @@ AddCustomType.defaultProps = {
 AddCustomType.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onBlob: PropTypes.func.isRequired,
-    onVal: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
 };
 

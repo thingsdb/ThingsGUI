@@ -5,6 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import {EditActions, useEdit} from '../TreeActions/Context';
+
 const useStyles = makeStyles(theme => ({
     container: {
         paddingTop: theme.spacing(1),
@@ -12,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AddError = ({input, cb}) => {
+const AddError = ({name}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         errCode:'',
@@ -20,29 +22,40 @@ const AddError = ({input, cb}) => {
     });
     const {errCode, errMsg} = state;
 
+    const [editState, dispatch] = useEdit();
+    const {val} = editState;
     React.useEffect(() => {
-        if(typeof(input)=='object'&&(input.error_code!=errCode || input.error_msg!=errMsg)) {
+        if(val[name]&&`err(${errCode}, '${errMsg}')`!=val[name]) {
+            let commaIndex = val[name].indexOf(',', 0);
+            let code = val[name].slice(4, commaIndex);
+            let secondAppIndex = val[name].indexOf('\'', commaIndex+2);
+            let msg = val[name].slice(commaIndex+2, secondAppIndex);
+
             setState({
-                errCode:input.error_code,
-                errMsg:input.error_msg,
+                errCode:code,
+                errMsg:msg,
             });
         }
     },
-    [JSON.stringify(input)],
+    [val[name]],
     );
 
     const handleOnChangeCode = ({target}) => {
         const {value} = target;
         setState({...state, errCode: value});
         const c = `err(${value}, '${errMsg}')`;
-        cb(c);
+        EditActions.update(dispatch, {
+            val: {...val, [name]: c},
+        });
     };
 
     const handleOnChangeMsg = ({target}) => {
         const {value} = target;
         setState({...state, errMsg: value});
         const c = `err(${errCode}, '${value}')`;
-        cb(c);
+        EditActions.update(dispatch, {
+            val: {...val, [name]: c},
+        });
     };
 
     return(
@@ -91,13 +104,8 @@ const AddError = ({input, cb}) => {
     );
 };
 
-AddError.defaultProps = {
-    input: null,
-};
-
 AddError.propTypes = {
-    cb: PropTypes.func.isRequired,
-    input: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+    name: PropTypes.string.isRequired,
 };
 
 export default AddError;

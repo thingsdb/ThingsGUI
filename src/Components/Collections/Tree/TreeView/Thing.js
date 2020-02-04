@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
+import {EditActions, EditProvider, useEdit} from '../TreeActions/Context';
 import {ThingActionsDialog} from '../TreeActions';
 import {CollectionActions} from '../../../../Stores/CollectionStore';
-import {checkType, fancyName, thingValue, TreeBranch} from '../../../Util';
+import {checkType, fancyName, isObjectEmpty, thingValue, TreeBranch} from '../../../Util';
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,21 +30,13 @@ const useStyles = makeStyles(theme => ({
 const Thing = ({child, collection, parent, thing, things, watchIds}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
-
+    const [editState, dispatch] = useEdit();
 
     React.useEffect(() => {
         setShow(false); // closes dialog when item of array is removed. Otherwise dialog stays open with previous item.
     },
     [JSON.stringify(thing)],
     );
-
-    const handleOpenDialog = () => {
-        setShow(true);
-    };
-
-    const handleCloseDialog = () => {
-        setShow(false);
-    };
 
     // thing info
 
@@ -59,6 +52,24 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
     const isWatching = type === 'thing' && thing && watchIds[thing['#']];
 
     const hasDialog = !(parent.type === 'closure' || parent.type === 'regex' || parent.type === 'error');
+
+    const handleOpenDialog = () => {
+        setShow(true);
+        console.log(currThing, type);
+        EditActions.update(dispatch, {
+            val: type == 'thing' ? ''
+                : type == 'closure' ? currThing['/']
+                    : type == 'regex' ? currThing['*']
+                        : type == 'error' ? `err(${currThing.error_code}, ${currThing.error_msg})`
+                            : type == 'array' ? ''
+                                : currThing,
+        });
+
+    };
+
+    const handleCloseDialog = () => {
+        setShow(false);
+    };
 
     const renderThing = ([k, v, i=null]) => {
         return k === '#' ? null : (

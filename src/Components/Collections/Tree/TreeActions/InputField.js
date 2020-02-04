@@ -4,35 +4,52 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import {EditActions, EditProvider, useEdit} from './Context';
+
 import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddError, AddFloat, AddInt, AddRegex, AddStr, AddThing} from '../TreeUtils';
 
 
-const InputField = ({customTypes, childTypes, dataTypes, dataType, onVal, onBlob, input, ...props}) => {
+const InputField = ({customTypes, childTypes, dataTypes, dataType, name, ...props}) => {
 
+    const [editState, dispatch] = useEdit();
     let content = {
-        str:  ()=><AddStr input={input} cb={onVal} {...props} />,
-        int: ()=><AddInt input={input} cb={onVal} {...props} />,
-        float: ()=><AddFloat input={input} cb={onVal} {...props} />,
-        thing: ()=><AddThing customTypes={customTypes} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} />,
-        set: ()=><AddArray customTypes={customTypes} childTypes={childTypes||['thing', ...customTypes.map(c=>c.name)]||[]} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} isSet />,
-        bool: ()=><AddBool input={`${input}`} cb={onVal} />,
-        list: ()=><AddArray customTypes={customTypes} childTypes={childTypes||[]} dataTypes={dataTypes} onBlob={onBlob} onVal={onVal} {...props} />,
-        closure: ()=><AddClosure input={input} cb={onVal} />,
-        regex: ()=><AddRegex input={input} cb={onVal} />,
-        error: ()=><AddError input={input} cb={onVal} />,
-        bytes: ()=><AddBlob onBlob={onBlob} onVal={onVal} />,
+        str:  ()=><AddStr name={name} {...props} />,
+        int: ()=><AddInt name={name} {...props} />,
+        float: ()=><AddFloat name={name} {...props} />,
+        thing: ()=>(
+            <EditProvider>
+                <AddThing name={name} customTypes={customTypes} dataTypes={dataTypes} parentDispatch={dispatch} />
+            </EditProvider>
+        ),
+        set: ()=>(
+            <AddArray name={name} customTypes={customTypes} childTypes={childTypes||['thing', ...customTypes.map(c=>c.name)]||[]} dataTypes={dataTypes} parentDispatch={dispatch} isSet />
+        ),
+        bool: ()=><AddBool />,
+        list: ()=>(
+            <AddArray name={name} customTypes={customTypes} childTypes={childTypes||[]} dataTypes={dataTypes} parentDispatch={dispatch} {...props} />
+
+        ),
+        closure: ()=><AddClosure name={name} />,
+        regex: ()=><AddRegex name={name} />,
+        error: ()=><AddError name={name} />,
+        bytes: ()=><AddBlob name={name} />,
         nil: ()=>null,
     };
 
     return(
         <React.Fragment>
-            {Object.keys(content).includes(dataType)?content[dataType](): <AddCustomType onBlob={onBlob} onVal={onVal} customTypes={customTypes} dataTypes={dataTypes} type={dataType} {...props} />}
+            {Object.keys(content).includes(dataType) ? content[dataType]()
+                : (
+                    <EditProvider>
+                        <AddCustomType customTypes={customTypes} dataTypes={dataTypes} type={dataType} parentDispatch={dispatch} name={name} {...props} />
+                    </EditProvider>
+                )
+            }
         </React.Fragment>
     );
 };
 
 InputField.defaultProps = {
-    input: '',
     customTypes: [],
     dataTypes: [],
     childTypes: null,
@@ -43,9 +60,7 @@ InputField.propTypes = {
     dataTypes: PropTypes.arrayOf(PropTypes.string),
     childTypes: PropTypes.arrayOf(PropTypes.string),
     dataType: PropTypes.string.isRequired,
-    onVal: PropTypes.func.isRequired,
-    onBlob: PropTypes.func.isRequired,
-    input: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
+    name: PropTypes.string.isRequired,
 };
 
 export default InputField;
