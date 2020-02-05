@@ -15,16 +15,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const AddRegex = ({name}) => {
+const AddRegex = ({identifier}) => {
     const classes = useStyles();
     const [editState, dispatch] = useEdit();
     const {val} = editState;
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.update(dispatch, {
-            val: {...val, [name]: `/${value}/`},
-        });
+        EditActions.updateVal(dispatch, `/${value}/`, identifier);
+
     };
+
+    const v = val[identifier]||(val.constructor === Object?'':val);
 
     return(
         <Grid className={classes.container} container spacing={2}>
@@ -39,7 +40,7 @@ const AddRegex = ({name}) => {
                         name="regex"
                         label="Regex"
                         type="text"
-                        value={val[name]?val[name].trim().slice(1, -1):''}
+                        value={v.trim().slice(1, -1)}
                         spellCheck={false}
                         onChange={handleOnChange}
                         fullWidth
@@ -57,8 +58,13 @@ const AddRegex = ({name}) => {
     );
 };
 
+AddRegex.defaultProps = {
+    identifier: null,
+},
+
 AddRegex.propTypes = {
-    name: PropTypes.string.isRequired,
+    identifier: PropTypes.string
+
 };
 
 export default AddRegex;

@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AddError = ({name}) => {
+const AddError = ({identifier}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         errCode:'',
@@ -25,11 +25,12 @@ const AddError = ({name}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
     React.useEffect(() => {
-        if(val[name]&&`err(${errCode}, '${errMsg}')`!=val[name]) {
-            let commaIndex = val[name].indexOf(',', 0);
-            let code = val[name].slice(4, commaIndex);
-            let secondAppIndex = val[name].indexOf('\'', commaIndex+2);
-            let msg = val[name].slice(commaIndex+2, secondAppIndex);
+        const v = val[identifier]||(val.constructor === Object?'':val);
+        if(`err(${errCode}, '${errMsg}')`!=v) {
+            let commaIndex = v.indexOf(',', 0);
+            let code = v.slice(4, commaIndex);
+            let secondAppIndex = v.indexOf('\'', commaIndex+2);
+            let msg = v.slice(commaIndex+2, secondAppIndex);
 
             setState({
                 errCode:code,
@@ -37,25 +38,22 @@ const AddError = ({name}) => {
             });
         }
     },
-    [val[name]],
+    [val],
     );
 
     const handleOnChangeCode = ({target}) => {
         const {value} = target;
         setState({...state, errCode: value});
         const c = `err(${value}, '${errMsg}')`;
-        EditActions.update(dispatch, {
-            val: {...val, [name]: c},
-        });
+        EditActions.updateVal(dispatch, c, identifier);
+
     };
 
     const handleOnChangeMsg = ({target}) => {
         const {value} = target;
         setState({...state, errMsg: value});
         const c = `err(${errCode}, '${value}')`;
-        EditActions.update(dispatch, {
-            val: {...val, [name]: c},
-        });
+        EditActions.updateVal(dispatch, c, identifier);
     };
 
     return(
@@ -104,8 +102,12 @@ const AddError = ({name}) => {
     );
 };
 
+AddError.defaultProps = {
+    identifier: null,
+},
+
 AddError.propTypes = {
-    name: PropTypes.string.isRequired,
+    identifier: PropTypes.string
 };
 
 export default AddError;

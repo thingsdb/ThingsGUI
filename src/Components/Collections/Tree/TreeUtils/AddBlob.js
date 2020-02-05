@@ -9,12 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import {EditActions, useEdit} from '../TreeActions/Context';
 
 
-const AddBlob = ({name}) => {
+const AddBlob = ({identifier}) => {
     const [newBlob, setBlob] = React.useState('');
     const [fileName, setFileName] = React.useState('');
 
     const [editState, dispatch] = useEdit();
-    const {val, blob} = editState;
+    const {blob} = editState;
 
     React.useEffect(() => {
         let f = fileName;
@@ -22,8 +22,8 @@ const AddBlob = ({name}) => {
             f = fileName.split('.')[0];
         }
         if (f != '' && newBlob != '') {
+            EditActions.updateVal(dispatch, f, identifier);
             EditActions.update(dispatch, {
-                val: {...val, [name]: f},
                 blob: {...blob, [f]: newBlob}
             });
         }
@@ -71,8 +71,13 @@ const AddBlob = ({name}) => {
     );
 };
 
+AddBlob.defaultProps = {
+    identifier: null,
+},
+
 AddBlob.propTypes = {
-    name: PropTypes.string.isRequired,
+    identifier: PropTypes.string
 };
+
 
 export default AddBlob;

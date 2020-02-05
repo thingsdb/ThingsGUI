@@ -9,30 +9,33 @@ import {EditActions, EditProvider, useEdit} from './Context';
 import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddError, AddFloat, AddInt, AddRegex, AddStr, AddThing} from '../TreeUtils';
 
 
-const InputField = ({customTypes, childTypes, dataTypes, dataType, name, ...props}) => {
+const InputField = ({customTypes, childTypes, dataTypes, dataType, identifier, ...props}) => {
 
     const [editState, dispatch] = useEdit();
     let content = {
-        str:  ()=><AddStr name={name} {...props} />,
-        int: ()=><AddInt name={name} {...props} />,
-        float: ()=><AddFloat name={name} {...props} />,
+        str:  ()=><AddStr identifier={identifier} {...props} />,
+        int: ()=><AddInt identifier={identifier} {...props} />,
+        float: ()=><AddFloat identifier={identifier} {...props} />,
         thing: ()=>(
             <EditProvider>
-                <AddThing name={name} customTypes={customTypes} dataTypes={dataTypes} parentDispatch={dispatch} />
+                <AddThing identifier={identifier} customTypes={customTypes} dataTypes={dataTypes} parentDispatch={dispatch} />
             </EditProvider>
         ),
         set: ()=>(
-            <AddArray name={name} customTypes={customTypes} childTypes={childTypes||['thing', ...customTypes.map(c=>c.name)]||[]} dataTypes={dataTypes} parentDispatch={dispatch} isSet />
+            <EditProvider>
+                <AddArray identifier={identifier} customTypes={customTypes} childTypes={childTypes||['thing', ...customTypes.map(c=>c.cb)]||[]} dataTypes={dataTypes} parentDispatch={dispatch} isSet />
+            </EditProvider>
         ),
-        bool: ()=><AddBool />,
+        bool: ()=><AddBool identifier={identifier} />,
         list: ()=>(
-            <AddArray name={name} customTypes={customTypes} childTypes={childTypes||[]} dataTypes={dataTypes} parentDispatch={dispatch} {...props} />
-
+            <EditProvider>
+                <AddArray identifier={identifier} customTypes={customTypes} childTypes={childTypes||[]} dataTypes={dataTypes} parentDispatch={dispatch} {...props} />
+            </EditProvider>
         ),
-        closure: ()=><AddClosure name={name} />,
-        regex: ()=><AddRegex name={name} />,
-        error: ()=><AddError name={name} />,
-        bytes: ()=><AddBlob name={name} />,
+        closure: ()=><AddClosure identifier={identifier} />,
+        regex: ()=><AddRegex identifier={identifier} />,
+        error: ()=><AddError identifier={identifier} />,
+        bytes: ()=><AddBlob identifier={identifier} />,
         nil: ()=>null,
     };
 
@@ -41,7 +44,7 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, name, ...prop
             {Object.keys(content).includes(dataType) ? content[dataType]()
                 : (
                     <EditProvider>
-                        <AddCustomType customTypes={customTypes} dataTypes={dataTypes} type={dataType} parentDispatch={dispatch} name={name} {...props} />
+                        <AddCustomType customTypes={customTypes} dataTypes={dataTypes} type={dataType} parentDispatch={dispatch} identifier={identifier} {...props} />
                     </EditProvider>
                 )
             }
@@ -53,6 +56,7 @@ InputField.defaultProps = {
     customTypes: [],
     dataTypes: [],
     childTypes: null,
+    identifier: null,
 },
 
 InputField.propTypes = {
@@ -60,7 +64,7 @@ InputField.propTypes = {
     dataTypes: PropTypes.arrayOf(PropTypes.string),
     childTypes: PropTypes.arrayOf(PropTypes.string),
     dataType: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    identifier: PropTypes.string
 };
 
 export default InputField;

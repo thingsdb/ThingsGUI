@@ -5,22 +5,23 @@ import TextField from '@material-ui/core/TextField';
 
 import {EditActions, useEdit} from '../TreeActions/Context';
 
-const AddStr = ({name, ...props}) => {
+const AddStr = ({identifier, ...props}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.update(dispatch, {
-            val: {...val, [name]:`'${value}'`},
-        });
+        EditActions.updateVal(dispatch, `'${value}'`, identifier);
     };
+    console.log('str');
+
+    const v = val[identifier]||(val.constructor === Object?'':val);
 
     return(
         <TextField
             name="value"
             type="text"
-            value={val[name]?(val[name][0]=='\''?val[name].trim().slice(1, -1):val[name]):''}
+            value={v[0]=='\''?v.trim().slice(1, -1):v}
             spellCheck={false}
             onChange={handleOnChange}
             multiline
@@ -30,9 +31,12 @@ const AddStr = ({name, ...props}) => {
     );
 };
 
+AddStr.defaultProps = {
+    identifier: null,
+},
 
 AddStr.propTypes = {
-    name: PropTypes.string.isRequired,
+    identifier: PropTypes.string
 };
 
 export default AddStr;

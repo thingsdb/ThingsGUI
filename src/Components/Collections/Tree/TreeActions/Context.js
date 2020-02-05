@@ -9,6 +9,11 @@ const EditActions = {
             return {...state, ...data};
         });
     },
+    updateVal: (dispatch, data, identifier=null) => {
+        dispatch((state) => {
+            return identifier? {...state, val: {...state.val, [identifier]: data}} : {...state, val: data};
+        });
+    },
     deleteBlob: (dispatch, data) => {
         dispatch((state) => {
             let copy = JSON.parse(JSON.stringify(state.blob));
@@ -71,11 +76,8 @@ const reducer = (state, action) => {
     return { ...state, ...update };
 };
 
-const EditProvider = ({ children, cb }) => {
+const EditProvider = ({ children }) => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
-    React.useEffect(()=>{
-        cb(state);
-    }, [state.val]);
     return (
         <StoreContext.Provider value={{ state, dispatch }}>
             {children}
@@ -84,12 +86,10 @@ const EditProvider = ({ children, cb }) => {
 };
 
 EditProvider.propTypes = {
-    cb: PropTypes.func,
     children: PropTypes.node,
 };
 
 EditProvider.defaultProps = {
-    cb: ()=>null,
     children: null,
 };
 

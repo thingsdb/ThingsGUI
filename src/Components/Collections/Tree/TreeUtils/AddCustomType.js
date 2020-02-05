@@ -12,8 +12,6 @@ import {EditActions, useEdit} from '../TreeActions/Context';
 
 const useStyles = makeStyles(theme => ({
     container: {
-        // display: 'flex',
-        // flexWrap: 'wrap',
         borderLeft: `1px solid ${theme.palette.primary.main}`,
         borderRight: `1px solid ${theme.palette.primary.main}`,
         borderRadius: '20px',
@@ -41,10 +39,7 @@ const useStyles = makeStyles(theme => ({
     },
     nested: {
         paddingLeft: theme.spacing(6),
-        // borderBottom: `2px solid ${theme.palette.primary.main}`,
-        // borderRadius: '30px',
         paddingBottom: theme.spacing(1),
-        // marginBottom: theme.spacing(1),
     },
     textfield: {
         paddingTop: 0,
@@ -135,7 +130,7 @@ const typing = ([fprop, type], dataTypes) =>  {
     );
 };
 
-const AddCustomType = ({customTypes, dataTypes, type, parentDispatch}) => {
+const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch}) => {
     const classes = useStyles();
     const [dataType, setDataType] = React.useState({});
     const [open, setOpen] = React.useState(false);
@@ -144,9 +139,7 @@ const AddCustomType = ({customTypes, dataTypes, type, parentDispatch}) => {
     const {array, val, blob} = editState;
 
     React.useEffect(() => {
-        EditActions.update(parentDispatch, {
-            val:  `${type}{${array}}`,
-        });
+        EditActions.updateVal(parentDispatch,`${type}{${array}}`, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
     },
     [JSON.stringify(array)],
@@ -162,7 +155,7 @@ const AddCustomType = ({customTypes, dataTypes, type, parentDispatch}) => {
         const {value} = target;
         setDataType({...dataType, [n]: value});
         if (value == 'nil') {
-            EditActions.update(dispatch, {val: {...val, [n]: 'nil'}});
+            EditActions.updateVal(dispatch, {...val, [n]: 'nil'});
         }
     };
 
@@ -174,14 +167,10 @@ const AddCustomType = ({customTypes, dataTypes, type, parentDispatch}) => {
     };
     const handleAdd = () => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        EditActions.update(parentDispatch, {
+        EditActions.update(dispatch, {
             array:  s,
         });
     };
-
-
-    // {...val, [n]: c}
-
 
     const typeObj = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
     const typeFields = typeObj?typeObj.fields.map(c=>typing(c, dataTypes)):[];
@@ -195,9 +184,6 @@ const AddCustomType = ({customTypes, dataTypes, type, parentDispatch}) => {
                         <Collapse className={classes.fullWidth} in={open} timeout="auto">
                             {( typeFields.map(([fprop, ftype, fchldtype], i) => (
                                 <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
-                                    {/* <Grid item xs={1}>
-                                        <FiberManualRecord color="primary" fontSize="small" />
-                                    </Grid> */}
                                     <Grid item xs={2}>
                                         <TextField
                                             type="text"
@@ -235,9 +221,9 @@ const AddCustomType = ({customTypes, dataTypes, type, parentDispatch}) => {
                                             dataType={dataType[fprop]||ftype[0]}
                                             dataTypes={dataTypes}
                                             childTypes={fchldtype}
-                                            input={val[fprop]||''}
                                             variant="standard"
                                             label="Value"
+                                            identifier={fprop}
                                         />
                                     </Grid>
                                 </Grid>
@@ -252,11 +238,14 @@ const AddCustomType = ({customTypes, dataTypes, type, parentDispatch}) => {
 
 AddCustomType.defaultProps = {
     customTypes: null,
+    identifier: null,
 };
 AddCustomType.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     type: PropTypes.string.isRequired,
+    identifier: PropTypes.string,
+    parentDispatch: PropTypes.func.isRequired,
 };
 
 export default AddCustomType;

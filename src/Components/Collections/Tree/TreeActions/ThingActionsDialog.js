@@ -17,7 +17,6 @@ const tag = '8';
 const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
     const [editState] = useEdit();
     const {query, blob, error} = editState;
-    console.log(query, blob, error);
 
     const initialState = {
         customTypes: [],

@@ -14,19 +14,19 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AddBool = ({name}) => {
+const AddBool = ({identifier}) => {
     const classes = useStyles();
     const [editState, dispatch] = useEdit();
     const {val} = editState;
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.update(dispatch, {
-            val: {...val, [name]: value},
-        });
+        EditActions.updateVal(dispatch, value, identifier);
     };
 
+    const v = val[identifier]||(val.constructor === Object?'':val);
+
     return(
-        <RadioGroup className={classes.dense} aria-label="position" name="value" value={`${val[name]?val[name]:''}`} onChange={handleOnChange} row>
+        <RadioGroup className={classes.dense} aria-label="position" name="value" value={`${v}`} onChange={handleOnChange} row>
             <FormControlLabel
                 value="true"
                 control={<Radio color="primary" />}
@@ -43,8 +43,12 @@ const AddBool = ({name}) => {
     );
 };
 
+AddBool.defaultProps = {
+    identifier: null,
+},
+
 AddBool.propTypes = {
-    name: PropTypes.string.isRequired,
+    identifier: PropTypes.string
 };
 
 export default AddBool;

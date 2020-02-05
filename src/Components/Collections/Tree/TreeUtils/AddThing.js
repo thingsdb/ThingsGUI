@@ -32,7 +32,7 @@ const single = [
     'str',
 ];
 
-const AddThing = ({customTypes, dataTypes, parentDispatch}) => {
+const AddThing = ({customTypes, dataTypes, identifier, parentDispatch}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         dataType: 'str',
@@ -44,9 +44,7 @@ const AddThing = ({customTypes, dataTypes, parentDispatch}) => {
     const {array, val, blob} = editState;
 
     React.useEffect(() => {
-        EditActions.update(parentDispatch, {
-            val: `{${array}}`,
-        });
+        EditActions.updateVal(parentDispatch,`{${array}}`, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
     },
     [array.length],
@@ -60,7 +58,7 @@ const AddThing = ({customTypes, dataTypes, parentDispatch}) => {
     const handleChangeType = ({target}) => {
         const {value} = target;
         setState({...state, dataType: value});
-        EditActions.update(dispatch, {val: ''});
+        EditActions.updateVal(dispatch, '');
     };
 
     const typeControls = (type, input) => {
@@ -131,10 +129,16 @@ const AddThing = ({customTypes, dataTypes, parentDispatch}) => {
     );
 };
 
+AddThing.defaultProps = {
+    identifier: null,
+};
+
 
 AddThing.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    identifier: PropTypes.string,
+    parentDispatch: PropTypes.func.isRequired,
 };
 
 export default AddThing;

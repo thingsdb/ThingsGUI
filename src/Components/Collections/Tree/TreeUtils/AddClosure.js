@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const AddClosure = ({name}) => {
+const AddClosure = ({identifier}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         variables: [],
@@ -28,34 +28,31 @@ const AddClosure = ({name}) => {
     const {val} = editState;
     React.useEffect(() => {
         const c = `|${variables}|${body}`;
-
-        if(val[name]&&val[name]!=c) {
-            let endVarArr = val[name].indexOf('|', 1);
-            let vars = val[name].slice(1, endVarArr).split(',');
-            let b = val[name].slice(endVarArr+1);
+        const v = val[identifier]||(val.constructor === Object?'':val);
+        if(v&&v!=c) {
+            let endVarArr = v.indexOf('|', 1);
+            let vars = v.slice(1, endVarArr).split(',');
+            let b = v.slice(endVarArr+1);
             setState({
                 variables: endVarArr==1?[]:vars,
                 body: b,
             });
         }
     },
-    [val[name]],
+    [val],
     );
 
     const handleBody = ({target}) => {
         const {value} = target;
         setState({...state, body: value});
-        EditActions.update(dispatch, {
-            val: {...val, [name]: `|${variables}|${value}`},
-        });
+        EditActions.updateVal(dispatch, `|${variables}|${value}`, identifier);
     };
 
     const handleVarArray = (items) => {
         setState({...state, variables: items});
-        EditActions.update(dispatch, {
-            val: {...val, [name]: `|${items}|${body}`},
-        });
+        EditActions.updateVal(dispatch, `|${items}|${body}`, identifier);
     };
+
 
     return(
         <Grid className={classes.container} container spacing={2}>
@@ -92,8 +89,12 @@ const AddClosure = ({name}) => {
     );
 };
 
+AddClosure.defaultProps = {
+    identifier: null,
+},
+
 AddClosure.propTypes = {
-    name: PropTypes.string.isRequired,
+    identifier: PropTypes.string
 };
 
 export default AddClosure;

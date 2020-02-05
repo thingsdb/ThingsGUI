@@ -55,15 +55,12 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
 
     const handleOpenDialog = () => {
         setShow(true);
-        console.log(currThing, type);
-        EditActions.update(dispatch, {
-            val: type == 'thing' ? ''
-                : type == 'closure' ? currThing['/']
-                    : type == 'regex' ? currThing['*']
-                        : type == 'error' ? `err(${currThing.error_code}, ${currThing.error_msg})`
-                            : type == 'array' ? ''
-                                : currThing,
-        });
+        EditActions.updateVal(dispatch, type == 'thing' ? ''
+            : type == 'closure' ? currThing['/']
+                : type == 'regex' ? currThing['*']
+                    : type == 'error' ? `err(${currThing.error_code}, ${currThing.error_msg})`
+                        : type == 'array' ? ''
+                            : currThing);
 
     };
 

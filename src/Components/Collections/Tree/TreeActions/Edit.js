@@ -64,10 +64,11 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
         EditActions.update(dispatch, {
             val: '',
             blob: {},
+            array: [],
+            error: '',
         });
         setDataType(value);
     };
-
 
     const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
@@ -149,7 +150,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
                 {warnDescription ? (
                     <LocalErrorMsg msgError={warnDescription} />
                 ) : (
-                    <InputField dataType={dataType} margin="dense" customTypes={customTypes} dataTypes={dataTypes} name={newProperty} label="Value" fullWidth />
+                    <InputField dataType={dataType} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
                 )}
             </List>
         </React.Fragment>

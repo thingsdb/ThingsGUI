@@ -33,7 +33,7 @@ const single = [
     'str',
 ];
 
-const AddArray = ({childTypes, customTypes, dataTypes, isSet, name}) => {
+const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parentDispatch}) => {
     const classes = useStyles();
     const [dataType, setDataType] = React.useState(childTypes[0]||dataTypes[0]||'str');
 
@@ -47,18 +47,20 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, name}) => {
     );
 
     React.useEffect(() => {
-        EditActions.update(dispatch, {
-            val: {...val, [name]: isSet?`set([${array}])`:`[${array}]`, ['prev'+name]: ''},
-        });
-        EditActions.updateBlob(dispatch, array, blob);
+        EditActions.updateVal(parentDispatch,isSet?`set([${array}])`:`[${array}]`, identifier);
+        EditActions.updateBlob(parentDispatch, array, blob);
     },
     [array.length],
     );
 
+    React.useEffect(() => {
+        EditActions.update(dispatch, {val: '', array: [], blob: {}});
+    },[isSet]);
+
     const handleChange = ({target}) => {
         const {value} = target;
         setDataType(value);
-        // EditActions.update(dispatch, {val: ''});
+        EditActions.updateVal(dispatch, '');
     };
 
     const typeControls = (type, input) => {
@@ -68,7 +70,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, name}) => {
     };
 
     const handleAdd = () => {
-        const contentTypeChecked = typeControls(dataType, val['prev'+name]);
+        const contentTypeChecked = typeControls(dataType, val);
         EditActions.addToArr(dispatch, contentTypeChecked);
     };
 
@@ -107,7 +109,6 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, name}) => {
                             customTypes={customTypes}
                             dataType={dataType}
                             dataTypes={dataTypes}
-                            name={'prev'+name}
                             variant="standard"
                             label="Value"
                         />
@@ -121,6 +122,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, name}) => {
 AddArray.defaultProps = {
     childTypes: [],
     isSet: false,
+    identifier: null,
 };
 
 AddArray.propTypes = {
@@ -128,7 +130,8 @@ AddArray.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     isSet: PropTypes.bool,
-    name: PropTypes.string.isRequired,
+    identifier: PropTypes.string,
+    parentDispatch: PropTypes.func.isRequired,
 };
 
 export default AddArray;
