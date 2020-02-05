@@ -21,14 +21,19 @@ const AddError = ({input, cb}) => {
     const {errCode, errMsg} = state;
 
     React.useEffect(() => {
-        if(typeof(input)=='object'&&(input.error_code!=errCode || input.error_msg!=errMsg)) {
+        if(`err(${errCode}, '${errMsg}')`!=input) {
+            let commaIndex = input.indexOf(',', 0);
+            let code = input.slice(4, commaIndex);
+            let secondAppIndex = input.indexOf('\'', commaIndex+2);
+            let msg = input.slice(commaIndex+2, secondAppIndex);
+
             setState({
-                errCode:input.error_code,
-                errMsg:input.error_msg,
+                errCode:code,
+                errMsg:msg,
             });
         }
     },
-    [JSON.stringify(input)],
+    [input],
     );
 
     const handleOnChangeCode = ({target}) => {

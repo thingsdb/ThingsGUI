@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
 import InputField from '../TreeActions/InputField';
-import {ListHeader} from '../../../Util';
+import {addItemToArr, delBlob, delItemFromArr, ListHeader} from '../../../Util';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -72,25 +72,17 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
     const handleAdd = () => {
         const contentTypeChecked = typeControls(dataType, `${property}: ${contentAdd}`);
         setMyItems(prevItems => {
-            const newArray = [...prevItems];
-            newArray.push(contentTypeChecked);
-            return newArray;
+            return addItemToArr(prevItems, contentTypeChecked);
         });
         setBlob({...blob, ...preBlob});
-        // setState({...state,  contentAdd: '', property: '', errors: {}});
     };
 
     const handleClick = (index, item) => () => {
         setBlob(prevBlob => {
-            let copyState = JSON.parse(JSON.stringify(prevBlob));
-            let k = Object.keys(copyState).find(i=>item.includes(i));
-            delete copyState[k];
-            return copyState;
+            return delBlob(prevBlob, item);
         });
         setMyItems(prevItems => {
-            const newArray = [...prevItems];
-            newArray.splice(index, 1);
-            return newArray;
+            return delItemFromArr(prevItems, index);
         });
     };
 

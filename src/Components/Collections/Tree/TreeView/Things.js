@@ -55,7 +55,6 @@ const ThingRoot = ({things, collection, watchIds}) => {
 
     React.useLayoutEffect(() => {
         CollectionActions.queryWithReturnDepth(collection);
-        // return () => CollectionActions.cleanupTmp();
     }, [collection.name]);
 
     const isWatching = Boolean(watchIds[collection.collection_id]);

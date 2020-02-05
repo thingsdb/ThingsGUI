@@ -25,7 +25,6 @@ const AddInt = ({input, cb, ...props}) => {
             value={input}
             spellCheck={false}
             onChange={handleOnChange}
-            // fullWidth
             multiline
             rowsMax={10}
             helperText={error}

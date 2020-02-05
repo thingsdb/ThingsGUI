@@ -51,11 +51,6 @@ const AddClosure = ({input, cb}) => {
 
     return(
         <Grid className={classes.container} container spacing={2}>
-            {/* <Grid item xs={12}>
-                <Typography variant="caption" color="primary">
-                    {'Stored closures which can potentially make changes to ThingsDB are called closures with side effects (wse) and must be wrapped with the wse(..) function.'}
-                </Typography>
-            </Grid> */}
             <Grid container item xs={12}>
                 <Grid item xs={1} container justify="flex-start">
                     <Typography variant="h3" color="primary">

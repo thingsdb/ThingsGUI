@@ -23,8 +23,6 @@ const BuildQueryString = ({action, cb, child, customTypes, parent, showQuery, qu
         cb(q);
     };
 
-    //STANDARD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
     const input = (childVal, childType) => {
         return childType == 'str' ? (childVal[0]=='\''? `${childVal}`:`'${childVal}'`)
             : childType == 'nil' ? 'nil'

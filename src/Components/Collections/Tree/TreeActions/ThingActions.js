@@ -21,7 +21,6 @@ const ThingActions = ({child, parent, thing, scope}) => {
         <React.Fragment>
             <ButtonBase onClick={handleClickOpen} >
                 <BuildIcon color="primary" />
-                {/* <AddIcon color="primary" /> */}
             </ButtonBase>
             {show ? (
                 <ThingActionsDialog

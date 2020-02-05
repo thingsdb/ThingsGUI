@@ -30,7 +30,6 @@ const useStyles = makeStyles(theme => ({
         },
         '& .MuiTextField-root': {
             margin: theme.spacing(1),
-            // width: 200,
         },
     },
 }));
@@ -77,7 +76,6 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     };
 
     const handleVal = (v) => {
-        console.log(v);
         setValue(v);
     };
 
@@ -169,7 +167,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                 {warnDescription ? (
                     <LocalErrorMsg msgError={warnDescription} />
                 ) : (
-                    <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={child.type=='error'?thing:value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
+                    <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
                 )}
             </List>
         </React.Fragment>

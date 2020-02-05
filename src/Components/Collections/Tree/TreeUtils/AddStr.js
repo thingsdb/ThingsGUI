@@ -11,6 +11,7 @@ const AddStr = ({input, cb, ...props}) => {
         cb(`'${value}'`);
     };
 
+    console.log("str");
     return(
         <TextField
             name="value"
