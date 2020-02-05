@@ -39,21 +39,29 @@ const useStyles = makeStyles(theme => ({
 const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
     const classes = useStyles();
     const [editState, dispatch] = useEdit();
-    const {val, query, error} = editState;
 
     const [newProperty, setNewProperty] = React.useState('');
+    const [error, setError] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type);
     const [warnDescription, setWarnDescription] = React.useState('');
 
+    React.useEffect(()=>{
+        if (child.name != 'root') {
+            EditActions.updateVal(dispatch, dataType == 'thing' ? ''
+                : dataType == 'closure' ? thing['/']
+                    : dataType == 'regex' ? thing['*']
+                        : dataType == 'error' ? `err(${thing.error_code}, ${thing.error_msg})`
+                            : dataType == 'array' ? ''
+                                : thing);
+        }
+    }, []);
 
-    const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
+    const errorTxt = (property) => thing[property] || property == 'root' ? 'property name already in use' : ''; // todo root
 
     const handleOnChangeName = ({target}) => {
         const {value} = target;
         const err = errorTxt(value);
-        EditActions.update(dispatch, {
-            error: err,
-        });
+        setError(err);
         setNewProperty(value);
     };
 
@@ -67,6 +75,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
             array: [],
             error: '',
         });
+        setError('');
         setDataType(value);
     };
 
@@ -90,30 +99,29 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
         }
     };
 
+    console.log('edit');
+
     return(
         <React.Fragment>
             <List disablePadding dense className={classes.list}>
-                <Collapse in={Boolean(query)} timeout="auto">
-                    <ListItem className={classes.listItem} >
-                        <BuildQueryString
-                            action="edit"
-                            child={{
-                                id: null,
-                                index: child.index,
-                                name: child.id?newProperty:child.name,
-                                type: dataType,
-                                val: val,
-                            }}
-                            customTypes={customTypes}
-                            parent={{
-                                id: child.id||parent.id,
-                                name: child.id || child.type == 'list' || child.type == 'set' ?child.name:parent.name,
-                                type: child.id|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
-                            }}
-                            showQuery
-                        />
-                    </ListItem>
-                </Collapse>
+                <ListItem className={classes.listItem} >
+                    <BuildQueryString
+                        action="edit"
+                        child={{
+                            id: null,
+                            index: child.index,
+                            name: child.id?newProperty:child.name,
+                            type: dataType,
+                        }}
+                        customTypes={customTypes}
+                        parent={{
+                            id: child.id||parent.id,
+                            name: child.id || child.type == 'list' || child.type == 'set' ?child.name:parent.name,
+                            type: child.id|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
+                        }}
+                        showQuery
+                    />
+                </ListItem>
                 <ListItem className={classes.listItem}>
                     {addNewProperty && (
                         <TextField

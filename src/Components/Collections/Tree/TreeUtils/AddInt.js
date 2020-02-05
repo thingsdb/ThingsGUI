@@ -23,6 +23,8 @@ const AddInt = ({identifier, ...props}) => {
 
     const v = val[identifier]||(val.constructor === Object?'':val);
 
+    console.log('int');
+
     return(
         <TextField
             name="value"

@@ -6,24 +6,27 @@ import {EditActions, useEdit} from './Context';
 
 const BuildQueryString = ({action, child, customTypes, parent, showQuery}) => {
     const [editState, dispatch] = useEdit();
-    const {query} = editState;
+    const {val, query} = editState;
+
+    console.log(val)
 
     React.useEffect(() => {
-        handleBuildQuery(action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type);
-    }, [action, child.val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type]);
+        handleBuildQuery(action, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type);
+    }, [action, val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type]);
 
-    const handleBuildQuery = (action, childVal, childType, childIndex, childId, childName, parentId, parentName, parentType) => {
-        let val;
+    const handleBuildQuery = (action, childType, childIndex, childId, childName, parentId, parentName, parentType) => {
+        let v;
         let q = '';
         switch (action) {
         case 'edit':
-            val = input(childVal, childType);
-            q = buildQueryAdd(parentId, parentName, parentType, childName, childIndex, val);
+            v = input(val, childType);
+            q = buildQueryAdd(parentId, parentName, parentType, childName, childIndex, v);
             break;
         case 'remove':
             q = buildQueryRemove(parentId, parentName, parentType, childId, childName, childIndex);
             break;
         }
+
         EditActions.update(dispatch, {
             query: q,
         });

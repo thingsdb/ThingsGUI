@@ -30,7 +30,6 @@ const useStyles = makeStyles(theme => ({
 const Thing = ({child, collection, parent, thing, things, watchIds}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
-    const [editState, dispatch] = useEdit();
 
     React.useEffect(() => {
         setShow(false); // closes dialog when item of array is removed. Otherwise dialog stays open with previous item.
@@ -55,19 +54,12 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
 
     const handleOpenDialog = () => {
         setShow(true);
-        EditActions.updateVal(dispatch, type == 'thing' ? ''
-            : type == 'closure' ? currThing['/']
-                : type == 'regex' ? currThing['*']
-                    : type == 'error' ? `err(${currThing.error_code}, ${currThing.error_msg})`
-                        : type == 'array' ? ''
-                            : currThing);
-
     };
 
     const handleCloseDialog = () => {
         setShow(false);
     };
-
+    console.log('thing');
     const renderThing = ([k, v, i=null]) => {
         return k === '#' ? null : (
             <div key={i ? i : k} className={classes.nested}>
