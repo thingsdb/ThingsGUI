@@ -13,7 +13,7 @@ const CollectionInfo = ({collection}) => {
             {ky: 'created_at', label: 'Created on'},
         ]},
     ];
-    const rows = JSON.parse(JSON.stringify(collection));
+    const rows = JSON.parse(JSON.stringify(collection)); //copy
     rows.created_at = moment(rows.created_at*1000).format('YYYY-MM-DD HH:mm:ss');
 
     return (

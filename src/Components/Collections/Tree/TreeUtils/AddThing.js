@@ -44,6 +44,12 @@ const AddThing = ({customTypes, dataTypes, identifier, parentDispatch}) => {
     const {array, val, blob} = editState;
 
     React.useEffect(() => {
+        EditActions.update(dispatch, {val: '', array: [], blob: {}});
+    },
+    [],
+    );
+
+    React.useEffect(() => {
         EditActions.updateVal(parentDispatch,`{${array}}`, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
     },
@@ -69,6 +75,8 @@ const AddThing = ({customTypes, dataTypes, identifier, parentDispatch}) => {
     const handleAdd = () => {
         const contentTypeChecked = typeControls(dataType, `${property}: ${val}`);
         EditActions.addToArr(dispatch, contentTypeChecked);
+        EditActions.updateVal(dispatch, '');
+        setState({...state, property: ''});
     };
 
     const handleClick = (index, item) => () => {

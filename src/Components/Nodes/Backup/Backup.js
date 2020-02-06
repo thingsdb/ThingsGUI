@@ -65,7 +65,7 @@ const Backup = ({nodeId, offline, backups}) => {
 
     const handleButtons = (backup) => <Remove nodeId={nodeId} backup={backup} />;
 
-    const rows = JSON.parse(JSON.stringify(backups));
+    const rows = JSON.parse(JSON.stringify(backups)); // copy
 
     rows.map(b=> {
         b.created_at = moment(b.created_at*1000).format('YYYY-MM-DD HH:mm:ss');

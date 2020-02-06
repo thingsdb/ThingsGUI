@@ -41,6 +41,12 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
     const {array, val, blob} = editState;
 
     React.useEffect(() => {
+        EditActions.update(dispatch, {val: '', array: [], blob: {}});
+    },
+    [],
+    );
+
+    React.useEffect(() => {
         setDataType(childTypes[0]||dataTypes[0]);
     },
     [childTypes.length, dataTypes.length],
@@ -72,6 +78,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
     const handleAdd = () => {
         const contentTypeChecked = typeControls(dataType, val);
         EditActions.addToArr(dispatch, contentTypeChecked);
+        EditActions.updateVal(dispatch, '');
     };
 
     const handleClick = (index, item) => () => {

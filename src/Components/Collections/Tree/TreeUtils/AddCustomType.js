@@ -142,7 +142,7 @@ const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch
         EditActions.updateVal(parentDispatch,`${type}{${array}}`, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
     },
-    [JSON.stringify(array)],
+    [JSON.stringify(array)], // TODO STRING
     );
 
     React.useEffect(() => {

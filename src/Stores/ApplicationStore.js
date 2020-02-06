@@ -155,7 +155,7 @@ class ApplicationStore extends BaseStore {
     onDelConn(config, tag) {
         this.emit('delConn', config).done((_data) => {
             this.setState(prevState => {
-                let copy = JSON.parse(JSON.stringify(prevState.savedConnections));
+                let copy = JSON.parse(JSON.stringify(prevState.savedConnections)); // copy
                 delete copy[config.name];
                 const update = Object.assign({}, prevState, {savedConnections: copy});
                 return update;

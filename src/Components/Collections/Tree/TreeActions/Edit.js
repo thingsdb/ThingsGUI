@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -38,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
     const classes = useStyles();
-    const [editState, dispatch] = useEdit();
+    const dispatch = useEdit()[1];
 
     const [newProperty, setNewProperty] = React.useState('');
     const [error, setError] = React.useState('');
@@ -46,14 +45,12 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
     const [warnDescription, setWarnDescription] = React.useState('');
 
     React.useEffect(()=>{
-        if (child.name != 'root') {
-            EditActions.updateVal(dispatch, dataType == 'thing' ? ''
-                : dataType == 'closure' ? thing['/']
-                    : dataType == 'regex' ? thing['*']
-                        : dataType == 'error' ? `err(${thing.error_code}, ${thing.error_msg})`
-                            : dataType == 'array' ? ''
-                                : thing);
-        }
+        EditActions.updateVal(dispatch, (child.type == 'thing' || child.type == 'list' || child.type == 'set') ? ''
+            : child.type == 'closure' ? thing['/']
+                : child.type == 'regex' ? thing['*']
+                    : child.type == 'error' ? `err(${thing.error_code}, ${thing.error_msg})`
+                        : thing);
+
     }, []);
 
     const errorTxt = (property) => thing[property] || property == 'root' ? 'property name already in use' : ''; // todo root
@@ -99,14 +96,11 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
         }
     };
 
-    console.log('edit');
-
     return(
         <React.Fragment>
             <List disablePadding dense className={classes.list}>
                 <ListItem className={classes.listItem} >
                     <BuildQueryString
-                        action="edit"
                         child={{
                             id: null,
                             index: child.index,
@@ -119,7 +113,6 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
                             name: child.id || child.type == 'list' || child.type == 'set' ?child.name:parent.name,
                             type: child.id|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
                         }}
-                        showQuery
                     />
                 </ListItem>
                 <ListItem className={classes.listItem}>

@@ -1,13 +1,12 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
-import React from "react";
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-
-import {useEdit} from './Context';
 import DialogButtons from './DialogButtons';
 import Edit from './Edit';
+import SubmitButton from './SubmitButton';
 import {CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
 import {ErrorMsg, SimpleModal} from '../../../Util';
 
@@ -15,14 +14,9 @@ const tag = '8';
 
 
 const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
-    const [editState] = useEdit();
-    const {query, blob, error} = editState;
 
     const initialState = {
         customTypes: [],
-        query: '',
-        blob: {},
-        error: '',
         show: false,
         setOrList: '',
         realChildType: '',
@@ -70,7 +64,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
         setState({...state, realChildType: t.childType, realParentType: t.parentType, show: true, customTypes: t.customTypes});
     };
 
-    const handleClickOk = () => {
+    const handleClickOk = (blob, query) => {
         if (Object.keys(blob).length) {
             CollectionActions.blob(
                 scope,
@@ -100,8 +94,6 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
     // buttons visible
     const isChildCustom = Boolean(customTypes.find(c=>c.name==realChildType));
     const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type === 'bytes' || realChildType[0]=='<');
-
-
 
     const content = (
         <Grid container spacing={1}>
@@ -146,9 +138,12 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
                 <SimpleModal
                     open
                     onClose={onClose}
-                    onOk={canEdit ? handleClickOk:null}
                     maxWidth="md"
-                    disableOk={Boolean(error)}
+                    actionButtons={
+                        <React.Fragment>
+                            {canEdit ? <SubmitButton onClickSubmit={handleClickOk} />:null}
+                        </React.Fragment>
+                    }
                 >
                     {content}
                 </SimpleModal>
