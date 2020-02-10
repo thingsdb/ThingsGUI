@@ -37,41 +37,39 @@ const Menu = ({title, icon, items, addItem, onClickItem}) => {
     };
 
     return (
-        <React.Fragment>
-            <List className={classes.root} dense disablePadding>
-                <ListItem button onClick={handleClickOpen}>
-                    <ListItemIcon>
-                        {open ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
-                    </ListItemIcon>
-                    <ListItemText primary={title} />
-                </ListItem>
-                <Collapse in={open} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        {items.length ? items.map((item, i) => {
-                            return(
-                                <ListItem key={i} button className={classes.nested} onClick={handleClickItem(i)}>
-                                    <ListItemIcon>
-                                        {icon}
-                                    </ListItemIcon>
-                                    <ListItemText primary={item.name} />
-                                </ListItem>
-                            );
-                        }) : (
-                            <ListItem button className={classes.nested}>
+        <List className={classes.root} dense disablePadding>
+            <ListItem button onClick={handleClickOpen}>
+                <ListItemIcon>
+                    {open ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
+                </ListItemIcon>
+                <ListItemText primary={title} />
+            </ListItem>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                    {items.length ? items.map((item, i) => {
+                        return(
+                            <ListItem key={i} button className={classes.nested} onClick={handleClickItem(i)}>
                                 <ListItemIcon>
-                                    <BlockIcon />
+                                    {icon}
                                 </ListItemIcon>
-                                <ListItemText primaryTypographyProps={{'variant':'caption', 'color':'error'}} />
+                                <ListItemText primary={item.name} />
                             </ListItem>
-                        )}
-                        <Divider />
-                        <ListItem className={classes.nestedAdd} >
-                            {addItem}
+                        );
+                    }) : (
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <BlockIcon />
+                            </ListItemIcon>
+                            <ListItemText primaryTypographyProps={{'variant':'caption', 'color':'error'}} />
                         </ListItem>
-                    </List>
-                </Collapse>
-            </List>
-        </React.Fragment>
+                    )}
+                    <Divider />
+                    <ListItem className={classes.nestedAdd} >
+                        {addItem}
+                    </ListItem>
+                </List>
+            </Collapse>
+        </List>
     );
 };
 

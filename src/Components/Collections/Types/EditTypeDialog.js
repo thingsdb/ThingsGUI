@@ -144,102 +144,100 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
     );
 
     return (
-        <React.Fragment>
-            <SimpleModal
-                open={open}
-                onClose={onClose}
-                onOk={add||edit?handleClickOk:null}
-                maxWidth="sm"
-                actionButtons={add||edit ? (
-                    <Button onClick={handleBack} color="primary">
-                        {'Back'}
-                    </Button>
-                ):null}
-            >
-                <Grid container spacing={1}>
-                    <Grid container spacing={1} item xs={12}>
-                        <Grid item xs={8}>
-                            <Typography variant="body1" >
-                                {'Customizing ThingDB type:'}
-                            </Typography>
-                            <Typography variant="h4" color='primary' component='span'>
-                                {customType.name||'Add new type'}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <ErrorMsg tag={tag} />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <List disablePadding dense>
-                            <Collapse in={Boolean(queryString)} timeout="auto">
-                                <ListItem className={classes.listItem} >
-                                    <TextField
-                                        name="queryString"
-                                        label="Query"
-                                        type="text"
-                                        value={queryString}
-                                        fullWidth
-                                        multiline
-                                        InputProps={{
-                                            readOnly: true,
-                                            disableUnderline: true,
-                                        }}
-                                        inputProps={{
-                                            style: {
-                                                fontFamily: 'monospace',
-                                            },
-                                        }}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-                                </ListItem>
-                            </Collapse>
-                            <Collapse in={add || edit} timeout="auto" unmountOnExit>
-                                <ListItem>
-                                    <AddTypeProperty cb={add?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={edit?property: {}} hasPropName={!edit} hasInitVal={add} />
-                                </ListItem>
-                            </Collapse>
-                            <Collapse in={overview||del} timeout="auto" unmountOnExit>
-                                <ListItem>
-                                    <ListItemText
-                                        primary="Current properties:"
-                                        secondary={
-                                            <Link href="https://docs.thingsdb.net/v0/data-types/type/">
-                                                {'https://docs.thingsdb.net/v0/data-types/type/'}
-                                            </Link>
-                                        }
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <TableWithButtons
-                                        header={header}
-                                        rows={rows}
-                                        rowClick={()=>null}
-                                        buttons={buttons}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <Grid container>
-                                        <Grid item xs={1}>
-                                            <ButtonBase onClick={handleAdd} >
-                                                <AddIcon color="primary" />
-                                            </ButtonBase>
-                                        </Grid>
-                                        <Grid container item xs={11} justify="flex-end">
-                                            <Box fontSize={10} fontStyle="italic" m={1}>
-                                                {`Created on: ${moment(customType.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}, last modified on: ${moment(customType.modified_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
-                                            </Box>
-                                        </Grid>
-                                    </Grid>
-                                </ListItem>
-                            </Collapse>
-                        </List>
+        <SimpleModal
+            open={open}
+            onClose={onClose}
+            onOk={add||edit?handleClickOk:null}
+            maxWidth="sm"
+            actionButtons={add||edit ? (
+                <Button onClick={handleBack} color="primary">
+                    {'Back'}
+                </Button>
+            ):null}
+        >
+            <Grid container spacing={1}>
+                <Grid container spacing={1} item xs={12}>
+                    <Grid item xs={8}>
+                        <Typography variant="body1" >
+                            {'Customizing ThingDB type:'}
+                        </Typography>
+                        <Typography variant="h4" color='primary' component='span'>
+                            {customType.name||'Add new type'}
+                        </Typography>
                     </Grid>
                 </Grid>
-            </SimpleModal>
-        </React.Fragment>
+                <Grid item xs={12}>
+                    <ErrorMsg tag={tag} />
+                </Grid>
+                <Grid item xs={12}>
+                    <List disablePadding dense>
+                        <Collapse in={Boolean(queryString)} timeout="auto">
+                            <ListItem className={classes.listItem} >
+                                <TextField
+                                    name="queryString"
+                                    label="Query"
+                                    type="text"
+                                    value={queryString}
+                                    fullWidth
+                                    multiline
+                                    InputProps={{
+                                        readOnly: true,
+                                        disableUnderline: true,
+                                    }}
+                                    inputProps={{
+                                        style: {
+                                            fontFamily: 'monospace',
+                                        },
+                                    }}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </ListItem>
+                        </Collapse>
+                        <Collapse in={add || edit} timeout="auto" unmountOnExit>
+                            <ListItem>
+                                <AddTypeProperty cb={add?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={edit?property: {}} hasPropName={!edit} hasInitVal={add} />
+                            </ListItem>
+                        </Collapse>
+                        <Collapse in={overview||del} timeout="auto" unmountOnExit>
+                            <ListItem>
+                                <ListItemText
+                                    primary="Current properties:"
+                                    secondary={
+                                        <Link href="https://docs.thingsdb.net/v0/data-types/type/">
+                                            {'https://docs.thingsdb.net/v0/data-types/type/'}
+                                        </Link>
+                                    }
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <TableWithButtons
+                                    header={header}
+                                    rows={rows}
+                                    rowClick={()=>null}
+                                    buttons={buttons}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <Grid container>
+                                    <Grid item xs={1}>
+                                        <ButtonBase onClick={handleAdd} >
+                                            <AddIcon color="primary" />
+                                        </ButtonBase>
+                                    </Grid>
+                                    <Grid container item xs={11} justify="flex-end">
+                                        <Box fontSize={10} fontStyle="italic" m={1}>
+                                            {`Created on: ${moment(customType.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}, last modified on: ${moment(customType.modified_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                                        </Box>
+                                    </Grid>
+                                </Grid>
+                            </ListItem>
+                        </Collapse>
+                    </List>
+                </Grid>
+            </Grid>
+        </SimpleModal>
     );
 };
 

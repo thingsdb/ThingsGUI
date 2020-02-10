@@ -49,46 +49,44 @@ const TopBar = ({additionals, user}) => {
     };
 
     return (
-        <React.Fragment>
-            <AppBar
-                className={classes.appBar}
-                position="static"
-            >
-                <Toolbar className={classes.toolbar}>
-                    <div className={classes.flex}>
-                        {/* <Tooltip disableFocusListener disableTouchListener title={packageJson.version}>                   */}
-                        <img
-                            alt="ThingsDB Logo"
-                            src="/img/thingsdb-logo.png"
-                            className={classes.avatar}
-                            draggable='false'
-                        />
-                        {/* </Tooltip> */}
-                    </div>
-                    <div >
-                        <TopBarMenu menuIcon={<AccountCircle />}>
-                            <List>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <PersonIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={user.name} />
-                                </ListItem>
-                                <ListItem button onClick={handleClickLogout}>
-                                    <ListItemIcon>
-                                        <ExitToAppIcon color="primary" />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Logout" />
-                                </ListItem>
-                            </List>
-                        </TopBarMenu>
-                    </div>
-                    <div>
-                        {additionals}
-                    </div>
-                </Toolbar>
-            </AppBar>
-        </React.Fragment>
+        <AppBar
+            className={classes.appBar}
+            position="static"
+        >
+            <Toolbar className={classes.toolbar}>
+                <div className={classes.flex}>
+                    {/* <Tooltip disableFocusListener disableTouchListener title={packageJson.version}>                   */}
+                    <img
+                        alt="ThingsDB Logo"
+                        src="/img/thingsdb-logo.png"
+                        className={classes.avatar}
+                        draggable='false'
+                    />
+                    {/* </Tooltip> */}
+                </div>
+                <div >
+                    <TopBarMenu menuIcon={<AccountCircle />}>
+                        <List>
+                            <ListItem>
+                                <ListItemIcon>
+                                    <PersonIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={user.name} />
+                            </ListItem>
+                            <ListItem button onClick={handleClickLogout}>
+                                <ListItemIcon>
+                                    <ExitToAppIcon color="primary" />
+                                </ListItemIcon>
+                                <ListItemText primary="Logout" />
+                            </ListItem>
+                        </List>
+                    </TopBarMenu>
+                </div>
+                <div>
+                    {additionals}
+                </div>
+            </Toolbar>
+        </AppBar>
     );
 };
 

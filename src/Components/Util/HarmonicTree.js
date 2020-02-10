@@ -31,18 +31,17 @@ const HarmonicTree = ({customTypes, items, jsonView, title, onAction, jsonReplac
             </ListItem>
             <Collapse in={show} timeout="auto" unmountOnExit>
                 {!jsonView && Object.entries(items).map(([k, v], i) => (
-                    <React.Fragment key={i}>
-                        <ThingsTree
-                            item={v}
-                            child={{
-                                name:v.name||k,
-                                index:null,
-                            }}
-                            customTypes={customTypes[k]}
-                            root={false}
-                            onAction={onAction&&onAction(k)}
-                        />
-                    </React.Fragment>
+                    <ThingsTree
+                        key={i}
+                        item={v}
+                        child={{
+                            name:v.name||k,
+                            index:null,
+                        }}
+                        customTypes={customTypes[k]}
+                        root={false}
+                        onAction={onAction&&onAction(k)}
+                    />
                 ))}
                 {jsonView &&
                     <pre>

@@ -11,11 +11,9 @@ const CountersReset = ({nodeId}) => {
     };
 
     return (
-        <React.Fragment>
-            <Button variant="outlined" color="primary" onClick={handleClickOk}>
-                {'Reset counters'}
-            </Button>
-        </React.Fragment>
+        <Button variant="outlined" color="primary" onClick={handleClickOk}>
+            {'Reset counters'}
+        </Button>
     );
 };
 

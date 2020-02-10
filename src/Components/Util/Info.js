@@ -27,20 +27,18 @@ const Info = ({header, content}) => {
                         <Divider />
                     </Grid>
                     {h.labels.map((l) => (
-                        <React.Fragment key={l.ky}>
-                            <Grid container item xs={12}>
-                                <Grid item xs={6}>
-                                    <Typography variant="caption">
-                                        {l.label + ':'}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography variant="subtitle2">
-                                        {content[l.ky]}
-                                    </Typography>
-                                </Grid>
+                        <Grid key={l.ky} container item xs={12}>
+                            <Grid item xs={6}>
+                                <Typography variant="caption">
+                                    {l.label + ':'}
+                                </Typography>
                             </Grid>
-                        </React.Fragment>
+                            <Grid item xs={6}>
+                                <Typography variant="subtitle2">
+                                    {content[l.ky]}
+                                </Typography>
+                            </Grid>
+                        </Grid>
                     ))}
                 </React.Fragment>
             ))}

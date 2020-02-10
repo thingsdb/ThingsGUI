@@ -74,78 +74,76 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
 
 
     return (
-        <React.Fragment>
-            <SimpleModal
-                open={open}
-                onClose={onClose}
-                onOk={handleClickOk}
-                maxWidth="sm"
-                disableOk={Boolean(error)}
-            >
-                <Grid container spacing={1}>
-                    <Grid container spacing={1} item xs={12}>
-                        <Grid item xs={8}>
-                            <Typography variant="body1" >
-                                {'Customizing ThingDB procedure:'}
-                            </Typography>
-                            <Typography variant="h4" color='primary' component='span'>
-                                {'Add new procedure'}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <ErrorMsg tag={tag} />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <List disablePadding dense>
-                            <Collapse in={Boolean(queryString)} timeout="auto">
-                                <ListItem className={classes.listItem} >
-                                    <TextField
-                                        name="queryString"
-                                        label="Query"
-                                        type="text"
-                                        value={queryString}
-                                        fullWidth
-                                        multiline
-                                        InputProps={{
-                                            readOnly: true,
-                                            disableUnderline: true,
-                                        }}
-                                        inputProps={{
-                                            style: {
-                                                fontFamily: 'monospace',
-                                            },
-                                        }}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-                                </ListItem>
-                            </Collapse>
-                            <ListItem className={classes.listItem}>
-                                <TextField
-                                    name="procedureName"
-                                    label="Name"
-                                    type="text"
-                                    value={procedureName}
-                                    spellCheck={false}
-                                    onChange={handleChange}
-                                    fullWidth
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <Typography variant="body1" >
-                                    {'Add closure:'}
-                                </Typography>
-                            </ListItem>
-                            <ListItem>
-                                <Closure cb={handleClosure} />
-                            </ListItem>
-                        </List>
+        <SimpleModal
+            open={open}
+            onClose={onClose}
+            onOk={handleClickOk}
+            maxWidth="sm"
+            disableOk={Boolean(error)}
+        >
+            <Grid container spacing={1}>
+                <Grid container spacing={1} item xs={12}>
+                    <Grid item xs={8}>
+                        <Typography variant="body1" >
+                            {'Customizing ThingDB procedure:'}
+                        </Typography>
+                        <Typography variant="h4" color='primary' component='span'>
+                            {'Add new procedure'}
+                        </Typography>
                     </Grid>
                 </Grid>
-            </SimpleModal>
-        </React.Fragment>
+                <Grid item xs={12}>
+                    <ErrorMsg tag={tag} />
+                </Grid>
+                <Grid item xs={12}>
+                    <List disablePadding dense>
+                        <Collapse in={Boolean(queryString)} timeout="auto">
+                            <ListItem className={classes.listItem} >
+                                <TextField
+                                    name="queryString"
+                                    label="Query"
+                                    type="text"
+                                    value={queryString}
+                                    fullWidth
+                                    multiline
+                                    InputProps={{
+                                        readOnly: true,
+                                        disableUnderline: true,
+                                    }}
+                                    inputProps={{
+                                        style: {
+                                            fontFamily: 'monospace',
+                                        },
+                                    }}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </ListItem>
+                        </Collapse>
+                        <ListItem className={classes.listItem}>
+                            <TextField
+                                name="procedureName"
+                                label="Name"
+                                type="text"
+                                value={procedureName}
+                                spellCheck={false}
+                                onChange={handleChange}
+                                fullWidth
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <Typography variant="body1" >
+                                {'Add closure:'}
+                            </Typography>
+                        </ListItem>
+                        <ListItem>
+                            <Closure cb={handleClosure} />
+                        </ListItem>
+                    </List>
+                </Grid>
+            </Grid>
+        </SimpleModal>
     );
 };
 

@@ -83,73 +83,71 @@ const EditProcedureDialog = ({open, onClose, procedure, scope, cb}) => {
     };
 
     return (
-        <React.Fragment>
-            <SimpleModal
-                open={open}
-                onClose={onClose}
-                onOk={handleClickOk}
-                maxWidth="sm"
-            >
-                <Grid container spacing={1}>
-                    <Grid container spacing={1} item xs={12}>
-                        <Grid item xs={8}>
-                            <Typography variant="body1" >
-                                {'Customizing ThingDB procedure:'}
-                            </Typography>
-                            <Typography variant="h4" color='primary' component='span'>
-                                {procedure.name||''}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <ErrorMsg tag={tag} />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <List disablePadding dense>
-                            <Collapse in={Boolean(queryString)} timeout="auto">
-                                <ListItem className={classes.listItem} >
-                                    <TextField
-                                        name="queryString"
-                                        label="Query"
-                                        type="text"
-                                        value={queryString}
-                                        fullWidth
-                                        multiline
-                                        InputProps={{
-                                            readOnly: true,
-                                            disableUnderline: true,
-                                        }}
-                                        inputProps={{
-                                            style: {
-                                                fontFamily: 'monospace',
-                                            },
-                                        }}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-                                </ListItem>
-                            </Collapse>
-                            <ListItem>
-                                <Typography variant="body1" >
-                                    {'Add closure:'}
-                                </Typography>
-                            </ListItem>
-                            <ListItem>
-                                <Closure input={closure} cb={handleClosure} />
-                            </ListItem>
-                            <ListItem>
-                                <Grid container item xs={11} justify="flex-end">
-                                    <Box fontSize={10} fontStyle="italic" m={1}>
-                                        {`Created on: ${moment(procedure.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
-                                    </Box>
-                                </Grid>
-                            </ListItem>
-                        </List>
+        <SimpleModal
+            open={open}
+            onClose={onClose}
+            onOk={handleClickOk}
+            maxWidth="sm"
+        >
+            <Grid container spacing={1}>
+                <Grid container spacing={1} item xs={12}>
+                    <Grid item xs={8}>
+                        <Typography variant="body1" >
+                            {'Customizing ThingDB procedure:'}
+                        </Typography>
+                        <Typography variant="h4" color='primary' component='span'>
+                            {procedure.name||''}
+                        </Typography>
                     </Grid>
                 </Grid>
-            </SimpleModal>
-        </React.Fragment>
+                <Grid item xs={12}>
+                    <ErrorMsg tag={tag} />
+                </Grid>
+                <Grid item xs={12}>
+                    <List disablePadding dense>
+                        <Collapse in={Boolean(queryString)} timeout="auto">
+                            <ListItem className={classes.listItem} >
+                                <TextField
+                                    name="queryString"
+                                    label="Query"
+                                    type="text"
+                                    value={queryString}
+                                    fullWidth
+                                    multiline
+                                    InputProps={{
+                                        readOnly: true,
+                                        disableUnderline: true,
+                                    }}
+                                    inputProps={{
+                                        style: {
+                                            fontFamily: 'monospace',
+                                        },
+                                    }}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </ListItem>
+                        </Collapse>
+                        <ListItem>
+                            <Typography variant="body1" >
+                                {'Add closure:'}
+                            </Typography>
+                        </ListItem>
+                        <ListItem>
+                            <Closure input={closure} cb={handleClosure} />
+                        </ListItem>
+                        <ListItem>
+                            <Grid container item xs={11} justify="flex-end">
+                                <Box fontSize={10} fontStyle="italic" m={1}>
+                                    {`Created on: ${moment(procedure.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                                </Box>
+                            </Grid>
+                        </ListItem>
+                    </List>
+                </Grid>
+            </Grid>
+        </SimpleModal>
     );
 };
 

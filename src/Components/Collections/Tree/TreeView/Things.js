@@ -69,26 +69,25 @@ const ThingRoot = ({things, collection, watchIds}) => {
                     disablePadding
                 >
                     {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
-                        <React.Fragment key={k}>
-                            <Thing
-                                className={classes.thing}
-                                id={collection.collection_id}
-                                thing={v}
-                                things={things}
-                                collection={collection}
-                                parent={{
-                                    id: collection.collection_id,
-                                    name: 'root',
-                                    type: 'thing',
-                                    isTuple: false,
-                                }}
-                                child={{
-                                    name: k,
-                                    index: null,
-                                }}
-                                watchIds={watchIds}
-                            />
-                        </React.Fragment>
+                        <Thing
+                            key={k}
+                            className={classes.thing}
+                            id={collection.collection_id}
+                            thing={v}
+                            things={things}
+                            collection={collection}
+                            parent={{
+                                id: collection.collection_id,
+                                name: 'root',
+                                type: 'thing',
+                                isTuple: false,
+                            }}
+                            child={{
+                                name: k,
+                                index: null,
+                            }}
+                            watchIds={watchIds}
+                        />
                     ))}
                     <Divider className={classes.divider} />
                     <ListItem className={classes.listItem}>

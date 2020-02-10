@@ -15,20 +15,18 @@ const useStyles = makeStyles(theme => ({
 const NodeButtons = () => {
     const classes = useStyles();
     return (
-        <React.Fragment>
-            <Grid
-                className={classes.buttons}
-                container
-                direction="column"
-                spacing={3}
-            >
-                <Grid item container xs={12} spacing={1} >
-                    <Grid item>
-                        <Add />
-                    </Grid>
+        <Grid
+            className={classes.buttons}
+            container
+            direction="column"
+            spacing={3}
+        >
+            <Grid item container xs={12} spacing={1} >
+                <Grid item>
+                    <Add />
                 </Grid>
             </Grid>
-        </React.Fragment>
+        </Grid>
     );
 };
 

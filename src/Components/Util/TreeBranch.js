@@ -82,34 +82,32 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                 />
                 {children}
                 <ListItemSecondaryAction>
-                    <React.Fragment>
-                        {onAction&&onAction(name, type, val)}
-                        {canToggle&& (
-                            <ButtonBase onClick={handleClick} >
-                                {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
-                            </ButtonBase>
-                        )}
-                        {!button ? (
-                            type === 'bytes' ? (
-                                <DownloadBlob val={val} isFab={false} />
-                            ) : type === 'str' ? (
-                                <SimpleModal
-                                    button={
-                                        <ButtonBase onClick={handleOpenStringDialog} >
-                                            <OpenIcon color="primary" />
-                                        </ButtonBase>
-                                    }
-                                    title="Show string"
-                                    open={open}
-                                    onClose={handleCloseStringDialog}
-                                >
-                                    <Typography align="justify" variant="body2">
-                                        {val}
-                                    </Typography>
-                                </SimpleModal>
-                            ) : null
-                        ):null}
-                    </React.Fragment>
+                    {onAction&&onAction(name, type, val)}
+                    {canToggle&& (
+                        <ButtonBase onClick={handleClick} >
+                            {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
+                        </ButtonBase>
+                    )}
+                    {!button ? (
+                        type === 'bytes' ? (
+                            <DownloadBlob val={val} isFab={false} />
+                        ) : type === 'str' ? (
+                            <SimpleModal
+                                button={
+                                    <ButtonBase onClick={handleOpenStringDialog} >
+                                        <OpenIcon color="primary" />
+                                    </ButtonBase>
+                                }
+                                title="Show string"
+                                open={open}
+                                onClose={handleCloseStringDialog}
+                            >
+                                <Typography align="justify" variant="body2">
+                                    {val}
+                                </Typography>
+                            </SimpleModal>
+                        ) : null
+                    ):null}
                 </ListItemSecondaryAction>
             </ListItem>
             {canToggle &&

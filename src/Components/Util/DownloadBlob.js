@@ -22,19 +22,17 @@ const TreeBranch = ({val, isFab}) => {
     };
 
     return (
-        <React.Fragment>
-            <Tooltip disableFocusListener disableTouchListener title="Download blob">
-                <Link href={link} download="blob" type="application/octet-stream" color="textPrimary">
-                    {isFab ? (
-                        <Fab color="primary" >
-                            <DownloadIcon fontSize="large" />
-                        </Fab>
-                    ) : (
-                        <DownloadIcon color="primary" />
-                    )}
-                </Link>
-            </Tooltip>
-        </React.Fragment>
+        <Tooltip disableFocusListener disableTouchListener title="Download blob">
+            <Link href={link} download="blob" type="application/octet-stream" color="textPrimary">
+                {isFab ? (
+                    <Fab color="primary" >
+                        <DownloadIcon fontSize="large" />
+                    </Fab>
+                ) : (
+                    <DownloadIcon color="primary" />
+                )}
+            </Link>
+        </Tooltip>
     );
 };
 

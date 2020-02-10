@@ -41,29 +41,27 @@ const LocalErrorMsg = ({msgError, onClose}) => {
     };
 
     return (
-        <React.Fragment>
-            <Collapse in={Boolean(msgError)} timeout="auto" unmountOnExit>
-                <Typography className={classes.typography} component="div" variant="caption">
-                    <Grid component="label" container alignItems="center" spacing={2} item xs={12}>
-                        <Grid item xs={2} >
-                            <Avatar className={classes.avatar}>
-                                <WarningIcon className={classes.warning} />
-                            </Avatar>
-                        </Grid>
-                        <Grid item className={classes.div} xs={8}>
-                            {msgError}
-                        </Grid>
-                        {onClose && (
-                            <Grid item xs={2}>
-                                <IconButton aria-label="settings" onClick={handleCloseError}>
-                                    <CloseIcon />
-                                </IconButton>
-                            </Grid>
-                        )}
+        <Collapse in={Boolean(msgError)} timeout="auto" unmountOnExit>
+            <Typography className={classes.typography} component="div" variant="caption">
+                <Grid component="label" container alignItems="center" spacing={2} item xs={12}>
+                    <Grid item xs={2} >
+                        <Avatar className={classes.avatar}>
+                            <WarningIcon className={classes.warning} />
+                        </Avatar>
                     </Grid>
-                </Typography>
-            </Collapse>
-        </React.Fragment>
+                    <Grid item className={classes.div} xs={8}>
+                        {msgError}
+                    </Grid>
+                    {onClose && (
+                        <Grid item xs={2}>
+                            <IconButton aria-label="settings" onClick={handleCloseError}>
+                                <CloseIcon />
+                            </IconButton>
+                        </Grid>
+                    )}
+                </Grid>
+            </Typography>
+        </Collapse>
     );
 };
 

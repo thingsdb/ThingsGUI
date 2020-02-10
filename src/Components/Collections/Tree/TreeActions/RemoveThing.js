@@ -55,41 +55,39 @@ const RemoveThing = ({scope, child, parent}) => {
     };
 
     const Content = (
-        <React.Fragment>
-            <List>
-                <ListItem>
-                    <TextField
-                        name="queryString"
-                        label="Query"
-                        type="text"
-                        value={query}
-                        fullWidth
-                        multiline
-                        rowsMax={4}
-                        InputProps={{
-                            readOnly: true,
-                            disableUnderline: true,
-                        }}
-                        inputProps={{
-                            style: {
-                                fontFamily: 'monospace',
-                            },
-                        }}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
-                </ListItem>
-                <ListItem>
-                    <ErrorMsg tag={tag} />
-                </ListItem>
-                <ListItem>
-                    <Typography>
-                        {'Are you sure?'}
-                    </Typography>
-                </ListItem>
-            </List>
-        </React.Fragment>
+        <List>
+            <ListItem>
+                <TextField
+                    name="queryString"
+                    label="Query"
+                    type="text"
+                    value={query}
+                    fullWidth
+                    multiline
+                    rowsMax={4}
+                    InputProps={{
+                        readOnly: true,
+                        disableUnderline: true,
+                    }}
+                    inputProps={{
+                        style: {
+                            fontFamily: 'monospace',
+                        },
+                    }}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
+            </ListItem>
+            <ListItem>
+                <ErrorMsg tag={tag} />
+            </ListItem>
+            <ListItem>
+                <Typography>
+                    {'Are you sure?'}
+                </Typography>
+            </ListItem>
+        </List>
     );
 
     const title = `Remove ${child.name}`;

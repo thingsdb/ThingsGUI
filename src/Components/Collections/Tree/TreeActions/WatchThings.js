@@ -34,17 +34,15 @@ const WatchThings = ({buttonIsFab, scope, tag, thingId, watchIds}) => {
     };
 
     return (
-        <React.Fragment>
-            <Tooltip disableFocusListener disableTouchListener title={onWatch ? 'Turn watching off' : 'Turn watching on'}>
-                {buttonIsFab ? (
-                    <Fab onClick={handleWatcher} color="primary">
-                        {onWatch ? <ExploreOffIcon fontSize="large" /> : <ExploreIcon fontSize="large" /> }
-                    </Fab>
-                ): (
-                    onWatch ? <ExploreOffIcon color="primary" /> : <ExploreIcon color="primary" />
-                )}
-            </Tooltip>
-        </React.Fragment>
+        <Tooltip disableFocusListener disableTouchListener title={onWatch ? 'Turn watching off' : 'Turn watching on'}>
+            {buttonIsFab ? (
+                <Fab onClick={handleWatcher} color="primary">
+                    {onWatch ? <ExploreOffIcon fontSize="large" /> : <ExploreIcon fontSize="large" /> }
+                </Fab>
+            ): (
+                onWatch ? <ExploreOffIcon color="primary" /> : <ExploreIcon color="primary" />
+            )}
+        </Tooltip>
     );
 };
 

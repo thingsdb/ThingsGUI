@@ -95,92 +95,90 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
 
 
     return (
-        <React.Fragment>
-            <SimpleModal
-                open={open}
-                onClose={onClose}
-                onOk={handleClickOk}
-                maxWidth="sm"
-                disableOk={Boolean(error)}
-            >
-                <Grid container spacing={1}>
-                    <Grid container spacing={1} item xs={12}>
-                        <Grid item xs={8}>
-                            <Typography variant="body1" >
-                                {'Customizing ThingDB type:'}
-                            </Typography>
-                            <Typography variant="h4" color='primary' component='span'>
-                                {'Add new type'}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <ErrorMsg tag={tag} />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <List disablePadding dense>
-                            <Collapse in={Boolean(queryString)} timeout="auto">
-                                <ListItem className={classes.listItem} >
-                                    <TextField
-                                        name="queryString"
-                                        label="Query"
-                                        type="text"
-                                        value={queryString}
-                                        fullWidth
-                                        multiline
-                                        InputProps={{
-                                            readOnly: true,
-                                            disableUnderline: true,
-                                        }}
-                                        inputProps={{
-                                            style: {
-                                                fontFamily: 'monospace',
-                                            },
-                                        }}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-                                </ListItem>
-                            </Collapse>
-                            <ListItem className={classes.listItem}>
-                                <TextField
-                                    name="typeName"
-                                    label="Name"
-                                    type="text"
-                                    value={typeName}
-                                    spellCheck={false}
-                                    onChange={handleChange}
-                                    fullWidth
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemText
-                                    primary="Add properties"
-                                    secondary={
-                                        <Link href="https://docs.thingsdb.net/v0/data-types/type/">
-                                            {'https://docs.thingsdb.net/v0/data-types/type/'}
-                                        </Link>
-                                    }
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ArrayLayout
-                                    child={(i) => (
-                                        <AddTypeProperty
-                                            cb={handleChangeProperty(i)}
-                                            dropdownItems={dataTypes}
-                                            input={properties[i]}
-                                        />
-                                    )}
-                                    onRemove={handleRemove}
-                                />
-                            </ListItem>
-                        </List>
+        <SimpleModal
+            open={open}
+            onClose={onClose}
+            onOk={handleClickOk}
+            maxWidth="sm"
+            disableOk={Boolean(error)}
+        >
+            <Grid container spacing={1}>
+                <Grid container spacing={1} item xs={12}>
+                    <Grid item xs={8}>
+                        <Typography variant="body1" >
+                            {'Customizing ThingDB type:'}
+                        </Typography>
+                        <Typography variant="h4" color='primary' component='span'>
+                            {'Add new type'}
+                        </Typography>
                     </Grid>
                 </Grid>
-            </SimpleModal>
-        </React.Fragment>
+                <Grid item xs={12}>
+                    <ErrorMsg tag={tag} />
+                </Grid>
+                <Grid item xs={12}>
+                    <List disablePadding dense>
+                        <Collapse in={Boolean(queryString)} timeout="auto">
+                            <ListItem className={classes.listItem} >
+                                <TextField
+                                    name="queryString"
+                                    label="Query"
+                                    type="text"
+                                    value={queryString}
+                                    fullWidth
+                                    multiline
+                                    InputProps={{
+                                        readOnly: true,
+                                        disableUnderline: true,
+                                    }}
+                                    inputProps={{
+                                        style: {
+                                            fontFamily: 'monospace',
+                                        },
+                                    }}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </ListItem>
+                        </Collapse>
+                        <ListItem className={classes.listItem}>
+                            <TextField
+                                name="typeName"
+                                label="Name"
+                                type="text"
+                                value={typeName}
+                                spellCheck={false}
+                                onChange={handleChange}
+                                fullWidth
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemText
+                                primary="Add properties"
+                                secondary={
+                                    <Link href="https://docs.thingsdb.net/v0/data-types/type/">
+                                        {'https://docs.thingsdb.net/v0/data-types/type/'}
+                                    </Link>
+                                }
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ArrayLayout
+                                child={(i) => (
+                                    <AddTypeProperty
+                                        cb={handleChangeProperty(i)}
+                                        dropdownItems={dataTypes}
+                                        input={properties[i]}
+                                    />
+                                )}
+                                onRemove={handleRemove}
+                            />
+                        </ListItem>
+                    </List>
+                </Grid>
+            </Grid>
+        </SimpleModal>
     );
 };
 

@@ -12,11 +12,9 @@ const CollectionTree = ({collection}) => (
         expand={false}
         title="THINGS TREE"
         content={
-            <React.Fragment>
-                <EditProvider>
-                    <Things collection={collection} />
-                </EditProvider>
-            </React.Fragment>
+            <EditProvider>
+                <Things collection={collection} />
+            </EditProvider>
         }
     />
 );

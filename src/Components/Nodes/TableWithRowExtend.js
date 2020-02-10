@@ -49,64 +49,62 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode}) => {
     };
 
     return (
-        <React.Fragment>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell colSpan={1} />
-                        {header.map((h, i) => (
-                            <TableCell key={h.ky} align={i?'right':'left'}>
-                                {h.label}
-                            </TableCell>
-                        ))}
-                        <TableCell colSpan={buttons&&rows.length ? buttons(rows[0]).length+1 : 1} />
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row, ri) => {
-                        const isopen = selected===ri;
-                        return (
-                            <React.Fragment key={ri}>
-                                <TableRow className={classes.row} >
-                                    <TableCell align='right' style={{borderBottom: isopen?'none':null}}>
-                                        {row.node_id == connectedNode.node_id && <ConnectedIcon />}
+        <Table>
+            <TableHead>
+                <TableRow>
+                    <TableCell colSpan={1} />
+                    {header.map((h, i) => (
+                        <TableCell key={h.ky} align={i?'right':'left'}>
+                            {h.label}
+                        </TableCell>
+                    ))}
+                    <TableCell colSpan={buttons&&rows.length ? buttons(rows[0]).length+1 : 1} />
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {rows.map((row, ri) => {
+                    const isopen = selected===ri;
+                    return (
+                        <React.Fragment key={ri}>
+                            <TableRow className={classes.row} >
+                                <TableCell align='right' style={{borderBottom: isopen?'none':null}}>
+                                    {row.node_id == connectedNode.node_id && <ConnectedIcon />}
+                                </TableCell>
+                                {header.map((h, i) => (
+                                    <TableCell key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
+                                        <Typography variant="inherit" color={row[h.ky] == 'OFFLINE' ? 'error' : 'inherit'}>
+                                            {row[h.ky]}
+                                        </Typography>
                                     </TableCell>
-                                    {header.map((h, i) => (
-                                        <TableCell key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
-                                            <Typography variant="inherit" color={row[h.ky] == 'OFFLINE' ? 'error' : 'inherit'}>
-                                                {row[h.ky]}
-                                            </Typography>
+                                ))}
+                                {buttons ? (
+                                    buttons(row).map((r, i) => (
+                                        <TableCell key={i} align='right' style={{borderBottom: isopen?'none':null}}>
+                                            {r}
                                         </TableCell>
-                                    ))}
-                                    {buttons ? (
-                                        buttons(row).map((r, i) => (
-                                            <TableCell key={i} align='right' style={{borderBottom: isopen?'none':null}}>
-                                                {r}
-                                            </TableCell>
-                                        ))
-                                    ) : null}
-                                    <TableCell align="right" style={{borderBottom: isopen?'none':null}}>
-                                        <IconButton onClick={handleClickRow(ri)}>
-                                            {isopen ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
-                                        </IconButton>
+                                    ))
+                                ) : null}
+                                <TableCell align="right" style={{borderBottom: isopen?'none':null}}>
+                                    <IconButton onClick={handleClickRow(ri)}>
+                                        {isopen ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                            {isopen ? (
+                                <TableRow className={classes.collapse} style={{borderBottom: 'none'}}>
+                                    <TableCell colSpan={12}>
+                                        <Collapse in={isopen} timeout="auto" unmountOnExit>
+                                            {rowExtend(row)}
+                                        </Collapse>
                                     </TableCell>
                                 </TableRow>
-                                {isopen ? (
-                                    <TableRow className={classes.collapse} style={{borderBottom: 'none'}}>
-                                        <TableCell colSpan={12}>
-                                            <Collapse in={isopen} timeout="auto" unmountOnExit>
-                                                {rowExtend(row)}
-                                            </Collapse>
-                                        </TableCell>
-                                    </TableRow>
 
-                                ) : null}
-                            </React.Fragment>
-                        );
-                    })}
-                </TableBody>
-            </Table>
-        </React.Fragment>
+                            ) : null}
+                        </React.Fragment>
+                    );
+                })}
+            </TableBody>
+        </Table>
     );
 };
 

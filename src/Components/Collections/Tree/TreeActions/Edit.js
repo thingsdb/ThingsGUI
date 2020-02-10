@@ -97,64 +97,62 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
     };
 
     return(
-        <React.Fragment>
-            <List disablePadding dense className={classes.list}>
-                <ListItem className={classes.listItem} >
-                    <BuildQueryString
-                        child={{
-                            id: null,
-                            index: child.index,
-                            name: child.id?newProperty:child.name,
-                            type: dataType,
-                        }}
-                        customTypes={customTypes}
-                        parent={{
-                            id: child.id||parent.id,
-                            name: child.id || child.type == 'list' || child.type == 'set' ?child.name:parent.name,
-                            type: child.id|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
-                        }}
+        <List disablePadding dense className={classes.list}>
+            <ListItem className={classes.listItem} >
+                <BuildQueryString
+                    child={{
+                        id: null,
+                        index: child.index,
+                        name: child.id?newProperty:child.name,
+                        type: dataType,
+                    }}
+                    customTypes={customTypes}
+                    parent={{
+                        id: child.id||parent.id,
+                        name: child.id || child.type == 'list' || child.type == 'set' ?child.name:parent.name,
+                        type: child.id|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
+                    }}
+                />
+            </ListItem>
+            <ListItem className={classes.listItem}>
+                {addNewProperty && (
+                    <TextField
+                        margin="dense"
+                        name="newProperty"
+                        label="New property"
+                        type="text"
+                        value={newProperty}
+                        spellCheck={false}
+                        onChange={handleOnChangeName}
+                        helperText={error}
+                        error={Boolean(error)}
                     />
-                </ListItem>
-                <ListItem className={classes.listItem}>
-                    {addNewProperty && (
-                        <TextField
-                            margin="dense"
-                            name="newProperty"
-                            label="New property"
-                            type="text"
-                            value={newProperty}
-                            spellCheck={false}
-                            onChange={handleOnChangeName}
-                            helperText={error}
-                            error={Boolean(error)}
-                        />
-                    )}
-                    {canChangeType && (
-                        <TextField
-                            margin="dense"
-                            autoFocus
-                            name="dataType"
-                            label="Data type"
-                            value={dataType}
-                            onChange={handleOnChangeType}
-                            select
-                            SelectProps={{native: true}}
-                        >
-                            {dataTypes.map(d => (
-                                <option key={d} value={d} disabled={child.type=='set'&&!(d=='thing'||Boolean(customTypes.find(c=>c.name==d)))} >
-                                    {d}
-                                </option>
-                            ))}
-                        </TextField>
-                    )}
-                </ListItem>
-                {warnDescription ? (
-                    <LocalErrorMsg msgError={warnDescription} />
-                ) : (
-                    <InputField dataType={dataType} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
                 )}
-            </List>
-        </React.Fragment>
+                {canChangeType && (
+                    <TextField
+                        margin="dense"
+                        autoFocus
+                        name="dataType"
+                        label="Data type"
+                        value={dataType}
+                        onChange={handleOnChangeType}
+                        select
+                        SelectProps={{native: true}}
+                    >
+                        {dataTypes.map(d => (
+                            <option key={d} value={d} disabled={child.type=='set'&&!(d=='thing'||Boolean(customTypes.find(c=>c.name==d)))} >
+                                {d}
+                            </option>
+                        ))}
+                    </TextField>
+                )}
+            </ListItem>
+            {warnDescription ? (
+                <LocalErrorMsg msgError={warnDescription} />
+            ) : (
+                <InputField dataType={dataType} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
+            )}
+        </List>
     );
 };
 

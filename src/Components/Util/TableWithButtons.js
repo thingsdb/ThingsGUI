@@ -15,40 +15,38 @@ const TableWithButtons = ({header, rows, rowClick, buttons}) => {
     };
 
     return (
-        <React.Fragment>
-            <Table padding="none">
-                <TableHead>
-                    <TableRow>
+        <Table padding="none">
+            <TableHead>
+                <TableRow>
+                    {header.map((h, i) => (
+                        <TableCell key={h.ky} align={i?'right':'left'}>
+                            <Typography variant="caption" align={i?'right':'left'}>
+                                {h.label}
+                            </Typography>
+                        </TableCell>
+                    ))}
+                    <TableCell />
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {rows.map((row, ri) => (
+                    <TableRow key={ri} onClick={handleClickRow(row)}>
                         {header.map((h, i) => (
                             <TableCell key={h.ky} align={i?'right':'left'}>
-                                <Typography variant="caption" align={i?'right':'left'}>
-                                    {h.label}
+                                <Typography component="div">
+                                    <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                        {row[h.ky]}
+                                    </Box>
                                 </Typography>
                             </TableCell>
                         ))}
-                        <TableCell />
+                        <TableCell align='right'>
+                            {buttons(row)}
+                        </TableCell>
                     </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row, ri) => (
-                        <TableRow key={ri} onClick={handleClickRow(row)}>
-                            {header.map((h, i) => (
-                                <TableCell key={h.ky} align={i?'right':'left'}>
-                                    <Typography component="div">
-                                        <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
-                                            {row[h.ky]}
-                                        </Box>
-                                    </Typography>
-                                </TableCell>
-                            ))}
-                            <TableCell align='right'>
-                                {buttons(row)}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </React.Fragment>
+                ))}
+            </TableBody>
+        </Table>
     );
 };
 

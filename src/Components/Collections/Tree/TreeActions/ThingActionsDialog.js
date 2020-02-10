@@ -140,11 +140,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
                     open
                     onClose={onClose}
                     maxWidth="md"
-                    actionButtons={
-                        <React.Fragment>
-                            {canEdit ? <SubmitButton onClickSubmit={handleClickOk} />:null}
-                        </React.Fragment>
-                    }
+                    actionButtons={canEdit ? <SubmitButton onClickSubmit={handleClickOk} />:null}
                 >
                     {content}
                 </SimpleModal>

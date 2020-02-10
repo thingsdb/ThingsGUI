@@ -36,48 +36,46 @@ const AppLoader = () => {
 
 
     return(
-        <React.Fragment>
+        <Grid
+            alignItems="center"
+            className={classes.root}
+            container
+            direction="row"
+            spacing={3}
+            justify="center"
+        >
             <Grid
                 alignItems="center"
-                className={classes.root}
                 container
-                direction="row"
+                direction="column"
                 spacing={3}
                 justify="center"
             >
                 <Grid
-                    alignItems="center"
-                    container
-                    direction="column"
-                    spacing={3}
-                    justify="center"
+                    className={classes.wrapper}
+                    item
+                    xs={12}
                 >
-                    <Grid
-                        className={classes.wrapper}
-                        item
-                        xs={12}
-                    >
-                        <Typography variant='h5'>
-                            {'Loading...'}
-                        </Typography>
-                    </Grid>
-                    <Grid
-                        className={classes.wrapper}
-                        item
-                        xs={12}
-                    >
-                        <img
-                            className={classes.logo}
-                            src="/img/thingsdb.gif"
-                            alt="loading..."
-                            draggable="false"
-                            width="100"
-                        />
+                    <Typography variant='h5'>
+                        {'Loading...'}
+                    </Typography>
+                </Grid>
+                <Grid
+                    className={classes.wrapper}
+                    item
+                    xs={12}
+                >
+                    <img
+                        className={classes.logo}
+                        src="/img/thingsdb.gif"
+                        alt="loading..."
+                        draggable="false"
+                        width="100"
+                    />
 
-                    </Grid>
                 </Grid>
             </Grid>
-        </React.Fragment>
+        </Grid>
     );
 };
 
