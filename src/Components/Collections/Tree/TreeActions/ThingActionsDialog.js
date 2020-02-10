@@ -65,6 +65,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
     };
 
     const handleClickOk = (blob, query) => {
+        console.log(blob)
         if (Object.keys(blob).length) {
             CollectionActions.blob(
                 scope,

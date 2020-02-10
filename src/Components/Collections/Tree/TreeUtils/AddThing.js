@@ -5,13 +5,9 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
 import InputField from '../TreeActions/InputField';
-<<<<<<< HEAD
 import {ListHeader} from '../../../Util';
 import {EditActions, useEdit} from '../TreeActions/Context';
 
-=======
-import {addItemToArr, delBlob, delItemFromArr, ListHeader} from '../../../Util';
->>>>>>> c45ac5f79b7eb41f6502f33991a7dd4023324e49
 
 const useStyles = makeStyles(theme => ({
     container: {

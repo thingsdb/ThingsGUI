@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const AddClosure = ({input, cb}) => {
+const Closure = ({input, cb}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         variables: [],
@@ -87,13 +87,13 @@ const AddClosure = ({input, cb}) => {
     );
 };
 
-AddClosure.defaultProps = {
+Closure.defaultProps = {
     input: null,
 },
 
-AddClosure.propTypes = {
+Closure.propTypes = {
     cb: PropTypes.func.isRequired,
     input: PropTypes.string,
 };
 
-export default AddClosure;
+export default Closure;

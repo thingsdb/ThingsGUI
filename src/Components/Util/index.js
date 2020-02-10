@@ -106,27 +106,7 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
-const delBlob = (prev, item) => {
-    let copyState = JSON.parse(JSON.stringify(prev));
-    let k = Object.keys(copyState).find(i=>item.includes(i));
-    delete copyState[k];
-    return copyState;
-};
-
-const delItemFromArr = (prev, index) => {
-    const newArray = [...prev];
-    newArray.splice(index, 1);
-    return newArray;
-};
-
-const addItemToArr = (prev, item) => {
-    const newArray = [...prev];
-    newArray.push(item);
-    return newArray;
-};
-
 export {
-    addItemToArr,
     ArrayLayout,
     AutoSelect,
     Buttons,

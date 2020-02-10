@@ -151,11 +151,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
                 {warnDescription ? (
                     <LocalErrorMsg msgError={warnDescription} />
                 ) : (
-<<<<<<< HEAD
                     <InputField dataType={dataType} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
-=======
-                    <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
->>>>>>> c45ac5f79b7eb41f6502f33991a7dd4023324e49
                 )}
             </List>
         </React.Fragment>

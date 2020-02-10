@@ -1,7 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExploreIcon from '@material-ui/icons/Explore';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,7 +10,7 @@ import React from 'react';
 
 import {ThingActionsDialog} from '../TreeActions';
 import {CollectionActions} from '../../../../Stores/CollectionStore';
-import {checkType, fancyName, isObjectEmpty, thingValue, TreeBranch} from '../../../Util';
+import {checkType, fancyName, thingValue, TreeBranch} from '../../../Util';
 
 
 const useStyles = makeStyles(theme => ({
