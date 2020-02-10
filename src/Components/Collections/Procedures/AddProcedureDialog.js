@@ -56,7 +56,7 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
     };
 
     const handleClosure = (c) => {
-        setState({...state, queryString: `new_procedure("${procedureName}", ${c})`});
+        setState({...state, closure: c, queryString: `new_procedure("${procedureName}", ${c})`});
     };
 
 
