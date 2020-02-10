@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import deepEqual from 'deep-equal';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExploreIcon from '@material-ui/icons/Explore';
 import ListItem from '@material-ui/core/ListItem';
@@ -37,17 +38,12 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
     const [show, setShow] = React.useState(false);
     const [more, setMore] = React.useState({});
 
-    React.useEffect(() => {
-        setShow(false); // closes dialog when item of array is removed. Otherwise dialog stays open with previous item.
-    },
-    [JSON.stringify(thing)], // TODO STRING
-    );
-
     // thing info
 
     // type and value
     const type = checkType(thing);
     const val = thingValue(type, thing);
+    // console.log(child, parent, thing, val)
 
     const canToggle =  type === 'thing' || (type === 'array' && thing.length>0) || type === 'closure' || type === 'regex'|| type === 'error';
 
@@ -166,5 +162,13 @@ Thing.propTypes = {
     things: PropTypes.object.isRequired,
     watchIds: PropTypes.object.isRequired,
 };
+
+// const areEqual = (prevProps, nextProps) => {
+//     console.log(deepEqual(prevProps, nextProps), prevProps, nextProps);
+//     return deepEqual(prevProps, nextProps);
+// };
+
+
+// export default React.memo(Thing, areEqual);
 
 export default Thing;

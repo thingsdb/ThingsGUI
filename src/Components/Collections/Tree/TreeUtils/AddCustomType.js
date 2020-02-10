@@ -139,13 +139,6 @@ const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch
     const {array, val, blob} = editState;
 
     React.useEffect(() => {
-        EditActions.updateVal(parentDispatch,`${type}{${array}}`, identifier);
-        EditActions.updateBlob(parentDispatch, array, blob);
-    },
-    [JSON.stringify(array)], // TODO STRING
-    );
-
-    React.useEffect(() => {
         setDataType({});
         setOpen(false);
         EditActions.update(dispatch, {val: '', array: [], blob: {}});
@@ -170,6 +163,8 @@ const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch
         EditActions.update(dispatch, {
             array:  s,
         });
+        EditActions.updateVal(parentDispatch,`${type}{${s}}`, identifier);
+        EditActions.updateBlob(parentDispatch, s, blob);
     };
 
     const typeObj = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);

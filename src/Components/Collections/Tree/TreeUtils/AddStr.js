@@ -13,11 +13,9 @@ const AddStr = ({identifier, ...props}) => {
         const {value} = target;
         EditActions.updateVal(dispatch, `'${value}'`, identifier);
     };
-    console.log('str', val);
 
     const v = val[identifier]||(val.constructor === Object?'':val);
 
-    console.log("str");
     return(
         <TextField
             name="value"

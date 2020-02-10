@@ -23,7 +23,6 @@ const AddBlob = ({identifier}) => {
         }
         if (f != '' && newBlob != '') {
             EditActions.updateVal(dispatch, f, identifier);
-            console.log(blob)
             EditActions.update(dispatch, {
                 blob: {...blob, [f]: newBlob}
             });

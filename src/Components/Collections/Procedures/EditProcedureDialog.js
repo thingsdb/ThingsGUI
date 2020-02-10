@@ -44,7 +44,7 @@ const EditProcedureDialog = ({open, onClose, procedure, scope, cb}) => {
             setClosure(procedure.definition);
         }
     },
-    [JSON.stringify(procedure)], // TODO STRING
+    [procedure.arguments&&procedure.arguments.length, procedure.created_at, procedure.definition, procedure.doc, procedure.name, procedure.with_side_effects],
     );
 
     React.useEffect(() => {

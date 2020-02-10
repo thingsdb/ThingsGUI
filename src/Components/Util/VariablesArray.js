@@ -1,3 +1,5 @@
+
+import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
@@ -19,7 +21,7 @@ const VariablesArray = ({input, cb}) => {
 
     const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
-        if(JSON.stringify(myItems)!=JSON.stringify(input)) { // TODO STRING
+        if(!deepEqual(myItems, input)) {
             cb(myItems);
         }
     },
@@ -27,7 +29,7 @@ const VariablesArray = ({input, cb}) => {
     );
 
     React.useEffect(() => {
-        if(JSON.stringify(myItems)!=JSON.stringify(input)) { // TODO STRING
+        if(!deepEqual(myItems, input)) {
             setMyItems(input);
         }
     },

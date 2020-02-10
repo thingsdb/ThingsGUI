@@ -1,3 +1,5 @@
+
+import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import {BaseStore} from './BaseStore';
@@ -70,7 +72,7 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(collection)){ // TODO STRING
+            if (!deepEqual(data, collection)){
                 this.setState({collections: data});
             }
         }).fail((event, status, message) => {
@@ -88,7 +90,7 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(collections)){ // TODO STRING
+            if (!deepEqual(data, collections)){
                 this.setState({collections: data});
             }
         }).fail((event, status, message) => {
@@ -105,7 +107,7 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(collections)){ // TODO STRING
+            if (!deepEqual(data, collections)){
                 this.setState({collections: data});
             }
             cb();
@@ -120,7 +122,7 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (JSON.stringify(data.collections) != JSON.stringify(collections) || JSON.stringify(data.users) != JSON.stringify(users)){ // TODO STRING
+            if (!deepEqual(data.collections, collections) || !deepEqual(data.users, users)){
                 this.setState({
                     collections: data.collections,
                     users: data.users,
@@ -177,7 +179,7 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(user)){ // TODO STRING
+            if (!deepEqual(data, user)){
                 this.setState({
                     user: data,
                 });
@@ -199,7 +201,7 @@ class ThingsdbStore extends BaseStore {
                 scope,
                 query
             }).done((data) => {
-                if (JSON.stringify(data) != JSON.stringify(users)){ // TODO STRING
+                if (!deepEqual(data, users)){
                     this.setState({
                         users: data,
                     });

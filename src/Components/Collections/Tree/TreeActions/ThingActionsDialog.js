@@ -65,7 +65,6 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
     };
 
     const handleClickOk = (blob, query) => {
-        console.log(blob)
         if (Object.keys(blob).length) {
             CollectionActions.blob(
                 scope,
@@ -111,7 +110,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
                     </Typography>
                 </Grid>
                 <Grid container spacing={1} item xs={4} justify="flex-end">
-                    <DialogButtons child={child} customTypes={customTypes} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} thing={thing} tag={tag} />
+                    <DialogButtons child={child} customTypes={customTypes} onClose={onClose} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} thing={thing} tag={tag} />
                 </Grid>
             </Grid>
             {canEdit ? (

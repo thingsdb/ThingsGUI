@@ -4,14 +4,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {EditActions, EditProvider, useEdit} from './Context';
+import {EditProvider, useEdit} from './Context';
 
 import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddError, AddFloat, AddInt, AddRegex, AddStr, AddThing} from '../TreeUtils';
 
 
 const InputField = ({customTypes, childTypes, dataTypes, dataType, identifier, ...props}) => {
 
-    const [editState, dispatch] = useEdit();
+    const dispatch = useEdit()[1];
     return(
         <React.Fragment>
             {dataType == 'str' ? <AddStr identifier={identifier} {...props} />

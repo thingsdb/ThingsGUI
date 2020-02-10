@@ -12,7 +12,7 @@ import {CollectionActions, ThingsdbActions} from '../../../../Stores';
 
 
 const tag = '7';
-const RemoveThing = ({scope, child, parent}) => {
+const RemoveThing = ({child, onClose, parent, scope}) => {
     const [show, setShow] = React.useState(false);
     const [query, setQuery] = React.useState('');
 
@@ -45,6 +45,7 @@ const RemoveThing = ({scope, child, parent}) => {
                 ThingsdbActions.getCollections();
             }
         );
+        onClose();
     };
 
     const handleKeyPress = (event) => {
@@ -111,6 +112,7 @@ const RemoveThing = ({scope, child, parent}) => {
 };
 
 RemoveThing.propTypes = {
+    onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
     parent: PropTypes.shape({
         id: PropTypes.number,

@@ -11,7 +11,7 @@ import {ApplicationActions} from '../../../../Stores';
 import {DownloadBlob} from '../../../Util';
 
 
-const DialogButtons = ({child, customTypes, parent, realChildType, realParentType, scope, thing, tag}) => {
+const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, tag, thing}) => {
 
     const handleClickOpenEditor = () => {
         ApplicationActions.navigate({path: 'query', index: 0, item: child.type==='thing' ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
@@ -30,6 +30,7 @@ const DialogButtons = ({child, customTypes, parent, realChildType, realParentTyp
             {canRemove &&
                 <Grid item>
                     <RemoveThing
+                        onClose={onClose}
                         scope={scope}
                         child={{
                             id: thing && thing['#'],
@@ -85,6 +86,7 @@ DialogButtons.propTypes = {
         type: PropTypes.string,
     }).isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onClose: PropTypes.func.isRequired,
     parent: PropTypes.shape({
         id: PropTypes.number,
         index: PropTypes.number,

@@ -1,5 +1,6 @@
 /*eslint-disable no-unused-vars */
 
+import deepEqual from 'deep-equal';
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 import moment from 'moment';
@@ -65,7 +66,7 @@ class NodesStore extends BaseStore {
             query
         }).done((data) => {
             data.connectedNode.uptime =  moment.duration(data.connectedNode.uptime , 'second').humanize();
-            if (JSON.stringify(data.nodes) != JSON.stringify(nodes) || JSON.stringify(data.connectedNode.node_id) != JSON.stringify(node.node_id)){ // TODO STRING
+            if (!deepEqual(data.nodes, nodes)|| data.connectedNode.node_id != node.node_id){
                 this.setState({
                     nodes: data.nodes,
                     connectedNode: data.connectedNode
@@ -89,7 +90,7 @@ class NodesStore extends BaseStore {
             query
         }).done((data) => {
             data.uptime =  moment.duration(data.uptime , 'second').humanize();
-            if (JSON.stringify(data) != JSON.stringify(node)){ // TODO STRING
+            if (!deepEqual(data, node)){
                 this.setState({
                     node: data,
                 });
@@ -104,7 +105,7 @@ class NodesStore extends BaseStore {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(counters)){ // TODO STRING
+            if (!deepEqual(data, counters)){
                 this.setState({
                     counters: data
                 });
@@ -188,7 +189,7 @@ class NodesStore extends BaseStore {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(backups)){ // TODO STRING
+            if (!deepEqual(data, backups)){
                 this.setState({
                     backups: data,
                 });
