@@ -76,6 +76,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
     };
 
     const handleAdd = () => {
+<<<<<<< HEAD
         const contentTypeChecked = typeControls(dataType, val);
         EditActions.addToArr(dispatch, contentTypeChecked);
         EditActions.updateVal(dispatch, '');
@@ -84,6 +85,26 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
     const handleClick = (index, item) => () => {
         EditActions.deleteBlob(dispatch, item);
         EditActions.deleteFromArr(dispatch, index);
+=======
+        const contentTypeChecked = typeControls(dataType, contentAdd);
+        setMyItems(prevItems => {
+            return addItemToArr(prevItems, contentTypeChecked);
+        });
+        setBlob({...blob, ...preBlob});
+    };
+
+    const handleClick = (index, item) => () => {
+        setBlob(prevBlob => {
+            return delBlob(prevBlob, item);
+        });
+        setMyItems(prevItems => {
+            return delItemFromArr(prevItems, index);
+        });
+    };
+
+    const handleBlob = (b) => {
+        setPreBlob({...b});
+>>>>>>> c45ac5f79b7eb41f6502f33991a7dd4023324e49
     };
 
     return (

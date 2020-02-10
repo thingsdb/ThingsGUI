@@ -17,6 +17,7 @@ const AddStr = ({identifier, ...props}) => {
 
     const v = val[identifier]||(val.constructor === Object?'':val);
 
+    console.log("str");
     return(
         <TextField
             name="value"
