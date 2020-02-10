@@ -26,9 +26,12 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.green,
         paddingRight: theme.spacing(1),
     },
+    justifyContent: {
+        justifyContent: 'center',
+    }
 }));
 
-
+const visibleNumber = 100;
 
 const Thing = ({child, collection, parent, thing, things, watchIds}) => {
     const classes = useStyles();
@@ -70,8 +73,8 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
 
     const renderThing = ([k, v, i=null], count) => {
         return k === '#' ? null : (
-            <React.Fragment>
-                <div key={i ? i : k} className={classes.nested}>
+            <React.Fragment key={i ? i : k}>
+                <div className={classes.nested}>
                     <Thing
                         collection={collection}
                         things={things}
@@ -90,8 +93,8 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
                     />
                 </div>
                 {more[count] && renderChildren(count+1)}
-                {(count+1)%100 == 0 && !more[count] ? (
-                    <ListItem>
+                {(count+1)%visibleNumber == 0 && !more[count] ? (
+                    <ListItem className={classes.justifyContent}>
                         <Button onClick={handleMore(count)}>
                             {'LOAD MORE'}
                             <ExpandMoreIcon color="primary" />
@@ -102,11 +105,8 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
         );
     };
 
-    // renderChildren(count+1)
-
     const renderChildren = (start=0) => {
-        let end = start+100;
-        console.log(start, end);
+        let end = start+visibleNumber;
         const isArray = Array.isArray(thing);
         return isArray ?
             thing.slice(start, end).map((t, i) => renderThing([`${child.name}`, t, start+i], start+i))
@@ -114,15 +114,13 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
             Object.entries(currThing || {}).slice(start, end).map(([k, v], i) => renderThing([k, v], start+i));
     };
 
-    const handleOpen = () => {
-        if (thing && thing['#']) {
-            CollectionActions.queryWithReturnDepth(collection, thing['#']);
-        }
+    const handleOpenClose = (open) => {
+        open ? (thing && thing['#'] && CollectionActions.queryWithReturnDepth(collection, thing['#'])) : setMore({});
     };
 
     return (
         <React.Fragment>
-            <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpen} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null}>
+            <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpenClose} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null}>
                 <React.Fragment>
                     {isWatching ? (
                         <ListItemIcon>

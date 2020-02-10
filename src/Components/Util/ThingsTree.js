@@ -66,7 +66,7 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
 ThingsTree.defaultProps = {
     customTypes: [],
     item: null,
-    onAction: ()=>null,
+    onAction: null,
     tree: null,
 };
 
