@@ -70,7 +70,7 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(collection)){
+            if (JSON.stringify(data) != JSON.stringify(collection)){ // TODO STRING
                 this.setState({collections: data});
             }
         }).fail((event, status, message) => {
@@ -88,7 +88,7 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(collections)){
+            if (JSON.stringify(data) != JSON.stringify(collections)){ // TODO STRING
                 this.setState({collections: data});
             }
         }).fail((event, status, message) => {
@@ -105,7 +105,7 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(collections)){
+            if (JSON.stringify(data) != JSON.stringify(collections)){ // TODO STRING
                 this.setState({collections: data});
             }
             cb();
@@ -120,7 +120,7 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (JSON.stringify(data.collections) != JSON.stringify(collections) || JSON.stringify(data.users) != JSON.stringify(users)){
+            if (JSON.stringify(data.collections) != JSON.stringify(collections) || JSON.stringify(data.users) != JSON.stringify(users)){ // TODO STRING
                 this.setState({
                     collections: data.collections,
                     users: data.users,
@@ -177,7 +177,7 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(user)){
+            if (JSON.stringify(data) != JSON.stringify(user)){ // TODO STRING
                 this.setState({
                     user: data,
                 });
@@ -199,7 +199,7 @@ class ThingsdbStore extends BaseStore {
                 scope,
                 query
             }).done((data) => {
-                if (JSON.stringify(data) != JSON.stringify(users)){
+                if (JSON.stringify(data) != JSON.stringify(users)){ // TODO STRING
                     this.setState({
                         users: data,
                     });

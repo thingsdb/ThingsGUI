@@ -31,7 +31,7 @@ const QueryOutput = ({output}) => {
 
     // if (value.search(/"http:\/\/.*download\/tmp\/thingsdb-cache-.*"/gi)!=-1)
     const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
-    const jsonOutput = JSON.stringify(output, replacer, 4);
+    const jsonOutput = JSON.stringify(output, replacer, 4); // output
 
     return (
         <Paper className={classes.card} >

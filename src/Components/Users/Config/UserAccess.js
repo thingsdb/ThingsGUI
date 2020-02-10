@@ -91,7 +91,7 @@ const UserAccess = ({user, collections}) => {
     const handleOnChangeSwitch = (key) => ({target}) => {
         const {value, checked} = target;
         setSwitches(switches => {
-            let newswitches = JSON.parse(JSON.stringify(switches));
+            let newswitches = JSON.parse(JSON.stringify(switches)); //copy
             newswitches[key][value] = checked;
             return newswitches;
         });

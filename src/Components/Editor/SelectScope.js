@@ -56,12 +56,4 @@ SelectScope.propTypes = {
     nodes: NodesStore.types.nodes.isRequired,
 };
 
-// const areEqual = (prevProps, nextProps) => {
-//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-// };
-
-
-// export default withStores(React.memo(SelectScope, areEqual));
-
-
 export default withStores(SelectScope);

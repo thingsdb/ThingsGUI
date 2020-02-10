@@ -3,6 +3,7 @@ import AutoSelect from './AutoSelect';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
 import ChipsCard from './ChipsCard';
+import Closure from './Closure';
 import DownloadBlob from './DownloadBlob';
 import DrawerLayout from './DrawerLayout';
 import ErrorMsg from './ErrorMsg';
@@ -132,8 +133,7 @@ export {
     CardButton,
     checkType,
     ChipsCard,
-    delBlob,
-    delItemFromArr,
+    Closure,
     DownloadBlob,
     DrawerLayout,
     duration,

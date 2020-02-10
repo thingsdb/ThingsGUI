@@ -116,13 +116,4 @@ Rename.propTypes = {
     users: ThingsdbStore.types.users.isRequired,
 };
 
-// const areEqual = (prevProps, nextProps) => {
-//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-// };
-
-
-// export default withStores(React.memo(Rename, areEqual));
-
-
-
 export default withStores(Rename);

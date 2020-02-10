@@ -65,7 +65,7 @@ class NodesStore extends BaseStore {
             query
         }).done((data) => {
             data.connectedNode.uptime =  moment.duration(data.connectedNode.uptime , 'second').humanize();
-            if (JSON.stringify(data.nodes) != JSON.stringify(nodes) || JSON.stringify(data.connectedNode.node_id) != JSON.stringify(node.node_id)){
+            if (JSON.stringify(data.nodes) != JSON.stringify(nodes) || JSON.stringify(data.connectedNode.node_id) != JSON.stringify(node.node_id)){ // TODO STRING
                 this.setState({
                     nodes: data.nodes,
                     connectedNode: data.connectedNode
@@ -89,7 +89,7 @@ class NodesStore extends BaseStore {
             query
         }).done((data) => {
             data.uptime =  moment.duration(data.uptime , 'second').humanize();
-            if (JSON.stringify(data) != JSON.stringify(node)){
+            if (JSON.stringify(data) != JSON.stringify(node)){ // TODO STRING
                 this.setState({
                     node: data,
                 });
@@ -104,7 +104,7 @@ class NodesStore extends BaseStore {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(counters)){
+            if (JSON.stringify(data) != JSON.stringify(counters)){ // TODO STRING
                 this.setState({
                     counters: data
                 });
@@ -188,7 +188,7 @@ class NodesStore extends BaseStore {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(backups)){
+            if (JSON.stringify(data) != JSON.stringify(backups)){ // TODO STRING
                 this.setState({
                     backups: data,
                 });

@@ -1,55 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 
-import {VariablesArray} from '../../../Util';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles(theme => ({
-    container: {
-        paddingTop: theme.spacing(1),
-        marginTop: theme.spacing(1),
-    },
-}));
+import {Closure} from '../../../Util';
+import {EditActions, useEdit} from '../TreeActions/Context';
 
 
-const AddClosure = ({input, cb}) => {
-    const classes = useStyles();
-    const [state, setState] = React.useState({
-        variables: [],
-        body: '',
-    });
-    const {variables, body} = state;
+const AddClosure = ({identifier}) => {
+    const [editState, dispatch] = useEdit();
+    const {val} = editState;
 
-    React.useEffect(() => {
-        const c = `|${variables}|${body}`;
-        if(input&&input!=c) {
-            let endVarArr = input.indexOf('|', 1);
-            let vars = input.slice(1, endVarArr).split(',');
-            let b = input.slice(endVarArr+1);
-            setState({
-                variables: endVarArr==1?[]:vars,
-                body: b,
-            });
-        }
-    },
-    [input],
-    );
-
-    const handleBody = ({target}) => {
-        const {value} = target;
-        setState({...state, body: value});
-        cb(`|${variables}|${value}`);
-    };
-
-    const handleVarArray = (items) => {
-        setState({...state, variables: items});
-        cb(`|${items}|${body}`);
+    const handleUpdateVal = (c) => {
+        EditActions.updateVal(dispatch, c, identifier);
     };
 
     return(
+<<<<<<< HEAD
+        <Closure input={val[identifier]||(val.constructor === Object?'':val)} cb={handleUpdateVal} />
+=======
         <Grid className={classes.container} container spacing={2}>
             <Grid container item xs={12}>
                 <Grid item xs={1} container justify="flex-start">
@@ -81,16 +48,16 @@ const AddClosure = ({input, cb}) => {
                 />
             </Grid>
         </Grid>
+>>>>>>> c45ac5f79b7eb41f6502f33991a7dd4023324e49
     );
 };
 
 AddClosure.defaultProps = {
-    input: '',
-};
+    identifier: null,
+},
 
 AddClosure.propTypes = {
-    cb: PropTypes.func.isRequired,
-    input: PropTypes.string,
+    identifier: PropTypes.string
 };
 
 export default AddClosure;

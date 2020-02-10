@@ -31,9 +31,18 @@ const DialogButtons = ({child, customTypes, parent, realChildType, realParentTyp
                 <Grid item>
                     <RemoveThing
                         scope={scope}
-                        thing={thing}
-                        child={{...child, type: realChildType}}
-                        parent={{...parent, type: realParentType||parent.type}}
+                        child={{
+                            id: thing && thing['#'],
+                            index: child.hasOwnProperty('index') ? child.index : null,
+                            name: child.name,
+                            type: realChildType,
+                            val: null,
+                        }}
+                        parent={{
+                            id: parent.id,
+                            name: parent.hasOwnProperty('name') ? parent.name : null,
+                            type: realParentType||parent.type
+                        }}
                     />
                 </Grid>
             }

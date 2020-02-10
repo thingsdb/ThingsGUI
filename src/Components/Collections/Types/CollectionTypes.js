@@ -65,7 +65,7 @@ const CollectionTypes = ({scope}) => {
     const [openEdit, setOpenEdit] = React.useState(false);
 
     const [index, setindex] = React.useState(null);
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         TypeActions.getTypes(scope, tag, handleTypes);
 
     }, [scope]);

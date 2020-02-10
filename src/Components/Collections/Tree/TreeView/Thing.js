@@ -1,13 +1,17 @@
 /* eslint-disable react/no-multi-comp */
+import {makeStyles} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExploreIcon from '@material-ui/icons/Explore';
+import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
 
 import {ThingActionsDialog} from '../TreeActions';
 import {CollectionActions} from '../../../../Stores/CollectionStore';
-import {checkType, fancyName, thingValue, TreeBranch} from '../../../Util';
+import {checkType, fancyName, isObjectEmpty, thingValue, TreeBranch} from '../../../Util';
 
 
 const useStyles = makeStyles(theme => ({
@@ -22,28 +26,23 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.green,
         paddingRight: theme.spacing(1),
     },
+    justifyContent: {
+        justifyContent: 'center',
+    }
 }));
 
-
+const visibleNumber = 100;
 
 const Thing = ({child, collection, parent, thing, things, watchIds}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
-
+    const [more, setMore] = React.useState({});
 
     React.useEffect(() => {
         setShow(false); // closes dialog when item of array is removed. Otherwise dialog stays open with previous item.
     },
-    [JSON.stringify(thing)],
+    [JSON.stringify(thing)], // TODO STRING
     );
-
-    const handleOpenDialog = () => {
-        setShow(true);
-    };
-
-    const handleCloseDialog = () => {
-        setShow(false);
-    };
 
     // thing info
 
@@ -60,46 +59,68 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
 
     const hasDialog = !(parent.type === 'closure' || parent.type === 'regex' || parent.type === 'error');
 
-    const renderThing = ([k, v, i=null]) => {
+    const handleOpenDialog = () => {
+        setShow(true);
+    };
+
+    const handleCloseDialog = () => {
+        setShow(false);
+    };
+
+    const handleMore = (c) => () => {
+        setMore({...more, [c]: true});
+    };
+
+    const renderThing = ([k, v, i=null], count) => {
         return k === '#' ? null : (
-            <div key={i ? i : k} className={classes.nested}>
-                <Thing
-                    collection={collection}
-                    things={things}
-                    thing={v}
-                    parent={{
-                        id: thingId,
-                        name: child.name,
-                        type: type,
-                        isTuple: isTuple,
-                    }}
-                    child={{
-                        name: fancyName(k, i),
-                        index: i,
-                    }}
-                    watchIds={watchIds}
-                />
-            </div>
+            <React.Fragment key={i ? i : k}>
+                <div className={classes.nested}>
+                    <Thing
+                        collection={collection}
+                        things={things}
+                        thing={v}
+                        parent={{
+                            id: thingId,
+                            name: child.name,
+                            type: type,
+                            isTuple: isTuple,
+                        }}
+                        child={{
+                            name: fancyName(k, i),
+                            index: i,
+                        }}
+                        watchIds={watchIds}
+                    />
+                </div>
+                {more[count] && renderChildren(count+1)}
+                {(count+1)%visibleNumber == 0 && !more[count] ? (
+                    <ListItem className={classes.justifyContent}>
+                        <Button onClick={handleMore(count)}>
+                            {'LOAD MORE'}
+                            <ExpandMoreIcon color="primary" />
+                        </Button>
+                    </ListItem>
+                ):null}
+            </React.Fragment>
         );
     };
 
-    const renderChildren = () => {
+    const renderChildren = (start=0) => {
+        let end = start+visibleNumber;
         const isArray = Array.isArray(thing);
         return isArray ?
-            thing.map((t, i) => renderThing([`${child.name}`, t, i]))
+            thing.slice(start, end).map((t, i) => renderThing([`${child.name}`, t, start+i], start+i))
             :
-            Object.entries(currThing || {}).map(renderThing);
+            Object.entries(currThing || {}).slice(start, end).map(([k, v], i) => renderThing([k, v], start+i));
     };
 
-    const handleOpen = () => {
-        if (thing && thing['#']) {
-            CollectionActions.queryWithReturnDepth(collection, thing['#']);
-        }
+    const handleOpenClose = (open) => {
+        open ? (thing && thing['#'] && CollectionActions.queryWithReturnDepth(collection, thing['#'])) : setMore({});
     };
 
     return (
         <React.Fragment>
-            <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpen} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null}>
+            <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpenClose} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null}>
                 <React.Fragment>
                     {isWatching ? (
                         <ListItemIcon>

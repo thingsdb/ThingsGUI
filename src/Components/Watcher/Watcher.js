@@ -225,12 +225,4 @@ Watcher.propTypes = {
     customTypes: TypeStore.types.customTypes.isRequired,
 };
 
-
-// const areEqual = (prevProps, nextProps) => {
-//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-// };
-
-
-// export default withStores(React.memo(Watcher, areEqual));
-
 export default withStores(Watcher);

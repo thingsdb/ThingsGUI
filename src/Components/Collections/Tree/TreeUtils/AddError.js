@@ -5,6 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import {EditActions, useEdit} from '../TreeActions/Context';
+
 const useStyles = makeStyles(theme => ({
     container: {
         paddingTop: theme.spacing(1),
@@ -12,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AddError = ({input, cb}) => {
+const AddError = ({identifier}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         errCode:'',
@@ -20,12 +22,15 @@ const AddError = ({input, cb}) => {
     });
     const {errCode, errMsg} = state;
 
+    const [editState, dispatch] = useEdit();
+    const {val} = editState;
     React.useEffect(() => {
-        if(`err(${errCode}, '${errMsg}')`!=input) {
-            let commaIndex = input.indexOf(',', 0);
-            let code = input.slice(4, commaIndex);
-            let secondAppIndex = input.indexOf('\'', commaIndex+2);
-            let msg = input.slice(commaIndex+2, secondAppIndex);
+        const v = val[identifier]||(val.constructor === Object?'':val);
+        if(`err(${errCode}, '${errMsg}')`!=v) {
+            let commaIndex = v.indexOf(',', 0);
+            let code = v.slice(4, commaIndex);
+            let secondAppIndex = v.indexOf('\'', commaIndex+2);
+            let msg = v.slice(commaIndex+2, secondAppIndex);
 
             setState({
                 errCode:code,
@@ -33,21 +38,22 @@ const AddError = ({input, cb}) => {
             });
         }
     },
-    [input],
+    [val],
     );
 
     const handleOnChangeCode = ({target}) => {
         const {value} = target;
         setState({...state, errCode: value});
         const c = `err(${value}, '${errMsg}')`;
-        cb(c);
+        EditActions.updateVal(dispatch, c, identifier);
+
     };
 
     const handleOnChangeMsg = ({target}) => {
         const {value} = target;
         setState({...state, errMsg: value});
         const c = `err(${errCode}, '${value}')`;
-        cb(c);
+        EditActions.updateVal(dispatch, c, identifier);
     };
 
     return(
@@ -97,12 +103,11 @@ const AddError = ({input, cb}) => {
 };
 
 AddError.defaultProps = {
-    input: null,
-};
+    identifier: null,
+},
 
 AddError.propTypes = {
-    cb: PropTypes.func.isRequired,
-    input: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+    identifier: PropTypes.string
 };
 
 export default AddError;

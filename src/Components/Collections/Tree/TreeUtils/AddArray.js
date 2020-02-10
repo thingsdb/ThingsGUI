@@ -5,7 +5,9 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
 import InputField from '../TreeActions/InputField';
-import {addItemToArr, delBlob, delItemFromArr, ListHeader} from '../../../Util';
+import {ListHeader} from '../../../Util';
+import {EditActions, useEdit} from '../TreeActions/Context';
+
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -31,38 +33,40 @@ const single = [
     'str',
 ];
 
-const AddArray = ({childTypes, customTypes, dataTypes, onBlob, onVal, isSet}) => {
+const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parentDispatch}) => {
     const classes = useStyles();
-    const [preBlob, setPreBlob] = React.useState({});
-    const [blob, setBlob] = React.useState({});
-    const [state, setState] = React.useState({
-        contentAdd: '',
-        dataType: childTypes[0]||dataTypes[0]||'str',
-        errors: {},
-    });
-    const {contentAdd, dataType} = state;
+    const [dataType, setDataType] = React.useState(childTypes[0]||dataTypes[0]||'str');
+
+    const [editState, dispatch] = useEdit();
+    const {array, val, blob} = editState;
 
     React.useEffect(() => {
-        setState({...state, dataType: childTypes[0]||dataTypes[0]});
+        EditActions.update(dispatch, {val: '', array: [], blob: {}});
+    },
+    [],
+    );
+
+    React.useEffect(() => {
+        setDataType(childTypes[0]||dataTypes[0]);
     },
     [childTypes.length, dataTypes.length],
     );
 
-    const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
-        onVal(isSet?`set([${myItems}])`:`[${myItems}]`);
-        onBlob(blob);
+        EditActions.updateVal(parentDispatch,isSet?`set([${array}])`:`[${array}]`, identifier);
+        EditActions.updateBlob(parentDispatch, array, blob);
     },
-    [myItems.length],
+    [array.length],
     );
 
-    const handleInputField = (val) => {
-        setState({...state, contentAdd: val, errors: {}});
-    };
+    React.useEffect(() => {
+        EditActions.update(dispatch, {val: '', array: [], blob: {}});
+    },[isSet]);
 
     const handleChange = ({target}) => {
         const {value} = target;
-        setState({...state, dataType: value, contentAdd: '', errors: {}});
+        setDataType(value);
+        EditActions.updateVal(dispatch, '');
     };
 
     const typeControls = (type, input) => {
@@ -72,6 +76,16 @@ const AddArray = ({childTypes, customTypes, dataTypes, onBlob, onVal, isSet}) =>
     };
 
     const handleAdd = () => {
+<<<<<<< HEAD
+        const contentTypeChecked = typeControls(dataType, val);
+        EditActions.addToArr(dispatch, contentTypeChecked);
+        EditActions.updateVal(dispatch, '');
+    };
+
+    const handleClick = (index, item) => () => {
+        EditActions.deleteBlob(dispatch, item);
+        EditActions.deleteFromArr(dispatch, index);
+=======
         const contentTypeChecked = typeControls(dataType, contentAdd);
         setMyItems(prevItems => {
             return addItemToArr(prevItems, contentTypeChecked);
@@ -90,11 +104,12 @@ const AddArray = ({childTypes, customTypes, dataTypes, onBlob, onVal, isSet}) =>
 
     const handleBlob = (b) => {
         setPreBlob({...b});
+>>>>>>> c45ac5f79b7eb41f6502f33991a7dd4023324e49
     };
 
     return (
         <Grid container>
-            <ListHeader onAdd={handleAdd} onDelete={handleClick} items={myItems} groupSign="[">
+            <ListHeader onAdd={handleAdd} onDelete={handleClick} items={array} groupSign="[">
                 <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="flex-end" >
                     {childTypes.length == 1 ? null : (
                         <Grid item xs={2}>
@@ -117,13 +132,11 @@ const AddArray = ({childTypes, customTypes, dataTypes, onBlob, onVal, isSet}) =>
                         </Grid>
                     )}
                     <Grid item xs={single.includes(dataType)?10:12}>
+
                         <InputField
                             customTypes={customTypes}
                             dataType={dataType}
                             dataTypes={dataTypes}
-                            input={contentAdd}
-                            onBlob={handleBlob}
-                            onVal={handleInputField}
                             variant="standard"
                             label="Value"
                         />
@@ -137,15 +150,16 @@ const AddArray = ({childTypes, customTypes, dataTypes, onBlob, onVal, isSet}) =>
 AddArray.defaultProps = {
     childTypes: [],
     isSet: false,
+    identifier: null,
 };
 
 AddArray.propTypes = {
     childTypes: PropTypes.arrayOf(PropTypes.string),
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onBlob: PropTypes.func.isRequired,
-    onVal: PropTypes.func.isRequired,
     isSet: PropTypes.bool,
+    identifier: PropTypes.string,
+    parentDispatch: PropTypes.func.isRequired,
 };
 
 export default AddArray;

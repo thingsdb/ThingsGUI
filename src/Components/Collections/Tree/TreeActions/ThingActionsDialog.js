@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 import DialogButtons from './DialogButtons';
 import Edit from './Edit';
+import SubmitButton from './SubmitButton';
 import {CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
 import {ErrorMsg, SimpleModal} from '../../../Util';
 
@@ -16,16 +17,14 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
 
     const initialState = {
         customTypes: [],
-        query: '',
-        blob: {},
-        error: '',
         show: false,
         setOrList: '',
         realChildType: '',
         realParentType: '',
     };
+
     const [state, setState] = React.useState(initialState);
-    const {query, blob, error, show, realChildType, realParentType, customTypes} = state;
+    const {show, realChildType, realParentType, customTypes} = state;
     const dataTypes = [
         'str',
         'int',
@@ -65,11 +64,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
         setState({...state, realChildType: t.childType, realParentType: t.parentType, show: true, customTypes: t.customTypes});
     };
 
-    const handleQuery = (q, b, e) => {
-        setState({...state, query: q, blob: b, error: e});
-    };
-
-    const handleClickOk = () => {
+    const handleClickOk = (blob, query) => {
         if (Object.keys(blob).length) {
             CollectionActions.blob(
                 scope,
@@ -100,8 +95,6 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
     const isChildCustom = Boolean(customTypes.find(c=>c.name==realChildType));
     const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type === 'bytes' || realChildType[0]=='<');
 
-
-
     const content = (
         <Grid container spacing={1}>
             <Grid container spacing={1} item xs={12}>
@@ -127,7 +120,6 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
                     </Grid>
                     <Grid item xs={12}>
                         <Edit
-                            cb={handleQuery}
                             customTypes={customTypes}
                             dataTypes={dataTypes}
                             thing={thing}
@@ -146,14 +138,18 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
                 <SimpleModal
                     open
                     onClose={onClose}
-                    onOk={canEdit ? handleClickOk:null}
                     maxWidth="md"
-                    disableOk={Boolean(error)}
+                    actionButtons={
+                        <React.Fragment>
+                            {canEdit ? <SubmitButton onClickSubmit={handleClickOk} />:null}
+                        </React.Fragment>
+                    }
                 >
                     {content}
                 </SimpleModal>
             ) : null}
         </React.Fragment>
+
     );
 };
 

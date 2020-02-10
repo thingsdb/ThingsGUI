@@ -8,7 +8,6 @@ import ThingActionsDialog from './ThingActionsDialog';
 
 const ThingActions = ({child, parent, thing, scope}) => {
     const [show, setShow] = React.useState(false);
-
     const handleClickOpen = () => {
         setShow(true);
     };

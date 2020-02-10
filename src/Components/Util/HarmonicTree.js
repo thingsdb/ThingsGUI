@@ -40,7 +40,7 @@ const HarmonicTree = ({customTypes, items, jsonView, title, onAction, jsonReplac
                             }}
                             customTypes={customTypes[k]}
                             root={false}
-                            onAction={onAction(k)}
+                            onAction={onAction&&onAction(k)}
                         />
                     </React.Fragment>
                 ))}
@@ -57,7 +57,7 @@ const HarmonicTree = ({customTypes, items, jsonView, title, onAction, jsonReplac
 HarmonicTree.defaultProps = {
     customTypes: {},
     jsonView: false,
-    onAction: ()=>()=>null,
+    onAction: null,
     jsonReplacer: ()=>null,
 };
 

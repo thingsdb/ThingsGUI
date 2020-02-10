@@ -1,22 +1,28 @@
 /*eslint-disable react/jsx-props-no-spreading*/
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-const AddStr = ({input, cb, ...props}) => {
+import {EditActions, useEdit} from '../TreeActions/Context';
+
+const AddStr = ({identifier, ...props}) => {
+    const [editState, dispatch] = useEdit();
+    const {val} = editState;
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        cb(`'${value}'`);
+        EditActions.updateVal(dispatch, `'${value}'`, identifier);
     };
+    console.log('str', val);
+
+    const v = val[identifier]||(val.constructor === Object?'':val);
 
     console.log("str");
     return(
         <TextField
             name="value"
             type="text"
-            value={input[0]=='\''?input.trim().slice(1, -1):input}
+            value={v[0]=='\''?v.trim().slice(1, -1):v}
             spellCheck={false}
             onChange={handleOnChange}
             multiline
@@ -27,12 +33,11 @@ const AddStr = ({input, cb, ...props}) => {
 };
 
 AddStr.defaultProps = {
-    input: '',
-};
+    identifier: null,
+},
 
 AddStr.propTypes = {
-    cb: PropTypes.func.isRequired,
-    input: PropTypes.string,
+    identifier: PropTypes.string
 };
 
 export default AddStr;

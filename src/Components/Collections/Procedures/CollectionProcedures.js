@@ -16,7 +16,7 @@ const CollectionProcedures = ({scope}) => {
         setProcedures(p);
     };
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         ProcedureActions.getProcedures(scope, tag, handleProcedures);
 
     }, [scope]);

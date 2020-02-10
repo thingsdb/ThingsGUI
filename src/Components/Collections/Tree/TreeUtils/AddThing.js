@@ -5,7 +5,13 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
 import InputField from '../TreeActions/InputField';
+<<<<<<< HEAD
+import {ListHeader} from '../../../Util';
+import {EditActions, useEdit} from '../TreeActions/Context';
+
+=======
 import {addItemToArr, delBlob, delItemFromArr, ListHeader} from '../../../Util';
+>>>>>>> c45ac5f79b7eb41f6502f33991a7dd4023324e49
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -30,38 +36,39 @@ const single = [
     'str',
 ];
 
-const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
+const AddThing = ({customTypes, dataTypes, identifier, parentDispatch}) => {
     const classes = useStyles();
-    const [preBlob, setPreBlob] = React.useState({});
-    const [blob, setBlob] = React.useState({});
     const [state, setState] = React.useState({
-        contentAdd: '',
         dataType: 'str',
-        errors: {},
         property: '',
     });
-    const {contentAdd, dataType, property} = state;
+    const {dataType, property} = state;
 
-    const [myItems, setMyItems] = React.useState([]);
+    const [editState, dispatch] = useEdit();
+    const {array, val, blob} = editState;
+
     React.useEffect(() => {
-        onVal(`{${myItems}}`);
-        onBlob(blob);
+        EditActions.update(dispatch, {val: '', array: [], blob: {}});
     },
-    [myItems.length],
+    [],
     );
 
-    const handleInputField = (val) => {
-        setState({...state, contentAdd: val, errors: {}});
-    };
+    React.useEffect(() => {
+        EditActions.updateVal(parentDispatch,`{${array}}`, identifier);
+        EditActions.updateBlob(parentDispatch, array, blob);
+    },
+    [array.length],
+    );
 
     const handleChangeProperty = ({target}) => {
         const {value} = target;
-        setState({...state, property: value, errors: {}});
+        setState({...state, property: value});
     };
 
     const handleChangeType = ({target}) => {
         const {value} = target;
-        setState({...state, dataType: value, contentAdd: '', errors: {}});
+        setState({...state, dataType: value});
+        EditActions.updateVal(dispatch, '');
     };
 
     const typeControls = (type, input) => {
@@ -70,29 +77,20 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
     };
 
     const handleAdd = () => {
-        const contentTypeChecked = typeControls(dataType, `${property}: ${contentAdd}`);
-        setMyItems(prevItems => {
-            return addItemToArr(prevItems, contentTypeChecked);
-        });
-        setBlob({...blob, ...preBlob});
+        const contentTypeChecked = typeControls(dataType, `${property}: ${val}`);
+        EditActions.addToArr(dispatch, contentTypeChecked);
+        EditActions.updateVal(dispatch, '');
+        setState({...state, property: ''});
     };
 
     const handleClick = (index, item) => () => {
-        setBlob(prevBlob => {
-            return delBlob(prevBlob, item);
-        });
-        setMyItems(prevItems => {
-            return delItemFromArr(prevItems, index);
-        });
-    };
-
-    const handleBlob = (b) => {
-        setPreBlob({...b});
+        EditActions.deleteBlob(dispatch, item);
+        EditActions.deleteFromArr(dispatch, index);
     };
 
     return (
         <Grid container>
-            <ListHeader onAdd={handleAdd} onDelete={handleClick} items={myItems} groupSign="{">
+            <ListHeader onAdd={handleAdd} onDelete={handleClick} items={array} groupSign="{">
                 <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
                     <Grid item xs={3}>
                         <TextField
@@ -132,10 +130,7 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
                             customTypes={customTypes}
                             dataType={dataType}
                             dataTypes={dataTypes}
-                            input={contentAdd}
                             name="Input"
-                            onVal={handleInputField}
-                            onBlob={handleBlob}
                             variant="standard"
                             label="Value"
                         />
@@ -146,12 +141,16 @@ const AddThing = ({customTypes, dataTypes, onBlob, onVal}) => {
     );
 };
 
+AddThing.defaultProps = {
+    identifier: null,
+};
+
 
 AddThing.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onBlob: PropTypes.func.isRequired,
-    onVal: PropTypes.func.isRequired,
+    identifier: PropTypes.string,
+    parentDispatch: PropTypes.func.isRequired,
 };
 
 export default AddThing;

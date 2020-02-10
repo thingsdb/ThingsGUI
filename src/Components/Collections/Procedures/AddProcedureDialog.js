@@ -10,8 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ProcedureActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal} from '../../Util';
-import {AddClosure} from '../Tree/TreeUtils';
+import {Closure, ErrorMsg, SimpleModal} from '../../Util';
 
 
 const tag = '5';
@@ -140,7 +139,7 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
                                 </Typography>
                             </ListItem>
                             <ListItem>
-                                <AddClosure cb={handleClosure} />
+                                <Closure cb={handleClosure} />
                             </ListItem>
                         </List>
                     </Grid>

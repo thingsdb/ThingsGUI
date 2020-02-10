@@ -42,7 +42,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
 
     const handleClick = () => {
         setShow(!show);
-        onOpen();
+        onOpen(!show);
     };
 
     const handleOpenStringDialog = () => {
@@ -83,7 +83,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                 {children}
                 <ListItemSecondaryAction>
                     <React.Fragment>
-                        {onAction(name, type, val)}
+                        {onAction&&onAction(name, type, val)}
                         {canToggle&& (
                             <ButtonBase onClick={handleClick} >
                                 {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
@@ -115,7 +115,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
             {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding dense>
-                    {renderChildren()}
+                    {show&&renderChildren()}
                 </List>
             </Collapse>}
         </React.Fragment>
@@ -126,7 +126,7 @@ TreeBranch.defaultProps = {
     button: false,
     children: null,
     name: null,
-    onAction: () => null,
+    onAction: null,
     onClick: () => null,
     onOpen: () => null,
 };

@@ -149,11 +149,4 @@ Add.propTypes = {
     collections: ThingsdbStore.types.collections.isRequired,
 };
 
-// const areEqual = (prevProps, nextProps) => {
-//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-// };
-
-
-// export default withStores(React.memo(Add, areEqual));
-
 export default withStores(Add);

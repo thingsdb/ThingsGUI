@@ -11,9 +11,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+
 import {CollectionActions, ProcedureActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal} from '../../Util';
-import {AddClosure} from '../Tree/TreeUtils';
+import {Closure, ErrorMsg, SimpleModal} from '../../Util';
 
 
 const tag = '12';
@@ -44,7 +44,7 @@ const EditProcedureDialog = ({open, onClose, procedure, scope, cb}) => {
             setClosure(procedure.definition);
         }
     },
-    [JSON.stringify(procedure)],
+    [JSON.stringify(procedure)], // TODO STRING
     );
 
     React.useEffect(() => {
@@ -136,7 +136,7 @@ const EditProcedureDialog = ({open, onClose, procedure, scope, cb}) => {
                                 </Typography>
                             </ListItem>
                             <ListItem>
-                                <AddClosure input={closure} cb={handleClosure} />
+                                <Closure input={closure} cb={handleClosure} />
                             </ListItem>
                             <ListItem>
                                 <Grid container item xs={11} justify="flex-end">

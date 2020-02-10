@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {makeStyles} from '@material-ui/core/styles';
 
+import {EditActions, useEdit} from './Context';
 import BuildQueryString from './BuildQueryString';
 import InputField from './InputField';
 import {LocalErrorMsg} from '../../../Util';
@@ -35,24 +35,25 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
+const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
     const classes = useStyles();
-    const [value, setValue] = React.useState(
-        child.type == 'thing' ? ''
-            : child.type == 'closure' ? thing['/']
-                : child.type == 'regex' ? thing['*']
-                    : child.type == 'error' ? `err(${thing.error_code}, ${thing.error_msg})`
-                        : child.type == 'list' ? ''
-                            : thing);
+    const dispatch = useEdit()[1];
 
-    const [blob, setBlob] = React.useState({});
-    const [queryString, setQueryString] = React.useState('');
-    const [error, setError] = React.useState('');
     const [newProperty, setNewProperty] = React.useState('');
+    const [error, setError] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type);
     const [warnDescription, setWarnDescription] = React.useState('');
 
-    const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
+    React.useEffect(()=>{
+        EditActions.updateVal(dispatch, (child.type == 'thing' || child.type == 'list' || child.type == 'set') ? ''
+            : child.type == 'closure' ? thing['/']
+                : child.type == 'regex' ? thing['*']
+                    : child.type == 'error' ? `err(${thing.error_code}, ${thing.error_msg})`
+                        : thing);
+
+    }, []);
+
+    const errorTxt = (property) => thing[property] || property == 'root' ? 'property name already in use' : ''; // todo root
 
     const handleOnChangeName = ({target}) => {
         const {value} = target;
@@ -65,23 +66,14 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
         const {value} = target;
         setWarnDescription('');
         checkCircularRef(value, {});
-        setValue('');
-        setBlob({});
+        EditActions.update(dispatch, {
+            val: '',
+            blob: {},
+            array: [],
+            error: '',
+        });
+        setError('');
         setDataType(value);
-    };
-
-    const handleQuery = (q) => {
-        setQueryString(q);
-        cb(q, blob, error);
-    };
-
-    const handleVal = (v) => {
-        setValue(v);
-    };
-
-    const handleBlob = (b) => {
-        setBlob(b);
-        cb(queryString, b, error);
     };
 
     const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
@@ -107,30 +99,22 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
     return(
         <React.Fragment>
             <List disablePadding dense className={classes.list}>
-                <Collapse in={Boolean(queryString)} timeout="auto">
-                    <ListItem className={classes.listItem} >
-                        <BuildQueryString
-                            action="edit"
-                            cb={handleQuery}
-                            child={{
-                                id: null,
-                                index: child.index,
-                                name: child.id?newProperty:child.name,
-                                type: dataType,
-                                val: value,
-                            }}
-                            customTypes={customTypes}
-                            parent={{
-                                id: child.id||parent.id,
-                                name: child.id || child.type == 'list' || child.type == 'set' ?child.name:parent.name,
-                                type: child.id|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
-                            }}
-                            showQuery
-                            query={queryString}
-                            blob={blob}
-                        />
-                    </ListItem>
-                </Collapse>
+                <ListItem className={classes.listItem} >
+                    <BuildQueryString
+                        child={{
+                            id: null,
+                            index: child.index,
+                            name: child.id?newProperty:child.name,
+                            type: dataType,
+                        }}
+                        customTypes={customTypes}
+                        parent={{
+                            id: child.id||parent.id,
+                            name: child.id || child.type == 'list' || child.type == 'set' ?child.name:parent.name,
+                            type: child.id|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
+                        }}
+                    />
+                </ListItem>
                 <ListItem className={classes.listItem}>
                     {addNewProperty && (
                         <TextField
@@ -167,7 +151,11 @@ const Edit = ({child, customTypes, parent, thing, dataTypes, cb}) => {
                 {warnDescription ? (
                     <LocalErrorMsg msgError={warnDescription} />
                 ) : (
+<<<<<<< HEAD
+                    <InputField dataType={dataType} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
+=======
                     <InputField dataType={dataType} onVal={handleVal} onBlob={handleBlob} input={value} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
+>>>>>>> c45ac5f79b7eb41f6502f33991a7dd4023324e49
                 )}
             </List>
         </React.Fragment>
@@ -179,7 +167,7 @@ Edit.defaultProps = {
 },
 
 Edit.propTypes = {
-    cb: PropTypes.func.isRequired,
+    // cb: PropTypes.func.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     parent: PropTypes.shape({
         id: PropTypes.number,

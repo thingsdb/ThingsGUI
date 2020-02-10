@@ -243,19 +243,19 @@ class EventStore extends BaseStore {
         }).done(() => {
             this.setState(prevState => {
 
-                let copyThings = JSON.parse(JSON.stringify(prevState.watchThings));
+                let copyThings = JSON.parse(JSON.stringify(prevState.watchThings)); // copy
                 Object.keys(copyThings[scope]).length<2 ? delete copyThings[scope] : delete copyThings[scope][id];
 
-                let copyIds = JSON.parse(JSON.stringify(prevState.watchIds));
+                let copyIds = JSON.parse(JSON.stringify(prevState.watchIds)); // copy
                 delete copyIds[id];
 
                 let res = {watchThings: copyThings, watchIds: copyIds};
 
-                let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures));
+                let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures)); // copy
                 if (copyProcedures[scope]&&copyProcedures[scope][id]) {
                     delete copyProcedures[scope];
 
-                    let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes));
+                    let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes)); // copy
                     delete copyTypes[scope];
 
                     res['watchProcedures'] = copyProcedures;
@@ -378,7 +378,7 @@ class EventStore extends BaseStore {
         let scope = watchIds[id];
 
         this.setState(prevState => {
-            let copyState = JSON.parse(JSON.stringify(prevState.watchProcedures[scope][id]));
+            let copyState = JSON.parse(JSON.stringify(prevState.watchProcedures[scope][id])); // copy
             delete copyState[del];
             const update = Object.assign({}, prevState.watchProcedures[scope], {[id]: copyState});
             const watchProcedures = Object.assign({}, prevState.watchProcedures, {[scope]: update});
@@ -483,7 +483,7 @@ class EventStore extends BaseStore {
         let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == del);
 
         this.setState(prevState => {
-            let copyState = JSON.parse(JSON.stringify(prevState.watchTypes[scope][id]));
+            let copyState = JSON.parse(JSON.stringify(prevState.watchTypes[scope][id])); // copy
             delete copyState[type.name];
             const update = Object.assign({}, prevState.watchTypes[scope], {[id]: copyState});
             const watchTypes = Object.assign({}, prevState.watchTypes, {[scope]: update});
@@ -510,7 +510,7 @@ class EventStore extends BaseStore {
         const {watchIds} = this.state;
         let scope = watchIds[id];
         this.setState(prevState => {
-            let copyState = JSON.parse(JSON.stringify(prevState.watchThings[scope][id]));
+            let copyState = JSON.parse(JSON.stringify(prevState.watchThings[scope][id])); // copy
             delete copyState[del];
             const update = Object.assign({}, prevState.watchThings[scope], {[id]: copyState});
             const watchThings = Object.assign({}, prevState.watchThings, {[scope]: update});
@@ -588,7 +588,7 @@ class EventStore extends BaseStore {
         let scope = watchIds[data['#']];
 
         this.setState(prevState => {
-            let copyState = JSON.parse(JSON.stringify(prevState.watchThings[scope]));
+            let copyState = JSON.parse(JSON.stringify(prevState.watchThings[scope])); // copy
             delete copyState[data['#']];
             const watchThings = Object.assign({}, prevState.watchThings, {[scope]: copyState});
             return {watchThings};

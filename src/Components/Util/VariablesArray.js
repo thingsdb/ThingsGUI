@@ -19,7 +19,7 @@ const VariablesArray = ({input, cb}) => {
 
     const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
-        if(JSON.stringify(myItems)!=JSON.stringify(input)) {
+        if(JSON.stringify(myItems)!=JSON.stringify(input)) { // TODO STRING
             cb(myItems);
         }
     },
@@ -27,7 +27,7 @@ const VariablesArray = ({input, cb}) => {
     );
 
     React.useEffect(() => {
-        if(JSON.stringify(myItems)!=JSON.stringify(input)) {
+        if(JSON.stringify(myItems)!=JSON.stringify(input)) { // TODO STRING
             setMyItems(input);
         }
     },
