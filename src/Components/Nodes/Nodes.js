@@ -2,6 +2,7 @@
 import React from 'react';
 import {withVlow} from 'vlow';
 
+import NodeGraph from './SVGNodes/NodeGraph';
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
 import {Remove} from './Config';
@@ -13,13 +14,16 @@ const withStores = withVlow([{
     keys: ['nodes', 'connectedNode']
 }]);
 
+
 const Nodes = ({nodes, connectedNode}) => {
 
     React.useEffect(() => {
         NodesActions.getNodes();
+        NodesActions.getStreamInfo();
         const setPoll = setInterval(
             () => {
                 NodesActions.getNodes();
+                NodesActions.getStreamInfo();
             }, 5000);
         return () => {
             clearInterval(setPoll);
@@ -45,6 +49,7 @@ const Nodes = ({nodes, connectedNode}) => {
         <React.Fragment>
             <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode} />
             <NodeButtons />
+            <NodeGraph data={nodes} />
         </React.Fragment>
     );
 };
