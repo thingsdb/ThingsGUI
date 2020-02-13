@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
+import {ApplicationActions} from './ApplicationStore';
 
 const scope='@thingsdb';
 
@@ -172,7 +173,7 @@ class ThingsdbStore extends BaseStore {
 
     //USERS
 
-    onGetUser(){
+    onGetUser(success=()=>null, failed=()=>null){
         const {user} = this.state;
         const query = 'user_info();';
         this.emit('query', {
@@ -184,11 +185,14 @@ class ThingsdbStore extends BaseStore {
                     user: data,
                 });
             }
+            success();
         }).fail((event, status, message) => {
             this.setState({
                 user: {},
             });
-            ErrorActions.setToastError(message.Log);
+            ApplicationActions.disconnect();
+            ErrorActions.setMsgError('0', message.Log);
+            failed();
         });
     }
 

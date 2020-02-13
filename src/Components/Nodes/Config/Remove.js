@@ -41,7 +41,7 @@ const Remove = ({node}) => {
         <React.Fragment>
             <ErrorMsg tag={tag} />
             <DialogContentText>
-                {'Are you sure you want to remove the latest node?'}
+                {'Are you sure you want to remove this node?'}
             </DialogContentText>
         </React.Fragment>
     );
