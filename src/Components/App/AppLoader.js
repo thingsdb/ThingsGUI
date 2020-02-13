@@ -29,12 +29,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const AppLoader = (connect) => {
+const AppLoader = ({connect}) => {
 
     const classes = useStyles();
     React.useEffect(() => {
         if (connect) {
-            console.log('hai')
             ApplicationActions.connected();
         }
     }, [connect]);
@@ -84,7 +83,7 @@ const AppLoader = (connect) => {
     );
 };
 
-Node.propTypes = {
+AppLoader.propTypes = {
     connect: PropTypes.bool.isRequired,
 };
 

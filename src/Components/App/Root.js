@@ -6,7 +6,7 @@ import {withVlow} from 'vlow';
 import App from './App';
 import AppLoader from './AppLoader';
 import Login from './Login';
-import {ApplicationActions, ApplicationStore, EventActions, EventStore} from '../../Stores';
+import {ApplicationActions, ApplicationStore, EventActions, EventStore, ThingsdbStore} from '../../Stores';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -53,6 +53,8 @@ const withStores = withVlow([{
     keys: ['loaded', 'connected', 'seekConnection']
 }, {
     store: EventStore,
+}, {
+    store: ThingsdbStore,
 }]);
 
 const Root = ({loaded, connected, seekConnection}) => {
@@ -63,7 +65,7 @@ const Root = ({loaded, connected, seekConnection}) => {
     },
     [],
     );
-    console.log(loaded, connected, seekConnection);
+
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />

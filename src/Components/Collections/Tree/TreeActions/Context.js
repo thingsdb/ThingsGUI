@@ -24,7 +24,7 @@ const EditActions = {
     },
     updateBlob: (dispatch, data, blob) => {
         dispatch((state) => {
-            let copy = JSON.parse(JSON.stringify({...state.blob, ...blob})); //copy
+            let copy = JSON.parse(JSON.stringify(blob)); //copy
             let keys={};
             Object.keys(copy).map((k)=> {
                 data.map(v=> {
@@ -37,7 +37,7 @@ const EditActions = {
             });
             Object.entries(keys).map(([k, v]) => !v&&delete copy[k]);
 
-            return {blob: copy};
+            return {blob: {...state.blob, ...copy}};
         });
     },
     addToArr: (dispatch, data) => {

@@ -57,7 +57,6 @@ class ApplicationStore extends BaseStore {
     }
 
     connect(api, config, tag) {
-        console.log('connect')
         this.setState({
             loaded: false,
             seekConnection: false,
@@ -65,9 +64,10 @@ class ApplicationStore extends BaseStore {
         this.emit(api, config).done((data) => {
             ThingsdbActions.getUser(
                 ()=>{
-                    console.log('COONECT')
                     this.setState({
                         connected: data.Connected,
+                        loaded: true,
+                        seekConnection:true,
                     });
                     EventActions.watch(
                         '@n',
@@ -86,7 +86,6 @@ class ApplicationStore extends BaseStore {
     }
 
     onConnected() {
-        console.log('connected');
         this.emit('connected').done((data) => {
             setTimeout(() => {
                 this.setState({
@@ -104,7 +103,6 @@ class ApplicationStore extends BaseStore {
     }
 
     onReconnect() {
-        console.log('reconnected');
         this.emit('reconn').done((data) => {
             this.setState({
                 connected: data.Connected,
@@ -124,7 +122,6 @@ class ApplicationStore extends BaseStore {
                 connected: data.Connected,
                 match: {},
             });
-            console.log('disco', data);
             ErrorActions.resetToastError();
             ThingsdbActions.resetThingsStore();
             NodesActions.resetNodesStore();

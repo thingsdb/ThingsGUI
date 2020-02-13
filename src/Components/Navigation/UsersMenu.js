@@ -15,7 +15,6 @@ const withStores = withVlow([{
 
 const UsersMenu = ({user, users}) => {
     React.useEffect(() => {
-        console.log('effect');
         ThingsdbActions.getUser();
         setTimeout(()=>ThingsdbActions.getUsers(), 1000);
         const setPoll = setInterval(

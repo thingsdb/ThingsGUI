@@ -113,7 +113,6 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
     const handleWatchButton = (s) => (_, t, v) => {
         const id = v.slice(2, -1);
         let onWatch=Boolean(watchIds[id]);
-        console.log(s);
 
         return(t=='thing'&& (onWatch ? (
             <Tooltip disableFocusListener disableTouchListener title="Turn watching off">

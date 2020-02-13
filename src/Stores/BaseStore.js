@@ -196,7 +196,6 @@ class EventStore extends BaseStore {
     onOpenEventChannel() {
         socket.emit('getEvent', 'hoi');
         socket.on('event', (data) => {
-            console.log(data);
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);
