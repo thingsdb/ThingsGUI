@@ -2,7 +2,6 @@
 import React from 'react';
 import {withVlow} from 'vlow';
 
-import NodeGraph from './SVGNodes/NodeGraph';
 import NodeButtons from '../Nodes/NodeButtons';
 import Node from './Node';
 import {Remove} from './Config';
@@ -48,8 +47,7 @@ const Nodes = ({nodes, connectedNode}) => {
     return(
         <React.Fragment>
             <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode} />
-            <NodeButtons />
-            <NodeGraph data={nodes} />
+            <NodeButtons nodes={nodes} />
         </React.Fragment>
     );
 };

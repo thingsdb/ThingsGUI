@@ -1,16 +1,8 @@
-import {withVlow} from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {NodesStore} from '../../../Stores';
 import Arrow from './Components/Arrow';
 import Node from './Components/Node';
-
-
-const withStores = withVlow([{
-    store: NodesStore,
-    keys: ['streamInfo']
-}]);
 
 const NodeGraph = ({width, height, radius, data, streamInfo}) => {
 
@@ -20,6 +12,12 @@ const NodeGraph = ({width, height, radius, data, streamInfo}) => {
 
     return(
         <svg width={width} height={height}>
+            <defs>
+                <filter id="blurFilter" >
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="6" />
+                </filter>
+            </defs>
+            <ellipse cx={width/2} cy={height/2} rx={width/2} ry={height/2} fill="rgba(0, 0, 0, 0.3)" filter="url(#blurFilter)" />
             {data.map((n, i) => (
                 <React.Fragment key={`l${i}`} >
                     {streamInfo[n.node_id]!=undefined&&streamInfo[n.node_id].map((s) => {
@@ -30,7 +28,7 @@ const NodeGraph = ({width, height, radius, data, streamInfo}) => {
                 </React.Fragment>
             ))}
             {data.map((n, i) => (
-                <Node key={`n${i}`} x={d[n.node_id][0]} y={d[n.node_id][1]} data={n} color={n.status=='OFFLINE'? 'red': n.status=='SHUTTING_DOWN' ? 'orange' : 'rgba(0, 55, 123, 0.5)'} />
+                <Node key={`n${i}`} x={d[n.node_id][0]} y={d[n.node_id][1]} data={n} color={n.status=='OFFLINE'? '#1b1c1d': n.status=='SHUTTING_DOWN' ? '#1b1c1d' : 'rgba(0, 55, 123, 0.5)'} />
             ))}
         </svg>
     );
@@ -38,9 +36,10 @@ const NodeGraph = ({width, height, radius, data, streamInfo}) => {
 
 
 NodeGraph.defaultProps = {
-    width: 500,
-    height: 500,
-    radius: 150,
+    width: 900,
+    height: 600,
+    radius: 250,
+    streamInfo: {},
 };
 
 NodeGraph.propTypes = {
@@ -48,12 +47,9 @@ NodeGraph.propTypes = {
     height: PropTypes.number,
     radius: PropTypes.number,
     data: PropTypes.arrayOf(PropTypes.object).isRequired,
-
-    /* nodes properties */
-    streamInfo: NodesStore.types.streamInfo.isRequired,
+    streamInfo:PropTypes.object,
 };
 
 
-export default withStores(NodeGraph);
+export default NodeGraph;
 
-// memory allocation error in `ti_query_parse` at ../src/ti/query.c:709

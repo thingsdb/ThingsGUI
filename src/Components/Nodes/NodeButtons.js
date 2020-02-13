@@ -1,8 +1,11 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
+import React from 'react';
+
 
 import {Add} from './Config';
+import OpenNodeGraph from './SVGNodes/OpenNodeGraph';
 
 
 const useStyles = makeStyles(theme => ({
@@ -12,7 +15,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const NodeButtons = () => {
+const NodeButtons = ({nodes}) => {
     const classes = useStyles();
     return (
         <Grid
@@ -25,9 +28,17 @@ const NodeButtons = () => {
                 <Grid item>
                     <Add />
                 </Grid>
+                <Grid item>
+                    <OpenNodeGraph nodes={nodes} />
+                </Grid>
             </Grid>
         </Grid>
     );
+};
+
+NodeButtons.propTypes = {
+    /* collections properties */
+    nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default NodeButtons;

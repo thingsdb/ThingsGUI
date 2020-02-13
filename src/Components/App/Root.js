@@ -50,12 +50,12 @@ const theme = createMuiTheme({
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['loaded', 'connected']
+    keys: ['loaded', 'connected', 'seekConnection']
 }, {
     store: EventStore,
 }]);
 
-const Root = ({loaded, connected}) => {
+const Root = ({loaded, connected, seekConnection}) => {
     React.useEffect(() => {
         ApplicationActions.pushNotifications();
         EventActions.openEventChannel();
@@ -63,11 +63,11 @@ const Root = ({loaded, connected}) => {
     },
     [],
     );
-
+    console.log(loaded, connected, seekConnection);
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
-            {loaded ? connected ? <App /> : <Login /> : <AppLoader />}
+            {loaded ? connected ? <App /> : <Login /> : <AppLoader connect={seekConnection} />}
         </MuiThemeProvider>
     );
 };
@@ -75,6 +75,7 @@ const Root = ({loaded, connected}) => {
 Root.propTypes = {
     loaded: ApplicationStore.types.loaded.isRequired,
     connected: ApplicationStore.types.connected.isRequired,
+    seekConnection: ApplicationStore.types.seekConnection.isRequired,
 };
 
 export default withStores(Root);

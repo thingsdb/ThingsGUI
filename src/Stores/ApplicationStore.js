@@ -29,6 +29,7 @@ class ApplicationStore extends BaseStore {
     static types = {
         loaded: PropTypes.bool,
         connected: PropTypes.bool,
+        seekConnection: PropTypes.bool,
         match: PropTypes.shape({path: PropTypes.string, index: PropTypes.number, item: PropTypes.string, scope: PropTypes.string}),
         openEditor: PropTypes.bool,
         input: PropTypes.string,
@@ -38,6 +39,7 @@ class ApplicationStore extends BaseStore {
     static defaults = {
         loaded: false,
         connected: false,
+        seekConnection: true,
         match: {
             path: '',
             index: 0,
@@ -55,16 +57,28 @@ class ApplicationStore extends BaseStore {
     }
 
     connect(api, config, tag) {
+        console.log('connect')
+        this.setState({
+            loaded: false,
+            seekConnection: false,
+        });
         this.emit(api, config).done((data) => {
-            this.setState({
-                connected: data.Connected,
-            });
-            EventActions.watch(
-                '@n',
-            );
+            ThingsdbActions.getUser(
+                ()=>{
+                    console.log('COONECT')
+                    this.setState({
+                        connected: data.Connected,
+                    });
+                    EventActions.watch(
+                        '@n',
+                    );
+                },
+                ()=>this.setState({loaded: true, seekConnection: false}));
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
+            this.setState({loaded: true, seekConnection: true});
         });
+
     }
 
     onPushNotifications() {
@@ -72,21 +86,25 @@ class ApplicationStore extends BaseStore {
     }
 
     onConnected() {
+        console.log('connected');
         this.emit('connected').done((data) => {
             setTimeout(() => {
                 this.setState({
                     loaded: data.Loaded,
                     connected: data.Connected,
                 });
-            }, 1000);
+            }, 2000);
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
+
+
 
     onConnect(config, tag) {
         this.connect('conn', config, tag);
     }
 
     onReconnect() {
+        console.log('reconnected');
         this.emit('reconn').done((data) => {
             this.setState({
                 connected: data.Connected,
@@ -106,6 +124,7 @@ class ApplicationStore extends BaseStore {
                 connected: data.Connected,
                 match: {},
             });
+            console.log('disco', data);
             ErrorActions.resetToastError();
             ThingsdbActions.resetThingsStore();
             NodesActions.resetNodesStore();
