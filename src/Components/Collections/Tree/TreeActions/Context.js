@@ -26,7 +26,7 @@ const EditActions = {
         dispatch((state) => {
             let copy = JSON.parse(JSON.stringify(blob)); //copy
             let keys={};
-            Object.keys(copy).map((k)=> {
+            Object.keys(copy).map(k=> {
                 data.map(v=> {
                     if (keys[k]||v.includes(k)){
                         keys[k]=true;

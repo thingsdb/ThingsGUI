@@ -46,16 +46,14 @@ const Menu = ({title, icon, items, addItem, onClickItem}) => {
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    {items.length ? items.map((item, i) => {
-                        return(
-                            <ListItem key={i} button className={classes.nested} onClick={handleClickItem(i)}>
-                                <ListItemIcon>
-                                    {icon}
-                                </ListItemIcon>
-                                <ListItemText primary={item.name} />
-                            </ListItem>
-                        );
-                    }) : (
+                    {items.length ? items.map((item, i) => (
+                        <ListItem key={i} button className={classes.nested} onClick={handleClickItem(i)}>
+                            <ListItemIcon>
+                                {icon}
+                            </ListItemIcon>
+                            <ListItemText primary={item.name} />
+                        </ListItem>
+                    )) : (
                         <ListItem button className={classes.nested}>
                             <ListItemIcon>
                                 <BlockIcon />

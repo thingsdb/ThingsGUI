@@ -18,18 +18,8 @@ const NodeGraph = ({width, height, radius, data, streamInfo}) => {
                 </filter>
             </defs>
             <ellipse cx={width/2} cy={height/2} rx={width/2} ry={height/2} fill="rgba(0, 0, 0, 0.3)" filter="url(#blurFilter)" />
-            {data.map((n, i) => (
-                <React.Fragment key={`l${i}`} >
-                    {streamInfo[n.node_id]!=undefined&&streamInfo[n.node_id].map((s) => {
-                        return(
-                            <Arrow key={s} startPointX={d[s][0]} startPointY={d[s][1]} endPointX={d[n.node_id][0]} endPointY={d[n.node_id][1]} />
-                        );
-                    })}
-                </React.Fragment>
-            ))}
-            {data.map((n, i) => (
-                <Node key={`n${i}`} x={d[n.node_id][0]} y={d[n.node_id][1]} data={n} color={n.status=='OFFLINE'? '#1b1c1d': n.status=='SHUTTING_DOWN' ? '#1b1c1d' : 'rgba(0, 55, 123, 0.5)'} />
-            ))}
+            {data.filter(n=> streamInfo[n.node_id] !== undefined).map( n=> streamInfo[n.node_id].map( s => <Arrow key={s} startPointX={d[s][0]} startPointY={d[s][1]} endPointX={d[n.node_id][0]} endPointY={d[n.node_id][1]} />))}
+            {data.map((n, i) => <Node key={i} x={d[n.node_id][0]} y={d[n.node_id][1]} data={n} color={n.status=='OFFLINE'? '#1b1c1d': n.status=='SHUTTING_DOWN' ? '#1b1c1d' : 'rgba(0, 55, 123, 0.5)'} />)}
         </svg>
     );
 };

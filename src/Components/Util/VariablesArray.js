@@ -70,23 +70,9 @@ const VariablesArray = ({input, cb}) => {
         });
     };
 
-    const makeAddedList = () => {
-        const elements =  myItems.map((listitem, index) => (
-            <Chip
-                key={index}
-                id={listitem}
-                className={classes.chip}
-                label={listitem}
-                onDelete={handleClick(index)}
-                color="primary"
-            />
-        ));
-        return elements;
-    };
-
     return (
         <div>
-            {makeAddedList()}
+            {myItems.map((listitem, index) => <Chip key={index} id={listitem} className={classes.chip} label={listitem} onDelete={handleClick(index)} color="primary" />)}
             <TextField
                 name="input"
                 label="Variable"

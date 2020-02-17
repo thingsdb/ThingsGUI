@@ -75,7 +75,7 @@ const Backup = ({nodeId, offline, backups}) => {
             </Tooltip>
         ) : b.next_run;
         const res_code = b.result_code;
-        b.result_code = b.result_code==undefined ? (
+        b.result_code = b.result_code === undefined ? (
             b.result_code
         ) : b.result_code == 0 ? (
             <Tooltip disableFocusListener disableTouchListener title={res_code}>

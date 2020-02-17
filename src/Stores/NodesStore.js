@@ -172,7 +172,7 @@ class NodesStore extends BaseStore {
             this.setState({
                 counters: data
             });
-        });//.fail((event, status, message) => ErrorActions.setMsgError(message.Log)); TODO create msg error!
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
     onShutdown(nodeId, tag, cb) {

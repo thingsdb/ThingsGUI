@@ -3,6 +3,7 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import {BaseStore, EventActions} from './BaseStore';
+import {CollectionActions} from './CollectionStore';
 import {ErrorActions} from './ErrorStore';
 import {NodesActions} from './NodesStore';
 import {ThingsdbActions} from './ThingsdbStore';
@@ -122,6 +123,7 @@ class ApplicationStore extends BaseStore {
                 connected: data.Connected,
                 match: {},
             });
+            CollectionActions.resetCollectionStore();
             ErrorActions.resetToastError();
             ThingsdbActions.resetThingsStore();
             NodesActions.resetNodesStore();

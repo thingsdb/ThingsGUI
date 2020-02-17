@@ -148,7 +148,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
                         select
                         SelectProps={{native: true}}
                     >
-                        {scopes.map((p) => (
+                        {scopes.map(p => (
                             <option key={p} value={p}>
                                 {p}
                             </option>

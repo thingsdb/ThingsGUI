@@ -34,17 +34,17 @@ const CollectionTypes = ({scope}) => {
 
     const typesOptional = [
         ...types,
-        ...types.map((v)=>(`${v}?`)),
+        ...types.map(v=>`${v}?`),
     ];
 
     const list = [
         '[]',
-        ...typesOptional.map((v)=>(`[${v}]`)),
+        ...typesOptional.map(v=>`[${v}]`),
     ];
 
     const listOptional = [
         ...list,
-        ...list.map((v)=>(`${v}?`)),
+        ...list.map(v=>`${v}?`),
     ];
 
     const set = [

@@ -196,6 +196,7 @@ class EventStore extends BaseStore {
     onOpenEventChannel() {
         socket.emit('getEvent', 'hoi');
         socket.on('event', (data) => {
+            console.log(data);
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);
@@ -204,7 +205,7 @@ class EventStore extends BaseStore {
                 this.watchUpdate(data.Data);
                 break;
             case ProtoMap.ProtoOnWatchDel:
-                this.watchDel(data.Data);
+                this.unwatch(data.Data['#']);
                 break;
             case ProtoMap.ProtoOnNodeStatus:
                 this.nodeStatus(data.Data);
@@ -584,18 +585,6 @@ class EventStore extends BaseStore {
             const update = Object.assign({}, prevState.watchThings[scope][id], {[prop]: newSet});
             const update2 = Object.assign({}, prevState.watchThings[scope], {[id]: update});
             const watchThings = Object.assign({}, prevState.watchThings, {[scope]: update2});
-            return {watchThings};
-        });
-    }
-
-    watchDel(data) {
-        const {watchIds} = this.state;
-        let scope = watchIds[data['#']];
-
-        this.setState(prevState => {
-            let copyState = JSON.parse(JSON.stringify(prevState.watchThings[scope])); // copy
-            delete copyState[data['#']];
-            const watchThings = Object.assign({}, prevState.watchThings, {[scope]: copyState});
             return {watchThings};
         });
     }

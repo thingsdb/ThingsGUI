@@ -14,6 +14,7 @@ const CollectionActions = Vlow.createActions([
     'queryEditor',
     'download',
     'cleanupTmp',
+    'resetCollectionStore'
 ]);
 
 // TODO: CALLBACKS
@@ -21,7 +22,6 @@ class CollectionStore extends BaseStore {
 
     static types = {
         things: PropTypes.object,
-        thingsByProp: PropTypes.object,
     }
 
     static defaults = {
@@ -31,6 +31,13 @@ class CollectionStore extends BaseStore {
     constructor() {
         super(CollectionActions);
         this.state = CollectionStore.defaults;
+    }
+
+
+    onResetCollectionStore() {
+        this.setState({
+            things: {},
+        });
     }
 
     onQueryWithReturnDepth(collection, thingId=null, depth=1) {

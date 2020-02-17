@@ -114,7 +114,7 @@ const AddThing = ({customTypes, dataTypes, identifier, parentDispatch}) => {
                             SelectProps={{native: true}}
                             fullWidth
                         >
-                            {dataTypes.map((p) => (
+                            {dataTypes.map( p => (
                                 <option key={p} value={p}>
                                     {p}
                                 </option>

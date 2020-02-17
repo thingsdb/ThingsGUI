@@ -102,7 +102,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
                                 select
                                 SelectProps={{native: true}}
                             >
-                                {(childTypes.length?childTypes:dataTypes).map((p) => (
+                                {(childTypes.length?childTypes:dataTypes).map(p => (
                                     <option key={p} value={p}>
                                         {p}
                                     </option>

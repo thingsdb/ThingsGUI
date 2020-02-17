@@ -203,7 +203,7 @@ const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch
                                             fullWidth
                                             disabled={ftype.length<2}
                                         >
-                                            {ftype.map((p) => (
+                                            {ftype.map( p => (
                                                 <option key={p} value={p}>
                                                     {p}
                                                 </option>
