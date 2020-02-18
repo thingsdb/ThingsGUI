@@ -111,7 +111,7 @@ class ApplicationStore extends BaseStore {
             EventActions.reWatch();
             ErrorActions.resetToastError();
         }).fail((event, status, message) => {
-            // ErrorActions.setToastError(message.Log); //Tag naar login scherm
+            ErrorActions.setToastError(message.Log); //Tag naar login scherm
             this.onDisconnect();
         });
     }
@@ -149,14 +149,13 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onNewConn(config, tag, cb) {
+    onNewConn(config, tag) {
         this.emit('newEditConn', config).done((_data) => {
             this.setState(prevState => {
                 const savedConn = Object.assign({}, prevState.savedConnections, {[config.name]: config});
                 const update = Object.assign({}, prevState, {savedConnections: savedConn});
                 return update;
             });
-            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });

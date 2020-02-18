@@ -101,12 +101,12 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
         );
     };
 
-    const handleClickWatch = (scope, id) => () => {
+    const handleClickWatch = (s, id) => () => {
         EventActions.watch(
-            scope,
+            s,
             id,
         );
-        TypeActions.getTypes(scope, tag);
+        TypeActions.getTypes(s, tag);
     };
 
 
@@ -125,7 +125,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
                 <AddOutlinedIcon size="small" className={classes.green}  />
             </ButtonBase>
         )));
-    }; // v = '{#123}'
+    };
 
     const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
 

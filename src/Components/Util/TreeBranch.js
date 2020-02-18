@@ -17,10 +17,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {DownloadBlob, SimpleModal, TreeIcon} from '../Util';
 
 
-const useStyles = makeStyles(theme => ({
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
+const useStyles = makeStyles(() => ({
     listItem: {
         margin: 0,
         padding: 0,
@@ -31,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpen, onRenderChildren, type, val}) => {
+const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpen, onRenderChildren, type, val, inset}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
     const [open, setOpen] = React.useState(false);
@@ -55,7 +52,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
 
     return (
         <React.Fragment>
-            <ListItem className={classes.listItem} button={button?true:false} onClick={onClick}>
+            <ListItem style={{margin: 0, paddingTop:0, paddingBottom:0, paddingRight: 0, paddingLeft: inset?32:0}} button={button?true:false} onClick={onClick}>
                 <ListItemIcon>
                     <TreeIcon type={type} />
                 </ListItemIcon>
@@ -112,7 +109,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
             </ListItem>
             {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding dense>
+                <List component="div" disablePadding dense style={{paddingLeft: inset?32:0}}>
                     {show&&renderChildren()}
                 </List>
             </Collapse>}
@@ -127,6 +124,7 @@ TreeBranch.defaultProps = {
     onAction: null,
     onClick: () => null,
     onOpen: () => null,
+    inset: false,
 };
 
 TreeBranch.propTypes = {
@@ -140,6 +138,7 @@ TreeBranch.propTypes = {
     onRenderChildren: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
     val: PropTypes.string.isRequired,
+    inset: PropTypes.bool,
 };
 
 export default TreeBranch;

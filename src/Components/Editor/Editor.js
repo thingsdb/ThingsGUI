@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {ApplicationStore, CollectionActions, CollectionStore, ErrorActions, ProcedureActions, ProcedureStore, TypeActions} from '../../Stores';
+import {ApplicationStore, CollectionActions, ErrorActions, ProcedureActions, TypeActions} from '../../Stores';
 import {ChipsCard, ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput, WarnPopover} from '../Util';
 import SelectScope from './SelectScope';
 
@@ -14,10 +14,6 @@ import SelectScope from './SelectScope';
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['match']
-}, {
-    store: ProcedureStore,
-}, {
-    store: CollectionStore,
 }]);
 
 const useStyles = makeStyles(() => ({
@@ -108,7 +104,7 @@ const Editor = ({match}) => {
 
     const handleSubmit = () => {
         setExpandOutput(false);
-        setTimeout(()=> {
+        setTimeout(()=> { // can result in -> Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function. in Editor (created by WithVlow()(Editor)) in WithVlow()(Editor) (created by App)
             setOutput(null);
             CollectionActions.queryEditor(scope.value, query, scope.collectionId, handleOutput, tag);
             handleGetAdditionals();

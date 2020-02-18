@@ -194,7 +194,7 @@ class EventStore extends BaseStore {
     }
 
     onOpenEventChannel() {
-        socket.emit('getEvent', 'hoi');
+        socket.emit('getEvent');
         socket.on('event', (data) => {
             console.log(data);
             switch(data.Proto){

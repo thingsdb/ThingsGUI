@@ -128,7 +128,7 @@ func (app *App) SocketRouter() {
 		return handlers.Unwatch(app.client[s.ID()], data, app.timeout)
 	})
 
-	app.server.OnEvent("/", "getEvent", func(s socketio.Conn, data string) {
+	app.server.OnEvent("/", "getEvent", func(s socketio.Conn) {
 		eCh := app.client[s.ID()].EventCh
 		lCh := app.client[s.ID()].LogCh
 		go func() {
@@ -143,9 +143,6 @@ func (app *App) SocketRouter() {
 	})
 
 	app.server.OnError("/", func(e error) {
-		// for _, v := range app.client {
-		// 	v.LogCh <- fmt.Sprintf("meet error: %s", e.Error())
-		// }
 		fmt.Printf("meet error: %s\n", e.Error())
 	})
 

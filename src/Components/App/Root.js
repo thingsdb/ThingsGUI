@@ -6,7 +6,8 @@ import {withVlow} from 'vlow';
 import App from './App';
 import AppLoader from './AppLoader';
 import Login from './Login';
-import {ApplicationActions, ApplicationStore, EventActions, EventStore, ThingsdbStore} from '../../Stores';
+import InitStores from './InitStores';
+import {ApplicationActions, ApplicationStore} from '../../Stores';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -51,16 +52,11 @@ const theme = createMuiTheme({
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['loaded', 'connected', 'seekConnection']
-}, {
-    store: EventStore,
-}, {
-    store: ThingsdbStore,
 }]);
 
 const Root = ({loaded, connected, seekConnection}) => {
     React.useEffect(() => {
         ApplicationActions.pushNotifications();
-        EventActions.openEventChannel();
         ApplicationActions.getConn('0'); // errmsg shown at Login dialog
     },
     [],
@@ -69,6 +65,7 @@ const Root = ({loaded, connected, seekConnection}) => {
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
+            <InitStores />
             {loaded ? connected ? <App /> : <Login /> : <AppLoader connect={seekConnection} />}
         </MuiThemeProvider>
     );
