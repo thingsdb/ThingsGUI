@@ -36,7 +36,7 @@ const ThingRestrict = ({thing, onChildren}) => {
     };
 
     const renderThing = ([k, v, i=null], count) => {
-        return k === '#' ? null : (
+        return(
             <React.Fragment key={i ? i : k}>
                 {onChildren(k, v, i, isArray)}
                 {more[count] && renderChildren(count+1)}
@@ -54,9 +54,8 @@ const ThingRestrict = ({thing, onChildren}) => {
 
     const renderChildren = (start=0) => {
         let end = start+visibleNumber;
-        console.log(from, start)
         return (
-            isArray ? thing.slice(from, till).slice(start, end).map((t, i) => renderThing([`${i}`, t, from+start+i], from+start+i)) : Object.entries(thing || {}).slice(from, till).slice(start, end).map(([k, v], i) => renderThing([k, v], from+start+i))
+            isArray ? thing.slice(from, till).slice(start, end).map((t, i) => renderThing([`${i}`, t, from+start+i], start+i)) : Object.keys(thing || {}).reduce((res, k) => {k!=='#'&&res.push([k, thing[k]]); return res;},[]).slice(from, till).slice(start, end).map(([k, v], i) => renderThing([k, v], start+i))
         );
     };
 
@@ -64,7 +63,7 @@ const ThingRestrict = ({thing, onChildren}) => {
     return (
         <React.Fragment>
             {(isArray?thing.length:Object.values(thing).length)>100 && (
-                <ThingsBounds onBounds={handleBounds} />
+                <ThingsBounds onBounds={handleBounds} total={isArray?thing.length:Object.keys(thing).length} />
             )}
             {renderChildren()}
         </React.Fragment>
