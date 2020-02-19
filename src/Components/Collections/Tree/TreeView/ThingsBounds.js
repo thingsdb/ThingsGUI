@@ -29,11 +29,8 @@ const ThingBounds = ({ onBounds, total }) => {
 
     return (
         <ListItem>
-            <Typography variant="body1" style={{paddingRight: 8}}>
-                {'Show tree items: '}
-            </Typography>
             <TextField
-                style={{width: 50}}
+                style={{width: from.length*9+60}}
                 margin="dense"
                 id="from"
                 inputProps={{
@@ -46,15 +43,13 @@ const ThingBounds = ({ onBounds, total }) => {
                 value={from}
                 onChange={handleOnChangeFrom}
                 size="small"
-                InputProps={{
-                    disableUnderline: true,
-                }}
+                variant="outlined"
             />
             <Typography variant="body1" style={{paddingRight: 8, paddingLeft: 8}}>
-                {' - '}
+                {' — '}
             </Typography>
             <TextField
-                style={{width: 50}}
+                style={{width: till.length*9+60}}
                 margin="dense"
                 id="till"
                 inputProps={{
@@ -67,9 +62,7 @@ const ThingBounds = ({ onBounds, total }) => {
                 value={till}
                 onChange={handleOnChangeTill}
                 size="small"
-                InputProps={{
-                    disableUnderline: true,
-                }}
+                variant="outlined"
             />
             <Typography variant="body1" style={{paddingLeft: 8}}>
                 {`of ${total}`}

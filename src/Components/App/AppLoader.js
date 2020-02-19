@@ -74,7 +74,7 @@ const AppLoader = ({connect}) => {
                         src="/img/thingsdb.gif"
                         alt="loading..."
                         draggable="false"
-                        width="100"
+                        width="200"
                     />
 
                 </Grid>
