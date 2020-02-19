@@ -1,7 +1,0 @@
-{
-    "git.ignoreLimitWarning": true,
-    "python.linting.pycodestyleEnabled": true,
-    "python.linting.pylintEnabled": true,
-    "python.linting.pylintUseMinimalCheckers": true, 
-    "files.eol": "auto",
-}
