@@ -7,13 +7,11 @@ import {CollectionConfig} from './Config';
 import CollectionTree from './Tree';
 import CollectionProcedures from './Procedures';
 import CollectionTypes from './Types';
-import {CollectionStore, ApplicationStore, ThingsdbStore} from '../../Stores';
+import {ApplicationStore, ThingsdbStore} from '../../Stores';
 import {findItem, isObjectEmpty, TitlePage} from '../Util';
 
 
 const withStores = withVlow([{
-    store: CollectionStore,
-}, {
     store: ApplicationStore,
     keys: ['match']
 }, {

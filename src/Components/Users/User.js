@@ -57,12 +57,4 @@ User.propTypes = {
     users: ThingsdbStore.types.users.isRequired,
 };
 
-
-// const areEqual = (prevProps, nextProps) => {
-//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-// };
-
-
-// export default withStores(React.memo(User, areEqual));
-
 export default withStores(User);

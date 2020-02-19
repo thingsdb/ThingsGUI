@@ -1,6 +1,9 @@
+/*eslint-disable no-unused-vars */
+
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import {BaseStore, EventActions} from './BaseStore';
+import {CollectionActions} from './CollectionStore';
 import {ErrorActions} from './ErrorStore';
 import {NodesActions} from './NodesStore';
 import {ThingsdbActions} from './ThingsdbStore';
@@ -27,6 +30,7 @@ class ApplicationStore extends BaseStore {
     static types = {
         loaded: PropTypes.bool,
         connected: PropTypes.bool,
+        seekConnection: PropTypes.bool,
         match: PropTypes.shape({path: PropTypes.string, index: PropTypes.number, item: PropTypes.string, scope: PropTypes.string}),
         openEditor: PropTypes.bool,
         input: PropTypes.string,
@@ -36,6 +40,7 @@ class ApplicationStore extends BaseStore {
     static defaults = {
         loaded: false,
         connected: false,
+        seekConnection: true,
         match: {
             path: '',
             index: 0,
@@ -53,16 +58,28 @@ class ApplicationStore extends BaseStore {
     }
 
     connect(api, config, tag) {
+        this.setState({
+            loaded: false,
+            seekConnection: false,
+        });
         this.emit(api, config).done((data) => {
-            this.setState({
-                connected: data.Connected,
-            });
-            EventActions.watch(
-                '@n',
-            );
+            ThingsdbActions.getUser(
+                ()=>{
+                    this.setState({
+                        connected: data.Connected,
+                        loaded: true,
+                        seekConnection:true,
+                    });
+                    EventActions.watch(
+                        '@n',
+                    );
+                },
+                ()=>this.setState({loaded: true, seekConnection: false}));
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
+            this.setState({loaded: true, seekConnection: true});
         });
+
     }
 
     onPushNotifications() {
@@ -76,9 +93,11 @@ class ApplicationStore extends BaseStore {
                     loaded: data.Loaded,
                     connected: data.Connected,
                 });
-            }, 1000);
+            }, 2000);
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
+
+
 
     onConnect(config, tag) {
         this.connect('conn', config, tag);
@@ -92,7 +111,7 @@ class ApplicationStore extends BaseStore {
             EventActions.reWatch();
             ErrorActions.resetToastError();
         }).fail((event, status, message) => {
-            // ErrorActions.setToastError(message.Log); //Tag naar login scherm
+            ErrorActions.setToastError(message.Log); //Tag naar login scherm
             this.onDisconnect();
         });
     }
@@ -104,6 +123,7 @@ class ApplicationStore extends BaseStore {
                 connected: data.Connected,
                 match: {},
             });
+            CollectionActions.resetCollectionStore();
             ErrorActions.resetToastError();
             ThingsdbActions.resetThingsStore();
             NodesActions.resetNodesStore();
@@ -129,14 +149,13 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onNewConn(config, tag, cb) {
+    onNewConn(config, tag) {
         this.emit('newEditConn', config).done((_data) => {
             this.setState(prevState => {
                 const savedConn = Object.assign({}, prevState.savedConnections, {[config.name]: config});
                 const update = Object.assign({}, prevState, {savedConnections: savedConn});
                 return update;
             });
-            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });
@@ -153,7 +172,7 @@ class ApplicationStore extends BaseStore {
     onDelConn(config, tag) {
         this.emit('delConn', config).done((_data) => {
             this.setState(prevState => {
-                let copy = JSON.parse(JSON.stringify(prevState.savedConnections));
+                let copy = JSON.parse(JSON.stringify(prevState.savedConnections)); // copy
                 delete copy[config.name];
                 const update = Object.assign({}, prevState, {savedConnections: copy});
                 return update;

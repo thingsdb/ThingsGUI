@@ -1,3 +1,6 @@
+/*eslint-disable no-unused-vars */
+
+import deepEqual from 'deep-equal';
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 import moment from 'moment';
@@ -7,6 +10,7 @@ import Vlow from 'vlow';
 const NodesActions = Vlow.createActions([
     'resetNodesStore',
     'getNodes',
+    'getStreamInfo',
     'getNode',
     'getCounters',
     'setLoglevel',
@@ -28,6 +32,7 @@ class NodesStore extends BaseStore {
         node: PropTypes.object,
         connectedNode: PropTypes.object,
         backups: PropTypes.arrayOf(PropTypes.object),
+        streamInfo: PropTypes.object,
     }
 
     static defaults = {
@@ -36,6 +41,7 @@ class NodesStore extends BaseStore {
         node: {},
         connectedNode: {},
         backups: [],
+        streamInfo: {},
     }
 
     constructor() {
@@ -52,6 +58,7 @@ class NodesStore extends BaseStore {
             node: {},
             connectedNode: {},
             backups: [],
+            streamInfo: {},
         });
     }
 
@@ -63,7 +70,7 @@ class NodesStore extends BaseStore {
             query
         }).done((data) => {
             data.connectedNode.uptime =  moment.duration(data.connectedNode.uptime , 'second').humanize();
-            if (JSON.stringify(data.nodes) != JSON.stringify(nodes) || JSON.stringify(data.connectedNode.node_id) != JSON.stringify(node.node_id)){
+            if (!deepEqual(data.nodes, nodes)|| data.connectedNode.node_id != node.node_id){
                 this.setState({
                     nodes: data.nodes,
                     connectedNode: data.connectedNode
@@ -79,6 +86,36 @@ class NodesStore extends BaseStore {
         });
     }
 
+    onGetStreamInfo(){
+        const {nodes, streamInfo} = this.state;
+        const query = 'nodes_info();';
+        const obj = {};
+        const length = nodes.length;
+        nodes.slice(0, -1).map((n,i) => // need all nodes -1
+            this.emit('query', {
+                scope: `@node:${n.node_id}`,
+                query
+            }).done((data) => {
+                data.slice(i).map(s=>{
+                    if(s.stream&&s.stream.includes('node-out')){
+                        obj[s.node_id] = obj[s.node_id]?[...obj[s.node_id], n.node_id]:[n.node_id];
+                    } else if(s.stream&&s.stream.includes('node-in')) {
+                        obj[n.node_id] = obj[n.node_id]?[...obj[n.node_id], s.node_id]:[s.node_id];
+                    }
+                });
+
+                if ((length-2)==i && !deepEqual(obj, streamInfo)){
+                    this.setState({streamInfo: obj});
+                }
+            }).fail((event, status, message) => {
+                ErrorActions.setToastError(message.Log);
+                if ((length-2)==i && !deepEqual(obj, streamInfo)){
+                    this.setState({streamInfo: obj});
+                }
+            })
+        );
+    }
+
     onGetNode(nodeId) {
         const {node} = this.state;
         const query = ' node_info();';
@@ -87,7 +124,7 @@ class NodesStore extends BaseStore {
             query
         }).done((data) => {
             data.uptime =  moment.duration(data.uptime , 'second').humanize();
-            if (JSON.stringify(data) != JSON.stringify(node)){
+            if (!deepEqual(data, node)){
                 this.setState({
                     node: data,
                 });
@@ -102,7 +139,7 @@ class NodesStore extends BaseStore {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(counters)){
+            if (!deepEqual(data, counters)){
                 this.setState({
                     counters: data
                 });
@@ -135,7 +172,7 @@ class NodesStore extends BaseStore {
             this.setState({
                 counters: data
             });
-        });//.fail((event, status, message) => ErrorActions.setMsgError(message.Log)); TODO create msg error!
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
     onShutdown(nodeId, tag, cb) {
@@ -186,7 +223,7 @@ class NodesStore extends BaseStore {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            if (JSON.stringify(data) != JSON.stringify(backups)){
+            if (!deepEqual(data, backups)){
                 this.setState({
                     backups: data,
                 });

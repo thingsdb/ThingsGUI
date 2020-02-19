@@ -55,7 +55,7 @@ class ErrorStore extends Vlow.Store {
 
     onRemoveMsgError(tag) {
         this.setState(prevState => {
-            let copyState = JSON.parse(JSON.stringify(prevState.msgError));
+            let copyState = JSON.parse(JSON.stringify(prevState.msgError)); // copy
             delete copyState[tag];
             return {msgError: copyState};
         });

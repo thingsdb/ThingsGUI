@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CloseIcon from '@material-ui/icons/Close';

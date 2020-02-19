@@ -14,6 +14,7 @@ import {withVlow} from 'vlow';
 import {ThingActions} from '../TreeActions';
 import {EventStore, CollectionStore, CollectionActions} from '../../../../Stores';
 
+import ThingRestrict from './ThingRestrict';
 import Thing from './Thing';
 
 const withStores = withVlow([{
@@ -53,9 +54,8 @@ const ThingRoot = ({things, collection, watchIds}) => {
     const classes = useStyles();
     const fetched = things.hasOwnProperty(collection.collection_id);
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         CollectionActions.queryWithReturnDepth(collection);
-        // return () => CollectionActions.cleanupTmp();
     }, [collection.name]);
 
     const isWatching = Boolean(watchIds[collection.collection_id]);
@@ -69,9 +69,32 @@ const ThingRoot = ({things, collection, watchIds}) => {
                     dense
                     disablePadding
                 >
-                    {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
-                        <React.Fragment key={k}>
+                    {/* {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
+                        <Thing
+                            key={k}
+                            className={classes.thing}
+                            id={collection.collection_id}
+                            thing={v}
+                            things={things}
+                            collection={collection}
+                            parent={{
+                                id: collection.collection_id,
+                                name: 'root',
+                                type: 'thing',
+                                isTuple: false,
+                            }}
+                            child={{
+                                name: k,
+                                index: null,
+                            }}
+                            watchIds={watchIds}
+                        />
+                    ))} */}
+                    <ThingRestrict
+                        thing={things[collection.collection_id]}
+                        onChildren={(k, v, _i, _isArray) => (
                             <Thing
+                                key={k}
                                 className={classes.thing}
                                 id={collection.collection_id}
                                 thing={v}
@@ -89,8 +112,8 @@ const ThingRoot = ({things, collection, watchIds}) => {
                                 }}
                                 watchIds={watchIds}
                             />
-                        </React.Fragment>
-                    ))}
+                        )}
+                    />
                     <Divider className={classes.divider} />
                     <ListItem className={classes.listItem}>
                         {isWatching ? (

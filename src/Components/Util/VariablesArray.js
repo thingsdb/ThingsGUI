@@ -1,3 +1,5 @@
+
+import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
@@ -19,7 +21,7 @@ const VariablesArray = ({input, cb}) => {
 
     const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
-        if(JSON.stringify(myItems)!=JSON.stringify(input)) {
+        if(!deepEqual(myItems, input)) {
             cb(myItems);
         }
     },
@@ -27,7 +29,7 @@ const VariablesArray = ({input, cb}) => {
     );
 
     React.useEffect(() => {
-        if(JSON.stringify(myItems)!=JSON.stringify(input)) {
+        if(!deepEqual(myItems, input)) {
             setMyItems(input);
         }
     },
@@ -68,23 +70,9 @@ const VariablesArray = ({input, cb}) => {
         });
     };
 
-    const makeAddedList = () => {
-        const elements =  myItems.map((listitem, index) => (
-            <Chip
-                key={index}
-                id={listitem}
-                className={classes.chip}
-                label={listitem}
-                onDelete={handleClick(index)}
-                color="primary"
-            />
-        ));
-        return elements;
-    };
-
     return (
         <div>
-            {makeAddedList()}
+            {myItems.map((listitem, index) => <Chip key={index} id={listitem} className={classes.chip} label={listitem} onDelete={handleClick(index)} color="primary" />)}
             <TextField
                 name="input"
                 label="Variable"

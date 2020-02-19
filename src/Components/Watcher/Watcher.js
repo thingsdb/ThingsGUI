@@ -17,7 +17,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import {EventActions, EventStore, ThingsdbStore, TypeActions, TypeStore} from '../../Stores';
-import {ErrorMsg, ThingsTree, HarmonicTree} from '../Util';
+import {ErrorMsg, HarmonicTree} from '../Util';
 
 const withStores = withVlow([{
     store: EventStore,
@@ -101,12 +101,12 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
         );
     };
 
-    const handleClickWatch = (scope, id) => () => {
+    const handleClickWatch = (s, id) => () => {
         EventActions.watch(
-            scope,
+            s,
             id,
         );
-        TypeActions.getTypes(scope, tag);
+        TypeActions.getTypes(s, tag);
     };
 
 
@@ -125,7 +125,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
                 <AddOutlinedIcon size="small" className={classes.green}  />
             </ButtonBase>
         )));
-    }; // v = '{#123}'
+    };
 
     const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
 
@@ -148,7 +148,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
                         select
                         SelectProps={{native: true}}
                     >
-                        {scopes.map((p) => (
+                        {scopes.map(p => (
                             <option key={p} value={p}>
                                 {p}
                             </option>
@@ -224,13 +224,5 @@ Watcher.propTypes = {
     /* type store properties */
     customTypes: TypeStore.types.customTypes.isRequired,
 };
-
-
-// const areEqual = (prevProps, nextProps) => {
-//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-// };
-
-
-// export default withStores(React.memo(Watcher, areEqual));
 
 export default withStores(Watcher);

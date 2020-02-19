@@ -1,7 +1,9 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+
 import {ApplicationActions} from '../../Stores';
 
 const useStyles = makeStyles(() => ({
@@ -27,58 +29,62 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const AppLoader = () => {
+const AppLoader = ({connect}) => {
 
     const classes = useStyles();
     React.useEffect(() => {
-        ApplicationActions.connected();
-    }, []);
+        if (connect) {
+            ApplicationActions.connected();
+        }
+    }, [connect]);
 
 
     return(
-        <React.Fragment>
+        <Grid
+            alignItems="center"
+            className={classes.root}
+            container
+            direction="row"
+            spacing={3}
+            justify="center"
+        >
             <Grid
                 alignItems="center"
-                className={classes.root}
                 container
-                direction="row"
+                direction="column"
                 spacing={3}
                 justify="center"
             >
                 <Grid
-                    alignItems="center"
-                    container
-                    direction="column"
-                    spacing={3}
-                    justify="center"
+                    className={classes.wrapper}
+                    item
+                    xs={12}
                 >
-                    <Grid
-                        className={classes.wrapper}
-                        item
-                        xs={12}
-                    >
-                        <Typography variant='h5'>
-                            {'Loading...'}
-                        </Typography>
-                    </Grid>
-                    <Grid
-                        className={classes.wrapper}
-                        item
-                        xs={12}
-                    >
-                        <img
-                            className={classes.logo}
-                            src="/img/thingsdb.gif"
-                            alt="loading..."
-                            draggable="false"
-                            width="100"
-                        />
+                    <Typography variant='h5'>
+                        {'Loading...'}
+                    </Typography>
+                </Grid>
+                <Grid
+                    className={classes.wrapper}
+                    item
+                    xs={12}
+                >
+                    <img
+                        className={classes.logo}
+                        src="/img/thingsdb.gif"
+                        alt="loading..."
+                        draggable="false"
+                        width="200"
+                    />
 
-                    </Grid>
                 </Grid>
             </Grid>
-        </React.Fragment>
+        </Grid>
     );
+};
+
+AppLoader.propTypes = {
+    connect: PropTypes.bool.isRequired,
 };
 
 export default AppLoader;

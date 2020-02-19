@@ -1,6 +1,6 @@
 {
   "name": "thingsgui",
-  "version": "0.0.1-beta",
+  "version": "0.0.2-beta",
   "description": "ThingsGUI",
   "main": "index.js",
   "repository": {
@@ -33,6 +33,7 @@
     "@material-ui/icons": "4.2.1",
     "babel-loader": "8.0.6",
     "css-loader": "^1.0.0",
+    "deep-equal": "^2.0.1",
     "moment": "^2.24.0",
     "monaco-editor": "0.17.1",
     "monaco-editor-webpack-plugin": "1.7.0",

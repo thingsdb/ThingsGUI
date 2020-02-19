@@ -5,6 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import {EditActions, useEdit} from '../TreeActions/Context';
+
 const useStyles = makeStyles(theme => ({
     container: {
         paddingTop: theme.spacing(1),
@@ -13,12 +15,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const AddRegex = ({input, cb}) => {
+const AddRegex = ({identifier}) => {
     const classes = useStyles();
+    const [editState, dispatch] = useEdit();
+    const {val} = editState;
     const handleOnChange = ({target}) => {
         const {value} = target;
-        cb(`/${value}/`);
+        EditActions.updateVal(dispatch, `/${value}/`, identifier);
+
     };
+
+    const v = val[identifier]||(val.constructor === Object?'':val);
 
     return(
         <Grid className={classes.container} container spacing={2}>
@@ -33,7 +40,7 @@ const AddRegex = ({input, cb}) => {
                         name="regex"
                         label="Regex"
                         type="text"
-                        value={input.trim().slice(1, -1)}
+                        value={v.trim().slice(1, -1)}
                         spellCheck={false}
                         onChange={handleOnChange}
                         fullWidth
@@ -52,12 +59,12 @@ const AddRegex = ({input, cb}) => {
 };
 
 AddRegex.defaultProps = {
-    input: '',
-};
+    identifier: null,
+},
 
 AddRegex.propTypes = {
-    cb: PropTypes.func.isRequired,
-    input: PropTypes.string,
+    identifier: PropTypes.string
+
 };
 
 export default AddRegex;

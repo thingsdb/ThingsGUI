@@ -8,7 +8,6 @@ import ThingActionsDialog from './ThingActionsDialog';
 
 const ThingActions = ({child, parent, thing, scope}) => {
     const [show, setShow] = React.useState(false);
-
     const handleClickOpen = () => {
         setShow(true);
     };
@@ -21,7 +20,6 @@ const ThingActions = ({child, parent, thing, scope}) => {
         <React.Fragment>
             <ButtonBase onClick={handleClickOpen} >
                 <BuildIcon color="primary" />
-                {/* <AddIcon color="primary" /> */}
             </ButtonBase>
             {show ? (
                 <ThingActionsDialog

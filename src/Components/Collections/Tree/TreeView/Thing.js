@@ -1,41 +1,43 @@
 /* eslint-disable react/no-multi-comp */
+import {makeStyles} from '@material-ui/core/styles';
 import ExploreIcon from '@material-ui/icons/Explore';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
 
+import ThingRestrict from './ThingRestrict';
 import {ThingActionsDialog} from '../TreeActions';
 import {CollectionActions} from '../../../../Stores/CollectionStore';
 import {checkType, fancyName, thingValue, TreeBranch} from '../../../Util';
 
 
 const useStyles = makeStyles(theme => ({
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
-    listItem: {
-        margin: 0,
-        padding: 0,
-    },
     green: {
         color: theme.palette.primary.green,
         paddingRight: theme.spacing(1),
     },
+    justifyContent: {
+        justifyContent: 'center',
+    }
 }));
 
-
-
-const Thing = ({child, collection, parent, thing, things, watchIds}) => {
+const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
 
+    // thing info
 
-    React.useEffect(() => {
-        setShow(false); // closes dialog when item of array is removed. Otherwise dialog stays open with previous item.
-    },
-    [JSON.stringify(thing)],
-    );
+    // type and value
+    const type = checkType(thing);
+    const val = thingValue(type, thing);
+    const currThing = thing && things[thing['#']] || thing;
+    const canToggle =  type === 'thing' || (type === 'array' && thing.length>0) || type === 'closure' || type === 'regex'|| type === 'error';
+
+    const isTuple = type === 'array' && parent.type === 'array';
+    const thingId = thing && thing['#'] || parent.id;
+    const isWatching = type === 'thing' && thing && watchIds[thing['#']];
+
+    const hasDialog = !(parent.type === 'closure' || parent.type === 'regex' || parent.type === 'error');
 
     const handleOpenDialog = () => {
         setShow(true);
@@ -45,68 +47,45 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
         setShow(false);
     };
 
-    // thing info
-
-    // type and value
-    const type = checkType(thing);
-    const val = thingValue(type, thing);
-
-    const canToggle =  type === 'thing' || (type === 'array' && thing.length>0) || type === 'closure' || type === 'regex'|| type === 'error';
-
-    const isTuple = type === 'array' && parent.type === 'array';
-    const thingId = thing && thing['#'] || parent.id;
-    const currThing = thing && things[thing['#']] || thing;
-    const isWatching = type === 'thing' && thing && watchIds[thing['#']];
-
-    const hasDialog = !(parent.type === 'closure' || parent.type === 'regex' || parent.type === 'error');
-
-    const renderThing = ([k, v, i=null]) => {
-        return k === '#' ? null : (
-            <div key={i ? i : k} className={classes.nested}>
-                <Thing
-                    collection={collection}
-                    things={things}
-                    thing={v}
-                    parent={{
-                        id: thingId,
-                        name: child.name,
-                        type: type,
-                        isTuple: isTuple,
-                    }}
-                    child={{
-                        name: fancyName(k, i),
-                        index: i,
-                    }}
-                    watchIds={watchIds}
-                />
-            </div>
+    const renderChildren = () => {
+        return (
+            <ThingRestrict
+                thing={currThing}
+                onChildren={(k, v, i, isArray) => (
+                    <Thing
+                        inset
+                        collection={collection}
+                        things={things}
+                        thing={v}
+                        parent={{
+                            id: thingId,
+                            name: child.name,
+                            type: type,
+                            isTuple: isTuple,
+                        }}
+                        child={{
+                            name: fancyName(isArray?child.name:k, i),
+                            index: i,
+                        }}
+                        watchIds={watchIds}
+                    />
+                )}
+            />
         );
     };
 
-    const renderChildren = () => {
-        const isArray = Array.isArray(thing);
-        return isArray ?
-            thing.map((t, i) => renderThing([`${child.name}`, t, i]))
-            :
-            Object.entries(currThing || {}).map(renderThing);
-    };
-
-    const handleOpen = () => {
-        if (thing && thing['#']) {
-            CollectionActions.queryWithReturnDepth(collection, thing['#']);
-        }
+    const handleOpenClose = (open) => {
+        open && thing && thing['#'] && CollectionActions.queryWithReturnDepth(collection, thing['#']);
     };
 
     return (
         <React.Fragment>
-            <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpen} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null}>
-                <React.Fragment>
-                    {isWatching ? (
-                        <ListItemIcon>
-                            <ExploreIcon className={classes.green} />
-                        </ListItemIcon>
-                    ) : null}
-                </React.Fragment>
+            <TreeBranch inset={inset} name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpenClose} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null}>
+                {isWatching ? (
+                    <ListItemIcon>
+                        <ExploreIcon className={classes.green} />
+                    </ListItemIcon>
+                ) : null}
             </TreeBranch>
             {show ? (
                 <ThingActionsDialog
@@ -129,6 +108,7 @@ const Thing = ({child, collection, parent, thing, things, watchIds}) => {
 
 Thing.defaultProps = {
     thing: null,
+    inset: false,
 };
 
 
@@ -147,6 +127,15 @@ Thing.propTypes = {
     }).isRequired,
     things: PropTypes.object.isRequired,
     watchIds: PropTypes.object.isRequired,
+    inset: PropTypes.bool,
 };
+
+// const areEqual = (prevProps, nextProps) => {
+//     console.log(deepEqual(prevProps, nextProps), prevProps, nextProps);
+//     return deepEqual(prevProps, nextProps);
+// };
+
+
+// export default React.memo(Thing, areEqual);
 
 export default Thing;

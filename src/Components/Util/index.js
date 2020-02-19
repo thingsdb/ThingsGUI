@@ -3,6 +3,7 @@ import AutoSelect from './AutoSelect';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
 import ChipsCard from './ChipsCard';
+import Closure from './Closure';
 import DownloadBlob from './DownloadBlob';
 import DrawerLayout from './DrawerLayout';
 import ErrorMsg from './ErrorMsg';
@@ -76,21 +77,21 @@ const getScopes = (collections) => [
     [
         {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
         {name: 'Node', value: '@node', collectionId: null},
-        ...collections.map((c) => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
+        ...collections.map(c => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
     ],
     [
-        '@thingsdb', '@node', ...collections.map((c) => (`@collection:${c.name}`))
+        '@thingsdb', '@node', ...collections.map(c => `@collection:${c.name}`)
     ]
 ];
 
 const getScopes2 = (collections, nodes) => [
     [
         {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
-        ...nodes.map((n) => ({name: `Node:${n.node_id}`, value: `@node:${n.node_id}`, collectionId: null})),
-        ...collections.map((c) => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
+        ...nodes.map(n => ({name: `Node:${n.node_id}`, value: `@node:${n.node_id}`, collectionId: null})),
+        ...collections.map(c => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
     ],
     [
-        '@thingsdb', ...nodes.map((n) => (`@node:${n.node_id}`)), ...collections.map((c) => (`@collection:${c.name}`))
+        '@thingsdb', ...nodes.map((n) => (`@node:${n.node_id}`)), ...collections.map(c => `@collection:${c.name}`)
     ]
 ];
 
@@ -105,7 +106,6 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
-
 export {
     ArrayLayout,
     AutoSelect,
@@ -113,6 +113,7 @@ export {
     CardButton,
     checkType,
     ChipsCard,
+    Closure,
     DownloadBlob,
     DrawerLayout,
     duration,

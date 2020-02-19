@@ -65,7 +65,7 @@ const Backup = ({nodeId, offline, backups}) => {
 
     const handleButtons = (backup) => <Remove nodeId={nodeId} backup={backup} />;
 
-    const rows = JSON.parse(JSON.stringify(backups));
+    const rows = JSON.parse(JSON.stringify(backups)); // copy
 
     rows.map(b=> {
         b.created_at = moment(b.created_at*1000).format('YYYY-MM-DD HH:mm:ss');
@@ -75,7 +75,7 @@ const Backup = ({nodeId, offline, backups}) => {
             </Tooltip>
         ) : b.next_run;
         const res_code = b.result_code;
-        b.result_code = b.result_code==undefined ? (
+        b.result_code = b.result_code === undefined ? (
             b.result_code
         ) : b.result_code == 0 ? (
             <Tooltip disableFocusListener disableTouchListener title={res_code}>

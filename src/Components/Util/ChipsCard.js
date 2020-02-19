@@ -90,16 +90,14 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, expand}) => {
                     </React.Fragment>
                 }
                 buttons={
-                    <React.Fragment>
-                        <Chip
-                            clickable
-                            className={classes.chip}
-                            label="ADD"
-                            onClick={handleClickAdd}
-                            color="primary"
-                            variant="outlined"
-                        />
-                    </React.Fragment>
+                    <Chip
+                        clickable
+                        className={classes.chip}
+                        label="ADD"
+                        onClick={handleClickAdd}
+                        color="primary"
+                        variant="outlined"
+                    />
                 }
             />
             <SimpleModal

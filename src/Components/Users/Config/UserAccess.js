@@ -1,3 +1,5 @@
+/*eslint-disable no-unused-vars */
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -5,7 +7,6 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles} from '@material-ui/core/styles';
 
 import Password from './Password';
 import Remove from './Remove';
@@ -90,7 +91,7 @@ const UserAccess = ({user, collections}) => {
     const handleOnChangeSwitch = (key) => ({target}) => {
         const {value, checked} = target;
         setSwitches(switches => {
-            let newswitches = JSON.parse(JSON.stringify(switches));
+            let newswitches = JSON.parse(JSON.stringify(switches)); //copy
             newswitches[key][value] = checked;
             return newswitches;
         });
@@ -166,24 +167,22 @@ const UserAccess = ({user, collections}) => {
                                     </Grid>
                                 </Grid>
                                 {switchesKeys.map((key, i) => (
-                                    <React.Fragment key={i}>
-                                        <Grid item container xs={12} spacing={2}>
-                                            <Grid item xs={3} container alignItems="center">
-                                                <Typography component="span" noWrap>
-                                                    {key}
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item container xs={9} >
-                                                <Grid item container xs={12} >
-                                                    {privileges.map(({ky, label}) => (
-                                                        <Grid item xs={2} key={ky} container justify="center">
-                                                            <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
-                                                        </Grid>
-                                                    ))}
-                                                </Grid>
+                                    <Grid key={i} item container xs={12} spacing={2}>
+                                        <Grid item xs={3} container alignItems="center">
+                                            <Typography component="span" noWrap>
+                                                {key}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item container xs={9} >
+                                            <Grid item container xs={12} >
+                                                {privileges.map(({ky, label}) => (
+                                                    <Grid item xs={2} key={ky} container justify="center">
+                                                        <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
+                                                    </Grid>
+                                                ))}
                                             </Grid>
                                         </Grid>
-                                    </React.Fragment>
+                                    </Grid>
                                 ))}
                             </Grid>
                         </Grid>

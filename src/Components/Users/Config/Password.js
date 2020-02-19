@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
 import Switch from '@material-ui/core/Switch';

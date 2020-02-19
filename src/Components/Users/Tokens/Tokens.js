@@ -65,89 +65,85 @@ const Tokens = ({user}) => {
         <HarmonicCard
             expand={false}
             title="TOKENS"
-            content={
+            content={user.tokens.length ? (
                 <React.Fragment>
-                    {user.tokens.length ? (
-                        <React.Fragment>
-                            <ErrorMsg tag={tag} />
-                            <Table padding="none">
-                                <TableHead>
-                                    <TableRow>
-                                        {header.map((h, i) => (
-                                            <TableCell key={h.ky} align={i?'right':'left'}>
-                                                <Typography variant="caption" align={i?'right':'left'}>
-                                                    {h.label}
-                                                </Typography>
-                                            </TableCell>
-                                        ))}
-                                        <TableCell />
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows.map((row, ri) => (
-                                        <TableRow key={ri}>
-                                            {header.map((h, i) => (
-                                                <TableCell key={h.ky} align={i?'right':'left'}>
-                                                    <Typography component="div">
-                                                        {h.ky=='key' ? (
-                                                            <RefWrap>
-                                                                {(reference) => (
-                                                                    <React.Fragment>
-                                                                        <TextField
-                                                                            className={classes.textfield}
-                                                                            name="queryString"
-                                                                            type="text"
-                                                                            value={row[h.ky]}
-                                                                            InputProps={{
-                                                                                readOnly: true,
-                                                                                disableUnderline: true,
-                                                                            }}
-                                                                            inputProps={{
-                                                                                style: {
-                                                                                    fontFamily: 'monospace',
-                                                                                    fontSize: 'body1.fontSize'
-                                                                                },
-                                                                            }}
-                                                                            InputLabelProps={{
-                                                                                shrink: true,
-                                                                            }}
-                                                                            inputRef={reference}
-                                                                        />
-                                                                        <Tooltip className={classes.copyButton} disableFocusListener disableTouchListener title="Copy to Clipboard">
-                                                                            <ButtonBase onClick={handleRef(reference)}>
-                                                                                <FileCopyIcon color="primary" />
-                                                                            </ButtonBase>
-                                                                        </Tooltip>
-                                                                    </React.Fragment>
-                                                                )}
-                                                            </RefWrap>
-                                                        ) : (
-                                                            <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
-                                                                {row[h.ky]}
-                                                            </Box>
+                    <ErrorMsg tag={tag} />
+                    <Table padding="none">
+                        <TableHead>
+                            <TableRow>
+                                {header.map((h, i) => (
+                                    <TableCell key={h.ky} align={i?'right':'left'}>
+                                        <Typography variant="caption" align={i?'right':'left'}>
+                                            {h.label}
+                                        </Typography>
+                                    </TableCell>
+                                ))}
+                                <TableCell />
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows.map((row, ri) => (
+                                <TableRow key={ri}>
+                                    {header.map((h, i) => (
+                                        <TableCell key={h.ky} align={i?'right':'left'}>
+                                            <Typography component="div">
+                                                {h.ky=='key' ? (
+                                                    <RefWrap>
+                                                        {(reference) => (
+                                                            <React.Fragment>
+                                                                <TextField
+                                                                    className={classes.textfield}
+                                                                    name="queryString"
+                                                                    type="text"
+                                                                    value={row[h.ky]}
+                                                                    InputProps={{
+                                                                        readOnly: true,
+                                                                        disableUnderline: true,
+                                                                    }}
+                                                                    inputProps={{
+                                                                        style: {
+                                                                            fontFamily: 'monospace',
+                                                                            fontSize: 'body1.fontSize'
+                                                                        },
+                                                                    }}
+                                                                    InputLabelProps={{
+                                                                        shrink: true,
+                                                                    }}
+                                                                    inputRef={reference}
+                                                                />
+                                                                <Tooltip className={classes.copyButton} disableFocusListener disableTouchListener title="Copy to Clipboard">
+                                                                    <ButtonBase onClick={handleRef(reference)}>
+                                                                        <FileCopyIcon color="primary" />
+                                                                    </ButtonBase>
+                                                                </Tooltip>
+                                                            </React.Fragment>
                                                         )}
-                                                    </Typography>
-                                                </TableCell>
-                                            ))}
-                                            <TableCell align='right'>
-                                                <Remove token={row} tag={tag} />
-                                            </TableCell>
-                                        </TableRow>
+                                                    </RefWrap>
+                                                ) : (
+                                                    <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                                        {row[h.ky]}
+                                                    </Box>
+                                                )}
+                                            </Typography>
+                                        </TableCell>
                                     ))}
-                                </TableBody>
-                            </Table>
-                        </React.Fragment>
-                    ) : user.has_password ? (
-                        <Typography>
-                            {'Not set.'}
-                        </Typography>
-                    ) : (
-                        <Typography color="error">
-                            {`This user had no password set. Set a token or password to prevent ${user.name} from getting locked out.`}
-                        </Typography>
-                    )}
+                                    <TableCell align='right'>
+                                        <Remove token={row} tag={tag} />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </React.Fragment>
-            }
+            ) : user.has_password ? (
+                <Typography>
+                    {'Not set.'}
+                </Typography>
+            ) : (
+                <Typography color="error">
+                    {`This user had no password set. Set a token or password to prevent ${user.name} from getting locked out.`}
+                </Typography>
+            )}
             buttons={
                 <React.Fragment>
                     <RemoveExpired tag={tag} />

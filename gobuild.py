@@ -66,11 +66,7 @@ binfiles = [
         get_version(os.path.dirname(__file__))), "FileMainBundleMinJS"),
     ('''./static/js/vendors-bundle-{}.min.js'''.format(
         get_version(os.path.dirname(__file__))), "FileVendorsBundleMinJS"),
-    # ("./static/js/css.worker.js", "FileCssWorkerJS"),         # Not included in the vendors bundle ?
-    ("./static/js/editor.worker.js", "FileEditorWorkerJS"),     # included in the vendors bundle ?
-    # ("./static/js/html.worker.js", "FileHtmlWorkerJS"),       # included in the vendors bundle ?
-    # ("./static/js/json.worker.js", "FileJsonWorkerJS"),       # included in the vendors bundle ?
-    # ("./static/js/typescript.worker.js", "FileTypescriptWorkerJS"),   # included in the vendors bundle ?
+    ("./static/js/editor.worker.js", "FileEditorWorkerJS"),
     ("./static/img/thingsdb.gif", "FileThingsdbGIF"),
     ("./static/img/thingsdb-logo.png", "FileThingsdbLogo"),
     ("./static/img/githubLogo.svg", "FileGithubLogo"),
@@ -80,6 +76,7 @@ binfiles = [
     ("./static/favicon.ico", "FileFaviconICO"),
     ("./templates/app.html", "FileAppHTML"),
 ]
+
 
 def build_all():
     path = os.path.dirname(os.path.abspath(__file__))
@@ -105,6 +102,7 @@ def build_all():
                 stdout=subprocess.PIPE) as proc:
             print('Building {}/{}...'.format(goos, goarch))
 
+
 def build(output=''):
     path = os.path.dirname(os.path.abspath(__file__))
     version = get_version(path)
@@ -117,6 +115,7 @@ def build(output=''):
             cwd=path,
             stdout=subprocess.PIPE) as proc:
         print('Building {}...'.format(outfile))
+
 
 def compile(fn, variable, empty=False):
     if empty:
@@ -144,14 +143,14 @@ if __name__ == '__main__':
     parser.add_argument(
         '-a', '--build-all',
         action='store_true',
-        help='build production binaries for all goos and goarchs')
+        help='build binaries for all goos and goarchs')
 
     args = parser.parse_args()
 
-    print('Create production go files...')
+    print('Create go files...')
     for bf in binfiles:
         compile(*bf)
-    print('Finished creating production go files!')
+    print('Finished creating go files!')
 
     if args.build_all:
         build_all()

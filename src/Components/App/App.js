@@ -16,17 +16,13 @@ import User from '../Users';
 import Nodes from '../Nodes';
 import Editor from '../Editor';
 import Watcher from '../Watcher';
-import {ApplicationStore, ProcedureStore, TypeStore} from '../../Stores';
+import {ApplicationStore} from '../../Stores';
 import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
 
 
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['match']
-}, {
-    store: TypeStore,
-}, {
-    store: ProcedureStore,
 }]);
 
 
@@ -48,6 +44,7 @@ const App = ({match}) => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    console.log('app', match)
 
     return(
         <DrawerLayout
@@ -77,24 +74,24 @@ const App = ({match}) => {
             }
             mainContent={
                 <Grid container alignItems="flex-start">
-                    <Grid container spacing={1} item xs={12} md={2} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
-                        <Grid item xs={4} md={12}>
+                    <Grid container spacing={1} item xs={12} sm={4} md={3} lg={2} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
+                        <Grid item xs={4} sm={12} md={12}>
                             <Card>
                                 <CollectionsMenu />
                             </Card>
                         </Grid>
-                        <Grid item xs={4} md={12}>
+                        <Grid item xs={4} sm={12} md={12}>
                             <Card>
                                 <UsersMenu />
                             </Card>
                         </Grid>
-                        <Grid item xs={4} md={12}>
+                        <Grid item xs={4} sm={12} md={12}>
                             <Card>
                                 <QueryEditorMenu />
                             </Card>
                         </Grid>
                     </Grid>
-                    <Grid container item xs={12} md={10} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
+                    <Grid container item xs={12} sm={8} md={9} lg={10} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
                         {pages[match.path]}
                     </Grid>
                 </Grid>

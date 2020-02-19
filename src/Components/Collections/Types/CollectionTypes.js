@@ -34,17 +34,17 @@ const CollectionTypes = ({scope}) => {
 
     const typesOptional = [
         ...types,
-        ...types.map((v, i)=>(`${v}?`)),
+        ...types.map(v=>`${v}?`),
     ];
 
     const list = [
         '[]',
-        ...typesOptional.map((v, i)=>(`[${v}]`)),
+        ...typesOptional.map(v=>`[${v}]`),
     ];
 
     const listOptional = [
         ...list,
-        ...list.map((v, i)=>(`${v}?`)),
+        ...list.map(v=>`${v}?`),
     ];
 
     const set = [
@@ -65,7 +65,7 @@ const CollectionTypes = ({scope}) => {
     const [openEdit, setOpenEdit] = React.useState(false);
 
     const [index, setindex] = React.useState(null);
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         TypeActions.getTypes(scope, tag, handleTypes);
 
     }, [scope]);

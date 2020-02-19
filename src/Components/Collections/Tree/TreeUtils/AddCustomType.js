@@ -8,11 +8,10 @@ import TextField from '@material-ui/core/TextField';
 
 import InputField from '../TreeActions/InputField';
 import {ListHeader} from '../../../Util';
+import {EditActions, useEdit} from '../TreeActions/Context';
 
 const useStyles = makeStyles(theme => ({
     container: {
-        // display: 'flex',
-        // flexWrap: 'wrap',
         borderLeft: `1px solid ${theme.palette.primary.main}`,
         borderRight: `1px solid ${theme.palette.primary.main}`,
         borderRadius: '20px',
@@ -40,10 +39,7 @@ const useStyles = makeStyles(theme => ({
     },
     nested: {
         paddingLeft: theme.spacing(6),
-        // borderBottom: `2px solid ${theme.palette.primary.main}`,
-        // borderRadius: '30px',
         paddingBottom: theme.spacing(1),
-        // marginBottom: theme.spacing(1),
     },
     textfield: {
         paddingTop: 0,
@@ -134,43 +130,26 @@ const typing = ([fprop, type], dataTypes) =>  {
     );
 };
 
-const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
+const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch}) => {
     const classes = useStyles();
-    const [blob, setBlob] = React.useState({});
     const [dataType, setDataType] = React.useState({});
-    const [myItems, setMyItems] = React.useState([]);
     const [open, setOpen] = React.useState(false);
-    const [val, setVal] = React.useState({});
+
+    const [editState, dispatch] = useEdit();
+    const {array, val, blob} = editState;
 
     React.useEffect(() => {
-        onVal(`${type}{${myItems}}`);
-        onBlob(blob);
-    },
-    [JSON.stringify(myItems)],
-    );
-
-    React.useEffect(() => {
-        setBlob({});
         setDataType({});
-        setMyItems([]);
         setOpen(false);
-        setVal([]);
+        EditActions.update(dispatch, {val: '', array: [], blob: {}});
     },[type]);
-
-    const handleVal = (n) => (c) => {
-        setVal({...val, [n]: c});
-    };
 
     const handleChangeType = (n) => ({target}) => {
         const {value} = target;
         setDataType({...dataType, [n]: value});
         if (value == 'nil') {
-            setVal({...val, [n]: 'nil'});
+            EditActions.updateVal(dispatch, {...val, [n]: 'nil'});
         }
-    };
-
-    const handleBlob = (b) => {
-        setBlob({...blob, ...b});
     };
 
     const handleOpen = () => {
@@ -181,24 +160,11 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
     };
     const handleAdd = () => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        setMyItems(s);
-        setBlob(prevBlob => {
-            let copy = JSON.parse(JSON.stringify(prevBlob));
-            let keys={};
-            Object.keys(copy).map((k)=> {
-                Object.values(val).map(v=> {
-                    if (v.includes(k)){
-                        keys[k]=true;
-                    } else {
-                        keys[k]=false;
-                    }
-                });
-            });
-            Object.entries(keys).map(([k, v]) => !v&&delete copy[k]);
-
-            return copy;
+        EditActions.update(dispatch, {
+            array:  s,
         });
-        // setVal({});
+        EditActions.updateVal(parentDispatch,`${type}{${s}}`, identifier);
+        EditActions.updateBlob(parentDispatch, s, blob);
     };
 
     const typeObj = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
@@ -209,13 +175,10 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
         <React.Fragment>
             {typeFields&&(
                 <Grid container>
-                    <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={myItems} name={type} groupSign="{">
+                    <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={array} name={type} groupSign="{">
                         <Collapse className={classes.fullWidth} in={open} timeout="auto">
                             {( typeFields.map(([fprop, ftype, fchldtype], i) => (
                                 <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
-                                    {/* <Grid item xs={1}>
-                                        <FiberManualRecord color="primary" fontSize="small" />
-                                    </Grid> */}
                                     <Grid item xs={2}>
                                         <TextField
                                             type="text"
@@ -240,7 +203,7 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
                                             fullWidth
                                             disabled={ftype.length<2}
                                         >
-                                            {ftype.map((p) => (
+                                            {ftype.map( p => (
                                                 <option key={p} value={p}>
                                                     {p}
                                                 </option>
@@ -253,11 +216,9 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
                                             dataType={dataType[fprop]||ftype[0]}
                                             dataTypes={dataTypes}
                                             childTypes={fchldtype}
-                                            input={val[fprop]||''}
-                                            onBlob={handleBlob}
-                                            onVal={handleVal(fprop)}
                                             variant="standard"
                                             label="Value"
+                                            identifier={fprop}
                                         />
                                     </Grid>
                                 </Grid>
@@ -272,13 +233,14 @@ const AddCustomType = ({customTypes, dataTypes, onBlob, onVal, type}) => {
 
 AddCustomType.defaultProps = {
     customTypes: null,
+    identifier: null,
 };
 AddCustomType.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onBlob: PropTypes.func.isRequired,
-    onVal: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
+    identifier: PropTypes.string,
+    parentDispatch: PropTypes.func.isRequired,
 };
 
 export default AddCustomType;

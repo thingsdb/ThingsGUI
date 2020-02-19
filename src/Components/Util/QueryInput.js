@@ -1,5 +1,9 @@
+/*eslint-disable no-unused-vars */
+/*eslint-disable no-useless-escape */
+/*eslint-disable quotes */
+
 import React from 'react';
-import PropTypes, { element } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import Language from './Language.js';
 import * as monaco from 'monaco-editor';
@@ -162,7 +166,7 @@ monaco.languages.setLanguageConfiguration('mySpecialLanguage', {
 
 monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
     triggerCharacters: ['.'],
-    provideCompletionItems: (model, position, token) => {
+    provideCompletionItems: (model, position, _token) => {
         const textUntilPosition = model.getValueInRange({startLineNumber: 1, startColumn: position.column-1, endLineNumber: position.lineNumber, endColumn: position.column}); // En wanneer value in variabel zit? Hoe herken je het type dan?
 
         //const re_str = new RegExp('^[\'\"].*[\'|\"]$');

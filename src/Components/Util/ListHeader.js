@@ -36,23 +36,8 @@ const groupSigning = {
     '(' : ['(', ')'],
 };
 
-const ListHeader = ({children, collapse, onAdd, onDelete, onOpen, onClose, open, items, name, groupSign}) => {
+const ListHeader = ({children, collapse, groupSign, items, name, onAdd, onClose, onDelete, onOpen, open}) => {
     const classes = useStyles();
-
-
-    const makeAddedList = () => {
-        const elements =  items.map((listitem, index) => (
-            <Chip
-                key={index}
-                id={listitem}
-                className={classes.chip}
-                label={listitem}
-                color="primary"
-                onDelete={onDelete(index, listitem)}
-            />
-        ));
-        return elements;
-    };
 
     return(
         <Grid className={classes.top} container item xs={12}>
@@ -66,7 +51,7 @@ const ListHeader = ({children, collapse, onAdd, onDelete, onOpen, onClose, open,
                     {groupSigning[groupSign][0]}
                 </Typography>
                 <Grid className={classes.inset}>
-                    {makeAddedList()}
+                    {items.map((listitem, index) => <Chip key={index} id={listitem} className={classes.chip} label={listitem} color="primary" onDelete={onDelete(index, listitem)} />)}
                 </Grid>
             </Grid>
             <Grid item xs={collapse&&!open?1:12} container justify="flex-start" alignItems="center">
@@ -99,6 +84,7 @@ ListHeader.defaultProps = {
 };
 
 ListHeader.propTypes = {
+    children: PropTypes.object.isRequired,
     collapse: PropTypes.bool,
     groupSign: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(PropTypes.string).isRequired,

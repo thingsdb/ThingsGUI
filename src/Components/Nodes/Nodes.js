@@ -13,13 +13,16 @@ const withStores = withVlow([{
     keys: ['nodes', 'connectedNode']
 }]);
 
+
 const Nodes = ({nodes, connectedNode}) => {
 
     React.useEffect(() => {
         NodesActions.getNodes();
+        NodesActions.getStreamInfo();
         const setPoll = setInterval(
             () => {
                 NodesActions.getNodes();
+                NodesActions.getStreamInfo();
             }, 5000);
         return () => {
             clearInterval(setPoll);
@@ -44,7 +47,7 @@ const Nodes = ({nodes, connectedNode}) => {
     return(
         <React.Fragment>
             <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode} />
-            <NodeButtons />
+            <NodeButtons nodes={nodes} />
         </React.Fragment>
     );
 };
@@ -54,12 +57,5 @@ Nodes.propTypes = {
     nodes: NodesStore.types.nodes.isRequired,
     connectedNode: NodesStore.types.connectedNode.isRequired,
 };
-
-// const areEqual = (prevProps, nextProps) => {
-//     return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-// };
-
-
-// export default withStores(React.memo(Nodes, areEqual));
 
 export default withStores(Nodes);

@@ -18,7 +18,7 @@ const Info = ({header, content}) => {
 
     return (
         <Grid container spacing={1}>
-            {header.map((h) => (
+            {header.map(h => (
                 <React.Fragment key={h.ky}>
                     <Grid item xs={12} className={classes.grid}>
                         <Typography variant="subtitle2">
@@ -26,21 +26,19 @@ const Info = ({header, content}) => {
                         </Typography>
                         <Divider />
                     </Grid>
-                    {h.labels.map((l) => (
-                        <React.Fragment key={l.ky}>
-                            <Grid container item xs={12}>
-                                <Grid item xs={6}>
-                                    <Typography variant="caption">
-                                        {l.label + ':'}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography variant="subtitle2">
-                                        {content[l.ky]}
-                                    </Typography>
-                                </Grid>
+                    {h.labels.map(l => (
+                        <Grid key={l.ky} container item xs={12}>
+                            <Grid item xs={6}>
+                                <Typography variant="caption">
+                                    {l.label + ':'}
+                                </Typography>
                             </Grid>
-                        </React.Fragment>
+                            <Grid item xs={6}>
+                                <Typography variant="subtitle2">
+                                    {content[l.ky]}
+                                </Typography>
+                            </Grid>
+                        </Grid>
                     ))}
                 </React.Fragment>
             ))}

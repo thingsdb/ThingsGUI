@@ -1,3 +1,4 @@
+/*eslint-disable react/jsx-props-no-spreading*/
 import PropTypes from 'prop-types';
 import React from 'react';
 import Collapse from '@material-ui/core/Collapse';
@@ -5,19 +6,26 @@ import Dropzone from 'react-dropzone';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+import {EditActions, useEdit} from '../TreeActions/Context';
 
-const AddBlob = ({onVal, onBlob}) => {
-    const [blob, setBlob] = React.useState('');
+
+const AddBlob = ({identifier}) => {
+    const [newBlob, setBlob] = React.useState('');
     const [fileName, setFileName] = React.useState('');
+
+    const [editState, dispatch] = useEdit();
+    const {blob} = editState;
 
     React.useEffect(() => {
         let f = fileName;
         if (fileName.includes('.')) {
             f = fileName.split('.')[0];
         }
-        if (f != '' && blob != '') {
-            onVal(f);
-            onBlob({[f]: blob});
+        if (f != '' && newBlob != '') {
+            EditActions.updateVal(dispatch, f, identifier);
+            EditActions.update(dispatch, {
+                blob: {...blob, [f]: newBlob}
+            });
         }
     },
     [fileName],
@@ -25,8 +33,8 @@ const AddBlob = ({onVal, onBlob}) => {
 
     const handleDropzone = React.useCallback(acceptedFiles => {
         const reader = new FileReader();
-        reader.onabort = () => console.log('file reading was aborted');
-        reader.onerror = () => console.log('file reading has failed');
+        reader.onabort = () => window.log('file reading was aborted');
+        reader.onerror = () => window.log('file reading has failed');
         reader.onload = () => {
             const binaryStr = reader.result;
             var encodedData = btoa(binaryStr);
@@ -53,7 +61,7 @@ const AddBlob = ({onVal, onBlob}) => {
                 </Dropzone>
             </Grid>
             <Grid item xs={12}>
-                <Collapse in={Boolean(blob)} timeout="auto" unmountOnExit>
+                <Collapse in={Boolean(newBlob)} timeout="auto" unmountOnExit>
                     <Typography variant="button" color="primary">
                         {fileName}
                     </Typography>
@@ -63,9 +71,13 @@ const AddBlob = ({onVal, onBlob}) => {
     );
 };
 
+AddBlob.defaultProps = {
+    identifier: null,
+},
+
 AddBlob.propTypes = {
-    onBlob: PropTypes.func.isRequired,
-    onVal: PropTypes.func.isRequired,
+    identifier: PropTypes.string
 };
+
 
 export default AddBlob;

@@ -6,7 +6,8 @@ import {withVlow} from 'vlow';
 import App from './App';
 import AppLoader from './AppLoader';
 import Login from './Login';
-import {ApplicationActions, ApplicationStore, EventActions, EventStore} from '../../Stores';
+import InitStores from './InitStores';
+import {ApplicationActions, ApplicationStore} from '../../Stores';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -50,15 +51,12 @@ const theme = createMuiTheme({
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['loaded', 'connected']
-}, {
-    store: EventStore,
+    keys: ['loaded', 'connected', 'seekConnection']
 }]);
 
-const Root = ({loaded, connected}) => {
+const Root = ({loaded, connected, seekConnection}) => {
     React.useEffect(() => {
         ApplicationActions.pushNotifications();
-        EventActions.openEventChannel();
         ApplicationActions.getConn('0'); // errmsg shown at Login dialog
     },
     [],
@@ -67,7 +65,8 @@ const Root = ({loaded, connected}) => {
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
-            {loaded ? connected ? <App /> : <Login /> : <AppLoader />}
+            <InitStores />
+            {loaded ? connected ? <App /> : <Login /> : <AppLoader connect={seekConnection} />}
         </MuiThemeProvider>
     );
 };
@@ -75,6 +74,7 @@ const Root = ({loaded, connected}) => {
 Root.propTypes = {
     loaded: ApplicationStore.types.loaded.isRequired,
     connected: ApplicationStore.types.connected.isRequired,
+    seekConnection: ApplicationStore.types.seekConnection.isRequired,
 };
 
 export default withStores(Root);

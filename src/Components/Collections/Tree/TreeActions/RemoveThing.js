@@ -4,17 +4,29 @@ import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import Fab from '@material-ui/core/Fab';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import BuildQueryString from './BuildQueryString';
 import { ErrorMsg, SimpleModal } from '../../../Util';
 import {CollectionActions, ThingsdbActions} from '../../../../Stores';
 
 
 const tag = '7';
-const RemoveThing = ({scope, thing, child, parent}) => {
+const RemoveThing = ({child, onClose, parent, scope}) => {
     const [show, setShow] = React.useState(false);
     const [query, setQuery] = React.useState('');
+
+    React.useEffect(() => {
+        handleBuildQuery(child, parent);
+    }, [child.index, child.id, child.name, parent.id, parent.name, parent.type]);
+
+    const handleBuildQuery = (child, parent) => {
+        const q = parent.type === 'thing' ? `#${parent.id}.del('${child.name}');`
+            : parent.type === 'set' ? `#${parent.id}.${parent.name}.remove(#${parent.id}.${parent.name}.find(|s| (s.id()==${child.id}) ));`
+                : `#${parent.id}.${parent.name}.splice(${child.index}, 1);`;
+        setQuery(q);
+    };
+
     const handleClickOpen = () => {
         setShow(true);
     };
@@ -33,6 +45,7 @@ const RemoveThing = ({scope, thing, child, parent}) => {
                 ThingsdbActions.getCollections();
             }
         );
+        onClose();
     };
 
     const handleKeyPress = (event) => {
@@ -42,44 +55,40 @@ const RemoveThing = ({scope, thing, child, parent}) => {
         }
     };
 
-    const handleQuery = (q) => {
-        setQuery(q);
-    };
-
     const Content = (
-        <React.Fragment>
-            <List>
-                <ListItem>
-                    <BuildQueryString
-                        action="remove"
-                        cb={handleQuery}
-                        child={{
-                            id: thing && thing['#'],
-                            index: child.hasOwnProperty('index') ? child.index : null,
-                            name: child.name,
-                            type: child.type,
-                            val: null,
-                        }}
-                        customTypes={[]}
-                        parent={{
-                            id: parent.id,
-                            name: parent.hasOwnProperty('name') ? parent.name : null,
-                            type: parent.type,
-                        }}
-                        showQuery
-                        query={query}
-                    />
-                </ListItem>
-                <ListItem>
-                    <ErrorMsg tag={tag} />
-                </ListItem>
-                <ListItem>
-                    <Typography>
-                        {'Are you sure?'}
-                    </Typography>
-                </ListItem>
-            </List>
-        </React.Fragment>
+        <List>
+            <ListItem>
+                <TextField
+                    name="queryString"
+                    label="Query"
+                    type="text"
+                    value={query}
+                    fullWidth
+                    multiline
+                    rowsMax={4}
+                    InputProps={{
+                        readOnly: true,
+                        disableUnderline: true,
+                    }}
+                    inputProps={{
+                        style: {
+                            fontFamily: 'monospace',
+                        },
+                    }}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
+            </ListItem>
+            <ListItem>
+                <ErrorMsg tag={tag} />
+            </ListItem>
+            <ListItem>
+                <Typography>
+                    {'Are you sure?'}
+                </Typography>
+            </ListItem>
+        </List>
     );
 
     const title = `Remove ${child.name}`;
@@ -102,13 +111,9 @@ const RemoveThing = ({scope, thing, child, parent}) => {
     );
 };
 
-RemoveThing.defaultProps = {
-    thing: null,
-};
-
 RemoveThing.propTypes = {
+    onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
-    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     parent: PropTypes.shape({
         id: PropTypes.number,
         index: PropTypes.number,

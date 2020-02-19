@@ -17,10 +17,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {DownloadBlob, SimpleModal, TreeIcon} from '../Util';
 
 
-const useStyles = makeStyles(theme => ({
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
+const useStyles = makeStyles(() => ({
     listItem: {
         margin: 0,
         padding: 0,
@@ -31,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpen, onRenderChildren, type, val}) => {
+const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpen, onRenderChildren, type, val, inset}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
     const [open, setOpen] = React.useState(false);
@@ -42,7 +39,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
 
     const handleClick = () => {
         setShow(!show);
-        onOpen();
+        onOpen(!show);
     };
 
     const handleOpenStringDialog = () => {
@@ -55,7 +52,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
 
     return (
         <React.Fragment>
-            <ListItem className={classes.listItem} button={button?true:false} onClick={onClick}>
+            <ListItem style={{margin: 0, paddingTop:0, paddingBottom:0, paddingRight: 0, paddingLeft: inset?32:0}} button={button?true:false} onClick={onClick}>
                 <ListItemIcon>
                     <TreeIcon type={type} />
                 </ListItemIcon>
@@ -82,40 +79,38 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                 />
                 {children}
                 <ListItemSecondaryAction>
-                    <React.Fragment>
-                        {onAction(name, type, val)}
-                        {canToggle&& (
-                            <ButtonBase onClick={handleClick} >
-                                {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
-                            </ButtonBase>
-                        )}
-                        {!button ? (
-                            type === 'bytes' ? (
-                                <DownloadBlob val={val} isFab={false} />
-                            ) : type === 'str' ? (
-                                <SimpleModal
-                                    button={
-                                        <ButtonBase onClick={handleOpenStringDialog} >
-                                            <OpenIcon color="primary" />
-                                        </ButtonBase>
-                                    }
-                                    title="Show string"
-                                    open={open}
-                                    onClose={handleCloseStringDialog}
-                                >
-                                    <Typography align="justify" variant="body2">
-                                        {val}
-                                    </Typography>
-                                </SimpleModal>
-                            ) : null
-                        ):null}
-                    </React.Fragment>
+                    {onAction&&onAction(name, type, val)}
+                    {canToggle&& (
+                        <ButtonBase onClick={handleClick} >
+                            {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
+                        </ButtonBase>
+                    )}
+                    {!button ? (
+                        type === 'bytes' ? (
+                            <DownloadBlob val={val} isFab={false} />
+                        ) : type === 'str' ? (
+                            <SimpleModal
+                                button={
+                                    <ButtonBase onClick={handleOpenStringDialog} >
+                                        <OpenIcon color="primary" />
+                                    </ButtonBase>
+                                }
+                                title="Show string"
+                                open={open}
+                                onClose={handleCloseStringDialog}
+                            >
+                                <Typography align="justify" variant="body2">
+                                    {val}
+                                </Typography>
+                            </SimpleModal>
+                        ) : null
+                    ):null}
                 </ListItemSecondaryAction>
             </ListItem>
             {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding dense>
-                    {renderChildren()}
+                <List component="div" disablePadding dense style={{paddingLeft: inset?32:0}}>
+                    {show&&renderChildren()}
                 </List>
             </Collapse>}
         </React.Fragment>
@@ -126,9 +121,10 @@ TreeBranch.defaultProps = {
     button: false,
     children: null,
     name: null,
-    onAction: () => null,
+    onAction: null,
     onClick: () => null,
     onOpen: () => null,
+    inset: false,
 };
 
 TreeBranch.propTypes = {
@@ -142,6 +138,7 @@ TreeBranch.propTypes = {
     onRenderChildren: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
     val: PropTypes.string.isRequired,
+    inset: PropTypes.bool,
 };
 
 export default TreeBranch;

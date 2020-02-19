@@ -10,7 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {makeStyles} from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     padding: {
         paddingTop: 0,
         paddingBottom: 0,
@@ -67,7 +67,7 @@ HarmonicCard.defaultProps = {
 
 HarmonicCard.propTypes = {
     title: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
-    content: PropTypes.object.isRequired,
+    content: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
     buttons: PropTypes.object,
     expand: PropTypes.bool,
     noPadding: PropTypes.bool,

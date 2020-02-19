@@ -22,7 +22,6 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import React from 'react';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
@@ -90,7 +89,6 @@ const Login = ({connected, loaded, savedConnections}) => {
     };
     const [state, setState] = React.useState(initialState);
     const {showPassword, showToken, errors, loginWith, form, openSaveConn, showNewConn, disableName} = state;
-    const [notifySaved, setNotifySaved] = React.useState(false);
 
     const handleNewConn = () => {
         setState({
@@ -166,12 +164,6 @@ const Login = ({connected, loaded, savedConnections}) => {
         ApplicationActions.delConn({name: name}, tag);
     };
 
-    const handleTooltip = () => {
-        handleClickCloseSaveConn();
-        setNotifySaved(true);
-        setTimeout(()=> setNotifySaved(false), 1000);
-    };
-
     const handleClickOpenSaveConn = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = ky=='name'?false:validation[ky](form);  return d; }, {});
         if (!Object.values(err).some(d => Boolean(d))) {
@@ -189,7 +181,7 @@ const Login = ({connected, loaded, savedConnections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => Boolean(d))) {
-            ApplicationActions.newConn(form, tag, handleTooltip);
+            ApplicationActions.newConn(form, tag);
         }
     };
 
@@ -406,11 +398,9 @@ const Login = ({connected, loaded, savedConnections}) => {
                                     </Grid>
                                 </Collapse>
                                 <Grid item xs={3}>
-                                    <Tooltip open={notifySaved} disableFocusListener disableTouchListener disableHoverListener title="Saved!">
-                                        <Button onClick={handleClickOpenSaveConn} color="primary" disabled={Object.values(errors).some(d => d)}>
-                                            {'Save'}
-                                        </Button>
-                                    </Tooltip>
+                                    <Button onClick={handleClickOpenSaveConn} color="primary" disabled={Object.values(errors).some(d => d)}>
+                                        {'Save'}
+                                    </Button>
                                 </Grid>
                             </Grid>
                             <Grid item xs={6} container justify="flex-end">

@@ -50,9 +50,7 @@ const ErrorMsg = ({tag, msgError}) => {
 
 
     return (
-        <React.Fragment>
-            <LocalErrorMsg msgError={msgError[tag] && msgError[tag].includes('https') ? link(msgError[tag]): msgError[tag]} onClose={handleCloseError} />
-        </React.Fragment>
+        <LocalErrorMsg msgError={msgError[tag] && msgError[tag].includes('https') ? link(msgError[tag]): msgError[tag]} onClose={handleCloseError} />
     );
 };
 

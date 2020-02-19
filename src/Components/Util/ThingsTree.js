@@ -1,7 +1,10 @@
 /* eslint-disable react/no-multi-comp */
+import {makeStyles} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
 
 import {checkType, fancyName, thingValue, TreeBranch} from '../Util';
 
@@ -14,42 +17,66 @@ const useStyles = makeStyles(theme => ({
         margin: 0,
         padding: 0,
     },
+    justifyContent: {
+        justifyContent: 'center',
+    }
 }));
 
+const visibleNumber = 100;
 
 const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
     const classes = useStyles();
+    const [more, setMore] = React.useState({});
 
     // is root if item is still null
     const thing = root ? tree : item;
 
-    const renderThing = ([k, v, i=null]) => { // QUEST: ???
+    const handleMore = (c) => () => {
+        setMore({...more, [c]: true});
+    };
+
+    const renderThing = ([k, v, i=null], count) => { // QUEST: ???
         return k === '#' ? null : (
-            <div key={i ? i : k} className={classes.nested}>
-                <ThingsTree
-                    item={v}
-                    tree={tree}
-                    child={{
-                        name: fancyName(k, i),
-                        index: i,
-                    }}
-                    root={false}
-                    customTypes={customTypes}
-                    onAction={onAction}
-                />
-            </div>
+            <React.Fragment key={i ? i : k}>
+                <div className={classes.nested}>
+                    <ThingsTree
+                        item={v}
+                        tree={tree}
+                        child={{
+                            name: fancyName(k, i),
+                            index: i,
+                        }}
+                        root={false}
+                        customTypes={customTypes}
+                        onAction={onAction}
+                    />
+                </div>
+                {more[count] && renderChildren(count+1)}
+                {(count+1)%visibleNumber == 0 && !more[count] ? (
+                    <ListItem className={classes.justifyContent}>
+                        <Button onClick={handleMore(count)}>
+                            {'LOAD MORE'}
+                            <ExpandMoreIcon color="primary" />
+                        </Button>
+                    </ListItem>
+                ):null}
+            </React.Fragment>
         );
     };
 
-    const renderChildren = () => {
+    const renderChildren = (start=0) => {
+        let end = start+visibleNumber;
         const t = type=='set'?thing['$']:thing;
         const isArray = Array.isArray(t);
         return isArray ?
-            t.map((t, i) => renderThing([child ? `${child.name}` : `${i}`, t, i]))
+            t.slice(start, end).map((t, i) => renderThing([child ? `${child.name}` : `${i}`, t, start+i], start+i))
             :
-            Object.entries((t && tree && tree[t['#']]) || t || {}).map(renderThing);
+            Object.entries((t && tree && tree[t['#']]) || t || {}).slice(start, end).map(([k, v], i) => renderThing([k, v], start+i));
     };
 
+    const handleOpenClose = (open) => {
+        !open&&setMore({});
+    };
 
     // type and value
     const type = checkType(thing);
@@ -59,14 +86,14 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
     const canToggle = (type === 'thing' && Object.keys(thing).length>1) || type === 'object' || (type === 'array' && thing.length>0) || type === 'closure' || type === 'regex'|| type === 'error' || (type === 'set' && thing['$'].length>0);
 
     return (
-        <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onAction={onAction} />
+        <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onOpen={handleOpenClose} onRenderChildren={renderChildren} onAction={onAction} />
     );
 };
 
 ThingsTree.defaultProps = {
     customTypes: [],
     item: null,
-    onAction: ()=>null,
+    onAction: null,
     tree: null,
 };
 
