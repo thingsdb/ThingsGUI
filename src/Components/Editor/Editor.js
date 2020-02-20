@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {withVlow} from 'vlow';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -50,7 +51,7 @@ const Editor = ({match}) => {
             window.removeEventListener('mousemove', handleMousemove);
             window.removeEventListener('mouseup', handleMouseup);
         }
-    },[isResizing]);
+    },[isResizing, handleMousemove, handleMouseup]);
 
     const handleMousedown = () => {
         setIsResizing(true);
@@ -58,7 +59,6 @@ const Editor = ({match}) => {
 
     const handleMousemove = React.useCallback((event) => {
         let el = document.getElementById('editor');
-
         let height = event.clientY - el.offsetTop;
         if (height > 100) {
             setNewHeight(height);

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -10,15 +11,6 @@ import {EditActions, useEdit} from '../TreeActions/Context';
 
 
 const useStyles = makeStyles(theme => ({
-    container: {
-        // display: 'flex',
-        // flexWrap: 'wrap',
-        borderLeft: `3px solid ${theme.palette.primary.main}`,
-        borderRight: `3px solid ${theme.palette.primary.main}`,
-        borderRadius: '20px',
-        padding: theme.spacing(2),
-        margin: theme.spacing(2),
-    },
     nested: {
         paddingLeft: theme.spacing(6),
     },
@@ -41,10 +33,9 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
     const {array, val, blob} = editState;
 
     React.useEffect(() => {
-        EditActions.update(dispatch, {val: '', array: [], blob: {}});
-    },
-    [],
-    );
+        isSet?EditActions.update(dispatch, {array: []}):EditActions.update(dispatch, {val: '', array: [], blob: {}});
+
+    },[isSet]);
 
     React.useEffect(() => {
         setDataType(childTypes[0]||dataTypes[0]);
@@ -58,10 +49,6 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
     },
     [array.length],
     );
-
-    React.useEffect(() => {
-        EditActions.update(dispatch, {val: '', array: [], blob: {}});
-    },[isSet]);
 
     const handleChange = ({target}) => {
         const {value} = target;

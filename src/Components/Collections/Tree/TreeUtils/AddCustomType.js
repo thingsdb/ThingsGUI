@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles } from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
@@ -11,46 +12,12 @@ import {ListHeader} from '../../../Util';
 import {EditActions, useEdit} from '../TreeActions/Context';
 
 const useStyles = makeStyles(theme => ({
-    container: {
-        borderLeft: `1px solid ${theme.palette.primary.main}`,
-        borderRight: `1px solid ${theme.palette.primary.main}`,
-        borderRadius: '20px',
-        padding: theme.spacing(2),
-        margin: theme.spacing(2),
-    },
-    chip: {
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
-    },
     fullWidth: {
         width: '100%',
-    },
-    bottom: {
-        marginBottom: theme.spacing(2),
-        paddingBottom: theme.spacing(1),
-    },
-    margin: {
-        padding: 0,
-        margin: 0,
-    },
-    listItem: {
-        margin: 0,
-        padding: 0,
     },
     nested: {
         paddingLeft: theme.spacing(6),
         paddingBottom: theme.spacing(1),
-    },
-    textfield: {
-        paddingTop: 0,
-        paddingBottom: 0,
-        marginTop: 0,
-        marginBottom: 0,
-    },
-    input: {
-        paddingTop: 0,
-        paddingBottom: 0,
-        color: theme.palette.primary.main,
     },
 }));
 

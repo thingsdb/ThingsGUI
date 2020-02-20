@@ -1,5 +1,4 @@
 /* eslint-disable react/no-multi-comp */
-import {makeStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -25,27 +24,10 @@ import {ErrorMsg, SimpleModal, TableWithButtons, WarnPopover} from '../../Util';
 
 const tag = '11';
 
-const useStyles = makeStyles(theme => ({
-    listItem: {
-        // margin: 0,
-        // padding: 0,
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    popover: {
-        padding: theme.spacing(1),
-        backgroundColor: theme.palette.primary.warning,
-    },
-
-}));
-
 const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
-    const classes = useStyles();
     const [state, setState] = React.useState({
         queryString: '',
-        property: {},
+        property: {propertyName: '', propertyType: '', propertyVal: ''},
     });
     const {queryString, property} = state;
     const [action, setAction] = React.useState('');
@@ -57,12 +39,12 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
         {ky: 'propertyName', label: 'Name'},
         {ky: 'propertyType', label: 'Type'},
     ];
-    const rows = customType.fields? customType.fields.map(c=>({propertyName: c[0], propertyType: c[1]})):[];
+    const rows = customType.fields? customType.fields.map(c=>({propertyName: c[0], propertyType: c[1], propertyVal: ''})):[];
 
     React.useEffect(() => {
         setState({
             queryString: '',
-            property: {},
+            property: {propertyName: '', propertyType: '', propertyVal: ''},
         });
         setAction('');
     },
@@ -73,11 +55,11 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
         const q = p.propertyType == 'str'||p.propertyType == 'utf8'||p.propertyType == 'raw'||p.propertyType == 'bytes' ?
             `mod_type('${customType.name}', 'add', '${p.propertyName}', '${p.propertyType}', '${p.propertyVal}')`
             : `mod_type('${customType.name}', 'add', '${p.propertyName}', '${p.propertyType}', ${p.propertyVal})`;
-        setState({...state, queryString: q});
+        setState({...state, property: p, queryString: q});
     };
 
     const handleQueryMod = (p) => {
-        setState({...state, queryString: `mod_type('${customType.name}', 'mod', '${property.propertyName}', '${p.propertyType}')`});
+        setState({...state, property: p, queryString: `mod_type('${customType.name}', 'mod', '${property.propertyName}', '${p.propertyType}')`});
     };
 
     const handleAdd = () => {
@@ -96,13 +78,13 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
     };
 
     const handleCloseDelete = () => {
-        setState({property: {}, queryString: ''});
+        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: ''});
         setAnchorEl(null);
     };
 
     const handleBack = () => {
         handleCloseError();
-        setState({property: {}, queryString: ''});
+        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: ''});
         setAction('');
     };
 
@@ -116,7 +98,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
                 TypeActions.getTypes(scope, tag, cb);
                 setAction('');
                 setAnchorEl(null);
-                setState({property: {}, queryString: ''});
+                setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: ''});
             }
         );
     };
@@ -172,7 +154,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
                 <Grid item xs={12}>
                     <List disablePadding dense>
                         <Collapse in={Boolean(queryString)} timeout="auto">
-                            <ListItem className={classes.listItem} >
+                            <ListItem>
                                 <TextField
                                     name="queryString"
                                     label="Query"
@@ -197,7 +179,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
                         </Collapse>
                         <Collapse in={add || edit} timeout="auto" unmountOnExit>
                             <ListItem>
-                                <AddTypeProperty cb={add?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={edit?property: {}} hasPropName={!edit} hasInitVal={add} />
+                                <AddTypeProperty cb={add?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={property} hasPropName={!edit} hasInitVal={add} />
                             </ListItem>
                         </Collapse>
                         <Collapse in={overview||del} timeout="auto" unmountOnExit>

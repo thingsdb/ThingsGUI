@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 import AddIcon from '@material-ui/icons/Add';
@@ -75,7 +76,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
     React.useEffect(() => {
         setState({...state, scope: scopes[0]});
     },
-    [scopes.length],
+    [scopes.length], // TODO
     );
 
     const handleChangeTab = (_event, newValue) => {

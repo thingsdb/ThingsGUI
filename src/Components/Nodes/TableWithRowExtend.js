@@ -20,9 +20,6 @@ const useStyles = makeStyles(() => ({
         borderBottom: '1px solid rgba(0, 0, 0, .125)',
         marginBottom: -1,
         minHeight: 56,
-        // '&$expanded': {
-        //     minHeight: 56,
-        // },
     },
     collapse: {
         backgroundColor: '#191D1F',
@@ -34,9 +31,6 @@ const useStyles = makeStyles(() => ({
         '&:before': {
             display: 'none',
         },
-        // '&$expanded': {
-        //     margin: 'auto',
-        // },
     },
 }));
 

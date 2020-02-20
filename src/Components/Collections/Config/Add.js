@@ -14,9 +14,6 @@ const withStores = withVlow([{
 }]);
 
 const useStyles = makeStyles(theme => ({
-    button: {
-        margin: theme.spacing(1),
-    },
     buttonBase: {
         width: '100%',
         height: '100%',

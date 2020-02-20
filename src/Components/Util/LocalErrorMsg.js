@@ -16,19 +16,11 @@ const useStyles = makeStyles(theme => ({
     avatar: {
         backgroundColor: 'transparent',
     },
-    div: {
-        // minWidth: 280,
-    },
-    multiline: {
-        whiteSpace: 'pre-wrap',
-    },
     warning: {
         color: amber[700],
     },
     typography: {
         marginBottom: theme.spacing(1),
-        // backgroundColor: theme.palette.primary.warning,
-        // borderRadius: '30px',
     },
 }));
 
@@ -49,7 +41,7 @@ const LocalErrorMsg = ({msgError, onClose}) => {
                             <WarningIcon className={classes.warning} />
                         </Avatar>
                     </Grid>
-                    <Grid item className={classes.div} xs={8}>
+                    <Grid item xs={8}>
                         {msgError}
                     </Grid>
                     {onClose && (

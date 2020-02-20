@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -58,7 +59,6 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
     },
     [input],
     );
-
 
     const handleRefSize = () => {
         if (textRef.current) {

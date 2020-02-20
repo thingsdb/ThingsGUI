@@ -13,10 +13,6 @@ const useStyles = makeStyles(theme => ({
     nested: {
         paddingLeft: theme.spacing(4),
     },
-    listItem: {
-        margin: 0,
-        padding: 0,
-    },
     justifyContent: {
         justifyContent: 'center',
     }

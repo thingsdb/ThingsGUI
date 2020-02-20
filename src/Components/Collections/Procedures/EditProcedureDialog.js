@@ -1,6 +1,4 @@
 /* eslint-disable react/no-multi-comp */
-
-import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
@@ -17,44 +15,22 @@ import {Closure, ErrorMsg, SimpleModal} from '../../Util';
 
 
 const tag = '12';
-
-const useStyles = makeStyles(theme => ({
-    listItem: {
-        // margin: 0,
-        // padding: 0,
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    popover: {
-        padding: theme.spacing(1),
-        backgroundColor: theme.palette.primary.warning,
-    },
-
-}));
-
 const EditProcedureDialog = ({open, onClose, procedure, scope, cb}) => {
-    const classes = useStyles();
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');
 
     React.useEffect(() => {
         if (open) {
             setClosure(procedure.definition);
+            setQueryString(`del_procedure("${procedure.name}"); new_procedure("${procedure.name}", ${procedure.definition});`);
         }
     },
-    [procedure.arguments&&procedure.arguments.length, procedure.created_at, procedure.definition, procedure.doc, procedure.name, procedure.with_side_effects],
-    );
-
-    React.useEffect(() => {
-        setQueryString(`del_procedure("${procedure.name}"); new_procedure("${procedure.name}", ${closure});`);
-    },
-    [procedure.name, closure],
+    [open, procedure.definition, procedure.name],
     );
 
     const handleClosure = (c) => {
         setClosure(c);
+        setQueryString(`del_procedure("${procedure.name}"); new_procedure("${procedure.name}", ${c});`);
     };
 
     const handleClickOk = () => {
@@ -106,7 +82,7 @@ const EditProcedureDialog = ({open, onClose, procedure, scope, cb}) => {
                 <Grid item xs={12}>
                     <List disablePadding dense>
                         <Collapse in={Boolean(queryString)} timeout="auto">
-                            <ListItem className={classes.listItem} >
+                            <ListItem>
                                 <TextField
                                     name="queryString"
                                     label="Query"

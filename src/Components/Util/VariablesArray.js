@@ -1,4 +1,4 @@
-
+/* eslint-disable react-hooks/exhaustive-deps */
 import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import React from 'react';

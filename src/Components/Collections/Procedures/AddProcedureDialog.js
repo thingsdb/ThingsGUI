@@ -1,5 +1,4 @@
 /* eslint-disable react/no-multi-comp */
-import {makeStyles} from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -15,21 +14,7 @@ import {Closure, ErrorMsg, SimpleModal} from '../../Util';
 
 const tag = '5';
 
-const useStyles = makeStyles(() => ({
-    listItem: {
-        // margin: 0,
-        // padding: 0,
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-
-}));
-
 const AddProcedureDialog = ({open, onClose, scope, cb}) => {
-    const classes = useStyles();
-
     const [state, setState] = React.useState({
         queryString: 'new_procedure("", )',
         procedureName: '',
@@ -39,7 +24,7 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
     const {queryString, procedureName, error, closure} = state;
 
 
-    React.useEffect(() => {
+    React.useEffect(() => { // clean state
         setState({
             queryString: 'new_procedure("", )',
             procedureName: '',
@@ -98,7 +83,7 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
                 <Grid item xs={12}>
                     <List disablePadding dense>
                         <Collapse in={Boolean(queryString)} timeout="auto">
-                            <ListItem className={classes.listItem} >
+                            <ListItem>
                                 <TextField
                                     name="queryString"
                                     label="Query"
@@ -121,7 +106,7 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
                                 />
                             </ListItem>
                         </Collapse>
-                        <ListItem className={classes.listItem}>
+                        <ListItem>
                             <TextField
                                 name="procedureName"
                                 label="Name"

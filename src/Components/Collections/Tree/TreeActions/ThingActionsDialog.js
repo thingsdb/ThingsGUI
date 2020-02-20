@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
@@ -11,7 +12,6 @@ import {CollectionActions, ThingsdbActions, TypeActions} from '../../../../Store
 import {ErrorMsg, SimpleModal} from '../../../Util';
 
 const tag = '8';
-
 
 const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
 
@@ -65,12 +65,13 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
     };
 
     const handleClickOk = (blob, query) => {
-        if (Object.keys(blob).length) {
+        const b = Object.keys(blob || {}).reduce((res, k) => {if(query.includes(k)){res[k]=blob[k];} return res;},{});
+        if (Object.keys(b).length) {
             CollectionActions.blob(
                 scope,
                 query,
                 child.id||parent.id,
-                blob,
+                b,
                 tag,
                 () => {
                     ThingsdbActions.getCollections();

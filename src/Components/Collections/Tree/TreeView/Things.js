@@ -1,4 +1,6 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import Divider from '@material-ui/core/Divider';
 import ExploreIcon from '@material-ui/icons/Explore';
 import List from '@material-ui/core/List';
@@ -29,7 +31,6 @@ const withStores = withVlow([{
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
-        // maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
     icon: {
@@ -69,27 +70,6 @@ const ThingRoot = ({things, collection, watchIds}) => {
                     dense
                     disablePadding
                 >
-                    {/* {Object.entries(things[collection.collection_id]).map(([k, v]) => k === '#' ? null : (
-                        <Thing
-                            key={k}
-                            className={classes.thing}
-                            id={collection.collection_id}
-                            thing={v}
-                            things={things}
-                            collection={collection}
-                            parent={{
-                                id: collection.collection_id,
-                                name: 'root',
-                                type: 'thing',
-                                isTuple: false,
-                            }}
-                            child={{
-                                name: k,
-                                index: null,
-                            }}
-                            watchIds={watchIds}
-                        />
-                    ))} */}
                     <ThingRestrict
                         thing={things[collection.collection_id]}
                         onChildren={(k, v, _i, _isArray) => (

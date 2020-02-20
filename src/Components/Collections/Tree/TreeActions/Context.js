@@ -36,7 +36,6 @@ const EditActions = {
                 });
             });
             Object.entries(keys).map(([k, v]) => !v&&delete copy[k]);
-
             return {blob: {...state.blob, ...copy}};
         });
     },

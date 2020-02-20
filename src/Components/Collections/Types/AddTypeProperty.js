@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
@@ -6,38 +7,15 @@ import TextField from '@material-ui/core/TextField';
 import {AutoSelect} from '../../Util';
 
 const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) => {
-    const [state, setState] = React.useState({
-        propertyName: '',
-        propertyType: dropdownItems[0],
-        propertyVal: '',
-    });
-    const {propertyName, propertyType, propertyVal} = state;
-
-    React.useEffect(() => {
-        if (Object.keys(input).length>1&&(input.propertyName!=state.propertyName || input.propertyType!=state.propertyType)) {
-            setState({
-                propertyName: input.propertyName,
-                propertyType: input.propertyType,
-                propertyVal: '',
-            });
-        }
-    },
-    [input.propertyName, input.propertyType],
-    );
-
-    React.useEffect(() => {
-        cb(state);
-    },
-    [state.propertyName, state.propertyType, state.propertyVal],
-    );
+    const {propertyName, propertyType, propertyVal} = input;
 
     const handleChange = ({target}) => {
         const {name, value} = target;
-        setState({...state, [name]: value});
+        cb({...input, [name]: value});
     };
 
     const handleType = (t) => {
-        setState({...state, propertyType: t});
+        cb({...input, propertyType: t});
     };
 
     return (
@@ -80,7 +58,6 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
 };
 
 AddTypeProperty.defaultProps = {
-    input: {},
     hasPropName: true,
     hasInitVal: false,
 };
@@ -88,7 +65,7 @@ AddTypeProperty.defaultProps = {
 AddTypeProperty.propTypes = {
     cb: PropTypes.func.isRequired,
     dropdownItems: PropTypes.arrayOf(PropTypes.string).isRequired,
-    input: PropTypes.object,
+    input: PropTypes.shape({propertyName: PropTypes.string.isRequired, propertyType:PropTypes.string.isRequired, propertyVal:PropTypes.string.isRequired}).isRequired,
     hasPropName: PropTypes.bool,
     hasInitVal: PropTypes.bool,
 };
