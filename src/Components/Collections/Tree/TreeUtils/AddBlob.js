@@ -19,9 +19,7 @@ const AddBlob = ({identifier}) => {
 
     React.useEffect(() => {
         let f = fileName;
-        if (fileName.includes('.')) {
-            f = fileName.split('.')[0];
-        }
+        f = fileName.replace('.', '_');
         if (f != '' && newBlob != '') {
             EditActions.updateVal(dispatch, f, identifier);
             EditActions.update(dispatch, {

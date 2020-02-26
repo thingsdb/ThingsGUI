@@ -8,31 +8,6 @@ import (
 	"io"
 )
 
-// func encryptFile(filename string, data []byte, passphrase string) {
-// 	f, _ := os.Create(filename)
-// 	defer f.Close()
-// 	f.Write(encrypt(data, passphrase))
-// }
-
-// func main() {
-// 	text := []byte("My name is Astaxie")
-// 	key := []byte("the-key-has-to-be-32-bytes-long!")
-
-// 	ciphertext, err := encrypt(text, key)
-// 	if err != nil {
-// 		// TODO: Properly handle error
-// 		log.Fatal(err)
-// 	}
-// 	fmt.Printf("%s => %x\n", text, ciphertext)
-
-// 	plaintext, err := decrypt(ciphertext, key)
-// 	if err != nil {
-// 		// TODO: Properly handle error
-// 		log.Fatal(err)
-// 	}
-// 	fmt.Printf("%x => %s\n", ciphertext, plaintext)
-// }
-
 func Encrypt(plaintext []byte, key []byte) ([]byte, error) {
 	c, err := aes.NewCipher(key)
 	if err != nil {

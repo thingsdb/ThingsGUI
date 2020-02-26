@@ -183,7 +183,7 @@ func Reconnect(client *Client) (int, LoginResp, util.Message) {
 }
 
 func Disconnect(client *Client) (int, LoginResp, util.Message) {
-	CloseSingleConn(client) // check if really closed?
+	CloseSingleConn(client)
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	return message.Status, LoginResp{Loaded: true, Connected: false}, message
 }

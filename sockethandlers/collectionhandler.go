@@ -28,7 +28,7 @@ func query(client *Client, data Data, blob map[string]interface{}, timeout uint1
 		return message.Status, "", message
 	}
 	var r interface{}
-	r, err = client.TmpFiles.ReplaceBinStrWithLink(resp) // run as goroutine??
+	r, err = client.TmpFiles.ReplaceBinStrWithLink(resp)
 	message := util.Msg(err, http.StatusInternalServerError)
 	if r != nil {
 		resp = r
@@ -85,7 +85,7 @@ func CleanupTmp(tmp *util.TmpFiles) (int, bool, util.Message) {
 
 func Watch(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
 	scope := data.Scope
-	ids := data.Ids // strings.Split(data.Ids, ",")
+	ids := data.Ids
 	idsInt := make([]uint64, 0)
 
 	if len(ids) > 0 {
@@ -102,7 +102,7 @@ func Watch(client *Client, data Data, timeout uint16) (int, interface{}, util.Me
 
 func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
 	scope := data.Scope
-	ids := data.Ids //s strings.Split(data.Ids, ",")
+	ids := data.Ids
 	idsInt := make([]uint64, 0)
 
 	if len(ids) > 0 {
