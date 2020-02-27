@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const HarmonicCard = ({title, content, buttons, expand, noPadding}) => {
+const HarmonicCard = ({title, content, buttons, expand, noPadding, unmountOnExit}) => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(expand);
 
@@ -42,7 +42,7 @@ const HarmonicCard = ({title, content, buttons, expand, noPadding}) => {
                 title={title}
                 titleTypographyProps={{variant: 'body1'}}
             />
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <Collapse in={expanded} timeout="auto" unmountOnExit={unmountOnExit}>
                 {noPadding? content : (
                     <CardContent>
                         {content}
@@ -62,6 +62,7 @@ HarmonicCard.defaultProps = {
     expand: true,
     buttons: null,
     noPadding: false,
+    unmountOnExit: true,
 },
 
 HarmonicCard.propTypes = {
@@ -70,6 +71,7 @@ HarmonicCard.propTypes = {
     buttons: PropTypes.object,
     expand: PropTypes.bool,
     noPadding: PropTypes.bool,
+    unmountOnExit: PropTypes.bool,
 };
 
 export default HarmonicCard;

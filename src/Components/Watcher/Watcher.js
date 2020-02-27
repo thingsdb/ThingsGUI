@@ -76,7 +76,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
     React.useEffect(() => {
         setState({...state, scope: scopes[0]});
     },
-    [scopes.length], // TODO
+    [scopes.length],
     );
 
     const handleChangeTab = (_event, newValue) => {
@@ -163,7 +163,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
                         inputProps={{min: '3'}}
                         label="Thing id"
                         type="number"
-                        value={thingId}  // TODOK placeholder
+                        value={thingId}
                         variant="outlined"
                         spellCheck={false}
                         onChange={handleChange}

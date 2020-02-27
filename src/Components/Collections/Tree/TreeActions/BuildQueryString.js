@@ -11,7 +11,7 @@ const BuildQueryString = ({child, customTypes, parent}) => {
 
     React.useEffect(() => {
         handleBuildQuery(child.type, child.index, child.name, parent.id, parent.name, parent.type);
-    }, [val, child.type, child.index, child.name, parent.id, parent.name, parent.type]); //TODO call handleBuildQuery when one of the items in the dependency array update. Not when handleBuildQuery updates. handleBuildQuery will be latest version when one of the items update. Unlike useCallback or useMemo; useCallback will return a memoized version of the callback that only changes if one of the dependencies has changed.
+    }, [val, child.type, child.index, child.name, parent.id, parent.name, parent.type]); // note: call handleBuildQuery when one of the items in the dependency array update. Not when handleBuildQuery updates. handleBuildQuery will be latest version when one of the items update. Unlike useCallback or useMemo; useCallback will return a memoized version of the callback that only changes if one of the dependencies has changed.
 
     const handleBuildQuery = (childType, childIndex, childName, parentId, parentName, parentType) => {
         let v;

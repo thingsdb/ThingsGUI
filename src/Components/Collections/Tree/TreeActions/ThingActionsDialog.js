@@ -13,7 +13,7 @@ import {ErrorMsg, SimpleModal} from '../../../Util';
 
 const tag = '8';
 
-const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
+const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 
     const initialState = {
         customTypes: [],
@@ -111,7 +111,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
                     </Typography>
                 </Grid>
                 <Grid container spacing={1} item xs={4} justify="flex-end">
-                    <DialogButtons child={child} customTypes={customTypes} onClose={onClose} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} thing={thing} tag={tag} />
+                    <DialogButtons child={child} customTypes={customTypes} onClose={onClose} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} thing={thing} tag={tag} isRoot={isRoot} />
                 </Grid>
             </Grid>
             {canEdit ? (
@@ -152,6 +152,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
 
 ThingActionsDialog.defaultProps = {
     thing: null,
+    isRoot: false,
 };
 
 
@@ -172,6 +173,7 @@ ThingActionsDialog.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
     }).isRequired,
+    isRoot: PropTypes.bool,
 };
 
 export default ThingActionsDialog;

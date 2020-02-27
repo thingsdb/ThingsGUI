@@ -9,7 +9,7 @@ const TypeActions = Vlow.createActions([
     'deleteType',
 ]);
 
-// TODO: CALLBACKS
+
 class TypeStore extends BaseStore {
 
     static types = {

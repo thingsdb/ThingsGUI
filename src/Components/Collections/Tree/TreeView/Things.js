@@ -118,6 +118,7 @@ const ThingRoot = ({things, collection, watchIds}) => {
                                 }}
                                 scope={`@collection:${collection.name}`}
                                 thing={things[collection.collection_id]}
+                                isRoot
                             />
                         </ListItemIcon>
                         {Object.entries(things[collection.collection_id]).length<2 ? (

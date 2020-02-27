@@ -11,10 +11,6 @@ import {HarmonicCard} from '../../Util';
 const CollectionConfig = ({collection}) => {
 
     const buttons = [
-        // {
-        //     name: 'quotas',
-        //     component: <SetQuotas collection={collection} />
-        // },
         {
             name: 'rename',
             component: <RenameCollection collection={collection} />

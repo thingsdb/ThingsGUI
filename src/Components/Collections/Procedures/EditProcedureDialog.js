@@ -34,7 +34,6 @@ const EditProcedureDialog = ({open, onClose, procedure, scope, cb}) => {
     };
 
     const handleClickOk = () => {
-        // check if no error in syntax
         CollectionActions.rawQuery(
             scope,
             closure,

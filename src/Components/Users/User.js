@@ -22,7 +22,7 @@ const User = ({match, user, users, collections}) => {
             : isObjectEmpty(user) ? []
                 : [user];
 
-    const selectedUser = findItem(match.index, users2); // TODO CHECK
+    const selectedUser = findItem(match.index, users2);
 
     return (
         isObjectEmpty(selectedUser) ? null

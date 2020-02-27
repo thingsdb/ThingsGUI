@@ -52,7 +52,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
     );
 
     const handleQueryAdd = (p) => {
-        const q = p.propertyType == 'str'||p.propertyType == 'utf8'||p.propertyType == 'raw'||p.propertyType == 'bytes' ?
+        const q = p.propertyType == 'str'||p.propertyType == 'utf8'||p.propertyType == 'raw' ?
             `mod_type('${customType.name}', 'add', '${p.propertyName}', '${p.propertyType}', '${p.propertyVal}')`
             : `mod_type('${customType.name}', 'add', '${p.propertyName}', '${p.propertyType}', ${p.propertyVal})`;
         setState({...state, property: p, queryString: q});

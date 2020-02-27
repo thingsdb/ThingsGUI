@@ -10,7 +10,7 @@ const ErrorActions = Vlow.createActions([
 ]);
 
 
-// TODO: CALLBACKS
+
 class ErrorStore extends Vlow.Store {
 
     static types = {

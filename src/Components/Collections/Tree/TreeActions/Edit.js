@@ -54,7 +54,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
 
     }, []);
 
-    const errorTxt = (property) => thing[property] || property == 'root' ? 'property name already in use' : ''; // todo root
+    const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
 
     const handleOnChangeName = ({target}) => {
         const {value} = target;

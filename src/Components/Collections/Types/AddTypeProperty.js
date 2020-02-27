@@ -51,6 +51,16 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
                         value={propertyVal}
                         variant="outlined"
                     />
+                    {/* <InputField
+                        customTypes={customTypes}
+                        dataType={propertyType}
+                        dataTypes={dataTypes}
+
+                        variant="outlined"
+                        name="propertyVal"
+                        label="Initial value"
+                        fullWidth
+                    /> */}
                 </Grid>
             ) : null}
         </Grid>

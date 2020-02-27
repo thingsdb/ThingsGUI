@@ -30,15 +30,10 @@ class _SocketRequest {
         }, 3000);
         socket.emit(event, ...data, (status, data, message) => {
             clearTimeout(warnOnLong);
-            if (message !== undefined && message !== null) {
-                // MessageActions.add(message);
-            }
 
             this._alwaysCb(status, data);
             if (status === 200) {
                 this._doneCb(data);
-            } else if (status === 125) {
-                // this._triggerSessionError();
             } else {
                 this._failCb(event, status, message);
             }
@@ -287,7 +282,6 @@ class EventStore extends BaseStore {
     }
 
     watchInit(data) {
-        // const {watchIds} = this.state;
         let scope = `@collection:${data.collection}`;
 
         this.setState(prevState => {

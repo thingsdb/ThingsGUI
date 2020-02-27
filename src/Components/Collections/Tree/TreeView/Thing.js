@@ -127,12 +127,4 @@ Thing.propTypes = {
     inset: PropTypes.bool,
 };
 
-// const areEqual = (prevProps, nextProps) => {
-//     console.log(deepEqual(prevProps, nextProps), prevProps, nextProps);
-//     return deepEqual(prevProps, nextProps);
-// };
-
-
-// export default React.memo(Thing, areEqual);
-
 export default Thing;

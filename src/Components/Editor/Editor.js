@@ -194,11 +194,15 @@ const Editor = ({match}) => {
     return (
         <TitlePage2
             preTitle='Customize your query:'
-            title={scope&&scope.value||''}
+            title={<SelectScope scope={match.scope} onChangeScope={handleOnChangeScope} />}
             content={
                 <React.Fragment>
                     <Grid item xs={12}>
-                        <ErrorMsg tag={tag} />
+                        <Card id='errMsg'>
+                            <ErrorMsg tag={tag} />
+                        </Card>
+                    </Grid>
+                    <Grid item xs={12}>
                         <Card id='editor' style={{height: newHeight}} className={classes.background}>
                             <div onKeyDown={handleKeyPress}>
                                 <QueryInput onChange={handleInput} input={queryInput} height={newHeight-25} />
@@ -219,12 +223,13 @@ const Editor = ({match}) => {
                                 >
                                     {'Submit'}
                                 </Button>
-                            }//"OUTPUT"
+                            }
                             content={
                                 <QueryOutput output={output} />
                             }
                             noPadding
                             expand={expandOutput}
+                            unmountOnExit={false}
                         />
                     </Grid>
                 </React.Fragment>
@@ -232,9 +237,6 @@ const Editor = ({match}) => {
             sideContent={
                 <React.Fragment>
                     <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} description={warnDescription} />
-                    <Grid item xs={12}>
-                        <SelectScope scope={match.scope} onChangeScope={handleOnChangeScope} />
-                    </Grid>
                     {scope&&scope.value && scope.value.includes('@node') ? null : (
                         <Grid item xs={12}>
                             <ChipsCard

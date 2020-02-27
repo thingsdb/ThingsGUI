@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import React from 'react';
 import PropTypes from 'prop-types';
+import NativeSelect from '@material-ui/core/NativeSelect';
 import {withVlow} from 'vlow';
 
 import {NodesStore, ThingsdbStore} from '../../Stores';
-import {getScopes2, HarmonicCard} from '../Util';
+import {getScopes2} from '../Util';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
@@ -33,15 +32,28 @@ const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
     };
 
     return (
-        <HarmonicCard
-            expand={false}
-            title="SCOPE"
-            content={
-                <RadioGroup aria-label="scope" name="scope" value={name} onChange={handleOnChangeScope}>
-                    {scopesObj.map(s => <FormControlLabel key={s.value} value={s.value} control={<Radio color='primary' />} label={s.value} />)}
-                </RadioGroup>
-            }
-        />
+        <NativeSelect
+            disableUnderline
+            IconComponent={ExpandMore}
+            id="scope"
+            inputProps={{
+                style: {
+                    color:'#3a6394',
+                    fontSize: '2.125rem',
+                },
+            }}
+
+            onChange={handleOnChangeScope}
+            style={{lineHeight: '2.2rem'}}
+            value={name}
+            variant="outlined"
+        >
+            {scopesObj.map(s => (
+                <option key={s.value} value={s.value}>
+                    {s.value}
+                </option>
+            ))}
+        </NativeSelect>
     );
 };
 

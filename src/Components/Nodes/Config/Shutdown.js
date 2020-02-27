@@ -57,7 +57,6 @@ const Shutdown = ({node}) => {
                 </Button>
             }
             onClose={handleClickClose}
-            // classes={{paper: classes.background}}
         >
             <React.Fragment>
                 <ErrorMsg tag={tag} />

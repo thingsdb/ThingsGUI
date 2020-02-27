@@ -23,7 +23,7 @@ const NodesActions = Vlow.createActions([
     'delBackup',
 ]);
 
-// TODO: CALLBACKS
+
 class NodesStore extends BaseStore {
 
     static types = {

@@ -54,7 +54,7 @@ const TimePeriodPicker = ({cb}) => {
                     id="number"
                     inputProps={{min: '1'}}
                     type="number"
-                    value={state.number}  // TODOK placeholder
+                    value={state.number}
                     spellCheck={false}
                     onChange={handleOnChange}
                     fullWidth

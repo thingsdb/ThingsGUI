@@ -33,7 +33,7 @@ const ThingsdbActions = Vlow.createActions([
     'delExpired',
 ]);
 
-// TODO: CALLBACKS
+
 class ThingsdbStore extends BaseStore {
 
     static types = {
@@ -333,7 +333,6 @@ class ThingsdbStore extends BaseStore {
 
 
     onNewToken(config, tag, cb){ // name [, expirationTime] [, description]
-        // TODO CHECK
         this.checkBeforeUserUpdate(`new_token('${config.name}', expiration_time=${config.expirationTime||'nil'}, description='${config.description||''}')`, tag, cb);
 
     }

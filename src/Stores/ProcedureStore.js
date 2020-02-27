@@ -7,7 +7,7 @@ const ProcedureActions = Vlow.createActions([
     'deleteProcedure',
 ]);
 
-// TODO: CALLBACKS
+
 class ProcedureStore extends BaseStore {
 
     constructor() {

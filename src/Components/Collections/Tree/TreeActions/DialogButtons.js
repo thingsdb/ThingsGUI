@@ -11,14 +11,13 @@ import {ApplicationActions} from '../../../../Stores';
 import {DownloadBlob} from '../../../Util';
 
 
-const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, tag, thing}) => {
+const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, tag, thing, isRoot}) => {
 
     const handleClickOpenEditor = () => {
         ApplicationActions.navigate({path: 'query', index: 0, item: child.type==='thing' ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
     };
 
     // buttons visible
-    const isRoot = child.name == 'root';
     const isParentCustom = Boolean(customTypes.find(c=>c.name==realParentType));
     const canRemove = !(child.name === '/' || parent.isTuple || isRoot || isParentCustom);
     const canWatch = thing && thing.hasOwnProperty('#');
@@ -75,6 +74,7 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
 
 DialogButtons.defaultProps = {
     thing: null,
+    isRoot: false,
 };
 
 
@@ -99,6 +99,7 @@ DialogButtons.propTypes = {
     scope: PropTypes.string.isRequired,
     tag: PropTypes.string.isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
+    isRoot: PropTypes.bool,
 };
 
 export default DialogButtons;

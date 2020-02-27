@@ -10,11 +10,6 @@ const bottomInfo = [
         icon: '/img/githubLogo.svg',
         url: 'https://github.com/thingsdb',
     },
-    // {
-    //     name: 'twitter',
-    //     icon: ,
-    //     url: '',
-    // },
     {
         name: 'facebook',
         icon: '/img/facebookLogo.png',

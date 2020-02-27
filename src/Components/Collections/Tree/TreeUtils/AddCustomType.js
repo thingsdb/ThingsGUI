@@ -78,7 +78,7 @@ const typing = ([fprop, type], dataTypes) =>  {
         }
     }
 
-    // if array set childtypes
+    // if array, set childtypes
     if (arr) {
         if (t.slice(-1)=='?') {
             t = t.slice(0, -1);

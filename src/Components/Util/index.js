@@ -47,7 +47,7 @@ const checkType = (t) => {
                 : kindOfObject === '/' ? 'closure'
                     : kindOfObject === '*' ? 'regex'
                         : kindOfObject === '!' ? 'error'
-                            : kindOfObject === '$' ? 'set' //set
+                            : kindOfObject === '$' ? 'set'
                                 : kindOfObject === '&' ? 'wrap'
                                     : 'object' ;
         }

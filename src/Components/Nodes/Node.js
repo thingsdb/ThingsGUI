@@ -14,7 +14,7 @@ const Node = ({selectedNode}) => {
 
     React.useEffect(() => {
         NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
-        NodesActions.getCounters(selectedNode.node_id); // update of the selected node; to get the latest info
+        NodesActions.getCounters(selectedNode.node_id); // update of the selected node counters; to get the latest info
         NodesActions.getBackups(selectedNode.node_id);
     }, [selectedNode.node_id]);
 
@@ -26,7 +26,7 @@ const Node = ({selectedNode}) => {
             NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
             break;
         case 1:
-            NodesActions.getCounters(selectedNode.node_id); // update of the selected node; to get the latest info
+            NodesActions.getCounters(selectedNode.node_id); // update of the selected node counters; to get the latest info
             break;
         case 2:
             NodesActions.getBackups(selectedNode.node_id);
