@@ -31,7 +31,7 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
                         spellCheck={false}
                         type="text"
                         value={propertyName}
-                        variant="outlined"
+                        variant="standard"
 
                     />
                 </Grid>
@@ -40,7 +40,7 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
                 <AutoSelect cb={handleType} dropdownItems={dropdownItems} input={propertyType} label="Definition" />
             </Grid>
             {hasInitVal ? (
-                <Grid item xs={4}>
+                <Grid item xs={12}>
                     <TextField
                         fullWidth
                         label="Initial value"
@@ -49,18 +49,9 @@ const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) =>
                         spellCheck={false}
                         type="text"
                         value={propertyVal}
-                        variant="outlined"
+                        variant="standard"
+                        multiline
                     />
-                    {/* <InputField
-                        customTypes={customTypes}
-                        dataType={propertyType}
-                        dataTypes={dataTypes}
-
-                        variant="outlined"
-                        name="propertyVal"
-                        label="Initial value"
-                        fullWidth
-                    /> */}
                 </Grid>
             ) : null}
         </Grid>

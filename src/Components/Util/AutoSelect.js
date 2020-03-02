@@ -106,7 +106,7 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
                     spellCheck={false}
                     type="text"
                     value={text}
-                    variant="outlined"
+                    variant="standard"
                     inputRef={textRef}
                 />
 
