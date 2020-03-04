@@ -8,7 +8,7 @@ import React from 'react';
 
 import ThingsBounds from './ThingsBounds';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     justifyContent: {
         justifyContent: 'center',
     }
