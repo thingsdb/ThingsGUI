@@ -25,16 +25,15 @@ class TypeStore extends BaseStore {
         this.state = TypeStore.defaults;
     }
 
-    onGetType(thing, scope, tag, cb) {
-        const query = `${thing}`;
+    onGetType(q, scope, tag, cb) {
+        const query = `${q}`;
         this.emit('query', {
             query,
             scope
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {
-            cb('');
-            ErrorActions.setMsgError(tag, message.Log);
+            ErrorActions.setToastError(message.Log);
             return [];
         });
     }

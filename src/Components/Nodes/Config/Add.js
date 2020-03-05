@@ -103,7 +103,7 @@ const Add = () => {
             <TextField
                 margin="dense"
                 id="address"
-                label="IP address"
+                label="Node name"
                 type="text"
                 value={form.address}
                 spellCheck={false}

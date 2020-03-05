@@ -47,7 +47,6 @@ class NodesStore extends BaseStore {
     constructor() {
         super(NodesActions);
         this.state = NodesStore.defaults;
-        this.onGetNodes();
     }
 
 

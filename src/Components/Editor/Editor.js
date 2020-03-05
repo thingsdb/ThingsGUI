@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {ApplicationStore, CollectionActions, ErrorActions, ProcedureActions, TypeActions} from '../../Stores';
+import {ApplicationStore, CollectionActions, ErrorActions, NodesActions, ProcedureActions, TypeActions} from '../../Stores';
 import {ChipsCard, ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput, WarnPopover} from '../Util';
 import SelectScope from './SelectScope';
 
@@ -42,6 +42,10 @@ const Editor = ({match}) => {
     const [expandOutput, setExpandOutput] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [warnDescription, setWarnDescription] = React.useState('');
+
+    React.useEffect(() => {
+        NodesActions.getNodes();
+    },[]);
 
     React.useEffect(() => {
         if (isResizing) {

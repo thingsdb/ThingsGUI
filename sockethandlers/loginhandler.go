@@ -46,7 +46,7 @@ type LoginData struct {
 func connect(client *Client, data LoginData) LoginResp {
 	hp := strings.Split(data.Address, ":")
 	if len(hp) != 2 {
-		return LoginResp{Connected: false, ConnErr: fmt.Errorf("invalid address")}
+		return LoginResp{Connected: false, ConnErr: fmt.Errorf("invalid node name/address")}
 	}
 	port, err := strconv.ParseUint(hp[1], 10, 16)
 	if err != nil {
