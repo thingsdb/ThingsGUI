@@ -23,8 +23,8 @@ const validation = {
         }
         return '';
     },
-    address: (f) => {
-        if (f.address.length==0) {
+    nodeName: (f) => {
+        if (f.nodeName.length==0) {
             return 'is required';
         }
         return '';
@@ -44,7 +44,7 @@ const Add = () => {
     const {show, errors, form, portSwitch} = state;
 
     const handleClickOpen = () => {
-        setState({...state, show: true, errors: {}, portSwitch: false, form: {secret: '', address: '', port: ''}});
+        setState({...state, show: true, errors: {}, portSwitch: false, form: {secret: '', nodeName: '', port: ''}});
     };
 
     const handleClickClose = () => {
@@ -102,15 +102,15 @@ const Add = () => {
             />
             <TextField
                 margin="dense"
-                id="address"
+                id="nodeName"
                 label="Node name"
                 type="text"
-                value={form.address}
+                value={form.nodeName}
                 spellCheck={false}
                 onChange={handleOnChange}
                 fullWidth
-                error={Boolean(errors.address)}
-                helperText={errors.address}
+                error={Boolean(errors.nodeName)}
+                helperText={errors.nodeName}
             />
             <FormControlLabel
                 control={(
@@ -121,7 +121,7 @@ const Add = () => {
                         onChange={handleSwitch}
                     />
                 )}
-                label="Add time [optional]"
+                label="Add port [optional]"
             />
             <Collapse in={portSwitch} timeout="auto" unmountOnExit>
                 <TextField

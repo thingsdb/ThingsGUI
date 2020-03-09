@@ -189,8 +189,8 @@ class NodesStore extends BaseStore {
         });
     }
 
-    onAddNode(config, tag, cb) { // secret , address [, port]
-        const query = config.port ? `new_node('${config.secret}', '${config.address}', ${config.port});`: `new_node('${config.secret}', '${config.address}');`;
+    onAddNode(config, tag, cb) { // secret , nodeName [, port]
+        const query = config.port ? `new_node('${config.secret}', '${config.nodeName}', ${config.port});`: `new_node('${config.secret}', '${config.nodeName}');`;
         this.emit('query', {
             scope: '@thingsdb',
             query
