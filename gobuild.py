@@ -46,8 +46,8 @@ goosarchs = [
     ('windows', 'amd64'),
 ]
 
-GOFILE = 'thingsdb-gui.go'
-TARGET = 'thingsdb-gui'
+GOFILE = 'thingsgui.go'
+TARGET = 'thingsgui'
 
 
 def get_version(path):
