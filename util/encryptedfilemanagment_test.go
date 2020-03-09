@@ -12,7 +12,7 @@ type LoginData struct {
 
 func TestEncryptedfilemanagment(t *testing.T) {
 	fmt.Println("TEST 4: encrypting file management")
-	path := GetHomePath("thingsgui_test")
+	path := GetHomePath("things-gui_test")
 	logCh := make(chan string, 1)
 	go func() {
 		for p := range logCh {

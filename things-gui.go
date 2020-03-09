@@ -21,7 +21,7 @@ import (
 // AppVersion exposes version information
 const AppVersion = "0.0.4-beta"
 
-var connFile = ".thingsgui"
+var connFile = ".things-gui_config"
 
 var (
 	host               string
