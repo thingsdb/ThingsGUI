@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 const tag = '27';
 
-const ChipsCard = ({title, items, onAdd, onClick, onDelete, expand}) => {
+const ChipsCard = ({title, items, onAdd, onClick, onDelete, moreButtons, expand}) => {
     const classes = useStyles();
     const [deleteIndex, setDeleteIndex] = React.useState(null);
     const [switchDel, setSwitchDel] = React.useState(false);
@@ -90,14 +90,17 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, expand}) => {
                     </React.Fragment>
                 }
                 buttons={
-                    <Chip
-                        clickable
-                        className={classes.chip}
-                        label="ADD"
-                        onClick={handleClickAdd}
-                        color="primary"
-                        variant="outlined"
-                    />
+                    <React.Fragment>
+                        <Chip
+                            clickable
+                            className={classes.chip}
+                            label="ADD"
+                            onClick={handleClickAdd}
+                            color="primary"
+                            variant="outlined"
+                        />
+                        {moreButtons}
+                    </React.Fragment>
                 }
             />
             <SimpleModal
@@ -132,6 +135,7 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, expand}) => {
 
 ChipsCard.defaultProps = {
     expand: null,
+    moreButtons: null,
 },
 
 ChipsCard.propTypes = {
@@ -141,6 +145,7 @@ ChipsCard.propTypes = {
     onClick: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
     expand: PropTypes.bool,
+    moreButtons: PropTypes.object
 };
 
 export default ChipsCard;

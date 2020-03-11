@@ -5,6 +5,7 @@ import {ErrorActions} from './ErrorStore';
 const ProcedureActions = Vlow.createActions([
     'getProcedures',
     'deleteProcedure',
+    'runProcedure'
 ]);
 
 
@@ -37,6 +38,21 @@ class ProcedureStore extends BaseStore {
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             return [];
+        });
+    }
+
+    onRunProcedure(scope, procedure, args, convertArgs, tag, cb) {
+        this.emit('run', {
+            scope,
+            procedure,
+            args,
+            convertArgs
+        }).done((data) => {
+            cb(data);
+            console.log(data);
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+            console.log(message.Log);
         });
     }
 }

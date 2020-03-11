@@ -6,9 +6,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {EditActions, useEdit} from './Context';
 import BuildQueryString from './BuildQueryString';
-import InputField from './InputField';
+import {InputField, EditActions, useEdit} from '../../CollectionsUtils';
 import {LocalErrorMsg} from '../../../Util';
 
 const useStyles = makeStyles(theme => ({

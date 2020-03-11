@@ -9,6 +9,7 @@ import AddInt from './AddInt';
 import AddRegex from './AddRegex';
 import AddStr from './AddStr';
 import AddThing from './AddThing';
+import AddVariable from './AddVariable';
 
 export {
     AddArray,
@@ -22,4 +23,5 @@ export {
     AddRegex,
     AddStr,
     AddThing,
+    AddVariable
 };

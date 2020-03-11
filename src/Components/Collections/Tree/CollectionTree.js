@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-import {EditProvider} from './TreeActions/Context';
+import {EditProvider} from '../CollectionsUtils';
 import Things from './TreeView';
 import {HarmonicCard} from '../../Util';
 

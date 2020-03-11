@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-import {EditActions, useEdit} from './Context';
+import {EditActions, useEdit} from '../../CollectionsUtils/Context';
 
 const BuildQueryString = ({child, customTypes, parent}) => {
     const [editState, dispatch] = useEdit();

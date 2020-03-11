@@ -1,5 +1,6 @@
 import ArrayLayout from './ArrayLayout';
 import AutoSelect from './AutoSelect';
+import BoolInput from './BoolInput';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
 import ChipsCard from './ChipsCard';
@@ -97,6 +98,25 @@ const getScopes2 = (collections, nodes) => [
 
 const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
+const allDataTypes = (customTypes) => {
+    const dataTypes = [
+        'str',
+        'int',
+        'float',
+        'bool',
+        'bytes',
+        'closure',
+        'regex',
+        'error',
+        'nil',
+        'list',
+        'set',
+        'thing',
+        ...customTypes.map(c=>c.name)
+    ];
+    return(dataTypes);
+};
+
 const duration = (n) => {
     let [time, unit] =  n<60 ? [n, 'second'] :
         n < 3600 ? [n/60, 'minute'] :
@@ -107,8 +127,10 @@ const duration = (n) => {
 };
 
 export {
+    allDataTypes,
     ArrayLayout,
     AutoSelect,
+    BoolInput,
     Buttons,
     CardButton,
     checkType,

@@ -5,9 +5,9 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
-import InputField from '../TreeActions/InputField';
+import InputField from '../InputField';
 import {ListHeader} from '../../../Util';
-import {EditActions, useEdit} from '../TreeActions/Context';
+import {EditActions, useEdit} from '../Context';
 
 
 const useStyles = makeStyles(theme => ({

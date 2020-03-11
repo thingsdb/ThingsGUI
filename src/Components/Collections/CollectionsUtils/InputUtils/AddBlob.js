@@ -7,7 +7,7 @@ import Dropzone from 'react-dropzone';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import {EditActions, useEdit} from '../TreeActions/Context';
+import {EditActions, useEdit} from '../Context';
 
 
 const AddBlob = ({identifier}) => {

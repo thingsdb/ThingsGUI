@@ -5,8 +5,6 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {EditActions, useEdit} from '../TreeActions/Context';
-
 const useStyles = makeStyles(theme => ({
     dense: {
         padding: theme.spacing(1),
@@ -14,19 +12,16 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AddBool = ({identifier}) => {
+const AddBool = ({input, cb}) => {
     const classes = useStyles();
-    const [editState, dispatch] = useEdit();
-    const {val} = editState;
+
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.updateVal(dispatch, value, identifier);
+        cb(value);
     };
 
-    const v = val[identifier]||(val.constructor === Object?'':val);
-
     return(
-        <RadioGroup className={classes.dense} aria-label="position" name="value" value={`${v}`} onChange={handleOnChange} row>
+        <RadioGroup className={classes.dense} aria-label="position" name="value" value={input} onChange={handleOnChange} row>
             <FormControlLabel
                 value="true"
                 control={<Radio color="primary" />}
@@ -43,12 +38,9 @@ const AddBool = ({identifier}) => {
     );
 };
 
-AddBool.defaultProps = {
-    identifier: null,
-},
-
 AddBool.propTypes = {
-    identifier: PropTypes.string
+    cb: PropTypes.func.isRequired,
+    input: PropTypes.string.isRequired,
 };
 
 export default AddBool;

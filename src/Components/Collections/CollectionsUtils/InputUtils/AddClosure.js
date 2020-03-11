@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {Closure} from '../../../Util';
-import {EditActions, useEdit} from '../TreeActions/Context';
+import {EditActions, useEdit} from '../Context';
 
 
 const AddClosure = ({identifier}) => {

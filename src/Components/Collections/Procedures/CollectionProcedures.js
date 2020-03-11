@@ -1,8 +1,11 @@
-import React from 'react';
+import Chip from '@material-ui/core/Chip';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import AddProcedureDialog from './AddProcedureDialog';
 import EditProcedureDialog from './EditProcedureDialog';
+import RunProcedureDialog from './RunProcedureDialog';
+import {EditProvider} from '../CollectionsUtils';
 import {ProcedureActions} from '../../../Stores';
 import {ChipsCard} from '../../Util';
 
@@ -23,6 +26,7 @@ const CollectionProcedures = ({scope}) => {
 
     const [openAdd, setOpenAdd] = React.useState(false);
     const [openEdit, setOpenEdit] = React.useState(false);
+    const [openRun, setOpenRun] = React.useState(false);
 
 
     const handleClickEdit = (i) => {
@@ -40,6 +44,15 @@ const CollectionProcedures = ({scope}) => {
     const handleCloseAdd = () => {
         setOpenAdd(false);
     };
+
+    const handleClickRun = () => {
+        setindex(null);
+        setOpenRun(true);
+    };
+    const handleCloseRun = () => {
+        setOpenRun(false);
+    };
+
     const handleClickDelete = (i, cb) => {
         const item = procedures[i];
         ProcedureActions.deleteProcedure(
@@ -61,10 +74,22 @@ const CollectionProcedures = ({scope}) => {
                 onAdd={handleClickAdd}
                 onClick={handleClickEdit}
                 onDelete={handleClickDelete}
+                moreButtons={
+                    <Chip
+                        clickable
+                        label="RUN"
+                        onClick={handleClickRun}
+                        color="primary"
+                        variant="outlined"
+                    />
+                }
                 title="procedures"
             />
             <AddProcedureDialog open={openAdd} onClose={handleCloseAdd} scope={scope} cb={handleProcedures} />
             <EditProcedureDialog open={openEdit} onClose={handleCloseEdit} procedure={index!==null?procedures[index]:{}} scope={scope} cb={handleProcedures} />
+            <EditProvider>
+                <RunProcedureDialog open={openRun} onClose={handleCloseRun} procedures={procedures} scope={scope} />
+            </EditProvider>
         </React.Fragment>
     );
 };

@@ -25,7 +25,7 @@ const TreeBranch = ({val, isFab}) => {
 
     return (
         <Tooltip disableFocusListener disableTouchListener title="Download blob">
-            <Link href={link} download="blob" type="application/octet-stream" color="textPrimary">
+            <Link target="_blank" href={link} download="blob" type="application/octet-stream" color="textPrimary">
                 {isFab ? (
                     <Fab color="primary" >
                         <DownloadIcon fontSize="large" />

@@ -11,10 +11,13 @@ import (
 )
 
 type Data struct {
-	Query string            `json:"query"`
-	Scope string            `json:"scope"`
-	Blob  map[string]string `json:"blob"`
-	Ids   []string          `json:"ids"`
+	Query       string            `json:"query"`
+	Scope       string            `json:"scope"`
+	Blob        map[string]string `json:"blob"`
+	Ids         []string          `json:"ids"`
+	Args        interface{}       `json:"args"`
+	Procedure   string            `json:"procedure"`
+	ConvertArgs bool              `json:convertArgs`
 }
 
 func query(client *Client, data Data, blob map[string]interface{}, timeout uint16) (int, interface{}, util.Message) {
@@ -113,6 +116,12 @@ func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, util.
 	}
 
 	resp, err := client.Connection.Unwatch(scope, idsInt, timeout)
+	message := util.Msg(err, http.StatusInternalServerError)
+	return message.Status, resp, message
+}
+
+func Run(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
+	resp, err := client.Connection.Run(data.Procedure, data.Args, data.Scope, timeout, data.ConvertArgs)
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
 }

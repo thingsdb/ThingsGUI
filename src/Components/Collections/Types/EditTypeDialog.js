@@ -187,7 +187,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
                                 <ListItemText
                                     primary="Current properties:"
                                     secondary={
-                                        <Link href="https://docs.thingsdb.net/v0/data-types/type/">
+                                        <Link target="_blank" href="https://docs.thingsdb.net/v0/data-types/type/">
                                             {'https://docs.thingsdb.net/v0/data-types/type/'}
                                         </Link>
                                     }

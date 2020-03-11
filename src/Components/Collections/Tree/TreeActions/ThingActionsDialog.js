@@ -9,7 +9,7 @@ import DialogButtons from './DialogButtons';
 import Edit from './Edit';
 import SubmitButton from './SubmitButton';
 import {CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
-import {ErrorMsg, SimpleModal} from '../../../Util';
+import {allDataTypes, ErrorMsg, SimpleModal} from '../../../Util';
 
 const tag = '8';
 
@@ -25,21 +25,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 
     const [state, setState] = React.useState(initialState);
     const {show, realChildType, realParentType, customTypes} = state;
-    const dataTypes = [
-        'str',
-        'int',
-        'float',
-        'bool',
-        'bytes',
-        'closure',
-        'regex',
-        'error',
-        'nil',
-        'list',
-        'set',
-        'thing',
-        ...customTypes.map(c=>c.name)
-    ];
+    const dataTypes = allDataTypes(customTypes);
 
     React.useEffect(() => {
         // Checks for the real type. From here on array is redefined to list or set. And thing is redefined to its potential custom type.

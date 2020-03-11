@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-import {EditActions, useEdit} from '../TreeActions/Context';
+import {EditActions, useEdit} from '../Context';
 
 const AddStr = ({identifier, ...props}) => {
     const [editState, dispatch] = useEdit();

@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {EditActions, useEdit} from '../TreeActions/Context';
+import {EditActions, useEdit} from '../Context';
 
 const useStyles = makeStyles(theme => ({
     container: {

@@ -32,7 +32,7 @@ const ErrorMsg = ({tag, msgError}) => {
             return(
                 <React.Fragment>
                     {msgErr.slice(0, startIndex)}
-                    <Link href={msgErr.slice(startIndex, startIndex+length)}>
+                    <Link target="_blank" href={msgErr.slice(startIndex, startIndex+length)}>
                         {msgErr.slice(startIndex, startIndex+length)}
                     </Link>
                     {msgErr.includes('https', startIndex+length) ? link(msgErr.slice(startIndex+length)):msgErr.slice(startIndex+length)}
@@ -42,7 +42,7 @@ const ErrorMsg = ({tag, msgError}) => {
             return(
                 <React.Fragment>
                     {msgErr.slice(0, startIndex)}
-                    <Link href={msgErr.slice(startIndex)}>
+                    <Link target="_blank" href={msgErr.slice(startIndex)}>
                         {msgErr.slice(startIndex)}
                     </Link>
                 </React.Fragment>

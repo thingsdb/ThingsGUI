@@ -144,7 +144,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
                             <ListItemText
                                 primary="Add properties"
                                 secondary={
-                                    <Link href="https://docs.thingsdb.net/v0/data-types/type/">
+                                    <Link target="_blank" href="https://docs.thingsdb.net/v0/data-types/type/">
                                         {'https://docs.thingsdb.net/v0/data-types/type/'}
                                     </Link>
                                 }

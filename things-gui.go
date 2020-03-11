@@ -128,6 +128,10 @@ func (app *App) SocketRouter() {
 		return handlers.Unwatch(app.client[s.ID()], data, app.timeout)
 	})
 
+	app.server.OnEvent("/", "run", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
+		return handlers.Run(app.client[s.ID()], data, app.timeout)
+	})
+
 	app.server.OnEvent("/", "getEvent", func(s socketio.Conn) {
 		eCh := app.client[s.ID()].EventCh
 		lCh := app.client[s.ID()].LogCh
