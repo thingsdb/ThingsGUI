@@ -26,7 +26,7 @@ const BuildQueryString = ({child, customTypes, parent}) => {
     };
 
     const input = (childVal, childType) => {
-        return childType == 'str' ? (childVal[0]=='\''? `${childVal}`:`'${childVal}'`)
+        return childType == 'str' ? (childVal[0]=='"'? `${childVal}`:`'${childVal}'`)
             : childType == 'nil' ? 'nil'
                 : `${childVal}`;
     };

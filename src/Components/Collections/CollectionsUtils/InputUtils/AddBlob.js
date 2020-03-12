@@ -75,7 +75,7 @@ AddBlob.defaultProps = {
 },
 
 AddBlob.propTypes = {
-    identifier: PropTypes.string
+    identifier: PropTypes.string,
 };
 
 

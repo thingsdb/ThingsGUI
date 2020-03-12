@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -15,9 +16,10 @@ type Data struct {
 	Scope       string            `json:"scope"`
 	Blob        map[string]string `json:"blob"`
 	Ids         []string          `json:"ids"`
-	Args        interface{}       `json:"args"`
+	Args        string            `json:"args"`
 	Procedure   string            `json:"procedure"`
-	ConvertArgs bool              `json:convertArgs`
+	ConvertArgs bool              `json:"convertArgs"`
+	EnableInts  bool              `json:"enableInts"`
 }
 
 func query(client *Client, data Data, blob map[string]interface{}, timeout uint16) (int, interface{}, util.Message) {
@@ -121,7 +123,22 @@ func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, util.
 }
 
 func Run(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
-	resp, err := client.Connection.Run(data.Procedure, data.Args, data.Scope, timeout, data.ConvertArgs)
+	fmt.Println(data.Args)
+	decoder := json.NewDecoder(strings.NewReader(data.Args))
+	var args interface{}
+	if err := decoder.Decode(&args); err != nil {
+		message := util.Msg(err, http.StatusInternalServerError)
+		return message.Status, "", message
+	}
+	fmt.Println(args)
+
+	if data.ConvertArgs || data.EnableInts {
+		fmt.Println("convert args", args)
+		args = util.Convert(args, data.ConvertArgs, data.EnableInts)
+	}
+	fmt.Println(args)
+
+	resp, err := client.Connection.Run(data.Procedure, args, data.Scope, timeout)
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
 }

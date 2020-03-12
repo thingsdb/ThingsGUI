@@ -9,28 +9,29 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {InputField, useEdit} from '../CollectionsUtils';
+import {EditActions, InputField, useEdit} from '../CollectionsUtils';
 import {ProcedureActions} from '../../../Stores';
-import {allDataTypes, BoolInput, ErrorMsg, SimpleModal} from '../../Util';
+import {BoolInput, ErrorMsg, SimpleModal} from '../../Util';
 
 const tag = '28';
 
 const RunProcedureDialog = ({open, onClose, procedures, scope}) => {
     const [state, setState] = React.useState({
         convertArgs: false,
+        enableInts: true,
         procedureName: '',
     });
-    const {convertArgs, procedureName} = state;
-    const editState = useEdit()[0];
+    const {convertArgs, enableInts, procedureName} = state;
+    const [editState, dispatch] = useEdit();
     const {val} = editState;
-    console.log(val);
 
-    const dataTypes = allDataTypes([]);
+    const dataTypes = ['str', 'int', 'float', 'bool', 'nil', 'list', 'thing'];
 
 
     React.useEffect(() => { // clean state
         setState({
             convertArgs: false,
+            enableInts: true,
             procedureName: '',
         });
     },
@@ -39,11 +40,15 @@ const RunProcedureDialog = ({open, onClose, procedures, scope}) => {
 
     const handleChangeProcedure = ({target}) => {
         const {value} = target;
+        EditActions.update(dispatch, {val: '', array: [], blob: {}});
         setState({...state, procedureName: value,});
     };
 
-    const handleChangConvArgs = (b) => {
+    const handleChangeConvArgs = (b) => {
         setState({...state, convertArgs: b=='true'});
+    };
+    const handleChangeEnableInts = (b) => {
+        setState({...state, enableInts: b=='true'});
     };
 
     const handleResult = (data) => {
@@ -55,6 +60,7 @@ const RunProcedureDialog = ({open, onClose, procedures, scope}) => {
             procedureName,
             val,
             convertArgs,
+            enableInts,
             tag,
             handleResult,
         );
@@ -77,7 +83,7 @@ const RunProcedureDialog = ({open, onClose, procedures, scope}) => {
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="h4" color='primary' component='span'>
-                            {`Run procedure from the ${scope}`}
+                            {`Run procedure: ${scope}`}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -91,7 +97,7 @@ const RunProcedureDialog = ({open, onClose, procedures, scope}) => {
                                 autoFocus
                                 margin="dense"
                                 id="procedureName"
-                                label="Type"
+                                label="Procedure"
                                 value={procedureName}
                                 onChange={handleChangeProcedure}
                                 fullWidth
@@ -113,16 +119,20 @@ const RunProcedureDialog = ({open, onClose, procedures, scope}) => {
                                 <ListItem>
                                     <ListItemText primary="Arguments:" />
                                 </ListItem>
-                                {selectedProcedure.arguments.map(a=>(
-                                    <ListItem key={a}>
-                                        <InputField dataType="variable" dataTypes={dataTypes} identifier={a} />
-                                    </ListItem>
-                                ))}
                                 <ListItem>
-                                    <ListItemText primary="Convert arguments" />
+                                    <InputField dataType="variable" dataTypes={dataTypes} variables={selectedProcedure.arguments} />
+                                </ListItem>
+                                {/* <ListItem>
+                                    <ListItemText primary="Use Thing ID" secondary="Enabling will cause  " />
                                 </ListItem>
                                 <ListItem>
-                                    <BoolInput input={`${convertArgs}`} cb={handleChangConvArgs} />
+                                    <BoolInput input={`${convertArgs}`} cb={handleChangeConvArgs} />
+                                </ListItem> */}
+                                <ListItem>
+                                    <ListItemText primary="Support integer values" secondary="Integer values will not be converted to floats." />
+                                </ListItem>
+                                <ListItem>
+                                    <BoolInput input={`${enableInts}`} cb={handleChangeEnableInts} />
                                 </ListItem>
                             </React.Fragment>
                         )}

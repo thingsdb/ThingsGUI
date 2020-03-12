@@ -23,7 +23,7 @@ AddClosure.defaultProps = {
 },
 
 AddClosure.propTypes = {
-    identifier: PropTypes.string
+    identifier: PropTypes.string,
 };
 
 export default AddClosure;

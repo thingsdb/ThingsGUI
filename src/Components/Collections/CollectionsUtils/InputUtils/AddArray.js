@@ -44,7 +44,9 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
     );
 
     React.useEffect(() => {
-        EditActions.updateVal(parentDispatch,isSet?`set([${array}])`:`[${array}]`, identifier);
+        let arr = isSet?`set([${array}])`:`[${array}]`;
+
+        EditActions.updateVal(parentDispatch, arr, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
     },
     [array.length],
@@ -58,7 +60,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
 
     const typeControls = (type, input) => {
         return type === 'nil' ? 'nil'
-            : type === 'str' ? (input[0]=='\''? `${input}`:`'${input}'`)
+            : type === 'str' ? (input[0]=='"'? `${input}`:`'${input}'`)
                 : `${input}`;
     };
 

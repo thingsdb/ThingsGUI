@@ -63,7 +63,7 @@ AddRegex.defaultProps = {
 },
 
 AddRegex.propTypes = {
-    identifier: PropTypes.string
+    identifier: PropTypes.string,
 
 };
 

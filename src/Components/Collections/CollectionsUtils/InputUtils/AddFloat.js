@@ -43,7 +43,7 @@ AddFloat.defaultProps = {
 },
 
 AddFloat.propTypes = {
-    identifier: PropTypes.string
+    identifier: PropTypes.string,
 };
 
 export default AddFloat;

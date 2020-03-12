@@ -42,7 +42,8 @@ const AddThing = ({customTypes, dataTypes, identifier, parentDispatch}) => {
     );
 
     React.useEffect(() => {
-        EditActions.updateVal(parentDispatch,`{${array}}`, identifier);
+        let arr = `{${array}}`;
+        EditActions.updateVal(parentDispatch, arr, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
     },
     [array.length],

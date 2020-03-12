@@ -44,7 +44,7 @@ AddInt.defaultProps = {
 },
 
 AddInt.propTypes = {
-    identifier: PropTypes.string
+    identifier: PropTypes.string,
 };
 
 export default AddInt;

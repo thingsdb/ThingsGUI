@@ -11,7 +11,7 @@ const AddStr = ({identifier, ...props}) => {
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.updateVal(dispatch, `'${value}'`, identifier);
+        EditActions.updateVal(dispatch, `"${value}"`, identifier);
     };
 
     const v = val[identifier]||(val.constructor === Object?'':val);
@@ -20,7 +20,7 @@ const AddStr = ({identifier, ...props}) => {
         <TextField
             name="value"
             type="text"
-            value={v[0]=='\''?v.trim().slice(1, -1):v}
+            value={v[0]=='"'?v.trim().slice(1, -1):v}
             spellCheck={false}
             onChange={handleOnChange}
             multiline
@@ -35,7 +35,7 @@ AddStr.defaultProps = {
 },
 
 AddStr.propTypes = {
-    identifier: PropTypes.string
+    identifier: PropTypes.string,
 };
 
 export default AddStr;

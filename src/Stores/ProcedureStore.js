@@ -41,12 +41,14 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onRunProcedure(scope, procedure, args, convertArgs, tag, cb) {
+    onRunProcedure(scope, procedure, args, convertArgs, enableInts, tag, cb) {
+        console.log(args, args.replace('{', '{"').replace(':', '":'))
         this.emit('run', {
             scope,
             procedure,
-            args,
-            convertArgs
+            args: args.replace('{', '{"').replace(':', '":'), // make it json proof
+            convertArgs,
+            enableInts,
         }).done((data) => {
             cb(data);
             console.log(data);

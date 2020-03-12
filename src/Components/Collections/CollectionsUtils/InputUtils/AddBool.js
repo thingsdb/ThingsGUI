@@ -23,7 +23,7 @@ AddBool.defaultProps = {
 },
 
 AddBool.propTypes = {
-    identifier: PropTypes.string
+    identifier: PropTypes.string,
 };
 
 export default AddBool;
