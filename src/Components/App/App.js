@@ -10,12 +10,13 @@ import StorageIcon from '@material-ui/icons/Storage';
 import VisibleIcon from '@material-ui/icons/Visibility';
 import {withVlow} from 'vlow';
 
-import {BottomBar, CollectionsMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
+import {BottomBar, CollectionsMenu, ProcedureMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
 import Collection from '../Collections';
 import User from '../Users';
 import Nodes from '../Nodes';
 import Editor from '../Editor';
 import Watcher from '../Watcher';
+import {Procedure} from '../Procedures';
 import {ApplicationStore} from '../../Stores';
 import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
 
@@ -33,6 +34,7 @@ const App = ({match}) => {
     const pages = {
         collection: <Collection />,
         user: <User />,
+        procedure: <Procedure />,
         query: <Editor />,
     };
 
@@ -74,17 +76,22 @@ const App = ({match}) => {
             mainContent={
                 <Grid container alignItems="flex-start">
                     <Grid container spacing={1} item xs={12} sm={4} md={3} lg={2} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
-                        <Grid item xs={4} sm={12} md={12}>
+                        <Grid item xs={3} sm={12} md={12}>
                             <Card>
                                 <CollectionsMenu />
                             </Card>
                         </Grid>
-                        <Grid item xs={4} sm={12} md={12}>
+                        <Grid item xs={3} sm={12} md={12}>
                             <Card>
                                 <UsersMenu />
                             </Card>
                         </Grid>
-                        <Grid item xs={4} sm={12} md={12}>
+                        <Grid item xs={3} sm={12} md={12}>
+                            <Card>
+                                <ProcedureMenu />
+                            </Card>
+                        </Grid>
+                        <Grid item xs={3} sm={12} md={12}>
                             <Card>
                                 <QueryEditorMenu />
                             </Card>

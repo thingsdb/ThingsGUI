@@ -1,51 +1,51 @@
 /* eslint-disable react/no-multi-comp */
+import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {CollectionActions, ProcedureActions} from '../../../Stores';
-import {Closure, ErrorMsg, SimpleModal} from '../../Util';
+import {CollectionActions, ProcedureActions} from '../../Stores';
+import {Closure, ErrorMsg, SimpleModal} from '../Util';
 
 
-const tag = '5';
+const tag = '12';
+const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
+    const [queryString, setQueryString] = React.useState('');
+    const [closure, setClosure] = React.useState('');
 
-const AddProcedureDialog = ({open, onClose, scope, cb}) => {
-    const [state, setState] = React.useState({
-        queryString: 'new_procedure("", )',
-        procedureName: '',
-        error: '',
-        closure: '',
-    });
-    const {queryString, procedureName, error, closure} = state;
-
-
-    React.useEffect(() => { // clean state
-        setState({
-            queryString: 'new_procedure("", )',
-            procedureName: '',
-            error: '',
-            closure: '',
-        });
+    React.useEffect(() => {
+        if (open) {
+            setClosure(procedure.definition);
+            setQueryString(`del_procedure("${procedure.name}"); new_procedure("${procedure.name}", ${procedure.definition});`);
+        }
     },
-    [open],
+    [open, procedure.definition, procedure.name],
     );
 
-    const handleChange = ({target}) => {
-        const {value} = target;
-        setState({...state, procedureName: value, queryString: `new_procedure("${value}", ${closure})`});
-    };
-
     const handleClosure = (c) => {
-        setState({...state, closure: c, queryString: `new_procedure("${procedureName}", ${c})`});
+        setClosure(c);
+        setQueryString(`del_procedure("${procedure.name}"); new_procedure("${procedure.name}", ${c});`);
     };
-
 
     const handleClickOk = () => {
+        CollectionActions.rawQuery(
+            scope,
+            closure,
+            tag,
+            () => {
+                handleSubmit();
+            }
+        );
+    };
+
+
+    const handleSubmit = () => {
         CollectionActions.rawQuery(
             scope,
             queryString,
@@ -57,14 +57,13 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
         );
     };
 
-
     return (
         <SimpleModal
+            button={button}
             open={open}
             onClose={onClose}
             onOk={handleClickOk}
             maxWidth="sm"
-            disableOk={Boolean(error)}
         >
             <Grid container spacing={1}>
                 <Grid container spacing={1} item xs={12}>
@@ -73,7 +72,7 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
                             {'Customizing ThingDB procedure:'}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {'Add new procedure'}
+                            {procedure.name||''}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -107,23 +106,19 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
                             </ListItem>
                         </Collapse>
                         <ListItem>
-                            <TextField
-                                name="procedureName"
-                                label="Name"
-                                type="text"
-                                value={procedureName}
-                                spellCheck={false}
-                                onChange={handleChange}
-                                fullWidth
-                            />
-                        </ListItem>
-                        <ListItem>
                             <Typography variant="body1" >
                                 {'Add closure:'}
                             </Typography>
                         </ListItem>
                         <ListItem>
-                            <Closure cb={handleClosure} />
+                            <Closure input={closure} cb={handleClosure} />
+                        </ListItem>
+                        <ListItem>
+                            <Grid container item xs={11} justify="flex-end">
+                                <Box fontSize={10} fontStyle="italic" m={1}>
+                                    {`Created on: ${moment(procedure.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                                </Box>
+                            </Grid>
                         </ListItem>
                     </List>
                 </Grid>
@@ -132,12 +127,19 @@ const AddProcedureDialog = ({open, onClose, scope, cb}) => {
     );
 };
 
-
-AddProcedureDialog.propTypes = {
-    open: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    scope: PropTypes.string.isRequired,
-    cb: PropTypes.func.isRequired,
+EditProcedureDialog.defaultProps = {
+    button: null,
+    procedure: {},
+    cb: () => null,
 };
 
-export default AddProcedureDialog;
+EditProcedureDialog.propTypes = {
+    button: PropTypes.object,
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    procedure: PropTypes.object,
+    scope: PropTypes.string.isRequired,
+    cb: PropTypes.func,
+};
+
+export default EditProcedureDialog;

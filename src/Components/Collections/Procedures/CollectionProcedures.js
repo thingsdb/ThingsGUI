@@ -1,56 +1,52 @@
 import Chip from '@material-ui/core/Chip';
 import PropTypes from 'prop-types';
 import React from 'react';
+import {withVlow} from 'vlow';
 
-import AddProcedureDialog from './AddProcedureDialog';
-import EditProcedureDialog from './EditProcedureDialog';
-import RunProcedureDialog from './RunProcedureDialog';
-import {EditProvider} from '../CollectionsUtils';
-import {ProcedureActions} from '../../../Stores';
+import {ProcedureDialogs} from '../../Procedures';
+import {ProcedureActions, ProcedureStore} from '../../../Stores';
 import {ChipsCard} from '../../Util';
+
+
+const withStores = withVlow([{
+    store: ProcedureStore,
+    keys: ['procedures']
+}]);
 
 const tag = '6';
 
-const CollectionProcedures = ({scope}) => {
+const CollectionProcedures = ({procedures, scope}) => {
     const [index, setindex] = React.useState(null);
-    const [procedures, setProcedures] = React.useState([]);
-
-    const handleProcedures = (p) => {
-        setProcedures(p);
-    };
 
     React.useEffect(() => {
-        ProcedureActions.getProcedures(scope, tag, handleProcedures);
+        ProcedureActions.getProcedures(scope, tag);
 
     }, [scope]);
 
-    const [openAdd, setOpenAdd] = React.useState(false);
-    const [openEdit, setOpenEdit] = React.useState(false);
-    const [openRun, setOpenRun] = React.useState(false);
+    const [open, setOpen] = React.useState({
+        add: false,
+        edit: false,
+        run: false,
+    });
 
 
     const handleClickEdit = (i) => {
         setindex(i);
-        setOpenEdit(true);
-    };
-    const handleCloseEdit = () => {
-        setOpenEdit(false);
+        setOpen({...open, edit: true});
     };
 
     const handleClickAdd = () => {
         setindex(null);
-        setOpenAdd(true);
-    };
-    const handleCloseAdd = () => {
-        setOpenAdd(false);
+        setOpen({...open, add: true});
     };
 
     const handleClickRun = () => {
         setindex(null);
-        setOpenRun(true);
+        setOpen({...open, run: true});
     };
-    const handleCloseRun = () => {
-        setOpenRun(false);
+
+    const handleClose = (c) => {
+        setOpen({...open, ...c});
     };
 
     const handleClickDelete = (i, cb) => {
@@ -59,9 +55,8 @@ const CollectionProcedures = ({scope}) => {
             scope,
             item.name,
             '27',
-            (p)=> {
+            ()=> {
                 cb();
-                handleProcedures(p);
             }
         );
     };
@@ -70,7 +65,7 @@ const CollectionProcedures = ({scope}) => {
         <React.Fragment>
             <ChipsCard
                 expand={false}
-                items={procedures}
+                items={procedures[scope]||[]}
                 onAdd={handleClickAdd}
                 onClick={handleClickEdit}
                 onDelete={handleClickDelete}
@@ -85,17 +80,16 @@ const CollectionProcedures = ({scope}) => {
                 }
                 title="procedures"
             />
-            <AddProcedureDialog open={openAdd} onClose={handleCloseAdd} scope={scope} cb={handleProcedures} />
-            <EditProcedureDialog open={openEdit} onClose={handleCloseEdit} procedure={index!==null?procedures[index]:{}} scope={scope} cb={handleProcedures} />
-            <EditProvider>
-                <RunProcedureDialog open={openRun} onClose={handleCloseRun} procedures={procedures} scope={scope} />
-            </EditProvider>
+            <ProcedureDialogs index={index} open={open} onClose={handleClose} procedures={procedures[scope]||[]} scope={scope} />
         </React.Fragment>
     );
 };
 
 CollectionProcedures.propTypes = {
     scope: PropTypes.string.isRequired,
+
+    /* procedures properties */
+    procedures: ProcedureStore.types.procedures.isRequired,
 };
 
-export default CollectionProcedures;
+export default withStores(CollectionProcedures);

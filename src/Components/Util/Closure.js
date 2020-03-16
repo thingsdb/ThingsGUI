@@ -56,6 +56,11 @@ const Closure = ({input, cb}) => {
     return(
         <Grid className={classes.container} container spacing={2}>
             <Grid container item xs={12}>
+                <Typography variant="caption">
+                    {'Arguments'}
+                </Typography>
+            </Grid>
+            <Grid container item xs={12}>
                 <Grid item xs={1} container justify="flex-start">
                     <Typography variant="h3" color="primary">
                         {'|'}

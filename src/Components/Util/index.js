@@ -126,7 +126,11 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
+const addDoubleQuotesAroundKeys = (strObject) => strObject.trim().replace(/\{/g, '{"').replace(/:/g, '":').replace(/,(?=[^{]*\})/g, ',"');
+
+
 export {
+    addDoubleQuotesAroundKeys,
     allDataTypes,
     ArrayLayout,
     AutoSelect,

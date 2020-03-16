@@ -37,34 +37,11 @@ const AddVariable = ({variables, customTypes, dataTypes, identifier, parentDispa
     const [editState, dispatch] = useEdit();
     const {array, val, blob} = editState;
 
-    const convertToRealType = (v, b, t) => {
-        console.log(v, b);
-        switch(t){
-        // case 'int':
-        //     if (Number.isNaN(Number.parseInt(v))) {
-        //         return 0;
-        //     }
-        //     return parseInt(v);
-        // case 'float':
-        //     if (Number.isNaN(Number.parseFloat(v))) {
-        //         return 0;
-        //     }
-        //     return parseFloat(v);
-        // case 'str': return v.slice(1,-1);
-        case 'bytes':
-            Object.keys(b).map(k=>{
-                v=v.replace(k, b[k]);
-                console.log(v)
-            });
-            return v;
-        default: return v;
-        }
-    };
 
     React.useEffect(() => {
         EditActions.update(dispatch, {val: '', array: [], blob: {}});
     },
-    [],
+    [JSON.stringify(variables)],
     );
 
     const handleChangeType = (v) => ({target}) => {
@@ -73,7 +50,7 @@ const AddVariable = ({variables, customTypes, dataTypes, identifier, parentDispa
         if (value == 'nil') {
             EditActions.updateVal(dispatch, 'nil', v);
         } else {
-            EditActions.updateVal(dispatch, '');
+            EditActions.updateVal(dispatch, '', v);
         }
     };
 
@@ -102,7 +79,7 @@ const AddVariable = ({variables, customTypes, dataTypes, identifier, parentDispa
                     <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={array} groupSign="{">
                         <Collapse className={classes.fullWidth} in={open} timeout="auto">
                             {( variables.map(v => (
-                                <Grid key={v} container item xs={12} spacing={1} alignItems="center" >
+                                <Grid key={v} className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
                                     <Grid item xs={12}>
                                         <Typography color="primary" variant="body1" >
                                             {v}

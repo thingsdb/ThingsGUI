@@ -211,7 +211,7 @@ func (app *App) Start() {
 
 	http.Handle("/socket.io/", app.server)
 
-	log.Printf("Serving at %s:%d...", app.host, app.port)
+	log.Printf("Serving at http://%s:%d...", app.host, app.port)
 
 	if !app.disableOpenBrowser {
 		go open(fmt.Sprintf("http://%s:%d/", app.host, app.port))

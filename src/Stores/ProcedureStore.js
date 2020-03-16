@@ -1,8 +1,10 @@
+import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 
 const ProcedureActions = Vlow.createActions([
+    'getProcedure',
     'getProcedures',
     'deleteProcedure',
     'runProcedure'
@@ -11,16 +13,47 @@ const ProcedureActions = Vlow.createActions([
 
 class ProcedureStore extends BaseStore {
 
-    constructor() {
-        super(ProcedureActions);
+    static types = {
+        procedure: PropTypes.object,
+        procedures: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
     }
 
-    onGetProcedures(scope, tag, cb) {
+    static defaults = {
+        procedure: {},
+        procedures: {},
+    }
+
+    constructor() {
+        super(ProcedureActions);
+        this.state = ProcedureStore.defaults;
+    }
+
+    onGetProcedure(scope, tag=null, cb=()=>null) {
+        const query = 'procedure_info()';
+        this.emit('query', {
+            query,
+            scope
+        }).done((data) => {
+            this.setState({
+                procedure: data
+            });
+            cb(data);
+        }).fail((event, status, message) => {
+            tag===null?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
+            return [];
+        });
+    }
+
+    onGetProcedures(scope, tag,  cb=()=>null) {
         const query = 'procedures_info()';
         this.emit('query', {
             query,
             scope
         }).done((data) => {
+            this.setState(prevState => {
+                const procedures = Object.assign({}, prevState.procedures, {[scope]: data});
+                return {procedures};
+            });
             cb(data);
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
@@ -28,25 +61,28 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onDeleteProcedure(scope, name, tag, cb) {
+    onDeleteProcedure(scope, name, tag,  cb=()=>null) {
         const query = `del_procedure('${name}'); procedures_info();`;
         this.emit('query', {
             query,
             scope
         }).done((data) => {
-            cb(data);
+            this.setState(prevState => {
+                const procedures = Object.assign({}, prevState.procedures, {[scope]: data});
+                return {procedures};
+            });
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             return [];
         });
     }
 
-    onRunProcedure(scope, procedure, args, convertArgs, enableInts, tag, cb) {
-        console.log(args, args.replace('{', '{"').replace(':', '":'))
+    onRunProcedure(scope, procedure, jsonProofArgs, convertArgs, enableInts, tag,  cb=()=>null) {
         this.emit('run', {
             scope,
             procedure,
-            args: args.replace('{', '{"').replace(':', '":'), // make it json proof
+            args: jsonProofArgs,
             convertArgs,
             enableInts,
         }).done((data) => {

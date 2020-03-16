@@ -5,10 +5,13 @@ import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Divider from '@material-ui/core/Divider';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -25,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Menu = ({title, icon, items, addItem, onClickItem}) => {
+const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
@@ -43,6 +46,13 @@ const Menu = ({title, icon, items, addItem, onClickItem}) => {
                     {open ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
                 </ListItemIcon>
                 <ListItemText primary={title} />
+                {onRefresh() && (
+                    <ListItemSecondaryAction>
+                        <IconButton onClick={onRefresh}>
+                            <RefreshIcon color="primary" />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                )}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
@@ -71,12 +81,17 @@ const Menu = ({title, icon, items, addItem, onClickItem}) => {
     );
 };
 
+Menu.defaultProps = {
+    onRefresh: ()=>null,
+};
+
 Menu.propTypes = {
     title: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
     icon: PropTypes.element.isRequired,
     addItem: PropTypes.object.isRequired,
     onClickItem: PropTypes.func.isRequired,
+    onRefresh: PropTypes.func,
 
 };
 
