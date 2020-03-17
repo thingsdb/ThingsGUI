@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 import { Info } from '../../Util';
 import CountersReset from './CountersReset';
@@ -50,15 +52,10 @@ const header = [
 
 const Counters = ({nodeId, offline, counters}) => {
     const classes = useStyles();
-    React.useEffect(() => {
-        const setPoll = setInterval(
-            () => {
-                NodesActions.getCounters(nodeId); // update of the selected node; to get the latest info
-            }, 5000);
-        return () => {
-            clearInterval(setPoll);
-        };
-    }, []);
+
+    const handleRefresh = () => {
+        NodesActions.getCounters(nodeId); // update of the selected node; to get the latest info
+    };
 
     return (
         <Grid
@@ -69,8 +66,15 @@ const Counters = ({nodeId, offline, counters}) => {
                 <Info header={header} content={counters} />
             </Grid>
             {offline ? null : (
-                <Grid item xs={12}>
-                    <CountersReset nodeId={nodeId} />
+                <Grid item container xs={12} spacing={1} >
+                    <Grid item>
+                        <CountersReset nodeId={nodeId} />
+                    </Grid>
+                    <Grid item>
+                        <Button variant="outlined" color="primary" onClick={handleRefresh} >
+                            <RefreshIcon color="primary" />
+                        </Button>
+                    </Grid>
                 </Grid>
             )}
         </Grid>
