@@ -19,7 +19,7 @@ import (
 )
 
 // AppVersion exposes version information
-const AppVersion = "0.0.4-beta"
+const AppVersion = "0.0.5-beta"
 
 var connFile = ".things-gui_config"
 
@@ -211,7 +211,7 @@ func (app *App) Start() {
 
 	http.Handle("/socket.io/", app.server)
 
-	log.Printf("Serving at http://%s:%d...", app.host, app.port)
+	log.Printf("Serving at http://%s:%d/", app.host, app.port)
 
 	if !app.disableOpenBrowser {
 		go open(fmt.Sprintf("http://%s:%d/", app.host, app.port))
