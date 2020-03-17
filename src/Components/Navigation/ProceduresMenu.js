@@ -1,12 +1,12 @@
-import React from 'react';
+import { makeStyles} from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import {withVlow} from 'vlow';
-import { makeStyles} from '@material-ui/core/styles';
+import React from 'react';
 
 import {AddProcedureDialog} from '../Procedures';
-import {Menu} from '../Util';
+import {Menu, orderByName} from '../Util';
 import {ApplicationActions, ProcedureActions, ProcedureStore} from '../../Stores';
 
 const withStores = withVlow([{
@@ -46,7 +46,7 @@ const ProceduresMenu = ({procedures}) => {
     }, []);
 
     const handleRefresh = () => {
-        ProcedureActions.getProcedures();
+        ProcedureActions.getProcedures(scope);
     };
 
     const handleClickProcedure = (i) => {
@@ -61,12 +61,14 @@ const ProceduresMenu = ({procedures}) => {
         setOpen(false);
     };
 
+    const orderedProcedure = orderByName(procedures[scope]||[]);
+
     return (
         <React.Fragment>
             <Menu
                 title="PROCEDURES"
                 icon={<PlayArrowIcon color="primary" />}
-                items={procedures[scope]||[]}
+                items={orderedProcedure}
                 addItem={
                     <ButtonBase className={classes.buttonBase} onClick={handleClickAdd} >
                         <AddBoxIcon className={classes.icon} />

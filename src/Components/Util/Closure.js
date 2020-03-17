@@ -10,9 +10,29 @@ import VariablesArray from './VariablesArray';
 
 
 const useStyles = makeStyles(theme => ({
+    border: {
+        margin: theme.spacing(1),
+        padding: theme.spacing(2),
+        border: '1px solid #525557',
+        position: 'relative',
+        borderRadius: '5px',
+        zIndex: 1,
+    },
     container: {
         paddingTop: theme.spacing(1),
         marginTop: theme.spacing(1),
+    },
+    label: {
+        position: 'absolute',
+        top: '-10px',
+        left: '10px',
+        height: '20px',
+        border: 'None',
+        textAlign: 'center',
+        paddingLeft: '3px',
+        paddingRight: '3px',
+        backgroundColor: theme.palette.background.paper,
+        zIndex: 2,
     },
 }));
 
@@ -54,8 +74,8 @@ const Closure = ({input, cb}) => {
 
 
     return(
-        <Grid className={classes.container} container spacing={2}>
-            <Grid container item xs={12}>
+        <Grid className={classes.container} container spacing={3}>
+            {/* <Grid container item xs={12}>
                 <Typography variant="caption">
                     {'Arguments'}
                 </Typography>
@@ -74,6 +94,12 @@ const Closure = ({input, cb}) => {
                         {'|'}
                     </Typography>
                 </Grid>
+            </Grid> */}
+            <Grid className={classes.border} container item xs={12}>
+                <Typography className={classes.label} variant="caption">
+                    {'Arguments'}
+                </Typography>
+                <VariablesArray cb={handleVarArray} input={variables} />
             </Grid>
             <Grid item xs={12} container justify="center">
                 <TextField

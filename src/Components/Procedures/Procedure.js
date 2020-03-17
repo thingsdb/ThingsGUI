@@ -6,9 +6,7 @@ import React from 'react';
 
 import {findItem, isObjectEmpty, TitlePage} from '../Util';
 import {ApplicationStore, ProcedureActions, ProcedureStore} from '../../Stores';
-import Edit from './Edit';
-import Remove from './Remove';
-import Run from './Run';
+import {Edit, Remove, Run} from './Actions';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -48,14 +46,14 @@ const Procedure = ({match, procedures}) => {
                     content={
                         <Grid item md={12} xs={12}>
                             <Grid container >
-                                <Grid item lg={8} md={12} xs={12}>
+                                <Grid item lg={8} md={8} xs={12}>
                                     <Card>
                                         <CardContent>
                                             <Edit procedure={selectedProcedure} />
                                         </CardContent>
                                     </Card>
                                 </Grid>
-                                <Grid container item lg={4} md={12} spacing={1} direction="row" justify="center" alignItems="center" >
+                                <Grid container item lg={4} md={4} spacing={1} justify="center" alignItems="center" >
                                     {buttons.map(button => (
                                         <Grid key={button.name} item>
                                             {button.component}

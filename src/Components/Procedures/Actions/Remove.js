@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CardButton, ErrorMsg, SimpleModal } from '../Util';
-import {ProcedureActions} from '../../Stores';
+import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
+import {ProcedureActions} from '../../../Stores';
 
 
 const tag = '22';

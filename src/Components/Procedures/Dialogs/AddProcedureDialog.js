@@ -8,8 +8,8 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {CollectionActions, ProcedureActions} from '../../Stores';
-import {Closure, ErrorMsg, SimpleModal} from '../Util';
+import {CollectionActions, ProcedureActions} from '../../../Stores';
+import {Closure, ErrorMsg, SimpleModal} from '../../Util';
 
 
 const tag = '5';

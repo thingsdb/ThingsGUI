@@ -73,6 +73,19 @@ const thingValue = (type, thing, customTypes=[]) => {
 
 const isObjectEmpty = (obj) => obj.constructor === Object && Object.entries(obj).length === 0;
 const findItem = (index, target) => target.length ? (index+1 > target.length ? {}: target[index]) : {}; //findItem(index-1, target) : target[index]) : {};
+const orderByName = (arr) => arr.sort((a, b) => {
+    const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+    const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+        return -1;
+    }
+    if (nameA > nameB) {
+        return 1;
+    }
+
+    // names must be equal
+    return 0;
+});
 
 const getScopes = (collections) => [
     [
@@ -156,6 +169,7 @@ export {
     ListHeader,
     LocalErrorMsg,
     Menu,
+    orderByName,
     QueryInput,
     QueryOutput,
     ServerError,

@@ -75,29 +75,29 @@ const App = ({match}) => {
             }
             mainContent={
                 <Grid container alignItems="flex-start">
-                    <Grid container spacing={1} item xs={12} sm={4} md={3} lg={2} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
-                        <Grid item xs={3} sm={12} md={12}>
+                    <Grid container spacing={1} item xs={12} sm={12} md={3} lg={2} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
+                        <Grid item xs={12} sm={3} md={12}>
                             <Card>
                                 <CollectionsMenu />
                             </Card>
                         </Grid>
-                        <Grid item xs={3} sm={12} md={12}>
+                        <Grid item xs={12} sm={3} md={12}>
                             <Card>
                                 <UsersMenu />
                             </Card>
                         </Grid>
-                        <Grid item xs={3} sm={12} md={12}>
+                        <Grid item xs={12} sm={3} md={12}>
                             <Card>
                                 <ProcedureMenu />
                             </Card>
                         </Grid>
-                        <Grid item xs={3} sm={12} md={12}>
+                        <Grid item xs={12} sm={3} md={12}>
                             <Card>
                                 <QueryEditorMenu />
                             </Card>
                         </Grid>
                     </Grid>
-                    <Grid container item xs={12} sm={8} md={9} lg={10} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
+                    <Grid container item xs={12} sm={12} md={9} lg={10} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
                         {pages[match.path]}
                     </Grid>
                 </Grid>

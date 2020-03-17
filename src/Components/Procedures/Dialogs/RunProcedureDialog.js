@@ -14,9 +14,9 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {EditActions, InputField, useEdit} from '../Collections/CollectionsUtils';
-import {ProcedureActions} from '../../Stores';
-import {addDoubleQuotesAroundKeys, BoolInput, ErrorMsg, SimpleModal, QueryOutput} from '../Util';
+import {EditActions, InputField, useEdit} from '../../Collections/CollectionsUtils';
+import {ProcedureActions} from '../../../Stores';
+import {addDoubleQuotesAroundKeys, BoolInput, ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
 
 const useStyles = makeStyles(theme => ({
     nested: {
@@ -83,7 +83,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
         const jsonProof = addDoubleQuotesAroundKeys(val); // make it json proof
         ProcedureActions.runProcedure(
             scope,
-            procedureName,
+            procedure&&procedure.name||procedureName,
             jsonProof,
             convertArgs,
             enableInts,

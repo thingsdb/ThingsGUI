@@ -87,10 +87,8 @@ class ProcedureStore extends BaseStore {
             enableInts,
         }).done((data) => {
             cb(data);
-            console.log(data);
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
-            console.log(message.Log);
         });
     }
 }

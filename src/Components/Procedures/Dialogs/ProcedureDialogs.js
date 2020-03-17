@@ -4,7 +4,7 @@ import React from 'react';
 import AddProcedureDialog from './AddProcedureDialog';
 import EditProcedureDialog from './EditProcedureDialog';
 import RunProcedureDialog from './RunProcedureDialog';
-import {EditProvider} from '../Collections/CollectionsUtils';
+import {EditProvider} from '../../Collections/CollectionsUtils';
 
 
 const ProcedureDialogs = ({index, procedures, scope, open, onClose}) => {

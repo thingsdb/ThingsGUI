@@ -1,23 +1,30 @@
 /* eslint-disable react/no-multi-comp */
+import { makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 
-import {CollectionActions, ProcedureActions} from '../../Stores';
-import {Closure, ErrorMsg} from '../Util';
+import {CollectionActions, ProcedureActions} from '../../../Stores';
+import {CardButton, Closure, ErrorMsg} from '../../Util';
 
+const useStyles = makeStyles(() => ({
+    backgroundButton: {
+        width: 95,
+        height: 98,
+        borderRadius: '50%',
+        backgroundColor: '#2E3336',
+
+    },
+}));
 
 const tag = '12';
 const scope = '@thingsdb';
 const Edit = ({procedure}) => {
+    const classes = useStyles();
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');
 
@@ -76,9 +83,9 @@ const Edit = ({procedure}) => {
                         </Grid>
                     </ListItem>
                     <ListItem>
-                        <Button onClick={handleClickOk} color="primary">
-                            {'Save'}
-                        </Button>
+                        <div className={classes.backgroundButton}>
+                            <CardButton onClick={handleClickOk} title="Save" style={{width:'80px', height:'80px'}} />
+                        </div>
                     </ListItem>
                 </List>
             </Grid>

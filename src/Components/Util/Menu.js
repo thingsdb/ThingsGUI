@@ -1,18 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import BlockIcon from '@material-ui/icons/Block';
-import Collapse from '@material-ui/core/Collapse';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Collapse from '@material-ui/core/Collapse';
 import Divider from '@material-ui/core/Divider';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import PropTypes from 'prop-types';
+import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -45,12 +45,18 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                 <ListItemIcon>
                     {open ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
                 </ListItemIcon>
-                <ListItemText primary={title} />
-                {onRefresh() && (
+                <ListItemText
+                    primary={title}
+                    primaryTypographyProps={{
+                        display: 'block',
+                        noWrap: true,
+                    }}
+                />
+                {onRefresh && (
                     <ListItemSecondaryAction>
-                        <IconButton onClick={onRefresh}>
+                        <ButtonBase onClick={onRefresh}>
                             <RefreshIcon color="primary" />
-                        </IconButton>
+                        </ButtonBase>
                     </ListItemSecondaryAction>
                 )}
             </ListItem>
@@ -82,7 +88,7 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
 };
 
 Menu.defaultProps = {
-    onRefresh: ()=>null,
+    onRefresh: null,
 };
 
 Menu.propTypes = {

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CardButton } from '../Util';
-import RunProcedureDialog from './RunProcedureDialog';
-import {EditProvider} from '../Collections/CollectionsUtils';
+import { CardButton } from '../../Util';
+import RunProcedureDialog from '../Dialogs/RunProcedureDialog';
+import {EditProvider} from '../../Collections/CollectionsUtils';
 
 
 
