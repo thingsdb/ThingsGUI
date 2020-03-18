@@ -60,7 +60,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
 
     const typeControls = (type, input) => {
         return type === 'nil' ? 'nil'
-            : type === 'str' ? (input[0]=='"'? `${input}`:`'${input}'`)
+            : type === 'str' ? (input[0]=='\''? `${input}`:`'${input}'`)
                 : `${input}`;
     };
 

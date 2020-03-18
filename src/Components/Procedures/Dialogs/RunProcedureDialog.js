@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {EditActions, InputField, useEdit} from '../../Collections/CollectionsUtils';
 import {ProcedureActions} from '../../../Stores';
-import {addDoubleQuotesAroundKeys, BoolInput, ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
+import {addDoubleQuotesAroundKeys, BoolInput, changeSingleToDoubleQuotes, ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
 
 const useStyles = makeStyles(theme => ({
     nested: {
@@ -80,7 +80,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
         elmnt.scrollIntoView();
     };
     const handleClickOk = () => {
-        const jsonProof = addDoubleQuotesAroundKeys(val); // make it json proof
+        const jsonProof = changeSingleToDoubleQuotes(addDoubleQuotesAroundKeys(val)); // make it json proof
         ProcedureActions.runProcedure(
             scope,
             procedure&&procedure.name||procedureName,
