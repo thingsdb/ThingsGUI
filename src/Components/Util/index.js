@@ -139,7 +139,9 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
-const addDoubleQuotesAroundKeys = (strObject) => strObject.trim().replace(/\{/g, '{"').replace(/:/g, '":').replace(/,(?=[^{]*\})/g, ',"');
+const addDoubleQuotesAroundKeys = (strObject) => strObject.replace(/\{/g, '{"').replace(/:/g, '":').replace(/,(?=[^{]*\})/g, ',"');
+const changeSingleToDoubleQuotes = (strObject) => strObject.replace(/'/g, '"');
+
 
 
 export {
@@ -150,6 +152,7 @@ export {
     BoolInput,
     Buttons,
     CardButton,
+    changeSingleToDoubleQuotes,
     checkType,
     ChipsCard,
     Closure,

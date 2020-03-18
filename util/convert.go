@@ -16,7 +16,6 @@ func Convert(arg interface{}, convertArgs bool, enableInts bool) interface{} {
 		return arr
 	case map[string]interface{}:
 		id := v["#"]
-		fmt.Println("id", id)
 		if id != nil && convertArgs {
 			if t, ok := id.(float64); ok {
 				return map[string]int{"#": int(t)}
