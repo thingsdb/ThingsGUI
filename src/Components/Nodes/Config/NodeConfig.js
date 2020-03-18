@@ -6,8 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import Tooltip from '@material-ui/core/Tooltip';
 
-import { Info } from '../../Util';
+import { Info, StartStopPolling } from '../../Util';
 import Loglevel from './Loglevel';
 import Shutdown from './Shutdown';
 import {NodesActions, NodesStore} from '../../../Stores';
@@ -96,9 +97,14 @@ const NodeConfig = ({nodeId, offline, node}) => {
                         <Shutdown node={node} />
                     </Grid>
                     <Grid item>
-                        <Button variant="outlined" color="primary" onClick={handleRefresh} >
-                            <RefreshIcon color="primary" />
-                        </Button>
+                        <Tooltip disableFocusListener disableTouchListener title="Refresh node info">
+                            <Button variant="outlined" color="primary" onClick={handleRefresh} >
+                                <RefreshIcon color="primary" />
+                            </Button>
+                        </Tooltip>
+                    </Grid>
+                    <Grid item>
+                        <StartStopPolling onPoll={handleRefresh} title="node info" />
                     </Grid>
                 </Grid>
             )}

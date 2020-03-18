@@ -15,27 +15,11 @@ const withStores = withVlow([{
 
 
 const Nodes = ({nodes, connectedNode}) => {
-    const {intervalId, setIntervalId} = React.useState(null);
     React.useEffect(() => {
         NodesActions.getNodes(NodesActions.getStreamInfo);
-        return () => {
-            stopPoll();
-        };
     }, []);
     const handleRefresh = () => {
         NodesActions.getNodes();
-    };
-
-    const startPoll = () => {
-        const setPoll = setInterval(
-            () => {
-                NodesActions.getNodes();
-            }, 1000);
-        setIntervalId(setPoll);
-    };
-
-    const stopPoll = () => {
-        clearInterval(intervalId);
     };
 
 

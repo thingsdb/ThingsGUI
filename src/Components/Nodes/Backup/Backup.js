@@ -14,7 +14,7 @@ import SuccessIcon from '@material-ui/icons/Check';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
-import { TableWithButtons } from '../../Util';
+import { TableWithButtons, StartStopPolling } from '../../Util';
 import {NodesActions, NodesStore} from '../../../Stores';
 import Add from './Add';
 import Remove from './Remove';
@@ -104,9 +104,14 @@ const Backup = ({nodeId, offline, backups}) => {
                         <Add nodeId={nodeId} />
                     </Grid>
                     <Grid item>
-                        <Button variant="outlined" color="primary" onClick={handleRefresh} >
-                            <RefreshIcon color="primary" />
-                        </Button>
+                        <Tooltip disableFocusListener disableTouchListener title="Refresh backup info">
+                            <Button variant="outlined" color="primary" onClick={handleRefresh} >
+                                <RefreshIcon color="primary" />
+                            </Button>
+                        </Tooltip>
+                    </Grid>
+                    <Grid item>
+                        <StartStopPolling onPoll={handleRefresh} title="backups info" />
                     </Grid>
                 </Grid>
             )}

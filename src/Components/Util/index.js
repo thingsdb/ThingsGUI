@@ -19,6 +19,7 @@ import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
+import StartStopPolling from './StartStopPolling';
 import TableWithButtons from './TableWithButtons';
 import ThingsTree from './ThingsTree';
 import TimePeriodPicker from './TimePeriodPicker';
@@ -177,6 +178,7 @@ export {
     QueryOutput,
     ServerError,
     SimpleModal,
+    StartStopPolling,
     TableWithButtons,
     ThingsTree,
     thingValue,

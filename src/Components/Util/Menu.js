@@ -13,6 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -54,9 +55,11 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                 />
                 {onRefresh && (
                     <ListItemSecondaryAction>
-                        <ButtonBase onClick={onRefresh}>
-                            <RefreshIcon color="primary" />
-                        </ButtonBase>
+                        <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title.toLowerCase()} info`}>
+                            <ButtonBase onClick={onRefresh}>
+                                <RefreshIcon color="primary" />
+                            </ButtonBase>
+                        </Tooltip>
                     </ListItemSecondaryAction>
                 )}
             </ListItem>

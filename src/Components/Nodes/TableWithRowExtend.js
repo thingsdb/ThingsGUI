@@ -13,6 +13,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 
@@ -56,11 +57,13 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                     ))}
                     <TableCell colSpan={buttons&&rows.length ? buttons(rows[0]).length+1 : 1}>
                         {onRefresh&&(
-                            <ButtonBase onClick={onRefresh}>
-                                <RefreshIcon color="primary" />
-                            </ButtonBase>
+                            <Tooltip disableFocusListener disableTouchListener title="Refresh nodes info">
+                                <ButtonBase onClick={onRefresh}>
+                                    <RefreshIcon color="primary" />
+                                </ButtonBase>
+                            </Tooltip>
                         )}
-                    </ TableCell>
+                    </TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>

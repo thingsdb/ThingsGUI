@@ -8,7 +8,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import {NodesActions, NodesStore} from '../../../Stores';
-import { SimpleModal } from '../../Util';
+import { SimpleModal, StartStopPolling } from '../../Util';
 import NodeGraph from './NodeGraph';
 
 
@@ -41,9 +41,14 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
     return(
         <SimpleModal
             actionButtons={
-                <Button variant="outlined" color="primary" onClick={handleRefresh} >
-                    <RefreshIcon color="primary" />
-                </Button>
+                <React.Fragment>
+                    <Tooltip disableFocusListener disableTouchListener title="Refresh stream info">
+                        <Button variant="outlined" color="primary" onClick={handleRefresh} >
+                            <RefreshIcon color="primary" />
+                        </Button>
+                    </Tooltip>
+                    <StartStopPolling onPoll={handleRefresh} title="stream info" />
+                </React.Fragment>
             }
             button={
                 <Tooltip disableFocusListener disableTouchListener title={Object.keys(streamInfo).length ? 'Ready' : 'Getting stream data...'} >
