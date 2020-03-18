@@ -1,18 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-import {EditActions, useEdit} from './Context';
+import {EditActions, useEdit} from '../../CollectionsUtils/Context';
 
 const BuildQueryString = ({child, customTypes, parent}) => {
     const [editState, dispatch] = useEdit();
     const {val, query} = editState;
 
     React.useEffect(() => {
-        handleBuildQuery(child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type);
-    }, [val, child.type, child.index, child.id, child.name, parent.id, parent.name, parent.type]);
+        handleBuildQuery(child.type, child.index, child.name, parent.id, parent.name, parent.type);
+    }, [val, child.type, child.index, child.name, parent.id, parent.name, parent.type]); // note: call handleBuildQuery when one of the items in the dependency array update. Not when handleBuildQuery updates. handleBuildQuery will be latest version when one of the items update. Unlike useCallback or useMemo; useCallback will return a memoized version of the callback that only changes if one of the dependencies has changed.
 
-    const handleBuildQuery = (childType, childIndex, childId, childName, parentId, parentName, parentType) => {
+    const handleBuildQuery = (childType, childIndex, childName, parentId, parentName, parentType) => {
         let v;
         let q = '';
         v = input(val, childType);

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {withVlow} from 'vlow';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -6,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {ApplicationStore, CollectionActions, ErrorActions, ProcedureActions, TypeActions} from '../../Stores';
+import {ApplicationStore, CollectionActions, ErrorActions, NodesActions, ProcedureActions, TypeActions} from '../../Stores';
 import {ChipsCard, ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput, WarnPopover} from '../Util';
 import SelectScope from './SelectScope';
 
@@ -43,6 +44,10 @@ const Editor = ({match}) => {
     const [warnDescription, setWarnDescription] = React.useState('');
 
     React.useEffect(() => {
+        NodesActions.getNodes();
+    },[]);
+
+    React.useEffect(() => {
         if (isResizing) {
             window.addEventListener('mousemove', handleMousemove);
             window.addEventListener('mouseup', handleMouseup);
@@ -50,7 +55,7 @@ const Editor = ({match}) => {
             window.removeEventListener('mousemove', handleMousemove);
             window.removeEventListener('mouseup', handleMouseup);
         }
-    },[isResizing]);
+    },[isResizing, handleMousemove, handleMouseup]);
 
     const handleMousedown = () => {
         setIsResizing(true);
@@ -58,7 +63,6 @@ const Editor = ({match}) => {
 
     const handleMousemove = React.useCallback((event) => {
         let el = document.getElementById('editor');
-
         let height = event.clientY - el.offsetTop;
         if (height > 100) {
             setNewHeight(height);
@@ -194,11 +198,15 @@ const Editor = ({match}) => {
     return (
         <TitlePage2
             preTitle='Customize your query:'
-            title={scope&&scope.value||''}
+            title={<SelectScope scope={match.scope} onChangeScope={handleOnChangeScope} />}
             content={
                 <React.Fragment>
                     <Grid item xs={12}>
-                        <ErrorMsg tag={tag} />
+                        <Card id='errMsg'>
+                            <ErrorMsg tag={tag} />
+                        </Card>
+                    </Grid>
+                    <Grid item xs={12}>
                         <Card id='editor' style={{height: newHeight}} className={classes.background}>
                             <div onKeyDown={handleKeyPress}>
                                 <QueryInput onChange={handleInput} input={queryInput} height={newHeight-25} />
@@ -219,12 +227,13 @@ const Editor = ({match}) => {
                                 >
                                     {'Submit'}
                                 </Button>
-                            }//"OUTPUT"
+                            }
                             content={
                                 <QueryOutput output={output} />
                             }
                             noPadding
                             expand={expandOutput}
+                            unmountOnExit={false}
                         />
                     </Grid>
                 </React.Fragment>
@@ -232,9 +241,6 @@ const Editor = ({match}) => {
             sideContent={
                 <React.Fragment>
                     <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} description={warnDescription} />
-                    <Grid item xs={12}>
-                        <SelectScope scope={match.scope} onChangeScope={handleOnChangeScope} />
-                    </Grid>
                     {scope&&scope.value && scope.value.includes('@node') ? null : (
                         <Grid item xs={12}>
                             <ChipsCard

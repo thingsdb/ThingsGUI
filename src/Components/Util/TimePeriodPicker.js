@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
@@ -52,7 +54,7 @@ const TimePeriodPicker = ({cb}) => {
                     id="number"
                     inputProps={{min: '1'}}
                     type="number"
-                    value={state.number}  // TODOK placeholder
+                    value={state.number}
                     spellCheck={false}
                     onChange={handleOnChange}
                     fullWidth

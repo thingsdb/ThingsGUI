@@ -24,14 +24,12 @@ const withStores = withVlow([{
 
 const useStyles = makeStyles(theme => ({
     avatar: {
-        // width: 35,
         height: 35,
     },
     appBar: {
         backgroundColor: theme.palette.secondary.main,
         flexGrow: 1,
         marginBottom: theme.spacing(1),
-        // minWidth: 1200,
     },
     flex: {
         flexGrow: 1,

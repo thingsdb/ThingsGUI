@@ -16,9 +16,6 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.green,
         paddingRight: theme.spacing(1),
     },
-    justifyContent: {
-        justifyContent: 'center',
-    }
 }));
 
 const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
@@ -129,13 +126,5 @@ Thing.propTypes = {
     watchIds: PropTypes.object.isRequired,
     inset: PropTypes.bool,
 };
-
-// const areEqual = (prevProps, nextProps) => {
-//     console.log(deepEqual(prevProps, nextProps), prevProps, nextProps);
-//     return deepEqual(prevProps, nextProps);
-// };
-
-
-// export default React.memo(Thing, areEqual);
 
 export default Thing;

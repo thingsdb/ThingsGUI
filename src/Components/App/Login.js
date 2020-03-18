@@ -181,7 +181,7 @@ const Login = ({connected, loaded, savedConnections}) => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
         if (!Object.values(err).some(d => Boolean(d))) {
-            ApplicationActions.newConn(form, tag);
+            ApplicationActions.newConn(form, tag, handleClickCloseSaveConn);
         }
     };
 

@@ -13,12 +13,6 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         backgroundColor: theme.palette.background.paper,
     },
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
-    nestedAdd: {
-        padding: 0,
-    },
 }));
 
 const QueryEditorMenu = () => {

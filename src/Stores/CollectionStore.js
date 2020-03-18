@@ -17,7 +17,7 @@ const CollectionActions = Vlow.createActions([
     'resetCollectionStore'
 ]);
 
-// TODO: CALLBACKS
+
 class CollectionStore extends BaseStore {
 
     static types = {
@@ -97,9 +97,9 @@ class CollectionStore extends BaseStore {
                     return {things};
                 });
             } else {
-                ThingsdbActions.getCollections(); //TODO weghalen??
-                ThingsdbActions.getUsers(); //TODO weghalen??
-                ThingsdbActions.getUser(); //TODO weghalen??
+                ThingsdbActions.getCollections();
+                ThingsdbActions.getUsers();
+                ThingsdbActions.getUser();
             }
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);

@@ -58,11 +58,6 @@ func WriteFile(path string, logCh chan string, data []byte) error {
 	}
 	defer file.Close()
 
-	// Write some text line-by-line to file.
-	// err = file.Truncate(0)
-	// if err != nil {
-	// 	return err
-	// }
 	_, err = file.Write(data)
 	if err != nil {
 		return err
@@ -122,11 +117,7 @@ func DeleteFile(path string, logCh chan string) error {
 
 func GetHomePath(fileName string) string {
 	var dir string
-	// var err error
 	dir, _ = os.UserHomeDir()
-	// if err != nil {
-	// 	return "", err
-	// }
 	path := fmt.Sprintf("%s/%s", dir, fileName)
 	return path
 }

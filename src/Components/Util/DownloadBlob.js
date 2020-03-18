@@ -1,4 +1,6 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import DownloadIcon from '@material-ui/icons/SaveAlt';
 import Fab from '@material-ui/core/Fab';
 import Link from '@material-ui/core/Link';
@@ -23,7 +25,7 @@ const TreeBranch = ({val, isFab}) => {
 
     return (
         <Tooltip disableFocusListener disableTouchListener title="Download blob">
-            <Link href={link} download="blob" type="application/octet-stream" color="textPrimary">
+            <Link target="_blank" href={link} download="blob" type="application/octet-stream" color="textPrimary">
                 {isFab ? (
                     <Fab color="primary" >
                         <DownloadIcon fontSize="large" />

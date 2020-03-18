@@ -33,7 +33,7 @@ const TitlePage2 = ({preTitle, title, sideContent, content}) => {
 
 TitlePage2.propTypes = {
     preTitle: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
     sideContent: PropTypes.object.isRequired,
     content: PropTypes.object.isRequired,
 };

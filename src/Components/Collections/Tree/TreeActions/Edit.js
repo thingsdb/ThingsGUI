@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -5,9 +6,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {EditActions, useEdit} from './Context';
 import BuildQueryString from './BuildQueryString';
-import InputField from './InputField';
+import {InputField, EditActions, useEdit} from '../../CollectionsUtils';
 import {LocalErrorMsg} from '../../../Util';
 
 const useStyles = makeStyles(theme => ({
@@ -53,7 +53,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
 
     }, []);
 
-    const errorTxt = (property) => thing[property] || property == 'root' ? 'property name already in use' : ''; // todo root
+    const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
 
     const handleOnChangeName = ({target}) => {
         const {value} = target;

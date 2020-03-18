@@ -13,10 +13,6 @@ const useStyles = makeStyles(theme => ({
     nested: {
         paddingLeft: theme.spacing(4),
     },
-    listItem: {
-        margin: 0,
-        padding: 0,
-    },
     justifyContent: {
         justifyContent: 'center',
     }
@@ -35,7 +31,7 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
         setMore({...more, [c]: true});
     };
 
-    const renderThing = ([k, v, i=null], count) => { // QUEST: ???
+    const renderThing = ([k, v, i=null], count) => {
         return k === '#' ? null : (
             <React.Fragment key={i ? i : k}>
                 <div className={classes.nested}>

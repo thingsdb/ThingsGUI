@@ -113,7 +113,7 @@ const Quotas = ({collection}) => {
                 inputProps={{min: '1'}}
                 label="Quota"
                 type="number"
-                value={form.quota}  // TODOK placeholder
+                value={form.quota}
                 spellCheck={false}
                 onChange={handleOnChange}
                 fullWidth

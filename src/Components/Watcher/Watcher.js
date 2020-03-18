@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 import AddIcon from '@material-ui/icons/Add';
@@ -162,7 +163,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
                         inputProps={{min: '3'}}
                         label="Thing id"
                         type="number"
-                        value={thingId}  // TODOK placeholder
+                        value={thingId}
                         variant="outlined"
                         spellCheck={false}
                         onChange={handleChange}

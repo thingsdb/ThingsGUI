@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import {makeStyles} from '@material-ui/core/styles';
+/* eslint-disable react-hooks/exhaustive-deps */
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
@@ -18,26 +18,13 @@ import {ArrayLayout, ErrorMsg, SimpleModal} from '../../Util';
 
 const tag = '9';
 
-const useStyles = makeStyles(() => ({
-    listItem: {
-        // margin: 0,
-        // padding: 0,
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-
-}));
-
 const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
-    const classes = useStyles();
 
     const [state, setState] = React.useState({
         queryString: '',
         typeName: '',
         error: '',
-        properties: [],
+        properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
     });
     const {queryString, typeName, error, properties} = state;
 
@@ -47,7 +34,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
             queryString: '',
             typeName: '',
             error: '',
-            properties: [],
+            properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
         });
     },
     [open],
@@ -119,7 +106,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
                 <Grid item xs={12}>
                     <List disablePadding dense>
                         <Collapse in={Boolean(queryString)} timeout="auto">
-                            <ListItem className={classes.listItem} >
+                            <ListItem>
                                 <TextField
                                     name="queryString"
                                     label="Query"
@@ -142,7 +129,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
                                 />
                             </ListItem>
                         </Collapse>
-                        <ListItem className={classes.listItem}>
+                        <ListItem>
                             <TextField
                                 name="typeName"
                                 label="Name"
@@ -157,7 +144,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
                             <ListItemText
                                 primary="Add properties"
                                 secondary={
-                                    <Link href="https://docs.thingsdb.net/v0/data-types/type/">
+                                    <Link target="_blank" href="https://docs.thingsdb.net/v0/data-types/type/">
                                         {'https://docs.thingsdb.net/v0/data-types/type/'}
                                     </Link>
                                 }
@@ -169,7 +156,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
                                     <AddTypeProperty
                                         cb={handleChangeProperty(i)}
                                         dropdownItems={dataTypes}
-                                        input={properties[i]}
+                                        input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}}
                                     />
                                 )}
                                 onRemove={handleRemove}

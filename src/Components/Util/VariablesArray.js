@@ -1,4 +1,4 @@
-
+/* eslint-disable react-hooks/exhaustive-deps */
 import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -33,7 +33,7 @@ const VariablesArray = ({input, cb}) => {
             setMyItems(input);
         }
     },
-    [input.length],
+    [JSON.stringify(input)],
     );
 
     const handleChange = ({target}) => {
@@ -75,7 +75,7 @@ const VariablesArray = ({input, cb}) => {
             {myItems.map((listitem, index) => <Chip key={index} id={listitem} className={classes.chip} label={listitem} onDelete={handleClick(index)} color="primary" />)}
             <TextField
                 name="input"
-                label="Variable"
+                // label="Variable"
                 type="text"
                 value={item}
                 spellCheck={false}

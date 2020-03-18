@@ -23,7 +23,7 @@ const NodesActions = Vlow.createActions([
     'delBackup',
 ]);
 
-// TODO: CALLBACKS
+
 class NodesStore extends BaseStore {
 
     static types = {
@@ -47,7 +47,6 @@ class NodesStore extends BaseStore {
     constructor() {
         super(NodesActions);
         this.state = NodesStore.defaults;
-        this.onGetNodes();
     }
 
 
@@ -190,8 +189,8 @@ class NodesStore extends BaseStore {
         });
     }
 
-    onAddNode(config, tag, cb) { // secret , address [, port]
-        const query = config.port ? `new_node('${config.secret}', '${config.address}', ${config.port});`: `new_node('${config.secret}', '${config.address}');`;
+    onAddNode(config, tag, cb) { // secret , nodename [, port]
+        const query = config.port ? `new_node('${config.secret}', '${config.nName}', ${config.port});`: `new_node('${config.secret}', '${config.nName}');`;
         this.emit('query', {
             scope: '@thingsdb',
             query

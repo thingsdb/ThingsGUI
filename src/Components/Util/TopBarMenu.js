@@ -7,9 +7,6 @@ import {makeStyles} from '@material-ui/core/styles';
 
 
 const useStyles = makeStyles(() => ({
-    flex: {
-        flexGrow: 1,
-    },
     menu: {
         top: 40,
         position: 'relative',
@@ -28,7 +25,7 @@ const TopBarMenu = ({ children, menuIcon}) => {
         return () => {
             document.removeEventListener('mousedown', handleMenuClose);
         };
-    }, []);
+    }, [handleMenuClose]); //TODO
 
     const handleMenuOpen = ({currentTarget}) => {
         setAnchorEl(currentTarget);

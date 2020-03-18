@@ -31,8 +31,8 @@ const Nodes = ({nodes, connectedNode}) => {
 
     const rows = nodes;
     const header = [{
-        ky: 'address',
-        label: 'Address',
+        ky: 'node_name',
+        label: 'Node name',
     }, {
         ky: 'port',
         label: 'Port',

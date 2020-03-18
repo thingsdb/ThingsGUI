@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 import Grid from '@material-ui/core/Grid';
@@ -25,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 const header = [
     {ky: 'title1', title: 'GENERAL', labels: [
         {ky: 'node_id', label: 'Node ID'},
-        {ky: 'hostname', label: 'Hostname'},
+        {ky: 'node_name', label: 'Node name'},
         {ky: 'status', label: 'Status'},
         {ky: 'log_level', label: 'Log level'},
         {ky: 'ip_support', label: 'IP support'},

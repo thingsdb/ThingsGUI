@@ -1,5 +1,8 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import Collapse from '@material-ui/core/Collapse';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
@@ -10,6 +13,7 @@ const initialState = {
     show: false,
     errors: {},
     form: {},
+    portSwitch: false,
 };
 
 const validation = {
@@ -19,8 +23,8 @@ const validation = {
         }
         return '';
     },
-    address: (f) => {
-        if (f.address.length==0) {
+    nName: (f) => {
+        if (f.nName.length==0) {
             return 'is required';
         }
         return '';
@@ -37,10 +41,10 @@ const tag = '16';
 
 const Add = () => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {show, errors, form, portSwitch} = state;
 
     const handleClickOpen = () => {
-        setState({...state, show: true, errors: {}, form: {secret: '', address: '', port: ''}});
+        setState({...state, show: true, errors: {}, portSwitch: false, form: {secret: '', nName: '', port: ''}}); // using nodeName would result in error.
     };
 
     const handleClickClose = () => {
@@ -75,6 +79,10 @@ const Add = () => {
         }
     };
 
+    const handleSwitch = ({target}) => {
+        const {checked} = target;
+        setState({...state, portSwitch: checked});
+    };
 
     const Content = (
         <React.Fragment>
@@ -94,28 +102,41 @@ const Add = () => {
             />
             <TextField
                 margin="dense"
-                id="address"
-                label="IP address"
+                id="nName"
+                label="Node name"
                 type="text"
-                value={form.address}
+                value={form.nName}
                 spellCheck={false}
                 onChange={handleOnChange}
                 fullWidth
-                error={Boolean(errors.address)}
-                helperText={errors.address}
+                error={Boolean(errors.nName)}
+                helperText={errors.nName}
             />
-            <TextField
-                margin="dense"
-                id="port"
-                label="Port"
-                type="text"
-                value={form.port}
-                spellCheck={false}
-                onChange={handleOnChange}
-                fullWidth
-                error={Boolean(errors.port)}
-                helperText={errors.port}
+            <FormControlLabel
+                control={(
+                    <Switch
+                        checked={portSwitch}
+                        color="primary"
+                        id="portSwitch"
+                        onChange={handleSwitch}
+                    />
+                )}
+                label="Add port [optional]"
             />
+            <Collapse in={portSwitch} timeout="auto" unmountOnExit>
+                <TextField
+                    margin="dense"
+                    id="port"
+                    label="Port"
+                    type="text"
+                    value={form.port}
+                    spellCheck={false}
+                    onChange={handleOnChange}
+                    fullWidth
+                    error={Boolean(errors.port)}
+                    helperText={errors.port}
+                />
+            </Collapse>
         </React.Fragment>
     );
 

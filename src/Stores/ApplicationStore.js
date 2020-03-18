@@ -24,7 +24,7 @@ const ApplicationActions = Vlow.createActions([
     'reconnect',
 ]);
 
-// TODO: CALLBACKS
+
 class ApplicationStore extends BaseStore {
 
     static types = {
@@ -111,7 +111,7 @@ class ApplicationStore extends BaseStore {
             EventActions.reWatch();
             ErrorActions.resetToastError();
         }).fail((event, status, message) => {
-            ErrorActions.setToastError(message.Log); //Tag naar login scherm
+            ErrorActions.setToastError(message.Log); //Tag of login screen
             this.onDisconnect();
         });
     }
@@ -149,13 +149,14 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onNewConn(config, tag) {
+    onNewConn(config, tag, cb) {
         this.emit('newEditConn', config).done((_data) => {
             this.setState(prevState => {
                 const savedConn = Object.assign({}, prevState.savedConnections, {[config.name]: config});
                 const update = Object.assign({}, prevState, {savedConnections: savedConn});
                 return update;
             });
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });

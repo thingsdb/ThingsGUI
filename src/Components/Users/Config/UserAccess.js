@@ -1,4 +1,5 @@
 /*eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -72,7 +73,6 @@ const UserAccess = ({user, collections}) => {
 
     const scopes = getScopes(collections)[0];
 
-    //TODO CHECK IF SCOPES ARE CORRECT
 
     React.useEffect(() => {
         let s = {};

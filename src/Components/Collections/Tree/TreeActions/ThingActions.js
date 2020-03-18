@@ -6,7 +6,7 @@ import BuildIcon from '@material-ui/icons/Build';
 
 import ThingActionsDialog from './ThingActionsDialog';
 
-const ThingActions = ({child, parent, thing, scope}) => {
+const ThingActions = ({child, parent, thing, scope, isRoot}) => {
     const [show, setShow] = React.useState(false);
     const handleClickOpen = () => {
         setShow(true);
@@ -29,6 +29,7 @@ const ThingActions = ({child, parent, thing, scope}) => {
                     parent={parent}
                     thing={thing}
                     scope={scope}
+                    isRoot={isRoot}
                 />
             ) : null}
         </React.Fragment>
@@ -37,6 +38,7 @@ const ThingActions = ({child, parent, thing, scope}) => {
 
 ThingActions.defaultProps = {
     thing: null,
+    isRoot: false,
 };
 
 ThingActions.propTypes = {
@@ -55,6 +57,7 @@ ThingActions.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
     }).isRequired,
+    isRoot: PropTypes.bool,
 };
 
 export default ThingActions;

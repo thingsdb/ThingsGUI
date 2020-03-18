@@ -20,12 +20,8 @@ const tag = '3';
 const Remove = ({collection}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
-    const [name, setName] = React.useState(collection.name);
+    const name = React.useState(collection.name)[0]; //to prevent update of name to undefined, after it is deleted.
     const [switchDel, setSwitchDel] = React.useState(false);
-
-    React.useEffect(() => {
-        setName(collection.name);
-    }, []);
 
     const handleClickOpen = () => {
         setShow(true);
@@ -65,7 +61,6 @@ const Remove = ({collection}) => {
                 </Button>
             }
             onClose={handleClickClose}
-            // classes={{paper: classes.background}}
         >
             <React.Fragment>
                 <ErrorMsg tag={tag} />

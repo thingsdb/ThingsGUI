@@ -1,5 +1,6 @@
 import ArrayLayout from './ArrayLayout';
 import AutoSelect from './AutoSelect';
+import BoolInput from './BoolInput';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
 import ChipsCard from './ChipsCard';
@@ -47,7 +48,7 @@ const checkType = (t) => {
                 : kindOfObject === '/' ? 'closure'
                     : kindOfObject === '*' ? 'regex'
                         : kindOfObject === '!' ? 'error'
-                            : kindOfObject === '$' ? 'set' //set
+                            : kindOfObject === '$' ? 'set'
                                 : kindOfObject === '&' ? 'wrap'
                                     : 'object' ;
         }
@@ -72,6 +73,19 @@ const thingValue = (type, thing, customTypes=[]) => {
 
 const isObjectEmpty = (obj) => obj.constructor === Object && Object.entries(obj).length === 0;
 const findItem = (index, target) => target.length ? (index+1 > target.length ? {}: target[index]) : {}; //findItem(index-1, target) : target[index]) : {};
+const orderByName = (arr) => arr.sort((a, b) => {
+    const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+    const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+        return -1;
+    }
+    if (nameA > nameB) {
+        return 1;
+    }
+
+    // names must be equal
+    return 0;
+});
 
 const getScopes = (collections) => [
     [
@@ -97,6 +111,25 @@ const getScopes2 = (collections, nodes) => [
 
 const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
+const allDataTypes = (customTypes) => {
+    const dataTypes = [
+        'str',
+        'int',
+        'float',
+        'bool',
+        'bytes',
+        'closure',
+        'regex',
+        'error',
+        'nil',
+        'list',
+        'set',
+        'thing',
+        ...customTypes.map(c=>c.name)
+    ];
+    return(dataTypes);
+};
+
 const duration = (n) => {
     let [time, unit] =  n<60 ? [n, 'second'] :
         n < 3600 ? [n/60, 'minute'] :
@@ -106,11 +139,20 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
+const addDoubleQuotesAroundKeys = (strObject) => strObject.replace(/\{/g, '{"').replace(/:/g, '":').replace(/,(?=[^{]*\})/g, ',"');
+const changeSingleToDoubleQuotes = (strObject) => strObject.replace(/'/g, '"');
+
+
+
 export {
+    addDoubleQuotesAroundKeys,
+    allDataTypes,
     ArrayLayout,
     AutoSelect,
+    BoolInput,
     Buttons,
     CardButton,
+    changeSingleToDoubleQuotes,
     checkType,
     ChipsCard,
     Closure,
@@ -130,6 +172,7 @@ export {
     ListHeader,
     LocalErrorMsg,
     Menu,
+    orderByName,
     QueryInput,
     QueryOutput,
     ServerError,

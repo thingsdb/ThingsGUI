@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
@@ -8,12 +9,11 @@ import DialogButtons from './DialogButtons';
 import Edit from './Edit';
 import SubmitButton from './SubmitButton';
 import {CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
-import {ErrorMsg, SimpleModal} from '../../../Util';
+import {allDataTypes, ErrorMsg, SimpleModal} from '../../../Util';
 
 const tag = '8';
 
-
-const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
+const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 
     const initialState = {
         customTypes: [],
@@ -25,21 +25,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
 
     const [state, setState] = React.useState(initialState);
     const {show, realChildType, realParentType, customTypes} = state;
-    const dataTypes = [
-        'str',
-        'int',
-        'float',
-        'bool',
-        'bytes',
-        'closure',
-        'regex',
-        'error',
-        'nil',
-        'list',
-        'set',
-        'thing',
-        ...customTypes.map(c=>c.name)
-    ];
+    const dataTypes = allDataTypes(customTypes);
 
     React.useEffect(() => {
         // Checks for the real type. From here on array is redefined to list or set. And thing is redefined to its potential custom type.
@@ -65,12 +51,13 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
     };
 
     const handleClickOk = (blob, query) => {
-        if (Object.keys(blob).length) {
+        const b = Object.keys(blob || {}).reduce((res, k) => {if(query.includes(k)){res[k]=blob[k];} return res;},{});
+        if (Object.keys(b).length) {
             CollectionActions.blob(
                 scope,
                 query,
                 child.id||parent.id,
-                blob,
+                b,
                 tag,
                 () => {
                     ThingsdbActions.getCollections();
@@ -110,7 +97,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
                     </Typography>
                 </Grid>
                 <Grid container spacing={1} item xs={4} justify="flex-end">
-                    <DialogButtons child={child} customTypes={customTypes} onClose={onClose} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} thing={thing} tag={tag} />
+                    <DialogButtons child={child} customTypes={customTypes} onClose={onClose} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} thing={thing} tag={tag} isRoot={isRoot} />
                 </Grid>
             </Grid>
             {canEdit ? (
@@ -151,6 +138,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope}) => {
 
 ThingActionsDialog.defaultProps = {
     thing: null,
+    isRoot: false,
 };
 
 
@@ -171,6 +159,7 @@ ThingActionsDialog.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
     }).isRequired,
+    isRoot: PropTypes.bool,
 };
 
 export default ThingActionsDialog;

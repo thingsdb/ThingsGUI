@@ -8,10 +8,7 @@ import React from 'react';
 
 import ThingsBounds from './ThingsBounds';
 
-const useStyles = makeStyles(theme => ({
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
+const useStyles = makeStyles(() => ({
     justifyContent: {
         justifyContent: 'center',
     }

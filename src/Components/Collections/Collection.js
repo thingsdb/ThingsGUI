@@ -22,7 +22,6 @@ const withStores = withVlow([{
 const useStyles = makeStyles(theme => ({
     spacing: {
         paddingBottom: theme.spacing(1),
-        // margin: 0,
     },
 }));
 

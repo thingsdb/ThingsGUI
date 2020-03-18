@@ -72,7 +72,6 @@ const Add = ({user}) => {
         ThingsdbActions.newToken(
             {
                 name: user.name,
-                // expirationTime: switches.expirationTime ? '(now() + ' + form.expirationTime + ')' : null,
                 expirationTime: switches.expirationTime ? `'${form.expirationTime}'` : null,
                 description: switches.description ? form.description : null,
             },
