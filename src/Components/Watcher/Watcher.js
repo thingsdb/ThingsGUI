@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 import AddIcon from '@material-ui/icons/Add';
 import AddOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
@@ -117,14 +117,14 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
 
         return(t=='thing'&& (onWatch ? (
             <Tooltip disableFocusListener disableTouchListener title="Turn watching off">
-                <ButtonBase onClick={handleUnwatch(id)} size="small" >
+                <Button onClick={handleUnwatch(id)} size="small" >
                     <RemoveIcon size="small" className={classes.red} />
-                </ButtonBase>
+                </Button>
             </Tooltip>
         ): (
-            <ButtonBase onClick={handleClickWatch(s, id)} size="small" >
+            <Button onClick={handleClickWatch(s, id)} size="small" >
                 <AddOutlinedIcon size="small" className={classes.green}  />
-            </ButtonBase>
+            </Button>
         )));
     };
 

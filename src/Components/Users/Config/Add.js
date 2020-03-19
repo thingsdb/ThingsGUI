@@ -1,6 +1,6 @@
 import React from 'react';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
@@ -120,9 +120,9 @@ const Add = ({users}) => {
     return(
         <SimpleModal
             button={
-                <ButtonBase className={classes.buttonBase} onClick={handleClickOpen} >
+                <Button className={classes.buttonBase} onClick={handleClickOpen} >
                     <AddBoxIcon className={classes.icon} />
-                </ButtonBase>
+                </Button>
             }
             title="New User"
             open={show}

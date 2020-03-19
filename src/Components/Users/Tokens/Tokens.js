@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import Box from '@material-ui/core/Box';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -112,9 +112,9 @@ const Tokens = ({user}) => {
                                                                     inputRef={reference}
                                                                 />
                                                                 <Tooltip className={classes.copyButton} disableFocusListener disableTouchListener title="Copy to Clipboard">
-                                                                    <ButtonBase onClick={handleRef(reference)}>
+                                                                    <Button onClick={handleRef(reference)}>
                                                                         <FileCopyIcon color="primary" />
-                                                                    </ButtonBase>
+                                                                    </Button>
                                                                 </Tooltip>
                                                             </React.Fragment>
                                                         )}

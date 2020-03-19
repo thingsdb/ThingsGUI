@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import BlockIcon from '@material-ui/icons/Block';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Collapse from '@material-ui/core/Collapse';
 import Divider from '@material-ui/core/Divider';
@@ -35,6 +35,7 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
 
     const handleClickOpen = () => {
         setOpen(!open);
+        onRefresh&&onRefresh();
     };
     const handleClickItem = (i) => () => {
         onClickItem(i);
@@ -56,9 +57,9 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                 {onRefresh && (
                     <ListItemSecondaryAction>
                         <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title.toLowerCase()} info`}>
-                            <ButtonBase onClick={onRefresh}>
+                            <Button onClick={onRefresh}>
                                 <RefreshIcon color="primary" />
-                            </ButtonBase>
+                            </Button>
                         </Tooltip>
                     </ListItemSecondaryAction>
                 )}

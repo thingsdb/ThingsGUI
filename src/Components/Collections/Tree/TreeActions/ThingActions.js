@@ -1,7 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import BuildIcon from '@material-ui/icons/Build';
 
 import ThingActionsDialog from './ThingActionsDialog';
@@ -18,9 +18,9 @@ const ThingActions = ({child, parent, thing, scope, isRoot}) => {
 
     return (
         <React.Fragment>
-            <ButtonBase onClick={handleClickOpen} >
+            <Button onClick={handleClickOpen} >
                 <BuildIcon color="primary" />
-            </ButtonBase>
+            </Button>
             {show ? (
                 <ThingActionsDialog
                     open={show}

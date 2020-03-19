@@ -6,7 +6,6 @@ import Card from '@material-ui/core/Card';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
 
 import {ApplicationStore, CollectionActions, EditorActions, EditorStore, ErrorActions, NodesActions, ProcedureActions, TypeActions} from '../../Stores';
 import {ChipsCard, ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput, WarnPopover} from '../Util';

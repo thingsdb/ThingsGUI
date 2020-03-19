@@ -4,13 +4,25 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles} from '@material-ui/core/styles';
 
+const styles = theme => ({
+    green: {
+        color: theme.palette.primary.green,
+    },
+    disabled: {
+        color: 'rgba(255, 255, 255, 0.3)',
+    },
+});
 
 class StartStopPolling extends React.Component {
 
     static propTypes = {
         onPoll: PropTypes.func.isRequired,
         title: PropTypes.string.isRequired,
+
+        /* Styles properties */
+        classes: PropTypes.object.isRequired,
     }
 
     constructor(props) {
@@ -24,8 +36,7 @@ class StartStopPolling extends React.Component {
 
 
     componentWillUnmount() {
-        const {intervalId, timeoutId} = this.state;
-        console.log(intervalId);
+        const {timeoutId} = this.state;
         this.handleStopPoll();
         clearTimeout(timeoutId);
     }
@@ -50,7 +61,6 @@ class StartStopPolling extends React.Component {
     handleStopPoll = () => {
         const {intervalId} = this.state;
         clearInterval(intervalId);
-        console.log(intervalId);
         this.setState({
             polling:false
         });
@@ -58,16 +68,16 @@ class StartStopPolling extends React.Component {
 
 
     render() {
-        const {title} = this.props;
+        const {classes, title} = this.props;
         const {polling} = this.state;
         return (
             <Tooltip disableFocusListener disableTouchListener title={polling?`Stop polling ${title}`:`Start polling ${title}`}>
-                <Button variant="outlined" color="primary" onClick={polling?this.handleStopPoll:this.handleStartPoll}>
-                    <ScheduleIcon color={polling?'primary':'disabled'} />
+                <Button variant="text" onClick={polling?this.handleStopPoll:this.handleStartPoll}>
+                    <ScheduleIcon className={polling?classes.green:classes.disabled} />
                 </Button>
             </Tooltip>
         );
     }
 }
 
-export default StartStopPolling;
+export default withStyles(styles)(StartStopPolling);

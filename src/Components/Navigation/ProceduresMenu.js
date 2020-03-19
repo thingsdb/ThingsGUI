@@ -1,7 +1,7 @@
 import { makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import React from 'react';
 
@@ -70,9 +70,9 @@ const ProceduresMenu = ({procedures}) => {
                 icon={<PlayArrowIcon color="primary" />}
                 items={orderedProcedure}
                 addItem={
-                    <ButtonBase className={classes.buttonBase} onClick={handleClickAdd} >
+                    <Button className={classes.buttonBase} onClick={handleClickAdd} >
                         <AddBoxIcon className={classes.icon} />
-                    </ButtonBase>}
+                    </Button>}
                 onClickItem={handleClickProcedure}
                 onRefresh={handleRefresh}
             />

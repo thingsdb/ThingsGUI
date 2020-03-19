@@ -1,5 +1,5 @@
 import {makeStyles} from '@material-ui/core/styles';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import ConnectedIcon from '@material-ui/icons/Power';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -60,9 +60,9 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                     <TableCell colSpan={buttons&&rows.length ? buttons(rows[0]).length : 1} align="right">
                         {onRefresh&&(
                             <Tooltip disableFocusListener disableTouchListener title="Refresh nodes info">
-                                <ButtonBase onClick={onRefresh}>
+                                <Button onClick={onRefresh}>
                                     <RefreshIcon color="primary" />
-                                </ButtonBase>
+                                </Button>
                             </Tooltip>
                         )}
                     </TableCell>

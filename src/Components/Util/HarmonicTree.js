@@ -1,7 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -24,9 +24,9 @@ const HarmonicTree = ({customTypes, items, jsonView, title, onAction, jsonReplac
             <ListItem>
                 <ListItemText primary={title} />
                 <ListItemSecondaryAction>
-                    <ButtonBase onClick={handleClick} >
+                    <Button onClick={handleClick} >
                         {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
-                    </ButtonBase>
+                    </Button>
                 </ListItemSecondaryAction>
             </ListItem>
             <Collapse in={show} timeout="auto" unmountOnExit>

@@ -44,6 +44,7 @@ const HarmonicCard = ({title, content, buttons, expand, noPadding, unmountOnExit
                     variant: 'body1',
                     display: 'block',
                     noWrap: true,
+                    component: 'span',
                 }}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit={unmountOnExit}>
