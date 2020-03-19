@@ -35,7 +35,7 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
 
     const handleClickOpen = () => {
         setOpen(!open);
-        onRefresh&&onRefresh();
+        onRefresh&&!open&&onRefresh();
     };
     const handleClickItem = (i) => () => {
         onClickItem(i);
