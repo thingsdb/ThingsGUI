@@ -16,6 +16,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
+import {StartStopPolling} from '../Util';
+
 
 const useStyles = makeStyles(() => ({
     row: {
@@ -55,7 +57,7 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                             {h.label}
                         </TableCell>
                     ))}
-                    <TableCell colSpan={buttons&&rows.length ? buttons(rows[0]).length+1 : 1}>
+                    <TableCell colSpan={buttons&&rows.length ? buttons(rows[0]).length : 1} align="right">
                         {onRefresh&&(
                             <Tooltip disableFocusListener disableTouchListener title="Refresh nodes info">
                                 <ButtonBase onClick={onRefresh}>
@@ -64,6 +66,11 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                             </Tooltip>
                         )}
                     </TableCell>
+                    {onRefresh&&(
+                        <TableCell align="right">
+                            <StartStopPolling onPoll={onRefresh} title="nodes info" />
+                        </TableCell>
+                    )}
                 </TableRow>
             </TableHead>
             <TableBody>

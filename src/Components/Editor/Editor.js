@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
-import {ApplicationStore, CollectionActions, ErrorActions, NodesActions, ProcedureActions, TypeActions} from '../../Stores';
+import {ApplicationStore, CollectionActions, EditorActions, EditorStore, ErrorActions, NodesActions, ProcedureActions, TypeActions} from '../../Stores';
 import {ChipsCard, ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput, WarnPopover} from '../Util';
 import SelectScope from './SelectScope';
 
@@ -15,6 +16,9 @@ import SelectScope from './SelectScope';
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['match']
+}, {
+    store: EditorStore,
+    keys: ['history']
 }]);
 
 const useStyles = makeStyles(() => ({
@@ -28,7 +32,7 @@ const useStyles = makeStyles(() => ({
 
 const tag = '13';
 
-const Editor = ({match}) => {
+const Editor = ({match, history}) => {
     const classes = useStyles();
     const [query, setQuery] = React.useState('');
     const [output, setOutput] = React.useState(null);
@@ -42,6 +46,8 @@ const Editor = ({match}) => {
     const [expandOutput, setExpandOutput] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [warnDescription, setWarnDescription] = React.useState('');
+    const [suggestion, setSuggestion] = React.useState(0);
+
 
     React.useEffect(() => {
         NodesActions.getNodes();
@@ -102,7 +108,7 @@ const Editor = ({match}) => {
 
     const handleInput = (value) => {
         handleCloseError();
-        setQueryInput('');
+        // setQueryInput('');
         setQuery(value);
     };
 
@@ -113,12 +119,18 @@ const Editor = ({match}) => {
             CollectionActions.queryEditor(scope.value, query, scope.collectionId, handleOutput, tag);
             handleGetAdditionals();
         }, 300);
+
+        EditorActions.setHistory(query);
     };
 
     const handleKeyPress = (e) => {
         const {key, ctrlKey} = e;
         if (ctrlKey && key == 'Enter') {
             handleSubmit();
+        }
+        if (ctrlKey && e.keyCode == '38') {
+            setSuggestion(suggestion+1==history.length?0:suggestion+1);
+            setQueryInput(history[suggestion]);
         }
     };
 
@@ -194,6 +206,7 @@ const Editor = ({match}) => {
     const handleCloseDelete = () => {
         setAnchorEl(null);
     };
+
 
     return (
         <TitlePage2
@@ -275,6 +288,9 @@ Editor.propTypes = {
 
     /* Application properties */
     match: ApplicationStore.types.match.isRequired,
+
+    /* Editor properties */
+    history: EditorStore.types.history.isRequired,
 };
 
 export default withStores(Editor);

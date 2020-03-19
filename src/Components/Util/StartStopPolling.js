@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import Button from '@material-ui/core/Button';
-import SchuduleIcon from '@material-ui/icons/Schedule';
+import ScheduleIcon from '@material-ui/icons/Schedule';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -17,31 +17,34 @@ class StartStopPolling extends React.Component {
         super(props);
         this.state = {
             intervalId: null,
+            timeoutId: null,
             polling: false,
         };
     }
 
 
     componentWillUnmount() {
-        const {intervalId} = this.state;
+        const {intervalId, timeoutId} = this.state;
         console.log(intervalId);
         this.handleStopPoll();
+        clearTimeout(timeoutId);
     }
 
     handleStartPoll = () => {
         const {onPoll} = this.props;
-        const setPoll = setInterval(
+        const iid = setInterval(
             () => {
                 onPoll();
             }, 1000);
-        this.setState({
-            intervalId:setPoll,
-            polling:true
-        });
-        setTimeout(
+        const tid= setTimeout(
             () => {
                 this.handleStopPoll();
             }, 300000); // after 5 min it stops
+        this.setState({
+            intervalId:iid,
+            polling:true,
+            timeoutId: tid,
+        });
     };
 
     handleStopPoll = () => {
@@ -60,7 +63,7 @@ class StartStopPolling extends React.Component {
         return (
             <Tooltip disableFocusListener disableTouchListener title={polling?`Stop polling ${title}`:`Start polling ${title}`}>
                 <Button variant="outlined" color="primary" onClick={polling?this.handleStopPoll:this.handleStartPoll}>
-                    <SchuduleIcon color={polling?'primary':'disabled'} />
+                    <ScheduleIcon color={polling?'primary':'disabled'} />
                 </Button>
             </Tooltip>
         );

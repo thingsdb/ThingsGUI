@@ -70,7 +70,13 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                             <ListItemIcon>
                                 {icon}
                             </ListItemIcon>
-                            <ListItemText primary={item.name} />
+                            <ListItemText
+                                primary={item.name}
+                                primaryTypographyProps={{
+                                    display: 'block',
+                                    noWrap: true,
+                                }}
+                            />
                         </ListItem>
                     )) : (
                         <ListItem button className={classes.nested}>
