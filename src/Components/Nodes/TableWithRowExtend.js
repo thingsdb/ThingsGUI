@@ -1,3 +1,5 @@
+import {makeStyles} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import ConnectedIcon from '@material-ui/icons/Power';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -5,13 +7,16 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
+
+import {StartStopPolling} from '../Util';
 
 
 const useStyles = makeStyles(() => ({
@@ -34,7 +39,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Tabel = ({buttons, header, rows, rowExtend, connectedNode}) => {
+const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => {
     const classes = useStyles();
     const [selected, setSelected] = React.useState(null);
 
@@ -52,7 +57,20 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode}) => {
                             {h.label}
                         </TableCell>
                     ))}
-                    <TableCell colSpan={buttons&&rows.length ? buttons(rows[0]).length+1 : 1} />
+                    <TableCell colSpan={buttons&&rows.length ? buttons(rows[0]).length : 1} align="right">
+                        {onRefresh&&(
+                            <Tooltip disableFocusListener disableTouchListener title="Refresh nodes info">
+                                <Button onClick={onRefresh}>
+                                    <RefreshIcon color="primary" />
+                                </Button>
+                            </Tooltip>
+                        )}
+                    </TableCell>
+                    {onRefresh&&(
+                        <TableCell align="right">
+                            <StartStopPolling onPoll={onRefresh} title="nodes info" />
+                        </TableCell>
+                    )}
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -104,6 +122,7 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode}) => {
 
 Tabel.defaultProps = {
     buttons: null,
+    onRefresh: null,
 };
 
 Tabel.propTypes = {
@@ -112,6 +131,7 @@ Tabel.propTypes = {
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     rowExtend: PropTypes.func.isRequired,
     connectedNode: PropTypes.object.isRequired,
+    onRefresh: PropTypes.func,
 };
 
 export default Tabel;

@@ -1,12 +1,14 @@
+import { makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import {NodesStore} from '../../../Stores';
-import { SimpleModal } from '../../Util';
+import {NodesActions, NodesStore} from '../../../Stores';
+import { SimpleModal, StartStopPolling } from '../../Util';
 import NodeGraph from './NodeGraph';
 
 
@@ -15,8 +17,19 @@ const withStores = withVlow([{
     keys: ['streamInfo']
 }]);
 
+const useStyles = makeStyles(() => ({
+    graph: {
+        backgroundColor: '#000'
+    },
+}));
+
 const OpenNodeGraph = ({nodes, streamInfo}) => {
+    const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+
+    const handleRefresh = () => {
+        NodesActions.getStreamInfo();
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -27,6 +40,16 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
 
     return(
         <SimpleModal
+            actionButtons={
+                <React.Fragment>
+                    <Tooltip disableFocusListener disableTouchListener title="Refresh stream info">
+                        <Button variant="outlined" color="primary" onClick={handleRefresh} >
+                            <RefreshIcon color="primary" />
+                        </Button>
+                    </Tooltip>
+                    <StartStopPolling onPoll={handleRefresh} title="stream info" />
+                </React.Fragment>
+            }
             button={
                 <Tooltip disableFocusListener disableTouchListener title={Object.keys(streamInfo).length ? 'Ready' : 'Getting stream data...'} >
                     <span>
@@ -41,7 +64,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             onClose={handleClickClose}
             maxWidth="md"
         >
-            <Grid container justify="center">
+            <Grid className={classes.graph} container justify="center">
                 <Grid item>
                     <NodeGraph data={nodes} streamInfo={streamInfo} />
                 </Grid>

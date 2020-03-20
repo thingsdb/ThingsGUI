@@ -40,7 +40,12 @@ const HarmonicCard = ({title, content, buttons, expand, noPadding, unmountOnExit
                     </IconButton>
                 }
                 title={title}
-                titleTypographyProps={{variant: 'body1'}}
+                titleTypographyProps={{
+                    variant: 'body1',
+                    display: 'block',
+                    noWrap: true,
+                    component: 'span',
+                }}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit={unmountOnExit}>
                 {noPadding? content : (

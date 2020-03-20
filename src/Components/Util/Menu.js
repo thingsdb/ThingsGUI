@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import BlockIcon from '@material-ui/icons/Block';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Collapse from '@material-ui/core/Collapse';
 import Divider from '@material-ui/core/Divider';
@@ -13,6 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -34,6 +35,7 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
 
     const handleClickOpen = () => {
         setOpen(!open);
+        onRefresh&&!open&&onRefresh();
     };
     const handleClickItem = (i) => () => {
         onClickItem(i);
@@ -54,9 +56,11 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                 />
                 {onRefresh && (
                     <ListItemSecondaryAction>
-                        <ButtonBase onClick={onRefresh}>
-                            <RefreshIcon color="primary" />
-                        </ButtonBase>
+                        <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title.toLowerCase()} info`}>
+                            <Button onClick={onRefresh}>
+                                <RefreshIcon color="primary" />
+                            </Button>
+                        </Tooltip>
                     </ListItemSecondaryAction>
                 )}
             </ListItem>
@@ -67,7 +71,13 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                             <ListItemIcon>
                                 {icon}
                             </ListItemIcon>
-                            <ListItemText primary={item.name} />
+                            <ListItemText
+                                primary={item.name}
+                                primaryTypographyProps={{
+                                    display: 'block',
+                                    noWrap: true,
+                                }}
+                            />
                         </ListItem>
                     )) : (
                         <ListItem button className={classes.nested}>

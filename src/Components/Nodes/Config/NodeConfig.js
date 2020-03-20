@@ -1,11 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import Tooltip from '@material-ui/core/Tooltip';
 
-import { Info } from '../../Util';
+import { Info, StartStopPolling } from '../../Util';
 import Loglevel from './Loglevel';
 import Shutdown from './Shutdown';
 import {NodesActions, NodesStore} from '../../../Stores';
@@ -72,15 +75,10 @@ const header = [
 
 const NodeConfig = ({nodeId, offline, node}) => {
     const classes = useStyles();
-    React.useEffect(() => {
-        const setPoll = setInterval(
-            () => {
-                NodesActions.getNode(nodeId); // update of the selected node; to get the latest info
-            }, 5000);
-        return () => {
-            clearInterval(setPoll);
-        };
-    }, []);
+
+    const handleRefresh = () => {
+        NodesActions.getNode(nodeId); // update of the selected node; to get the latest info
+    };
 
     return (
         <Grid
@@ -97,6 +95,16 @@ const NodeConfig = ({nodeId, offline, node}) => {
                     </Grid>
                     <Grid item>
                         <Shutdown node={node} />
+                    </Grid>
+                    <Grid item>
+                        <Tooltip disableFocusListener disableTouchListener title="Refresh node info">
+                            <Button variant="outlined" color="primary" onClick={handleRefresh} >
+                                <RefreshIcon color="primary" />
+                            </Button>
+                        </Tooltip>
+                    </Grid>
+                    <Grid item>
+                        <StartStopPolling onPoll={handleRefresh} title="node info" />
                     </Grid>
                 </Grid>
             )}

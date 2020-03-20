@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const Buttons = ({children}) => {
@@ -20,9 +20,9 @@ const Buttons = ({children}) => {
                 {children}
             </span>
             {!isMouseInside ? (
-                <ButtonBase onClick={mouseEnter}>
+                <Button onClick={mouseEnter}>
                     <MoreVertIcon color="primary" />
-                </ButtonBase>
+                </Button>
             ): null}
         </div>
     );

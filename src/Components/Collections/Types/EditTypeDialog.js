@@ -2,7 +2,6 @@
 import AddIcon from '@material-ui/icons/Add';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -115,12 +114,12 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
 
     const buttons = (row) => (
         <React.Fragment>
-            <ButtonBase onClick={handleMod(row)} >
+            <Button onClick={handleMod(row)} >
                 <EditIcon color="primary" />
-            </ButtonBase>
-            <ButtonBase onClick={handleDel(row)} >
+            </Button>
+            <Button onClick={handleDel(row)} >
                 <DeleteIcon color="primary" />
-            </ButtonBase>
+            </Button>
             <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} onOk={handleClickOk} description={`Are you sure you want to remove '${property.propertyName?property.propertyName:''}'`} />
         </React.Fragment>
     );
@@ -204,9 +203,9 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
                             <ListItem>
                                 <Grid container>
                                     <Grid item xs={1}>
-                                        <ButtonBase onClick={handleAdd} >
+                                        <Button onClick={handleAdd} >
                                             <AddIcon color="primary" />
-                                        </ButtonBase>
+                                        </Button>
                                     </Grid>
                                     <Grid container item xs={11} justify="flex-end">
                                         <Box fontSize={10} fontStyle="italic" m={1}>

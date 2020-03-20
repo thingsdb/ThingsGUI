@@ -16,14 +16,11 @@ const CollectionsMenu = ({collections}) => {
 
     React.useEffect(() => {
         ThingsdbActions.getCollections();
-        const setPoll = setInterval(
-            () => {
-                ThingsdbActions.getCollections();
-            }, 5000);
-        return () => {
-            clearInterval(setPoll);
-        };
     }, []);
+
+    const handleRefresh = () => {
+        ThingsdbActions.getCollections();
+    };
 
     const handleClickCollection = (collection) => {
         ApplicationActions.navigate({path: 'collection', index: collection, item: '', scope:''});
@@ -36,6 +33,7 @@ const CollectionsMenu = ({collections}) => {
             items={collections}
             addItem={<Add />}
             onClickItem={handleClickCollection}
+            onRefresh={handleRefresh}
         />
     );
 };

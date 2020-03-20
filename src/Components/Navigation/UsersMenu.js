@@ -17,16 +17,12 @@ const UsersMenu = ({user, users}) => {
     React.useEffect(() => {
         ThingsdbActions.getUser();
         setTimeout(()=>ThingsdbActions.getUsers(), 1000);
-        const setPoll = setInterval(
-            () => {
-                ThingsdbActions.getUser();
-                ThingsdbActions.getUsers();
-            }, 5000);
-        return () => {
-            clearInterval(setPoll);
-        };
     }, []);
 
+    const handleRefresh = () => {
+        ThingsdbActions.getUser();
+        ThingsdbActions.getUsers();
+    };
 
     const handleClickUser = (user) => {
         ApplicationActions.navigate({path: 'user', index: user, item: '', scope: ''});
@@ -44,6 +40,7 @@ const UsersMenu = ({user, users}) => {
             items={users2}
             addItem={<Add />}
             onClickItem={handleClickUser}
+            onRefresh={handleRefresh}
         />
     );
 };

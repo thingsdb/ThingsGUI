@@ -15,19 +15,13 @@ const withStores = withVlow([{
 
 
 const Nodes = ({nodes, connectedNode}) => {
-
     React.useEffect(() => {
-        NodesActions.getNodes();
-        NodesActions.getStreamInfo();
-        const setPoll = setInterval(
-            () => {
-                NodesActions.getNodes();
-                NodesActions.getStreamInfo();
-            }, 5000);
-        return () => {
-            clearInterval(setPoll);
-        };
+        NodesActions.getNodes(NodesActions.getStreamInfo);
     }, []);
+    const handleRefresh = () => {
+        NodesActions.getNodes();
+    };
+
 
     const rows = nodes;
     const header = [{
@@ -46,7 +40,7 @@ const Nodes = ({nodes, connectedNode}) => {
     ]);
     return(
         <React.Fragment>
-            <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode} />
+            <TableWithRowExtend buttons={handleButtons} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode} onRefresh={handleRefresh} />
             <NodeButtons nodes={nodes} />
         </React.Fragment>
     );

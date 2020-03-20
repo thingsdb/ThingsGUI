@@ -61,7 +61,7 @@ class NodesStore extends BaseStore {
         });
     }
 
-    onGetNodes(){
+    onGetNodes(cb=()=>null){
         const {node, nodes} = this.state;
         const query = '{nodes: nodes_info(), connectedNode: node_info()};';
         this.emit('query', {
@@ -75,6 +75,7 @@ class NodesStore extends BaseStore {
                     connectedNode: data.connectedNode
                 });
             }
+            cb();
         }).fail((event, status, message) => {
             this.setState({
                 counters: {},

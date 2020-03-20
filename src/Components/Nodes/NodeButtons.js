@@ -3,10 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-
 import {Add} from './Config';
 import OpenNodeGraph from './SVGNodes/OpenNodeGraph';
-
 
 const useStyles = makeStyles(theme => ({
     buttons: {
@@ -37,7 +35,6 @@ const NodeButtons = ({nodes}) => {
 };
 
 NodeButtons.propTypes = {
-    /* collections properties */
     nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 

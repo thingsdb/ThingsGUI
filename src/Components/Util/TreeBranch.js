@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -81,9 +81,9 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                 <ListItemSecondaryAction>
                     {onAction&&onAction(name, type, val)}
                     {canToggle&& (
-                        <ButtonBase onClick={handleClick} >
+                        <Button onClick={handleClick} >
                             {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
-                        </ButtonBase>
+                        </Button>
                     )}
                     {!button ? (
                         type === 'bytes' ? (
@@ -91,9 +91,9 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                         ) : type === 'str' ? (
                             <SimpleModal
                                 button={
-                                    <ButtonBase onClick={handleOpenStringDialog} >
+                                    <Button onClick={handleOpenStringDialog} >
                                         <OpenIcon color="primary" />
-                                    </ButtonBase>
+                                    </Button>
                                 }
                                 title="Show string"
                                 open={open}

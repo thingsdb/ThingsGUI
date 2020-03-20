@@ -1,4 +1,4 @@
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -27,9 +27,9 @@ const Remove = ({token, tag}) => {
     return (
         <React.Fragment>
             <Tooltip disableFocusListener disableTouchListener title="Remove token">
-                <ButtonBase onClick={handleClick}>
+                <Button onClick={handleClick}>
                     <DeleteIcon color="primary" />
-                </ButtonBase>
+                </Button>
             </Tooltip>
             <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} onOk={handleClickOk} description="Are you sure you want to remove this token?" />
         </React.Fragment>
