@@ -28,10 +28,23 @@ const config = {
         }, {
             test: /\.css$/,
             use: ['style-loader', 'css-loader']
+        }, {
+            test: /\.ttf$/,
+            loader:'file-loader',
+            options: {
+                name: 'monaco-font.ttf',
+                // Failed to decode downloaded font: ...
+                // OTS parsing error: invalid version tag
+                // Adding following solved warning above
+                outputPath: '../fonts/',
+                publicPath: 'fonts',
+            },
         }]
     },
     plugins: [
-        new MonacoWebpackPlugin(),
+        new MonacoWebpackPlugin({
+            languages: ['javascript']
+        }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new BundleAnalyzerPlugin({
             /* Usage:
