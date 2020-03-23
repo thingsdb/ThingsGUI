@@ -123,15 +123,14 @@ func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, util.
 }
 
 func Run(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
-	decoder := json.NewDecoder(strings.NewReader(data.Args))
 	var args interface{}
-	if err := decoder.Decode(&args); err != nil {
-		message := util.Msg(err, http.StatusInternalServerError)
-		return message.Status, "", message
-	}
-
-	if data.ConvertArgs || data.EnableInts {
-		args = util.Convert(args, data.ConvertArgs, data.EnableInts)
+	if data.Args != "" {
+		decoder := json.NewDecoder(strings.NewReader(data.Args))
+		if err := decoder.Decode(&args); err != nil {
+			message := util.Msg(err, http.StatusInternalServerError)
+			return message.Status, "", message
+		}
+		args = util.Convert(args)
 	}
 
 	resp, err := client.Connection.Run(data.Procedure, args, data.Scope, timeout)
