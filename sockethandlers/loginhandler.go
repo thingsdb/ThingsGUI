@@ -120,6 +120,37 @@ func Connect(client *Client, data LoginData) (int, LoginResp, util.Message) {
 		data,
 	)
 
+	client.Connection.EnableKeepAlive()
+
+	if resp.Connected {
+		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	} else {
+		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
+	}
+	return message.Status, resp, message
+}
+
+func ConnectionToo(client *Client, data LoginData) (int, interface{}, util.Message) {
+	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+
+	fileNotExist := util.FileNotExist(client.HomePath)
+	if fileNotExist {
+		return internalError(fmt.Errorf("File does not exist"))
+	}
+
+	var mapping = make(map[string]LoginData)
+	err := util.ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
+	if err != nil {
+		return internalError(err)
+	}
+
+	resp := connect(
+		client,
+		mapping[data.Name],
+	)
+
+	client.Connection.EnableKeepAlive()
+
 	if resp.Connected {
 		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	} else {
@@ -261,33 +292,6 @@ func DelConnection(client *Client, data LoginData) (int, interface{}, util.Messa
 	}
 
 	return message.Status, nil, message
-}
-
-func ConnectionToo(client *Client, data LoginData) (int, interface{}, util.Message) {
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
-
-	fileNotExist := util.FileNotExist(client.HomePath)
-	if fileNotExist {
-		return internalError(fmt.Errorf("File does not exist"))
-	}
-
-	var mapping = make(map[string]LoginData)
-	err := util.ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
-	if err != nil {
-		return internalError(err)
-	}
-
-	resp := connect(
-		client,
-		mapping[data.Name],
-	)
-
-	if resp.Connected {
-		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
-	} else {
-		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
-	}
-	return message.Status, resp, message
 }
 
 func internalError(err error) (int, interface{}, util.Message) {

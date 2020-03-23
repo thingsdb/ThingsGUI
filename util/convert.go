@@ -1,11 +1,6 @@
 package util
 
-import (
-	"fmt"
-)
-
 func Convert(arg interface{}) interface{} {
-	fmt.Printf("start conv: %T\n", arg)
 	switch v := arg.(type) {
 	case []interface{}:
 		arr := make([]interface{}, 0)

@@ -132,7 +132,6 @@ func Run(client *Client, data Data, timeout uint16) (int, interface{}, util.Mess
 		}
 		args = util.Convert(args)
 	}
-
 	resp, err := client.Connection.Run(data.Procedure, args, data.Scope, timeout)
 	message := util.Msg(err, http.StatusInternalServerError)
 	return message.Status, resp, message
