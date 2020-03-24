@@ -29,7 +29,7 @@ const validation = {
     },
 };
 
-const tag = '23';
+const tag = '26';
 
 const Rename = ({user, users}) => {
     const [state, setState] = React.useState(initialState);

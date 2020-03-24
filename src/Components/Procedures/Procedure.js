@@ -7,6 +7,7 @@ import React from 'react';
 import {findItem, isObjectEmpty, TitlePage} from '../Util';
 import {ApplicationStore, ProcedureActions, ProcedureStore} from '../../Stores';
 import {Edit, Remove, Run} from './Actions';
+import {EditProvider} from '../Collections/CollectionsUtils';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -28,8 +29,8 @@ const Procedure = ({match, procedures}) => {
 
     const buttons = [
         {
-            name: 'run',
-            component: <Run procedure={selectedProcedure} scope={scope} />
+            name: 'edit',
+            component: <Edit procedure={selectedProcedure} scope={scope} />
         },
         {
             name: 'remove',
@@ -44,24 +45,20 @@ const Procedure = ({match, procedures}) => {
                     preTitle='Customizing ThingDB procedure:'
                     title={selectedProcedure.name}
                     content={
-                        <Grid item md={12} xs={12}>
-                            <Grid container >
-                                <Grid item lg={8} md={8} xs={12}>
-                                    <Card>
-                                        <CardContent>
-                                            <Edit procedure={selectedProcedure} />
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                                <Grid container item lg={4} md={4} spacing={1} justify="center" alignItems="center" >
-                                    {buttons.map(button => (
-                                        <Grid key={button.name} item>
-                                            {button.component}
-                                        </Grid>
-                                    ))}
-                                </Grid>
+                        <React.Fragment>
+                            <Grid container spacing={1} item md={9} sm={12}>
+                                <EditProvider>
+                                    <Run procedure={selectedProcedure} />
+                                </EditProvider>
                             </Grid>
-                        </Grid>
+                            <Grid container item md={3} sm={12} spacing={1} justify="center" alignItems="center" >
+                                {buttons.map(button => (
+                                    <Grid key={button.name} item>
+                                        {button.component}
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </React.Fragment>
                     }
                 />
             )

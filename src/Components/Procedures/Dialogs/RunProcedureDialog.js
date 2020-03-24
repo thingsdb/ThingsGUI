@@ -13,7 +13,7 @@ import {EditActions, InputField, useEdit} from '../../Collections/CollectionsUti
 import {ProcedureActions} from '../../../Stores';
 import {addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
 
-const tag = '28';
+const tag = '22';
 const dataTypes = ['str', 'int', 'float', 'bool', 'nil', 'list', 'thing']; // Supported types
 
 const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope}) => {
@@ -57,7 +57,9 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
         );
     };
 
-    const selectedProcedure = procedure ? procedure : procedures.length && procedures.find(i => i.name == procedureName);
+    console.log(procedures, procedure)
+
+    const selectedProcedure = procedure ? procedure : procedures && procedures.find(i => i.name == procedureName);
     return (
         <SimpleModal
             button={button}
@@ -110,7 +112,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
                         )}
                         {selectedProcedure && (
                             <React.Fragment>
-                                {selectedProcedure.arguments.length!==0 && (
+                                {selectedProcedure.arguments&&selectedProcedure.arguments.length!==0 && (
                                     <React.Fragment>
                                         <ListItem>
                                             <ListItemText primary="Arguments:" />

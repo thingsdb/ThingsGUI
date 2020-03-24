@@ -79,7 +79,7 @@ const Counters = ({nodeId, offline, counters}) => {
                         </Tooltip>
                     </Grid>
                     <Grid item>
-                        <StartStopPolling onPoll={handleRefresh} title="counters" />
+                        <StartStopPolling onPoll={handleRefresh} title="counters" variant="outlined" />
                     </Grid>
                 </Grid>
             )}

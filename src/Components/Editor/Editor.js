@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const tag = '13';
+const tag = '12';
 
 const Editor = ({match, history}) => {
     const classes = useStyles();
@@ -259,7 +259,7 @@ const Editor = ({match, history}) => {
                                 expand={false}
                                 items={procedures}
                                 onAdd={handleClickAddProcedure}
-                                onClick={handleClickProcedure}
+                                onEdit={handleClickProcedure}
                                 onDelete={handleClickDeleteProcedure}
                                 title="procedures"
                             />
@@ -271,7 +271,7 @@ const Editor = ({match, history}) => {
                                 expand={false}
                                 items={customTypes}
                                 onAdd={handleClickAddTypes}
-                                onClick={handleClickTypes}
+                                onEdit={handleClickTypes}
                                 onDelete={handleClickDeleteTypes}
                                 title="custom types"
                             />

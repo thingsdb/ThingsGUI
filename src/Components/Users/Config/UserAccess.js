@@ -38,7 +38,7 @@ const privileges = [
     },
 ];
 
-const tag = '24';
+const tag = '27';
 
 const UserAccess = ({user, collections}) => {
     const [switches, setSwitches] = React.useState({});

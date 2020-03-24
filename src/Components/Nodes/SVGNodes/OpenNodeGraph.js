@@ -27,6 +27,12 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
+    React.useEffect(() => {
+        if (open) {
+            NodesActions.getStreamInfo();
+        }
+    }, [open]);
+
     const handleRefresh = () => {
         NodesActions.getStreamInfo();
     };
@@ -43,7 +49,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             actionButtons={
                 <React.Fragment>
                     <Tooltip disableFocusListener disableTouchListener title="Refresh stream info">
-                        <Button variant="outlined" color="primary" onClick={handleRefresh} >
+                        <Button color="primary" onClick={handleRefresh} >
                             <RefreshIcon color="primary" />
                         </Button>
                     </Tooltip>
@@ -53,7 +59,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             button={
                 <Tooltip disableFocusListener disableTouchListener title={Object.keys(streamInfo).length ? 'Ready' : 'Getting stream data...'} >
                     <span>
-                        <Button variant="outlined" color="primary" onClick={handleClickOpen} disabled={!Object.keys(streamInfo).length} >
+                        <Button variant="outlined" color="primary" onClick={handleClickOpen} >
                             {'View stream graph'}
                         </Button>
                     </span>

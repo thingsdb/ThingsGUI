@@ -27,7 +27,7 @@ const ProcedureDialogs = ({index, procedures, scope, open, onClose}) => {
             <AddProcedureDialog open={add} onClose={handleCloseAdd} scope={scope} />
             <EditProcedureDialog open={edit} onClose={handleCloseEdit} procedure={index!==null?procedures[index]:{}} scope={scope} />
             <EditProvider>
-                <RunProcedureDialog open={run} onClose={handleCloseRun} procedures={procedures} scope={scope} />
+                <RunProcedureDialog open={run} onClose={handleCloseRun} procedure={index!==null?procedures[index]:{}} scope={scope} />
             </EditProvider>
         </React.Fragment>
     );

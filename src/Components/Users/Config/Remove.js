@@ -5,7 +5,7 @@ import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
 
 
-const tag = '22';
+const tag = '25';
 
 const Remove = ({user}) => {
     const [show, setShow] = React.useState(false);

@@ -14,7 +14,7 @@ import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal} from '../../Util';
 
 
-const tag = '12';
+const tag = '21';
 const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');

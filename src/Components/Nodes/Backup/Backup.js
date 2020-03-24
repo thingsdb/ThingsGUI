@@ -111,7 +111,7 @@ const Backup = ({nodeId, offline, backups}) => {
                         </Tooltip>
                     </Grid>
                     <Grid item>
-                        <StartStopPolling onPoll={handleRefresh} title="backups info" />
+                        <StartStopPolling onPoll={handleRefresh} title="backups info" variant="outlined" />
                     </Grid>
                 </Grid>
             )}

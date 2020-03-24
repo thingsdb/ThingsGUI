@@ -54,12 +54,6 @@ const AddVariable = ({variables, customTypes, dataTypes, identifier, parentDispa
         }
     };
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
     const handleAdd = () => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
         EditActions.update(dispatch, {
@@ -76,8 +70,8 @@ const AddVariable = ({variables, customTypes, dataTypes, identifier, parentDispa
         <React.Fragment>
             {variables&&(
                 <Grid container>
-                    <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={array} groupSign="{">
-                        <Collapse className={classes.fullWidth} in={open} timeout="auto">
+                    <ListHeader onAdd={handleAdd} items={array} groupSign="{">
+                        <React.Fragment>
                             {( variables.map(v => (
                                 <Grid key={v} className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
                                     <Grid item xs={12}>
@@ -118,7 +112,7 @@ const AddVariable = ({variables, customTypes, dataTypes, identifier, parentDispa
                                     </Grid>
                                 </Grid>
                             )))}
-                        </Collapse>
+                        </React.Fragment>
                     </ListHeader>
                 </Grid>
             )}

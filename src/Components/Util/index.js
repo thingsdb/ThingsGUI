@@ -3,6 +3,7 @@ import AutoSelect from './AutoSelect';
 import BoolInput from './BoolInput';
 import Buttons from './Buttons';
 import CardButton from './CardButton';
+import CardMultiButton from './CardMultiButton';
 import ChipsCard from './ChipsCard';
 import Closure from './Closure';
 import DownloadBlob from './DownloadBlob';
@@ -153,6 +154,7 @@ export {
     BoolInput,
     Buttons,
     CardButton,
+    CardMultiButton,
     changeSingleToDoubleQuotes,
     checkType,
     ChipsCard,

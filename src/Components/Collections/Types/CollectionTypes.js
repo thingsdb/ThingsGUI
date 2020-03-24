@@ -104,7 +104,7 @@ const CollectionTypes = ({scope}) => {
                 expand={false}
                 items={customTypes}
                 onAdd={handleClickAdd}
-                onClick={handleClickEdit}
+                onEdit={handleClickEdit}
                 onDelete={handleClickDelete}
                 title="custom types"
             />

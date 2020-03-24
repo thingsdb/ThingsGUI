@@ -5,7 +5,7 @@ import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ProcedureActions} from '../../../Stores';
 
 
-const tag = '22';
+const tag = '18';
 
 const Remove = ({procedure, scope}) => {
     const [open, setOpen] = React.useState(false);
