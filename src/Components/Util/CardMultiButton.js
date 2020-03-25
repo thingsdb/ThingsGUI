@@ -12,52 +12,86 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
     card: {
-        float: 'left',
-        height: 30,
-        textAlign: 'center',
-        borderRadius: '30px',
-        margin: theme.spacing(1),
+        alignItems: 'center',
         backgroundColor: theme.palette.primary.main,
-    },
-    wrapper: {
-        height: 30,
+        border: 'none',
+        borderRadius: '16px',
+        boxSizing: 'border-box',
+        color: 'rgba(0, 0, 0, 0.87)',
+        cursor: 'default',
+        display: 'inline-flex',
+        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        fontSize: '0.8125rem',
+        height: '32px',
+        justifyContent: 'center',
+        margin: theme.spacing(1),
+        outline: 0,
+        padding: 0,
         textAlign: 'center',
-        borderRadius: '30px',
-        padding: theme.spacing(2),
+        textDecoration: 'none',
+        transition: 'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+        verticalAlign: 'middle',
+        whiteSpace: 'nowrap',
+    },
+    text: {
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        paddingLeft: '12px',
+        paddingRight: '12px',
+        textOverflow: 'ellipsis',
+        boxSizing: 'inherit',
+    },
+    button: {
+        color: theme.palette.background.paper,
+        width: '22px',
+        cursor: 'pointer',
+        height: '22px',
+        margin: '0 5px 0 -6px',
+        '-webkit-tap-highlight-color': 'transparent',
+        fill: 'currentColor',
+        width: '1em',
+        height: '1em',
+        display: 'inline-block',
+        fontSize: '1.5rem',
+        transition: 'fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+        flexShrink: 0,
+        userSelect: 'none',
+        boxSizing: 'inherit',
+        overflow: 'hidden',
     },
 }));
 
 
-const CardButton = ({buttons, label, ...other}) => {
+const CardMultiButton = ({buttons, label, ...other}) => {
     const classes = useStyles();
     return(
         <div
             className={classes.card}
-            raised
             {...other}
         >
-            <span className={classes.wrapper} {...other}>
-                <Typography variant="caption" component="span">
+            <span className={classes.text} {...other}>
+                <Typography variant="caption" component="span" color="inherit">
                     {label}
                 </Typography>
-                {buttons.map((b, i)=>(
-                    <IconButton onClick={b.onClick} size="small">
-                        {b.icon}
-                    </IconButton>
-                ))}
             </span>
+            {buttons.map((b, i)=>(
+                <IconButton className={classes.button} key={i} onClick={b.onClick} size="small">
+                    {b.icon}
+                </IconButton>
+            ))}
+
         </div>
     );
 };
 
-CardButton.defaultProps = {
+CardMultiButton.defaultProps = {
     other: {},
 };
 
-CardButton.propTypes = {
+CardMultiButton.propTypes = {
     buttons: PropTypes.arrayOf(PropTypes.object).isRequired,
     label: PropTypes.string.isRequired,
     other: PropTypes.object,
 };
 
-export default CardButton;
+export default CardMultiButton;

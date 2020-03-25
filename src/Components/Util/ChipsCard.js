@@ -106,13 +106,14 @@ const ChipsCard = ({title, items, onAdd, onEdit, onDelete, onRun, moreButtons, e
                             //         color="primary"
                             //     />
                             // </Tooltip>
-                            <CardMultiButton
-                                key={index}
-                                // className={classes.chip}
-                                label={listitem.name}
-                                buttons={onRun?buttons(index):buttons(index).slice(1)}
-                                color="primary"
-                            />
+                            <React.Fragment key={index}>
+                                <CardMultiButton
+                                    // className={classes.chip}
+                                    label={listitem.name}
+                                    buttons={onRun?buttons(index):buttons(index).slice(1)}
+                                    color="primary"
+                                />
+                            </React.Fragment>
                         )) : `No ${title}.`}
                     </React.Fragment>
                 }
