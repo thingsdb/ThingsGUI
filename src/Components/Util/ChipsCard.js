@@ -16,10 +16,6 @@ import {ErrorMsg, HarmonicCard, SimpleModal, CardMultiButton} from '../Util';
 
 
 const useStyles = makeStyles(theme => ({
-    chip: {
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
-    },
     customWidth: {
         maxWidth: 500,
     },
@@ -45,7 +41,7 @@ const ChipsCard = ({title, items, onAdd, onEdit, onDelete, onRun, moreButtons, e
     };
 
     const handleClickDelete = () => {
-        onDelete(deleteIndex, handleCloseDelete);
+        onDelete(deleteIndex, handleCloseDelete, tag);
     };
 
     const handleClickAdd = () => {
@@ -87,28 +83,8 @@ const ChipsCard = ({title, items, onAdd, onEdit, onDelete, onRun, moreButtons, e
                 content={
                     <React.Fragment>
                         {items && items.length ? items.map((listitem, index) => (
-                            // <Tooltip
-                            //     key={index}
-                            //     disableFocusListener
-                            //     disableTouchListener
-                            //     disableHoverListener={Boolean(!(listitem.doc||listitem.definition))}
-                            //     classes={{ tooltip: classes.customWidth }}
-                            //     title={
-                            //         <Typography variant="caption">
-                            //             {listitem.doc&&listitem.doc!=''?listitem.doc:listitem.definition}
-                            //         </Typography>
-                            //     }
-                            // >
-                            //     <CardMultiButton
-                            //         className={classes.chip}
-                            //         label={listitem.name}
-                            //         buttons={onRun?buttons(index):buttons(index).slice(1)}
-                            //         color="primary"
-                            //     />
-                            // </Tooltip>
                             <React.Fragment key={index}>
                                 <CardMultiButton
-                                    // className={classes.chip}
                                     label={listitem.name}
                                     buttons={onRun?buttons(index):buttons(index).slice(1)}
                                     color="primary"

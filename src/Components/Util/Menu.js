@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
     nestedAdd: {
         padding: 0,
     },
+    ListItemSecondaryAction: {
+        right: '0px',
+    },
 }));
 
 
@@ -55,7 +58,7 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                     }}
                 />
                 {onRefresh && (
-                    <ListItemSecondaryAction>
+                    <ListItemSecondaryAction className={classes.ListItemSecondaryAction}>
                         <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title.toLowerCase()} info`}>
                             <Button onClick={onRefresh}>
                                 <RefreshIcon color="primary" />

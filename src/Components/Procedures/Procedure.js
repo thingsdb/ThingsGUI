@@ -34,7 +34,7 @@ const Procedure = ({match, procedures}) => {
         },
         {
             name: 'remove',
-            component: <Remove procedure={selectedProcedure} scope={scope} />
+            component: <Remove procedure={selectedProcedure} scope={scope} close={(procedures[scope].length-1)!=match.index} />
         },
     ];
 

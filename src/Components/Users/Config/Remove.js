@@ -7,7 +7,7 @@ import {ThingsdbActions} from '../../../Stores';
 
 const tag = '25';
 
-const Remove = ({user}) => {
+const Remove = ({user, close}) => {
     const [show, setShow] = React.useState(false);
     const [name, setName] = React.useState('');
 
@@ -27,7 +27,7 @@ const Remove = ({user}) => {
         ThingsdbActions.removeUser(
             user.name,
             tag,
-            () => null,
+            close?handleClickClose:()=>null,
         );
     };
 
@@ -55,8 +55,13 @@ const Remove = ({user}) => {
     );
 };
 
+Remove.defaultProps = {
+    close: false,
+};
+
 Remove.propTypes = {
     user: PropTypes.object.isRequired,
+    close: PropTypes.bool,
 };
 
 export default Remove;

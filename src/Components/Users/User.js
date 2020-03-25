@@ -33,7 +33,7 @@ const User = ({match, user, users, collections}) => {
                     content={
                         <React.Fragment>
                             <Grid item md={12} xs={12}>
-                                <UserAccess user={selectedUser} collections={collections} />
+                                <UserAccess user={selectedUser} collections={collections} close={(users2.length-1)!=match.index} />
                             </Grid>
                             <Grid item md={12} xs={12}>
                                 <Tokens user={selectedUser} />

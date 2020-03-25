@@ -153,11 +153,11 @@ const Editor = ({match, history}) => {
         setQueryInput(i);
     };
 
-    const handleClickDeleteProcedure = (index, cb) => {
+    const handleClickDeleteProcedure = (index, cb, tag) => {
         ProcedureActions.deleteProcedure(
             scope.value,
             procedures[index].name,
-            '27',
+            tag,
             (p) => {
                 cb();
                 handleProcedures(p);
@@ -186,11 +186,11 @@ const Editor = ({match, history}) => {
         setQueryInput(i);
     };
 
-    const handleClickDeleteTypes = (index, cb) => {
+    const handleClickDeleteTypes = (index, cb, tag) => {
         TypeActions.deleteType(
             scope.value,
             customTypes[index].name,
-            '27',
+            tag,
             (t) => {
                 cb();
                 handleTypes(t);

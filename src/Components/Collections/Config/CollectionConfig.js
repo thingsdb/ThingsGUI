@@ -8,7 +8,7 @@ import RenameCollection from './Rename';
 import {HarmonicCard} from '../../Util';
 
 
-const CollectionConfig = ({collection}) => {
+const CollectionConfig = ({collection, close}) => {
 
     const buttons = [
         {
@@ -17,7 +17,7 @@ const CollectionConfig = ({collection}) => {
         },
         {
             name: 'remove',
-            component: <RemoveCollection collection={collection} />
+            component: <RemoveCollection collection={collection} close={close}/>
         },
     ];
 
@@ -39,8 +39,13 @@ const CollectionConfig = ({collection}) => {
     );
 };
 
+CollectionConfig.defaultProps = {
+    close: false,
+};
+
 CollectionConfig.propTypes = {
     collection: PropTypes.object.isRequired,
+    close: PropTypes.bool,
 };
 
 export default CollectionConfig;

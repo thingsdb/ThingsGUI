@@ -39,7 +39,7 @@ const Collection = ({match, collections}) => {
                         <React.Fragment>
                             <Grid container item md={7} xs={12}>
                                 <Grid className={classes.spacing} item xs={12}>
-                                    <CollectionConfig collection={selectedCollection} />
+                                    <CollectionConfig collection={selectedCollection} close={(collections.length-1)!=match.index} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <CollectionTree collection={selectedCollection} />

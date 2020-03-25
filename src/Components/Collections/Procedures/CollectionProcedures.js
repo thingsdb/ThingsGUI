@@ -49,12 +49,13 @@ const CollectionProcedures = ({procedures, scope}) => {
         setOpen({...open, ...c});
     };
 
-    const handleClickDelete = (i, cb) => {
-        const item = procedures[i];
+    const handleClickDelete = (i, cb, tag) => {
+        console.log(i, procedures);
+        const item = procedures[scope][i];
         ProcedureActions.deleteProcedure(
             scope,
             item.name,
-            '27',
+            tag,
             ()=> {
                 cb();
             }
