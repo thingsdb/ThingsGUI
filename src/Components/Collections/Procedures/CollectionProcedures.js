@@ -40,8 +40,8 @@ const CollectionProcedures = ({procedures, scope}) => {
         setOpen({...open, add: true});
     };
 
-    const handleClickRun = () => {
-        setindex(null);
+    const handleClickRun = (i) => {
+        setindex(i);
         setOpen({...open, run: true});
     };
 
@@ -49,12 +49,12 @@ const CollectionProcedures = ({procedures, scope}) => {
         setOpen({...open, ...c});
     };
 
-    const handleClickDelete = (i, cb) => {
-        const item = procedures[i];
+    const handleClickDelete = (i, cb, tag) => {
+        const item = procedures[scope][i];
         ProcedureActions.deleteProcedure(
             scope,
             item.name,
-            '27',
+            tag,
             ()=> {
                 cb();
             }
@@ -67,13 +67,14 @@ const CollectionProcedures = ({procedures, scope}) => {
                 expand={false}
                 items={procedures[scope]||[]}
                 onAdd={handleClickAdd}
-                onClick={handleClickEdit}
+                onEdit={handleClickEdit}
+                onRun={handleClickRun}
                 onDelete={handleClickDelete}
                 moreButtons={
                     <Chip
                         clickable
-                        label="RUN"
-                        onClick={handleClickRun}
+                        label="Edit"
+                        onClick={handleClickEdit}
                         color="primary"
                         variant="outlined"
                     />

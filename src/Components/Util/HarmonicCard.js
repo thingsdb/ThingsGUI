@@ -72,7 +72,7 @@ HarmonicCard.defaultProps = {
 
 HarmonicCard.propTypes = {
     title: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
-    content: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
+    content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.arrayOf(PropTypes.object)]).isRequired,
     buttons: PropTypes.object,
     expand: PropTypes.bool,
     noPadding: PropTypes.bool,

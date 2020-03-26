@@ -51,13 +51,13 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
         <Table>
             <TableHead>
                 <TableRow>
-                    <TableCell colSpan={1} />
+                    <TableCell size="small" colSpan={1} />
                     {header.map((h, i) => (
                         <TableCell key={h.ky} align={i?'right':'left'}>
                             {h.label}
                         </TableCell>
                     ))}
-                    <TableCell colSpan={buttons&&rows.length ? buttons(rows[0]).length : 1} align="right">
+                    <TableCell size="small" colSpan={buttons&&rows.length ? buttons(rows[0]).length : 1} align="right">
                         {onRefresh&&(
                             <Tooltip disableFocusListener disableTouchListener title="Refresh nodes info">
                                 <Button onClick={onRefresh}>
@@ -67,7 +67,7 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                         )}
                     </TableCell>
                     {onRefresh&&(
-                        <TableCell align="right">
+                        <TableCell size="small" align="right">
                             <StartStopPolling onPoll={onRefresh} title="nodes info" />
                         </TableCell>
                     )}
@@ -79,11 +79,11 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                     return (
                         <React.Fragment key={ri}>
                             <TableRow className={classes.row} >
-                                <TableCell align='right' style={{borderBottom: isopen?'none':null}}>
+                                <TableCell size="small" align='right' style={{borderBottom: isopen?'none':null}}>
                                     {row.node_id == connectedNode.node_id && <ConnectedIcon />}
                                 </TableCell>
                                 {header.map((h, i) => (
-                                    <TableCell key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
+                                    <TableCell size="small" key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
                                         <Typography variant="inherit" color={row[h.ky] == 'OFFLINE' ? 'error' : 'inherit'}>
                                             {row[h.ky]}
                                         </Typography>
@@ -91,12 +91,12 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                                 ))}
                                 {buttons ? (
                                     buttons(row).map((r, i) => (
-                                        <TableCell key={i} align='right' style={{borderBottom: isopen?'none':null}}>
+                                        <TableCell size="small" key={i} align='right' style={{borderBottom: isopen?'none':null}}>
                                             {r}
                                         </TableCell>
                                     ))
                                 ) : null}
-                                <TableCell align="right" style={{borderBottom: isopen?'none':null}}>
+                                <TableCell size="small" align="right" style={{borderBottom: isopen?'none':null}}>
                                     <IconButton onClick={handleClickRow(ri)}>
                                         {isopen ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
                                     </IconButton>
@@ -104,7 +104,7 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                             </TableRow>
                             {isopen ? (
                                 <TableRow className={classes.collapse} style={{borderBottom: 'none'}}>
-                                    <TableCell colSpan={12}>
+                                    <TableCell size="small" colSpan={12}>
                                         <Collapse in={isopen} timeout="auto" unmountOnExit>
                                             {rowExtend(row)}
                                         </Collapse>

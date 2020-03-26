@@ -20,9 +20,14 @@ class StartStopPolling extends React.Component {
     static propTypes = {
         onPoll: PropTypes.func.isRequired,
         title: PropTypes.string.isRequired,
+        variant: PropTypes.string,
 
         /* Styles properties */
         classes: PropTypes.object.isRequired,
+    }
+
+    static defaultProps = {
+        variant: 'text',
     }
 
     constructor(props) {
@@ -68,11 +73,11 @@ class StartStopPolling extends React.Component {
 
 
     render() {
-        const {classes, title} = this.props;
+        const {classes, title, variant} = this.props;
         const {polling} = this.state;
         return (
             <Tooltip disableFocusListener disableTouchListener title={polling?`Stop polling ${title}`:`Start polling ${title}`}>
-                <Button variant="text" onClick={polling?this.handleStopPoll:this.handleStartPoll}>
+                <Button variant={variant} onClick={polling?this.handleStopPoll:this.handleStartPoll}>
                     <ScheduleIcon className={polling?classes.green:classes.disabled} />
                 </Button>
             </Tooltip>

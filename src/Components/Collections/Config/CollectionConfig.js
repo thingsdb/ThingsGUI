@@ -8,7 +8,7 @@ import RenameCollection from './Rename';
 import {HarmonicCard} from '../../Util';
 
 
-const CollectionConfig = ({collection}) => {
+const CollectionConfig = ({collection, close}) => {
 
     const buttons = [
         {
@@ -17,7 +17,7 @@ const CollectionConfig = ({collection}) => {
         },
         {
             name: 'remove',
-            component: <RemoveCollection collection={collection} />
+            component: <RemoveCollection collection={collection} close={close} />
         },
     ];
 
@@ -27,9 +27,9 @@ const CollectionConfig = ({collection}) => {
             title="INFO"
             content={<CollectionInfo collection={collection} />}
             buttons={
-                <Grid container spacing={1} >
+                <Grid container spacing={1}>
                     {buttons.map(button => (
-                        <Grid key={button.name} item >
+                        <Grid key={button.name} item>
                             {button.component}
                         </Grid>
                     ))}
@@ -39,8 +39,13 @@ const CollectionConfig = ({collection}) => {
     );
 };
 
+CollectionConfig.defaultProps = {
+    close: false,
+};
+
 CollectionConfig.propTypes = {
     collection: PropTypes.object.isRequired,
+    close: PropTypes.bool,
 };
 
 export default CollectionConfig;

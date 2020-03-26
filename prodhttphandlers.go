@@ -23,6 +23,11 @@ func handlerEditorWorkerJS(w http.ResponseWriter, r *http.Request) {
 	w.Write(FileEditorWorkerJS)
 }
 
+func handlerMonacoFontTTF(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "font/ttf")
+	w.Write(FileMonacoFontTTF)
+}
+
 func handlerThingsdbGIF(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "image/gif")
 	w.Write(FileThingsdbGIF)

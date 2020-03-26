@@ -104,7 +104,7 @@ const NodeConfig = ({nodeId, offline, node}) => {
                         </Tooltip>
                     </Grid>
                     <Grid item>
-                        <StartStopPolling onPoll={handleRefresh} title="node info" />
+                        <StartStopPolling onPoll={handleRefresh} title="node info" variant="outlined" />
                     </Grid>
                 </Grid>
             )}

@@ -5,18 +5,15 @@ import Chip from '@material-ui/core/Chip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import PropTypes from 'prop-types';
 import React from 'react';
+import EditIcon from '@material-ui/icons/Edit';
+import RemoveIcon from '@material-ui/icons/Cancel';
+import RunIcon from '@material-ui/icons/DirectionsRun';
 import Switch from '@material-ui/core/Switch';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
 
-import {ErrorMsg, HarmonicCard, SimpleModal} from '../Util';
+import {ErrorMsg, HarmonicCard, SimpleModal, CardMultiButton} from '../Util';
 
 
 const useStyles = makeStyles(theme => ({
-    chip: {
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
-    },
     customWidth: {
         maxWidth: 500,
     },
@@ -25,19 +22,24 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const tag = '27';
+const tag = '30';
 
-const ChipsCard = ({title, items, onAdd, onClick, onDelete, moreButtons, expand}) => {
+const ChipsCard = ({title, items, onAdd, onEdit, onDelete, onRun, moreButtons, expand}) => {
     const classes = useStyles();
     const [deleteIndex, setDeleteIndex] = React.useState(null);
     const [switchDel, setSwitchDel] = React.useState(false);
 
-    const handleClick = (index) => ({target}) => {
-        onClick(index, target);
+
+    const handleOpenEdit = (index) => ({target}) => {
+        onEdit(index, target);
+    };
+
+    const handleOpenRun = (index) => ({target}) => {
+        onRun(index, target);
     };
 
     const handleClickDelete = () => {
-        onDelete(deleteIndex, handleCloseDelete);
+        onDelete(deleteIndex, handleCloseDelete, tag);
     };
 
     const handleClickAdd = () => {
@@ -56,38 +58,36 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, moreButtons, expand}
         setSwitchDel(false);
     };
 
+    const buttons = (index)=>([
+        {
+            icon: <RunIcon fontSize="small" />,
+            onClick: handleOpenRun(index),
+        },
+        {
+            icon: <EditIcon fontSize="small" />,
+            onClick: handleOpenEdit(index),
+        },
+        {
+            icon: <RemoveIcon fontSize="small" />,
+            onClick: handleOpenDelete(index),
+        },
+    ]);
+
     return (
         <React.Fragment>
             <HarmonicCard
                 title={title.toUpperCase()}
                 expand={expand}
                 content={
-                    <React.Fragment>
-                        {items && items.length ? items.map((listitem, index) => (
-                            <Tooltip
-                                key={index}
-                                disableFocusListener
-                                disableTouchListener
-                                disableHoverListener={Boolean(!(listitem.doc||listitem.definition))}
-                                classes={{ tooltip: classes.customWidth }}
-                                title={
-                                    <Typography variant="caption">
-                                        {listitem.doc&&listitem.doc!=''?listitem.doc:listitem.definition}
-                                    </Typography>
-                                }
-                            >
-                                <Chip
-                                    clickable
-                                    id={listitem.name}
-                                    className={classes.chip}
-                                    label={listitem.name}
-                                    onClick={handleClick(index)}
-                                    onDelete={handleOpenDelete(index)}
-                                    color="primary"
-                                />
-                            </Tooltip>
-                        )) : `No ${title}.`}
-                    </React.Fragment>
+                    items && items.length ? items.map((listitem, index) => (
+                        <React.Fragment key={index}>
+                            <CardMultiButton
+                                label={listitem.name}
+                                buttons={onRun?buttons(index):buttons(index).slice(1)}
+                                color="primary"
+                            />
+                        </React.Fragment>
+                    )) : `No ${title}.`
                 }
                 buttons={
                     <React.Fragment>
@@ -136,13 +136,15 @@ const ChipsCard = ({title, items, onAdd, onClick, onDelete, moreButtons, expand}
 ChipsCard.defaultProps = {
     expand: null,
     moreButtons: null,
+    onRun: null,
 },
 
 ChipsCard.propTypes = {
     title: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
     onAdd: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired,
+    onEdit: PropTypes.func.isRequired,
+    onRun: PropTypes.func,
     onDelete: PropTypes.func.isRequired,
     expand: PropTypes.bool,
     moreButtons: PropTypes.object

@@ -30,7 +30,7 @@ const validation = {
     },
 };
 
-const tag = '21';
+const tag = '24';
 
 const Password = ({user}) => {
     const [state, setState] = React.useState(initialState);

@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const tag = '13';
+const tag = '12';
 
 const Editor = ({match, history}) => {
     const classes = useStyles();
@@ -153,11 +153,11 @@ const Editor = ({match, history}) => {
         setQueryInput(i);
     };
 
-    const handleClickDeleteProcedure = (index, cb) => {
+    const handleClickDeleteProcedure = (index, cb, tag) => {
         ProcedureActions.deleteProcedure(
             scope.value,
             procedures[index].name,
-            '27',
+            tag,
             (p) => {
                 cb();
                 handleProcedures(p);
@@ -186,11 +186,11 @@ const Editor = ({match, history}) => {
         setQueryInput(i);
     };
 
-    const handleClickDeleteTypes = (index, cb) => {
+    const handleClickDeleteTypes = (index, cb, tag) => {
         TypeActions.deleteType(
             scope.value,
             customTypes[index].name,
-            '27',
+            tag,
             (t) => {
                 cb();
                 handleTypes(t);
@@ -259,7 +259,7 @@ const Editor = ({match, history}) => {
                                 expand={false}
                                 items={procedures}
                                 onAdd={handleClickAddProcedure}
-                                onClick={handleClickProcedure}
+                                onEdit={handleClickProcedure}
                                 onDelete={handleClickDeleteProcedure}
                                 title="procedures"
                             />
@@ -271,7 +271,7 @@ const Editor = ({match, history}) => {
                                 expand={false}
                                 items={customTypes}
                                 onAdd={handleClickAddTypes}
-                                onClick={handleClickTypes}
+                                onEdit={handleClickTypes}
                                 onDelete={handleClickDeleteTypes}
                                 title="custom types"
                             />

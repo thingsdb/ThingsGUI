@@ -8,6 +8,7 @@ const socket = io.connect(`${window.location.protocol}//${window.location.host}`
     reconnection: true,
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
+    pingInterval: 10000,
     reconnectionAttempts: Infinity,
     transports: ['websocket']
 });

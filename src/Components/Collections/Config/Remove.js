@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 
 const tag = '3';
 
-const Remove = ({collection}) => {
+const Remove = ({collection, close}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
     const name = React.useState(collection.name)[0]; //to prevent update of name to undefined, after it is deleted.
@@ -37,7 +37,7 @@ const Remove = ({collection}) => {
         ThingsdbActions.removeCollection(
             collection.name,
             tag,
-            ()=>null,
+            close?handleClickClose:()=>null,
         );
     };
 
@@ -80,7 +80,13 @@ const Remove = ({collection}) => {
     );
 };
 
+Remove.defaultProps = {
+    close: false,
+};
+
 Remove.propTypes = {
+    close: PropTypes.bool,
+
     /* collections properties */
     collection: PropTypes.object.isRequired,
 };

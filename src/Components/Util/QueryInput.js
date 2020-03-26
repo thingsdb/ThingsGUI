@@ -63,6 +63,10 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
     tokenizer: {
         root: [
             [/[{}]/, 'delimiter.bracket'],
+            {include: 'common'}
+        ],
+
+        common: [
 
             // identifiers and keywords
             [/[A-Za-z_][0-9A-Za-z_]*/, {
@@ -103,10 +107,11 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             [/[;,.]/, 'delimiter'],
 
             // strings
-            // [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
-            // [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+            [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+            [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
             [/"/, 'string', '@string_double'],
             [/'/, 'string', '@string_single'],
+            [/`/, 'string', '@string_backtick'],
         ],
         comment: [
             [/[^\/*]+/, 'comment' ],
@@ -144,30 +149,64 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
 
         string_double: [
             [/[^\\"]+/, 'string'],
-            // [/@escapes/, 'string.escape'],
-            // [/\\./, 'string.escape.invalid'],
+            [/@escapes/, 'string.escape'],
+            [/\\./, 'string.escape.invalid'],
             [/"/, 'string', '@pop']
         ],
 
         string_single: [
             [/[^\\']+/, 'string'],
-            // [/@escapes/, 'string.escape'],
-            // [/\\./, 'string.escape.invalid'],
+            [/@escapes/, 'string.escape'],
+            [/\\./, 'string.escape.invalid'],
             [/'/, 'string', '@pop']
+        ],
+
+        string_backtick: [
+            [/\{/, { token: 'delimiter.bracket', next: '@bracketCounting' }],
+            [/[^\\`{]+/, 'string'],
+            [/@escapes/, 'string.escape'],
+            [/\\./, 'string.escape.invalid'],
+            [/`/, 'string', '@pop']
+        ],
+
+        bracketCounting: [
+            [/\{/, 'delimiter.bracket', '@bracketCounting'],
+            [/\}/, 'delimiter.bracket', '@pop'],
+            { include: 'common' }
         ],
     },
 });
 
 monaco.languages.setLanguageConfiguration('mySpecialLanguage', {
-    surroundingPairs: [{open:'{', close: '}'}],
-    autoClosingPairs: [{open:'{', close: '}'}],
-    brackets: [['{','}']],
+    surroundingPairs: [
+        { open: '{', close: '}' },
+        { open: '[', close: ']' },
+        { open: '(', close: ')' },
+        { open: '"', close: '"', notIn: ['string'] },
+        { open: '\'', close: '\'', notIn: ['string', 'comment'] },
+        { open: '`', close: '`', notIn: ['string', 'comment'] },
+        // { open: "/**", close: " */", notIn: ["string"] }
+    ],
+    autoClosingPairs: [
+        { open: '{', close: '}' },
+        { open: '[', close: ']' },
+        { open: '(', close: ')' },
+        { open: '"', close: '"', notIn: ['string'] },
+        { open: '\'', close: '\'', notIn: ['string', 'comment'] },
+        { open: '`', close: '`', notIn: ['string', 'comment'] },
+        // { open: "/**", close: " */", notIn: ["string"] }
+    ],
+    brackets: [
+        ['{', '}'],
+        ['[', ']'],
+        ['(', ')']
+    ],
 });
 
 monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
     triggerCharacters: ['.'],
     provideCompletionItems: (model, position, _token) => {
-        const textUntilPosition = model.getValueInRange({startLineNumber: 1, startColumn: position.column-1, endLineNumber: position.lineNumber, endColumn: position.column}); // En wanneer value in variabel zit? Hoe herken je het type dan?
+        const textUntilPosition = model.getValueInRange({startLineNumber: 1, startColumn: position.column-1, endLineNumber: position.lineNumber, endColumn: position.column});
 
         //const re_str = new RegExp('^[\'\"].*[\'|\"]$');
         const suggestions = [];

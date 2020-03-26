@@ -12,7 +12,7 @@ import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal} from '../../Util';
 
 
-const tag = '5';
+const tag = '20';
 
 const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
     const [state, setState] = React.useState({

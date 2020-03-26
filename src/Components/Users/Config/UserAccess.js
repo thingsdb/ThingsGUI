@@ -38,9 +38,9 @@ const privileges = [
     },
 ];
 
-const tag = '24';
+const tag = '27';
 
-const UserAccess = ({user, collections}) => {
+const UserAccess = ({user, collections, close}) => {
     const [switches, setSwitches] = React.useState({});
 
     const getSwitches = (scope, privileges) => {
@@ -124,7 +124,7 @@ const UserAccess = ({user, collections}) => {
         },
         {
             name: 'remove',
-            component: <Remove user={user} />
+            component: <Remove user={user} close={close} />
         },
     ];
 
@@ -201,9 +201,14 @@ const UserAccess = ({user, collections}) => {
     );
 };
 
+UserAccess.defaultProps = {
+    close: false,
+};
+
 UserAccess.propTypes = {
     user: PropTypes.object.isRequired,
     collections: PropTypes.arrayOf(PropTypes.object).isRequired,
+    close: PropTypes.bool,
 };
 
 export default UserAccess;

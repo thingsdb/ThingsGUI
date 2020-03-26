@@ -85,12 +85,12 @@ const CollectionTypes = ({scope}) => {
     const handleCloseAdd = () => {
         setOpenAdd(false);
     };
-    const handleClickDelete = (i, cb) => {
+    const handleClickDelete = (i, cb, tag) => {
         const item = customTypes[i];
         TypeActions.deleteType(
             scope,
             item.name,
-            '27',
+            tag,
             (t) => {
                 cb();
                 handleTypes(t);
@@ -104,7 +104,7 @@ const CollectionTypes = ({scope}) => {
                 expand={false}
                 items={customTypes}
                 onAdd={handleClickAdd}
-                onClick={handleClickEdit}
+                onEdit={handleClickEdit}
                 onDelete={handleClickDelete}
                 title="custom types"
             />

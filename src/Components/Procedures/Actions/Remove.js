@@ -5,9 +5,9 @@ import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ProcedureActions} from '../../../Stores';
 
 
-const tag = '22';
+const tag = '18';
 
-const Remove = ({procedure, scope}) => {
+const Remove = ({procedure, scope, close}) => {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState('');
 
@@ -28,7 +28,7 @@ const Remove = ({procedure, scope}) => {
             scope,
             procedure.name,
             tag,
-            () => null,
+            close?handleClickClose:()=>null,
         );
     };
 
@@ -47,9 +47,14 @@ const Remove = ({procedure, scope}) => {
     );
 };
 
+Remove.defaultProps = {
+    close: false,
+};
+
 Remove.propTypes = {
     procedure: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
+    close: PropTypes.bool,
 };
 
 export default Remove;

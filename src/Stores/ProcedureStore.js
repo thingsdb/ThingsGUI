@@ -78,13 +78,11 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onRunProcedure(scope, procedure, jsonProofArgs, convertArgs, enableInts, tag,  cb=()=>null) {
+    onRunProcedure(scope, procedure, jsonProofArgs, tag,  cb=()=>null) {
         this.emit('run', {
             scope,
             procedure,
             args: jsonProofArgs,
-            convertArgs,
-            enableInts,
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {

@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const tag = '26';
+const tag = '31';
 
 const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThings, watchTypes}) => {
     const classes = useStyles();
