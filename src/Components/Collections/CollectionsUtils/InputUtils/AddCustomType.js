@@ -139,62 +139,60 @@ const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch
 
 
     return(
-        <React.Fragment>
-            {typeFields&&(
-                <Grid container>
-                    <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={array} name={type} groupSign="{">
-                        <Collapse className={classes.fullWidth} in={open} timeout="auto">
-                            {( typeFields.map(([fprop, ftype, fchldtype], i) => (
-                                <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
-                                    <Grid item xs={2}>
-                                        <TextField
-                                            type="text"
-                                            name="property"
-                                            label="Property"
-                                            value={fprop}
-                                            variant="standard"
-                                            fullWidth
-                                            disabled
-                                        />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <TextField
-                                            type="text"
-                                            name="dataType"
-                                            label="Data type"
-                                            onChange={handleChangeType(fprop)}
-                                            value={dataType[fprop]||ftype[0]}
-                                            variant="standard"
-                                            select
-                                            SelectProps={{native: true}}
-                                            fullWidth
-                                            disabled={ftype.length<2}
-                                        >
-                                            {ftype.map( p => (
-                                                <option key={p} value={p}>
-                                                    {p}
-                                                </option>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={single.includes(dataType[fprop]||ftype[0])?7:12}>
-                                        <InputField
-                                            customTypes={customTypes}
-                                            dataType={dataType[fprop]||ftype[0]}
-                                            dataTypes={dataTypes}
-                                            childTypes={fchldtype}
-                                            variant="standard"
-                                            label="Value"
-                                            identifier={fprop}
-                                        />
-                                    </Grid>
+        typeFields&&(
+            <Grid container>
+                <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={array} name={type} groupSign="{">
+                    <Collapse className={classes.fullWidth} in={open} timeout="auto">
+                        {( typeFields.map(([fprop, ftype, fchldtype], i) => (
+                            <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
+                                <Grid item xs={2}>
+                                    <TextField
+                                        type="text"
+                                        name="property"
+                                        label="Property"
+                                        value={fprop}
+                                        variant="standard"
+                                        fullWidth
+                                        disabled
+                                    />
                                 </Grid>
-                            )))}
-                        </Collapse>
-                    </ListHeader>
-                </Grid>
-            )}
-        </React.Fragment>
+                                <Grid item xs={2}>
+                                    <TextField
+                                        type="text"
+                                        name="dataType"
+                                        label="Data type"
+                                        onChange={handleChangeType(fprop)}
+                                        value={dataType[fprop]||ftype[0]}
+                                        variant="standard"
+                                        select
+                                        SelectProps={{native: true}}
+                                        fullWidth
+                                        disabled={ftype.length<2}
+                                    >
+                                        {ftype.map( p => (
+                                            <option key={p} value={p}>
+                                                {p}
+                                            </option>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={single.includes(dataType[fprop]||ftype[0])?7:12}>
+                                    <InputField
+                                        customTypes={customTypes}
+                                        dataType={dataType[fprop]||ftype[0]}
+                                        dataTypes={dataTypes}
+                                        childTypes={fchldtype}
+                                        variant="standard"
+                                        label="Value"
+                                        identifier={fprop}
+                                    />
+                                </Grid>
+                            </Grid>
+                        )))}
+                    </Collapse>
+                </ListHeader>
+            </Grid>
+        )
     );
 };
 

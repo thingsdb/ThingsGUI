@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -56,8 +57,6 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
             handleResult,
         );
     };
-
-    console.log(procedures, procedure)
 
     const selectedProcedure = procedure ? procedure : procedures && procedures.find(i => i.name == procedureName);
     return (

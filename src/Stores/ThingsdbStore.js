@@ -159,7 +159,6 @@ class ThingsdbStore extends BaseStore {
     }
 
     onRemoveCollection(name, tag, cb) {
-        console.log(cb)
         this.checkBeforeCollectionUpdate(`del_collection('${name}')`, tag, cb);
     }
 
@@ -239,7 +238,6 @@ class ThingsdbStore extends BaseStore {
             this.setState({
                 users: data
             });
-            console.log(cb)
             cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);

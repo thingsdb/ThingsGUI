@@ -30,34 +30,32 @@ const Collection = ({match, collections}) => {
     const selectedCollection = findItem(match.index, collections);
 
     return (
-        <React.Fragment>
-            {isObjectEmpty(selectedCollection) ? null : (
-                <TitlePage
-                    preTitle='Overview of:'
-                    title={selectedCollection.name}
-                    content={
-                        <React.Fragment>
-                            <Grid container item md={7} xs={12}>
-                                <Grid className={classes.spacing} item xs={12}>
-                                    <CollectionConfig collection={selectedCollection} close={(collections.length-1)!=match.index} />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <CollectionTree collection={selectedCollection} />
-                                </Grid>
+        isObjectEmpty(selectedCollection) ? null : (
+            <TitlePage
+                preTitle='Overview of:'
+                title={selectedCollection.name}
+                content={
+                    <React.Fragment>
+                        <Grid container item md={7} xs={12}>
+                            <Grid className={classes.spacing} item xs={12}>
+                                <CollectionConfig collection={selectedCollection} close={(collections.length-1)!=match.index} />
                             </Grid>
-                            <Grid container item md={5} xs={12}>
-                                <Grid className={classes.spacing} item xs={12}>
-                                    <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <CollectionTypes scope={`@collection:${selectedCollection.name}`} />
-                                </Grid>
+                            <Grid item xs={12}>
+                                <CollectionTree collection={selectedCollection} />
                             </Grid>
-                        </React.Fragment>
-                    }
-                />
-            )}
-        </React.Fragment>
+                        </Grid>
+                        <Grid container item md={5} xs={12}>
+                            <Grid className={classes.spacing} item xs={12}>
+                                <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <CollectionTypes scope={`@collection:${selectedCollection.name}`} />
+                            </Grid>
+                        </Grid>
+                    </React.Fragment>
+                }
+            />
+        )
     );
 };
 

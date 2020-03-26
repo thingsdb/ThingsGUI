@@ -17,7 +17,7 @@ const CollectionConfig = ({collection, close}) => {
         },
         {
             name: 'remove',
-            component: <RemoveCollection collection={collection} close={close}/>
+            component: <RemoveCollection collection={collection} close={close} />
         },
     ];
 
@@ -27,9 +27,9 @@ const CollectionConfig = ({collection, close}) => {
             title="INFO"
             content={<CollectionInfo collection={collection} />}
             buttons={
-                <Grid container spacing={1} >
+                <Grid container spacing={1}>
                     {buttons.map(button => (
-                        <Grid key={button.name} item >
+                        <Grid key={button.name} item>
                             {button.component}
                         </Grid>
                     ))}

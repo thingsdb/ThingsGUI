@@ -1,9 +1,6 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 
 import { makeStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -43,9 +40,7 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         color: theme.palette.background.paper,
-        width: '22px',
         cursor: 'pointer',
-        height: '22px',
         margin: '0 5px 0 -6px',
         '-webkit-tap-highlight-color': 'transparent',
         fill: 'currentColor',

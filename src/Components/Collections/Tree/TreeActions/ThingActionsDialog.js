@@ -120,19 +120,16 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
     );
 
     return (
-        <React.Fragment>
-            {show ? (
-                <SimpleModal
-                    open
-                    onClose={onClose}
-                    maxWidth="md"
-                    actionButtons={canEdit ? <SubmitButton onClickSubmit={handleClickOk} />:null}
-                >
-                    {content}
-                </SimpleModal>
-            ) : null}
-        </React.Fragment>
-
+        show ? (
+            <SimpleModal
+                open
+                onClose={onClose}
+                maxWidth="md"
+                actionButtons={canEdit ? <SubmitButton onClickSubmit={handleClickOk} />:null}
+            >
+                {content}
+            </SimpleModal>
+        ) : null
     );
 };
 

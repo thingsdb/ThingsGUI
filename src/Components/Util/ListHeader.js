@@ -84,7 +84,7 @@ ListHeader.defaultProps = {
 };
 
 ListHeader.propTypes = {
-    children: PropTypes.object.isRequired,
+    children: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]).isRequired,
     collapse: PropTypes.bool,
     groupSign: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(PropTypes.string).isRequired,

@@ -9,8 +9,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import RemoveIcon from '@material-ui/icons/Cancel';
 import RunIcon from '@material-ui/icons/DirectionsRun';
 import Switch from '@material-ui/core/Switch';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
 
 import {ErrorMsg, HarmonicCard, SimpleModal, CardMultiButton} from '../Util';
 
@@ -81,17 +79,15 @@ const ChipsCard = ({title, items, onAdd, onEdit, onDelete, onRun, moreButtons, e
                 title={title.toUpperCase()}
                 expand={expand}
                 content={
-                    <React.Fragment>
-                        {items && items.length ? items.map((listitem, index) => (
-                            <React.Fragment key={index}>
-                                <CardMultiButton
-                                    label={listitem.name}
-                                    buttons={onRun?buttons(index):buttons(index).slice(1)}
-                                    color="primary"
-                                />
-                            </React.Fragment>
-                        )) : `No ${title}.`}
-                    </React.Fragment>
+                    items && items.length ? items.map((listitem, index) => (
+                        <React.Fragment key={index}>
+                            <CardMultiButton
+                                label={listitem.name}
+                                buttons={onRun?buttons(index):buttons(index).slice(1)}
+                                color="primary"
+                            />
+                        </React.Fragment>
+                    )) : `No ${title}.`
                 }
                 buttons={
                     <React.Fragment>

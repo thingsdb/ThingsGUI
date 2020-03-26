@@ -62,76 +62,74 @@ const ThingRoot = ({things, collection, watchIds}) => {
     const isWatching = Boolean(watchIds[collection.collection_id]);
 
     return (
-        <React.Fragment>
-            {fetched ? (
-                <List
-                    component="nav"
-                    className={classes.root}
-                    dense
-                    disablePadding
-                >
-                    <ThingRestrict
-                        thing={things[collection.collection_id]}
-                        onChildren={(k, v, _i, _isArray) => (
-                            <Thing
-                                key={k}
-                                className={classes.thing}
-                                id={collection.collection_id}
-                                thing={v}
-                                things={things}
-                                collection={collection}
-                                parent={{
-                                    id: collection.collection_id,
-                                    name: 'root',
-                                    type: 'thing',
-                                    isTuple: false,
-                                }}
-                                child={{
-                                    name: k,
-                                    index: null,
-                                }}
-                                watchIds={watchIds}
-                            />
-                        )}
-                    />
-                    <Divider className={classes.divider} />
-                    <ListItem className={classes.listItem}>
-                        {isWatching ? (
-                            <ListItemIcon className={classes.icon}>
-                                <ExploreIcon className={classes.green} />
-                            </ListItemIcon>
-                        ) : null}
+        fetched ? (
+            <List
+                component="nav"
+                className={classes.root}
+                dense
+                disablePadding
+            >
+                <ThingRestrict
+                    thing={things[collection.collection_id]}
+                    onChildren={(k, v, _i, _isArray) => (
+                        <Thing
+                            key={k}
+                            className={classes.thing}
+                            id={collection.collection_id}
+                            thing={v}
+                            things={things}
+                            collection={collection}
+                            parent={{
+                                id: collection.collection_id,
+                                name: 'root',
+                                type: 'thing',
+                                isTuple: false,
+                            }}
+                            child={{
+                                name: k,
+                                index: null,
+                            }}
+                            watchIds={watchIds}
+                        />
+                    )}
+                />
+                <Divider className={classes.divider} />
+                <ListItem className={classes.listItem}>
+                    {isWatching ? (
                         <ListItemIcon className={classes.icon}>
-                            <ThingActions
-                                child={{
-                                    id: collection.collection_id,
-                                    index: null,
-                                    name: 'root',
-                                    type: 'thing',
-                                }}
-                                parent={{
-                                    id: null,
-                                    index: null,
-                                    name: '',
-                                    type: '',
-                                    isTuple: false,
-                                }}
-                                scope={`@collection:${collection.name}`}
-                                thing={things[collection.collection_id]}
-                                isRoot
-                            />
+                            <ExploreIcon className={classes.green} />
                         </ListItemIcon>
-                        {Object.entries(things[collection.collection_id]).length<2 ? (
-                            <ListItemText primary="Add your first thing!" />
-                        ) : null}
-                    </ListItem>
-                </List>
-            ) : (
-                <Typography variant="caption">
-                    {'Cannot fetch data.'}
-                </Typography>
-            )}
-        </React.Fragment>
+                    ) : null}
+                    <ListItemIcon className={classes.icon}>
+                        <ThingActions
+                            child={{
+                                id: collection.collection_id,
+                                index: null,
+                                name: 'root',
+                                type: 'thing',
+                            }}
+                            parent={{
+                                id: null,
+                                index: null,
+                                name: '',
+                                type: '',
+                                isTuple: false,
+                            }}
+                            scope={`@collection:${collection.name}`}
+                            thing={things[collection.collection_id]}
+                            isRoot
+                        />
+                    </ListItemIcon>
+                    {Object.entries(things[collection.collection_id]).length<2 ? (
+                        <ListItemText primary="Add your first thing!" />
+                    ) : null}
+                </ListItem>
+            </List>
+        ) : (
+            <Typography variant="caption">
+                {'Cannot fetch data.'}
+            </Typography>
+        )
     );
 };
 

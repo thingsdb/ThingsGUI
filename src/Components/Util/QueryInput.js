@@ -107,6 +107,8 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             // [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
             [/"/, 'string', '@string_double'],
             [/'/, 'string', '@string_single'],
+            [/^`.*\${$/, 'string', '@string'],
+            [/^}.*`$/, 'string', '@string'],
         ],
         comment: [
             [/[^\/*]+/, 'comment' ],
@@ -155,6 +157,11 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             // [/\\./, 'string.escape.invalid'],
             [/'/, 'string', '@pop']
         ],
+
+        string: [
+            [/^`.*\${$/, 'string'],
+            [/^}.*`$/, 'string', '@pop'],
+        ],
     },
 });
 
@@ -167,7 +174,7 @@ monaco.languages.setLanguageConfiguration('mySpecialLanguage', {
 monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
     triggerCharacters: ['.'],
     provideCompletionItems: (model, position, _token) => {
-        const textUntilPosition = model.getValueInRange({startLineNumber: 1, startColumn: position.column-1, endLineNumber: position.lineNumber, endColumn: position.column}); // En wanneer value in variabel zit? Hoe herken je het type dan?
+        const textUntilPosition = model.getValueInRange({startLineNumber: 1, startColumn: position.column-1, endLineNumber: position.lineNumber, endColumn: position.column});
 
         //const re_str = new RegExp('^[\'\"].*[\'|\"]$');
         const suggestions = [];
