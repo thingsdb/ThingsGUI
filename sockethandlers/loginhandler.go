@@ -61,7 +61,6 @@ func connect(client *Client, data LoginData) LoginResp {
 	}
 	client.Host = host
 	client.Port = uint16(port)
-	fmt.Println("newconn")
 	client.Connection = things.NewConn(host, uint16(port), client.Ssl)
 	client.Connection.EventCh = client.EventCh
 	client.Connection.LogCh = client.LogCh

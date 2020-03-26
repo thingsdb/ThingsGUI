@@ -50,7 +50,6 @@ const CollectionProcedures = ({procedures, scope}) => {
     };
 
     const handleClickDelete = (i, cb, tag) => {
-        console.log(i, procedures);
         const item = procedures[scope][i];
         ProcedureActions.deleteProcedure(
             scope,
