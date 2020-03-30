@@ -122,12 +122,12 @@ const Editor = ({match, history}) => {
         EditorActions.setHistory(query);
     };
 
-    const handleKeyPress = (e) => {
-        const {key, ctrlKey} = e;
+    const handleKeyUp = (e) => {
+        const {key, ctrlKey, keyCode} = e;
         if (ctrlKey && key == 'Enter') {
             handleSubmit();
         }
-        if (ctrlKey && e.keyCode == '38') {
+        if (ctrlKey && keyCode == '38') {
             setSuggestion(suggestion+1==history.length?0:suggestion+1);
             setQueryInput(history[suggestion]);
         }
@@ -220,7 +220,7 @@ const Editor = ({match, history}) => {
                     </Grid>
                     <Grid item xs={12}>
                         <Card id='editor' style={{height: newHeight}} className={classes.background}>
-                            <div onKeyDown={handleKeyPress}>
+                            <div onKeyUp={handleKeyUp}>
                                 <QueryInput onChange={handleInput} input={queryInput} height={newHeight-25} />
                             </div>
                             <Grid container item xs={12} alignItems="flex-end" justify="center" >
