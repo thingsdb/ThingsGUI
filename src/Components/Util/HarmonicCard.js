@@ -25,7 +25,7 @@ const HarmonicCard = ({buttons, content, expand, noPadding, onRefresh, title, un
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
-        onRefresh&&!expanded?onRefresh():null
+        onRefresh&&!expanded?onRefresh():null;
     };
 
     React.useEffect(() => {
