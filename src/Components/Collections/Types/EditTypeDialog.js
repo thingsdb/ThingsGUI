@@ -23,7 +23,7 @@ import {ErrorMsg, SimpleModal, TableWithButtons, WarnPopover} from '../../Util';
 
 const tag = '11';
 
-const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
+const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
     const [state, setState] = React.useState({
         queryString: '',
         property: {propertyName: '', propertyType: '', propertyVal: ''},
@@ -94,7 +94,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope, cb}) => {
             queryString,
             tag,
             () => {
-                TypeActions.getTypes(scope, tag, cb);
+                TypeActions.getTypes(scope, tag);
                 setAction('');
                 setAnchorEl(null);
                 setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: ''});
@@ -232,7 +232,6 @@ EditTypeDialog.propTypes = {
     customType: PropTypes.object,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     scope: PropTypes.string.isRequired,
-    cb: PropTypes.func.isRequired,
 };
 
 export default EditTypeDialog;

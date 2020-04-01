@@ -62,8 +62,8 @@ class TypeStore extends BaseStore {
             scope
         }).done((data) => {
             this.setState(prevState => {
-                const types = Object.assign({}, prevState.customTypes, {[scope]: data});
-                return {types};
+                const customTypes = Object.assign({}, prevState.customTypes, {[scope]: data});
+                return {customTypes};
             });
             cb(data);
         }).fail((event, status, message) => {

@@ -153,6 +153,7 @@ export default {
         'new_user': 'Creates a new user to ThingsDB. The new user is created without a password, token and access privileges. You probably want to set a password or add a new token and assign some privileges using grant(…).',
         'rename_collection': 'Rename a collection.',
         'rename_user': 'Rename a user.',
+        'restore': 'Restore from a backup file created with the new_backup function.',
         'revoke': 'Revoke collection or general privileges from a user. See grant for more information on how access privileges can be set for a user.',
         'set_password': 'Change a users password. This function can also be used to remove an existing password by using nil as the new password. Passwords must contain 1 to 128 printable characters.',
         'user_info': 'Returns information about a user. If no argument is given, this method will return information about the current logged in user.',

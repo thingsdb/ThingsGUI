@@ -23,6 +23,11 @@ const CollectionProcedures = ({procedures, scope}) => {
 
     }, [scope]);
 
+    const handleRefresh = () => {
+        ProcedureActions.getProcedures(scope, tag);
+    };
+
+
     const [open, setOpen] = React.useState({
         add: false,
         edit: false,
@@ -68,6 +73,7 @@ const CollectionProcedures = ({procedures, scope}) => {
                 items={procedures[scope]||[]}
                 onAdd={handleClickAdd}
                 onEdit={handleClickEdit}
+                onRefresh={handleRefresh}
                 onRun={handleClickRun}
                 onDelete={handleClickDelete}
                 moreButtons={
