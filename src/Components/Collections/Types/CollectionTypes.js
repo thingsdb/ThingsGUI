@@ -1,20 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {withVlow} from 'vlow';
 
 import AddTypeDialog from './AddTypeDialog';
 import EditTypeDialog from './EditTypeDialog';
-import {TypeActions} from '../../../Stores';
+import {TypeActions, TypeStore} from '../../../Stores';
 import {ChipsCard} from '../../Util';
 
 const tag = '10';
 
-const CollectionTypes = ({scope}) => {
-    const [customTypes, setCustomTypes] = React.useState([]);
 
-    const handleTypes = (t) => {
-        setCustomTypes(t);
-    };
+const withStores = withVlow([{
+    store: TypeStore,
+    keys: ['customTypes']
+}]);
 
+const CollectionTypes = ({scope, customTypes}) => {
     const types = [
         'str',
         'utf8',
@@ -29,7 +30,7 @@ const CollectionTypes = ({scope}) => {
         'number',
         'thing',
         'any',
-        ...customTypes.map(c=>c.name)
+        ...(customTypes[scope]||[]).map(c=>c.name)
     ];
 
     const typesOptional = [
@@ -51,7 +52,7 @@ const CollectionTypes = ({scope}) => {
         '{}',
         '{any}',
         '{thing}',
-        ...customTypes.map(c=>`{${c.name}}`),
+        ...(customTypes[scope]||[]).map(c=>`{${c.name}}`),
     ];
 
     const datatypesMap = [
@@ -66,9 +67,13 @@ const CollectionTypes = ({scope}) => {
 
     const [index, setindex] = React.useState(null);
     React.useEffect(() => {
-        TypeActions.getTypes(scope, tag, handleTypes);
+        TypeActions.getTypes(scope, tag);
 
     }, [scope]);
+
+    const handleRefresh = () => {
+        TypeActions.getTypes(scope, tag);
+    };
 
     const handleClickEdit = (i) => {
         setindex(i);
@@ -86,14 +91,13 @@ const CollectionTypes = ({scope}) => {
         setOpenAdd(false);
     };
     const handleClickDelete = (i, cb, tag) => {
-        const item = customTypes[i];
+        const item = customTypes[scope][i];
         TypeActions.deleteType(
             scope,
             item.name,
             tag,
-            (t) => {
+            () => {
                 cb();
-                handleTypes(t);
             }
         );
     };
@@ -102,20 +106,24 @@ const CollectionTypes = ({scope}) => {
         <React.Fragment>
             <ChipsCard
                 expand={false}
-                items={customTypes}
+                items={customTypes[scope]||[]}
                 onAdd={handleClickAdd}
-                onEdit={handleClickEdit}
                 onDelete={handleClickDelete}
+                onEdit={handleClickEdit}
+                onRefresh={handleRefresh}
                 title="custom types"
             />
-            <AddTypeDialog open={openAdd} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} cb={handleTypes} />
-            <EditTypeDialog open={openEdit} onClose={handleCloseEdit} customType={index!=null?customTypes[index]:{}} dataTypes={datatypesMap} scope={scope} cb={handleTypes} />
+            <AddTypeDialog open={openAdd} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} />
+            <EditTypeDialog open={openEdit} onClose={handleCloseEdit} customType={index!=null&&customTypes[scope]?customTypes[scope][index]:{}} dataTypes={datatypesMap} scope={scope} />
         </React.Fragment>
     );
 };
 
 CollectionTypes.propTypes = {
     scope: PropTypes.string.isRequired,
+
+    /* procedures properties */
+    customTypes: TypeStore.types.customTypes.isRequired,
 };
 
-export default CollectionTypes;
+export default withStores(CollectionTypes);

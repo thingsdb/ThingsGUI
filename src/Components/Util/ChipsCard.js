@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 const tag = '30';
 
-const ChipsCard = ({title, items, onAdd, onEdit, onDelete, onRun, moreButtons, expand}) => {
+const ChipsCard = ({expand, items, moreButtons, onAdd, onDelete, onEdit, onRefresh, onRun, title}) => {
     const classes = useStyles();
     const [deleteIndex, setDeleteIndex] = React.useState(null);
     const [switchDel, setSwitchDel] = React.useState(false);
@@ -102,6 +102,7 @@ const ChipsCard = ({title, items, onAdd, onEdit, onDelete, onRun, moreButtons, e
                         {moreButtons}
                     </React.Fragment>
                 }
+                onRefresh={onRefresh}
             />
             <SimpleModal
                 open={deleteIndex!=null}
@@ -136,18 +137,20 @@ const ChipsCard = ({title, items, onAdd, onEdit, onDelete, onRun, moreButtons, e
 ChipsCard.defaultProps = {
     expand: null,
     moreButtons: null,
+    onRefresh: null,
     onRun: null,
 },
 
 ChipsCard.propTypes = {
-    title: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(PropTypes.object).isRequired,
-    onAdd: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired,
-    onRun: PropTypes.func,
-    onDelete: PropTypes.func.isRequired,
     expand: PropTypes.bool,
-    moreButtons: PropTypes.object
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
+    moreButtons: PropTypes.object,
+    onAdd: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    onEdit: PropTypes.func.isRequired,
+    onRefresh: PropTypes.func,
+    onRun: PropTypes.func,
+    title: PropTypes.string.isRequired,
 };
 
 export default ChipsCard;

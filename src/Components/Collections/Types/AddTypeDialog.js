@@ -18,7 +18,7 @@ import {ArrayLayout, ErrorMsg, SimpleModal} from '../../Util';
 
 const tag = '9';
 
-const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
+const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
 
     const [state, setState] = React.useState({
         queryString: '',
@@ -74,7 +74,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope, cb}) => {
             queryString,
             tag,
             () => {
-                TypeActions.getTypes(scope, tag, cb);
+                TypeActions.getTypes(scope, tag);
                 onClose();
             }
         );
@@ -175,7 +175,6 @@ AddTypeDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     scope: PropTypes.string.isRequired,
-    cb: PropTypes.func.isRequired,
 };
 
 export default AddTypeDialog;

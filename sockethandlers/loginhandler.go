@@ -238,6 +238,7 @@ func GetConnection(client *Client) (int, interface{}, util.Message) {
 	var resp = make(map[string]LoginData)
 	for k, v := range mapping {
 		v.Password = ""
+		v.Token = ""
 
 		resp[k] = v
 	}

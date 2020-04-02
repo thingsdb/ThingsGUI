@@ -19,12 +19,13 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const HarmonicCard = ({title, content, buttons, expand, noPadding, unmountOnExit}) => {
+const HarmonicCard = ({buttons, content, expand, noPadding, onRefresh, title, unmountOnExit}) => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(expand);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
+        onRefresh&&!expanded?onRefresh():null;
     };
 
     React.useEffect(() => {
@@ -64,18 +65,20 @@ const HarmonicCard = ({title, content, buttons, expand, noPadding, unmountOnExit
 };
 
 HarmonicCard.defaultProps = {
-    expand: true,
     buttons: null,
+    expand: true,
     noPadding: false,
+    onRefresh: null,
     unmountOnExit: true,
 },
 
 HarmonicCard.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
-    content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.arrayOf(PropTypes.object)]).isRequired,
     buttons: PropTypes.object,
+    content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.arrayOf(PropTypes.object)]).isRequired,
     expand: PropTypes.bool,
     noPadding: PropTypes.bool,
+    onRefresh: PropTypes.func,
+    title: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     unmountOnExit: PropTypes.bool,
 };
 
