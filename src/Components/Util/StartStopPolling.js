@@ -51,7 +51,7 @@ class StartStopPolling extends React.Component {
         const iid = setInterval(
             () => {
                 onPoll();
-            }, 1000);
+            }, 2000);
         const tid= setTimeout(
             () => {
                 this.handleStopPoll();
