@@ -88,6 +88,9 @@ const Editor = ({match, history}) => {
         setProcedures(p);
     };
 
+    const handleRefreshProcedures = () => ProcedureActions.getProcedures(scope.value, tag, handleProcedures);
+    const handleRefreshTypes = () => TypeActions.getTypes(scope.value, tag, handleTypes);
+
     const handleGetAdditionals = () => {
         if (scope.value&&!scope.value.includes('@node')) {
             ProcedureActions.getProcedures(scope.value, tag, handleProcedures);
@@ -260,6 +263,7 @@ const Editor = ({match, history}) => {
                                 items={procedures}
                                 onAdd={handleClickAddProcedure}
                                 onEdit={handleClickProcedure}
+                                onRefresh={handleRefreshProcedures}
                                 onDelete={handleClickDeleteProcedure}
                                 title="procedures"
                             />
@@ -272,6 +276,7 @@ const Editor = ({match, history}) => {
                                 items={customTypes}
                                 onAdd={handleClickAddTypes}
                                 onEdit={handleClickTypes}
+                                onRefresh={handleRefreshTypes}
                                 onDelete={handleClickDeleteTypes}
                                 title="custom types"
                             />
