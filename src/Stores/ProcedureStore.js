@@ -71,7 +71,7 @@ class ProcedureStore extends BaseStore {
                 const procedures = Object.assign({}, prevState.procedures, {[scope]: data});
                 return {procedures};
             });
-            cb();
+            cb(data);
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             return [];
