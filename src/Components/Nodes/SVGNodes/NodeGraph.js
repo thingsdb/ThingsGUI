@@ -6,9 +6,9 @@ import Node from './Components/Node';
 
 const NodeGraph = ({width, height, radius, data, streamInfo}) => {
 
-    const x = (a) => (width/2)+Math.cos(a*Math.PI)*radius;
-    const y = (a) => (height/2)+Math.sin(a*Math.PI)*radius;
-    const d = data.reduce((res, item, i) => { res[item.node_id] = [x(i*2/data.length),y(i*2/data.length)] ; return res;}, {});
+    const x = (a) => (width/2)+Math.cos(a*2*Math.PI)*radius;
+    const y = (a) => (height/2)+Math.sin(a*2*Math.PI)*radius;
+    const d = data.reduce((res, item, i) => { res[item.node_id] = [x(i/data.length),y(i/data.length)] ; return res;}, {});
 
     return(
         <svg width={width} height={height}>

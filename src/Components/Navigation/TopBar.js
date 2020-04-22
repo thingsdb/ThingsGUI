@@ -14,6 +14,7 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {TopBarMenu} from '../Util';
 import {ApplicationActions, ThingsdbStore} from '../../Stores';
+import LandingPage from '../LandingPage';
 // import packageJson from '../../'; TODO does not find package.json
 
 const withStores = withVlow([{
@@ -53,13 +54,14 @@ const TopBar = ({additionals, user}) => {
         >
             <Toolbar className={classes.toolbar}>
                 <div className={classes.flex}>
+                    <LandingPage />
                     {/* <Tooltip disableFocusListener disableTouchListener title={packageJson.version}>                   */}
-                    <img
+                    {/* <img
                         alt="ThingsDB Logo"
                         src="/img/thingsdb-logo.png"
                         className={classes.avatar}
                         draggable='false'
-                    />
+                    /> */}
                     {/* </Tooltip> */}
                 </div>
                 <div >
