@@ -1,29 +1,37 @@
-import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
+import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import Grid from '@material-ui/core/Grid';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import PeopleIcon from '@material-ui/icons/People';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Slide from '@material-ui/core/Slide';
+import StorageIcon from '@material-ui/icons/Storage';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import {withVlow} from 'vlow';
 
 import PieChart from './Components';
-import {ThingsdbActions, ThingsdbStore} from '../../Stores';
+import {TopBar} from '../Navigation';
+import {NodesActions, NodesStore, ThingsdbActions, ThingsdbStore} from '../../Stores';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
-    keys: ['collections']
+    keys: ['collections', 'users']
+}, {
+    store: NodesStore,
+    keys: ['nodes']
 }]);
 
 const useStyles = makeStyles((theme) => ({
@@ -57,7 +65,11 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
     },
     divider: {
-        height: 10,
+        border: '1px solid #89afe0',
+    },
+    icon: {
+        fontSize: '70px',
+        color: theme.palette.primary.main,
     },
 }));
 
@@ -65,20 +77,21 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} mountOnEnter unmountOnExit />;
 });
 
-const LandingPage = ({collections}) => {
+const LandingPage = ({collections, users, nodes}) => {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
     const [thingsSavedPerCol, setThingsSavedPerCol] = React.useState([]);
 
     React.useEffect(() => {
-        ThingsdbActions.getCollections();
+        NodesActions.getNodes();
     }, []);
     React.useEffect(() => {
         if(open) {
+            console.log('hi')
             const t = collections.reduce((res, item) => { res.push({title: item.name, number: item.things}) ; return res;}, []);
             setThingsSavedPerCol(t);
         }
-    }, [open]);
+    }, [open, collections]);
 
     const handleClickOpen = () => {
       setOpen(true);
@@ -89,6 +102,9 @@ const LandingPage = ({collections}) => {
     };
 
     const totalNumThings = thingsSavedPerCol.reduce((res, item) => { res += item.number  ; return res;}, 0);
+    const totalNumCollections = collections.length;
+    const totalNumUsers = users.length;
+    const totalNumNodes = nodes.length
 
     return(
         <div>
@@ -106,8 +122,8 @@ const LandingPage = ({collections}) => {
                         <Grid container>
                             <Grid item xs={6} sm={3}>
                                 <Card className={classes.card}>
-                                    <Divider />
-                                    <CardHeader
+                                    <Divider className={classes.divider} />
+                                     <CardHeader
                                         action={
                                             <img
                                                 alt="ThingsDB Logo"
@@ -129,35 +145,56 @@ const LandingPage = ({collections}) => {
                             </Grid>
                             <Grid item xs={6} sm={3}>
                                 <Card className={classes.card}>
-                                    <Typography variant="button">
-                                        {'Total number of Things'}
-                                    </Typography>
-                                    <Typography variant="h4">
-                                        {totalNumThings}
-                                    </Typography>
-                                    <Divider />
+                                    <Divider className={classes.divider} />
+                                     <CardHeader
+                                        action={
+                                            <DashboardIcon className={classes.icon} />
+                                        }
+                                        title={totalNumCollections}
+                                        subheader="Total number of Collections"
+                                        subheaderTypographyProps={{
+                                            variant:"button"
+                                        }}
+                                        titleTypographyProps={{
+                                            variant:"h4"
+                                        }}
+                                    />
                                 </Card>
                             </Grid>
                             <Grid item xs={6} sm={3}>
                                 <Card className={classes.card}>
-                                    <Typography variant="button">
-                                        {'Total number of Things'}
-                                    </Typography>
-                                    <Typography variant="h4">
-                                        {totalNumThings}
-                                    </Typography>
-                                    <Divider />
+                                    <Divider className={classes.divider} />
+                                     <CardHeader
+                                        action={
+                                            <PeopleIcon className={classes.icon} />
+                                        }
+                                        title={totalNumUsers}
+                                        subheader="Total number of Users"
+                                        subheaderTypographyProps={{
+                                            variant:"button"
+                                        }}
+                                        titleTypographyProps={{
+                                            variant:"h4"
+                                        }}
+                                    />
                                 </Card>
                             </Grid>
                             <Grid item xs={6} sm={3}>
                                 <Card className={classes.card}>
-                                    <Typography variant="button">
-                                        {'Total number of Things'}
-                                    </Typography>
-                                    <Typography variant="h4">
-                                        {totalNumThings}
-                                    </Typography>
-                                    <Divider />
+                                    <Divider className={classes.divider} />
+                                     <CardHeader
+                                        action={
+                                            <StorageIcon className={classes.icon} />
+                                        }
+                                        title={totalNumNodes}
+                                        subheader="Total number of Nodes"
+                                        subheaderTypographyProps={{
+                                            variant:"button"
+                                        }}
+                                        titleTypographyProps={{
+                                            variant:"h4"
+                                        }}
+                                    />
                                 </Card>
                             </Grid>
                         </Grid>
@@ -190,18 +227,28 @@ const LandingPage = ({collections}) => {
                     </ListItem>
                 </List>
                 <div style={{position:'fixed', width: "100%", bottom: 0, zIndex: 2}}>
-                    <AppBar className={classes.appBar} position="static">
-                        <Toolbar className={classes.toolbar}>
+                    <TopBar
+                        pageIcon={
                             <IconButton edge="start" color="default" onClick={handleClose} aria-label="close">
                                 <ExpandLessIcon />
                             </IconButton>
-                        </Toolbar>
-                    </AppBar>
+                            }
+                        />
                 </div>
             </Dialog>
 
         </div>
     );
+};
+
+LandingPage.propTypes = {
+
+    /* ThingsDB properties */
+    collections: ThingsdbStore.types.collections.isRequired,
+    users: ThingsdbStore.types.users.isRequired,
+
+    /* Node properties */
+    nodes: NodesStore.types.nodes.isRequired,
 };
 
 export default withStores(LandingPage);

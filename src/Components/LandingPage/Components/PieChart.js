@@ -5,7 +5,7 @@ import Pie from './Pie';
 
 
 const PieChart = ({width, height, radius, data, backgroundColor, title}) => {
-    console.log('hi');
+    console.log('hoi');
     return(
           <svg width={width} height={height}>
             <text x={width/2-(title.length*11)/2} y={35} fill="white" style={{fontSize:'18px', fontFamily:'monospace'}}>

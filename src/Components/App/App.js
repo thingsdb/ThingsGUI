@@ -19,6 +19,7 @@ import Watcher from '../Watcher';
 import {Procedure} from '../Procedures';
 import {ApplicationStore} from '../../Stores';
 import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
+import LandingPage from '../LandingPage';
 
 
 const withStores = withVlow([{
@@ -71,6 +72,7 @@ const App = ({match}) => {
                             </List>
                         </TopBarMenu>
                     }
+                    pageIcon={<LandingPage />}
                 />
             }
             mainContent={
