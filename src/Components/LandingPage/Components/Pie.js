@@ -4,8 +4,8 @@ import React from 'react';
 import Piece from './Piece';
 
 
-const colors = ['#43A19E', '#7B43A1', '#F2317A', '#FF9824', '#58CF6C'];
-const Pie = ({ data, hole, radius, showLabels, showPercent, stroke, strokeWidth}) => {
+const colors = ['#89afe0', '#51719d', '#3a5985', '#d5deef', '#43A19E', '#58CF6C', '#FF9824', '#F2317A', '#7B43A1'];
+const Pie = ({ data, hole, offset, radius, showLabels, showPercent, stroke, strokeWidth}) => {
 
     let colorsLength = colors.length;
 
@@ -20,21 +20,26 @@ const Pie = ({ data, hole, radius, showLabels, showPercent, stroke, strokeWidth}
             start += fraction;
 
             return(
-                <Piece
-                    key={ i }
-                    value={ piece.number }
-                    showPercent={ showPercent }
-                    fraction={ fraction }
-                    start={ next }
-                    radius={ radius }
-                    hole={ radius - hole }
-                    trueHole={ hole }
-                    showLabel= { showLabels }
-                    fill={ colors[i % colorsLength] }
-                    stroke={ stroke }
-                    strokeWidth={ strokeWidth }
-                    offset = {{x: 0, y: 50}}
-                />
+                <React.Fragment key={i}>
+                    <Piece
+                        value={piece.number}
+                        showPercent={showPercent}
+                        fraction={fraction}
+                        start={next}
+                        radius={radius}
+                        hole={radius - hole}
+                        trueHole={hole}
+                        showLabel= {showLabels}
+                        fill={colors[i % colorsLength]}
+                        stroke={stroke}
+                        strokeWidth={strokeWidth}
+                        offset = {offset}
+                    />
+                    <circle cx={i%2 ? offset.x+radius : 20 } cy={i%2 ? 20+offset.y+2*radius+(i-1)/2*25 : 20+offset.y+2*radius+i/2*25} r="10" fill={colors[i % colorsLength]} />
+                    <text x={i%2 ? offset.x+radius+20 : 40} y={i%2 ?  25+offset.y+2*radius+(i-1)/2*25 : 25+offset.y+2*radius+i/2*25} fill="white" style={{fontSize:'10px', fontFamily:'monospace'}}>
+                        {piece.title}
+                    </text>
+                </React.Fragment>
             );
         })
     );
@@ -44,6 +49,7 @@ const Pie = ({ data, hole, radius, showLabels, showPercent, stroke, strokeWidth}
 Pie.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object).isRequired,
     hole: PropTypes.number.isRequired,
+    offset: PropTypes.object.isRequired,
     radius: PropTypes.number.isRequired,
     showLabels: PropTypes.bool.isRequired,
     showPercent: PropTypes.bool.isRequired,

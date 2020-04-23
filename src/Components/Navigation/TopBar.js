@@ -55,14 +55,6 @@ const TopBar = ({additionals, user}) => {
             <Toolbar className={classes.toolbar}>
                 <div className={classes.flex}>
                     <LandingPage />
-                    {/* <Tooltip disableFocusListener disableTouchListener title={packageJson.version}>                   */}
-                    {/* <img
-                        alt="ThingsDB Logo"
-                        src="/img/thingsdb-logo.png"
-                        className={classes.avatar}
-                        draggable='false'
-                    /> */}
-                    {/* </Tooltip> */}
                 </div>
                 <div >
                     <TopBarMenu menuIcon={<AccountCircle />}>

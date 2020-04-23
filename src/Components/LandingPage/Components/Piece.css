@@ -4,12 +4,6 @@ svg {
         transform-origin: 50% 50%;
         animation: scale .6s;
     margin: 10px;
-
-    /* text {
-        font-family: Helvetica, Arial, sans-serif;
-        font-weight: bolder;
-        font-size: 12px;
-    } */
 }
 
 @keyframes scale {
