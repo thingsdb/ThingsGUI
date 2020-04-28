@@ -12,7 +12,7 @@ function getAnglePoint(fraction, radius, rx, ry) {
 
 
 const Piece = ({fill, fraction, hole, offset, radius, showLabel, showPercent, start, stroke, strokeWidth, trueHole, value}) => {
-    const [textPoint, setTextPoint] = React.useState({
+     const [textPoint, setTextPoint] = React.useState({
         x: 0,
         y: 0
     });
@@ -24,16 +24,14 @@ const Piece = ({fill, fraction, hole, offset, radius, showLabel, showPercent, st
 
 	React.useEffect(() => {
         animate();
-    }, []);
+    }, [fraction, start]);
 
 	const animate = () => {
 		draw(0);
     }
 
 	const draw = (s) => {
-
 		let step = fraction / 20;
-
 		if (s + step > fraction) {
             s = fraction;
 		}

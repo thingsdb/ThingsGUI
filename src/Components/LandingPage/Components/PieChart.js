@@ -4,8 +4,7 @@ import React from 'react';
 import Pie from './Pie';
 
 
-const PieChart = ({width, height, radius, data, backgroundColor, title}) => {
-    console.log('hoi');
+const PieChart = ({backgroundColor, data, height, radius, showPercent, title, width}) => {
     return(
           <svg width={width} height={height}>
             <text x={width/2-(title.length*11)/2} y={35} fill="white" style={{fontSize:'18px', fontFamily:'monospace'}}>
@@ -15,7 +14,7 @@ const PieChart = ({width, height, radius, data, backgroundColor, title}) => {
                 data={ data }
                 hole={ 50 }
                 showLabels={ true }
-                showPercent={ true }
+                showPercent={ showPercent }
                 radius={ radius }
                 stroke={ backgroundColor }
                 strokeWidth={ 5 }
@@ -27,18 +26,20 @@ const PieChart = ({width, height, radius, data, backgroundColor, title}) => {
 
 
 PieChart.defaultProps = {
-    width: 300,
     height: 450,
     radius: 145,
+    showPercent: false,
+    width: 300,
 };
 
 PieChart.propTypes = {
-    width: PropTypes.number,
+    backgroundColor: PropTypes.string.isRequired,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
     height: PropTypes.number,
     radius: PropTypes.number,
-    data: PropTypes.arrayOf(PropTypes.object).isRequired,
-    backgroundColor: PropTypes.string.isRequired,
+    showPercent: PropTypes.bool,
     title: PropTypes.string.isRequired,
+    width: PropTypes.number,
 };
 
 

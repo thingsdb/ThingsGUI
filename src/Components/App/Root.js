@@ -29,7 +29,7 @@ const theme = createMuiTheme({
             warning: '#5a0c18d9'
         },
         secondary: {
-            main: 'rgba(0, 55, 123, 0.3)',
+            main: '#193352',
         },
         tertiary: {
             main: '#304765',

@@ -14,7 +14,6 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {TopBarMenu} from '../Util';
 import {ApplicationActions, ThingsdbStore} from '../../Stores';
-import LandingPage from '../LandingPage';
 // import packageJson from '../../'; TODO does not find package.json
 
 const withStores = withVlow([{
@@ -31,6 +30,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.secondary.main,
         flexGrow: 1,
         marginBottom: theme.spacing(1),
+
     },
     flex: {
         flexGrow: 1,

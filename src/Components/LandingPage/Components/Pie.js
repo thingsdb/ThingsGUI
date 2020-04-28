@@ -3,8 +3,15 @@ import React from 'react';
 
 import Piece from './Piece';
 
+const colors = [
+    '#43A19E', '#58CF6C', '#FF9824', '#F2317A', '#7B43A1', '#219ef9', '#89afe0',
+    '#51719d', '#3a5985', '#aa2e25', '#f44336', '#e91e63', '#9c27b0', '#673ab7',
+    '#1769aa', '#0276aa', '#008394', '#00695f', '#357a38', '#618833', '#8f9a27',
+    '#f6685e', '#6d1b7b', '#482880', '#6573c3', '#4dabf5', '#35baf6', '#33c9dc',
+    '#33ab9f', '#6fbf73', '#a2cf6e', '#b28704', '#b26a00', '#b23c17', '#a31545',
+    '#ed4b82', '#af52bf', '#8561c5', '#2196f3', '#03a9f4', '#00bcd4', '#009688',
+    '#4caf50', '#8bc34a', '#ff5722']
 
-const colors = ['#89afe0', '#51719d', '#3a5985', '#d5deef', '#43A19E', '#58CF6C', '#FF9824', '#F2317A', '#7B43A1'];
 const Pie = ({ data, hole, offset, radius, showLabels, showPercent, stroke, strokeWidth}) => {
 
     let colorsLength = colors.length;
@@ -12,9 +19,8 @@ const Pie = ({ data, hole, offset, radius, showLabels, showPercent, stroke, stro
     const total = data.reduce((res, item) => { res += item.number  ; return res;}, 0);
     let start = 0;
 
-
     return (
-        data.map(function (piece, i) {
+        data.map((piece, i) => {
             let next = start;
             let fraction = (piece.number / total);
             start += fraction;
@@ -22,18 +28,18 @@ const Pie = ({ data, hole, offset, radius, showLabels, showPercent, stroke, stro
             return(
                 <React.Fragment key={i}>
                     <Piece
-                        value={piece.number}
-                        showPercent={showPercent}
-                        fraction={fraction}
-                        start={next}
-                        radius={radius}
-                        hole={radius - hole}
-                        trueHole={hole}
-                        showLabel= {showLabels}
                         fill={colors[i % colorsLength]}
+                        fraction={fraction}
+                        hole={radius - hole}
+                        offset = {offset}
+                        radius={radius}
+                        showLabel= {showLabels}
+                        showPercent={showPercent}
+                        start={next}
                         stroke={stroke}
                         strokeWidth={strokeWidth}
-                        offset = {offset}
+                        trueHole={hole}
+                        value={piece.number}
                     />
                     <circle cx={i%2 ? offset.x+radius : 20 } cy={i%2 ? 20+offset.y+2*radius+(i-1)/2*25 : 20+offset.y+2*radius+i/2*25} r="10" fill={colors[i % colorsLength]} />
                     <text x={i%2 ? offset.x+radius+20 : 40} y={i%2 ?  25+offset.y+2*radius+(i-1)/2*25 : 25+offset.y+2*radius+i/2*25} fill="white" style={{fontSize:'10px', fontFamily:'monospace'}}>

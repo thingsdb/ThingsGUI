@@ -8,39 +8,42 @@ import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
 const NodesActions = Vlow.createActions([
-    'resetNodesStore',
-    'getNodes',
-    'getStreamInfo',
-    'getNode',
-    'getCounters',
-    'setLoglevel',
-    'resetCounters',
-    'shutdown',
+    'addBackup',
     'addNode',
+    'delBackup',
     'delNode',
     'getBackups',
-    'addBackup',
-    'delBackup',
+    'getCounters',
+    'getDashboardInfo',
+    'getNode',
+    'getNodes',
+    'getStreamInfo',
+    'resetCounters',
+    'resetNodesStore',
+    'setLoglevel',
+    'shutdown',
 ]);
 
 
 class NodesStore extends BaseStore {
 
     static types = {
-        counters: PropTypes.object,
-        nodes: PropTypes.arrayOf(PropTypes.object),
-        node: PropTypes.object,
-        connectedNode: PropTypes.object,
+        allNodeInfo: PropTypes.arrayOf(PropTypes.object),
         backups: PropTypes.arrayOf(PropTypes.object),
+        connectedNode: PropTypes.object,
+        counters: PropTypes.object,
+        node: PropTypes.object,
+        nodes: PropTypes.arrayOf(PropTypes.object),
         streamInfo: PropTypes.object,
     }
 
     static defaults = {
-        counters: {},
-        nodes: [],
-        node: {},
-        connectedNode: {},
+        allNodeInfo: [],
         backups: [],
+        connectedNode: {},
+        counters: {},
+        node: {},
+        nodes: [],
         streamInfo: {},
     }
 
@@ -111,6 +114,32 @@ class NodesStore extends BaseStore {
                 ErrorActions.setToastError(message.Log);
                 if ((length-2)==i && !deepEqual(obj, streamInfo)){
                     this.setState({streamInfo: obj});
+                }
+            })
+        );
+    }
+
+    onGetDashboardInfo(cb=()=>null){
+        const {nodes, allNodeInfo} = this.state;
+        const query = '{node_info: node_info(), counters: counters()};';
+        const length = nodes.length;
+        const arr = [];
+        nodes.map((n,i) =>
+            this.emit('query', {
+                scope: `@node:${n.node_id}`,
+                query
+            }).done((data) => {
+                arr.push(data);
+                if ((length-1)==i && !deepEqual(data, allNodeInfo[i])){
+                    console.log(i);
+                    this.setState({allNodeInfo: arr});
+                    cb(arr);
+                }
+            }).fail((event, status, message) => {
+                ErrorActions.setToastError(message.Log);
+                if ((length-1)==i && !deepEqual(data, allNodeInfo[i])){
+                    this.setState({allNodeInfo: arr});
+                    cb(arr);
                 }
             })
         );
