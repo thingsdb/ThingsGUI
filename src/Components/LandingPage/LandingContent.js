@@ -26,8 +26,8 @@ const withStores = withVlow([{
 const useStyles = makeStyles((theme) => ({
     card: {
         backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
+        padding: theme.spacing(0.5),
+        margin: theme.spacing(0.5),
     },
     title: {
         marginLeft: theme.spacing(2),
@@ -62,52 +62,59 @@ const LandingContent = ({collections, users, nodes}) => {
 
     const numbers = [
         {
-            title: "Total number of Things",
+            title: 'Total number of Things',
             data: totalNumThings,
-            logo:  <img
-                alt="ThingsDB Logo"
-                src="/img/thingsdb-logo.png"
-                draggable='false'
-                height="70px"
-            />
+            logo:  <img alt='ThingsDB Logo' src='/img/thingsdb-logo.png' draggable='false' height='70px' />
         }, {
-            title: "Total number of Collections",
+            title: 'Total number of Collections',
             data: collections.length,
             logo: <DashboardIcon className={classes.icon} />
         }, {
-            title: "Total number of Users",
+            title: 'Total number of Users',
             data: users.length,
             logo: <PeopleIcon className={classes.icon} />
         }, {
-            title: "Total number of Nodes",
+            title: 'Total number of Nodes',
             data: nodes.length,
             logo: <StorageIcon className={classes.icon} />
         }
     ];
     const piecharts = [
         {
-            title: "Things per Collection",
+            title: 'Things per Collection',
             data: thingsSavedPerCol
         }, {
-            title: "Clients connected per Node",
+            title: 'Clients connected per Node',
             data: clientPerNode
         }, {
-            title: "Queries per Node",
+            title: 'Queries per Node',
             data: queriesPerNode
         }
     ];
 
-    const tables = [ thingsSavedPerCol, clientPerNode, queriesPerNode];
-    const columns = [
-        { id: 'title', label: 'Collection', minWidth: 170 },
+
+    const columns = (ltitle, lnumber) => ([
+        { id: 'title', label: ltitle, minWidth: 170 },
         {
             id: 'number',
-            label: 'Number',
+            label: lnumber,
             minWidth: 170,
             align: 'right',
             format: (value) => value.toFixed(0),
         },
-    ];
+    ]);
+
+    const tables = [
+        {
+            columns: columns('Collections', 'Number of Things'),
+            rows: thingsSavedPerCol
+        }, {
+            columns: columns('Node', 'Number of Clients'),
+            rows: clientPerNode
+        }, {
+            columns: columns('Node', 'Number of Queries'),
+            rows: queriesPerNode
+        }];
 
     const radius = 160;
 
@@ -130,17 +137,17 @@ const LandingContent = ({collections, users, nodes}) => {
                     <Grid key={i} item xs={6} sm={3}>
                         <Card className={classes.card}>
                             <Divider className={classes.divider} />
-                                <CardHeader
-                                    action={n.logo}
-                                    title={n.data}
-                                    subheader={n.title}
-                                    subheaderTypographyProps={{
-                                        variant:"button"
-                                    }}
-                                    titleTypographyProps={{
-                                        variant:"h4"
-                                    }}
-                                />
+                            <CardHeader
+                                action={n.logo}
+                                title={n.data}
+                                subheader={n.title}
+                                subheaderTypographyProps={{
+                                    variant:'button'
+                                }}
+                                titleTypographyProps={{
+                                    variant:'h4'
+                                }}
+                            />
                         </Card>
                     </Grid>
                 ))}
@@ -149,7 +156,7 @@ const LandingContent = ({collections, users, nodes}) => {
                 {piecharts.map((p,i)=>(
                     <Grid key={i} item sm={12} md={4}>
                         <Card className={classes.card}>
-                            <Grid container justify='center'>
+                            <Grid container justify="center">
                                 <PieChart data={p.data} radius={radius} stroke="#2E3336" showPercent title={p.title} />
                             </Grid>
                         </Card>
@@ -160,9 +167,8 @@ const LandingContent = ({collections, users, nodes}) => {
                 {tables.map((p,i)=>(
                     <Grid key={i} item sm={12} md={4}>
                         <Card className={classes.card}>
-                            <Grid container justify='center'>
-                                <StickyHeadTable columns={columns} rows={p} />
-
+                            <Grid container justify="center">
+                                <StickyHeadTable columns={p.columns} rows={p.rows} size="small" />
                             </Grid>
                         </Card>
                     </Grid>

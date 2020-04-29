@@ -10,29 +10,29 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 
 const useStyles = makeStyles({
-  container: {
-    maxHeight: 440,
-  },
+    container: {
+        maxHeight: 440,
+    },
 });
 
-const StickyHeadTable = ({columns, rows}) => {
-  const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+const StickyHeadTable = ({columns, rows, size}) => {
+    const classes = useStyles();
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(4);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
 
-  return (
+    return (
         <React.Fragment>
             <TableContainer className={classes.container}>
-                <Table stickyHeader aria-label="sticky table">
+                <Table stickyHeader aria-label="sticky table" size={size}>
                     <TableHead>
                         <TableRow>
                             {columns.map((column) => (
@@ -65,7 +65,7 @@ const StickyHeadTable = ({columns, rows}) => {
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[4, 10, 25, 100]}
                 component="div"
                 count={rows.length}
                 rowsPerPage={rowsPerPage}
@@ -75,12 +75,13 @@ const StickyHeadTable = ({columns, rows}) => {
             />
         </React.Fragment>
     );
-}
+};
 
 StickyHeadTable.propTypes = {
 
     columns: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
+    size: PropTypes.string.isRequired,
 
 };
 

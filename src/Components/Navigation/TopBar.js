@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TopBar = ({additionals, pageIcon, user}) => {
+const TopBar = ({additionals, pageIcon, user, title}) => {
     const classes = useStyles();
     const handleClickLogout = () => {
         ApplicationActions.disconnect();
@@ -55,6 +55,9 @@ const TopBar = ({additionals, pageIcon, user}) => {
             <Toolbar className={classes.toolbar}>
                 <div className={classes.flex}>
                     {pageIcon}
+                </div>
+                <div className={classes.flex}>
+                    {title}
                 </div>
                 <div >
                     <TopBarMenu menuIcon={<AccountCircle />}>
@@ -84,11 +87,13 @@ const TopBar = ({additionals, pageIcon, user}) => {
 
 TopBar.defaultProps = {
     additionals: null,
+    title: null,
 };
 
 TopBar.propTypes = {
     additionals: PropTypes.object,
     pageIcon: PropTypes.object.isRequired,
+    title: PropTypes.object,
 
     /* Users properties */
     user: ThingsdbStore.types.user.isRequired,

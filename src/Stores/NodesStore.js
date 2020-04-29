@@ -130,13 +130,13 @@ class NodesStore extends BaseStore {
                 query
             }).done((data) => {
                 arr.push(data);
-                if ((length-1)==i && !deepEqual(data, allNodeInfo[i])){
+                if ((length-1)==i && !deepEqual(arr, allNodeInfo)){
                     this.setState({allNodeInfo: arr});
                     cb(arr);
                 }
             }).fail((event, status, message) => {
                 ErrorActions.setToastError(message.Log);
-                if ((length-1)==i && !deepEqual(data, allNodeInfo[i])){
+                if ((length-1)==i && !deepEqual(arr, allNodeInfo)){
                     this.setState({allNodeInfo: arr});
                     cb(arr);
                 }
