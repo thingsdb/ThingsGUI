@@ -5,6 +5,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import {EditProvider} from '../../CollectionsUtils';
 import ThingRestrict from './ThingRestrict';
 import {ThingActionsDialog} from '../TreeActions';
 import {CollectionActions} from '../../../../Stores/CollectionStore';
@@ -85,19 +86,21 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
                 ) : null}
             </TreeBranch>
             {show ? (
-                <ThingActionsDialog
-                    open
-                    onClose={handleCloseDialog}
-                    child={{
-                        id: thing && thing['#']||null,
-                        index: child.index,
-                        name: child.name,
-                        type: type,
-                    }}
-                    parent={parent}
-                    thing={currThing}
-                    scope={`@collection:${collection.name}`}
-                />
+                <EditProvider>
+                    <ThingActionsDialog
+                        open
+                        onClose={handleCloseDialog}
+                        child={{
+                            id: thing ? thing['#'] : null,
+                            index: child.index,
+                            name: child.name,
+                            type: type,
+                        }}
+                        parent={parent}
+                        thing={currThing}
+                        scope={`@collection:${collection.name}`}
+                    />
+                </EditProvider>
             ) : null}
         </React.Fragment>
     );

@@ -32,7 +32,7 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
                         onClose={onClose}
                         scope={scope}
                         child={{
-                            id: thing && thing['#'],
+                            id: thing ? thing['#']:null,
                             index: child.hasOwnProperty('index') ? child.index : null,
                             name: child.name,
                             type: realChildType,

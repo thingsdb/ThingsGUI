@@ -53,7 +53,7 @@ const LandingPage = () => {
             </Button>
             <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
                 <LandingContent />
-                <div style={{position:'sticky', width: "100%", bottom: -8, zIndex: 2}}>
+                <div style={{position:'fixed', width: "100%", bottom: -8, zIndex: 2}}>
                     <TopBar
                         pageIcon={
                             <IconButton edge="start" color="default" onClick={handleClose} aria-label="close">

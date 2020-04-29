@@ -131,7 +131,6 @@ class NodesStore extends BaseStore {
             }).done((data) => {
                 arr.push(data);
                 if ((length-1)==i && !deepEqual(data, allNodeInfo[i])){
-                    console.log(i);
                     this.setState({allNodeInfo: arr});
                     cb(arr);
                 }
