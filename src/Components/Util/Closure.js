@@ -34,6 +34,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.background.paper,
         zIndex: 2,
     },
+    someMargin: {
+        margin: theme.spacing(1)
+    },
 }));
 
 
@@ -74,7 +77,7 @@ const Closure = ({input, cb}) => {
 
 
     return(
-        <Grid className={classes.container} container spacing={3}>
+        <Grid className={classes.container} container>
             {/* <Grid container item xs={12}>
                 <Typography variant="caption">
                     {'Arguments'}
@@ -103,6 +106,7 @@ const Closure = ({input, cb}) => {
             </Grid>
             <Grid item xs={12} container justify="center">
                 <TextField
+                    className={classes.someMargin}
                     name="body"
                     label="Body"
                     type="text"

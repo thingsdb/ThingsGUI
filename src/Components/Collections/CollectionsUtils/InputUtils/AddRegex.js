@@ -24,7 +24,6 @@ const AddRegex = ({identifier}) => {
         EditActions.updateVal(dispatch, `/${value}/`, identifier);
 
     };
-
     const v = val[identifier]||(val.constructor === Object?'':val);
 
     return(

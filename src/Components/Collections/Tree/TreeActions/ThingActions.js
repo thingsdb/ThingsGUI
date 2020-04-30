@@ -4,6 +4,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import BuildIcon from '@material-ui/icons/Build';
 
+import {EditProvider} from '../../CollectionsUtils';
 import ThingActionsDialog from './ThingActionsDialog';
 
 const ThingActions = ({child, parent, thing, scope, isRoot}) => {
@@ -22,15 +23,17 @@ const ThingActions = ({child, parent, thing, scope, isRoot}) => {
                 <BuildIcon color="primary" />
             </Button>
             {show ? (
-                <ThingActionsDialog
-                    open={show}
-                    onClose={handleClickClose}
-                    child={child}
-                    parent={parent}
-                    thing={thing}
-                    scope={scope}
-                    isRoot={isRoot}
-                />
+                <EditProvider>
+                    <ThingActionsDialog
+                        open={show}
+                        onClose={handleClickClose}
+                        child={child}
+                        parent={parent}
+                        thing={thing}
+                        scope={scope}
+                        isRoot={isRoot}
+                    />
+                </EditProvider>
             ) : null}
         </React.Fragment>
     );

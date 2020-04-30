@@ -1,10 +1,3 @@
-/*
- *  Rules to check:
- *   - react/jsx-handler-names
- *   - react/jsx-no-bind
- */
-
-
 module.exports = {
     "env": {
         "browser": true,

@@ -1,12 +1,14 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Collapse from '@material-ui/core/Collapse';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Switch from '@material-ui/core/Switch';
+import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal, TimePicker, TimePeriodPicker } from '../../Util';
 import {NodesActions} from '../../../Stores';
@@ -99,6 +101,16 @@ const Add = ({nodeId}) => {
         <React.Fragment>
             <ErrorMsg tag={tag} />
             <List>
+                <ListItem>
+                    <ListItemText
+                        primary="For more information, see:"
+                        secondary={
+                            <Link target="_blank" href="https://docs.thingsdb.net/v0/node-api/new_backup/">
+                                {'https://docs.thingsdb.net/v0/node-api/new_backup/'}
+                            </Link>
+                        }
+                    />
+                </ListItem>
                 <ListItem>
                     <TextField
                         autoFocus

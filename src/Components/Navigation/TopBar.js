@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.secondary.main,
         flexGrow: 1,
         marginBottom: theme.spacing(1),
+
     },
     flex: {
         flexGrow: 1,
@@ -40,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TopBar = ({additionals, user}) => {
+const TopBar = ({additionals, pageIcon, user, title}) => {
     const classes = useStyles();
     const handleClickLogout = () => {
         ApplicationActions.disconnect();
@@ -53,14 +54,10 @@ const TopBar = ({additionals, user}) => {
         >
             <Toolbar className={classes.toolbar}>
                 <div className={classes.flex}>
-                    {/* <Tooltip disableFocusListener disableTouchListener title={packageJson.version}>                   */}
-                    <img
-                        alt="ThingsDB Logo"
-                        src="/img/thingsdb-logo.png"
-                        className={classes.avatar}
-                        draggable='false'
-                    />
-                    {/* </Tooltip> */}
+                    {pageIcon}
+                </div>
+                <div className={classes.flex}>
+                    {title}
                 </div>
                 <div >
                     <TopBarMenu menuIcon={<AccountCircle />}>
@@ -90,10 +87,13 @@ const TopBar = ({additionals, user}) => {
 
 TopBar.defaultProps = {
     additionals: null,
+    title: null,
 };
 
 TopBar.propTypes = {
     additionals: PropTypes.object,
+    pageIcon: PropTypes.object.isRequired,
+    title: PropTypes.object,
 
     /* Users properties */
     user: ThingsdbStore.types.user.isRequired,
