@@ -38,7 +38,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             scope,
             closure,
             tag,
-            () => {
+            (_data) => {
                 handleSubmit();
             }
         );
@@ -50,7 +50,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             scope,
             queryString,
             tag,
-            () => {
+            (_data) => {
                 ProcedureActions.getProcedures(scope, tag, cb);
                 onClose();
             }

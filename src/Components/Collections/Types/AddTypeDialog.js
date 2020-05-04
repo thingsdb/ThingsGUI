@@ -73,7 +73,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
             scope,
             queryString,
             tag,
-            () => {
+            (_data) => {
                 TypeActions.getTypes(scope, tag);
                 onClose();
             }

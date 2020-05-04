@@ -4,14 +4,12 @@ import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
-import {ThingsdbActions} from './ThingsdbStore';
 
 const CollectionActions = Vlow.createActions([
     'blob',
     'queryWithReturn',
     'queryWithReturnDepth',
     'rawQuery',
-    'queryEditor',
     'download',
     'cleanupTmp',
     'resetCollectionStore'
@@ -73,34 +71,12 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onRawQuery(scope, q, tag, cb) {
-        const query = `${q}`;
+    onRawQuery(scope, query, tag, cb) {
         this.emit('query', {
             query,
             scope
-        }).done(() => {
-            cb();
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
-    onQueryEditor(scope, query, collectionId, onOutput, tag) {
-        this.emit('queryEditor', {
-            query,
-            scope
         }).done((data) => {
-            onOutput(data.output);
-            if (collectionId!==null) {
-                this.setState(prevState => {
-                    const things = Object.assign({}, prevState.things, {[collectionId]: data.things});
-                    return {things};
-                });
-            } else {
-                ThingsdbActions.getCollections();
-                ThingsdbActions.getUsers();
-                ThingsdbActions.getUser();
-            }
+            cb(data);
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });

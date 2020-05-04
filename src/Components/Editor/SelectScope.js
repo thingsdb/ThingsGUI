@@ -18,17 +18,17 @@ const withStores = withVlow([{
 
 const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
     const [name, setName] = React.useState(scope|| collections[0] ? `@collection:${collections[0].name}` : '@thingsdb');
-    const [scopesObj] = getScopes2(collections, nodes);
+    const scopes = getScopes2(collections, nodes);
 
     React.useEffect(()=> {
         let name = scope|| collections[0] ? `@collection:${collections[0].name}` : '@thingsdb';
-        onChangeScope(scopesObj.find(i=>i.value===name)||{});
+        onChangeScope(scopes.find(i=>i===name)||'');
     }, []);
 
     const handleOnChangeScope = ({target}) => {
         const {value} = target;
         setName(value);
-        onChangeScope(scopesObj.find(i=>i.value===value)||{});
+        onChangeScope(scopes.find(i=>i===value)||'');
     };
 
     return (
@@ -48,9 +48,9 @@ const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
             value={name}
             variant="outlined"
         >
-            {scopesObj.map(s => (
-                <option key={s.value} value={s.value}>
-                    {s.value}
+            {scopes.map(s => (
+                <option key={s} value={s}>
+                    {s}
                 </option>
             ))}
         </NativeSelect>

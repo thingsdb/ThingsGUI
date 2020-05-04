@@ -1,13 +1,15 @@
-
-import { makeStyles} from '@material-ui/core/styles';
+import { fade, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
+import EditIcon from '@material-ui/icons/Edit';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
+import InputBase from '@material-ui/core/InputBase';
 import PropTypes from 'prop-types';
 import React from 'react';
-import EditIcon from '@material-ui/icons/Edit';
 import RemoveIcon from '@material-ui/icons/Cancel';
 import RunIcon from '@material-ui/icons/DirectionsRun';
+import SearchIcon from '@material-ui/icons/Search';
 import Switch from '@material-ui/core/Switch';
 
 import {ErrorMsg, HarmonicCard, SimpleModal, CardMultiButton} from '../Util';
@@ -19,7 +21,44 @@ const useStyles = makeStyles(theme => ({
     },
     warning: {
         color: theme.palette.primary.red
-    }
+    },
+    search: {
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: fade(theme.palette.common.white, 0.15),
+        '&:hover': {
+            backgroundColor: fade(theme.palette.common.white, 0.25),
+        },
+        marginLeft: 0,
+        [theme.breakpoints.up('sm')]: {
+            marginLeft: theme.spacing(1),
+            width: 'auto',
+        },
+    },
+    searchIcon: {
+        padding: theme.spacing(0, 2),
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    inputRoot: {
+        color: 'inherit',
+    },
+    inputInput: {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        transition: theme.transitions.create('width'),
+        [theme.breakpoints.up('sm')]: {
+            width: '12ch',
+            '&:focus': {
+            width: '20ch',
+            },
+        },
+    },
 }));
 
 const tag = '30';
@@ -28,6 +67,7 @@ const ChipsCard = ({expand, items, moreButtons, onAdd, onDelete, onEdit, onRefre
     const classes = useStyles();
     const [deleteIndex, setDeleteIndex] = React.useState(null);
     const [switchDel, setSwitchDel] = React.useState(false);
+    const [searchString, setSearchString] = React.useState('');
 
 
     const handleOpenEdit = (index) => ({target}) => {
@@ -58,6 +98,11 @@ const ChipsCard = ({expand, items, moreButtons, onAdd, onDelete, onEdit, onRefre
         setSwitchDel(false);
     };
 
+    const handleSearchString = ({target}) => {
+        const {value} = target;
+        setSearchString(value);
+    };
+
     const buttons = (index)=>([
         {
             icon: <RunIcon fontSize="small" />,
@@ -73,21 +118,48 @@ const ChipsCard = ({expand, items, moreButtons, onAdd, onDelete, onEdit, onRefre
         },
     ]);
 
+    let searchList = searchString?items.filter(i=>i.name.startsWith(searchString)):items;
+
     return (
         <React.Fragment>
             <HarmonicCard
                 title={title.toUpperCase()}
                 expand={expand}
                 content={
-                    items && items.length ? items.map((listitem, index) => (
-                        <React.Fragment key={index}>
-                            <CardMultiButton
-                                label={listitem.name}
-                                buttons={onRun?buttons(index):buttons(index).slice(1)}
-                                color="primary"
-                            />
-                        </React.Fragment>
-                    )) : `No ${title}.`
+                    <Grid container spacing={2}>
+                        <Grid container item xs={12}>
+                            <Grid item>
+                                <div className={classes.search}>
+                                    <div className={classes.searchIcon}>
+                                        <SearchIcon />
+                                    </div>
+                                    <InputBase
+                                        placeholder="Search…"
+                                        value={searchString}
+                                        onChange={handleSearchString}
+                                        classes={{
+                                            root: classes.inputRoot,
+                                            input: classes.inputInput,
+                                        }}
+                                        inputProps={{ 'aria-label': 'search' }}
+                                    />
+                                </div>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            {
+                                searchList && searchList.length ? searchList.map((listitem, index) => (
+                                    <React.Fragment key={index}>
+                                        <CardMultiButton
+                                            label={listitem.name}
+                                            buttons={onRun?buttons(index):buttons(index).slice(1)}
+                                            color="primary"
+                                        />
+                                    </React.Fragment>
+                                )) : `No ${title}.`
+                            }
+                        </Grid>
+                    </Grid>
                 }
                 buttons={
                     <React.Fragment>

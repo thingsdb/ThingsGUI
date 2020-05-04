@@ -8,8 +8,9 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
 import {ApplicationStore, CollectionActions, EditorActions, EditorStore, ErrorActions, NodesActions, ProcedureActions, TypeActions} from '../../Stores';
-import {ChipsCard, ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput, WarnPopover} from '../Util';
+import {ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput} from '../Util';
 import SelectScope from './SelectScope';
+import EditorSideContent from './EditorSideContent';
 
 
 const withStores = withVlow([{
@@ -35,16 +36,12 @@ const Editor = ({match, history}) => {
     const classes = useStyles();
     const [query, setQuery] = React.useState('');
     const [output, setOutput] = React.useState(null);
-    const [scope, setScope] = React.useState({});
+    const [scope, setScope] = React.useState('');
     const [queryInput, setQueryInput] = React.useState('');
-    const [procedures, setProcedures] = React.useState([]);
-    const [customTypes, setCustomTypes] = React.useState([]);
 
     const [isResizing, setIsResizing] = React.useState(false);
     const [newHeight, setNewHeight] = React.useState(200);
     const [expandOutput, setExpandOutput] = React.useState(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [warnDescription, setWarnDescription] = React.useState('');
     const [suggestion, setSuggestion] = React.useState(0);
 
 
@@ -61,6 +58,11 @@ const Editor = ({match, history}) => {
             window.removeEventListener('mouseup', handleMouseup);
         }
     },[isResizing, handleMousemove, handleMouseup]);
+
+    React.useEffect(() => {
+        setQueryInput(match.item);
+    }, [match.item]);
+
 
     const handleMousedown = () => {
         setIsResizing(true);
@@ -80,46 +82,20 @@ const Editor = ({match, history}) => {
     }, []);
 
 
-    const handleTypes = (t) => {
-        setCustomTypes(t);
-    };
-
-    const handleProcedures = (p) => {
-        setProcedures(p);
-    };
-
-    const handleRefreshProcedures = () => ProcedureActions.getProcedures(scope.value, tag, handleProcedures);
-    const handleRefreshTypes = () => TypeActions.getTypes(scope.value, tag, handleTypes);
-
-    const handleGetAdditionals = () => {
-        if (scope.value&&!scope.value.includes('@node')) {
-            ProcedureActions.getProcedures(scope.value, tag, handleProcedures);
-        }
-        if (scope.value&&scope.value.includes('collection')) {
-            TypeActions.getTypes(scope.value, tag, handleTypes);
-        }
-    };
-
-    React.useEffect(() => {
-        setQueryInput(match.item);
-    }, [match.item]);
-
-    React.useEffect(() => {
-        handleGetAdditionals();
-    }, [scope]);
-
     const handleInput = (value) => {
         handleCloseError();
-        // setQueryInput('');
         setQuery(value);
+    };
+
+    const handleQueryInput = (value) => {
+        setQueryInput(value);
     };
 
     const handleSubmit = () => {
         setExpandOutput(false);
         setTimeout(()=> { // can result in -> Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function. in Editor (created by WithVlow()(Editor)) in WithVlow()(Editor) (created by App)
             setOutput(null);
-            CollectionActions.queryEditor(scope.value, query, scope.collectionId, handleOutput, tag);
-            handleGetAdditionals();
+            CollectionActions.rawQuery(scope, query, tag, handleOutput);
         }, 300);
 
         EditorActions.setHistory(query);
@@ -149,66 +125,6 @@ const Editor = ({match, history}) => {
     const handleCloseError = () => {
         ErrorActions.removeMsgError(tag);
     };
-
-    // Procedures
-    const handleClickProcedure = (index) => {
-        const i = procedures[index].with_side_effects ? `wse(run('${procedures[index].name}',${procedures[index].arguments.map(a=>` <${a}>` )}))` : `run('${procedures[index].name}',${procedures[index].arguments.map(a=>` <${a}>` )})`;
-        setQueryInput(i);
-    };
-
-    const handleClickDeleteProcedure = (index, cb, tag) => {
-        ProcedureActions.deleteProcedure(
-            scope.value,
-            procedures[index].name,
-            tag,
-            (p) => {
-                cb();
-                handleProcedures(p);
-            }
-        );
-    };
-
-    const handleClickAddProcedure = () => {
-        setQueryInput('new_procedure("...", ...)');
-    };
-    const customTypeNames = [...customTypes.map(c=>c.name)];
-    const makeTypeInstanceInit = (index, circularRefFlag, target) => {
-        if (circularRefFlag[customTypes[index].name]) {
-            setAnchorEl(target);
-            setWarnDescription(`Circular reference detected in type ${customTypes[index].name}`);
-            return '';
-        } else {
-            circularRefFlag[customTypes[index].name] = true;
-        }
-        return `${customTypes[index].name}{${customTypes[index].fields.map(c =>`${c[0]}: ${customTypeNames.includes(c[1]) ? makeTypeInstanceInit(customTypeNames.indexOf(c[1]), circularRefFlag, target) : `<${c[1]}>`}` )}}`;
-    };
-
-    const handleClickTypes = (index, target) => {
-        const circularRefFlag = {};
-        const i = makeTypeInstanceInit(index, circularRefFlag, target);
-        setQueryInput(i);
-    };
-
-    const handleClickDeleteTypes = (index, cb, tag) => {
-        TypeActions.deleteType(
-            scope.value,
-            customTypes[index].name,
-            tag,
-            (t) => {
-                cb();
-                handleTypes(t);
-            }
-        );
-    };
-
-    const handleClickAddTypes = () => {
-        setQueryInput('set_type("...", {...})');
-    };
-
-    const handleCloseDelete = () => {
-        setAnchorEl(null);
-    };
-
 
     return (
         <TitlePage2
@@ -253,37 +169,7 @@ const Editor = ({match, history}) => {
                     </Grid>
                 </React.Fragment>
             }
-            sideContent={
-                <React.Fragment>
-                    <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} description={warnDescription} />
-                    {scope&&scope.value && scope.value.includes('@node') ? null : (
-                        <Grid item xs={12}>
-                            <ChipsCard
-                                expand={false}
-                                items={procedures}
-                                onAdd={handleClickAddProcedure}
-                                onEdit={handleClickProcedure}
-                                onRefresh={handleRefreshProcedures}
-                                onDelete={handleClickDeleteProcedure}
-                                title="procedures"
-                            />
-                        </Grid>
-                    )}
-                    {scope&&scope.value && scope.value.includes('@collection') ? (
-                        <Grid item xs={12}>
-                            <ChipsCard
-                                expand={false}
-                                items={customTypes}
-                                onAdd={handleClickAddTypes}
-                                onEdit={handleClickTypes}
-                                onRefresh={handleRefreshTypes}
-                                onDelete={handleClickDeleteTypes}
-                                title="custom types"
-                            />
-                        </Grid>
-                    ): null}
-                </React.Fragment>
-            }
+            sideContent={<EditorSideContent scope={scope} onSetQueryInput={handleQueryInput} tag={tag} />}
         />
     );
 };

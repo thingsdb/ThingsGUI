@@ -58,26 +58,6 @@ func QueryBlob(client *Client, data Data, timeout uint16) (int, interface{}, uti
 	return query(client, data, blob, timeout)
 }
 
-func QueryEditor(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
-	var collectionResp = make(map[string]interface{})
-
-	status1, resp1, message1 := query(client, data, nil, timeout)
-	if status1 == http.StatusInternalServerError {
-		return status1, resp1, message1
-	}
-	collectionResp["output"] = resp1
-
-	if strings.Contains(data.Scope, "@collection") {
-		data.Query = "thing(.id());"
-		status2, resp2, message2 := query(client, data, nil, timeout)
-		if status2 == http.StatusInternalServerError {
-			return status2, resp2, message2
-		}
-		collectionResp["things"] = resp2
-	}
-	return message1.Status, collectionResp, message1
-}
-
 func CleanupTmp(tmp *util.TmpFiles) (int, bool, util.Message) {
 	resp := true
 	err := tmp.CleanupTmp()
@@ -88,6 +68,7 @@ func CleanupTmp(tmp *util.TmpFiles) (int, bool, util.Message) {
 	return message.Status, resp, message
 }
 
+// Watch function
 func Watch(client *Client, data Data, timeout uint16) (int, interface{}, util.Message) {
 	scope := data.Scope
 	ids := data.Ids

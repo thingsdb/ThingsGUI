@@ -50,7 +50,7 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
             scope,
             queryString,
             tag,
-            () => {
+            (_data) => {
                 ProcedureActions.getProcedures(scope, tag, cb);
                 onClose();
             }

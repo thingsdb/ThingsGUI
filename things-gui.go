@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -112,10 +113,6 @@ func (app *App) SocketRouter() {
 		return handlers.QueryBlob(app.client[s.ID()], data, app.timeout)
 	})
 
-	app.server.OnEvent("/", "queryEditor", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.QueryEditor(app.client[s.ID()], data, app.timeout)
-	})
-
 	app.server.OnEvent("/", "cleanupTmp", func(s socketio.Conn) (int, bool, util.Message) {
 		return handlers.CleanupTmp(app.client[s.ID()].TmpFiles)
 	})
@@ -188,13 +185,25 @@ func (app *App) quit() {
 	app.server.Close()
 }
 
+type Page struct {
+	Title string
+}
+
 func (app *App) Start() {
 	go app.server.Serve()
 	defer app.server.Close()
 	app.SocketRouter()
 
+	pagedata := &Page{Title: fmt.Sprintf("ThingsGUI - %s:%d", app.host, app.port)}
+	var tmpl *template.Template
+	var err error
+	if tmpl, err = template.ParseFiles("./templates/app.html"); err != nil {
+		fmt.Println(err)
+	}
+
 	//HTTP handlers
-	http.HandleFunc("/", handlerMain) // homepage
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) { tmpl.Execute(w, pagedata) }) // homepage THIS WORKS!
+	// http.HandleFunc("/", handlerMain)                                                                // homepage
 	http.HandleFunc("/js/main-bundle", handlerMainJsBundle)
 	http.HandleFunc("/js/vendors-bundle", handlerVendorsJsBundle)
 	http.HandleFunc("/js/editor.worker.js", handlerEditorWorkerJS)

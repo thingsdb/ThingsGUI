@@ -93,7 +93,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
             scope,
             queryString,
             tag,
-            () => {
+            (_data) => {
                 TypeActions.getTypes(scope, tag);
                 setAction('');
                 setAnchorEl(null);
