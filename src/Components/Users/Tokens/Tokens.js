@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+import { amber } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
@@ -30,6 +31,9 @@ const useStyles = makeStyles(theme => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         width: 175,
+    },
+    warnColor: {
+        color: amber[700],
     },
 }));
 
@@ -140,7 +144,7 @@ const Tokens = ({user}) => {
                     {'Not set.'}
                 </Typography>
             ) : (
-                <Typography color="error">
+                <Typography variant="caption" className={classes.warnColor}>
                     {`This user had no password set. Set a token or password to prevent ${user.name} from getting locked out.`}
                 </Typography>
             )}

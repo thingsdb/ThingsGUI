@@ -17,8 +17,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import AddTypeProperty from './AddTypeProperty';
-import {CollectionActions, ErrorActions, TypeActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal, TableWithButtons, WarnPopover} from '../../Util';
+import {CollectionActions, ErrorActions, TypeActions} from '../../../../Stores';
+import {ErrorMsg, SimpleModal, TableWithButtons, WarnPopover} from '../../../Util';
 
 
 const tag = '11';

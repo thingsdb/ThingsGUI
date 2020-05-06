@@ -1,18 +1,15 @@
 import { fade, makeStyles } from '@material-ui/core/styles';
+import {ErrorMsg, HarmonicCard, SimpleModal, CardMultiButton} from '../Util';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
-import EditIcon from '@material-ui/icons/Edit';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import InputBase from '@material-ui/core/InputBase';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RemoveIcon from '@material-ui/icons/Cancel';
-import RunIcon from '@material-ui/icons/DirectionsRun';
 import SearchIcon from '@material-ui/icons/Search';
 import Switch from '@material-ui/core/Switch';
-
-import {ErrorMsg, HarmonicCard, SimpleModal, CardMultiButton} from '../Util';
 
 
 const useStyles = makeStyles(theme => ({
@@ -63,20 +60,12 @@ const useStyles = makeStyles(theme => ({
 
 const tag = '30';
 
-const ChipsCard = ({expand, items, moreButtons, onAdd, onDelete, onEdit, onRefresh, onRun, title}) => {
+const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefresh, title, warnExpression}) => {
     const classes = useStyles();
     const [deleteIndex, setDeleteIndex] = React.useState(null);
     const [switchDel, setSwitchDel] = React.useState(false);
     const [searchString, setSearchString] = React.useState('');
 
-
-    const handleOpenEdit = (index) => ({target}) => {
-        onEdit(index, target);
-    };
-
-    const handleOpenRun = (index) => ({target}) => {
-        onRun(index, target);
-    };
 
     const handleClickDelete = () => {
         onDelete(deleteIndex, handleCloseDelete, tag);
@@ -103,20 +92,11 @@ const ChipsCard = ({expand, items, moreButtons, onAdd, onDelete, onEdit, onRefre
         setSearchString(value);
     };
 
-    const buttons = (index)=>([
-        {
-            icon: <RunIcon fontSize="small" />,
-            onClick: handleOpenRun(index),
-        },
-        {
-            icon: <EditIcon fontSize="small" />,
-            onClick: handleOpenEdit(index),
-        },
+    const remove = (index)=>(
         {
             icon: <RemoveIcon fontSize="small" />,
             onClick: handleOpenDelete(index),
-        },
-    ]);
+        });
 
     let searchList = searchString?items.filter(i=>i.name.startsWith(searchString)):items;
 
@@ -152,8 +132,9 @@ const ChipsCard = ({expand, items, moreButtons, onAdd, onDelete, onEdit, onRefre
                                     <React.Fragment key={index}>
                                         <CardMultiButton
                                             label={listitem.name}
-                                            buttons={onRun?buttons(index):buttons(index).slice(1)}
+                                            buttons={[...buttons(index), remove(index)]}
                                             color="primary"
+                                            warn={warnExpression(listitem)}
                                         />
                                     </React.Fragment>
                                 )) : `No ${title}.`
@@ -211,6 +192,7 @@ ChipsCard.defaultProps = {
     moreButtons: null,
     onRefresh: null,
     onRun: null,
+    warnExpression: ()=>false,
 },
 
 ChipsCard.propTypes = {
@@ -219,10 +201,10 @@ ChipsCard.propTypes = {
     moreButtons: PropTypes.object,
     onAdd: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired,
     onRefresh: PropTypes.func,
-    onRun: PropTypes.func,
     title: PropTypes.string.isRequired,
+    buttons: PropTypes.func.isRequired,
+    warnExpression: PropTypes.func,
 };
 
 export default ChipsCard;

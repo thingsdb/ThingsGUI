@@ -12,8 +12,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import AddTypeProperty from './AddTypeProperty';
-import {CollectionActions, TypeActions} from '../../../Stores';
-import {ArrayLayout, ErrorMsg, SimpleModal} from '../../Util';
+import {CollectionActions, TypeActions} from '../../../../Stores';
+import {ArrayLayout, ErrorMsg, SimpleModal} from '../../../Util';
 
 
 const tag = '9';

@@ -1,5 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react-hooks/exhaustive-deps */
+import { amber } from '@material-ui/core/colors';
+import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -14,10 +16,17 @@ import {EditActions, InputField, useEdit} from '../../Collections/CollectionsUti
 import {ProcedureActions} from '../../../Stores';
 import {addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
 
+const useStyles = makeStyles(theme => ({
+    warnColor: {
+        color: amber[700],
+    },
+}));
+
 const tag = '22';
 const dataTypes = ['str', 'int', 'float', 'bool', 'nil', 'list', 'thing']; // Supported types
 
 const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope}) => {
+    const classes = useStyles();
     const [state, setState] = React.useState({
         output: '',
         procedureName: '',
@@ -85,6 +94,13 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
                 </Grid>
                 <Grid item xs={12}>
                     <List disablePadding dense>
+                        {selectedProcedure.with_side_effects&&(
+                            <ListItem>
+                                <Typography variant="caption" className={classes.warnColor}>
+                                    {'Note: this procedure generates an event.'}
+                                </Typography>
+                            </ListItem>
+                        )}
                         {procedures && (
                             <ListItem>
                                 <TextField
@@ -114,7 +130,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
                                 {selectedProcedure.arguments&&selectedProcedure.arguments.length!==0 && (
                                     <React.Fragment>
                                         <ListItem>
-                                            <ListItemText primary="Arguments:" />
+                                            <ListItemText primary="Arguments:" primaryTypographyProps={{variant: 'h6'}} />
                                         </ListItem>
                                         <ListItem>
                                             <InputField dataType="variable" dataTypes={dataTypes} variables={selectedProcedure.arguments} />
@@ -122,7 +138,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
                                     </React.Fragment>
                                 )}
                                 <ListItem>
-                                    <ListItemText primary="Output:" />
+                                    <ListItemText primary="Output:" primaryTypographyProps={{variant: 'h6'}} />
                                 </ListItem>
                                 <div id="output">
                                     <QueryOutput output={output} />

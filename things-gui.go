@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -194,16 +193,8 @@ func (app *App) Start() {
 	defer app.server.Close()
 	app.SocketRouter()
 
-	pagedata := &Page{Title: fmt.Sprintf("ThingsGUI - %s:%d", app.host, app.port)}
-	var tmpl *template.Template
-	var err error
-	if tmpl, err = template.ParseFiles("./templates/app.html"); err != nil {
-		fmt.Println(err)
-	}
-
 	//HTTP handlers
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) { tmpl.Execute(w, pagedata) }) // homepage THIS WORKS!
-	// http.HandleFunc("/", handlerMain)                                                                // homepage
+	http.HandleFunc("/", handlerMain) // homepage
 	http.HandleFunc("/js/main-bundle", handlerMainJsBundle)
 	http.HandleFunc("/js/vendors-bundle", handlerVendorsJsBundle)
 	http.HandleFunc("/js/editor.worker.js", handlerEditorWorkerJS)
@@ -214,6 +205,7 @@ func (app *App) Start() {
 	http.HandleFunc("/img/facebookLogo.png", handlerFacebookLogo)
 	http.HandleFunc("/img/linkedinLogo.png", handlerLinkedinLogo)
 	http.HandleFunc("/img/TTLogo.png", handlerTTLogo)
+	http.HandleFunc("/img/view-edit.png", handlerViewEditLogo)
 	http.HandleFunc("/favicon.ico", handlerFaviconIco)
 	http.HandleFunc("/download", util.HandlerDownload)
 

@@ -1,14 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
+import ViewIcon from '@material-ui/icons/Visibility';
 
 import {ProcedureActions, TypeActions} from '../../Stores';
 import {ChipsCard, WarnPopover} from '../Util';
+import {ViewProcedureDialog} from '../Procedures/Dialogs';
+import {ViewTypeDialog} from '../Collections/Types/Dialogs';
 
 const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     const [procedures, setProcedures] = React.useState([]);
     const [customTypes, setCustomTypes] = React.useState([]);
+
+    const [view, setView] = React.useState({
+        procedure: {
+            open: false,
+            index: null,
+        },
+        types: {
+            open: false,
+            index: null,
+        }
+    });
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [warnDescription, setWarnDescription] = React.useState('');
@@ -71,11 +86,11 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         );
     };
 
-    const handleClickProcedure = (index) => {
+    const handleClickProcedure = (index) => () => {
         const i = procedures[index].with_side_effects ? `wse(run('${procedures[index].name}',${procedures[index].arguments.map(a=>` <${a}>` )}))` : `run('${procedures[index].name}',${procedures[index].arguments.map(a=>` <${a}>` )})`;
         onSetQueryInput(i);
     };
-    const handleClickTypes = (index, target) => {
+    const handleClickTypes = (index, target) => () => {
         const circularRefFlag = {};
         const i = makeTypeInstanceInit(index, circularRefFlag, target);
         onSetQueryInput(i);
@@ -87,38 +102,69 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         onSetQueryInput('set_type("...", {...})');
     };
 
-    const handleCloseDelete = () => {
+    const handleCloseWarn = () => {
         setAnchorEl(null);
     };
 
+    const handleClickViewProcedure = (i) => () => {
+        setView({...view, procedure: {open: true, index: i}});
+    };
+
+    const handleCloseViewProcedure = () => {
+        setView({...view, procedure: {open: false, index: null}});
+    };
+
+    const handleClickViewTypes = (i) => () => {
+        setView({...view, types: {open: true, index: i}});
+    };
+
+    const handleCloseViewTypes = () => {
+        setView({...view, types: {open: false, index: null}});
+    };
+
+    console.log(view, customTypes);
+
+    const buttons = (fnView, fnEdit) => (index)=>([
+        {
+            icon: <ViewIcon fontSize="small" />,
+            onClick: fnView(index),
+        },
+        {
+            icon:  <EditIcon fontSize="small" />,
+            onClick: fnEdit(index),
+        },
+    ]);
 
     return (
         <React.Fragment>
-            <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} description={warnDescription} />
+            <WarnPopover anchorEl={anchorEl} onClose={handleCloseWarn} description={warnDescription} />
             {scope&&scope.includes('@node') ? null : (
                 <Grid item xs={12}>
                     <ChipsCard
+                        buttons={buttons(handleClickViewProcedure, handleClickProcedure)}
                         expand={false}
                         items={procedures}
                         onAdd={handleClickAddProcedure}
-                        onEdit={handleClickProcedure}
                         onRefresh={handleRefreshProcedures}
                         onDelete={handleClickDeleteProcedure}
                         title="procedures"
+                        warnExpression={i=>i.with_side_effects}
                     />
+                    <ViewProcedureDialog open={view.procedure.open} onClose={handleCloseViewProcedure} procedure={view.procedure.index!==null?procedures[view.procedure.index]:{}} />
                 </Grid>
             )}
             {scope&&scope.includes('@collection') ? (
                 <Grid item xs={12}>
                     <ChipsCard
+                        buttons={buttons(handleClickViewTypes, handleClickTypes)}
                         expand={false}
                         items={customTypes}
                         onAdd={handleClickAddTypes}
-                        onEdit={handleClickTypes}
                         onRefresh={handleRefreshTypes}
                         onDelete={handleClickDeleteTypes}
                         title="custom types"
                     />
+                    <ViewTypeDialog open={view.types.open} onClose={handleCloseViewTypes} customType={view.types.index!=null&&customTypes?customTypes[view.types.index]:{}} />
                 </Grid>
             ): null}
         </React.Fragment>

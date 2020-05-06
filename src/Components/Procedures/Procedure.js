@@ -4,7 +4,7 @@ import React from 'react';
 
 import {findItem, isObjectEmpty, TitlePage} from '../Util';
 import {ApplicationStore, ProcedureActions, ProcedureStore} from '../../Stores';
-import {Edit, Remove, Run} from './Actions';
+import {Edit, Remove, Run, View} from './Actions';
 import {EditProvider} from '../Collections/CollectionsUtils';
 
 const withStores = withVlow([{
@@ -26,6 +26,10 @@ const Procedure = ({match, procedures}) => {
     const selectedProcedure = findItem(match.index, procedures[scope]||[]);
 
     const buttons = [
+        {
+            name: 'view',
+            component: <View procedure={selectedProcedure} />
+        },
         {
             name: 'edit',
             component: <Edit procedure={selectedProcedure} scope={scope} />

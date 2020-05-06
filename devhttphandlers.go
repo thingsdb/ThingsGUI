@@ -49,6 +49,10 @@ func handlerTTLogo(w http.ResponseWriter, r *http.Request) {
 	util.HandleFileRequest(w, "./static/img/TTLogo.png", "image/png")
 }
 
+func handlerViewEditLogo(w http.ResponseWriter, r *http.Request) {
+	util.HandleFileRequest(w, "./static/img/view-edit.png", "image/png")
+}
+
 func handlerFaviconIco(w http.ResponseWriter, r *http.Request) {
 	util.HandleFileRequest(w, "./static/favicon.ico", "image/x-icon")
 }

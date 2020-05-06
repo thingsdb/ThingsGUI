@@ -4,7 +4,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
-import {AutoSelect} from '../../Util';
+import {AutoSelect} from '../../../Util';
 
 const AddTypeProperty = ({cb, dropdownItems, input, hasPropName, hasInitVal}) => {
     const {propertyName, propertyType, propertyVal} = input;

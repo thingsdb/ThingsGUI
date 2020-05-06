@@ -1,4 +1,6 @@
 /* eslint-disable react/no-multi-comp */
+import { amber } from '@material-ui/core/colors';
+import { makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
@@ -13,9 +15,15 @@ import Typography from '@material-ui/core/Typography';
 import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal} from '../../Util';
 
+const useStyles = makeStyles(theme => ({
+    warnColor: {
+        color: amber[700],
+    },
+}));
 
 const tag = '21';
 const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
+    const classes = useStyles();
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');
 
@@ -81,6 +89,13 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
                 </Grid>
                 <Grid item xs={12}>
                     <List disablePadding dense>
+                        {procedure.with_side_effects&&(
+                            <ListItem>
+                                <Typography variant="caption" className={classes.warnColor}>
+                                    {'Note: this procedure generates an event.'}
+                                </Typography>
+                            </ListItem>
+                        )}
                         <Collapse in={Boolean(queryString)} timeout="auto">
                             <ListItem>
                                 <TextField
