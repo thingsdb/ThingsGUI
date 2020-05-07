@@ -7,6 +7,7 @@ import { makeStyles} from '@material-ui/core/styles';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
+import {ShutdownTAG} from '../../../constants';
 
 const useStyles = makeStyles(theme => ({
     warning: {
@@ -14,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const tag = '17';
+const tag = ShutdownTAG;
 
 const Shutdown = ({node}) => {
     const classes = useStyles();

@@ -5,6 +5,7 @@ import Vlow from 'vlow';
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 import {ApplicationActions} from './ApplicationStore';
+import {LoginTAG} from '../constants';
 
 const scope='@thingsdb';
 
@@ -182,7 +183,7 @@ class ThingsdbStore extends BaseStore {
                 user: {},
             });
             ApplicationActions.disconnect();
-            ErrorActions.setMsgError('0', message.Log);
+            ErrorActions.setMsgError(LoginTAG, message.Log);
             failed();
         });
     }

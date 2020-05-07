@@ -14,6 +14,7 @@ import Remove from './Remove';
 import Rename from './Rename';
 import {ThingsdbActions} from '../../../Stores';
 import {ErrorMsg, getScopes} from '../../Util';
+import {UserAccessTAG} from '../../../constants';
 
 const privileges = [
     {
@@ -38,7 +39,7 @@ const privileges = [
     },
 ];
 
-const tag = '27';
+const tag = UserAccessTAG;
 
 const UserAccess = ({user, collections, close}) => {
     const [switches, setSwitches] = React.useState({});

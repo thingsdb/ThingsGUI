@@ -49,6 +49,7 @@ ProcedureDialogs.propTypes = {
         add: PropTypes.bool,
         edit: PropTypes.bool,
         run: PropTypes.bool,
+        view: PropTypes.bool,
     }).isRequired,
     procedures: PropTypes.arrayOf(PropTypes.object).isRequired,
     scope: PropTypes.string.isRequired,

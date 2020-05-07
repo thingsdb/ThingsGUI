@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable no-unused-vars */
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -10,9 +11,10 @@ import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal} from '../../Util';
+import {AddProcedureDialogTAG} from '../../../constants';
 
 
-const tag = '20';
+const tag = AddProcedureDialogTAG;
 
 const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
     const [state, setState] = React.useState({

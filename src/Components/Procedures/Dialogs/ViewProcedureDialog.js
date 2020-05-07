@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {SimpleModal} from '../../Util';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     warnColor: {
         color: amber[700],
     },
@@ -25,6 +25,13 @@ const ViewProcedureDialog = ({button, open, onClose, procedure}) => {
             open={open}
             onClose={onClose}
             maxWidth="sm"
+            actionButtons={procedure.with_side_effects?(
+                <ListItem>
+                    <Typography variant="caption" className={classes.warnColor}>
+                        {'Note: this procedure generates an event.'}
+                    </Typography>
+                </ListItem>
+            ):null}
         >
             <Grid container spacing={1}>
                 <Grid container spacing={1} item xs={12}>
@@ -39,18 +46,11 @@ const ViewProcedureDialog = ({button, open, onClose, procedure}) => {
                 </Grid>
                 <Grid item xs={12}>
                     <List disablePadding dense>
-                        {procedure.with_side_effects&&(
-                            <ListItem>
-                                <Typography variant="caption" className={classes.warnColor}>
-                                    {'Note: this procedure generates an event.'}
-                                </Typography>
-                            </ListItem>
-                        )}
                         <ListItem>
                             <TextField
-                                name="closure"
-                                label="Closure"
-                                type="Outlined"
+                                name="procedure"
+                                type="text"
+                                variant="standard"
                                 value={procedure.definition}
                                 fullWidth
                                 multiline

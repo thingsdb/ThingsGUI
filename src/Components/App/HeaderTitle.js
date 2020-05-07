@@ -18,7 +18,9 @@ const HeaderTitle = ({connectedNode}) => {
 
     return(
         <Helmet>
-            <title>{`ThingsGUI ${connectedNode&&connectedNode.node_name ? `  -  ${connectedNode.node_name}:${connectedNode.client_port}`: ''}`}</title>
+            <title>
+                {`ThingsGUI ${connectedNode&&connectedNode.node_name ? `  -  ${connectedNode.node_name}:${connectedNode.client_port}`: ''}`}
+            </title>
         </Helmet>
     );
 };

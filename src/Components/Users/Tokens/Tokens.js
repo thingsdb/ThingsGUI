@@ -20,7 +20,7 @@ import RemoveExpired from './RemoveExpired';
 import Remove from './Remove';
 import RefWrap from './RefWrap';
 import {ErrorMsg, HarmonicCard} from '../../Util';
-
+import {TokensTAG} from '../../../constants';
 
 const useStyles = makeStyles(theme => ({
     copyButton: {
@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const tag = '29';
+const tag = TokensTAG;
 
 const Tokens = ({user}) => {
     const classes = useStyles();

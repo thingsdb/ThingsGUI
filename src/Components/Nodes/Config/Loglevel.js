@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
+import {LoglevelTAG} from '../../../constants';
 
 
 const loglevels = [
@@ -20,7 +21,7 @@ const initialState = {
     form: {},
 };
 
-const tag = '15';
+const tag = LoglevelTAG;
 
 const Loglevel = ({node}) => {
     const [state, setState] = React.useState(initialState);

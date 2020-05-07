@@ -28,7 +28,6 @@ const withStores = withVlow([{
     keys: ['match']
 }]);
 
-
 const App = ({match}) => {
     const [open, setOpen] = React.useState(false);
     const [drawerContent, setDrawerContent] = React.useState(0);

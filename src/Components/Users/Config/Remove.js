@@ -3,9 +3,10 @@ import React from 'react';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
+import {RemoveUserTAG} from '../../../constants';
 
 
-const tag = '25';
+const tag = RemoveUserTAG;
 
 const Remove = ({user, close}) => {
     const [show, setShow] = React.useState(false);

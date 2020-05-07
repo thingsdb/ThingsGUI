@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
+import {AddNodeTAG} from '../../../constants';
 
 
 const initialState = {
@@ -37,7 +38,7 @@ const validation = {
     },
 };
 
-const tag = '14';
+const tag = AddNodeTAG;
 
 const Add = () => {
     const [state, setState] = React.useState(initialState);

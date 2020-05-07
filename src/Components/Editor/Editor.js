@@ -7,10 +7,11 @@ import DragHandleIcon from '@material-ui/icons/DragHandle';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
-import {ApplicationStore, CollectionActions, EditorActions, EditorStore, ErrorActions, NodesActions, ProcedureActions, TypeActions} from '../../Stores';
+import {ApplicationStore, CollectionActions, EditorActions, EditorStore, ErrorActions, NodesActions} from '../../Stores';
 import {ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput} from '../Util';
 import SelectScope from './SelectScope';
 import EditorSideContent from './EditorSideContent';
+import {EditorTAG} from '../../constants';
 
 
 const withStores = withVlow([{
@@ -30,7 +31,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const tag = '12';
+const tag = EditorTAG;
 
 const Editor = ({match, history}) => {
     const classes = useStyles();

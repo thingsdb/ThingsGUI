@@ -15,15 +15,17 @@ import Typography from '@material-ui/core/Typography';
 import {ProcedureActions} from '../../../Stores';
 import {ErrorMsg, HarmonicCard, QueryOutput, changeSingleToDoubleQuotes, addDoubleQuotesAroundKeys} from '../../Util';
 import {useEdit, InputField} from '../../Collections/CollectionsUtils';
+import {RunProcedureTAG} from '../../../constants';
 
-const useStyles = makeStyles(theme => ({
+
+const useStyles = makeStyles(() => ({
     warnColor: {
         color: amber[700],
     },
 }));
 
 const dataTypes = ['str', 'int', 'float', 'bool', 'nil', 'list', 'thing']; // Supported types
-const tag = '19';
+const tag = RunProcedureTAG;
 const scope = '@thingsdb';
 const Run = ({procedure}) => {
     const classes = useStyles();

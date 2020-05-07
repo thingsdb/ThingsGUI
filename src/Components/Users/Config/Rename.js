@@ -5,6 +5,7 @@ import {withVlow} from 'vlow';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
+import {RenameUserTAG} from '../../../constants';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
@@ -29,7 +30,7 @@ const validation = {
     },
 };
 
-const tag = '26';
+const tag = RenameUserTAG;
 
 const Rename = ({user, users}) => {
     const [state, setState] = React.useState(initialState);

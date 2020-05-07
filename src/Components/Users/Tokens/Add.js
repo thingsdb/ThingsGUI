@@ -10,6 +10,7 @@ import Switch from '@material-ui/core/Switch';
 
 import { ErrorMsg, SimpleModal, TimePicker } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
+import {AddTokenTAG} from '../../../constants';
 
 
 const initialState = {
@@ -21,7 +22,7 @@ const initialState = {
     },
 };
 
-const tag = '28';
+const tag = AddTokenTAG;
 
 const Add = ({user}) => {
     const [state, setState] = React.useState(initialState);

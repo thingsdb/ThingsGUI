@@ -2,17 +2,18 @@ import {withVlow} from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {AddTypeDialog, EditTypeDialog, ViewTypeDialog} from './Dialogs';
+import {AddTypeDialog, EditTypeDialog} from './Dialogs';
 import {TypeActions, TypeStore} from '../../../Stores';
 import {ChipsCard} from '../../Util';
-
-const tag = '10';
+import {CollectionTypesTAG} from '../../../constants';
 
 
 const withStores = withVlow([{
     store: TypeStore,
     keys: ['customTypes']
 }]);
+
+const tag = CollectionTypesTAG;
 
 const CollectionTypes = ({scope, customTypes}) => {
     const types = [
@@ -64,9 +65,8 @@ const CollectionTypes = ({scope, customTypes}) => {
     const [open, setOpen] = React.useState({
         add: false,
         edit: false,
-        view: false,
     });
-    const {add, edit, view} = open;
+    const {add, edit} = open;
 
     const [index, setindex] = React.useState(null);
     React.useEffect(() => {

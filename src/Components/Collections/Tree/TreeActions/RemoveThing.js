@@ -10,9 +10,10 @@ import Typography from '@material-ui/core/Typography';
 
 import { ErrorMsg, SimpleModal } from '../../../Util';
 import {CollectionActions, ThingsdbActions} from '../../../../Stores';
+import {RemoveThingTAG} from '../../../../constants';
 
 
-const tag = '7';
+const tag = RemoveThingTAG;
 const RemoveThing = ({child, onClose, parent, scope}) => {
     const [show, setShow] = React.useState(false);
     const [query, setQuery] = React.useState('');

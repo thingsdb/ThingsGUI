@@ -8,14 +8,14 @@ import ViewIcon from '@material-ui/icons/Visibility';
 import {ProcedureDialogs} from '../../Procedures';
 import {ProcedureActions, ProcedureStore} from '../../../Stores';
 import {ChipsCard} from '../../Util';
-
+import {CollectionProceduresTAG} from '../../../constants';
 
 const withStores = withVlow([{
     store: ProcedureStore,
     keys: ['procedures']
 }]);
 
-const tag = '6';
+const tag = CollectionProceduresTAG;
 
 const CollectionProcedures = ({procedures, scope}) => {
     const [index, setindex] = React.useState(null);
@@ -76,12 +76,12 @@ const CollectionProcedures = ({procedures, scope}) => {
 
     const buttons = (index)=>([
         {
-            icon: <RunIcon fontSize="small" />,
-            onClick: handleClickRun(index),
-        },
-        {
             icon: <ViewIcon fontSize="small" />,
             onClick: handleClickView(index),
+        },
+        {
+            icon: <RunIcon fontSize="small" />,
+            onClick: handleClickRun(index),
         },
         {
             icon:  <EditIcon fontSize="small" />,

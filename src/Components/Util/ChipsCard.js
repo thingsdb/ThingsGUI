@@ -11,6 +11,8 @@ import RemoveIcon from '@material-ui/icons/Cancel';
 import SearchIcon from '@material-ui/icons/Search';
 import Switch from '@material-ui/core/Switch';
 
+import {ChipsCardTAG} from '../../constants';
+
 
 const useStyles = makeStyles(theme => ({
     customWidth: {
@@ -52,13 +54,27 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]: {
             width: '12ch',
             '&:focus': {
-            width: '20ch',
+                width: '20ch',
             },
         },
     },
 }));
 
-const tag = '30';
+const orderByName = (arr) => arr.sort((a, b) => {
+    const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+    const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+        return -1;
+    }
+    if (nameA > nameB) {
+        return 1;
+    }
+
+    // names must be equal
+    return 0;
+});
+
+const tag = ChipsCardTAG;
 
 const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefresh, title, warnExpression}) => {
     const classes = useStyles();
@@ -98,7 +114,7 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
             onClick: handleOpenDelete(index),
         });
 
-    let searchList = searchString?items.filter(i=>i.name.startsWith(searchString)):items;
+    let searchList = orderByName(searchString?items.filter(i=>i.name.startsWith(searchString)):items);
 
     return (
         <React.Fragment>
@@ -191,7 +207,6 @@ ChipsCard.defaultProps = {
     expand: null,
     moreButtons: null,
     onRefresh: null,
-    onRun: null,
     warnExpression: ()=>false,
 },
 

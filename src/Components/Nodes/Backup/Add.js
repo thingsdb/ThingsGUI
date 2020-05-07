@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal, TimePicker, TimePeriodPicker } from '../../Util';
 import {NodesActions} from '../../../Stores';
+import {AddBackupTAG} from '../../../constants';
 
 const initialState = {
     show: false,
@@ -22,7 +23,7 @@ const initialState = {
     },
 };
 
-const tag = '13';
+const tag = AddBackupTAG;
 
 const Add = ({nodeId}) => {
     const [state, setState] = React.useState(initialState);

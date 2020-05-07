@@ -6,8 +6,10 @@ import CardHeader from '@material-ui/core/CardHeader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import PeopleIcon from '@material-ui/icons/People';
 import React from 'react';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import StorageIcon from '@material-ui/icons/Storage';
 import Typography from '@material-ui/core/Typography';
 
@@ -50,10 +52,14 @@ const LandingContent = ({collections, users, nodes}) => {
     const classes = useStyles();
     const [allNodeInfo, setAllNodeInfo] = React.useState([]);
 
-    React.useEffect(() => {
+    const handleRefresh = () => {
         NodesActions.getNodes(()=>NodesActions.getDashboardInfo(setAllNodeInfo));
         ThingsdbActions.getCollections();
         ThingsdbActions.getUsers();
+    };
+
+    React.useEffect(() => {
+        handleRefresh();
     }, []);
 
     const thingsSavedPerCol = collections.reduce((res, item) => { res.push({title: item.name, number: item.things}) ; return res;}, []);
@@ -124,12 +130,21 @@ const LandingContent = ({collections, users, nodes}) => {
                 <Grid item xs={12}>
                     <Card className={classes.card} raised>
                         <CardContent>
-                            <Typography variant="body1" >
-                                {'Overview of'}
-                            </Typography>
-                            <Typography variant="h4">
-                                {'ThingsDB'}
-                            </Typography>
+                            <Grid container>
+                                <Grid item xs={11}>
+                                    <Typography variant="body1" >
+                                        {'Overview of'}
+                                    </Typography>
+                                    <Typography variant="h4">
+                                        {'ThingsDB'}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={1}>
+                                    <IconButton onClick={handleRefresh} size="medium">
+                                        <RefreshIcon color="primary" style={{ fontSize: 50 }}  />
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
                         </CardContent>
                     </Card>
                 </Grid>

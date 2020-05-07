@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import PropTypes from 'prop-types';
 import {ErrorActions} from './ErrorStore';
 import {ApplicationActions} from './ApplicationStore';
+import {LoginTAG} from '../constants';
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
     reconnection: true,
@@ -127,7 +128,7 @@ class _PushNotification {
         socket.on('logging', (msg) => {
             window.console.log(msg);
             if (msg.includes('connection lost')) {
-                ErrorActions.setMsgError('0', msg);
+                ErrorActions.setMsgError(LoginTAG, msg);
             }
         });
         socket.on('disconnect', () => {
@@ -192,6 +193,7 @@ class EventStore extends BaseStore {
     onOpenEventChannel() {
         socket.emit('getEvent');
         socket.on('event', (data) => {
+            console.log(data);
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);
@@ -209,7 +211,7 @@ class EventStore extends BaseStore {
                 this.unwatch(data.Data['#']);
                 break;
             case ProtoMap.ProtoOnWarn:
-                ErrorActions.setMsgError('26', data.Data.warn_msg);
+                ErrorActions.setToastError(data.Data.warn_msg);
                 break;
             default:
 

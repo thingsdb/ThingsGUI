@@ -1,14 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {makeStyles} from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import IconButton from '@material-ui/core/IconButton';
+import PropTypes from 'prop-types';
+import React from 'react';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 const useStyles = makeStyles(() => ({
     padding: {
@@ -28,6 +29,10 @@ const HarmonicCard = ({buttons, content, expand, noPadding, onRefresh, title, un
         onRefresh&&!expanded?onRefresh():null;
     };
 
+    const handleRefresh = () => {
+        onRefresh();
+    };
+
     React.useEffect(() => {
         setExpanded(expand);
     }, [expand]);
@@ -36,9 +41,16 @@ const HarmonicCard = ({buttons, content, expand, noPadding, onRefresh, title, un
         <Card>
             <CardHeader
                 action={
-                    <IconButton onClick={handleExpandClick}>
-                        {expanded ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-                    </IconButton>
+                    <React.Fragment>
+                        {onRefresh && expanded && (
+                            <IconButton onClick={handleRefresh}>
+                                <RefreshIcon color="primary" />
+                            </IconButton>
+                        )}
+                        <IconButton onClick={handleExpandClick}>
+                            {expanded ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
+                        </IconButton>
+                    </React.Fragment>
                 }
                 title={title}
                 titleTypographyProps={{

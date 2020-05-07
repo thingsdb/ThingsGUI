@@ -3,6 +3,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
+import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
 import {ProcedureActions, TypeActions} from '../../Stores';
@@ -86,11 +87,11 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         );
     };
 
-    const handleClickProcedure = (index) => () => {
+    const handleClickRunProcedure = (index) => () => {
         const i = procedures[index].with_side_effects ? `wse(run('${procedures[index].name}',${procedures[index].arguments.map(a=>` <${a}>` )}))` : `run('${procedures[index].name}',${procedures[index].arguments.map(a=>` <${a}>` )})`;
         onSetQueryInput(i);
     };
-    const handleClickTypes = (index, target) => () => {
+    const handleClickRunTypes = (index, target) => () => {
         const circularRefFlag = {};
         const i = makeTypeInstanceInit(index, circularRefFlag, target);
         onSetQueryInput(i);
@@ -122,16 +123,14 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         setView({...view, types: {open: false, index: null}});
     };
 
-    console.log(view, customTypes);
-
-    const buttons = (fnView, fnEdit) => (index)=>([
+    const buttons = (fnView, fnRun) => (index)=>([
         {
             icon: <ViewIcon fontSize="small" />,
             onClick: fnView(index),
         },
         {
-            icon:  <EditIcon fontSize="small" />,
-            onClick: fnEdit(index),
+            icon: <RunIcon fontSize="small" />,
+            onClick: fnRun(index),
         },
     ]);
 
@@ -141,7 +140,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
             {scope&&scope.includes('@node') ? null : (
                 <Grid item xs={12}>
                     <ChipsCard
-                        buttons={buttons(handleClickViewProcedure, handleClickProcedure)}
+                        buttons={buttons(handleClickViewProcedure, handleClickRunProcedure)}
                         expand={false}
                         items={procedures}
                         onAdd={handleClickAddProcedure}
@@ -156,7 +155,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
             {scope&&scope.includes('@collection') ? (
                 <Grid item xs={12}>
                     <ChipsCard
-                        buttons={buttons(handleClickViewTypes, handleClickTypes)}
+                        buttons={buttons(handleClickViewTypes, handleClickRunTypes)}
                         expand={false}
                         items={customTypes}
                         onAdd={handleClickAddTypes}
