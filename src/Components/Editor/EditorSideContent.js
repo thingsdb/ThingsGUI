@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
