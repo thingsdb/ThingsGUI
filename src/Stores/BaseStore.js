@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import PropTypes from 'prop-types';
 import {ErrorActions} from './ErrorStore';
 import {ApplicationActions} from './ApplicationStore';
-import {LoginTAG} from '../constants';
+import {LoginTAG, WatcherTAG} from '../constants';
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
     reconnection: true,
@@ -193,7 +193,6 @@ class EventStore extends BaseStore {
     onOpenEventChannel() {
         socket.emit('getEvent');
         socket.on('event', (data) => {
-            console.log(data);
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);
@@ -211,7 +210,7 @@ class EventStore extends BaseStore {
                 this.unwatch(data.Data['#']);
                 break;
             case ProtoMap.ProtoOnWarn:
-                ErrorActions.setToastError(data.Data.warn_msg);
+                ErrorActions.setMsgError(WatcherTAG, data.Data.warn_msg);
                 break;
             default:
 

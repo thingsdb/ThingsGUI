@@ -1,5 +1,6 @@
 package util
 
+// Convert float value to integer if possible.
 func Convert(arg interface{}) interface{} {
 	switch v := arg.(type) {
 	case []interface{}:
@@ -22,9 +23,9 @@ func Convert(arg interface{}) interface{} {
 
 		if v == f {
 			return i
-		} else {
-			return v
 		}
+		return v
+
 	}
 	return arg
 }

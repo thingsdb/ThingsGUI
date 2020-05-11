@@ -19,6 +19,7 @@ func newBuffer() *buffer {
 	}
 }
 
+// FileNotExist returns a boolean indicating if a file does not exists
 func FileNotExist(path string) bool {
 	// check if file exists
 	fileNotExist := false
@@ -32,6 +33,7 @@ func FileNotExist(path string) bool {
 	return fileNotExist
 }
 
+// CreateFile creates a file and returns a boolean if successfull and an error message when something goes wrong
 func CreateFile(path string, logCh chan string) (bool, error) {
 	create := FileNotExist(path)
 	if create {
@@ -50,6 +52,7 @@ func CreateFile(path string, logCh chan string) (bool, error) {
 	return create, nil
 }
 
+// WriteFile writes data to a file and may return an error if something goes wrong
 func WriteFile(path string, logCh chan string, data []byte) error {
 	// Open file using READ & WRITE permission.
 	var file, err = os.OpenFile(path, os.O_RDWR|os.O_TRUNC, 0600)
@@ -73,6 +76,7 @@ func WriteFile(path string, logCh chan string, data []byte) error {
 	return nil
 }
 
+// ReadFile reads a file and returns a byte array and may return an error when something goes wrong
 func ReadFile(path string, logCh chan string) ([]byte, error) {
 	// Open file for reading.
 	file, err := os.OpenFile(path, os.O_RDWR, 0600)
@@ -104,6 +108,7 @@ func ReadFile(path string, logCh chan string) ([]byte, error) {
 	return b.data, nil
 }
 
+// DeleteFile deletes a file and may retun an error if somthing goes wrong
 func DeleteFile(path string, logCh chan string) error {
 	// delete file
 	var err = os.Remove(path)
@@ -115,6 +120,7 @@ func DeleteFile(path string, logCh chan string) error {
 	return nil
 }
 
+// GetHomePath returns the path of the local home folder
 func GetHomePath(fileName string) string {
 	var dir string
 	dir, _ = os.UserHomeDir()

@@ -12,6 +12,7 @@ import (
 	things "github.com/thingsdb/go-thingsdb"
 )
 
+// Client type
 type Client struct {
 	Connection *things.Conn
 	Closed     chan bool
@@ -27,12 +28,14 @@ type Client struct {
 	Port       uint16
 }
 
+// LoginResp type
 type LoginResp struct {
 	Loaded    bool
 	Connected bool
 	ConnErr   error
 }
 
+// LoginData type
 type LoginData struct {
 	Name               string `json:"name"`
 	Address            string `json:"address"`
@@ -97,6 +100,7 @@ func connect(client *Client, data LoginData) LoginResp {
 	return LoginResp{Connected: true}
 }
 
+// Connected returns if a connection with ThingsDB is established
 func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
 	var resp LoginResp
 	resp.Loaded = true
@@ -112,6 +116,7 @@ func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
 	return message.Status, resp, message
 }
 
+// Connect to ThingsDB
 func Connect(client *Client, data LoginData) (int, LoginResp, util.Message) {
 	var resp LoginResp
 	var message util.Message
@@ -129,6 +134,7 @@ func Connect(client *Client, data LoginData) (int, LoginResp, util.Message) {
 	return message.Status, resp, message
 }
 
+// ConnectionToo connects to ThingsDB using a known saved connection
 func ConnectionToo(client *Client, data LoginData) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 
@@ -184,6 +190,7 @@ func reconnect(client *Client) bool {
 	}
 }
 
+// Reconnect to ThingsDB when a connection is lost.
 func Reconnect(client *Client) (int, LoginResp, util.Message) {
 	resp := LoginResp{Connected: true}
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
@@ -212,12 +219,14 @@ func Reconnect(client *Client) (int, LoginResp, util.Message) {
 	return message.Status, resp, message
 }
 
+// Disconnect closes a connection to ThingsDB
 func Disconnect(client *Client) (int, LoginResp, util.Message) {
 	CloseSingleConn(client)
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	return message.Status, LoginResp{Loaded: true, Connected: false}, message
 }
 
+// CloseSingleConn closes a connection to ThingsDB
 func CloseSingleConn(client *Client) {
 	if client.Connection != nil {
 		client.Connection.Close()
@@ -225,6 +234,7 @@ func CloseSingleConn(client *Client) {
 	}
 }
 
+// GetConnection gets all the saved connections
 func GetConnection(client *Client) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 
@@ -246,6 +256,7 @@ func GetConnection(client *Client) (int, interface{}, util.Message) {
 	return message.Status, resp, message
 }
 
+// NewEditConnection saves a new connection or edits locally
 func NewEditConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	var mapping = make(map[string]LoginData)
@@ -271,6 +282,7 @@ func NewEditConnection(client *Client, data LoginData) (int, interface{}, util.M
 	return message.Status, nil, message
 }
 
+// DelConnection deletes a saved connection
 func DelConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 

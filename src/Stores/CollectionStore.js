@@ -78,7 +78,6 @@ class CollectionStore extends BaseStore {
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {
-            console.log(message);
             ErrorActions.setMsgError(tag, message.Log);
         });
     }

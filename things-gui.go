@@ -30,6 +30,7 @@ var (
 	disableOpenBrowser bool
 )
 
+// Init parses the flags
 func Init() {
 	flag.StringVar(&host, "host", "0.0.0.0", "Specific host for the http webserver.")
 	flag.UintVar(&port, "port", 5000, "Specific port for the http webserver.")
@@ -39,6 +40,7 @@ func Init() {
 	flag.Parse()
 }
 
+// App type
 type App struct {
 	host               string
 	port               uint16
@@ -48,6 +50,7 @@ type App struct {
 	client             map[string]*handlers.Client
 }
 
+// SocketRouter socketio
 func (app *App) SocketRouter() {
 	app.server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
@@ -184,10 +187,7 @@ func (app *App) quit() {
 	app.server.Close()
 }
 
-type Page struct {
-	Title string
-}
-
+// Start app
 func (app *App) Start() {
 	go app.server.Serve()
 	defer app.server.Close()
