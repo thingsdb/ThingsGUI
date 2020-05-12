@@ -1,4 +1,6 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable no-unused-vars */
+import { makeStyles} from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -10,11 +12,29 @@ import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal} from '../../Util';
+import {AddProcedureDialogTAG} from '../../../constants';
 
+const useStyles = makeStyles(theme => ({
+    scroll: {
+        '@global': {
+            '*::-webkit-scrollbar': {
+                width: '0.4em'
+            },
+            '*::-webkit-scrollbar-track': {
+                '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+            },
+            '*::-webkit-scrollbar-thumb': {
+                backgroundColor: theme.palette.primary.main,
+                outline: '1px solid slategrey'
+            }
+        },
+    },
+}));
 
-const tag = '20';
+const tag = AddProcedureDialogTAG;
 
 const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
+    const classes = useStyles();
     const [state, setState] = React.useState({
         queryString: 'new_procedure("", )',
         procedureName: '',
@@ -50,7 +70,7 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
             scope,
             queryString,
             tag,
-            () => {
+            (_data) => {
                 ProcedureActions.getProcedures(scope, tag, cb);
                 onClose();
             }
@@ -67,7 +87,7 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
             maxWidth="sm"
             disableOk={Boolean(error)}
         >
-            <Grid container spacing={1}>
+            <Grid className={classes.scroll} container spacing={1}>
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
@@ -92,6 +112,7 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
                                     value={queryString}
                                     fullWidth
                                     multiline
+                                    rowsMax="10"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,

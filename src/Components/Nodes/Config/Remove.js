@@ -6,9 +6,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
+import {RemoveNodeTAG} from '../../../constants';
 
-
-const tag = '16';
+const tag = RemoveNodeTAG;
 
 const Remove = ({node}) => {
     const [show, setShow] = React.useState(false);

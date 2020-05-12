@@ -58,6 +58,11 @@ func handlerTTLogo(w http.ResponseWriter, r *http.Request) {
 	w.Write(FileTTLogo)
 }
 
+func handlerViewEditLogo(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "image/png")
+	w.Write(FileViewEditLogo)
+}
+
 func handlerFaviconIco(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "image/x-icon")
 	w.Write(FileFaviconICO)

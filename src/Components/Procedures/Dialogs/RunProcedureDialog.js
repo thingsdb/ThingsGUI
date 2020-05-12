@@ -1,5 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react-hooks/exhaustive-deps */
+import { amber } from '@material-ui/core/colors';
+import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -13,11 +15,19 @@ import Typography from '@material-ui/core/Typography';
 import {EditActions, InputField, useEdit} from '../../Collections/CollectionsUtils';
 import {ProcedureActions} from '../../../Stores';
 import {addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
+import {RunProcedureDialogTAG} from '../../../constants';
 
-const tag = '22';
+const useStyles = makeStyles(() => ({
+    warnColor: {
+        color: amber[700],
+    },
+}));
+
+const tag = RunProcedureDialogTAG;
 const dataTypes = ['str', 'int', 'float', 'bool', 'nil', 'list', 'thing']; // Supported types
 
 const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope}) => {
+    const classes = useStyles();
     const [state, setState] = React.useState({
         output: '',
         procedureName: '',
@@ -65,11 +75,20 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
             open={open}
             onClose={onClose}
             actionButtons={
-                <Button color="primary" onClick={handleClickOk}>
-                    {'Run'}
-                </Button>
+                <React.Fragment>
+                    {selectedProcedure.with_side_effects&&(
+                        <ListItem>
+                            <Typography variant="caption" className={classes.warnColor}>
+                                {'Note: this procedure generates an event.'}
+                            </Typography>
+                        </ListItem>
+                    )}
+                    <Button color="primary" onClick={handleClickOk}>
+                        {'Run'}
+                    </Button>
+                </React.Fragment>
             }
-            maxWidth="md"
+            maxWidth="sm"
             // disableOk={Boolean(error)}
         >
             <Grid container spacing={1}>
@@ -114,7 +133,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
                                 {selectedProcedure.arguments&&selectedProcedure.arguments.length!==0 && (
                                     <React.Fragment>
                                         <ListItem>
-                                            <ListItemText primary="Arguments:" />
+                                            <ListItemText primary="Arguments:" primaryTypographyProps={{variant: 'body1'}} />
                                         </ListItem>
                                         <ListItem>
                                             <InputField dataType="variable" dataTypes={dataTypes} variables={selectedProcedure.arguments} />
@@ -122,7 +141,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
                                     </React.Fragment>
                                 )}
                                 <ListItem>
-                                    <ListItemText primary="Output:" />
+                                    <ListItemText primary="Output:" primaryTypographyProps={{variant: 'body1'}} />
                                 </ListItem>
                                 <div id="output">
                                     <QueryOutput output={output} />

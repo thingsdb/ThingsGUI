@@ -12,6 +12,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
+import {PasswordTAG} from '../../../constants';
 
 
 const initialState = {
@@ -30,7 +31,7 @@ const validation = {
     },
 };
 
-const tag = '24';
+const tag = PasswordTAG;
 
 const Password = ({user}) => {
     const [state, setState] = React.useState(initialState);

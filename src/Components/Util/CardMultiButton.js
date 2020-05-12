@@ -1,6 +1,8 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 
+import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
+import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -54,14 +56,19 @@ const useStyles = makeStyles(theme => ({
         boxSizing: 'inherit',
         overflow: 'hidden',
     },
+    warnColor: {
+        backgroundColor: amber[700],
+    },
 }));
 
 
-const CardMultiButton = ({buttons, label, ...other}) => {
+const CardMultiButton = ({buttons, label, warn, ...other}) => {
     const classes = useStyles();
     return(
         <div
-            className={classes.card}
+            className={clsx(classes.card, {
+                [classes.warnColor]: warn,
+            })}
             {...other}
         >
             <span className={classes.text} {...other}>
@@ -81,12 +88,14 @@ const CardMultiButton = ({buttons, label, ...other}) => {
 
 CardMultiButton.defaultProps = {
     other: {},
+    warn: false,
 };
 
 CardMultiButton.propTypes = {
     buttons: PropTypes.arrayOf(PropTypes.object).isRequired,
     label: PropTypes.string.isRequired,
     other: PropTypes.object,
+    warn: PropTypes.bool,
 };
 
 export default CardMultiButton;

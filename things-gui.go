@@ -19,7 +19,7 @@ import (
 )
 
 // AppVersion exposes version information
-const AppVersion = "0.1.2"
+const AppVersion = "0.1.3"
 
 var connFile = ".things-gui_config"
 
@@ -30,6 +30,7 @@ var (
 	disableOpenBrowser bool
 )
 
+// Init parses the flags
 func Init() {
 	flag.StringVar(&host, "host", "0.0.0.0", "Specific host for the http webserver.")
 	flag.UintVar(&port, "port", 5000, "Specific port for the http webserver.")
@@ -39,6 +40,7 @@ func Init() {
 	flag.Parse()
 }
 
+// App type
 type App struct {
 	host               string
 	port               uint16
@@ -48,6 +50,7 @@ type App struct {
 	client             map[string]*handlers.Client
 }
 
+// SocketRouter socketio
 func (app *App) SocketRouter() {
 	app.server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
@@ -110,10 +113,6 @@ func (app *App) SocketRouter() {
 
 	app.server.OnEvent("/", "queryBlob", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
 		return handlers.QueryBlob(app.client[s.ID()], data, app.timeout)
-	})
-
-	app.server.OnEvent("/", "queryEditor", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.QueryEditor(app.client[s.ID()], data, app.timeout)
 	})
 
 	app.server.OnEvent("/", "cleanupTmp", func(s socketio.Conn) (int, bool, util.Message) {
@@ -188,6 +187,7 @@ func (app *App) quit() {
 	app.server.Close()
 }
 
+// Start app
 func (app *App) Start() {
 	go app.server.Serve()
 	defer app.server.Close()
@@ -205,6 +205,7 @@ func (app *App) Start() {
 	http.HandleFunc("/img/facebookLogo.png", handlerFacebookLogo)
 	http.HandleFunc("/img/linkedinLogo.png", handlerLinkedinLogo)
 	http.HandleFunc("/img/TTLogo.png", handlerTTLogo)
+	http.HandleFunc("/img/view-edit.png", handlerViewEditLogo)
 	http.HandleFunc("/favicon.ico", handlerFaviconIco)
 	http.HandleFunc("/download", util.HandlerDownload)
 

@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// HandlerNotFound sends a 404-not-found  error
 func HandlerNotFound(w http.ResponseWriter, r *http.Request) {
 	sendError(w, "404 not found", http.StatusNotFound)
 }
@@ -39,6 +40,7 @@ func readBody(w http.ResponseWriter, r *http.Request, v interface{}) error {
 	}
 }
 
+// HandleFileRequest handles a file request
 func HandleFileRequest(w http.ResponseWriter, fn, ct string) {
 	b, err := ioutil.ReadFile(fn)
 	if err == nil {
@@ -52,6 +54,7 @@ func HandleFileRequest(w http.ResponseWriter, fn, ct string) {
 	}
 }
 
+// HandlerDownload sends a binary data object
 func HandlerDownload(w http.ResponseWriter, r *http.Request) {
 	var link string
 	if err := readBody(w, r, &link); err != nil {

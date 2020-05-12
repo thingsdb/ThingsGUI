@@ -49,7 +49,9 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
 
     React.useEffect(() => {
         window.addEventListener('resize', handleRefSize);
-        return () => window.removeEventListener('resize', handleRefSize);
+        return () => {
+            window.removeEventListener('resize', handleRefSize);
+        };
     },[]);
 
     React.useEffect(() => {

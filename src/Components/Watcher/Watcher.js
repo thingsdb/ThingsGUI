@@ -19,6 +19,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {EventActions, EventStore, ThingsdbStore, TypeActions, TypeStore} from '../../Stores';
 import {ErrorMsg, HarmonicTree} from '../Util';
+import {WatcherTAG} from '../../constants';
 
 const withStores = withVlow([{
     store: EventStore,
@@ -61,7 +62,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const tag = '31';
+const tag = WatcherTAG;
 
 const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThings, watchTypes}) => {
     const classes = useStyles();

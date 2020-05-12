@@ -13,6 +13,7 @@ const NodesActions = Vlow.createActions([
     'delBackup',
     'delNode',
     'getBackups',
+    'getConnectedNode',
     'getCounters',
     'getDashboardInfo',
     'getNode',
@@ -87,6 +88,22 @@ class NodesStore extends BaseStore {
             });
             ErrorActions.setToastError(message.Log);
         });
+    }
+
+    onGetConnectedNode() {
+        const {connectedNode} = this.state;
+        const query = 'node_info();';
+        this.emit('query', {
+            scope: '@node',
+            query
+        }).done((data) => {
+            data.uptime =  moment.duration(data.uptime , 'second').humanize();
+            if (!deepEqual(data, connectedNode)){
+                this.setState({
+                    connectedNode: data,
+                });
+            }
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
     onGetStreamInfo(){

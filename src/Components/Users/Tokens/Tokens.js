@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+import { amber } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
@@ -19,7 +20,7 @@ import RemoveExpired from './RemoveExpired';
 import Remove from './Remove';
 import RefWrap from './RefWrap';
 import {ErrorMsg, HarmonicCard} from '../../Util';
-
+import {TokensTAG} from '../../../constants';
 
 const useStyles = makeStyles(theme => ({
     copyButton: {
@@ -31,9 +32,12 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1),
         width: 175,
     },
+    warnColor: {
+        color: amber[700],
+    },
 }));
 
-const tag = '29';
+const tag = TokensTAG;
 
 const Tokens = ({user}) => {
     const classes = useStyles();
@@ -140,7 +144,7 @@ const Tokens = ({user}) => {
                     {'Not set.'}
                 </Typography>
             ) : (
-                <Typography color="error">
+                <Typography variant="caption" className={classes.warnColor}>
                     {`This user had no password set. Set a token or password to prevent ${user.name} from getting locked out.`}
                 </Typography>
             )}

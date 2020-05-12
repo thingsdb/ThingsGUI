@@ -57,7 +57,7 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                         noWrap: true,
                     }}
                 />
-                {onRefresh && (
+                {onRefresh && open && (
                     <ListItemSecondaryAction className={classes.ListItemSecondaryAction}>
                         <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title.toLowerCase()} info`}>
                             <Button onClick={onRefresh}>

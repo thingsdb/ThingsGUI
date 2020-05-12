@@ -18,7 +18,9 @@ const withStores = withVlow([{
 const ErrorMsg = ({tag, msgError}) => {
 
     React.useEffect(()=>{
-        return () => handleCloseError();
+        return () => {
+            handleCloseError();
+        };
     }, []);
 
     const handleCloseError = () => {

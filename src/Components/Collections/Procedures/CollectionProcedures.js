@@ -1,19 +1,21 @@
-import Chip from '@material-ui/core/Chip';
+import {withVlow} from 'vlow';
+import EditIcon from '@material-ui/icons/Edit';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {withVlow} from 'vlow';
+import RunIcon from '@material-ui/icons/DirectionsRun';
+import ViewIcon from '@material-ui/icons/Visibility';
 
 import {ProcedureDialogs} from '../../Procedures';
 import {ProcedureActions, ProcedureStore} from '../../../Stores';
 import {ChipsCard} from '../../Util';
-
+import {CollectionProceduresTAG} from '../../../constants';
 
 const withStores = withVlow([{
     store: ProcedureStore,
     keys: ['procedures']
 }]);
 
-const tag = '6';
+const tag = CollectionProceduresTAG;
 
 const CollectionProcedures = ({procedures, scope}) => {
     const [index, setindex] = React.useState(null);
@@ -32,10 +34,11 @@ const CollectionProcedures = ({procedures, scope}) => {
         add: false,
         edit: false,
         run: false,
+        view: false,
     });
 
 
-    const handleClickEdit = (i) => {
+    const handleClickEdit = (i) => () => {
         setindex(i);
         setOpen({...open, edit: true});
     };
@@ -45,9 +48,14 @@ const CollectionProcedures = ({procedures, scope}) => {
         setOpen({...open, add: true});
     };
 
-    const handleClickRun = (i) => {
+    const handleClickRun = (i) => () => {
         setindex(i);
         setOpen({...open, run: true});
+    };
+
+    const handleClickView = (i) => () => {
+        setindex(i);
+        setOpen({...open, view: true});
     };
 
     const handleClose = (c) => {
@@ -66,26 +74,47 @@ const CollectionProcedures = ({procedures, scope}) => {
         );
     };
 
+    const buttons = (index)=>([
+        {
+            icon: <ViewIcon fontSize="small" />,
+            onClick: handleClickView(index),
+        },
+        {
+            icon: <RunIcon fontSize="small" />,
+            onClick: handleClickRun(index),
+        },
+        {
+            icon:  <EditIcon fontSize="small" />,
+            onClick: handleClickEdit(index),
+        },
+    ]);
+
+    // const buttons = (index)=>([
+    //     {
+    //         icon: <RunIcon fontSize="small" />,
+    //         onClick: handleClickRun(index),
+    //     },
+    //     {
+    //         icon: <ViewIcon fontSize="small" />,
+    //         onClick: handleClickView(index),
+    //     },
+    //     {
+    //         icon: <img src="/img/view-edit.png" alt="view/edit" draggable="false" width="20" />,
+    //         onClick: handleClickEdit(index),
+    //     },
+    // ]);
+
     return (
         <React.Fragment>
             <ChipsCard
+                buttons={buttons}
                 expand={false}
                 items={procedures[scope]||[]}
                 onAdd={handleClickAdd}
-                onEdit={handleClickEdit}
-                onRefresh={handleRefresh}
-                onRun={handleClickRun}
                 onDelete={handleClickDelete}
-                moreButtons={
-                    <Chip
-                        clickable
-                        label="Edit"
-                        onClick={handleClickEdit}
-                        color="primary"
-                        variant="outlined"
-                    />
-                }
+                onRefresh={handleRefresh}
                 title="procedures"
+                warnExpression={i=>i.with_side_effects}
             />
             <ProcedureDialogs index={index} open={open} onClose={handleClose} procedures={procedures[scope]||[]} scope={scope} />
         </React.Fragment>

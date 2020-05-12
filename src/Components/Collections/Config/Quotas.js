@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
-
+import {QuotasTAG} from '../../../constants';
 
 const quotaTypes = [
     'things',
@@ -19,7 +19,7 @@ const initialState = {
     form: {},
 };
 
-const tag = '2';
+const tag = QuotasTAG;
 
 const Quotas = ({collection}) => {
     const [state, setState] = React.useState(initialState);

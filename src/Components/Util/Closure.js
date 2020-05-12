@@ -116,6 +116,7 @@ const Closure = ({input, cb}) => {
                     fullWidth
                     multiline
                     rows="4"
+                    rowsMax="10"
                     variant="outlined"
                 />
             </Grid>

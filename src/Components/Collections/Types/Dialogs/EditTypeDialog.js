@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable no-unused-vars */
 import AddIcon from '@material-ui/icons/Add';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -17,11 +18,12 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import AddTypeProperty from './AddTypeProperty';
-import {CollectionActions, ErrorActions, TypeActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal, TableWithButtons, WarnPopover} from '../../Util';
+import {CollectionActions, ErrorActions, TypeActions} from '../../../../Stores';
+import {ErrorMsg, SimpleModal, TableWithButtons, WarnPopover} from '../../../Util';
+import {EditTypeDialogTAG} from '../../../../constants';
 
 
-const tag = '11';
+const tag = EditTypeDialogTAG;
 
 const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
     const [state, setState] = React.useState({
@@ -93,7 +95,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
             scope,
             queryString,
             tag,
-            () => {
+            (_data) => {
                 TypeActions.getTypes(scope, tag);
                 setAction('');
                 setAnchorEl(null);

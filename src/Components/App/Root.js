@@ -8,6 +8,7 @@ import AppLoader from './AppLoader';
 import Login from './Login';
 import InitStores from './InitStores';
 import {ApplicationActions, ApplicationStore} from '../../Stores';
+import {LoginTAG} from '../../constants';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -57,7 +58,7 @@ const withStores = withVlow([{
 const Root = ({loaded, connected, seekConnection}) => {
     React.useEffect(() => {
         ApplicationActions.pushNotifications();
-        ApplicationActions.getConn('0'); // errmsg shown at Login dialog
+        ApplicationActions.getConn(LoginTAG); // errmsg shown at Login dialog
     },
     [],
     );

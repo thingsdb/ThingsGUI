@@ -7,6 +7,7 @@ import { makeStyles} from '@material-ui/core/styles';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
+import {AddUserTAG} from '../../../constants';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
@@ -53,7 +54,7 @@ const validation = {
     },
 };
 
-const tag = '23';
+const tag = AddUserTAG;
 
 const Add = ({users}) => {
     const classes = useStyles();

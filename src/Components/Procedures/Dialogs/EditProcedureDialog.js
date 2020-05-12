@@ -1,4 +1,7 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable no-unused-vars */
+import { amber } from '@material-ui/core/colors';
+import { makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
@@ -12,10 +15,31 @@ import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal} from '../../Util';
+import {EditProcedureDialogTAG} from '../../../constants';
 
+const useStyles = makeStyles(theme => ({
+    warnColor: {
+        color: amber[700],
+    },
+    scroll: {
+        '@global': {
+            '*::-webkit-scrollbar': {
+                width: '0.4em'
+            },
+            '*::-webkit-scrollbar-track': {
+                '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+            },
+            '*::-webkit-scrollbar-thumb': {
+                backgroundColor: theme.palette.primary.main,
+                outline: '1px solid slategrey'
+            }
+        },
+    },
+}));
 
-const tag = '21';
+const tag = EditProcedureDialogTAG;
 const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
+    const classes = useStyles();
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');
 
@@ -38,7 +62,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             scope,
             closure,
             tag,
-            () => {
+            (_data) => {
                 handleSubmit();
             }
         );
@@ -50,7 +74,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             scope,
             queryString,
             tag,
-            () => {
+            (_data) => {
                 ProcedureActions.getProcedures(scope, tag, cb);
                 onClose();
             }
@@ -64,8 +88,15 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             onClose={onClose}
             onOk={handleClickOk}
             maxWidth="sm"
+            actionButtons={procedure.with_side_effects?(
+                <ListItem>
+                    <Typography variant="caption" className={classes.warnColor}>
+                        {'Note: this procedure generates an event.'}
+                    </Typography>
+                </ListItem>
+            ):null}
         >
-            <Grid container spacing={1}>
+            <Grid className={classes.scroll} container spacing={1}>
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
@@ -90,6 +121,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
                                     value={queryString}
                                     fullWidth
                                     multiline
+                                    rowsMax="10"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,
@@ -107,7 +139,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
                         </Collapse>
                         <ListItem>
                             <Typography variant="body1" >
-                                {'Add closure:'}
+                                {'Edit procedure:'}
                             </Typography>
                         </ListItem>
                         <ListItem>

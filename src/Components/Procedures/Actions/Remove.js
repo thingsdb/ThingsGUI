@@ -3,9 +3,10 @@ import React from 'react';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ProcedureActions} from '../../../Stores';
+import {RemoveProcedureTAG} from '../../../constants';
 
 
-const tag = '18';
+const tag = RemoveProcedureTAG;
 
 const Remove = ({procedure, scope, close}) => {
     const [open, setOpen] = React.useState(false);

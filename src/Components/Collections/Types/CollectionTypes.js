@@ -1,19 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {withVlow} from 'vlow';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import AddTypeDialog from './AddTypeDialog';
-import EditTypeDialog from './EditTypeDialog';
+import {AddTypeDialog, EditTypeDialog} from './Dialogs';
 import {TypeActions, TypeStore} from '../../../Stores';
 import {ChipsCard} from '../../Util';
-
-const tag = '10';
+import {CollectionTypesTAG} from '../../../constants';
 
 
 const withStores = withVlow([{
     store: TypeStore,
     keys: ['customTypes']
 }]);
+
+const tag = CollectionTypesTAG;
 
 const CollectionTypes = ({scope, customTypes}) => {
     const types = [
@@ -62,8 +62,11 @@ const CollectionTypes = ({scope, customTypes}) => {
     ];
 
 
-    const [openAdd, setOpenAdd] = React.useState(false);
-    const [openEdit, setOpenEdit] = React.useState(false);
+    const [open, setOpen] = React.useState({
+        add: false,
+        edit: false,
+    });
+    const {add, edit} = open;
 
     const [index, setindex] = React.useState(null);
     React.useEffect(() => {
@@ -75,20 +78,20 @@ const CollectionTypes = ({scope, customTypes}) => {
         TypeActions.getTypes(scope, tag);
     };
 
-    const handleClickEdit = (i) => {
+    const handleClickEdit = (i) => () => {
         setindex(i);
-        setOpenEdit(true);
+        setOpen({...open, edit: true});
     };
     const handleCloseEdit = () => {
-        setOpenEdit(false);
+        setOpen({...open, edit: false});
     };
 
     const handleClickAdd = () => {
         setindex(null);
-        setOpenAdd(true);
+        setOpen({...open, add: true});
     };
     const handleCloseAdd = () => {
-        setOpenAdd(false);
+        setOpen({...open, add: false});
     };
     const handleClickDelete = (i, cb, tag) => {
         const item = customTypes[scope][i];
@@ -102,19 +105,26 @@ const CollectionTypes = ({scope, customTypes}) => {
         );
     };
 
+    const buttons = (index)=>([
+        {
+            icon: <img src="/img/view-edit.png" alt="view/edit" draggable="false" width="20" />,
+            onClick: handleClickEdit(index),
+        },
+    ]);
+
     return (
         <React.Fragment>
             <ChipsCard
+                buttons={buttons}
                 expand={false}
                 items={customTypes[scope]||[]}
                 onAdd={handleClickAdd}
                 onDelete={handleClickDelete}
-                onEdit={handleClickEdit}
                 onRefresh={handleRefresh}
                 title="custom types"
             />
-            <AddTypeDialog open={openAdd} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} />
-            <EditTypeDialog open={openEdit} onClose={handleCloseEdit} customType={index!=null&&customTypes[scope]?customTypes[scope][index]:{}} dataTypes={datatypesMap} scope={scope} />
+            <AddTypeDialog open={add} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} />
+            <EditTypeDialog open={edit} onClose={handleCloseEdit} customType={index!=null&&customTypes[scope]?customTypes[scope][index]:{}} dataTypes={datatypesMap} scope={scope} />
         </React.Fragment>
     );
 };

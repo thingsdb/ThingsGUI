@@ -40,21 +40,26 @@ const TableWithButtons = ({header, rows, rowClick, buttons}) => {
                                 </Typography>
                             </TableCell>
                         ))}
-                        <TableCell align='right'>
-                            {buttons(row)}
-                        </TableCell>
+                        {buttons&& (
+                            <TableCell align='right'>
+                                {buttons(row)}
+                            </TableCell>
+                        )}
                     </TableRow>
                 ))}
             </TableBody>
         </Table>
     );
 };
+TableWithButtons.defaultProps = {
+    buttons: null,
+};
 
 TableWithButtons.propTypes = {
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     rowClick: PropTypes.func.isRequired,
-    buttons: PropTypes.func.isRequired,
+    buttons: PropTypes.func,
 };
 
 export default TableWithButtons;

@@ -1,5 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
@@ -12,11 +13,12 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import AddTypeProperty from './AddTypeProperty';
-import {CollectionActions, TypeActions} from '../../../Stores';
-import {ArrayLayout, ErrorMsg, SimpleModal} from '../../Util';
+import {CollectionActions, TypeActions} from '../../../../Stores';
+import {ArrayLayout, ErrorMsg, SimpleModal} from '../../../Util';
+import {AddTypeDialogTAG} from '../../../../constants';
 
 
-const tag = '9';
+const tag = AddTypeDialogTAG;
 
 const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
 
@@ -73,7 +75,7 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
             scope,
             queryString,
             tag,
-            () => {
+            (_data) => {
                 TypeActions.getTypes(scope, tag);
                 onClose();
             }

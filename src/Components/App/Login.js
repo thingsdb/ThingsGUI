@@ -27,6 +27,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { ErrorMsg, isObjectEmpty, SimpleModal } from '../Util';
 import {ApplicationStore, ApplicationActions} from '../../Stores';
+import {LoginTAG} from '../../constants';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -66,7 +67,7 @@ const validation = {
     },
 };
 
-const tag = '0';
+const tag = LoginTAG;
 
 const Login = ({connected, loaded, savedConnections}) => {
     const initialState = {

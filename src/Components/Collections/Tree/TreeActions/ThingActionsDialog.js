@@ -10,8 +10,9 @@ import Edit from './Edit';
 import SubmitButton from './SubmitButton';
 import {CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
 import {allDataTypes, ErrorMsg, SimpleModal} from '../../../Util';
+import {ThingActionsDialogTAG} from '../../../../constants';
 
-const tag = '8';
+const tag = ThingActionsDialogTAG;
 
 const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 

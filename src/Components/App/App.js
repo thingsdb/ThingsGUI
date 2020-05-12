@@ -10,23 +10,23 @@ import StorageIcon from '@material-ui/icons/Storage';
 import VisibleIcon from '@material-ui/icons/Visibility';
 import {withVlow} from 'vlow';
 
-import {BottomBar, CollectionsMenu, ProcedureMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
-import Collection from '../Collections';
-import User from '../Users';
-import Nodes from '../Nodes';
-import Editor from '../Editor';
-import Watcher from '../Watcher';
-import {Procedure} from '../Procedures';
 import {ApplicationStore} from '../../Stores';
+import {BottomBar, CollectionsMenu, ProcedureMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
 import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
+import {Procedure} from '../Procedures';
+import Collection from '../Collections';
+import Editor from '../Editor';
+import HeaderTitle from './HeaderTitle';
 import LandingPage from '../LandingPage';
+import Nodes from '../Nodes';
+import User from '../Users';
+import Watcher from '../Watcher';
 
 
 const withStores = withVlow([{
     store: ApplicationStore,
     keys: ['match']
 }]);
-
 
 const App = ({match}) => {
     const [open, setOpen] = React.useState(false);
@@ -49,66 +49,69 @@ const App = ({match}) => {
     };
 
     return(
-        <DrawerLayout
-            open={open}
-            onClose={handleDrawerClose}
-            topbar={
-                <TopBar
-                    additionals={
-                        <TopBarMenu menuIcon={<MenuIcon />}>
-                            <List>
-                                <ListItem button onClick={handleDrawerOpen(0)} >
-                                    <ListItemIcon>
-                                        <VisibleIcon color="primary" />
-                                    </ListItemIcon>
-                                    <ListItemText primary="WATCHER" />
-                                </ListItem>
-                                <ListItem button onClick={handleDrawerOpen(1)} >
-                                    <ListItemIcon>
-                                        <StorageIcon color="primary" />
-                                    </ListItemIcon>
-                                    <ListItemText primary="NODES" />
-                                </ListItem>
-                            </List>
-                        </TopBarMenu>
-                    }
-                    pageIcon={<LandingPage />}
-                />
-            }
-            mainContent={
-                <Grid container alignItems="flex-start">
-                    <Grid container spacing={1} item xs={12} sm={12} md={3} lg={2} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
-                        <Grid item xs={12} sm={3} md={12}>
-                            <Card>
-                                <CollectionsMenu />
-                            </Card>
+        <React.Fragment>
+            <HeaderTitle />
+            <DrawerLayout
+                open={open}
+                onClose={handleDrawerClose}
+                topbar={
+                    <TopBar
+                        additionals={
+                            <TopBarMenu menuIcon={<MenuIcon />}>
+                                <List>
+                                    <ListItem button onClick={handleDrawerOpen(0)} >
+                                        <ListItemIcon>
+                                            <VisibleIcon color="primary" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="WATCHER" />
+                                    </ListItem>
+                                    <ListItem button onClick={handleDrawerOpen(1)} >
+                                        <ListItemIcon>
+                                            <StorageIcon color="primary" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="NODES" />
+                                    </ListItem>
+                                </List>
+                            </TopBarMenu>
+                        }
+                        pageIcon={<LandingPage />}
+                    />
+                }
+                mainContent={
+                    <Grid container alignItems="flex-start">
+                        <Grid container spacing={1} item xs={12} sm={12} md={3} lg={2} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
+                            <Grid item xs={12} sm={3} md={12}>
+                                <Card>
+                                    <CollectionsMenu />
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12} sm={3} md={12}>
+                                <Card>
+                                    <UsersMenu />
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12} sm={3} md={12}>
+                                <Card>
+                                    <ProcedureMenu />
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12} sm={3} md={12}>
+                                <Card>
+                                    <QueryEditorMenu />
+                                </Card>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={3} md={12}>
-                            <Card>
-                                <UsersMenu />
-                            </Card>
-                        </Grid>
-                        <Grid item xs={12} sm={3} md={12}>
-                            <Card>
-                                <ProcedureMenu />
-                            </Card>
-                        </Grid>
-                        <Grid item xs={12} sm={3} md={12}>
-                            <Card>
-                                <QueryEditorMenu />
-                            </Card>
+                        <Grid container item xs={12} sm={12} md={9} lg={10} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
+                            {pages[match.path]}
                         </Grid>
                     </Grid>
-                    <Grid container item xs={12} sm={12} md={9} lg={10} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
-                        {pages[match.path]}
-                    </Grid>
-                </Grid>
-            }
-            bottomBar={<BottomBar />}
-            drawerTitle={drawerContent ? 'NODES' : 'WATCHER'}
-            drawerContent={drawerContent ? <Nodes /> : <Watcher />}
-            toast={<ErrorToast />}
-        />
+                }
+                bottomBar={<BottomBar />}
+                drawerTitle={drawerContent ? 'NODES' : 'WATCHER'}
+                drawerContent={drawerContent ? <Nodes /> : <Watcher />}
+                toast={<ErrorToast />}
+            />
+        </React.Fragment>
     );
 };
 

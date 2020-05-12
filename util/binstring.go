@@ -7,10 +7,12 @@ import (
 	"strings"
 )
 
+// TmpFiles keeps track of generates files
 type TmpFiles struct {
 	generated map[string]bool
 }
 
+// NewTmpFiles create a new tmp struct
 func NewTmpFiles() *TmpFiles {
 	return &TmpFiles{
 		generated: make(map[string]bool),
@@ -43,6 +45,7 @@ func (tmp *TmpFiles) createBinFileLink(content []byte) (string, error) {
 	return fmt.Sprintf("http://%s/download%s", hostname, tmpfile.Name()), nil
 }
 
+// ReplaceBinStrWithLink replace a binary string with a symlink
 func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) (interface{}, error) {
 	var err error
 	switch v := thing.(type) {
@@ -89,14 +92,14 @@ func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) (interface{}, erro
 	return nil, nil
 }
 
+// CleanupTmp removes downloaded blob files from local tmp folder
 func (tmp *TmpFiles) CleanupTmp() error { // cleanup at end of session
 	var err error
-	for k, _ := range tmp.generated {
+	for k := range tmp.generated {
 		err = os.Remove(k)
+		delete(tmp.generated, k)
 		if err != nil && !strings.Contains(err.Error(), "no such file or directory") {
 			return err
-		} else {
-			delete(tmp.generated, k)
 		}
 	}
 	return nil

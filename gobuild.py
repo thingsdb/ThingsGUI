@@ -74,6 +74,7 @@ binfiles = [
     ("./static/img/facebookLogo.png", "FileFacebookLogo"),
     ("./static/img/linkedinLogo.png", "FileLinkedinLogo"),
     ("./static/img/TTLogo.png", "FileTTLogo"),
+    ("./static/img/view-edit.png", "FileViewEditLogo"),
     ("./static/favicon.ico", "FileFaviconICO"),
     ("./templates/app.html", "FileAppHTML"),
 ]
