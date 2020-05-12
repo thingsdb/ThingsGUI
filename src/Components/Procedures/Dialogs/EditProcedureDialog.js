@@ -17,9 +17,23 @@ import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal} from '../../Util';
 import {EditProcedureDialogTAG} from '../../../constants';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     warnColor: {
         color: amber[700],
+    },
+    scroll: {
+        '@global': {
+            '*::-webkit-scrollbar': {
+                width: '0.4em'
+            },
+            '*::-webkit-scrollbar-track': {
+                '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+            },
+            '*::-webkit-scrollbar-thumb': {
+                backgroundColor: theme.palette.primary.main,
+                outline: '1px solid slategrey'
+            }
+        },
     },
 }));
 
@@ -82,7 +96,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
                 </ListItem>
             ):null}
         >
-            <Grid container spacing={1}>
+            <Grid className={classes.scroll} container spacing={1}>
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
@@ -107,6 +121,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
                                     value={queryString}
                                     fullWidth
                                     multiline
+                                    rowsMax="10"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,
