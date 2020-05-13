@@ -9,10 +9,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {EditActions, InputField, useEdit} from '../../Collections/CollectionsUtils';
+import {InputField, useEdit} from '../../Collections/CollectionsUtils';
 import {ProcedureActions} from '../../../Stores';
 import {addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
 import {RunProcedureDialogTAG} from '../../../constants';
@@ -26,34 +25,21 @@ const useStyles = makeStyles(() => ({
 const tag = RunProcedureDialogTAG;
 const dataTypes = ['str', 'int', 'float', 'bool', 'nil', 'list', 'thing']; // Supported types
 
-const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope}) => {
+const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const classes = useStyles();
-    const [state, setState] = React.useState({
-        output: '',
-        procedureName: '',
-    });
-    const {output, procedureName} = state;
-    const [editState, dispatch] = useEdit();
+    const [output, setOutput] = React.useState('');
+    const editState = useEdit()[0];
     const {val} = editState;
 
 
     React.useEffect(() => { // clean state
-        setState({
-            procedureName: procedure?procedure.name:(procedures&&procedures.length?procedures[0].name:''),
-            output: '',
-        });
+        setOutput('');
     },
     [open],
     );
 
-    const handleChangeProcedure = ({target}) => {
-        const {value} = target;
-        EditActions.update(dispatch, {val: '', array: [], blob: {}});
-        setState({...state, procedureName: value});
-    };
-
     const handleResult = (data) => {
-        setState({...state, output: data});
+        setOutput(data);
         const elmnt = document.getElementById('output');
         elmnt.scrollIntoView();
     };
@@ -68,7 +54,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
         );
     };
 
-    const selectedProcedure = procedure ? procedure : procedures && procedures.find(i => i.name == procedureName);
+    console.log(procedure);
     return (
         <SimpleModal
             button={button}
@@ -76,7 +62,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
             onClose={onClose}
             actionButtons={
                 <React.Fragment>
-                    {selectedProcedure.with_side_effects&&(
+                    {procedure.with_side_effects&&(
                         <ListItem>
                             <Typography variant="caption" className={classes.warnColor}>
                                 {'Note: this procedure generates an event.'}
@@ -89,7 +75,6 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
                 </React.Fragment>
             }
             maxWidth="sm"
-            // disableOk={Boolean(error)}
         >
             <Grid container spacing={1}>
                 <Grid container spacing={1} item xs={12}>
@@ -104,39 +89,14 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
                 </Grid>
                 <Grid item xs={12}>
                     <List disablePadding dense>
-                        {procedures && (
-                            <ListItem>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="procedureName"
-                                    label="Procedure"
-                                    value={procedureName}
-                                    onChange={handleChangeProcedure}
-                                    fullWidth
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    select
-                                    SelectProps={{native: true}}
-                                >
-                                    {procedures.map((p,i) => (
-                                        <option key={i} value={p.name}>
-                                            {p.name}
-                                        </option>
-                                    ))}
-                                </TextField>
-                            </ListItem>
-                        )}
-                        {selectedProcedure && (
                             <React.Fragment>
-                                {selectedProcedure.arguments&&selectedProcedure.arguments.length!==0 && (
+                                {procedure.arguments&&procedure.arguments.length!==0 && (
                                     <React.Fragment>
                                         <ListItem>
                                             <ListItemText primary="Arguments:" primaryTypographyProps={{variant: 'body1'}} />
                                         </ListItem>
                                         <ListItem>
-                                            <InputField dataType="variable" dataTypes={dataTypes} variables={selectedProcedure.arguments} />
+                                            <InputField dataType="variable" dataTypes={dataTypes} variables={procedure.arguments} />
                                         </ListItem>
                                     </React.Fragment>
                                 )}
@@ -157,8 +117,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, procedures, scope
 
 RunProcedureDialog.defaultProps = {
     button: null,
-    procedure: null,
-    procedures: null,
+    procedure: {},
 };
 
 
@@ -167,7 +126,6 @@ RunProcedureDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     procedure: PropTypes.object,
-    procedures: PropTypes.arrayOf(PropTypes.object),
     scope: PropTypes.string.isRequired,
 };
 

@@ -19,6 +19,7 @@ const Piece = ({fill, fraction, hole, offset, radius, showLabel, showPercent, st
     });
     const [path, setPath] = React.useState('');
     const [part, setPart] = React.useState(0);
+    const [timeId, setTimeId] = React.useState(null);
 
     let startA = getAnglePoint(start, radius, radius+offset.x, radius+offset.y);
     let startB = getAnglePoint(start, radius - hole, radius+offset.x, radius+offset.y);
@@ -26,6 +27,13 @@ const Piece = ({fill, fraction, hole, offset, radius, showLabel, showPercent, st
     React.useEffect(() => {
         animate();
     }, [fraction, start]);
+
+    React.useEffect(() => {
+        return(()=>{
+            clearTimeout(timeId); // prevent React state update on unmounted component
+        });
+    }, [timeId]);
+
 
     const animate = () => {
         draw(0);
@@ -44,7 +52,8 @@ const Piece = ({fill, fraction, hole, offset, radius, showLabel, showPercent, st
         let p = `M ${startA.x} ${startA.y} A ${radius} ${radius} 0 ${(s > 0.5 ? 1 : 0)} 1 ${endA.x} ${endA.y} L ${endB.x} ${endB.y} A ${radius- hole} ${radius- hole} 0 ${(s > 0.5 ? 1 : 0)} 0 ${startB.x} ${startB.y} Z`;
 
         if (s < fraction) {
-            setTimeout(() => { draw(s + step); } , 10);
+            let timeoutId = setTimeout(() => { draw(s + step); } , 10);
+            setTimeId(timeoutId);
         } else if (showLabel) {
             let c = getAnglePoint(start + (fraction / 2), (radius / 2 + trueHole / 2), radius+offset.x, radius+offset.y);
             setTextPoint({x: c.x, y: c.y});
