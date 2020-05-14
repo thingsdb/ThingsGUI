@@ -81,16 +81,20 @@ const OverviewTypes = ({buttons, customType, customTypes, onChangeType}) => {
                     </Grid>
                 </Grid>
             </ListItem>
-            <ListItem>
-                <ListItemText
-                    primary="Part of type:"
-                />
-            </ListItem>
-            <ListItem>
-                {usedBy.map((item, index)=>(
-                    <Chip className={classes.chips} key={index} onClick={handleClickCustomType(item.name)} label={item.name} size="small" />
-                ))}
-            </ListItem>
+            {usedBy.length ? (
+                <React.Fragment>
+                    <ListItem>
+                        <ListItemText
+                            primary="Part of type:"
+                        />
+                    </ListItem>
+                    <ListItem>
+                        {usedBy.map((item, index)=>(
+                            <Chip color="primary" className={classes.chips} key={index} onClick={handleClickCustomType(item.name)} label={item.name} size="small" />
+                        ))}
+                    </ListItem>
+                </React.Fragment>
+            ) : null}
         </React.Fragment>
     );
 };
