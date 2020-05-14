@@ -88,8 +88,6 @@ const CollectionProcedures = ({procedures, scope}) => {
         },
     ]);
 
-    console.log(procedures[scope])
-
     return (
         <React.Fragment>
             <ChipsCard

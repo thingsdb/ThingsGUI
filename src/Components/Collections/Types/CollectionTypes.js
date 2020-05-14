@@ -126,7 +126,7 @@ const CollectionTypes = ({scope, customTypes}) => {
                 title="custom types"
             />
             <AddTypeDialog open={add} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} />
-            <EditTypeDialog open={edit} onChangeType={handleChangeType} onClose={handleCloseEdit} customType={name&&customTypes[scope]?customTypes[scope].find(i=>i.name==name):{}} dataTypes={datatypesMap} customTypeNames={[...(customTypes[scope]||[]).map(c=>c.name)]} scope={scope} />
+            <EditTypeDialog open={edit} onChangeType={handleChangeType} onClose={handleCloseEdit} customType={name&&customTypes[scope]?customTypes[scope].find(i=>i.name==name):{}} dataTypes={datatypesMap} customTypes={customTypes[scope]||[]} scope={scope} />
         </React.Fragment>
     );
 };

@@ -25,7 +25,7 @@ const ProcedureDialogs = ({name, procedures, scope, open, onClose}) => {
     const handleCloseView = () => {
         onClose({view: false});
     };
-    console.log(name, procedures.find(i=>i.name==name))
+
     let selectedProcedure = name?procedures.find(i=>i.name==name):{};
 
     return (

@@ -53,14 +53,17 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
 
     const customTypeNames = [...customTypes.map(c=>c.name)];
     const makeTypeInstanceInit = (n, circularRefFlag, target) => {
-        if (circularRefFlag[n]) {
-            setAnchorEl(target);
-            setWarnDescription(`Circular reference detected in type ${n}`);
-            return '';
-        } else {
-            circularRefFlag[n] = true;
+        if (customTypeNames.includes(n)) {
+            if (circularRefFlag[n]) {
+                setAnchorEl(target);
+                setWarnDescription('Circular reference detected');
+                return '';
+            } else {
+                circularRefFlag[n] = true;
+                return `${n}{${customTypes.find(i=>i.name==n).fields.map(c =>`${c[0]}: ${makeTypeInstanceInit(c[1], {...circularRefFlag}, target)}`)}}`;
+            }
         }
-        return `${n}{${customTypes.find(i=>i.name==n).fields.map(c =>`${c[0]}: ${customTypeNames.includes(c[1]) ? makeTypeInstanceInit(c[1], circularRefFlag, target) : `<${c[1]}>`}` )}}`;
+        return `<${n}>`;
     };
 
     const handleClickDeleteProcedure = (n, cb, tag) => {
@@ -91,7 +94,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         const i = p.with_side_effects ? `wse(run('${n}',${p.arguments.map(a=>` <${a}>` )}))` : `run('${n}',${p.arguments.map(a=>` <${a}>` )})`;
         onSetQueryInput(i);
     };
-    const handleClickRunTypes = (n, target) => () => {
+    const handleClickRunTypes = (n) => ({target}) => {
         const circularRefFlag = {};
         const i = makeTypeInstanceInit(n, circularRefFlag, target);
         onSetQueryInput(i);
@@ -116,7 +119,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     };
 
     const handleCloseViewProcedure = () => {
-        setView({...view, procedure: {open: false, name: ''}});
+        setView({...view, procedure: {...view.procedure, open: false, }});
     };
 
     const handleClickViewTypes = (n) => () => {
@@ -124,7 +127,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     };
 
     const handleCloseViewTypes = () => {
-        setView({...view, types: {open: false, name: ''}});
+        setView({...view, types: {...view.types, open: false}});
     };
 
     const buttons = (fnView, fnRun) => (n)=>([
@@ -167,7 +170,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                         onDelete={handleClickDeleteTypes}
                         title="custom types"
                     />
-                    <ViewTypeDialog open={view.types.open} onClose={handleCloseViewTypes} onChangeType={handleChangeType} customType={view.types.name&&customTypes?customTypes.find(i=>i.name==view.types.name):{}} customTypeNames={[...(customTypes||[]).map(c=>c.name)]} />
+                    <ViewTypeDialog open={view.types.open} onClose={handleCloseViewTypes} onChangeType={handleChangeType} customType={view.types.name&&customTypes?customTypes.find(i=>i.name==view.types.name):{}} customTypes={customTypes||[]} />
                 </Grid>
             ): null}
         </React.Fragment>

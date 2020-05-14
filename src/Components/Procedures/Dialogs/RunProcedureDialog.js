@@ -47,14 +47,13 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
         const jsonProof = changeSingleToDoubleQuotes(addDoubleQuotesAroundKeys(val)); // make it json proof
         ProcedureActions.runProcedure(
             scope,
-            procedure&&procedure.name||procedureName,
+            procedure.name,
             jsonProof,
             tag,
             handleResult,
         );
     };
 
-    console.log(procedure);
     return (
         <SimpleModal
             button={button}
@@ -89,25 +88,24 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                 </Grid>
                 <Grid item xs={12}>
                     <List disablePadding dense>
-                            <React.Fragment>
-                                {procedure.arguments&&procedure.arguments.length!==0 && (
-                                    <React.Fragment>
-                                        <ListItem>
-                                            <ListItemText primary="Arguments:" primaryTypographyProps={{variant: 'body1'}} />
-                                        </ListItem>
-                                        <ListItem>
-                                            <InputField dataType="variable" dataTypes={dataTypes} variables={procedure.arguments} />
-                                        </ListItem>
-                                    </React.Fragment>
-                                )}
-                                <ListItem>
-                                    <ListItemText primary="Output:" primaryTypographyProps={{variant: 'body1'}} />
-                                </ListItem>
-                                <div id="output">
-                                    <QueryOutput output={output} />
-                                </div>
-                            </React.Fragment>
-                        )}
+                        <React.Fragment>
+                            {procedure.arguments&&procedure.arguments.length!==0 && (
+                                <React.Fragment>
+                                    <ListItem>
+                                        <ListItemText primary="Arguments:" primaryTypographyProps={{variant: 'body1'}} />
+                                    </ListItem>
+                                    <ListItem>
+                                        <InputField dataType="variable" dataTypes={dataTypes} variables={procedure.arguments} />
+                                    </ListItem>
+                                </React.Fragment>
+                            )}
+                            <ListItem>
+                                <ListItemText primary="Output:" primaryTypographyProps={{variant: 'body1'}} />
+                            </ListItem>
+                            <div id="output">
+                                <QueryOutput output={output} />
+                            </div>
+                        </React.Fragment>
                     </List>
                 </Grid>
             </Grid>
