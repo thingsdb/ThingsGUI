@@ -156,7 +156,7 @@ const revealCustomType = (i) => {
         arr = 1;
     }
     if(i.includes('?')) {
-        opt = arr&&i.slice(-1)=='?'&&i.slice(-3, -2)? 2: 1;
+        opt = arr&&i.slice(-1)=='?'&&i.slice(-3, -2)=='?'? 2: 1;
     }
     return i.slice(arr, i.length-(arr+opt));
 };

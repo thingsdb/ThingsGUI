@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import BlockIcon from '@material-ui/icons/Block';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Collapse from '@material-ui/core/Collapse';
@@ -55,6 +55,7 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                     primaryTypographyProps={{
                         display: 'block',
                         noWrap: true,
+                        variant: 'button'
                     }}
                 />
                 {onRefresh && open && (
@@ -84,10 +85,9 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                         </ListItem>
                     )) : (
                         <ListItem button className={classes.nested}>
-                            <ListItemIcon>
-                                <BlockIcon />
-                            </ListItemIcon>
-                            <ListItemText primaryTypographyProps={{'variant':'caption', 'color':'error'}} />
+                            <Box fontSize={12} fontStyle="italic" m={1}>
+                                {`No ${title}`}
+                            </Box>
                         </ListItem>
                     )}
                     <Divider />

@@ -28,7 +28,7 @@ const CollectionsMenu = ({collections}) => {
 
     return (
         <Menu
-            title="COLLECTIONS"
+            title="collections"
             icon={<DashboardIcon color="primary" />}
             items={collections}
             addItem={<Add />}

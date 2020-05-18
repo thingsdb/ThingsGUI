@@ -172,7 +172,7 @@ const EditTypeDialog = ({open, onClose, customType, customTypes, dataTypes, scop
                             </ListItem>
                         </Collapse>
                         <Collapse in={overview||del} timeout="auto" unmountOnExit>
-                            <OverviewTypes buttons={buttons} customType={customType} customTypes={customTypes} onChangeType={onChangeType} />
+                            <OverviewTypes buttons={buttons} customType={customType} customTypes={customTypes} onAdd={handleAdd} onChangeType={onChangeType} />
                         </Collapse>
                     </List>
                 </Grid>
