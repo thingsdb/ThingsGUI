@@ -1,11 +1,13 @@
 import {withVlow} from 'vlow';
+import Link from '@material-ui/core/Link';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {AddTypeDialog, EditTypeDialog} from './Dialogs';
+import {AddTypeDialog} from './Dialogs';
 import {TypeActions, TypeStore} from '../../../Stores';
-import {ChipsCard} from '../../Util';
+import {ChipsCard, revealCustomType} from '../../Util';
 import {CollectionTypesTAG} from '../../../constants';
+import EditDialog from '../CollectionsUtils/TypesEnumsUtils/EditDialog';
 
 
 const withStores = withVlow([{
@@ -78,7 +80,7 @@ const CollectionTypes = ({scope, customTypes}) => {
         TypeActions.getTypes(scope, tag);
     };
 
-    const handleChangeType = (n) => {
+    const handleChangeType = (n) => () => {
         setName(n);
     };
     const handleClickEdit = (n) => () => {
@@ -114,6 +116,32 @@ const CollectionTypes = ({scope, customTypes}) => {
         },
     ]);
 
+
+    const addLink = (i, ctn) => {
+        let t = revealCustomType(i);
+        return( ctn.includes(t)? (
+            <React.Fragment>
+                {i.length-t.length>1?i[0]:null}
+                <Link component="button" onClick={handleChangeType(t)}>
+                    {t}
+                </Link>
+                {i.length-t.length>2?i.slice(t.length-i.length+1):i.length-t.length>0?i.slice(-1):null}
+            </React.Fragment>
+        ) : (i));
+    };
+    const customTypeNames=[...(customTypes[scope]||[]).map(c=>c.name)];
+    const customType = name&&customTypes[scope]?customTypes[scope].find(i=>i.name==name):{};
+    const rows = customType.fields? customType.fields.map(c=>({propertyName: c[0], propertyType: c[1], propertyObject: addLink(c[1], customTypeNames), propertyVal: ''})):[];
+    const usedBy = customTypes[scope]?customTypes[scope].filter(i=>
+        `${i.fields},`.includes(`,${customType.name},`) ||
+        `${i.fields}`.includes(`,${customType.name},`) ||
+        `${i.fields}`.includes(`[${customType.name}]`) ||
+        `${i.fields}`.includes(`{${customType.name}}`) ||
+        `${i.fields}`.includes(`,${customType.name}?`) ||
+        `${i.fields}`.includes(`[${customType.name}?]`) ||
+        `${i.fields}`.includes(`{${customType.name}?}`)
+    ):[];
+    console.log(customTypeNames, customType, rows, usedBy);
     return (
         <React.Fragment>
             <ChipsCard
@@ -125,8 +153,24 @@ const CollectionTypes = ({scope, customTypes}) => {
                 onRefresh={handleRefresh}
                 title="custom types"
             />
-            <AddTypeDialog open={add} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} />
-            <EditTypeDialog open={edit} onChangeType={handleChangeType} onClose={handleCloseEdit} customType={name&&customTypes[scope]?customTypes[scope].find(i=>i.name==name):{}} dataTypes={datatypesMap} customTypes={customTypes[scope]||[]} scope={scope} />
+            <AddTypeDialog
+                open={add}
+                onClose={handleCloseAdd}
+                dataTypes={datatypesMap}
+                scope={scope}
+            />
+            <EditDialog
+                dataTypes={datatypesMap}
+                feature="type"
+                getInfo={(scope, tag)=>TypeActions.getTypes(scope, tag)}
+                item={customType}
+                onChangeItem={handleChangeType}
+                onClose={handleCloseEdit}
+                open={edit}
+                rows={rows}
+                scope={scope}
+                usedBy={usedBy}
+            />
         </React.Fragment>
     );
 };

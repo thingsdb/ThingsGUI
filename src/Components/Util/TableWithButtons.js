@@ -9,7 +9,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
 const TableWithButtons = ({header, rows, rowClick, buttons}) => {
-
     const handleClickRow = (row) => () => {
         rowClick(row);
     };
