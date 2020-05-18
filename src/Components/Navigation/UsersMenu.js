@@ -35,7 +35,7 @@ const UsersMenu = ({user, users}) => {
 
     return (
         <Menu
-            title="USERS"
+            title="users"
             icon={<PersonIcon color="primary" />}
             items={users2}
             addItem={<Add />}

@@ -66,7 +66,7 @@ const ProceduresMenu = ({procedures}) => {
     return (
         <React.Fragment>
             <Menu
-                title="PROCEDURES"
+                title="procedures"
                 icon={<PlayArrowIcon color="primary" />}
                 items={orderedProcedure}
                 addItem={

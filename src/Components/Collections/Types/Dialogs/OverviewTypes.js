@@ -1,6 +1,8 @@
 /* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
@@ -18,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const OverviewTypes = ({buttons, customType, customTypes, onChangeType}) => {
+const OverviewTypes = ({buttons, customType, customTypes, onAdd, onChangeType}) => {
     const classes = useStyles();
     const header = [
         {ky: 'propertyName', label: 'Name'},
@@ -28,6 +30,9 @@ const OverviewTypes = ({buttons, customType, customTypes, onChangeType}) => {
     const handleClickCustomType = (i) => () => {
         onChangeType(i);
     };
+    const handleAdd = () => {
+        onAdd();
+    };
     const addLink = (i, ctn) => {
         let t = revealCustomType(i);
         return( ctn.includes(t)? (
@@ -36,7 +41,7 @@ const OverviewTypes = ({buttons, customType, customTypes, onChangeType}) => {
                 <Link component="button" onClick={handleClickCustomType(t)}>
                     {t}
                 </Link>
-                {i.length-t.length>2?i.slice(i.length-t.length, -1):i.length-t.length>0?i.slice(-1):null}
+                {i.length-t.length>2?i.slice(t.length-i.length+1):i.length-t.length>0?i.slice(-1):null}
             </React.Fragment>
         ) : (i));
     };
@@ -74,9 +79,16 @@ const OverviewTypes = ({buttons, customType, customTypes, onChangeType}) => {
             </ListItem>
             <ListItem>
                 <Grid container>
-                    <Grid container item xs={11} justify="flex-end">
+                    {onAdd && (
+                        <Grid item xs={1}>
+                            <Button onClick={handleAdd} >
+                                <AddIcon color="primary" />
+                            </Button>
+                        </Grid>
+                    )}
+                    <Grid container item xs={onAdd?11:12} justify="flex-end">
                         <Box fontSize={10} fontStyle="italic" m={1}>
-                            {`Created on: ${moment(customType.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}, last modified on: ${moment(customType.modified_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                            {`Created on: ${moment(customType.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}${customType.modified_at?`, last modified on: ${moment(customType.modified_at*1000).format('YYYY-MM-DD HH:mm:ss')}`:''}`}
                         </Box>
                     </Grid>
                 </Grid>
@@ -102,13 +114,15 @@ const OverviewTypes = ({buttons, customType, customTypes, onChangeType}) => {
 OverviewTypes.defaultProps = {
     buttons: null,
     customType: {},
+    onAdd: null,
 };
 
 OverviewTypes.propTypes = {
     buttons: PropTypes.func,
-    onChangeType: PropTypes.func.isRequired,
     customType: PropTypes.object,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onAdd: PropTypes.func,
+    onChangeType: PropTypes.func.isRequired,
 };
 
 export default OverviewTypes;

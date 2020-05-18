@@ -1,5 +1,6 @@
 import { fade, makeStyles } from '@material-ui/core/styles';
 import {ErrorMsg, HarmonicCard, SimpleModal, CardMultiButton} from '../Util';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -153,7 +154,11 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
                                             warn={warnExpression(listitem)}
                                         />
                                     </React.Fragment>
-                                )) : `No ${title}.`
+                                )) :  (
+                                    <Box fontSize={12} fontStyle="italic" m={1}>
+                                        {`No ${title}`}
+                                    </Box>
+                                )
                             }
                         </Grid>
                     </Grid>
