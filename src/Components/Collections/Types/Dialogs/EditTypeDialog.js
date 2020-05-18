@@ -1,34 +1,29 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable no-unused-vars */
-import AddIcon from '@material-ui/icons/Add';
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import AddTypeProperty from './AddTypeProperty';
 import {CollectionActions, ErrorActions, TypeActions} from '../../../../Stores';
-import {ErrorMsg, SimpleModal, TableWithButtons, WarnPopover} from '../../../Util';
 import {EditTypeDialogTAG} from '../../../../constants';
-
+import {ErrorMsg, SimpleModal, WarnPopover} from '../../../Util';
+import AddTypeProperty from './AddTypeProperty';
+import OverviewTypes from './OverviewTypes';
 
 const tag = EditTypeDialogTAG;
 
-const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
+const EditTypeDialog = ({open, onClose, customType, customTypes, dataTypes, scope, onChangeType}) => {
     const [state, setState] = React.useState({
         queryString: '',
-        property: {propertyName: '', propertyType: '', propertyVal: ''},
+        property: {propertyName: '', propertyType: '', propertyTypeObject:null, propertyVal: ''},
     });
     const {queryString, property} = state;
     const [action, setAction] = React.useState('');
@@ -36,16 +31,10 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
 
-    const header = [
-        {ky: 'propertyName', label: 'Name'},
-        {ky: 'propertyType', label: 'Type'},
-    ];
-    const rows = customType.fields? customType.fields.map(c=>({propertyName: c[0], propertyType: c[1], propertyVal: ''})):[];
-
     React.useEffect(() => {
         setState({
             queryString: '',
-            property: {propertyName: '', propertyType: '', propertyVal: ''},
+            property: {propertyName: '', propertyType: '', propertyTypeObject:null, propertyVal: ''},
         });
         setAction('');
     },
@@ -112,7 +101,6 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
     const add = action=='add';
     const edit = action=='mod';
     const del = action=='del';
-
 
     const buttons = (row) => (
         <React.Fragment>
@@ -184,38 +172,7 @@ const EditTypeDialog = ({open, onClose, customType, dataTypes, scope}) => {
                             </ListItem>
                         </Collapse>
                         <Collapse in={overview||del} timeout="auto" unmountOnExit>
-                            <ListItem>
-                                <ListItemText
-                                    primary="Current properties:"
-                                    secondary={
-                                        <Link target="_blank" href="https://docs.thingsdb.net/v0/data-types/type/">
-                                            {'https://docs.thingsdb.net/v0/data-types/type/'}
-                                        </Link>
-                                    }
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <TableWithButtons
-                                    header={header}
-                                    rows={rows}
-                                    rowClick={()=>null}
-                                    buttons={buttons}
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <Grid container>
-                                    <Grid item xs={1}>
-                                        <Button onClick={handleAdd} >
-                                            <AddIcon color="primary" />
-                                        </Button>
-                                    </Grid>
-                                    <Grid container item xs={11} justify="flex-end">
-                                        <Box fontSize={10} fontStyle="italic" m={1}>
-                                            {`Created on: ${moment(customType.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}, last modified on: ${moment(customType.modified_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
-                                        </Box>
-                                    </Grid>
-                                </Grid>
-                            </ListItem>
+                            <OverviewTypes buttons={buttons} customType={customType} customTypes={customTypes} onChangeType={onChangeType} />
                         </Collapse>
                     </List>
                 </Grid>
@@ -231,7 +188,9 @@ EditTypeDialog.defaultProps = {
 EditTypeDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
+    onChangeType: PropTypes.func.isRequired,
     customType: PropTypes.object,
+    customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     scope: PropTypes.string.isRequired,
 };

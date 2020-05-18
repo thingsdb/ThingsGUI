@@ -78,28 +78,28 @@ const tag = ChipsCardTAG;
 
 const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefresh, title, warnExpression}) => {
     const classes = useStyles();
-    const [deleteIndex, setDeleteIndex] = React.useState(null);
+    const [deleteItem, setDeleteItem] = React.useState('');
     const [switchDel, setSwitchDel] = React.useState(false);
     const [searchString, setSearchString] = React.useState('');
 
 
     const handleClickDelete = () => {
-        onDelete(deleteIndex, handleCloseDelete, tag);
+        onDelete(deleteItem, handleCloseDelete, tag);
     };
 
     const handleClickAdd = () => {
         onAdd();
     };
 
-    const handleOpenDelete = (index) => () => {
-        setDeleteIndex(index);
+    const handleOpenDelete = (name) => () => {
+        setDeleteItem(name);
     };
     const handleSwitch = ({target}) => {
         const {checked} = target;
         setSwitchDel(checked);
     };
     const handleCloseDelete = () => {
-        setDeleteIndex(null);
+        setDeleteItem('');
         setSwitchDel(false);
     };
 
@@ -108,13 +108,13 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
         setSearchString(value);
     };
 
-    const remove = (index)=>(
+    const remove = (name)=>(
         {
             icon: <RemoveIcon fontSize="small" />,
-            onClick: handleOpenDelete(index),
+            onClick: handleOpenDelete(name),
         });
 
-    let searchList = orderByName(searchString?items.filter(i=>i.name.startsWith(searchString)):items);
+    let searchList = orderByName(searchString?items.filter(i=>i.name.includes(searchString)):items);
 
     return (
         <React.Fragment>
@@ -148,7 +148,7 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
                                     <React.Fragment key={index}>
                                         <CardMultiButton
                                             label={listitem.name}
-                                            buttons={[...buttons(index), remove(index)]}
+                                            buttons={[...buttons(listitem.name), remove(listitem.name)]}
                                             color="primary"
                                             warn={warnExpression(listitem)}
                                         />
@@ -174,7 +174,7 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
                 onRefresh={onRefresh}
             />
             <SimpleModal
-                open={deleteIndex!=null}
+                open={Boolean(deleteItem)}
                 onClose={handleCloseDelete}
                 actionButtons={
                     <Button onClick={handleClickDelete} disabled={!switchDel} className={classes.warning}>
@@ -182,7 +182,7 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
                     </Button>
                 }
                 maxWidth="xs"
-                title={deleteIndex!=null?`Are you sure you want to remove '${items[deleteIndex]&&items[deleteIndex].name}'?`:''}
+                title={deleteItem?`Are you sure you want to remove '${deleteItem}'?`:''}
             >
                 <React.Fragment>
                     <ErrorMsg tag={tag} />

@@ -149,6 +149,17 @@ const duration = (n) => {
 const addDoubleQuotesAroundKeys = (strObject) => strObject.replace(/\{/g, '{"').replace(/:/g, '":').replace(/,(?=[^{]*\})/g, ',"');
 const changeSingleToDoubleQuotes = (strObject) => strObject.replace(/'/g, '"');
 
+const revealCustomType = (i) => {
+    let arr = 0;
+    let opt = 0;
+    if(i[0]=='[' || i[0]=='{') {
+        arr = 1;
+    }
+    if(i.includes('?')) {
+        opt = arr&&i.slice(-1)=='?'&&i.slice(-3, -2)? 2: 1;
+    }
+    return i.slice(arr, i.length-(arr+opt));
+};
 
 
 export {
@@ -183,6 +194,7 @@ export {
     orderByName,
     QueryInput,
     QueryOutput,
+    revealCustomType,
     ServerError,
     SimpleModal,
     StartStopPolling,

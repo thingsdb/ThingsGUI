@@ -18,7 +18,7 @@ const withStores = withVlow([{
 const tag = CollectionProceduresTAG;
 
 const CollectionProcedures = ({procedures, scope}) => {
-    const [index, setindex] = React.useState(null);
+    const [name, setName] = React.useState('');
 
     React.useEffect(() => {
         ProcedureActions.getProcedures(scope, tag);
@@ -38,23 +38,23 @@ const CollectionProcedures = ({procedures, scope}) => {
     });
 
 
-    const handleClickEdit = (i) => () => {
-        setindex(i);
+    const handleClickEdit = (n) => () => {
+        setName(n);
         setOpen({...open, edit: true});
     };
 
     const handleClickAdd = () => {
-        setindex(null);
+        setName('');
         setOpen({...open, add: true});
     };
 
-    const handleClickRun = (i) => () => {
-        setindex(i);
+    const handleClickRun = (n) => () => {
+        setName(n);
         setOpen({...open, run: true});
     };
 
-    const handleClickView = (i) => () => {
-        setindex(i);
+    const handleClickView = (n) => () => {
+        setName(n);
         setOpen({...open, view: true});
     };
 
@@ -62,11 +62,10 @@ const CollectionProcedures = ({procedures, scope}) => {
         setOpen({...open, ...c});
     };
 
-    const handleClickDelete = (i, cb, tag) => {
-        const item = procedures[scope][i];
+    const handleClickDelete = (n, cb, tag) => {
         ProcedureActions.deleteProcedure(
             scope,
-            item.name,
+            n,
             tag,
             ()=> {
                 cb();
@@ -74,35 +73,20 @@ const CollectionProcedures = ({procedures, scope}) => {
         );
     };
 
-    const buttons = (index)=>([
+    const buttons = (n)=>([
         {
             icon: <ViewIcon fontSize="small" />,
-            onClick: handleClickView(index),
+            onClick: handleClickView(n),
         },
         {
             icon: <RunIcon fontSize="small" />,
-            onClick: handleClickRun(index),
+            onClick: handleClickRun(n),
         },
         {
             icon:  <EditIcon fontSize="small" />,
-            onClick: handleClickEdit(index),
+            onClick: handleClickEdit(n),
         },
     ]);
-
-    // const buttons = (index)=>([
-    //     {
-    //         icon: <RunIcon fontSize="small" />,
-    //         onClick: handleClickRun(index),
-    //     },
-    //     {
-    //         icon: <ViewIcon fontSize="small" />,
-    //         onClick: handleClickView(index),
-    //     },
-    //     {
-    //         icon: <img src="/img/view-edit.png" alt="view/edit" draggable="false" width="20" />,
-    //         onClick: handleClickEdit(index),
-    //     },
-    // ]);
 
     return (
         <React.Fragment>
@@ -116,7 +100,7 @@ const CollectionProcedures = ({procedures, scope}) => {
                 title="procedures"
                 warnExpression={i=>i.with_side_effects}
             />
-            <ProcedureDialogs index={index} open={open} onClose={handleClose} procedures={procedures[scope]||[]} scope={scope} />
+            <ProcedureDialogs name={name} open={open} onClose={handleClose} procedures={procedures[scope]||[]} scope={scope} />
         </React.Fragment>
     );
 };

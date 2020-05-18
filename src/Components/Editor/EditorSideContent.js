@@ -17,11 +17,11 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     const [view, setView] = React.useState({
         procedure: {
             open: false,
-            index: null,
+            name: '',
         },
         types: {
             open: false,
-            index: null,
+            name: '',
         }
     });
 
@@ -52,21 +52,24 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     const handleRefreshTypes = () => TypeActions.getTypes(scope, tag, handleTypes);
 
     const customTypeNames = [...customTypes.map(c=>c.name)];
-    const makeTypeInstanceInit = (index, circularRefFlag, target) => {
-        if (circularRefFlag[customTypes[index].name]) {
-            setAnchorEl(target);
-            setWarnDescription(`Circular reference detected in type ${customTypes[index].name}`);
-            return '';
-        } else {
-            circularRefFlag[customTypes[index].name] = true;
+    const makeTypeInstanceInit = (n, circularRefFlag, target) => {
+        if (customTypeNames.includes(n)) {
+            if (circularRefFlag[n]) {
+                setAnchorEl(target);
+                setWarnDescription('Circular reference detected');
+                return '';
+            } else {
+                circularRefFlag[n] = true;
+                return `${n}{${customTypes.find(i=>i.name==n).fields.map(c =>`${c[0]}: ${makeTypeInstanceInit(c[1], {...circularRefFlag}, target)}`)}}`;
+            }
         }
-        return `${customTypes[index].name}{${customTypes[index].fields.map(c =>`${c[0]}: ${customTypeNames.includes(c[1]) ? makeTypeInstanceInit(customTypeNames.indexOf(c[1]), circularRefFlag, target) : `<${c[1]}>`}` )}}`;
+        return `<${n}>`;
     };
 
-    const handleClickDeleteProcedure = (index, cb, tag) => {
+    const handleClickDeleteProcedure = (n, cb, tag) => {
         ProcedureActions.deleteProcedure(
             scope,
-            procedures[index].name,
+            n,
             tag,
             (p) => {
                 cb();
@@ -74,10 +77,10 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
             }
         );
     };
-    const handleClickDeleteTypes = (index, cb, tag) => {
+    const handleClickDeleteTypes = (n, cb, tag) => {
         TypeActions.deleteType(
             scope,
-            customTypes[index].name,
+            n,
             tag,
             (t) => {
                 cb();
@@ -86,13 +89,14 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         );
     };
 
-    const handleClickRunProcedure = (index) => () => {
-        const i = procedures[index].with_side_effects ? `wse(run('${procedures[index].name}',${procedures[index].arguments.map(a=>` <${a}>` )}))` : `run('${procedures[index].name}',${procedures[index].arguments.map(a=>` <${a}>` )})`;
+    const handleClickRunProcedure = (n) => () => {
+        let p = procedures.find(i=>i.name==n);
+        const i = p.with_side_effects ? `wse(run('${n}',${p.arguments.map(a=>` <${a}>` )}))` : `run('${n}',${p.arguments.map(a=>` <${a}>` )})`;
         onSetQueryInput(i);
     };
-    const handleClickRunTypes = (index, target) => () => {
+    const handleClickRunTypes = (n) => ({target}) => {
         const circularRefFlag = {};
-        const i = makeTypeInstanceInit(index, circularRefFlag, target);
+        const i = makeTypeInstanceInit(n, circularRefFlag, target);
         onSetQueryInput(i);
     };
     const handleClickAddProcedure = () => {
@@ -106,30 +110,34 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         setAnchorEl(null);
     };
 
-    const handleClickViewProcedure = (i) => () => {
-        setView({...view, procedure: {open: true, index: i}});
+    const handleChangeType = (n) => {
+        setView({...view, types: {open: true, name: n}});
+    };
+
+    const handleClickViewProcedure = (n) => () => {
+        setView({...view, procedure: {open: true, name: n}});
     };
 
     const handleCloseViewProcedure = () => {
-        setView({...view, procedure: {open: false, index: null}});
+        setView({...view, procedure: {...view.procedure, open: false, }});
     };
 
-    const handleClickViewTypes = (i) => () => {
-        setView({...view, types: {open: true, index: i}});
+    const handleClickViewTypes = (n) => () => {
+        setView({...view, types: {open: true, name: n}});
     };
 
     const handleCloseViewTypes = () => {
-        setView({...view, types: {open: false, index: null}});
+        setView({...view, types: {...view.types, open: false}});
     };
 
-    const buttons = (fnView, fnRun) => (index)=>([
+    const buttons = (fnView, fnRun) => (n)=>([
         {
             icon: <ViewIcon fontSize="small" />,
-            onClick: fnView(index),
+            onClick: fnView(n),
         },
         {
             icon: <RunIcon fontSize="small" />,
-            onClick: fnRun(index),
+            onClick: fnRun(n),
         },
     ]);
 
@@ -148,7 +156,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                         title="procedures"
                         warnExpression={i=>i.with_side_effects}
                     />
-                    <ViewProcedureDialog open={view.procedure.open} onClose={handleCloseViewProcedure} procedure={view.procedure.index!==null?procedures[view.procedure.index]:{}} />
+                    <ViewProcedureDialog open={view.procedure.open} onClose={handleCloseViewProcedure} procedure={view.procedure.name?procedures.find(i=>i.name==view.procedure.name):{}} />
                 </Grid>
             )}
             {scope&&scope.includes('@collection') ? (
@@ -162,7 +170,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                         onDelete={handleClickDeleteTypes}
                         title="custom types"
                     />
-                    <ViewTypeDialog open={view.types.open} onClose={handleCloseViewTypes} customType={view.types.index!=null&&customTypes?customTypes[view.types.index]:{}} />
+                    <ViewTypeDialog open={view.types.open} onClose={handleCloseViewTypes} onChangeType={handleChangeType} customType={view.types.name&&customTypes?customTypes.find(i=>i.name==view.types.name):{}} customTypes={customTypes||[]} />
                 </Grid>
             ): null}
         </React.Fragment>

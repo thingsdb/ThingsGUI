@@ -83,15 +83,15 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
 
 
     const checkCircularRef = (type, circularRefFlag) => {
-        if (type[0] === '[' || type[0] === '{') {
+        if (!type.includes('?') && type[0] === '[' || type[0] === '{') {
             type = type.slice(1, -1);
         }
         if (customTypeNames.includes(type)) {
             if (circularRefFlag[type]) {
-                setWarnDescription(`Circular reference detected in type ${type}. `);
+                setWarnDescription('Circular reference detected');
             } else {
                 circularRefFlag[type] = true;
-                customTypes.find(c=> c.name == type).fields.map(f=>checkCircularRef(f[1], circularRefFlag));
+                customTypes.find(c=> c.name == type).fields.map(f=>checkCircularRef(f[1], {...circularRefFlag}));
             }
         }
     };
@@ -139,8 +139,8 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
                         select
                         SelectProps={{native: true}}
                     >
-                        {dataTypes.map(d => (
-                            <option key={d} value={d} disabled={child.type=='set'&&!(d=='thing'||Boolean(customTypes.find(c=>c.name==d)))} >
+                        {dataTypes.map((d, i) => (
+                            <option key={i} value={d} disabled={child.type=='set'&&!(d=='thing'||Boolean(customTypes.find(c=>c.name==d)))} >
                                 {d}
                             </option>
                         ))}

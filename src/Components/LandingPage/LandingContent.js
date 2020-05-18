@@ -22,7 +22,7 @@ const withStores = withVlow([{
     keys: ['collections', 'users']
 }, {
     store: NodesStore,
-    keys: ['nodes']
+    keys: ['allNodeInfo', 'nodes']
 }]);
 
 const useStyles = makeStyles((theme) => ({
@@ -48,12 +48,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const LandingContent = ({collections, users, nodes}) => {
+const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
     const classes = useStyles();
-    const [allNodeInfo, setAllNodeInfo] = React.useState([]);
 
     const handleRefresh = () => {
-        NodesActions.getNodes(()=>NodesActions.getDashboardInfo(setAllNodeInfo));
+        NodesActions.getNodes(()=>NodesActions.getDashboardInfo());
         ThingsdbActions.getCollections();
         ThingsdbActions.getUsers();
     };
@@ -200,6 +199,7 @@ LandingContent.propTypes = {
     users: ThingsdbStore.types.users.isRequired,
 
     /* Node properties */
+    allNodeInfo: NodesStore.types.allNodeInfo.isRequired,
     nodes: NodesStore.types.nodes.isRequired,
 };
 

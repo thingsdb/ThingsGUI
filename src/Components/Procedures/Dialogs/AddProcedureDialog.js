@@ -130,6 +130,7 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
                         </Collapse>
                         <ListItem>
                             <TextField
+                                autoFocus
                                 name="procedureName"
                                 label="Name"
                                 type="text"

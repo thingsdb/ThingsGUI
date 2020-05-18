@@ -68,7 +68,7 @@ const CollectionTypes = ({scope, customTypes}) => {
     });
     const {add, edit} = open;
 
-    const [index, setindex] = React.useState(null);
+    const [name, setName] = React.useState('');
     React.useEffect(() => {
         TypeActions.getTypes(scope, tag);
 
@@ -78,8 +78,11 @@ const CollectionTypes = ({scope, customTypes}) => {
         TypeActions.getTypes(scope, tag);
     };
 
-    const handleClickEdit = (i) => () => {
-        setindex(i);
+    const handleChangeType = (n) => {
+        setName(n);
+    };
+    const handleClickEdit = (n) => () => {
+        setName(n);
         setOpen({...open, edit: true});
     };
     const handleCloseEdit = () => {
@@ -87,17 +90,16 @@ const CollectionTypes = ({scope, customTypes}) => {
     };
 
     const handleClickAdd = () => {
-        setindex(null);
+        setName('');
         setOpen({...open, add: true});
     };
     const handleCloseAdd = () => {
         setOpen({...open, add: false});
     };
-    const handleClickDelete = (i, cb, tag) => {
-        const item = customTypes[scope][i];
+    const handleClickDelete = (n, cb, tag) => {
         TypeActions.deleteType(
             scope,
-            item.name,
+            n,
             tag,
             () => {
                 cb();
@@ -105,10 +107,10 @@ const CollectionTypes = ({scope, customTypes}) => {
         );
     };
 
-    const buttons = (index)=>([
+    const buttons = (n)=>([
         {
             icon: <img src="/img/view-edit.png" alt="view/edit" draggable="false" width="20" />,
-            onClick: handleClickEdit(index),
+            onClick: handleClickEdit(n),
         },
     ]);
 
@@ -124,7 +126,7 @@ const CollectionTypes = ({scope, customTypes}) => {
                 title="custom types"
             />
             <AddTypeDialog open={add} onClose={handleCloseAdd} dataTypes={datatypesMap} scope={scope} />
-            <EditTypeDialog open={edit} onClose={handleCloseEdit} customType={index!=null&&customTypes[scope]?customTypes[scope][index]:{}} dataTypes={datatypesMap} scope={scope} />
+            <EditTypeDialog open={edit} onChangeType={handleChangeType} onClose={handleCloseEdit} customType={name&&customTypes[scope]?customTypes[scope].find(i=>i.name==name):{}} dataTypes={datatypesMap} customTypes={customTypes[scope]||[]} scope={scope} />
         </React.Fragment>
     );
 };
