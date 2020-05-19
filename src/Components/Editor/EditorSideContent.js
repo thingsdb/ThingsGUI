@@ -5,14 +5,15 @@ import React from 'react';
 import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import {ProcedureActions, TypeActions} from '../../Stores';
+import {EnumActions, ProcedureActions, TypeActions} from '../../Stores';
 import {ChipsCard, WarnPopover} from '../Util';
 import {ViewProcedureDialog} from '../Procedures/Dialogs';
-import {ViewTypeDialog} from '../Collections/Types/Dialogs';
+import {AddLink, ViewDialog} from '../Collections/CollectionsUtils/TypesEnumsUtils';
 
 const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     const [procedures, setProcedures] = React.useState([]);
     const [customTypes, setCustomTypes] = React.useState([]);
+    const [enums, setEnums] = React.useState([]);
 
     const [view, setView] = React.useState({
         procedure: {
@@ -20,6 +21,10 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
             name: '',
         },
         types: {
+            open: false,
+            name: '',
+        },
+        enums: {
             open: false,
             name: '',
         }
@@ -38,6 +43,9 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     const handleProcedures = (p) => {
         setProcedures(p);
     };
+    const handleEnums = (e) => {
+        setEnums(e);
+    };
 
     const handleGetAdditionals = () => {
         if (scope&&!scope.includes('@node')) {
@@ -45,11 +53,13 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         }
         if (scope&&scope.includes('collection')) {
             TypeActions.getTypes(scope, tag, handleTypes);
+            EnumActions.getEnums(scope, tag, handleEnums);
         }
     };
 
     const handleRefreshProcedures = () => ProcedureActions.getProcedures(scope, tag, handleProcedures);
     const handleRefreshTypes = () => TypeActions.getTypes(scope, tag, handleTypes);
+    const handleRefreshEnums = () => EnumActions.getEnums(scope, tag, handleEnums);
 
     const customTypeNames = [...customTypes.map(c=>c.name)];
     const makeTypeInstanceInit = (n, circularRefFlag, target) => {
@@ -88,6 +98,17 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
             }
         );
     };
+    const handleClickDeleteEnums = (n, cb, tag) => {
+        EnumActions.deleteEnum(
+            scope,
+            n,
+            tag,
+            (t) => {
+                cb();
+                handleEnums(t);
+            }
+        );
+    };
 
     const handleClickRunProcedure = (n) => () => {
         let p = procedures.find(i=>i.name==n);
@@ -99,18 +120,27 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         const i = makeTypeInstanceInit(n, circularRefFlag, target);
         onSetQueryInput(i);
     };
+    const handleClickRunEnums = (n) => () => {
+        const i = `${n}{...}`;
+        onSetQueryInput(i);
+    };
+
     const handleClickAddProcedure = () => {
         onSetQueryInput('new_procedure("...", ...)');
     };
     const handleClickAddTypes = () => {
         onSetQueryInput('set_type("...", {...})');
     };
+    const handleClickAddEnums = () => {
+        onSetQueryInput('set_enum("...", {...})');
+    };
+
 
     const handleCloseWarn = () => {
         setAnchorEl(null);
     };
 
-    const handleChangeType = (n) => {
+    const handleChangeType = (n) => () => {
         setView({...view, types: {open: true, name: n}});
     };
 
@@ -130,6 +160,14 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         setView({...view, types: {...view.types, open: false}});
     };
 
+    const handleClickViewEnums = (n) => () => {
+        setView({...view, enums: {open: true, name: n}});
+    };
+
+    const handleCloseViewEnums = () => {
+        setView({...view, enums: {...view.enums, open: false}});
+    };
+
     const buttons = (fnView, fnRun) => (n)=>([
         {
             icon: <ViewIcon fontSize="small" />,
@@ -140,6 +178,21 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
             onClick: fnRun(n),
         },
     ]);
+
+    const customType = view.types.name&&customTypes?customTypes.find(i=>i.name==view.types.name):{};
+    const rowsTypes = customType.fields? customType.fields.map(c=>({propertyName: c[0], propertyType: c[1], propertyObject: <AddLink name={c[1]} items={customTypeNames} onChange={handleChangeType} />, propertyVal: ''})):[];
+    const usedBy = customTypes?customTypes.filter(i=>
+        `${i.fields},`.includes(`,${customType.name},`) ||
+        `${i.fields}`.includes(`,${customType.name},`) ||
+        `${i.fields}`.includes(`[${customType.name}]`) ||
+        `${i.fields}`.includes(`{${customType.name}}`) ||
+        `${i.fields}`.includes(`,${customType.name}?`) ||
+        `${i.fields}`.includes(`[${customType.name}?]`) ||
+        `${i.fields}`.includes(`{${customType.name}?}`)
+    ):[];
+
+    const enum_ = view.enums.name&&enums?enums.find(i=>i.name==view.enums.name):{};
+    const rowsEnums  = enum_.members? enum_.members.map(c=>({propertyName: c[0], propertyType: '', propertyObject: c[1], propertyVal: c[1]})):[];
 
     return (
         <React.Fragment>
@@ -160,18 +213,48 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                 </Grid>
             )}
             {scope&&scope.includes('@collection') ? (
-                <Grid item xs={12}>
-                    <ChipsCard
-                        buttons={buttons(handleClickViewTypes, handleClickRunTypes)}
-                        expand={false}
-                        items={customTypes}
-                        onAdd={handleClickAddTypes}
-                        onRefresh={handleRefreshTypes}
-                        onDelete={handleClickDeleteTypes}
-                        title="custom types"
-                    />
-                    <ViewTypeDialog open={view.types.open} onClose={handleCloseViewTypes} onChangeType={handleChangeType} customType={view.types.name&&customTypes?customTypes.find(i=>i.name==view.types.name):{}} customTypes={customTypes||[]} />
-                </Grid>
+                <React.Fragment>
+                    <Grid item xs={12}>
+                        <ChipsCard
+                            buttons={buttons(handleClickViewTypes, handleClickRunTypes)}
+                            expand={false}
+                            items={customTypes}
+                            onAdd={handleClickAddTypes}
+                            onRefresh={handleRefreshTypes}
+                            onDelete={handleClickDeleteTypes}
+                            title="custom types"
+                        />
+                        <ViewDialog
+                            feature="type"
+                            item={customType}
+                            link="https://docs.thingsdb.net/v0/data-types/type/"
+                            onChangeItem={handleChangeType}
+                            onClose={handleCloseViewTypes}
+                            open={view.types.open}
+                            rows={rowsTypes}
+                            usedBy={usedBy}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <ChipsCard
+                            buttons={buttons(handleClickViewEnums, handleClickRunEnums)}
+                            expand={false}
+                            items={enums}
+                            onAdd={handleClickAddEnums}
+                            onRefresh={handleRefreshEnums}
+                            onDelete={handleClickDeleteEnums}
+                            title="enums"
+                        />
+                        <ViewDialog
+                            feature="enum"
+                            item={enum_}
+                            link="https://docs.thingsdb.net/v0/data-types/type/"
+                            onClose={handleCloseViewEnums}
+                            open={view.enums.open}
+                            rows={rowsEnums}
+                        />
+                    </Grid>
+                </React.Fragment>
             ): null}
         </React.Fragment>
 

@@ -3,12 +3,13 @@ import Grid from '@material-ui/core/Grid';
 import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
 
-import {CollectionConfig} from './Config';
-import CollectionTree from './Tree';
-import CollectionProcedures from './Procedures';
-import CollectionTypes from './Types';
 import {ApplicationStore, ThingsdbStore} from '../../Stores';
+import {CollectionConfig} from './Config';
 import {findItem, isObjectEmpty, TitlePage} from '../Util';
+import CollectionEnums from './Enums';
+import CollectionProcedures from './Procedures';
+import CollectionTree from './Tree';
+import CollectionTypes from './Types';
 
 
 const withStores = withVlow([{
@@ -48,8 +49,11 @@ const Collection = ({match, collections}) => {
                             <Grid className={classes.spacing} item xs={12}>
                                 <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid className={classes.spacing} item xs={12}>
                                 <CollectionTypes scope={`@collection:${selectedCollection.name}`} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <CollectionEnums scope={`@collection:${selectedCollection.name}`} />
                             </Grid>
                         </Grid>
                     </React.Fragment>

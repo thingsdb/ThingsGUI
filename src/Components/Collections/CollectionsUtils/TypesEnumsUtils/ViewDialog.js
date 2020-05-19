@@ -6,10 +6,10 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import {SimpleModal} from '../../../Util';
-import OverviewTypes from './OverviewTypes';
+import Overview from './Overview';
 
 
-const ViewDialog = ({feature, item, onChangeItem, onClose, open, rows, usedBy}) => (
+const ViewDialog = ({feature, item, link, onChangeItem, onClose, open, rows, usedBy}) => (
     <SimpleModal
         open={open}
         onClose={onClose}
@@ -28,7 +28,7 @@ const ViewDialog = ({feature, item, onChangeItem, onClose, open, rows, usedBy}) 
             </Grid>
             <Grid item xs={12}>
                 <List disablePadding dense>
-                    <OverviewTypes item={item} onChangeType={onChangeItem} rows={rows} usedBy={usedBy} />
+                    <Overview feature={feature} item={item} link={link} onChangeItem={onChangeItem} rows={rows} usedBy={usedBy} />
                 </List>
             </Grid>
         </Grid>
@@ -37,16 +37,19 @@ const ViewDialog = ({feature, item, onChangeItem, onClose, open, rows, usedBy}) 
 
 ViewDialog.defaultProps = {
     item: {},
+    usedBy: [],
+    onChangeItem: ()=>null,
 };
 
 ViewDialog.propTypes = {
     feature: PropTypes.string.isRequired,
     item: PropTypes.object,
-    onChangeItem: PropTypes.func.isRequired,
+    link: PropTypes.string.isRequired,
+    onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
-    usedBy: PropTypes.arrayOf(PropTypes.object).isRequired,
+    usedBy: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default ViewDialog;

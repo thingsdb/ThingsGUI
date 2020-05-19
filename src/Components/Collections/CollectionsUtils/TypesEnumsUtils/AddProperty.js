@@ -21,7 +21,7 @@ const AddProperty = ({cb, dropdownItems, hasInitVal, hasPropName, hasType, input
     return (
         <Grid container item xs={12} spacing={1} alignItems="center" >
             {hasPropName ? (
-                <Grid item xs={hasInitVal?4:6}>
+                <Grid item xs={12}>
                     <TextField
                         autoFocus
                         fullWidth
@@ -37,7 +37,7 @@ const AddProperty = ({cb, dropdownItems, hasInitVal, hasPropName, hasType, input
                 </Grid>
             ):null}
             {hasType ? (
-                <Grid item xs={hasInitVal?4:6}>
+                <Grid item xs={12}>
                     <AutoSelect cb={handleType} dropdownItems={dropdownItems} input={propertyType} label="Definition" />
                 </Grid>
             ) : null}
@@ -45,7 +45,7 @@ const AddProperty = ({cb, dropdownItems, hasInitVal, hasPropName, hasType, input
                 <Grid item xs={12}>
                     <TextField
                         fullWidth
-                        label="Initial value"
+                        label="Value"
                         name="propertyVal"
                         onChange={handleChange}
                         spellCheck={false}
@@ -73,7 +73,7 @@ AddProperty.propTypes = {
     hasInitVal: PropTypes.bool,
     hasPropName: PropTypes.bool,
     hasType: PropTypes.bool,
-    input: PropTypes.shape({propertyName: PropTypes.string.isRequired, propertyType:PropTypes.string.isRequired, propertyVal:PropTypes.string.isRequired}).isRequired,
+    input: PropTypes.shape({propertyName: PropTypes.string.isRequired, propertyType:PropTypes.string.isRequired, propertyVal:PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired}).isRequired,
 };
 
 export default AddProperty;

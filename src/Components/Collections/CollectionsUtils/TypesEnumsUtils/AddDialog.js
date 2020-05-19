@@ -12,29 +12,29 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import AddTypeProperty from './AddTypeProperty';
-import {CollectionActions, TypeActions} from '../../../../Stores';
+import AddProperty from './AddProperty';
+import {CollectionActions} from '../../../../Stores';
 import {ArrayLayout, ErrorMsg, SimpleModal} from '../../../Util';
 import {AddTypeDialogTAG} from '../../../../constants';
 
 
 const tag = AddTypeDialogTAG;
 
-const AddDialog = ({open, onClose, dataTypes, scope}) => {
+const AddDialog = ({dataTypes, feature, getInfo, link, onClose, open, scope}) => {
 
     const [state, setState] = React.useState({
         queryString: '',
-        typeName: '',
+        name: '',
         error: '',
         properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
     });
-    const {queryString, typeName, error, properties} = state;
+    const {queryString, name, error, properties} = state;
 
 
     React.useEffect(() => {
         setState({
             queryString: '',
-            typeName: '',
+            name: '',
             error: '',
             properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
         });
@@ -43,14 +43,14 @@ const AddDialog = ({open, onClose, dataTypes, scope}) => {
     );
 
     React.useEffect(() => { // keep this useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-        setState({...state, queryString: `set_type("${typeName}", {${properties.map(v=>`${v.propertyName}: '${v.propertyType}'`)}})`});
+        setState({...state, queryString: `set_${feature}("${name}", {${properties.map(v=>`${v.propertyName}: ${feature=='type'?`'${v.propertyType}'`:`${/^[0-9]*$/gm.test(v.propertyVal)?`${v.propertyVal}`:`'${v.propertyVal}'`}`}`)}})`});
     },
-    [typeName, JSON.stringify(properties)], // TODO STRING
+    [name, JSON.stringify(properties)], // TODO STRING
     );
 
     const handleChange = ({target}) => {
         const {value} = target;
-        setState({...state, typeName: value});
+        setState({...state, name: value});
     };
 
     const handleChangeProperty = (index) => (property) => {
@@ -76,7 +76,7 @@ const AddDialog = ({open, onClose, dataTypes, scope}) => {
             queryString,
             tag,
             (_data) => {
-                TypeActions.getTypes(scope, tag);
+                getInfo(scope, tag);
                 onClose();
             }
         );
@@ -95,10 +95,10 @@ const AddDialog = ({open, onClose, dataTypes, scope}) => {
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
-                            {'Customizing ThingDB type:'}
+                            {`Customizing ThingDB ${feature}:`}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {'Add new type'}
+                            {`Add new ${feature}`}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -133,10 +133,10 @@ const AddDialog = ({open, onClose, dataTypes, scope}) => {
                         </Collapse>
                         <ListItem>
                             <TextField
-                                name="typeName"
+                                name="name"
                                 label="Name"
                                 type="text"
-                                value={typeName}
+                                value={name}
                                 spellCheck={false}
                                 onChange={handleChange}
                                 fullWidth
@@ -146,8 +146,8 @@ const AddDialog = ({open, onClose, dataTypes, scope}) => {
                             <ListItemText
                                 primary="Add properties"
                                 secondary={
-                                    <Link target="_blank" href="https://docs.thingsdb.net/v0/data-types/type/">
-                                        {'https://docs.thingsdb.net/v0/data-types/type/'}
+                                    <Link target="_blank" href={link}>
+                                        {link}
                                     </Link>
                                 }
                             />
@@ -168,12 +168,20 @@ const AddDialog = ({open, onClose, dataTypes, scope}) => {
 };
 
 
-AddDialog.propTypes = {
-    open: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    scope: PropTypes.string.isRequired,
+AddDialog.defaultProps = {
+    dataTypes: [],
 };
 
-export default AddTypeDialog;
-AddDialog
+
+AddDialog.propTypes = {
+    dataTypes: PropTypes.arrayOf(PropTypes.string),
+    feature: PropTypes.string.isRequired,
+    getInfo: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    scope: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+};
+
+export default AddDialog;
+

@@ -20,7 +20,7 @@ import Overview from './Overview';
 
 const tag = EditTypeDialogTAG;
 
-const EditDialog = ({dataTypes, feature, getInfo, item, onChangeItem, onClose, open, rows, scope, usedBy}) => {
+const EditDialog = ({dataTypes, feature, getInfo, item, link, onChangeItem, onClose, open, rows, scope, usedBy}) => {
     const [state, setState] = React.useState({
         queryString: '',
         property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''},
@@ -42,27 +42,24 @@ const EditDialog = ({dataTypes, feature, getInfo, item, onChangeItem, onClose, o
     );
 
     const handleQueryAdd = (p) => {
-        const q = p.propertyType == 'str'||p.propertyType == 'utf8'||p.propertyType == 'raw' ?
-            `mod_${feature}('${item.name}', 'add', '${p.propertyName}', ${feature=='type'?`'${p.propertyType}',`:''} '${p.propertyVal}')`
-            : `mod_${feature}('${item.name}', 'add', '${p.propertyName}', '${p.propertyType}', ${p.propertyVal})`;
-        setState({...state, property: p, queryString: q});
+        setState({...state, property: p, queryString: `mod_${feature}('${item.name}', 'add', '${p.propertyName}', ${feature=='type'?`'${p.propertyType}',`:''} ${/^[0-9]*$/gm.test(p.propertyVal)?`${p.propertyVal}`:`'${p.propertyVal}'`})`});
     };
 
     const handleQueryMod = (p) => {
-        setState({...state, property: p, queryString: `mod_${feature}('${item.name}', 'mod', '${property.propertyName}', '${p.propertyType}')`});
+        setState({property: p, queryString: `mod_${feature}('${item.name}', 'mod', '${p.propertyName}', ${feature=='type'?`'${p.propertyType}'`:`${/^[0-9]*$/gm.test(p.propertyVal)?`${p.propertyVal}`:`'${p.propertyVal}'`}`})`});
     };
 
     const handleAdd = () => {
         setAction('add');
     };
 
-    const handleMod = (i) => () => {
-        setState({property: i, queryString: `mod_${feature}('${item.name}', 'mod', '${i.propertyName}', '${i.propertyType}')`});
+    const handleMod = (p) => () => {
+        handleQueryMod(p);
         setAction('mod');
     };
 
-    const handleDel = (i) => (e) => {
-        setState({property: i, queryString: `mod_${feature}('${item.name}', 'del', '${i.propertyName}')`});
+    const handleDel = (p) => (e) => {
+        setState({property: p, queryString: `mod_${feature}('${item.name}', 'del', '${p.propertyName}')`});
         setAnchorEl(e.currentTarget);
         setAction('del');
     };
@@ -101,6 +98,7 @@ const EditDialog = ({dataTypes, feature, getInfo, item, onChangeItem, onClose, o
     const add = action=='add';
     const edit = action=='mod';
     const del = action=='del';
+
 
     const buttons = (row) => (
         <React.Fragment>
@@ -172,7 +170,7 @@ const EditDialog = ({dataTypes, feature, getInfo, item, onChangeItem, onClose, o
                             </ListItem>
                         </Collapse>
                         <Collapse in={overview||del} timeout="auto" unmountOnExit>
-                            <Overview buttons={buttons} item={item} onAdd={handleAdd} onChangeItem={onChangeItem} rows={rows} usedBy={usedBy} />
+                            <Overview feature={feature} buttons={buttons} item={item} link={link} onAdd={handleAdd} onChangeItem={onChangeItem} rows={rows} usedBy={usedBy} />
                         </Collapse>
                     </List>
                 </Grid>
@@ -184,6 +182,8 @@ const EditDialog = ({dataTypes, feature, getInfo, item, onChangeItem, onClose, o
 EditDialog.defaultProps = {
     item: {},
     dataTypes: [],
+    usedBy: [],
+    onChangeItem: ()=>null,
 };
 
 EditDialog.propTypes = {
@@ -191,12 +191,13 @@ EditDialog.propTypes = {
     feature: PropTypes.string.isRequired,
     getInfo: PropTypes.func.isRequired,
     item: PropTypes.object,
-    onChangeItem: PropTypes.func.isRequired,
+    link: PropTypes.string.isRequired,
+    onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     scope: PropTypes.string.isRequired,
-    usedBy: PropTypes.arrayOf(PropTypes.object).isRequired,
+    usedBy: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default EditDialog;

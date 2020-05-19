@@ -20,11 +20,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Overview = ({buttons, item, onAdd, onChangeItem, rows, usedBy}) => {
+const Overview = ({buttons, feature, item, link, onAdd, onChangeItem, rows, usedBy}) => {
     const classes = useStyles();
     const header = [
         {ky: 'propertyName', label: 'Name'},
-        {ky: 'propertyObject', label: 'Type'},
+        {ky: 'propertyObject', label: feature=='type'?'Type':'Value'},
     ];
 
     const handleAdd = () => {
@@ -38,8 +38,8 @@ const Overview = ({buttons, item, onAdd, onChangeItem, rows, usedBy}) => {
                 <ListItemText
                     primary="Current properties:"
                     secondary={
-                        <Link target="_blank" href="https://docs.thingsdb.net/v0/data-types/type/">
-                            {'https://docs.thingsdb.net/v0/data-types/type/'}
+                        <Link target="_blank" href={link}>
+                            {link}
                         </Link>
                     }
                 />
@@ -90,15 +90,19 @@ Overview.defaultProps = {
     buttons: null,
     item: {},
     onAdd: null,
+    usedBy: [],
+    onChangeItem: ()=>null,
 };
 
 Overview.propTypes = {
     buttons: PropTypes.func,
+    feature: PropTypes.string.isRequired,
     item: PropTypes.object,
+    link: PropTypes.string.isRequired,
     onAdd: PropTypes.func,
-    onChangeItem: PropTypes.func.isRequired,
+    onChangeItem: PropTypes.func,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
-    usedBy: PropTypes.arrayOf(PropTypes.object).isRequired,
+    usedBy: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default Overview;
