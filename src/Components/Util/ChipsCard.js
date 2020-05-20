@@ -210,6 +210,7 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
 
 ChipsCard.defaultProps = {
     expand: null,
+    items: [],
     moreButtons: null,
     onRefresh: null,
     warnExpression: ()=>false,

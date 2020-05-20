@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {TableWithButtons} from '../../../Util';
+import  UsedByType from './UsedByType';
 
 const useStyles = makeStyles(theme => ({
     chips: {
@@ -20,11 +21,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Overview = ({buttons, feature, item, link, onAdd, onChangeItem, rows, usedBy}) => {
+const Overview = ({buttons, category, item, link, onAdd, onChangeItem, rows, scope}) => {
     const classes = useStyles();
     const header = [
         {ky: 'propertyName', label: 'Name'},
-        {ky: 'propertyObject', label: feature=='type'?'Type':'Value'},
+        {ky: 'propertyObject', label: category=='type'?'Type':'Value'},
     ];
 
     const handleAdd = () => {
@@ -68,20 +69,7 @@ const Overview = ({buttons, feature, item, link, onAdd, onChangeItem, rows, used
                     </Grid>
                 </Grid>
             </ListItem>
-            {usedBy.length ? (
-                <React.Fragment>
-                    <ListItem>
-                        <ListItemText
-                            primary="Part of type:"
-                        />
-                    </ListItem>
-                    <ListItem>
-                        {usedBy.map((item, index)=>(
-                            <Chip color="primary" className={classes.chips} key={index} onClick={onChangeItem(item.name)} label={item.name} size="small" />
-                        ))}
-                    </ListItem>
-                </React.Fragment>
-            ) : null}
+            <UsedByType name={item.name} onChangeItem={onChangeItem} scope={scope} />
         </React.Fragment>
     );
 };
@@ -90,19 +78,18 @@ Overview.defaultProps = {
     buttons: null,
     item: {},
     onAdd: null,
-    usedBy: [],
     onChangeItem: ()=>null,
 };
 
 Overview.propTypes = {
     buttons: PropTypes.func,
-    feature: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
     item: PropTypes.object,
     link: PropTypes.string.isRequired,
     onAdd: PropTypes.func,
     onChangeItem: PropTypes.func,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
-    usedBy: PropTypes.arrayOf(PropTypes.object),
+    scope: PropTypes.string.isRequired,
 };
 
 export default Overview;

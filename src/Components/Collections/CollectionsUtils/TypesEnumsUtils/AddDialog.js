@@ -20,7 +20,7 @@ import {AddTypeDialogTAG} from '../../../../constants';
 
 const tag = AddTypeDialogTAG;
 
-const AddDialog = ({dataTypes, feature, getInfo, link, onClose, open, scope}) => {
+const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) => {
 
     const [state, setState] = React.useState({
         queryString: '',
@@ -43,7 +43,7 @@ const AddDialog = ({dataTypes, feature, getInfo, link, onClose, open, scope}) =>
     );
 
     React.useEffect(() => { // keep this useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-        setState({...state, queryString: `set_${feature}("${name}", {${properties.map(v=>`${v.propertyName}: ${feature=='type'?`'${v.propertyType}'`:`${/^[0-9]*$/gm.test(v.propertyVal)?`${v.propertyVal}`:`'${v.propertyVal}'`}`}`)}})`});
+        setState({...state, queryString: `set_${category}("${name}", {${properties.map(v=>`${v.propertyName}: ${category=='type'?`'${v.propertyType}'`:`${/^[0-9]*$/gm.test(v.propertyVal)?`${v.propertyVal}`:`'${v.propertyVal}'`}`}`)}})`});
     },
     [name, JSON.stringify(properties)], // TODO STRING
     );
@@ -95,10 +95,10 @@ const AddDialog = ({dataTypes, feature, getInfo, link, onClose, open, scope}) =>
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
-                            {`Customizing ThingDB ${feature}:`}
+                            {`Customizing ThingDB ${category}:`}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {`Add new ${feature}`}
+                            {`Add new ${category}`}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -155,7 +155,7 @@ const AddDialog = ({dataTypes, feature, getInfo, link, onClose, open, scope}) =>
                         <ListItem>
                             <ArrayLayout
                                 child={(i) => (
-                                    <AddProperty cb={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}} hasType={feature=='type'} hasInitVal={feature=='enum'} />
+                                    <AddProperty cb={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}} hasType={category=='type'} hasInitVal={category=='enum'} />
                                 )}
                                 onRemove={handleRemove}
                             />
@@ -175,7 +175,7 @@ AddDialog.defaultProps = {
 
 AddDialog.propTypes = {
     dataTypes: PropTypes.arrayOf(PropTypes.string),
-    feature: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
     getInfo: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,

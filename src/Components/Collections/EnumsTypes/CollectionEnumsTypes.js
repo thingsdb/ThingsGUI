@@ -18,7 +18,7 @@ const withStores = withVlow([{
 
 const tag = CollectionTypesTAG;
 
-const CollectionTypes = ({enums, scope, customTypes}) => {
+const CollectionEnumsTypes = ({categoryInit, enums, scope, customTypes}) => {
     const types = [
         'str',
         'utf8',
@@ -72,20 +72,29 @@ const CollectionTypes = ({enums, scope, customTypes}) => {
     const {add, edit} = open;
 
     const [name, setName] = React.useState('');
+    const [category, setCategory] = React.useState(categoryInit);
+
     React.useEffect(() => {
         TypeActions.getTypes(scope, tag);
+        EnumActions.getEnums(scope, tag);
 
     }, [scope]);
 
     const handleRefresh = () => {
-        TypeActions.getTypes(scope, tag);
+        category=='type'? TypeActions.getTypes(scope, tag) : EnumActions.getEnums(scope, tag);
     };
 
     const handleChangeType = (n) => () => {
         setName(n);
+        setCategory('type');
     };
-    const handleClickEdit = (n) => () => {
+    const handleChangeCat = (n, c) => () => {
         setName(n);
+        setCategory(c);
+    };
+    const handleClickEdit = (n, c) => () => {
+        setName(n);
+        setCategory(c);
         setOpen({...open, edit: true});
     };
     const handleCloseEdit = () => {
@@ -100,76 +109,77 @@ const CollectionTypes = ({enums, scope, customTypes}) => {
         setOpen({...open, add: false});
     };
     const handleClickDelete = (n, cb, tag) => {
-        TypeActions.deleteType(
-            scope,
-            n,
-            tag,
-            () => {
-                cb();
-            }
-        );
+        category ?
+            TypeActions.deleteType(
+                scope,
+                n,
+                tag,
+                () => {
+                    cb();
+                }
+            ) :
+                EnumActions.deleteEnum(
+                    scope,
+                    n,
+                    tag,
+                    () => {
+                        cb();
+                    }
+                );
+
     };
 
     const buttons = (n)=>([
         {
             icon: <img src="/img/view-edit.png" alt="view/edit" draggable="false" width="20" />,
-            onClick: handleClickEdit(n),
+            onClick: handleClickEdit(n, categoryInit),
         },
     ]);
 
-    const typeEnumNames=[...(customTypes[scope]||[]).map(c=>c.name), ...(enums[scope]||[]).map(c=>(c.name))];
-    const customType = name&&customTypes[scope]?customTypes[scope].find(i=>i.name==name):null;
-    const enum_ = name&&enums[scope]?enums[scope].find(i=>i.name==name):null;
-    const rows  =  customType ? customType.fields? customType.fields.map(c=>({propertyName: c[0], propertyType: c[1], propertyObject: <AddLink name={c[1]} items={typeEnumNames} onChange={handleChangeType} />, propertyVal: ''})):[] : enum_&&enum_.members? enum_.members.map(c=>({propertyName: c[0], propertyType: '', propertyObject: c[1], propertyVal: c[1]})):[];
-    const usedBy = customTypes[scope]?customTypes[scope].filter(i=>
-        `${i.fields},`.includes(`,${name},`) ||
-        `${i.fields}`.includes(`,${name},`) ||
-        `${i.fields}`.includes(`[${name}]`) ||
-        `${i.fields}`.includes(`{${name}}`) ||
-        `${i.fields}`.includes(`,${name}?`) ||
-        `${i.fields}`.includes(`[${name}?]`) ||
-        `${i.fields}`.includes(`{${name}?}`)
-    ):[];
+    const customType = name&&customTypes[scope]?customTypes[scope].find(i=>i.name==name):{};
+    console.log(customType, customTypes, category, name)
+    const enum_ = name&&enums[scope]?enums[scope].find(i=>i.name==name):{};
+    const rows  =  category=='type' ? customType.fields? customType.fields.map(c=>({propertyName: c[0], propertyType: c[1], propertyObject: <AddLink name={c[1]} scope={scope} onChange={handleChangeCat} />, propertyVal: ''})):[] : enum_.members? enum_.members.map(c=>({propertyName: c[0], propertyType: '', propertyObject: c[1], propertyVal: c[1]})):[];
 
     return (
         <React.Fragment>
             <ChipsCard
                 buttons={buttons}
                 expand={false}
-                items={customTypes[scope]||[]}
+                items={categoryInit=='type'?customTypes[scope]:enums[scope]}
                 onAdd={handleClickAdd}
                 onDelete={handleClickDelete}
                 onRefresh={handleRefresh}
-                title="custom types"
+                title={categoryInit=='type'?'custom types':'enums'}
             />
             <AddDialog
                 dataTypes={datatypesMap}
-                feature="type"
-                getInfo={(scope, tag)=>TypeActions.getTypes(scope, tag)}
-                link="https://docs.thingsdb.net/v0/data-types/type/"
+                category={categoryInit}
+                getInfo={categoryInit=='type'?TypeActions.getTypes:EnumActions.getEnums}
+                link={`https://docs.thingsdb.net/v0/data-types/${categoryInit}/`}
                 onClose={handleCloseAdd}
                 open={add}
                 scope={scope}
             />
             <EditDialog
                 dataTypes={datatypesMap}
-                feature={customType?'type':'enum'}
-                getInfo={customType?(scope, tag)=>TypeActions.getTypes(scope, tag):(scope, tag)=>EnumActions.getEnums(scope, tag)}
-                item={customType||enum_||{}}
-                link="https://docs.thingsdb.net/v0/data-types/type/"
+                category={category}
+                getInfo={category=='type'?TypeActions.getTypes:EnumActions.getEnums}
+                item={category=='type'?customType:enum_}
+                link={`https://docs.thingsdb.net/v0/data-types/${category}/`}
                 onChangeItem={handleChangeType}
                 onClose={handleCloseEdit}
                 open={edit}
                 rows={rows}
                 scope={scope}
-                usedBy={usedBy}
             />
         </React.Fragment>
     );
 };
 
-CollectionTypes.propTypes = {
+CollectionEnumsTypes.propTypes = {
     scope: PropTypes.string.isRequired,
+    categoryInit: PropTypes.string.isRequired,
 
     /* types properties */
     customTypes: TypeStore.types.customTypes.isRequired,
@@ -178,4 +188,4 @@ CollectionTypes.propTypes = {
     enums: EnumStore.types.enums.isRequired,
 };
 
-export default withStores(CollectionTypes);
+export default withStores(CollectionEnumsTypes);

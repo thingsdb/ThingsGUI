@@ -20,7 +20,7 @@ import Overview from './Overview';
 
 const tag = EditTypeDialogTAG;
 
-const EditDialog = ({dataTypes, feature, getInfo, item, link, onChangeItem, onClose, open, rows, scope, usedBy}) => {
+const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onClose, open, rows, scope}) => {
     const [state, setState] = React.useState({
         queryString: '',
         property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''},
@@ -42,11 +42,11 @@ const EditDialog = ({dataTypes, feature, getInfo, item, link, onChangeItem, onCl
     );
 
     const handleQueryAdd = (p) => {
-        setState({...state, property: p, queryString: `mod_${feature}('${item.name}', 'add', '${p.propertyName}', ${feature=='type'?`'${p.propertyType}',`:''} ${/^[0-9]*$/gm.test(p.propertyVal)?`${p.propertyVal}`:`'${p.propertyVal}'`})`});
+        setState({...state, property: p, queryString: `mod_${category}('${item.name}', 'add', '${p.propertyName}', ${category=='type'?`'${p.propertyType}',`:''} ${/^[0-9]*$/gm.test(p.propertyVal)?`${p.propertyVal}`:`'${p.propertyVal}'`})`});
     };
 
     const handleQueryMod = (p) => {
-        setState({property: p, queryString: `mod_${feature}('${item.name}', 'mod', '${p.propertyName}', ${feature=='type'?`'${p.propertyType}'`:`${/^[0-9]*$/gm.test(p.propertyVal)?`${p.propertyVal}`:`'${p.propertyVal}'`}`})`});
+        setState({property: p, queryString: `mod_${category}('${item.name}', 'mod', '${p.propertyName}', ${category=='type'?`'${p.propertyType}'`:`${/^[0-9]*$/gm.test(p.propertyVal)?`${p.propertyVal}`:`'${p.propertyVal}'`}`})`});
     };
 
     const handleAdd = () => {
@@ -59,7 +59,7 @@ const EditDialog = ({dataTypes, feature, getInfo, item, link, onChangeItem, onCl
     };
 
     const handleDel = (p) => (e) => {
-        setState({property: p, queryString: `mod_${feature}('${item.name}', 'del', '${p.propertyName}')`});
+        setState({property: p, queryString: `mod_${category}('${item.name}', 'del', '${p.propertyName}')`});
         setAnchorEl(e.currentTarget);
         setAction('del');
     };
@@ -128,10 +128,10 @@ const EditDialog = ({dataTypes, feature, getInfo, item, link, onChangeItem, onCl
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
-                            {`Customizing ThingDB ${feature}:`}
+                            {`Customizing ThingDB ${category}:`}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {item.name||`Add new ${feature}`}
+                            {item.name||`Add new ${category}`}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -166,11 +166,11 @@ const EditDialog = ({dataTypes, feature, getInfo, item, link, onChangeItem, onCl
                         </Collapse>
                         <Collapse in={add || edit} timeout="auto" unmountOnExit>
                             <ListItem>
-                                <AddProperty cb={add?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={property} hasType={feature=='type'} hasPropName={!edit} hasInitVal={add||feature=='enum'} />
+                                <AddProperty cb={add?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={property} hasType={category=='type'} hasPropName={!edit} hasInitVal={add||category=='enum'} />
                             </ListItem>
                         </Collapse>
                         <Collapse in={overview||del} timeout="auto" unmountOnExit>
-                            <Overview feature={feature} buttons={buttons} item={item} link={link} onAdd={handleAdd} onChangeItem={onChangeItem} rows={rows} usedBy={usedBy} />
+                            <Overview category={category} buttons={buttons} item={item} link={link} onAdd={handleAdd} onChangeItem={onChangeItem} rows={rows} scope={scope} />
                         </Collapse>
                     </List>
                 </Grid>
@@ -182,13 +182,12 @@ const EditDialog = ({dataTypes, feature, getInfo, item, link, onChangeItem, onCl
 EditDialog.defaultProps = {
     item: {},
     dataTypes: [],
-    usedBy: [],
     onChangeItem: ()=>null,
 };
 
 EditDialog.propTypes = {
     dataTypes: PropTypes.arrayOf(PropTypes.string),
-    feature: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
     getInfo: PropTypes.func.isRequired,
     item: PropTypes.object,
     link: PropTypes.string.isRequired,
@@ -197,7 +196,6 @@ EditDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     scope: PropTypes.string.isRequired,
-    usedBy: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default EditDialog;

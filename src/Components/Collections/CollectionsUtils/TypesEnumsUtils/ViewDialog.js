@@ -9,7 +9,7 @@ import {SimpleModal} from '../../../Util';
 import Overview from './Overview';
 
 
-const ViewDialog = ({feature, item, link, onChangeItem, onClose, open, rows, usedBy}) => (
+const ViewDialog = ({category, item, link, onChangeItem, onClose, open, rows, scope}) => (
     <SimpleModal
         open={open}
         onClose={onClose}
@@ -19,7 +19,7 @@ const ViewDialog = ({feature, item, link, onChangeItem, onClose, open, rows, use
             <Grid container spacing={1} item xs={12}>
                 <Grid item xs={8}>
                     <Typography variant="body1" >
-                        {`View ThingDB ${feature}:`}
+                        {`View ThingDB ${category}:`}
                     </Typography>
                     <Typography variant="h4" color='primary' component='span'>
                         {item.name||''}
@@ -28,7 +28,7 @@ const ViewDialog = ({feature, item, link, onChangeItem, onClose, open, rows, use
             </Grid>
             <Grid item xs={12}>
                 <List disablePadding dense>
-                    <Overview feature={feature} item={item} link={link} onChangeItem={onChangeItem} rows={rows} usedBy={usedBy} />
+                    <Overview category={category} item={item} link={link} onChangeItem={onChangeItem} rows={rows} scope={scope} />
                 </List>
             </Grid>
         </Grid>
@@ -37,19 +37,18 @@ const ViewDialog = ({feature, item, link, onChangeItem, onClose, open, rows, use
 
 ViewDialog.defaultProps = {
     item: {},
-    usedBy: [],
     onChangeItem: ()=>null,
 };
 
 ViewDialog.propTypes = {
-    feature: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
     item: PropTypes.object,
     link: PropTypes.string.isRequired,
     onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
-    usedBy: PropTypes.arrayOf(PropTypes.object),
+    scope: PropTypes.string.isRequired,
 };
 
 export default ViewDialog;

@@ -6,10 +6,9 @@ import { makeStyles} from '@material-ui/core/styles';
 import {ApplicationStore, ThingsdbStore} from '../../Stores';
 import {CollectionConfig} from './Config';
 import {findItem, isObjectEmpty, TitlePage} from '../Util';
-import CollectionEnums from './Enums';
 import CollectionProcedures from './Procedures';
 import CollectionTree from './Tree';
-import CollectionTypes from './Types';
+import CollectionEnumsTypes from './EnumsTypes';
 
 
 const withStores = withVlow([{
@@ -50,10 +49,10 @@ const Collection = ({match, collections}) => {
                                 <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
                             </Grid>
                             <Grid className={classes.spacing} item xs={12}>
-                                <CollectionTypes scope={`@collection:${selectedCollection.name}`} />
+                                <CollectionEnumsTypes categoryInit="type" scope={`@collection:${selectedCollection.name}`} />
                             </Grid>
                             <Grid item xs={12}>
-                                <CollectionEnums scope={`@collection:${selectedCollection.name}`} />
+                                <CollectionEnumsTypes categoryInit="enum" scope={`@collection:${selectedCollection.name}`} />
                             </Grid>
                         </Grid>
                     </React.Fragment>
