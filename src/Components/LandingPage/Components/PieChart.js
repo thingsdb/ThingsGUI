@@ -36,6 +36,7 @@ const PieChart = ({data, hole, offset, radius, showLabels, showPercent, stroke, 
 
     const legendy = (y, lineNumber) => y + offset.y+lineNumber/2*legendLineHeight;
 
+
     return(
         <svg width={width} height={height}>
             <text x={width/2-(title.length*charWidth)/2} y={35} fill="white" style={{fontSize:'18px', fontFamily:'monospace'}}>

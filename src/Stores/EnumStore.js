@@ -48,7 +48,6 @@ class EnumStore extends BaseStore {
                 const enums = Object.assign({}, prevState.enums, {[scope]: data});
                 return {enums};
             });
-            console.log(data)
             cb(data);
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);

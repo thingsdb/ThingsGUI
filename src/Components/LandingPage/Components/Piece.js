@@ -20,22 +20,31 @@ const Piece = ({fill, fraction, hole, offset, radius, showLabel, showPercent, st
     const [path, setPath] = React.useState('');
     const [part, setPart] = React.useState(0);
     const [timeId, setTimeId] = React.useState(null);
+    const [lock, setLock] = React.useState(false);
 
     let startA = getAnglePoint(start, radius, radius+offset.x, radius+offset.y);
     let startB = getAnglePoint(start, radius - hole, radius+offset.x, radius+offset.y);
 
     React.useEffect(() => {
-        animate();
+        console.log('hi', {fraction, start})
+        if (!lock) {
+            console.log('hoi', {fraction, start})
+            animate();
+        }
     }, [fraction, start]);
 
     React.useEffect(() => {
-        return(()=>{
-            clearTimeout(timeId); // prevent React state update on unmounted component
-        });
-    }, [timeId]);
+        return ()=>{
+            handleClearTimeout(); // prevent React state update on unmounted component
+            setLock(false);
+        };
+    }, []);
+
+    const handleClearTimeout = () => clearTimeout(timeId);
 
 
     const animate = () => {
+        setLock(true);
         draw(0);
     };
 
@@ -57,6 +66,7 @@ const Piece = ({fill, fraction, hole, offset, radius, showLabel, showPercent, st
         } else if (showLabel) {
             let c = getAnglePoint(start + (fraction / 2), (radius / 2 + trueHole / 2), radius+offset.x, radius+offset.y);
             setTextPoint({x: c.x, y: c.y});
+            setLock(false);
         }
         setPath(p);
         setPart(s);
@@ -77,10 +87,8 @@ const Piece = ({fill, fraction, hole, offset, radius, showLabel, showPercent, st
                     <circle
                         cx={radius+offset.x}
                         cy={radius+offset.y}
-                        r={hole/2}
+                        r={hole/2-(strokeWidth ? strokeWidth : 4)/2}
                         fill={stroke}
-                        stroke={stroke}
-                        strokeWidth={strokeWidth ? 2*strokeWidth : 8}
                     />
                 </React.Fragment>
             ) : (

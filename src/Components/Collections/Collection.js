@@ -49,11 +49,11 @@ const Collection = ({match, collections}) => {
                                 <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
                             </Grid>
                             <Grid className={classes.spacing} item xs={12}>
-                                <CollectionEnumsTypes categoryInit="type" scope={`@collection:${selectedCollection.name}`} />
+                                <CollectionEnumsTypes scope={`@collection:${selectedCollection.name}`} />
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <CollectionEnumsTypes categoryInit="enum" scope={`@collection:${selectedCollection.name}`} />
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </React.Fragment>
                 }

@@ -8,25 +8,21 @@ import ViewIcon from '@material-ui/icons/Visibility';
 import {EnumActions, ProcedureActions, TypeActions} from '../../Stores';
 import {ChipsCard, WarnPopover} from '../Util';
 import {ViewProcedureDialog} from '../Procedures/Dialogs';
-import {AddLink, ViewDialog} from '../Collections/CollectionsUtils/TypesEnumsUtils';
 import EditorEnumType from './EditorEnumType';
 
 const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     const [procedures, setProcedures] = React.useState([]);
-
-    const [view, setView] = React.useState({
-        procedure: {
-            open: false,
-            name: '',
-        },
-        enum: {
-            open: false,
-            name: '',
-        },
-        type: {
-            open: false,
-            name: '',
-        }
+    const [viewProcedure, setViewProcedure] = React.useState({
+        open: false,
+        name: '',
+    });
+    const [viewEnum, setViewEnum] = React.useState({
+        open: false,
+        name: '',
+    });
+    const [viewType, setViewType] = React.useState({
+        open: false,
+        name: '',
     });
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -96,23 +92,26 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     };
 
     const handleClickViewProcedure = (n) => () => {
-        setView({...view, procedure: {open: true, name: n}});
+        setViewProcedure({open: true, name: n});
     };
 
     const handleCloseViewProcedure = () => {
-        setView({...view, procedure: {...view.procedure, open: false}});
+        setViewProcedure({open: false, name: ''});
     };
 
     const handleChangeView = (n, c) => {
-        console.log('hi')
-        setView({...view, [c]: {open: true, name: n}});
+        if (c=='type') {
+            setViewType({open: true, name: n});
+        } else {
+            setViewEnum({open: true, name: n});
+        }
     };
 
     const handleCloseViewType = () => {
-        setView({...view, type: {open: false, name: ''}});
+        setViewType({open: false, name: ''});
     };
     const handleCloseViewEnum = () => {
-        setView({...view, enum: {open: false, name: ''}});
+        setViewEnum({open: false, name: ''});
     };
 
     const buttons = (fnView, fnRun) => (n)=>([
@@ -125,7 +124,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
             onClick: fnRun(n),
         },
     ]);
-    console.log(view)
+
     return (
         <React.Fragment>
             <WarnPopover anchorEl={anchorEl} onClose={handleCloseWarn} description={warnDescription} />
@@ -141,7 +140,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                         title="procedures"
                         warnExpression={i=>i.with_side_effects}
                     />
-                    <ViewProcedureDialog open={view.procedure.open} onClose={handleCloseViewProcedure} procedure={view.procedure.name?procedures.find(i=>i.name==view.procedure.name):{}} />
+                    <ViewProcedureDialog open={viewProcedure.open} onClose={handleCloseViewProcedure} procedure={viewProcedure.name?procedures.find(i=>i.name==viewProcedure.name):{}} />
                 </Grid>
             )}
             {scope&&scope.includes('@collection') ? (
@@ -158,7 +157,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                         onSetQueryInput={onSetQueryInput}
                         scope={scope}
                         tag={tag}
-                        view={view.type}
+                        view={viewType}
                     />
                     <EditorEnumType
                         addInput={'set_enum("...", {...})'}
@@ -173,7 +172,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                         onSetQueryInput={onSetQueryInput}
                         scope={scope}
                         tag={tag}
-                        view={view.enum}
+                        view={viewEnum}
                     />
                 </React.Fragment>
             ): null}

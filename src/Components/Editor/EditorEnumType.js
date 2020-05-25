@@ -45,7 +45,6 @@ const EditorEnumType = ({addInput, categoryInit, fields, noLink, onChange, onClo
     };
 
     const handleClickView = (n) => () => {
-        console.log('hoi')
         onChange(n, categoryInit);
     };
 
@@ -68,7 +67,7 @@ const EditorEnumType = ({addInput, categoryInit, fields, noLink, onChange, onClo
             onClick: fnRun(n),
         },
     ]);
-    console.log('enumtye');
+
     const item = view.name&&items?items.find(i=>i.name==view.name):{};
     const rows = item[fields]? item[fields].map(c=>({propertyName: c[0], propertyObject: noLink ? c[1] : <AddLink name={c[1]} scope={scope} onChange={handleChangeView} />})):[];
 
