@@ -6,8 +6,8 @@ import React from 'react';
 import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import {ChipsCard} from '../../Util';
-import {AddDialog, AddLink, EditDialog, ViewDialog} from '../CollectionsUtils/TypesEnumsUtils';
+import {ChipsCard} from '../../../Util';
+import {AddDialog, AddLink, EditDialog, ViewDialog} from '.';
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,7 +25,6 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
     }, [scope]);
 
     const handleItems = (t) => {
-        console.log('hi', t)
         setItems(t);
     };
 
@@ -107,8 +106,8 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
     };
 
     const item = view.name&&items?items.find(i=>i.name==view.name):{};
-    const rows = item[fields]? item[fields].map(c=>({propertyName: c[0], propertyType: c[1], propertyVal: c[1], propertyObject: noLink ? c[1] : <AddLink name={c[1]} scope={scope} onChange={view.view?handleChangeView:handleChangeEdit} />})):[];
-    console.log(item)
+    const rows = item[fields]? item[fields].map(c=>({propertyName: c[0], propertyType: categoryInit=='type'?c[1]:'', propertyVal: categoryInit=='type'?'':c[1], propertyObject: noLink ? c[1] : <AddLink name={c[1]} scope={scope} onChange={view.view?handleChangeView:handleChangeEdit} />})):[];
+
     return (
         <Grid className={classes.spacing} item xs={12}>
             <ChipsCard

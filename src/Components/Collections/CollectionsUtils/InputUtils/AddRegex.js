@@ -19,6 +19,7 @@ const AddRegex = ({identifier}) => {
     const classes = useStyles();
     const [editState, dispatch] = useEdit();
     const {val} = editState;
+
     const handleOnChange = ({target}) => {
         const {value} = target;
         EditActions.updateVal(dispatch, `/${value}/`, identifier);
@@ -63,7 +64,6 @@ AddRegex.defaultProps = {
 
 AddRegex.propTypes = {
     identifier: PropTypes.string,
-
 };
 
 export default AddRegex;

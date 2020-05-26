@@ -8,9 +8,10 @@ import {EditActions, useEdit} from '../Context';
 const onlyFloats = (str) => str.length == str.replace(/[^0-9.]/g, '').length && str.includes('.');
 
 const AddFloat = ({identifier, ...props}) => {
-    const [error, setError] = React.useState('');
     const [editState, dispatch] = useEdit();
     const {val} = editState;
+    const [error, setError] = React.useState('');
+
     const errorTxt = (value) => {
         setError(onlyFloats(value) ? '' : 'only floats');
     };

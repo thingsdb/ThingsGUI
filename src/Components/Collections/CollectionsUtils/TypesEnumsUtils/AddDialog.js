@@ -170,6 +170,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
 
 AddDialog.defaultProps = {
     dataTypes: [],
+    open: false,
 };
 
 
@@ -178,7 +179,7 @@ AddDialog.propTypes = {
     category: PropTypes.string.isRequired,
     getInfo: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
-    open: PropTypes.bool.isRequired,
+    open: PropTypes.bool,
     scope: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
 };

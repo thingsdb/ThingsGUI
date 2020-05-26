@@ -42,7 +42,6 @@ const typeConv = {
     'number': ['int', 'float'],
 };
 
-const single = ['bool', 'bytes', 'float', 'int', 'nil', 'str', 'utf8', 'raw', 'uint', 'pint', 'nint', 'number'];
 
 const typing = ([fprop, type], dataTypes) =>  {
     let t = type.trim();
@@ -97,7 +96,7 @@ const typing = ([fprop, type], dataTypes) =>  {
     );
 };
 
-const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch}) => {
+const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentDispatch}) => {
     const classes = useStyles();
     const [dataType, setDataType] = React.useState({});
     const [open, setOpen] = React.useState(false);
@@ -140,7 +139,7 @@ const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch
 
     return(
         typeFields&&(
-            <Grid container>
+            <Grid container item xs={12}>
                 <ListHeader collapse onAdd={handleAdd} onOpen={handleOpen} onClose={handleClose} open={open} items={array} name={type} groupSign="{">
                     <Collapse className={classes.fullWidth} in={open} timeout="auto">
                         {( typeFields.map(([fprop, ftype, fchldtype], i) => (
@@ -176,17 +175,16 @@ const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch
                                         ))}
                                     </TextField>
                                 </Grid>
-                                <Grid item xs={single.includes(dataType[fprop]||ftype[0])?7:12}>
-                                    <InputField
-                                        customTypes={customTypes}
-                                        dataType={dataType[fprop]||ftype[0]}
-                                        dataTypes={dataTypes}
-                                        childTypes={fchldtype}
-                                        variant="standard"
-                                        label="Value"
-                                        identifier={fprop}
-                                    />
-                                </Grid>
+                                <InputField
+                                    customTypes={customTypes}
+                                    dataType={dataType[fprop]||ftype[0]}
+                                    dataTypes={dataTypes}
+                                    enums={enums}
+                                    childTypes={fchldtype}
+                                    variant="standard"
+                                    label="Value"
+                                    identifier={fprop}
+                                />
                             </Grid>
                         )))}
                     </Collapse>
@@ -198,10 +196,12 @@ const AddCustomType = ({customTypes, dataTypes, type, identifier, parentDispatch
 
 AddCustomType.defaultProps = {
     customTypes: null,
+    enums: null,
     identifier: null,
 };
 AddCustomType.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object),
+    enums: PropTypes.arrayOf(PropTypes.object),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     type: PropTypes.string.isRequired,
     identifier: PropTypes.string,

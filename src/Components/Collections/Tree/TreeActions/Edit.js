@@ -6,9 +6,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {makeStyles} from '@material-ui/core/styles';
 
-import BuildQueryString from './BuildQueryString';
 import {InputField, EditActions, useEdit} from '../../CollectionsUtils';
 import {LocalErrorMsg} from '../../../Util';
+import BuildQueryString from './BuildQueryString';
+import PropInit from './PropInit';
+import TypeInit from './TypeInit';
 
 const useStyles = makeStyles(theme => ({
     listItem: {
@@ -35,12 +37,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
+const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
     const classes = useStyles();
     const dispatch = useEdit()[1];
 
     const [newProperty, setNewProperty] = React.useState('');
-    const [error, setError] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type);
     const [warnDescription, setWarnDescription] = React.useState('');
 
@@ -53,35 +54,26 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
 
     }, []);
 
-    const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
-
-    const handleOnChangeName = ({target}) => {
-        const {value} = target;
-        const err = errorTxt(value);
-        setError(err);
-        setNewProperty(value);
+    const handleOnChangeName = (p) => {
+        setNewProperty(p);
     };
 
-    const handleOnChangeType = ({target}) => {
-        const {value} = target;
+    const handleOnChangeType = (t) => {
         setWarnDescription('');
-        checkCircularRef(value, {});
+        checkCircularRef(t, {});
         EditActions.update(dispatch, {
             val: '',
             blob: {},
             array: [],
             error: '',
         });
-        setError('');
-        setDataType(value);
+        setDataType(t);
     };
 
     const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
 
     const customTypeNames = [...customTypes.map(c=>c.name)];
-
-
     const checkCircularRef = (type, circularRefFlag) => {
         if (!type.includes('?') && type[0] === '[' || type[0] === '{') {
             type = type.slice(1, -1);
@@ -95,7 +87,7 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
             }
         }
     };
-
+    console.log('edit')
     return(
         <List disablePadding dense className={classes.list}>
             <ListItem className={classes.listItem} >
@@ -116,41 +108,24 @@ const Edit = ({child, customTypes, parent, thing, dataTypes}) => {
             </ListItem>
             <ListItem className={classes.listItem}>
                 {addNewProperty && (
-                    <TextField
-                        margin="dense"
-                        name="newProperty"
-                        label="New property"
-                        type="text"
-                        value={newProperty}
-                        spellCheck={false}
-                        onChange={handleOnChangeName}
-                        helperText={error}
-                        error={Boolean(error)}
+                    <PropInit
+                        thing={thing}
+                        cb={handleOnChangeName}
                     />
                 )}
                 {canChangeType && (
-                    <TextField
-                        margin="dense"
-                        autoFocus
-                        name="dataType"
-                        label="Data type"
-                        value={dataType}
-                        onChange={handleOnChangeType}
-                        select
-                        SelectProps={{native: true}}
-                    >
-                        {dataTypes.map((d, i) => (
-                            <option key={i} value={d} disabled={child.type=='set'&&!(d=='thing'||Boolean(customTypes.find(c=>c.name==d)))} >
-                                {d}
-                            </option>
-                        ))}
-                    </TextField>
+                    <TypeInit
+                        child={child}
+                        customTypes={customTypes}
+                        dataTypes={dataTypes}
+                        cb={handleOnChangeType}
+                    />
                 )}
             </ListItem>
             {warnDescription ? (
                 <LocalErrorMsg msgError={warnDescription} />
             ) : (
-                <InputField dataType={dataType} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
+                <InputField dataType={dataType} enums={enums} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
             )}
         </List>
     );
@@ -163,6 +138,7 @@ Edit.defaultProps = {
 Edit.propTypes = {
     // cb: PropTypes.func.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
+    enums: PropTypes.arrayOf(PropTypes.object).isRequired,
     parent: PropTypes.shape({
         id: PropTypes.number,
         index: PropTypes.number,

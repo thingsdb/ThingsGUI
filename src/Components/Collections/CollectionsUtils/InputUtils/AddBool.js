@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {EditActions, useEdit} from '../Context';
 import {BoolInput} from '../../../Util';
+import {EditActions, useEdit} from '../Context';
 
 const AddBool = ({identifier}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
+
     const handleOnChange = (b) => {
         EditActions.updateVal(dispatch, b, identifier);
     };

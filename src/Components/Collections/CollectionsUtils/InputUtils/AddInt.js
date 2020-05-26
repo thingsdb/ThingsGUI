@@ -8,9 +8,10 @@ import {EditActions, useEdit} from '../Context';
 const onlyInts = (str) => str.length == str.replace(/[^0-9]/g, '').length;
 
 const AddInt = ({identifier, ...props}) => {
-    const [error, setError] = React.useState('');
     const [editState, dispatch] = useEdit();
     const {val} = editState;
+    const [error, setError] = React.useState('');
+
     const errorTxt = (value) => {
         setError(onlyInts(value) ? '' : 'only integers');
     };

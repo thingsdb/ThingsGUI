@@ -61,7 +61,7 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
         handleRefresh();
     }, []);
 
-    const thingsSavedPerCol = collections.reduce((res, item) => { res.push({title: item.name, number: item.things}) ; console.log('colls'); return res;}, []);
+    const thingsSavedPerCol = collections.reduce((res, item) => { res.push({title: item.name, number: item.things}); return res;}, []);
     const totalNumThings = thingsSavedPerCol.reduce((res, item) => { res += item.number  ; return res;}, 0);
     const {clientPerNode, queriesPerNode} = allNodeInfo.reduce((res, item) => { res.clientPerNode.push({title: `node:${item.node_info.node_id}`, number: item.node_info.connected_clients}); res.queriesPerNode.push({title: `node:${item.node_info.node_id}`, number: item.counters.queries_success})  ; return res;}, {clientPerNode:[], queriesPerNode: []});
 

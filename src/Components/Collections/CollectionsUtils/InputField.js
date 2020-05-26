@@ -6,12 +6,13 @@ import React from 'react';
 
 import {EditProvider, useEdit} from './Context';
 
-import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddError, AddFloat, AddInt, AddRegex, AddStr, AddThing, AddVariable} from './InputUtils';
+import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddEnum, AddError, AddFloat, AddInt, AddRegex, AddStr, AddThing, AddVariable} from './InputUtils';
 
 
-const InputField = ({customTypes, childTypes, dataTypes, dataType, identifier, variables,...props}) => {
+const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identifier, variables,...props}) => {
 
     const dispatch = useEdit()[1];
+    console.log('hi', dataType)
 
     switch(dataType){
     case 'str': return <AddStr identifier={identifier} {...props} />;
@@ -25,47 +26,51 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, identifier, v
     case 'nil': return null;
     case 'thing': return(
         <EditProvider>
-            <AddThing identifier={identifier} customTypes={customTypes} dataTypes={dataTypes} parentDispatch={dispatch} />
+            <AddThing identifier={identifier} customTypes={customTypes} enums={enums} dataTypes={dataTypes} parentDispatch={dispatch} />
         </EditProvider>
     );
     case 'set': return(
         <EditProvider>
-            <AddArray identifier={identifier} customTypes={customTypes} childTypes={childTypes||['thing', ...customTypes.map(c=>c.name)]||[]} dataTypes={dataTypes} parentDispatch={dispatch} isSet />
+            <AddArray identifier={identifier} customTypes={customTypes} enums={enums} childTypes={childTypes||['thing', ...customTypes.map(c=>c.name)]||[]} dataTypes={dataTypes} parentDispatch={dispatch} isSet />
         </EditProvider>
     );
     case 'list': return(
         <EditProvider>
-            <AddArray identifier={identifier} customTypes={customTypes} childTypes={childTypes||[]} dataTypes={dataTypes} parentDispatch={dispatch} {...props} />
+            <AddArray identifier={identifier} customTypes={customTypes} enums={enums} childTypes={childTypes||[]} dataTypes={dataTypes} parentDispatch={dispatch} {...props} />
         </EditProvider>
     );
     case 'variable': return(
         <EditProvider>
-            <AddVariable identifier={identifier} customTypes={customTypes} childTypes={childTypes||[]} dataTypes={dataTypes} variables={variables} parentDispatch={dispatch} />
+            <AddVariable identifier={identifier} customTypes={customTypes} enums={enums} childTypes={childTypes||[]} dataTypes={dataTypes} variables={variables} parentDispatch={dispatch} />
         </EditProvider>
     );
     default: return(
-        <EditProvider>
-            <AddCustomType customTypes={customTypes} dataTypes={dataTypes} type={dataType} parentDispatch={dispatch} identifier={identifier} {...props} />
-        </EditProvider>
+        [...customTypes.map(c=>c.name)].includes(dataType) ? (
+            <EditProvider>
+                <AddCustomType customTypes={customTypes} enums={enums} dataTypes={dataTypes} type={dataType} parentDispatch={dispatch} identifier={identifier} {...props} />
+            </EditProvider>
+        ) : <AddEnum identifier={identifier} enum_={dataType} enums={enums} {...props} />
     );
     }
 };
 
 InputField.defaultProps = {
+    childTypes: null,
     customTypes: [],
     dataTypes: [],
-    childTypes: null,
+    enums: [],
     identifier: null,
     variables: [],
 },
 
 InputField.propTypes = {
-    customTypes: PropTypes.arrayOf(PropTypes.object),
-    dataTypes: PropTypes.arrayOf(PropTypes.string),
     childTypes: PropTypes.arrayOf(PropTypes.string),
-    variables: PropTypes.arrayOf(PropTypes.string),
+    customTypes: PropTypes.arrayOf(PropTypes.object),
     dataType: PropTypes.string.isRequired,
+    dataTypes: PropTypes.arrayOf(PropTypes.string),
+    enums: PropTypes.arrayOf(PropTypes.object),
     identifier: PropTypes.string,
+    variables: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default InputField;

@@ -38,6 +38,7 @@ const ViewDialog = ({category, item, link, onChangeItem, onClose, open, rows, sc
 ViewDialog.defaultProps = {
     item: {},
     onChangeItem: ()=>null,
+    open: false,
 };
 
 ViewDialog.propTypes = {
@@ -46,7 +47,7 @@ ViewDialog.propTypes = {
     link: PropTypes.string.isRequired,
     onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
-    open: PropTypes.bool.isRequired,
+    open: PropTypes.bool,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     scope: PropTypes.string.isRequired,
 };

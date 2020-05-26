@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import DialogButtons from './DialogButtons';
 import Edit from './Edit';
 import SubmitButton from './SubmitButton';
-import {CollectionActions, ThingsdbActions, TypeActions} from '../../../../Stores';
+import {CollectionActions, EnumActions, ThingsdbActions, TypeActions} from '../../../../Stores';
 import {allDataTypes, ErrorMsg, SimpleModal} from '../../../Util';
 import {ThingActionsDialogTAG} from '../../../../constants';
 
@@ -26,7 +26,8 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 
     const [state, setState] = React.useState(initialState);
     const {show, realChildType, realParentType, customTypes} = state;
-    const dataTypes = allDataTypes(customTypes);
+    const [enums, setEnums] = React.useState([]);
+    const dataTypes = allDataTypes([...customTypes, ...enums]);
 
     React.useEffect(() => {
         // Checks for the real type. From here on array is redefined to list or set. And thing is redefined to its potential custom type.
@@ -44,6 +45,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
             query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}.${parent.name}), customTypes: types_info()}`; // check if custom type
         }
         TypeActions.getType(query, scope, tag, setType);
+        EnumActions.getEnums(scope, tag, setEnums);
 
     }, []);
 
@@ -110,6 +112,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
                         <Edit
                             customTypes={customTypes}
                             dataTypes={dataTypes}
+                            enums={enums}
                             thing={thing}
                             child={{...child, type: realChildType}}
                             parent={{...parent, type: realParentType||parent.type}}

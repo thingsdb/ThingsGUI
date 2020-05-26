@@ -51,9 +51,6 @@ const Collection = ({match, collections}) => {
                             <Grid className={classes.spacing} item xs={12}>
                                 <CollectionEnumsTypes scope={`@collection:${selectedCollection.name}`} />
                             </Grid>
-                            {/* <Grid item xs={12}>
-                                <CollectionEnumsTypes categoryInit="enum" scope={`@collection:${selectedCollection.name}`} />
-                            </Grid> */}
                         </Grid>
                     </React.Fragment>
                 }

@@ -4,7 +4,7 @@ import React from 'react';
 
 import {CollectionTypesTAG} from '../../../constants';
 import {EnumActions, TypeActions, TypeStore} from '../../../Stores';
-import EnumTypeChips from './EnumTypeChips';
+import EnumTypeChips from '../CollectionsUtils/TypesEnumsUtils/EnumTypeChips';
 
 
 const withStores = withVlow([{
@@ -73,7 +73,6 @@ const CollectionEnumsTypes = ({scope, customTypes}) => {
     });
 
     const handleChange = (a, c, n) => {
-        console.log(a, c, n)
         if (c=='type') {
             setViewEnum({...viewEnum, [a]: false, name: ''});
             setViewType({...viewType, [a]: true, name: n});
@@ -85,14 +84,15 @@ const CollectionEnumsTypes = ({scope, customTypes}) => {
     };
 
     const handleClose = (a, c) => {
-        console.log(a, c)
         if (c=='type') {
             setViewType({...viewType, [a]: false, name: ''});
         } else {
             setViewEnum({...viewEnum, [a]: false, name: ''});
         }
     };
-    console.log({viewType, viewEnum})
+
+    console.log(viewType, viewEnum)
+
     return (
         <React.Fragment>
             <EnumTypeChips

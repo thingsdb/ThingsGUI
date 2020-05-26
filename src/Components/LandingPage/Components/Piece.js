@@ -11,44 +11,63 @@ const getAnglePoint = (fraction, radius, rx, ry) => {
     return { x, y };
 };
 
+class Piece extends React.Component {
 
-const Piece = ({fill, fraction, hole, offset, radius, showLabel, showPercent, start, stroke, strokeWidth, trueHole, value}) => {
-    const [textPoint, setTextPoint] = React.useState({
-        x: 0,
-        y: 0
-    });
-    const [path, setPath] = React.useState('');
-    const [part, setPart] = React.useState(0);
-    const [timeId, setTimeId] = React.useState(null);
-    const [lock, setLock] = React.useState(false);
+    static propTypes = {
+        fill: PropTypes.string.isRequired,
+        fraction: PropTypes.number.isRequired,
+        hole: PropTypes.number.isRequired,
+        offset: PropTypes.object.isRequired,
+        radius: PropTypes.number.isRequired,
+        showLabel: PropTypes.bool.isRequired,
+        showPercent: PropTypes.bool.isRequired,
+        start: PropTypes.number.isRequired,
+        stroke: PropTypes.string.isRequired,
+        strokeWidth: PropTypes.number.isRequired,
+        trueHole: PropTypes.number.isRequired,
+        value: PropTypes.number.isRequired,
+    }
 
-    let startA = getAnglePoint(start, radius, radius+offset.x, radius+offset.y);
-    let startB = getAnglePoint(start, radius - hole, radius+offset.x, radius+offset.y);
-
-    React.useEffect(() => {
-        console.log('hi', {fraction, start})
-        if (!lock) {
-            console.log('hoi', {fraction, start})
-            animate();
-        }
-    }, [fraction, start]);
-
-    React.useEffect(() => {
-        return ()=>{
-            handleClearTimeout(); // prevent React state update on unmounted component
-            setLock(false);
+    constructor(props) {
+        super(props);
+        this.state = {
+            textPoint: {
+                x: 0,
+                y: 0
+            },
+            path: '',
+            part: 0,
+            timeId: null,
         };
-    }, []);
+    }
 
-    const handleClearTimeout = () => clearTimeout(timeId);
+    componentDidMount() {
+        this.animate();
+    }
+
+    componentDidUpdate(prevProps) {
+        const { fraction, start } = this.props;
+        if (fraction != prevProps.fraction || start != prevProps.start) {
+            this.handleStopTimeOut();
+            this.setState({ path: '' });
+            this.animate();
+        }
+    }
 
 
-    const animate = () => {
-        setLock(true);
-        draw(0);
-    };
+    componentWillUnmount() {
+        this.handleStopTimeOut();
+    }
 
-    const draw = (s) => {
+    animate = () => {
+        this.draw(0);
+    }
+
+    draw = (s) => {
+        const {fraction, hole, offset, radius, showLabel, start, trueHole} = this.props;
+
+        let startA = getAnglePoint(start, radius, radius+offset.x, radius+offset.y);
+        let startB = getAnglePoint(start, radius - hole, radius+offset.x, radius+offset.y);
         let step = fraction / 20;
         if (s + step > fraction) {
             s = fraction;
@@ -61,66 +80,62 @@ const Piece = ({fill, fraction, hole, offset, radius, showLabel, showPercent, st
         let p = `M ${startA.x} ${startA.y} A ${radius} ${radius} 0 ${(s > 0.5 ? 1 : 0)} 1 ${endA.x} ${endA.y} L ${endB.x} ${endB.y} A ${radius- hole} ${radius- hole} 0 ${(s > 0.5 ? 1 : 0)} 0 ${startB.x} ${startB.y} Z`;
 
         if (s < fraction) {
-            let timeoutId = setTimeout(() => { draw(s + step); } , 10);
-            setTimeId(timeoutId);
+            let timeoutId = setTimeout(() => { this.draw(s + step); } , 10);
+            this.setState({timeId: timeoutId});
         } else if (showLabel) {
             let c = getAnglePoint(start + (fraction / 2), (radius / 2 + trueHole / 2), radius+offset.x, radius+offset.y);
-            setTextPoint({x: c.x, y: c.y});
-            setLock(false);
+            this.setState({textPoint: {x: c.x, y: c.y}});
         }
-        setPath(p);
-        setPart(s);
-    };
+        this.setState({
+            path: p,
+            part: s
+        });
+    }
 
-    return (
-        <g overflow="hidden">
-            {fraction == 1 && part == 1 ? (
-                <React.Fragment>
-                    <circle
-                        cx={radius+offset.x}
-                        cy={radius+offset.y}
-                        r={radius}
+    handleStopTimeOut = () => {
+        const {timeId} = this.state;
+        clearTimeout(timeId);
+    }
+
+    render() {
+        const {fill, fraction, hole, offset, radius, showLabel, showPercent, stroke, strokeWidth, value} = this.props;
+        const {textPoint, path, part} = this.state;
+
+        return (
+            <g overflow="hidden">
+                {fraction == 1 && part == 1 ? (
+                    <React.Fragment>
+                        <circle
+                            cx={radius+offset.x}
+                            cy={radius+offset.y}
+                            r={radius}
+                            fill={fill}
+                            stroke={stroke}
+                            strokeWidth={strokeWidth ? strokeWidth : 4}
+                        />
+                        <circle
+                            cx={radius+offset.x}
+                            cy={radius+offset.y}
+                            r={hole/2-(strokeWidth ? strokeWidth : 4)/2}
+                            fill={stroke}
+                        />
+                    </React.Fragment>
+                ) : (
+                    <path
+                        d={path}
                         fill={fill}
                         stroke={stroke}
                         strokeWidth={strokeWidth ? strokeWidth : 4}
                     />
-                    <circle
-                        cx={radius+offset.x}
-                        cy={radius+offset.y}
-                        r={hole/2-(strokeWidth ? strokeWidth : 4)/2}
-                        fill={stroke}
-                    />
-                </React.Fragment>
-            ) : (
-                <path
-                    d={path}
-                    fill={fill}
-                    stroke={stroke}
-                    strokeWidth={strokeWidth ? strokeWidth : 4}
-                />
-            )}
-            {showLabel && fraction > 0.05 ? (
-                <text x={textPoint.x} y={textPoint.y} fill="#fff" textAnchor="middle" style={{fontSize:'12px', fontFamily:'monospace'}} >
-                    {showPercent ? (fraction*100).toFixed(1) + '%' : value}
-                </text>
-            ) : null}
-        </g>
-    );
-};
-
-Piece.propTypes = {
-    fill: PropTypes.string.isRequired,
-    fraction: PropTypes.number.isRequired,
-    hole: PropTypes.number.isRequired,
-    offset: PropTypes.object.isRequired,
-    radius: PropTypes.number.isRequired,
-    showLabel: PropTypes.bool.isRequired,
-    showPercent: PropTypes.bool.isRequired,
-    start: PropTypes.number.isRequired,
-    stroke: PropTypes.string.isRequired,
-    strokeWidth: PropTypes.number.isRequired,
-    trueHole: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
+                )}
+                {showLabel && fraction > 0.05 ? (
+                    <text x={textPoint.x} y={textPoint.y} fill="#fff" textAnchor="middle" style={{fontSize:'12px', fontFamily:'monospace'}} >
+                        {showPercent ? (fraction*100).toFixed(1) + '%' : value}
+                    </text>
+                ) : null}
+            </g>
+        );
+    }
+}
 
 export default Piece;

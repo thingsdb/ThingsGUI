@@ -118,7 +118,7 @@ const getScopes2 = (collections, nodes) => [
 
 const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
-const allDataTypes = (customTypes) => {
+const allDataTypes = (types) => {
     const dataTypes = [
         'str',
         'int',
@@ -132,7 +132,7 @@ const allDataTypes = (customTypes) => {
         'list',
         'set',
         'thing',
-        ...customTypes.map(c=>c.name)
+        ...types.map(c=>c.name)
     ];
     return(dataTypes);
 };

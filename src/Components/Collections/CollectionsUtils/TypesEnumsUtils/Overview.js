@@ -1,9 +1,7 @@
 /* eslint-disable react/no-multi-comp */
-import {makeStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import ListItem from '@material-ui/core/ListItem';
@@ -15,14 +13,8 @@ import React from 'react';
 import {TableWithButtons} from '../../../Util';
 import  UsedByType from './UsedByType';
 
-const useStyles = makeStyles(theme => ({
-    chips: {
-        margin: theme.spacing(1),
-    },
-}));
 
 const Overview = ({buttons, category, item, link, onAdd, onChangeItem, rows, scope}) => {
-    const classes = useStyles();
     const header = [
         {ky: 'propertyName', label: 'Name'},
         {ky: 'propertyObject', label: category=='type'?'Type':'Value'},

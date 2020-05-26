@@ -137,7 +137,6 @@ class NodesStore extends BaseStore {
     }
 
     onGetDashboardInfo(cb=()=>null){
-        console.log('dashinfo');
         const {nodes, allNodeInfo} = this.state;
         const query = '{node_info: node_info(), counters: counters()};';
         const length = nodes.length;

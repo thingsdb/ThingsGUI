@@ -17,14 +17,14 @@ const useStyles = makeStyles(theme => ({
 
 const AddError = ({identifier}) => {
     const classes = useStyles();
+    const [editState, dispatch] = useEdit();
+    const {val} = editState;
     const [state, setState] = React.useState({
         errCode:'',
         errMsg:'',
     });
     const {errCode, errMsg} = state;
 
-    const [editState, dispatch] = useEdit();
-    const {val} = editState;
     React.useEffect(() => {
         const v = val[identifier]||(val.constructor === Object?'':val);
         if(`err(${errCode}, '${errMsg}')`!=v) {
@@ -108,7 +108,7 @@ AddError.defaultProps = {
 },
 
 AddError.propTypes = {
-    identifier: PropTypes.string
+    identifier: PropTypes.string,
 };
 
 export default AddError;

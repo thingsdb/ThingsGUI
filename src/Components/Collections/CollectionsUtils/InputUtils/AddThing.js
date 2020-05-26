@@ -16,15 +16,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const single = [
-    'bool',
-    'float',
-    'int',
-    'nil',
-    'str',
-];
 
-const AddThing = ({customTypes, dataTypes, identifier, parentDispatch}) => {
+const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         dataType: 'str',
@@ -78,7 +71,7 @@ const AddThing = ({customTypes, dataTypes, identifier, parentDispatch}) => {
     };
 
     return (
-        <Grid container>
+        <Grid container item xs={12}>
             <ListHeader onAdd={handleAdd} onDelete={handleClick} items={array} groupSign="{">
                 <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
                     <Grid item xs={3}>
@@ -114,16 +107,15 @@ const AddThing = ({customTypes, dataTypes, identifier, parentDispatch}) => {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={single.includes(dataType)?6:12}>
-                        <InputField
-                            customTypes={customTypes}
-                            dataType={dataType}
-                            dataTypes={dataTypes}
-                            name="Input"
-                            variant="standard"
-                            label="Value"
-                        />
-                    </Grid>
+                    <InputField
+                        customTypes={customTypes}
+                        dataType={dataType}
+                        dataTypes={dataTypes}
+                        enums={enums}
+                        name="Input"
+                        variant="standard"
+                        label="Value"
+                    />
                 </Grid>
             </ListHeader>
         </Grid>
@@ -138,6 +130,7 @@ AddThing.defaultProps = {
 AddThing.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    enums: PropTypes.arrayOf(PropTypes.object).isRequired,
     identifier: PropTypes.string,
     parentDispatch: PropTypes.func.isRequired,
 };

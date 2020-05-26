@@ -20,15 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const single = [
-    'bool',
-    'float',
-    'int',
-    'nil',
-    'str',
-];
-
-const AddVariable = ({variables, customTypes, dataTypes, identifier, parentDispatch}) => {
+const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, parentDispatch}) => {
     const classes = useStyles();
     const [dataType, setDataType] = React.useState('str');
 
@@ -65,7 +57,7 @@ const AddVariable = ({variables, customTypes, dataTypes, identifier, parentDispa
 
     return (
         variables&&(
-            <Grid container>
+            <Grid container item xs={12}>
                 <ListHeader onAdd={handleAdd} items={array} groupSign="{">
                     {( variables.map(v => (
                         <Grid key={v} className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
@@ -94,17 +86,16 @@ const AddVariable = ({variables, customTypes, dataTypes, identifier, parentDispa
                                     ))}
                                 </TextField>
                             </Grid>
-                            <Grid item xs={single.includes(dataType[v]||dataTypes[0])?6:12}>
-                                <InputField
-                                    customTypes={customTypes}
-                                    dataType={dataType[v]||dataTypes[0]}
-                                    dataTypes={dataTypes}
-                                    name="Input"
-                                    variant="standard"
-                                    label="Value"
-                                    identifier={v}
-                                />
-                            </Grid>
+                            <InputField
+                                customTypes={customTypes}
+                                dataType={dataType[v]||dataTypes[0]}
+                                dataTypes={dataTypes}
+                                enums={enums}
+                                name="Input"
+                                variant="standard"
+                                label="Value"
+                                identifier={v}
+                            />
                         </Grid>
                     )))}
                 </ListHeader>
@@ -122,6 +113,7 @@ AddVariable.propTypes = {
     variables: PropTypes.arrayOf(PropTypes.string).isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    enums: PropTypes.arrayOf(PropTypes.object).isRequired,
     identifier: PropTypes.string,
     parentDispatch: PropTypes.func.isRequired,
 };

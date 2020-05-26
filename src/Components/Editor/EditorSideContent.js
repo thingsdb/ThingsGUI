@@ -8,7 +8,7 @@ import ViewIcon from '@material-ui/icons/Visibility';
 import {EnumActions, ProcedureActions, TypeActions} from '../../Stores';
 import {ChipsCard, WarnPopover} from '../Util';
 import {ViewProcedureDialog} from '../Procedures/Dialogs';
-import EditorEnumType from './EditorEnumType';
+import {EnumTypeChips} from '../Collections/CollectionsUtils/TypesEnumsUtils';
 
 const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     const [procedures, setProcedures] = React.useState([]);
@@ -40,10 +40,6 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         if (scope&&!scope.includes('@node')) {
             ProcedureActions.getProcedures(scope, tag, handleProcedures);
         }
-        // if (scope&&scope.includes('collection')) {
-        //     TypeActions.getTypes(scope, tag, handleTypes);
-        //     EnumActions.getEnums(scope, tag, handleEnums);
-        // }
     };
 
     const handleRefreshProcedures = () => ProcedureActions.getProcedures(scope, tag, handleProcedures);
@@ -99,19 +95,33 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         setViewProcedure({open: false, name: ''});
     };
 
-    const handleChangeView = (n, c) => {
-        if (c=='type') {
-            setViewType({open: true, name: n});
-        } else {
-            setViewEnum({open: true, name: n});
+    const handleChange = (a, c, n) => {
+        switch(a){
+            case 'view':
+                if (c=='type') {
+                    setViewEnum({open: false, name: ''});
+                    setViewType({open: true, name: n});
+                } else {
+                    setViewType({open: false, name: ''});
+                    setViewEnum({open: true, name: n});
+                }
+                break;
+            case 'add':
+                if (c=='type') {
+                    onSetQueryInput('set_type("...", {...})');
+                } else {
+                    onSetQueryInput('set_enum("...", {...})');
+                }
+                break;
         }
     };
 
-    const handleCloseViewType = () => {
-        setViewType({open: false, name: ''});
-    };
-    const handleCloseViewEnum = () => {
-        setViewEnum({open: false, name: ''});
+    const handleClose = (a, c) => {
+        if (c=='type') {
+            setViewType({open: false, name: ''});
+        } else {
+            setViewEnum({open: false, name: ''});
+        }
     };
 
     const buttons = (fnView, fnRun) => (n)=>([
@@ -145,34 +155,34 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
             )}
             {scope&&scope.includes('@collection') ? (
                 <React.Fragment>
-                    <EditorEnumType
-                        addInput={'set_type("...", {...})'}
+                    <EnumTypeChips
+                        buttonsView={{add: false, edit: false, run: true, view: true}}
                         categoryInit="type"
                         fields="fields"
-                        onChange={handleChangeView}
-                        onCloseView={handleCloseViewType}
-                        onDeleteItem={TypeActions.deleteType}
+                        onChange={handleChange}
+                        onClose={handleClose}
+                        onDelete={TypeActions.deleteType}
                         onInfo={TypeActions.getTypes}
                         onMakeInstanceInit={makeTypeInstanceInit}
                         onSetQueryInput={onSetQueryInput}
                         scope={scope}
                         tag={tag}
-                        view={viewType}
+                        view={{view: viewType.open, name: viewType.name}}
                     />
-                    <EditorEnumType
-                        addInput={'set_enum("...", {...})'}
+                    <EnumTypeChips
+                        buttonsView={{add: false, edit: false, run: true, view: true}}
                         categoryInit="enum"
                         fields="members"
                         noLink
-                        onChange={handleChangeView}
-                        onCloseView={handleCloseViewEnum}
-                        onDeleteItem={EnumActions.deleteEnum}
+                        onChange={handleChange}
+                        onClose={handleClose}
+                        onDelete={EnumActions.deleteEnum}
                         onInfo={EnumActions.getEnums}
                         onMakeInstanceInit={makeEnumInstanceInit}
                         onSetQueryInput={onSetQueryInput}
                         scope={scope}
                         tag={tag}
-                        view={viewEnum}
+                        view={{view: viewEnum.open, name: viewEnum.name}}
                     />
                 </React.Fragment>
             ): null}
