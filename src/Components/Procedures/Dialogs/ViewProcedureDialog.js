@@ -24,7 +24,7 @@ const ViewProcedureDialog = ({button, open, onClose, procedure}) => {
             button={button}
             open={open}
             onClose={onClose}
-            maxWidth="sm"
+            maxWidth="md"
             actionButtons={procedure.with_side_effects?(
                 <ListItem>
                     <Typography variant="caption" className={classes.warnColor}>

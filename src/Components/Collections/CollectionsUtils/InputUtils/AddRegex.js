@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
@@ -15,15 +16,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const AddRegex = ({identifier}) => {
+const AddRegex = ({identifier, init}) => {
     const classes = useStyles();
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
+    React.useEffect(()=>{
+        EditActions.updateVal(dispatch, init, identifier);
+    }, []);
+
     const handleOnChange = ({target}) => {
         const {value} = target;
         EditActions.updateVal(dispatch, `/${value}/`, identifier);
-
     };
     const v = val[identifier]||(val.constructor === Object?'':val);
 
@@ -44,6 +48,7 @@ const AddRegex = ({identifier}) => {
                         spellCheck={false}
                         onChange={handleOnChange}
                         fullWidth
+                        rowsMax={10}
                         multiline
                         variant="outlined"
                     />
@@ -60,10 +65,12 @@ const AddRegex = ({identifier}) => {
 
 AddRegex.defaultProps = {
     identifier: null,
+    init: '',
 },
 
 AddRegex.propTypes = {
     identifier: PropTypes.string,
+    init: PropTypes.string,
 };
 
 export default AddRegex;

@@ -84,7 +84,7 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
             open={open}
             onClose={onClose}
             onOk={handleClickOk}
-            maxWidth="sm"
+            maxWidth="md"
             disableOk={Boolean(error)}
         >
             <Grid className={classes.scroll} container spacing={1}>

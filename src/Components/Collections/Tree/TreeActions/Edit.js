@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {InputField, EditActions, useEdit} from '../../CollectionsUtils';
+import {InputField} from '../../CollectionsUtils';
 import {LocalErrorMsg} from '../../../Util';
 import BuildQueryString from './BuildQueryString';
 import PropInit from './PropInit';
@@ -39,20 +38,11 @@ const useStyles = makeStyles(theme => ({
 
 const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
     const classes = useStyles();
-    const dispatch = useEdit()[1];
 
     const [newProperty, setNewProperty] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type);
     const [warnDescription, setWarnDescription] = React.useState('');
 
-    React.useEffect(()=>{
-        EditActions.updateVal(dispatch, (child.type == 'thing' || child.type == 'list' || child.type == 'set') ? ''
-            : child.type == 'closure' ? thing['/']
-                : child.type == 'regex' ? thing['*']
-                    : child.type == 'error' ? `err(${thing.error_code}, ${thing.error_msg})`
-                        : thing);
-
-    }, []);
 
     const handleOnChangeName = (p) => {
         setNewProperty(p);
@@ -61,12 +51,6 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
     const handleOnChangeType = (t) => {
         setWarnDescription('');
         checkCircularRef(t, {});
-        EditActions.update(dispatch, {
-            val: '',
-            blob: {},
-            array: [],
-            error: '',
-        });
         setDataType(t);
     };
 
@@ -87,7 +71,14 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
             }
         }
     };
-    console.log('edit')
+
+
+    const t = (child.type == 'thing' || child.type == 'list' || child.type == 'set') ? ''
+        : child.type == 'closure' ? thing['/']
+            : child.type == 'regex' ? thing['*']
+                : child.type == 'error' ? `err(${thing.error_code}, '${thing.error_msg}')`
+                    : thing;
+
     return(
         <List disablePadding dense className={classes.list}>
             <ListItem className={classes.listItem} >
@@ -109,23 +100,25 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
             <ListItem className={classes.listItem}>
                 {addNewProperty && (
                     <PropInit
-                        thing={thing}
                         cb={handleOnChangeName}
+                        input={newProperty}
+                        thing={thing}
                     />
                 )}
                 {canChangeType && (
                     <TypeInit
+                        cb={handleOnChangeType}
                         child={child}
                         customTypes={customTypes}
                         dataTypes={dataTypes}
-                        cb={handleOnChangeType}
+                        input={dataType}
                     />
                 )}
             </ListItem>
             {warnDescription ? (
                 <LocalErrorMsg msgError={warnDescription} />
             ) : (
-                <InputField dataType={dataType} enums={enums} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth />
+                <InputField dataType={dataType} enums={enums} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth init={t} />
             )}
         </List>
     );

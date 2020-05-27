@@ -42,7 +42,7 @@ const AddLink = ({customTypes, enums, name, onChange, scope}) => {
 };
 
 AddLink.defaultProps = {
-    name: "",
+    name: '',
 };
 
 AddLink.propTypes = {

@@ -8,27 +8,26 @@ import TextField from '@material-ui/core/TextField';
 import {EditActions, useEdit} from '../Context';
 
 
-const AddEnum = ({enum_, enums, identifier}) => {
-    // const [enumMem, setEnumMem] = React.useState('');
-    const [editState, dispatch] = useEdit();
-    const {val} = editState;
+const AddEnum = ({enum_, enums, identifier, init}) => {
+    const [enumMem, setEnumMem] = React.useState('');
+    const dispatch = useEdit()[1];
 
     React.useEffect(()=>{
-        const v = val[identifier]||(val.constructor === Object?'':val);
-        EditActions.updateVal(dispatch, `${enum_}{${v}}`, identifier);
-    }, []);
+        const en = (enums||[]).find(e=>e.name==enum_);
+        if (en) {
+            const e = init?en.members.find(i=> i[1]==init):en.members[0];
+            setEnumMem(e[0]);
+            EditActions.updateVal(dispatch, `${enum_}{${e[0]}}`, identifier);
+        }
+    }, [enums.length]);
 
     const handleChangeEnum = ({target}) => {
         const {value} = target;
-        // setEnumMem(value);
+        setEnumMem(value);
         EditActions.updateVal(dispatch, `${enum_}{${value}}`, identifier);
     };
 
     const en = (enums||[]).find(e=>e.name==enum_);
-    const v = val[identifier]||(val.constructor === Object?'':val);
-    const i1 = v.indexOf('{', 0);
-    const i2 = v.indexOf('}', 0);
-    let e = i1==-1&&i2==-1?v.slice(i1, i2): v;
 
     return(en&&en.members?(
         <Grid container item xs={3}>
@@ -37,15 +36,15 @@ const AddEnum = ({enum_, enums, identifier}) => {
                 name="enum"
                 label="Enum"
                 onChange={handleChangeEnum}
-                value={e}
+                value={enumMem}
                 variant="standard"
                 select
                 SelectProps={{native: true}}
                 fullWidth
             >
-                { en.members.map(([fprop, fval], i) => (
-                    <option key={i} value={fprop}>
-                        {fprop}
+                { en.members.map((f, i) => (
+                    <option key={i} value={f[0]}>
+                        {f[0]}
                     </option>
                 ))}
             </TextField>
@@ -55,11 +54,13 @@ const AddEnum = ({enum_, enums, identifier}) => {
 
 AddEnum.defaultProps = {
     identifier: null,
+    init: '',
 };
 AddEnum.propTypes = {
     enum_: PropTypes.string.isRequired,
     enums: PropTypes.arrayOf(PropTypes.object).isRequired,
     identifier: PropTypes.string,
+    init: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default AddEnum;

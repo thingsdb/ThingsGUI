@@ -73,7 +73,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                     </Button>
                 </React.Fragment>
             }
-            maxWidth="sm"
+            maxWidth="md"
         >
             <Grid container spacing={1}>
                 <Grid container spacing={1} item xs={12}>

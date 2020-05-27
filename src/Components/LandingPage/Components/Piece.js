@@ -49,7 +49,6 @@ class Piece extends React.Component {
         const { fraction, start } = this.props;
         if (fraction != prevProps.fraction || start != prevProps.start) {
             this.handleStopTimeOut();
-            this.setState({ path: '' });
             this.animate();
         }
     }

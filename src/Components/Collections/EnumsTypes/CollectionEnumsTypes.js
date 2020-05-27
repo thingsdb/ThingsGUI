@@ -3,18 +3,21 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {CollectionTypesTAG} from '../../../constants';
-import {EnumActions, TypeActions, TypeStore} from '../../../Stores';
+import {EnumActions, EnumStore, TypeActions, TypeStore} from '../../../Stores';
 import EnumTypeChips from '../CollectionsUtils/TypesEnumsUtils/EnumTypeChips';
 
 
 const withStores = withVlow([{
+    store: EnumStore,
+    keys: ['enums']
+}, {
     store: TypeStore,
     keys: ['customTypes']
 }]);
 
 const tag = CollectionTypesTAG;
 
-const CollectionEnumsTypes = ({scope, customTypes}) => {
+const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
     const types = [
         'str',
         'utf8',
@@ -29,7 +32,8 @@ const CollectionEnumsTypes = ({scope, customTypes}) => {
         'number',
         'thing',
         'any',
-        ...(customTypes[scope]||[]).map(c=>c.name)
+        ...(customTypes[scope]||[]).map(c=>c.name),
+        ...(enums[scope]||[]).map(c=>c.name)
     ];
 
     const typesOptional = [
@@ -91,7 +95,6 @@ const CollectionEnumsTypes = ({scope, customTypes}) => {
         }
     };
 
-    console.log(viewType, viewEnum)
 
     return (
         <React.Fragment>
@@ -130,6 +133,8 @@ CollectionEnumsTypes.propTypes = {
 
     /* types properties */
     customTypes: TypeStore.types.customTypes.isRequired,
+    /* enums properties */
+    enums: EnumStore.types.enums.isRequired,
 };
 
 export default withStores(CollectionEnumsTypes);

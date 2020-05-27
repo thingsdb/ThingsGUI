@@ -3,16 +3,21 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-const TypeInit = ({child, customTypes, dataTypes, cb}) => {
-    const [dataType, setDataType] = React.useState(child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type);
+import {EditActions, useEdit} from '../../CollectionsUtils';
 
-    React.useEffect(()=>{
-        cb(dataType);
-    }, [dataType]);
+const TypeInit = ({child, customTypes, dataTypes, cb, input}) => {
+    const dispatch = useEdit()[1];
 
     const handleOnChangeType = ({target}) => {
         const {value} = target;
-        setDataType(value);
+        cb(value);
+        EditActions.update(dispatch, {
+            query: '',
+            val: '',
+            blob: {},
+            array: [],
+            error: '',
+        });
     };
 
     return(
@@ -21,7 +26,7 @@ const TypeInit = ({child, customTypes, dataTypes, cb}) => {
             autoFocus
             name="dataType"
             label="Data type"
-            value={dataType}
+            value={input}
             onChange={handleOnChangeType}
             select
             SelectProps={{native: true}}
@@ -32,7 +37,7 @@ const TypeInit = ({child, customTypes, dataTypes, cb}) => {
                 </option>
             ))}
         </TextField>
-    )
+    );
 };
 
 
@@ -46,6 +51,7 @@ TypeInit.propTypes = {
         type: PropTypes.string,
     }).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    input: PropTypes.string.isRequired,
 };
 
 export default TypeInit;

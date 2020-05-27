@@ -218,7 +218,7 @@ ChipsCard.defaultProps = {
 
 ChipsCard.propTypes = {
     expand: PropTypes.bool,
-    items: PropTypes.arrayOf(PropTypes.object).isRequired,
+    items: PropTypes.arrayOf(PropTypes.object),
     moreButtons: PropTypes.object,
     onAdd: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,

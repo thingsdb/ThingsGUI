@@ -38,7 +38,7 @@ const BuildQueryString = ({child, customTypes, parent}) => {
                     : [...customTypes.map(c=>c.name)].includes(parentType) ? `#${parentId}.${childName} = ${value};`
                         : '';
     };
-    console.log('buildQueryString')
+
     return(
         <TextField
             name="queryString"

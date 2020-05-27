@@ -87,7 +87,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             open={open}
             onClose={onClose}
             onOk={handleClickOk}
-            maxWidth="sm"
+            maxWidth="md"
             actionButtons={procedure.with_side_effects?(
                 <ListItem>
                     <Typography variant="caption" className={classes.warnColor}>

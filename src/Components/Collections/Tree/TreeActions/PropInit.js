@@ -3,13 +3,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-const Edit = ({cb, thing}) => {
-    const [newProperty, setNewProperty] = React.useState('');
+const PropInit = ({cb, input, thing}) => {
     const [error, setError] = React.useState('');
-
-    React.useEffect(()=>{
-        cb(newProperty);
-    }, [newProperty]);
 
     const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
 
@@ -17,7 +12,7 @@ const Edit = ({cb, thing}) => {
         const {value} = target;
         const err = errorTxt(value);
         setError(err);
-        setNewProperty(value);
+        cb(value);
     };
 
     return(
@@ -26,22 +21,23 @@ const Edit = ({cb, thing}) => {
             name="newProperty"
             label="New property"
             type="text"
-            value={newProperty}
+            value={input}
             spellCheck={false}
             onChange={handleOnChangeName}
             helperText={error}
             error={Boolean(error)}
         />
-    )
+    );
 };
 
-Edit.defaultProps = {
+PropInit.defaultProps = {
     thing: null,
 },
 
-Edit.propTypes = {
+PropInit.propTypes = {
     cb: PropTypes.func.isRequired,
+    input: PropTypes.string.isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
 };
 
-export default Edit;
+export default PropInit;

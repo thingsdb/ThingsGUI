@@ -51,7 +51,7 @@ const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
 };
 
 UsedByType.defaultProps = {
-    name: "",
+    name: '',
 };
 
 UsedByType.propTypes = {

@@ -11,7 +11,7 @@ const EditActions = {
     },
     updateVal: (dispatch, data, identifier=null) => {
         dispatch((state) => {
-            return identifier? {val: {...state.val, [identifier]: data}} : {...state, val: data};
+            return identifier? {val: {...state.val, [identifier]: data}} : {val: data};
         });
     },
     deleteBlob: (dispatch, data) => {
@@ -77,6 +77,7 @@ const reducer = (state, action) => {
 
 const EditProvider = ({ children }) => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
+    console.log('hi provider', state)
     return (
         <StoreContext.Provider value={{ state, dispatch }}>
             {children}

@@ -107,7 +107,7 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
     React.useEffect(() => {
         setDataType({});
         setOpen(false);
-        EditActions.update(dispatch, {val: '', array: [], blob: {}});
+        // EditActions.update(dispatch, {array: [], blob: {}});
     },[type]);
 
     const handleChangeType = (n) => ({target}) => {

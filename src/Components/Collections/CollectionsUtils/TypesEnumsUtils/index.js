@@ -1,5 +1,5 @@
 import AddDialog from './AddDialog';
-import AddLink from './AddLink'
+import AddLink from './AddLink';
 import EditDialog from './EditDialog';
 import EnumTypeChips from './EnumTypeChips';
 import UsedByType from './UsedByType';

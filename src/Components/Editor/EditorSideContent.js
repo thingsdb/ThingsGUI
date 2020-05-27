@@ -97,22 +97,22 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
 
     const handleChange = (a, c, n) => {
         switch(a){
-            case 'view':
-                if (c=='type') {
-                    setViewEnum({open: false, name: ''});
-                    setViewType({open: true, name: n});
-                } else {
-                    setViewType({open: false, name: ''});
-                    setViewEnum({open: true, name: n});
-                }
-                break;
-            case 'add':
-                if (c=='type') {
-                    onSetQueryInput('set_type("...", {...})');
-                } else {
-                    onSetQueryInput('set_enum("...", {...})');
-                }
-                break;
+        case 'view':
+            if (c=='type') {
+                setViewEnum({open: false, name: ''});
+                setViewType({open: true, name: n});
+            } else {
+                setViewType({open: false, name: ''});
+                setViewEnum({open: true, name: n});
+            }
+            break;
+        case 'add':
+            if (c=='type') {
+                onSetQueryInput('set_type("...", {...})');
+            } else {
+                onSetQueryInput('set_enum("...", {...})');
+            }
+            break;
         }
     };
 
