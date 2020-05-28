@@ -12,7 +12,6 @@ import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddEnum, AddError
 const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identifier, init, variables,...props}) => {
 
     const dispatch = useEdit()[1];
-    console.log('hi', dataType);
 
     // EditProvider needs a key to distinguish the instance
     switch(dataType){

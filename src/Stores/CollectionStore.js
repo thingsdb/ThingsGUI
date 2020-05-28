@@ -83,16 +83,18 @@ class CollectionStore extends BaseStore {
     }
 
     onBlob(scope, q, thingId, blob, tag, cb) {
-        const query = `${q} #${thingId}`;
+        const query = thingId?`${q} #${thingId}`:`${q}`;
         this.emit('queryBlob', {
             query,
             scope,
             blob,
         }).done((data) => {
-            this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[thingId]: data});
-                return {things};
-            });
+            if(thingId){
+                this.setState(prevState => {
+                    const things = Object.assign({}, prevState.things, {[thingId]: data});
+                    return {things};
+                });
+            }
             cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);

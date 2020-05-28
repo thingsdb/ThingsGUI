@@ -13,19 +13,21 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ErrorActions} from '../../../../Stores';
-import {EditTypeDialogTAG} from '../../../../constants';
+import {EditDialogTAG} from '../../../../constants';
 import {ErrorMsg, SimpleModal, WarnPopover} from '../../../Util';
+import {EditProvider} from '../Context';
 import AddProperty from './AddProperty';
 import Overview from './Overview';
 
-const tag = EditTypeDialogTAG;
+const tag = EditDialogTAG;
 
 const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onClose, open, rows, scope}) => {
     const [state, setState] = React.useState({
         queryString: '',
         property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''},
+        blob: {},
     });
-    const {queryString, property} = state;
+    const {queryString, property, blob} = state;
     const [action, setAction] = React.useState('');
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,18 +37,19 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
         setState({
             queryString: '',
             property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''},
+            blob: {},
         });
         setAction('');
     },
     [open],
     );
 
-    const handleQueryAdd = (p) => {
-        setState({...state, property: p, queryString: `mod_${category}('${item.name}', 'add', '${p.propertyName}', ${category=='type'?`'${p.propertyType}',`:''} ${/^[0-9]*$/gm.test(p.propertyVal)?`${p.propertyVal}`:`'${p.propertyVal}'`})`});
+    const handleQueryAdd = (p, b) => {
+        setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'add', '${p.propertyName}', ${category=='type'?`'${p.propertyType}',`:''} ${p.propertyVal})`});
     };
 
-    const handleQueryMod = (p) => {
-        setState({property: p, queryString: `mod_${category}('${item.name}', 'mod', '${p.propertyName}', ${category=='type'?`'${p.propertyType}'`:`${/^[0-9]*$/gm.test(p.propertyVal)?`${p.propertyVal}`:`'${p.propertyVal}'`}`})`});
+    const handleQueryMod = (p, b) => {
+        setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'mod', '${p.propertyName}', ${category=='type'?`'${p.propertyType}'`:`${p.propertyVal}`})`});
     };
 
     const handleAdd = () => {
@@ -59,35 +62,52 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     };
 
     const handleDel = (p) => (e) => {
-        setState({property: p, queryString: `mod_${category}('${item.name}', 'del', '${p.propertyName}')`});
+        setState({...state, property: p, queryString: `mod_${category}('${item.name}', 'del', '${p.propertyName}')`});
         setAnchorEl(e.currentTarget);
         setAction('del');
     };
 
     const handleCloseDelete = () => {
-        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: ''});
+        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: '', blob: {}});
         setAnchorEl(null);
     };
 
     const handleBack = () => {
         handleCloseError();
-        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: ''});
+        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: '', blob: {},});
         setAction('');
     };
 
     const handleClickOk = () => {
         handleCloseError();
-        CollectionActions.rawQuery(
-            scope,
-            queryString,
-            tag,
-            (_data) => {
-                getInfo(scope, tag);
-                setAction('');
-                setAnchorEl(null);
-                setState({property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''}, queryString: ''});
-            }
-        );
+        const b = Object.keys(blob || {}).reduce((res, k) => {if(queryString.includes(k)){res[k]=blob[k];} return res;},{});
+        if (Object.keys(b).length) {
+            CollectionActions.blob(
+                scope,
+                queryString,
+                null,
+                b,
+                tag,
+                () => {
+                    getInfo(scope, tag);
+                    setAction('');
+                    setAnchorEl(null);
+                    setState({property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''}, queryString: ''});
+                }
+            );
+        } else {
+            CollectionActions.rawQuery(
+                scope,
+                queryString,
+                tag,
+                (_data) => {
+                    getInfo(scope, tag);
+                    setAction('');
+                    setAnchorEl(null);
+                    setState({property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''}, queryString: ''});
+                }
+            );
+        }
     };
 
     const handleCloseError = () => {
@@ -117,7 +137,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
             open={open}
             onClose={onClose}
             onOk={add||edit?handleClickOk:null}
-            maxWidth="sm"
+            maxWidth="md"
             actionButtons={add||edit ? (
                 <Button onClick={handleBack} color="primary">
                     {'Back'}
@@ -166,7 +186,9 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                         </Collapse>
                         <Collapse in={add || edit} timeout="auto" unmountOnExit>
                             <ListItem>
-                                <AddProperty cb={add?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={property} hasType={category=='type'} hasPropName={!edit} hasInitVal={add||category=='enum'} />
+                                <EditProvider>
+                                    <AddProperty cb={add?handleQueryAdd:handleQueryMod} category={category} dropdownItems={dataTypes} input={property} hasType={category=='type'} hasPropName={!edit} hasInitVal={add||category=='enum'} scope={scope} />
+                                </EditProvider>
                             </ListItem>
                         </Collapse>
                         <Collapse in={overview||del} timeout="auto" unmountOnExit>

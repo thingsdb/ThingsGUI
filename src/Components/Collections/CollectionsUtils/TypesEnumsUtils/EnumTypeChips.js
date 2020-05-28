@@ -106,7 +106,17 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
     };
 
     const item = view.name&&items?items.find(i=>i.name==view.name):{};
-    const rows = item[fields]? item[fields].map(c=>({propertyName: c[0], propertyType: categoryInit=='type'?c[1]:'', propertyVal: categoryInit=='type'?'':c[1], propertyObject: noLink ? c[1] : <AddLink name={c[1]} scope={scope} onChange={view.view?handleChangeView:handleChangeEdit} />})):[];
+    const rows = item[fields] ? item[fields].map(
+        c=>{
+            const objectProof = c[1].constructor===Object?JSON.stringify(c[1]):c[1];
+            return({
+                propertyName: c[0],
+                propertyType: categoryInit=='type'?c[1]:'',
+                propertyVal: categoryInit=='type'?'':c[1],
+                propertyObject: noLink ? objectProof : <AddLink name={objectProof} scope={scope} onChange={view.view?handleChangeView:handleChangeEdit} />
+            });
+        }
+    ):[];
 
     return (
         <Grid className={classes.spacing} item xs={12}>

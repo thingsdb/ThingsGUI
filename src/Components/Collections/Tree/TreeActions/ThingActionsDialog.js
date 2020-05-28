@@ -83,7 +83,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 
     // buttons visible
     const isChildCustom = Boolean(customTypes.find(c=>c.name==realChildType));
-    const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || child.type === 'bytes' || realChildType[0]=='<');
+    const canEdit = !(parent.isTuple && child.type !== 'thing' || realChildType=='tuple' || isChildCustom || realChildType[0]=='<');
 
     const content = (
         <Grid container spacing={1}>

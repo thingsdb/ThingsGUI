@@ -27,20 +27,11 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
     const [editState, dispatch] = useEdit();
     const {array, val, blob} = editState;
 
-
-    React.useEffect(() => {
-        EditActions.update(dispatch, {val: '', array: [], blob: {}});
-    },
-    [JSON.stringify(variables)],
-    );
-
     const handleChangeType = (v) => ({target}) => {
         const {value} = target;
         setDataType({...dataType, [v]: value});
         if (value == 'nil') {
             EditActions.updateVal(dispatch, 'nil', v);
-        } else {
-            EditActions.updateVal(dispatch, '', v);
         }
     };
 
@@ -50,7 +41,6 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
             array:  s,
         });
 
-        // const v = convertToRealType(val, blob, dataType);
         EditActions.updateVal(parentDispatch,`{${s}}`, identifier);
         EditActions.updateBlob(parentDispatch, s, blob);
     };

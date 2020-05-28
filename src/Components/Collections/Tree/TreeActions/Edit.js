@@ -54,7 +54,7 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
         setDataType(t);
     };
 
-    const addNewProperty = Boolean(child.id) && !(child.type.trim()[0] == '<');
+    const addNewProperty = child.type == 'thing';//Boolean(child.id) && !(child.type.trim()[0] == '<')
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
 
     const customTypeNames = [...customTypes.map(c=>c.name)];
@@ -86,14 +86,15 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
                     child={{
                         id: null,
                         index: child.index,
-                        name: child.id?newProperty:child.name,
+                        name: child.type == 'thing'?newProperty:child.name,
                         type: dataType,
                     }}
                     customTypes={customTypes}
+                    enums={enums}
                     parent={{
-                        id: child.id||parent.id,
-                        name: child.id || child.type == 'list' || child.type == 'set' ?child.name:parent.name,
-                        type: child.id|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
+                        id: child.type == 'thing'? child.id:parent.id,
+                        name: child.type == 'thing'|| child.type == 'list' || child.type == 'set' ?child.name:parent.name,
+                        type: child.type == 'thing'|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
                     }}
                 />
             </ListItem>
@@ -108,7 +109,7 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
                 {canChangeType && (
                     <TypeInit
                         cb={handleOnChangeType}
-                        child={child}
+                        type={child.type}
                         customTypes={customTypes}
                         dataTypes={dataTypes}
                         input={dataType}
@@ -118,7 +119,7 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
             {warnDescription ? (
                 <LocalErrorMsg msgError={warnDescription} />
             ) : (
-                <InputField dataType={dataType} enums={enums} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth init={t} />
+                <InputField dataType={dataType} enums={enums} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth init={t==null?'':t} />
             )}
         </List>
     );

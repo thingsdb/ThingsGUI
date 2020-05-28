@@ -13,7 +13,7 @@ const ViewDialog = ({category, item, link, onChangeItem, onClose, open, rows, sc
     <SimpleModal
         open={open}
         onClose={onClose}
-        maxWidth="sm"
+        maxWidth="md"
     >
         <Grid container spacing={1}>
             <Grid container spacing={1} item xs={12}>

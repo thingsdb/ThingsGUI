@@ -30,7 +30,7 @@ AddClosure.defaultProps = {
 
 AddClosure.propTypes = {
     identifier: PropTypes.string,
-    init: PropTypes.string,
+    init: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
 };
 
 export default AddClosure;

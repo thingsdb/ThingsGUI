@@ -12,13 +12,13 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import AddProperty from './AddProperty';
-import {CollectionActions} from '../../../../Stores';
+import {AddDialogTAG} from '../../../../constants';
 import {ArrayLayout, ErrorMsg, SimpleModal} from '../../../Util';
-import {AddTypeDialogTAG} from '../../../../constants';
+import {CollectionActions} from '../../../../Stores';
+import {EditProvider} from '../Context';
+import AddProperty from './AddProperty';
 
-
-const tag = AddTypeDialogTAG;
+const tag = AddDialogTAG;
 
 const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) => {
 
@@ -27,8 +27,9 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
         name: '',
         error: '',
         properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
+        blob: {}
     });
-    const {queryString, name, error, properties} = state;
+    const {queryString, name, error, properties, blob} = state;
 
 
     React.useEffect(() => {
@@ -37,13 +38,14 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
             name: '',
             error: '',
             properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
+            blob: {}
         });
     },
     [open],
     );
 
     React.useEffect(() => { // keep this useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-        setState({...state, queryString: `set_${category}("${name}", {${properties.map(v=>`${v.propertyName}: ${category=='type'?`'${v.propertyType}'`:`${/^[0-9]*$/gm.test(v.propertyVal)?`${v.propertyVal}`:`'${v.propertyVal}'`}`}`)}})`});
+        setState({...state, queryString: `set_${category}("${name}", {${properties.map(v=>`${v.propertyName}: ${category=='type'?`'${v.propertyType}'`:`${v.propertyVal}`}`)}})`});
     },
     [name, JSON.stringify(properties)], // TODO STRING
     );
@@ -53,11 +55,11 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
         setState({...state, name: value});
     };
 
-    const handleChangeProperty = (index) => (property) => {
+    const handleChangeProperty = (index) => (property, blob) => {
         setState(prevState => {
             let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
             update.splice(index, 1, property);
-            return {...prevState, properties: update};
+            return {...prevState, properties: update, blob: {...prevState.blob, ...blob}};
         });
     };
 
@@ -69,26 +71,39 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
         });
     };
 
-
     const handleClickOk = () => {
-        CollectionActions.rawQuery(
-            scope,
-            queryString,
-            tag,
-            (_data) => {
-                getInfo(scope, tag);
-                onClose();
-            }
-        );
+        const b = Object.keys(blob || {}).reduce((res, k) => {if(queryString.includes(k)){res[k]=blob[k];} return res;},{});
+        if (Object.keys(b).length) {
+            CollectionActions.blob(
+                scope,
+                queryString,
+                null,
+                b,
+                tag,
+                () => {
+                    getInfo(scope, tag);
+                    onClose();
+                }
+            );
+        } else {
+            CollectionActions.rawQuery(
+                scope,
+                queryString,
+                tag,
+                (_data) => {
+                    getInfo(scope, tag);
+                    onClose();
+                }
+            );
+        }
     };
-
 
     return (
         <SimpleModal
             open={open}
             onClose={onClose}
             onOk={handleClickOk}
-            maxWidth="sm"
+            maxWidth="md"
             disableOk={Boolean(error)}
         >
             <Grid container spacing={1}>
@@ -155,8 +170,11 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
                         <ListItem>
                             <ArrayLayout
                                 child={(i) => (
-                                    <AddProperty cb={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}} hasType={category=='type'} hasInitVal={category=='enum'} />
+                                    <EditProvider>
+                                        <AddProperty category={category} cb={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}} hasType={category=='type'} hasInitVal={category=='enum'} scope={scope} />
+                                    </EditProvider>
                                 )}
+                                fullWidth={category=='enum'}
                                 onRemove={handleRemove}
                             />
                         </ListItem>

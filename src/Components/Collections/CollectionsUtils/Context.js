@@ -77,7 +77,6 @@ const reducer = (state, action) => {
 
 const EditProvider = ({ children }) => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
-    console.log('hi provider', state)
     return (
         <StoreContext.Provider value={{ state, dispatch }}>
             {children}

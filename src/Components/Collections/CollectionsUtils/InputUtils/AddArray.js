@@ -24,13 +24,6 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
     const [editState, dispatch] = useEdit();
     const {array, val, blob} = editState;
 
-    // React.useEffect(() => {
-    //     // EditActions.update(dispatch, {array: [], blob: {}});
-    //     console.log(val)
-    // },
-    // [isSet],
-    // );
-
     React.useEffect(() => {
         setDataType(childTypes[0]||dataTypes[0]);
     },
@@ -61,7 +54,6 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
     const handleAdd = () => {
         const contentTypeChecked = typeControls(dataType, val);
         EditActions.addToArr(dispatch, contentTypeChecked);
-        // EditActions.updateVal(dispatch, '');
     };
 
     const handleClick = (index, item) => () => {

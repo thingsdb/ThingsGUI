@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 
 import {EditActions, useEdit} from '../../CollectionsUtils';
 
-const TypeInit = ({child, customTypes, dataTypes, cb, input}) => {
+const TypeInit = ({type, customTypes, dataTypes, cb, input}) => {
     const dispatch = useEdit()[1];
 
     const handleOnChangeType = ({target}) => {
@@ -22,6 +22,7 @@ const TypeInit = ({child, customTypes, dataTypes, cb, input}) => {
 
     return(
         <TextField
+            fullWidth
             margin="dense"
             autoFocus
             name="dataType"
@@ -32,7 +33,7 @@ const TypeInit = ({child, customTypes, dataTypes, cb, input}) => {
             SelectProps={{native: true}}
         >
             {dataTypes.map((d, i) => (
-                <option key={i} value={d} disabled={child.type=='set'&&!(d=='thing'||Boolean(customTypes.find(c=>c.name==d)))} >
+                <option key={i} value={d} disabled={type=='set'&&!(d=='thing'||Boolean(customTypes.find(c=>c.name==d)))} >
                     {d}
                 </option>
             ))}
@@ -44,12 +45,7 @@ const TypeInit = ({child, customTypes, dataTypes, cb, input}) => {
 TypeInit.propTypes = {
     cb: PropTypes.func.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
-    child: PropTypes.shape({
-        id: PropTypes.number,
-        index: PropTypes.number,
-        name: PropTypes.string,
-        type: PropTypes.string,
-    }).isRequired,
+    type: PropTypes.string.isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     input: PropTypes.string.isRequired,
 };

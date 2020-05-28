@@ -15,7 +15,7 @@ const AddEnum = ({enum_, enums, identifier, init}) => {
     React.useEffect(()=>{
         const en = (enums||[]).find(e=>e.name==enum_);
         if (en) {
-            const e = init?en.members.find(i=> i[1]==init):en.members[0];
+            const e = init ? init.constructor===Object ? en.members.find(i=> i[1]['#']==init['#']) : en.members.find(i=> i[1]==init)||en.members[0] : en.members[0];
             setEnumMem(e[0]);
             EditActions.updateVal(dispatch, `${enum_}{${e[0]}}`, identifier);
         }
@@ -60,7 +60,7 @@ AddEnum.propTypes = {
     enum_: PropTypes.string.isRequired,
     enums: PropTypes.arrayOf(PropTypes.object).isRequired,
     identifier: PropTypes.string,
-    init: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    init: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
 };
 
 export default AddEnum;
