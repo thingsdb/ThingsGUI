@@ -177,6 +177,7 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
                     </React.Fragment>
                 }
                 onRefresh={onRefresh}
+                unmountOnExit
             />
             <SimpleModal
                 open={Boolean(deleteItem)}

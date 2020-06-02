@@ -21,15 +21,21 @@ const useStyles = makeStyles(theme => ({
 
 const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
     const classes = useStyles();
+
+    const pattern = "(?<=[{\\[,]|^)" + name + "(?=[}\\],?]|$)";
+    const re= new RegExp(pattern)
     const u = customTypes[scope]?customTypes[scope].filter(i=>
-        `${i.fields},`.includes(`,${name},`) ||
-        `${i.fields}`.includes(`,${name},`) ||
-        `${i.fields}`.includes(`[${name}]`) ||
-        `${i.fields}`.includes(`{${name}}`) ||
-        `${i.fields}`.includes(`,${name}?`) ||
-        `${i.fields}`.includes(`[${name}?]`) ||
-        `${i.fields}`.includes(`{${name}?}`)
+
+        re.test(`${i.fields}`)
+        // `${i.fields},`.includes(`,${name},`) ||
+        // `${i.fields}`.includes(`,${name},`) ||
+        // `${i.fields}`.includes(`[${name}]`) ||
+        // `${i.fields}`.includes(`{${name}}`) ||
+        // `${i.fields}`.includes(`,${name}?`) ||
+        // `${i.fields}`.includes(`[${name}?]`) ||
+        // `${i.fields}`.includes(`{${name}?}`)
     ):[];
+    console.log(customTypes[scope], name)
 
     const handleChange = (name, category) => () => {
         onChangeItem(name, category);

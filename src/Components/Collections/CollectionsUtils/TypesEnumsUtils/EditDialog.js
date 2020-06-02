@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable no-unused-vars */
 import Button from '@material-ui/core/Button';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -29,9 +30,9 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     });
     const {queryString, property, blob} = state;
     const [action, setAction] = React.useState('');
+    const [index, setIndex] = React.useState(null);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
-
 
     React.useEffect(() => {
         setState({
@@ -52,13 +53,24 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
         setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'mod', '${p.propertyName}', ${category=='type'?`'${p.propertyType}'`:`${p.propertyVal}`})`});
     };
 
+    const handleQueryRen = (i) => (p, b) => {
+        console.log(i, rows)
+        setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'ren', '${rows[i]&&rows[i].propertyName}', '${p.propertyName}')`});
+    };
+
     const handleAdd = () => {
         setAction('add');
     };
 
-    const handleMod = (p) => () => {
-        handleQueryMod(p);
-        setAction('mod');
+    const handleMod = (h, p, i) => () => {
+        if (h.ky=="propertyName") {
+            setAction('ren');
+            setIndex(i);
+            handleQueryRen(i)(p, {});
+        } else {
+            handleQueryMod(p, {});
+            setAction('mod');
+        }
     };
 
     const handleDel = (p) => (e) => {
@@ -118,13 +130,10 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     const add = action=='add';
     const edit = action=='mod';
     const del = action=='del';
-
+    const ren = action=='ren';
 
     const buttons = (row) => (
         <React.Fragment>
-            <Button onClick={handleMod(row)} >
-                <EditIcon color="primary" />
-            </Button>
             <Button onClick={handleDel(row)} >
                 <DeleteIcon color="primary" />
             </Button>
@@ -132,13 +141,19 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
         </React.Fragment>
     );
 
+    const badgeButton = (h, row, i) => (
+        <ButtonBase onClick={handleMod(h, row, i)}>
+            <EditIcon color="primary" style={{fontSize: 20}} />
+        </ButtonBase>
+    );
+    console.log(index)
     return (
         <SimpleModal
             open={open}
             onClose={onClose}
-            onOk={add||edit?handleClickOk:null}
+            onOk={add||edit||ren?handleClickOk:null}
             maxWidth="md"
-            actionButtons={add||edit ? (
+            actionButtons={add||edit||ren ? (
                 <Button onClick={handleBack} color="primary">
                     {'Back'}
                 </Button>
@@ -184,15 +199,15 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                                 />
                             </ListItem>
                         </Collapse>
-                        <Collapse in={add || edit} timeout="auto" unmountOnExit>
+                        <Collapse in={add || edit || ren} timeout="auto" unmountOnExit>
                             <ListItem>
                                 <EditProvider>
-                                    <AddProperty cb={add?handleQueryAdd:handleQueryMod} category={category} dropdownItems={dataTypes} input={property} hasType={category=='type'} hasPropName={!edit} hasInitVal={add||category=='enum'} scope={scope} />
+                                    <AddProperty cb={add?handleQueryAdd:edit?handleQueryMod:handleQueryRen(index)} category={category} dropdownItems={dataTypes} input={property} hasType={category=='type'&&!ren} hasPropName={add||ren} hasInitVal={!ren&&(add||category=='enum')} scope={scope} />
                                 </EditProvider>
                             </ListItem>
                         </Collapse>
                         <Collapse in={overview||del} timeout="auto" unmountOnExit>
-                            <Overview category={category} buttons={buttons} item={item} link={link} onAdd={handleAdd} onChangeItem={onChangeItem} rows={rows} scope={scope} />
+                            <Overview category={category} badgeButton={badgeButton} buttons={buttons} item={item} link={link} onAdd={handleAdd} onChangeItem={onChangeItem} rows={rows} scope={scope} />
                         </Collapse>
                     </List>
                 </Grid>
