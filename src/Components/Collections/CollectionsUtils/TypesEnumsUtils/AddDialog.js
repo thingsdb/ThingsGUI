@@ -12,52 +12,54 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import AddTypeProperty from './AddTypeProperty';
-import {CollectionActions, TypeActions} from '../../../../Stores';
+import {AddDialogTAG} from '../../../../constants';
 import {ArrayLayout, ErrorMsg, SimpleModal} from '../../../Util';
-import {AddTypeDialogTAG} from '../../../../constants';
+import {CollectionActions} from '../../../../Stores';
+import {EditProvider} from '../Context';
+import AddProperty from './AddProperty';
 
+const tag = AddDialogTAG;
 
-const tag = AddTypeDialogTAG;
-
-const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
+const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) => {
 
     const [state, setState] = React.useState({
         queryString: '',
-        typeName: '',
+        name: '',
         error: '',
         properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
+        blob: {}
     });
-    const {queryString, typeName, error, properties} = state;
+    const {queryString, name, error, properties, blob} = state;
 
 
     React.useEffect(() => {
         setState({
             queryString: '',
-            typeName: '',
+            name: '',
             error: '',
             properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
+            blob: {}
         });
     },
     [open],
     );
 
     React.useEffect(() => { // keep this useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-        setState({...state, queryString: `set_type("${typeName}", {${properties.map(v=>`${v.propertyName}: '${v.propertyType}'`)}})`});
+        setState({...state, queryString: `set_${category}("${name}", {${properties.map(v=>`${v.propertyName}: ${category=='type'?`'${v.propertyType}'`:`${v.propertyVal}`}`)}})`});
     },
-    [typeName, JSON.stringify(properties)], // TODO STRING
+    [name, JSON.stringify(properties)], // TODO STRING
     );
 
     const handleChange = ({target}) => {
         const {value} = target;
-        setState({...state, typeName: value});
+        setState({...state, name: value});
     };
 
-    const handleChangeProperty = (index) => (property) => {
+    const handleChangeProperty = (index) => (property, blob) => {
         setState(prevState => {
             let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
             update.splice(index, 1, property);
-            return {...prevState, properties: update};
+            return {...prevState, properties: update, blob: {...prevState.blob, ...blob}};
         });
     };
 
@@ -69,36 +71,49 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
         });
     };
 
-
     const handleClickOk = () => {
-        CollectionActions.rawQuery(
-            scope,
-            queryString,
-            tag,
-            (_data) => {
-                TypeActions.getTypes(scope, tag);
-                onClose();
-            }
-        );
+        const b = Object.keys(blob || {}).reduce((res, k) => {if(queryString.includes(k)){res[k]=blob[k];} return res;},{});
+        if (Object.keys(b).length) {
+            CollectionActions.blob(
+                scope,
+                queryString,
+                null,
+                b,
+                tag,
+                () => {
+                    getInfo(scope, tag);
+                    onClose();
+                }
+            );
+        } else {
+            CollectionActions.rawQuery(
+                scope,
+                queryString,
+                tag,
+                (_data) => {
+                    getInfo(scope, tag);
+                    onClose();
+                }
+            );
+        }
     };
-
 
     return (
         <SimpleModal
             open={open}
             onClose={onClose}
             onOk={handleClickOk}
-            maxWidth="sm"
+            maxWidth="md"
             disableOk={Boolean(error)}
         >
             <Grid container spacing={1}>
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
-                            {'Customizing ThingDB type:'}
+                            {`Customizing ThingDB ${category}:`}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {'Add new type'}
+                            {`Add new ${category}`}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -133,10 +148,10 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
                         </Collapse>
                         <ListItem>
                             <TextField
-                                name="typeName"
+                                name="name"
                                 label="Name"
                                 type="text"
-                                value={typeName}
+                                value={name}
                                 spellCheck={false}
                                 onChange={handleChange}
                                 fullWidth
@@ -146,8 +161,8 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
                             <ListItemText
                                 primary="Add properties"
                                 secondary={
-                                    <Link target="_blank" href="https://docs.thingsdb.net/v0/data-types/type/">
-                                        {'https://docs.thingsdb.net/v0/data-types/type/'}
+                                    <Link target="_blank" href={link}>
+                                        {link}
                                     </Link>
                                 }
                             />
@@ -155,12 +170,11 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
                         <ListItem>
                             <ArrayLayout
                                 child={(i) => (
-                                    <AddTypeProperty
-                                        cb={handleChangeProperty(i)}
-                                        dropdownItems={dataTypes}
-                                        input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}}
-                                    />
+                                    <EditProvider>
+                                        <AddProperty category={category} cb={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}} hasType={category=='type'} hasInitVal={category=='enum'} scope={scope} />
+                                    </EditProvider>
                                 )}
+                                fullWidth={category=='enum'}
                                 onRemove={handleRemove}
                             />
                         </ListItem>
@@ -172,11 +186,21 @@ const AddTypeDialog = ({open, onClose, dataTypes, scope}) => {
 };
 
 
-AddTypeDialog.propTypes = {
-    open: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    scope: PropTypes.string.isRequired,
+AddDialog.defaultProps = {
+    dataTypes: [],
+    open: false,
 };
 
-export default AddTypeDialog;
+
+AddDialog.propTypes = {
+    dataTypes: PropTypes.arrayOf(PropTypes.string),
+    category: PropTypes.string.isRequired,
+    getInfo: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool,
+    scope: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+};
+
+export default AddDialog;
+

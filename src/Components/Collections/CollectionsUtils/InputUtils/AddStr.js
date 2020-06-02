@@ -1,13 +1,18 @@
 /*eslint-disable react/jsx-props-no-spreading*/
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
 import {EditActions, useEdit} from '../Context';
 
-const AddStr = ({identifier, ...props}) => {
+const AddStr = ({identifier, init, ...props}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
+
+    React.useEffect(()=>{
+        EditActions.updateVal(dispatch, `'${init}'`, identifier);
+    }, []);
 
     const handleOnChange = ({target}) => {
         const {value} = target;
@@ -32,10 +37,12 @@ const AddStr = ({identifier, ...props}) => {
 
 AddStr.defaultProps = {
     identifier: null,
+    init:'',
 },
 
 AddStr.propTypes = {
     identifier: PropTypes.string,
+    init: PropTypes.string,
 };
 
 export default AddStr;

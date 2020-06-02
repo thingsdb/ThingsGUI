@@ -1,11 +1,13 @@
 import React from 'react';
 import {withVlow} from 'vlow';
 
-import {CollectionStore, EventActions, EventStore, NodesStore, ThingsdbStore, TypeStore, ProcedureStore} from '../../Stores';
+import {CollectionStore, EnumStore, EventActions, EventStore, NodesStore, ThingsdbStore, TypeStore, ProcedureStore} from '../../Stores';
 
 // separate function to prevent unnecessary rendering of <Root /> and children.
 const withStores = withVlow([{
     store: CollectionStore,
+}, {
+    store: EnumStore,
 }, {
     store: EventStore,
 }, {

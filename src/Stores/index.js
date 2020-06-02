@@ -1,5 +1,6 @@
 import {ApplicationActions, ApplicationStore} from './ApplicationStore';
 import {EditorActions, EditorStore} from './EditorStore';
+import {EnumActions, EnumStore} from './EnumStore';
 import {EventActions, EventStore} from './BaseStore';
 import {CollectionActions, CollectionStore} from './CollectionStore';
 import {ErrorActions, ErrorStore} from './ErrorStore';
@@ -12,6 +13,7 @@ import {TypeActions, TypeStore} from './TypeStore';
 export {
     ApplicationActions, ApplicationStore,
     EditorActions, EditorStore,
+    EnumActions, EnumStore,
     EventActions, EventStore,
     CollectionActions, CollectionStore,
     ErrorActions, ErrorStore,

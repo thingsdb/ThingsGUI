@@ -11,7 +11,7 @@ const EditActions = {
     },
     updateVal: (dispatch, data, identifier=null) => {
         dispatch((state) => {
-            return identifier? {val: {...state.val, [identifier]: data}} : {...state, val: data};
+            return identifier? {val: {...state.val, [identifier]: data}} : {val: data};
         });
     },
     deleteBlob: (dispatch, data) => {

@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 
 import {EditActions, useEdit} from '../../CollectionsUtils/Context';
 
-const BuildQueryString = ({child, customTypes, parent}) => {
+const BuildQueryString = ({child, customTypes, enums, parent}) => {
     const [editState, dispatch] = useEdit();
     const {val, query} = editState;
 
@@ -35,7 +35,7 @@ const BuildQueryString = ({child, customTypes, parent}) => {
         return parentType==='list' ? (childIndex===null ? `#${parentId}.${parentName}.push(${value});` : `#${parentId}.${parentName}[${childIndex}] = ${value};`)
             : parentType==='thing' ? `#${parentId}.${childName} = ${value};`
                 : parentType==='set' ? `#${parentId}.${parentName}.add(${value});`
-                    : [...customTypes.map(c=>c.name)].includes(parentType) ? `#${parentId}.${childName} = ${value};`
+                    : [...customTypes.map(c=>c.name), ...enums.map(e=>e.name)].includes(parentType) ? `#${parentId}.${childName} = ${value};`
                         : '';
     };
 
@@ -67,6 +67,7 @@ const BuildQueryString = ({child, customTypes, parent}) => {
 BuildQueryString.propTypes = {
     child: PropTypes.object.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
+    enums: PropTypes.arrayOf(PropTypes.object).isRequired,
     parent: PropTypes.object.isRequired,
 };
 

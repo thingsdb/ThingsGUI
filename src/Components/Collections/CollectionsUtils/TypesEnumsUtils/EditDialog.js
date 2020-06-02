@@ -12,20 +12,22 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {CollectionActions, ErrorActions, TypeActions} from '../../../../Stores';
-import {EditTypeDialogTAG} from '../../../../constants';
+import {CollectionActions, ErrorActions} from '../../../../Stores';
+import {EditDialogTAG} from '../../../../constants';
 import {ErrorMsg, SimpleModal, WarnPopover} from '../../../Util';
-import AddTypeProperty from './AddTypeProperty';
-import OverviewTypes from './OverviewTypes';
+import {EditProvider} from '../Context';
+import AddProperty from './AddProperty';
+import Overview from './Overview';
 
-const tag = EditTypeDialogTAG;
+const tag = EditDialogTAG;
 
-const EditTypeDialog = ({open, onClose, customType, customTypes, dataTypes, scope, onChangeType}) => {
+const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onClose, open, rows, scope}) => {
     const [state, setState] = React.useState({
         queryString: '',
-        property: {propertyName: '', propertyType: '', propertyTypeObject:null, propertyVal: ''},
+        property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''},
+        blob: {},
     });
-    const {queryString, property} = state;
+    const {queryString, property, blob} = state;
     const [action, setAction] = React.useState('');
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -34,63 +36,78 @@ const EditTypeDialog = ({open, onClose, customType, customTypes, dataTypes, scop
     React.useEffect(() => {
         setState({
             queryString: '',
-            property: {propertyName: '', propertyType: '', propertyTypeObject:null, propertyVal: ''},
+            property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''},
+            blob: {},
         });
         setAction('');
     },
     [open],
     );
 
-    const handleQueryAdd = (p) => {
-        const q = p.propertyType == 'str'||p.propertyType == 'utf8'||p.propertyType == 'raw' ?
-            `mod_type('${customType.name}', 'add', '${p.propertyName}', '${p.propertyType}', '${p.propertyVal}')`
-            : `mod_type('${customType.name}', 'add', '${p.propertyName}', '${p.propertyType}', ${p.propertyVal})`;
-        setState({...state, property: p, queryString: q});
+    const handleQueryAdd = (p, b) => {
+        setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'add', '${p.propertyName}', ${category=='type'?`'${p.propertyType}',`:''} ${p.propertyVal})`});
     };
 
-    const handleQueryMod = (p) => {
-        setState({...state, property: p, queryString: `mod_type('${customType.name}', 'mod', '${property.propertyName}', '${p.propertyType}')`});
+    const handleQueryMod = (p, b) => {
+        setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'mod', '${p.propertyName}', ${category=='type'?`'${p.propertyType}'`:`${p.propertyVal}`})`});
     };
 
     const handleAdd = () => {
         setAction('add');
     };
 
-    const handleMod = (i) => () => {
-        setState({property: i, queryString: `mod_type('${customType.name}', 'mod', '${i.propertyName}', '${i.propertyType}')`});
+    const handleMod = (p) => () => {
+        handleQueryMod(p);
         setAction('mod');
     };
 
-    const handleDel = (i) => (e) => {
-        setState({property: i, queryString: `mod_type('${customType.name}', 'del', '${i.propertyName}')`});
+    const handleDel = (p) => (e) => {
+        setState({...state, property: p, queryString: `mod_${category}('${item.name}', 'del', '${p.propertyName}')`});
         setAnchorEl(e.currentTarget);
         setAction('del');
     };
 
     const handleCloseDelete = () => {
-        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: ''});
+        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: '', blob: {}});
         setAnchorEl(null);
     };
 
     const handleBack = () => {
         handleCloseError();
-        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: ''});
+        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: '', blob: {},});
         setAction('');
     };
 
     const handleClickOk = () => {
         handleCloseError();
-        CollectionActions.rawQuery(
-            scope,
-            queryString,
-            tag,
-            (_data) => {
-                TypeActions.getTypes(scope, tag);
-                setAction('');
-                setAnchorEl(null);
-                setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: ''});
-            }
-        );
+        const b = Object.keys(blob || {}).reduce((res, k) => {if(queryString.includes(k)){res[k]=blob[k];} return res;},{});
+        if (Object.keys(b).length) {
+            CollectionActions.blob(
+                scope,
+                queryString,
+                null,
+                b,
+                tag,
+                () => {
+                    getInfo(scope, tag);
+                    setAction('');
+                    setAnchorEl(null);
+                    setState({property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''}, queryString: ''});
+                }
+            );
+        } else {
+            CollectionActions.rawQuery(
+                scope,
+                queryString,
+                tag,
+                (_data) => {
+                    getInfo(scope, tag);
+                    setAction('');
+                    setAnchorEl(null);
+                    setState({property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''}, queryString: ''});
+                }
+            );
+        }
     };
 
     const handleCloseError = () => {
@@ -101,6 +118,7 @@ const EditTypeDialog = ({open, onClose, customType, customTypes, dataTypes, scop
     const add = action=='add';
     const edit = action=='mod';
     const del = action=='del';
+
 
     const buttons = (row) => (
         <React.Fragment>
@@ -119,7 +137,7 @@ const EditTypeDialog = ({open, onClose, customType, customTypes, dataTypes, scop
             open={open}
             onClose={onClose}
             onOk={add||edit?handleClickOk:null}
-            maxWidth="sm"
+            maxWidth="md"
             actionButtons={add||edit ? (
                 <Button onClick={handleBack} color="primary">
                     {'Back'}
@@ -130,10 +148,10 @@ const EditTypeDialog = ({open, onClose, customType, customTypes, dataTypes, scop
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
-                            {'Customizing ThingDB type:'}
+                            {`Customizing ThingDB ${category}:`}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {customType.name||'Add new type'}
+                            {item.name||`Add new ${category}`}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -168,11 +186,13 @@ const EditTypeDialog = ({open, onClose, customType, customTypes, dataTypes, scop
                         </Collapse>
                         <Collapse in={add || edit} timeout="auto" unmountOnExit>
                             <ListItem>
-                                <AddTypeProperty cb={add?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={property} hasPropName={!edit} hasInitVal={add} />
+                                <EditProvider>
+                                    <AddProperty cb={add?handleQueryAdd:handleQueryMod} category={category} dropdownItems={dataTypes} input={property} hasType={category=='type'} hasPropName={!edit} hasInitVal={add||category=='enum'} scope={scope} />
+                                </EditProvider>
                             </ListItem>
                         </Collapse>
                         <Collapse in={overview||del} timeout="auto" unmountOnExit>
-                            <OverviewTypes buttons={buttons} customType={customType} customTypes={customTypes} onAdd={handleAdd} onChangeType={onChangeType} />
+                            <Overview category={category} buttons={buttons} item={item} link={link} onAdd={handleAdd} onChangeItem={onChangeItem} rows={rows} scope={scope} />
                         </Collapse>
                     </List>
                 </Grid>
@@ -181,18 +201,24 @@ const EditTypeDialog = ({open, onClose, customType, customTypes, dataTypes, scop
     );
 };
 
-EditTypeDialog.defaultProps = {
-    customType: {},
+EditDialog.defaultProps = {
+    item: {},
+    dataTypes: [],
+    onChangeItem: ()=>null,
+    open: false,
 };
 
-EditTypeDialog.propTypes = {
-    open: PropTypes.bool.isRequired,
+EditDialog.propTypes = {
+    dataTypes: PropTypes.arrayOf(PropTypes.string),
+    category: PropTypes.string.isRequired,
+    getInfo: PropTypes.func.isRequired,
+    item: PropTypes.object,
+    link: PropTypes.string.isRequired,
+    onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
-    onChangeType: PropTypes.func.isRequired,
-    customType: PropTypes.object,
-    customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
-    dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    open: PropTypes.bool,
+    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     scope: PropTypes.string.isRequired,
 };
 
-export default EditTypeDialog;
+export default EditDialog;

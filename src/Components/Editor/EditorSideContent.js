@@ -5,24 +5,24 @@ import React from 'react';
 import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import {ProcedureActions, TypeActions} from '../../Stores';
+import {EnumActions, ProcedureActions, TypeActions} from '../../Stores';
 import {ChipsCard, WarnPopover} from '../Util';
 import {ViewProcedureDialog} from '../Procedures/Dialogs';
-import {ViewTypeDialog} from '../Collections/Types/Dialogs';
+import {EnumTypeChips} from '../Collections/CollectionsUtils/TypesEnumsUtils';
 
 const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
     const [procedures, setProcedures] = React.useState([]);
-    const [customTypes, setCustomTypes] = React.useState([]);
-
-    const [view, setView] = React.useState({
-        procedure: {
-            open: false,
-            name: '',
-        },
-        types: {
-            open: false,
-            name: '',
-        }
+    const [viewProcedure, setViewProcedure] = React.useState({
+        open: false,
+        name: '',
+    });
+    const [viewEnum, setViewEnum] = React.useState({
+        open: false,
+        name: '',
+    });
+    const [viewType, setViewType] = React.useState({
+        open: false,
+        name: '',
     });
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,9 +32,6 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         handleGetAdditionals();
     }, [scope]);
 
-    const handleTypes = (t) => {
-        setCustomTypes(t);
-    };
     const handleProcedures = (p) => {
         setProcedures(p);
     };
@@ -43,16 +40,11 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         if (scope&&!scope.includes('@node')) {
             ProcedureActions.getProcedures(scope, tag, handleProcedures);
         }
-        if (scope&&scope.includes('collection')) {
-            TypeActions.getTypes(scope, tag, handleTypes);
-        }
     };
 
     const handleRefreshProcedures = () => ProcedureActions.getProcedures(scope, tag, handleProcedures);
-    const handleRefreshTypes = () => TypeActions.getTypes(scope, tag, handleTypes);
 
-    const customTypeNames = [...customTypes.map(c=>c.name)];
-    const makeTypeInstanceInit = (n, circularRefFlag, target) => {
+    const makeTypeInstanceInit = (n, customTypeNames, customTypes, circularRefFlag, target) => {
         if (customTypeNames.includes(n)) {
             if (circularRefFlag[n]) {
                 setAnchorEl(target);
@@ -60,10 +52,13 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                 return '';
             } else {
                 circularRefFlag[n] = true;
-                return `${n}{${customTypes.find(i=>i.name==n).fields.map(c =>`${c[0]}: ${makeTypeInstanceInit(c[1], {...circularRefFlag}, target)}`)}}`;
+                return `${n}{${customTypes.find(i=>i.name==n).fields.map(c =>`${c[0]}: ${makeTypeInstanceInit(c[1], customTypeNames, customTypes, {...circularRefFlag}, target)}`)}}`;
             }
         }
         return `<${n}>`;
+    };
+    const makeEnumInstanceInit = (n)  => {
+        return `${n}{...}`;
     };
 
     const handleClickDeleteProcedure = (n, cb, tag) => {
@@ -77,57 +72,56 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
             }
         );
     };
-    const handleClickDeleteTypes = (n, cb, tag) => {
-        TypeActions.deleteType(
-            scope,
-            n,
-            tag,
-            (t) => {
-                cb();
-                handleTypes(t);
-            }
-        );
-    };
 
     const handleClickRunProcedure = (n) => () => {
         let p = procedures.find(i=>i.name==n);
         const i = p.with_side_effects ? `wse(run('${n}',${p.arguments.map(a=>` <${a}>` )}))` : `run('${n}',${p.arguments.map(a=>` <${a}>` )})`;
         onSetQueryInput(i);
     };
-    const handleClickRunTypes = (n) => ({target}) => {
-        const circularRefFlag = {};
-        const i = makeTypeInstanceInit(n, circularRefFlag, target);
-        onSetQueryInput(i);
-    };
+
     const handleClickAddProcedure = () => {
         onSetQueryInput('new_procedure("...", ...)');
-    };
-    const handleClickAddTypes = () => {
-        onSetQueryInput('set_type("...", {...})');
     };
 
     const handleCloseWarn = () => {
         setAnchorEl(null);
     };
 
-    const handleChangeType = (n) => {
-        setView({...view, types: {open: true, name: n}});
-    };
-
     const handleClickViewProcedure = (n) => () => {
-        setView({...view, procedure: {open: true, name: n}});
+        setViewProcedure({open: true, name: n});
     };
 
     const handleCloseViewProcedure = () => {
-        setView({...view, procedure: {...view.procedure, open: false, }});
+        setViewProcedure({open: false, name: ''});
     };
 
-    const handleClickViewTypes = (n) => () => {
-        setView({...view, types: {open: true, name: n}});
+    const handleChange = (a, c, n) => {
+        switch(a){
+        case 'view':
+            if (c=='type') {
+                setViewEnum({open: false, name: ''});
+                setViewType({open: true, name: n});
+            } else {
+                setViewType({open: false, name: ''});
+                setViewEnum({open: true, name: n});
+            }
+            break;
+        case 'add':
+            if (c=='type') {
+                onSetQueryInput('set_type("...", {...})');
+            } else {
+                onSetQueryInput('set_enum("...", {...})');
+            }
+            break;
+        }
     };
 
-    const handleCloseViewTypes = () => {
-        setView({...view, types: {...view.types, open: false}});
+    const handleClose = (a, c) => {
+        if (c=='type') {
+            setViewType({open: false, name: ''});
+        } else {
+            setViewEnum({open: false, name: ''});
+        }
     };
 
     const buttons = (fnView, fnRun) => (n)=>([
@@ -156,22 +150,41 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                         title="procedures"
                         warnExpression={i=>i.with_side_effects}
                     />
-                    <ViewProcedureDialog open={view.procedure.open} onClose={handleCloseViewProcedure} procedure={view.procedure.name?procedures.find(i=>i.name==view.procedure.name):{}} />
+                    <ViewProcedureDialog open={viewProcedure.open} onClose={handleCloseViewProcedure} procedure={viewProcedure.name?procedures.find(i=>i.name==viewProcedure.name):{}} />
                 </Grid>
             )}
             {scope&&scope.includes('@collection') ? (
-                <Grid item xs={12}>
-                    <ChipsCard
-                        buttons={buttons(handleClickViewTypes, handleClickRunTypes)}
-                        expand={false}
-                        items={customTypes}
-                        onAdd={handleClickAddTypes}
-                        onRefresh={handleRefreshTypes}
-                        onDelete={handleClickDeleteTypes}
-                        title="custom types"
+                <React.Fragment>
+                    <EnumTypeChips
+                        buttonsView={{add: false, edit: false, run: true, view: true}}
+                        categoryInit="type"
+                        fields="fields"
+                        onChange={handleChange}
+                        onClose={handleClose}
+                        onDelete={TypeActions.deleteType}
+                        onInfo={TypeActions.getTypes}
+                        onMakeInstanceInit={makeTypeInstanceInit}
+                        onSetQueryInput={onSetQueryInput}
+                        scope={scope}
+                        tag={tag}
+                        view={{view: viewType.open, name: viewType.name}}
                     />
-                    <ViewTypeDialog open={view.types.open} onClose={handleCloseViewTypes} onChangeType={handleChangeType} customType={view.types.name&&customTypes?customTypes.find(i=>i.name==view.types.name):{}} customTypes={customTypes||[]} />
-                </Grid>
+                    <EnumTypeChips
+                        buttonsView={{add: false, edit: false, run: true, view: true}}
+                        categoryInit="enum"
+                        fields="members"
+                        noLink
+                        onChange={handleChange}
+                        onClose={handleClose}
+                        onDelete={EnumActions.deleteEnum}
+                        onInfo={EnumActions.getEnums}
+                        onMakeInstanceInit={makeEnumInstanceInit}
+                        onSetQueryInput={onSetQueryInput}
+                        scope={scope}
+                        tag={tag}
+                        view={{view: viewEnum.open, name: viewEnum.name}}
+                    />
+                </React.Fragment>
             ): null}
         </React.Fragment>
 

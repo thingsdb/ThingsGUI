@@ -15,32 +15,27 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AddError = ({identifier}) => {
+const AddError = ({identifier, init}) => {
     const classes = useStyles();
+    const dispatch = useEdit()[1];
     const [state, setState] = React.useState({
         errCode:'',
         errMsg:'',
     });
     const {errCode, errMsg} = state;
 
-    const [editState, dispatch] = useEdit();
-    const {val} = editState;
-    React.useEffect(() => {
-        const v = val[identifier]||(val.constructor === Object?'':val);
-        if(`err(${errCode}, '${errMsg}')`!=v) {
-            let commaIndex = v.indexOf(',', 0);
-            let code = v.slice(4, commaIndex);
-            let secondAppIndex = v.indexOf('\'', commaIndex+2);
-            let msg = v.slice(commaIndex+2, secondAppIndex);
+    React.useEffect(()=>{
+        EditActions.updateVal(dispatch, init, identifier);
+        let commaIndex = init.indexOf(',', 0);
+        let code = init.slice(4, commaIndex);
+        let secondAppIndex = init.indexOf('\'', commaIndex);
+        let msg = init.slice(secondAppIndex+1, -2);
 
-            setState({
-                errCode:code,
-                errMsg:msg,
-            });
-        }
-    },
-    [val],
-    );
+        setState({
+            errCode:code,
+            errMsg:msg,
+        });
+    }, []);
 
     const handleOnChangeCode = ({target}) => {
         const {value} = target;
@@ -105,10 +100,12 @@ const AddError = ({identifier}) => {
 
 AddError.defaultProps = {
     identifier: null,
+    init: '',
 },
 
 AddError.propTypes = {
-    identifier: PropTypes.string
+    identifier: PropTypes.string,
+    init: PropTypes.string,
 };
 
 export default AddError;

@@ -16,26 +16,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const single = [
-    'bool',
-    'bytes',
-    'float',
-    'int',
-    'nil',
-    'str',
-];
 
-const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parentDispatch}) => {
+const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier, parentDispatch}) => {
     const classes = useStyles();
     const [dataType, setDataType] = React.useState(childTypes[0]||dataTypes[0]||'str');
 
     const [editState, dispatch] = useEdit();
     const {array, val, blob} = editState;
-
-    React.useEffect(() => {
-        isSet?EditActions.update(dispatch, {array: []}):EditActions.update(dispatch, {val: '', array: [], blob: {}});
-
-    },[isSet]);
 
     React.useEffect(() => {
         setDataType(childTypes[0]||dataTypes[0]);
@@ -67,7 +54,6 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
     const handleAdd = () => {
         const contentTypeChecked = typeControls(dataType, val);
         EditActions.addToArr(dispatch, contentTypeChecked);
-        EditActions.updateVal(dispatch, '');
     };
 
     const handleClick = (index, item) => () => {
@@ -76,7 +62,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
     };
 
     return (
-        <Grid container>
+        <Grid container item xs={12}>
             <ListHeader onAdd={handleAdd} onDelete={handleClick} items={array} groupSign="[">
                 <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="flex-end" >
                     {childTypes.length == 1 ? null : (
@@ -99,16 +85,14 @@ const AddArray = ({childTypes, customTypes, dataTypes, isSet, identifier, parent
                             </TextField>
                         </Grid>
                     )}
-                    <Grid item xs={single.includes(dataType)?10:12}>
-
-                        <InputField
-                            customTypes={customTypes}
-                            dataType={dataType}
-                            dataTypes={dataTypes}
-                            variant="standard"
-                            label="Value"
-                        />
-                    </Grid>
+                    <InputField
+                        customTypes={customTypes}
+                        dataType={dataType}
+                        dataTypes={dataTypes}
+                        enums={enums}
+                        variant="standard"
+                        label="Value"
+                    />
                 </Grid>
             </ListHeader>
         </Grid>
@@ -125,6 +109,7 @@ AddArray.propTypes = {
     childTypes: PropTypes.arrayOf(PropTypes.string),
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    enums: PropTypes.arrayOf(PropTypes.object).isRequired,
     isSet: PropTypes.bool,
     identifier: PropTypes.string,
     parentDispatch: PropTypes.func.isRequired,

@@ -1,4 +1,5 @@
 /*eslint-disable react/jsx-props-no-spreading*/
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -7,10 +8,15 @@ import {EditActions, useEdit} from '../Context';
 
 const onlyInts = (str) => str.length == str.replace(/[^0-9]/g, '').length;
 
-const AddInt = ({identifier, ...props}) => {
-    const [error, setError] = React.useState('');
+const AddInt = ({identifier, init, ...props}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
+    const [error, setError] = React.useState('');
+
+    React.useEffect(()=>{
+        EditActions.updateVal(dispatch, init, identifier);
+    }, []);
+
     const errorTxt = (value) => {
         setError(onlyInts(value) ? '' : 'only integers');
     };
@@ -30,8 +36,6 @@ const AddInt = ({identifier, ...props}) => {
             value={v}
             spellCheck={false}
             onChange={handleOnChange}
-            multiline
-            rowsMax={10}
             helperText={error}
             error={Boolean(error)}
             {...props}
@@ -41,10 +45,12 @@ const AddInt = ({identifier, ...props}) => {
 
 AddInt.defaultProps = {
     identifier: null,
+    init:'',
 },
 
 AddInt.propTypes = {
     identifier: PropTypes.string,
+    init: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default AddInt;
