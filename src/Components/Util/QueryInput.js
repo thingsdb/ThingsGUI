@@ -22,6 +22,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         ...Object.keys(Language.procedures),
         ...Object.keys(Language.types.bytes),
         ...Object.keys(Language.types.closure),
+        ...Object.keys(Language.types.enum),
         ...Object.keys(Language.types.error),
         ...Object.keys(Language.types.list),
         ...Object.keys(Language.types.set),
@@ -215,6 +216,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
             suggestions.push(...[
                 ...Object.entries(Language.types.bytes),
                 ...Object.entries(Language.types.closure),
+                ...Object.entries(Language.types.enum),
                 ...Object.entries(Language.types.error),
                 ...Object.entries(Language.types.list),
                 ...Object.entries(Language.types.set),

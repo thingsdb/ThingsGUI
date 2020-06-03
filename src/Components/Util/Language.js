@@ -110,7 +110,7 @@ export default {
         'istuple': 'This function determines whether the value passed to this function is a immutable array or not. At least nested arrays are of kind tuple.',
         'isutf8': 'This function determines whether the value passed to this function is of type raw and contains valid utf8.',
         'list': 'Returns a new empty list or returns a list for a given set.',
-        'mode_enum': 'Modify an existing enumerator type',
+        'mod_enum': 'Modify an existing enumerator type',
         'mod_type': 'This function is used to modify an existing Type. A number of actions can be performed with this function.',
         'new': 'Creates a new instance of a defined Type.',
         'new_type': 'Creates a new Type. This function only creates a new type and does not allow you to specify any fields. With the set_type() function you can define the fields for the new type.',

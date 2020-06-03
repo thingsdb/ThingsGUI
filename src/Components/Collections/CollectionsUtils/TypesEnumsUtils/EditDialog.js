@@ -22,31 +22,37 @@ import Overview from './Overview';
 
 const tag = EditDialogTAG;
 
+const initState = {
+    blob: {},
+    property: {
+        propertyName: '',
+        propertyObject:null,
+        propertyType: '',
+        propertyVal: null
+    },
+    queryString: '',
+};
+
 const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onClose, open, rows, scope}) => {
-    const [state, setState] = React.useState({
-        queryString: '',
-        property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''},
-        blob: {},
-    });
+    const [state, setState] = React.useState(initState);
     const {queryString, property, blob} = state;
     const [action, setAction] = React.useState('');
     const [index, setIndex] = React.useState(null);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
+
+
     React.useEffect(() => {
-        setState({
-            queryString: '',
-            property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''},
-            blob: {},
-        });
+        setState(initState);
         setAction('');
     },
     [open],
     );
 
     const handleQueryAdd = (p, b) => {
-        setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'add', '${p.propertyName}', ${category=='type'?`'${p.propertyType}',`:''} ${p.propertyVal})`});
+        console.log(p.propertyVal)
+        setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'add', '${p.propertyName}'${category=='type'?`, '${p.propertyType}'`:''}${p.propertyVal?`, ${p.propertyVal}`:''})`});
     };
 
     const handleQueryMod = (p, b) => {
@@ -80,13 +86,13 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     };
 
     const handleCloseDelete = () => {
-        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: '', blob: {}});
+        setState(initState);
         setAnchorEl(null);
     };
 
     const handleBack = () => {
         handleCloseError();
-        setState({property: {propertyName: '', propertyType: '', propertyVal: ''}, queryString: '', blob: {},});
+        setState(initState);
         setAction('');
     };
 
@@ -104,7 +110,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                     getInfo(scope, tag);
                     setAction('');
                     setAnchorEl(null);
-                    setState({property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''}, queryString: ''});
+                    setState(initState);
                 }
             );
         } else {
@@ -116,7 +122,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                     getInfo(scope, tag);
                     setAction('');
                     setAnchorEl(null);
-                    setState({property: {propertyName: '', propertyType: '', propertyObject:null, propertyVal: ''}, queryString: ''});
+                    setState(initState);
                 }
             );
         }
@@ -202,7 +208,17 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                         <Collapse in={add || edit || ren} timeout="auto" unmountOnExit>
                             <ListItem>
                                 <EditProvider>
-                                    <AddProperty cb={add?handleQueryAdd:edit?handleQueryMod:handleQueryRen(index)} category={category} dropdownItems={dataTypes} input={property} hasType={category=='type'&&!ren} hasPropName={add||ren} hasInitVal={!ren&&(add||category=='enum')} scope={scope} />
+                                    <AddProperty
+                                        category={category}
+                                        cb={add?handleQueryAdd:edit?handleQueryMod:handleQueryRen(index)}
+                                        dropdownItems={dataTypes}
+                                        hasInitVal={add&&category=='type'}
+                                        hasPropName={add||ren}
+                                        hasType={category=='type'&&!ren}
+                                        hasVal={!ren&&category=='enum'}
+                                        input={property}
+                                        scope={scope}
+                                    />
                                 </EditProvider>
                             </ListItem>
                         </Collapse>

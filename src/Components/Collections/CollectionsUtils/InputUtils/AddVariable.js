@@ -45,10 +45,17 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
         EditActions.updateBlob(parentDispatch, s, blob);
     };
 
+    const handleRefresh = () => {
+        EditActions.update(dispatch, {
+            array:  [],
+        });
+        EditActions.updateVal(parentDispatch,'{}', identifier);
+    };
+
     return (
         variables&&(
-            <Grid container item xs={12}>
-                <ListHeader onAdd={handleAdd} items={array} groupSign="{">
+            <Grid item xs={12}>
+                <ListHeader open canCollapse={false} onAdd={handleAdd} onRefresh={handleRefresh} items={array} groupSign="{">
                     {( variables.map(v => (
                         <Grid key={v} className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
                             <Grid item xs={12}>

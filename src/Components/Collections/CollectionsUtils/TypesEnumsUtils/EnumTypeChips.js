@@ -6,7 +6,7 @@ import React from 'react';
 import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import {ChipsCard} from '../../../Util';
+import {ChipsCard, DownloadBlob} from '../../../Util';
 import {AddDialog, AddLink, EditDialog, ViewDialog} from '.';
 
 
@@ -108,12 +108,13 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
     const item = view.name&&items?items.find(i=>i.name==view.name):{};
     const rows = item[fields] ? item[fields].map(
         c=>{
-            const objectProof = c[1].constructor===Object?JSON.stringify(c[1]):c[1];
+            const isBlob = c[1].constructor===String&&c[1].includes('/download/tmp/thingsdb-cache');
+            const objectProof = !isBlob&&c[1].constructor===Object?JSON.stringify(c[1]):c[1];
             return({
                 propertyName: c[0],
                 propertyType: categoryInit=='type'?c[1]:'',
                 propertyVal: categoryInit=='type'?'':c[1],
-                propertyObject: noLink ? objectProof : <AddLink name={objectProof} scope={scope} onChange={view.view?handleChangeView:handleChangeEdit} />
+                propertyObject: isBlob? <DownloadBlob val={c[1]} isFab={false} /> : noLink ? objectProof : <AddLink name={objectProof} scope={scope} onChange={view.view?handleChangeView:handleChangeEdit} />
             });
         }
     ):[];

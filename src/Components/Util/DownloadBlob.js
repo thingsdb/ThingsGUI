@@ -12,7 +12,7 @@ import {CollectionActions} from '../../Stores/CollectionStore';
 
 
 
-const TreeBranch = ({val, isFab}) => {
+const DownloadBlob = ({val, isFab}) => {
     const [link, setLink] = React.useState('');
 
     React.useEffect(() => {
@@ -38,13 +38,13 @@ const TreeBranch = ({val, isFab}) => {
     );
 };
 
-TreeBranch.defaultProps = {
+DownloadBlob.defaultProps = {
     isFab: true,
 };
 
-TreeBranch.propTypes = {
+DownloadBlob.propTypes = {
     val: PropTypes.string.isRequired,
     isFab: PropTypes.bool,
 };
 
-export default TreeBranch;
+export default DownloadBlob;

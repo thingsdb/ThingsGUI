@@ -56,26 +56,35 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
         EditActions.addToArr(dispatch, contentTypeChecked);
     };
 
+    const handleRefresh = () => {
+        EditActions.update(dispatch, {
+            array:  [],
+        });
+        EditActions.updateVal(parentDispatch,'[]', identifier);
+    };
+
     const handleClick = (index, item) => () => {
         EditActions.deleteBlob(dispatch, item);
         EditActions.deleteFromArr(dispatch, index);
     };
 
     return (
-        <Grid container item xs={12}>
-            <ListHeader onAdd={handleAdd} onDelete={handleClick} items={array} groupSign="[">
-                <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="flex-end" >
+        <Grid item xs={12}>
+            <ListHeader canCollapse onAdd={handleAdd} onDelete={handleClick} onRefresh={handleRefresh} items={array} groupSign="[">
+                <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
                     {childTypes.length == 1 ? null : (
-                        <Grid item xs={2}>
+                        <Grid item xs={4}>
                             <TextField
                                 id="dataType"
                                 type="text"
                                 name="dataType"
+                                label="Data type"
                                 onChange={handleChange}
                                 value={dataType}
                                 variant="standard"
                                 select
                                 SelectProps={{native: true}}
+                                fullWidth
                             >
                                 {(childTypes.length?childTypes:dataTypes).map(p => (
                                     <option key={p} value={p}>

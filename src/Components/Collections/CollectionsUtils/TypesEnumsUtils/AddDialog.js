@@ -171,7 +171,14 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
                             <ArrayLayout
                                 child={(i) => (
                                     <EditProvider>
-                                        <AddProperty category={category} cb={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}} hasType={category=='type'} hasInitVal={category=='enum'} scope={scope} />
+                                        <AddProperty
+                                            category={category}
+                                            cb={handleChangeProperty(i)}
+                                            dropdownItems={dataTypes}
+                                            input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}}
+                                            hasType={category=='type'}
+                                            hasVal={category=='enum'}
+                                            scope={scope} />
                                     </EditProvider>
                                 )}
                                 fullWidth={category=='enum'}

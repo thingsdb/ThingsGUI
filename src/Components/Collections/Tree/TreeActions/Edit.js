@@ -6,7 +6,6 @@ import ListItem from '@material-ui/core/ListItem';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {InputField} from '../../CollectionsUtils';
-import {LocalErrorMsg} from '../../../Util';
 import BuildQueryString from './BuildQueryString';
 import PropInit from './PropInit';
 import TypeInit from './TypeInit';
@@ -41,37 +40,17 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
 
     const [newProperty, setNewProperty] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type);
-    const [warnDescription, setWarnDescription] = React.useState('');
-
 
     const handleOnChangeName = (p) => {
         setNewProperty(p);
     };
 
     const handleOnChangeType = (t) => {
-        setWarnDescription('');
-        checkCircularRef(t, {});
         setDataType(t);
     };
 
     const addNewProperty = child.type == 'thing';//Boolean(child.id) && !(child.type.trim()[0] == '<')
     const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
-
-    const customTypeNames = [...customTypes.map(c=>c.name)];
-    const checkCircularRef = (type, circularRefFlag) => {
-        if (!type.includes('?') && type[0] === '[' || type[0] === '{') {
-            type = type.slice(1, -1);
-        }
-        if (customTypeNames.includes(type)) {
-            if (circularRefFlag[type]) {
-                setWarnDescription('Circular reference detected');
-            } else {
-                circularRefFlag[type] = true;
-                customTypes.find(c=> c.name == type).fields.map(f=>checkCircularRef(f[1], {...circularRefFlag}));
-            }
-        }
-    };
-
 
     const t = (child.type == 'thing' || child.type == 'list' || child.type == 'set') ? ''
         : child.type == 'closure' ? thing['/']
@@ -116,11 +95,7 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
                     />
                 )}
             </ListItem>
-            {warnDescription ? (
-                <LocalErrorMsg msgError={warnDescription} />
-            ) : (
-                <InputField dataType={dataType} enums={enums} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth init={t==null?'':t} />
-            )}
+            <InputField dataType={dataType} enums={enums} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth init={t==null?'':t} />
         </List>
     );
 };

@@ -57,14 +57,21 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
         EditActions.addToArr(dispatch, contentTypeChecked);
     };
 
+    const handleRefresh = () => {
+        EditActions.update(dispatch, {
+            array:  [],
+        });
+        EditActions.updateVal(parentDispatch,'{}', identifier);
+    };
+
     const handleClick = (index, item) => () => {
         EditActions.deleteBlob(dispatch, item);
         EditActions.deleteFromArr(dispatch, index);
     };
 
     return (
-        <Grid container item xs={12}>
-            <ListHeader onAdd={handleAdd} onDelete={handleClick} items={array} groupSign="{">
+        <Grid item xs={12}>
+            <ListHeader canCollapse onAdd={handleAdd} onDelete={handleClick} onRefresh={handleRefresh} items={array} groupSign="{">
                 <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
                     <Grid item xs={3}>
                         <TextField
