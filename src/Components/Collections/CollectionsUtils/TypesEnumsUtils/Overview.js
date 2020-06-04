@@ -16,6 +16,7 @@ import  UsedByType from './UsedByType';
 
 const Overview = ({badgeButton, buttons, category, item, link, onAdd, onChangeItem, rows, scope}) => {
     const header = [
+        {ky: 'default', label: 'Default'},
         {ky: 'propertyName', label: 'Name'},
         {ky: 'propertyObject', label: category=='type'?'Type':'Value'},
     ];
@@ -39,7 +40,7 @@ const Overview = ({badgeButton, buttons, category, item, link, onAdd, onChangeIt
             </ListItem>
             <ListItem>
                 <TableWithBadges
-                    header={header}
+                    header={category=='type'?header.slice(1):header}
                     rows={rows}
                     badgeButton={badgeButton}
                     buttons={buttons}

@@ -22,8 +22,8 @@ const useStyles = makeStyles(theme => ({
 const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
     const classes = useStyles();
 
-    const pattern = "(?<=[{\\[,]|^)" + name + "(?=[}\\],?]|$)";
-    const re= new RegExp(pattern)
+    const pattern = '(?<=[{\\[,]|^)' + name + '(?=[}\\],?]|$)';
+    const re= new RegExp(pattern);
     const u = customTypes[scope]?customTypes[scope].filter(i=>
         re.test(`${i.fields}`)
     ):[];

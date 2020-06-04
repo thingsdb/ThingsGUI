@@ -37,12 +37,15 @@ export default {
         set: {
             'add': 'Adds new thing to the set and returns the number of things which are actually added to the set. For example my_set.add(#42); will return 0 if my_set already contains thing #42.',
             'each': 'Iterate over items in an set.',
+            'every': 'This function checks if all things in the set pass a given test. It returns a boolean value.',
             'filter': 'When this method is used on a set, then the return value will be a new set.',
             'find': 'This function returns the value of the first element in the set that satisfies the callback function. Otherwise nil is returned unless an alternative return value is specified.',
             'has': 'Determines if a set has a given thing.',
             'len': 'Returns the length of a set.',
             'map': 'Iterate over items in an set.',
+            'reduce': 'Executes a given reducer closure on every thing in the set, accumulating to a single return value.',
             'remove': 'This function can be used to remove things from a set. If a closure is used, then all things that satisfy the test are removed from the set and returned as list. The order of the removed things is not guaranteed since the set itself is unordered. It is also possible to specify things as arguments. In this case a list is returned with all the things which are removed from the set, in the order that the arguments are used. Things which are not found in the set are ignored.',
+            'some': 'This function checks if at least one thing in the set passes a given test. It returns a boolean value.',
         },
         string: {
             'contains': 'Determines if a given string is a substring of a string.',

@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles} from '@material-ui/core/styles';
+import CheckIcon from '@material-ui/icons/Check';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -106,18 +107,18 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
     };
 
     const item = view.name&&items?items.find(i=>i.name==view.name):{};
-    const rows = item[fields] ? item[fields].map(
-        c=>{
-            const isBlob = c[1].constructor===String&&c[1].includes('/download/tmp/thingsdb-cache');
-            const objectProof = !isBlob&&c[1].constructor===Object?JSON.stringify(c[1]):c[1];
-            return({
-                propertyName: c[0],
-                propertyType: categoryInit=='type'?c[1]:'',
-                propertyVal: categoryInit=='type'?'':c[1],
-                propertyObject: isBlob? <DownloadBlob val={c[1]} isFab={false} /> : noLink ? objectProof : <AddLink name={objectProof} scope={scope} onChange={view.view?handleChangeView:handleChangeEdit} />
-            });
-        }
-    ):[];
+    const rows = item[fields] ? item[fields].map(c=>{
+        const isBlob = c[1].constructor===String&&c[1].includes('/download/tmp/thingsdb-cache');
+        const objectProof = !isBlob&&c[1].constructor===Object?JSON.stringify(c[1]):c[1];
+        const obj = isBlob? <DownloadBlob val={c[1]} /> : noLink ? objectProof : <AddLink name={objectProof} scope={scope} onChange={view.view?handleChangeView:handleChangeEdit} />;
+        return({
+            default: item.default===c[0]? <CheckIcon />: null,
+            propertyName: c[0],
+            propertyType: categoryInit=='type'?c[1]:'',
+            propertyVal: categoryInit=='type'?'':c[1],
+            propertyObject: obj,
+        });
+    }):[];
 
     return (
         <Grid className={classes.spacing} item xs={12}>

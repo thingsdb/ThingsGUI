@@ -14,7 +14,6 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
 
     const mouseEnter = (i) => () => {
         setIndex(i);
-        console.log(i)
     };
     const mouseLeave = () => {
         setIndex(null);
@@ -72,7 +71,7 @@ TableWithBadges.propTypes = {
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     buttons: PropTypes.func,
-    batchButton: PropTypes.func,
+    badgeButton: PropTypes.func,
 };
 
 export default TableWithBadges;

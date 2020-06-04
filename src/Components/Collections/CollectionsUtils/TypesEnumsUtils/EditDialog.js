@@ -23,8 +23,8 @@ import Overview from './Overview';
 const tag = EditDialogTAG;
 
 const initState = {
-    blob: {},
     property: {
+        default: null,
         propertyName: '',
         propertyObject:null,
         propertyType: '',
@@ -35,12 +35,12 @@ const initState = {
 
 const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onClose, open, rows, scope}) => {
     const [state, setState] = React.useState(initState);
-    const {queryString, property, blob} = state;
+    const {queryString, property} = state;
     const [action, setAction] = React.useState('');
     const [index, setIndex] = React.useState(null);
+    const [blob, setBlob] = React.useState({});
 
     const [anchorEl, setAnchorEl] = React.useState(null);
-
 
 
     React.useEffect(() => {
@@ -50,34 +50,48 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     [open],
     );
 
-    const handleQueryAdd = (p, b) => {
-        console.log(p.propertyVal)
-        setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'add', '${p.propertyName}'${category=='type'?`, '${p.propertyType}'`:''}${p.propertyVal?`, ${p.propertyVal}`:''})`});
+    const handleBlob = (b) => {
+        setBlob(b);
     };
 
-    const handleQueryMod = (p, b) => {
-        setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'mod', '${p.propertyName}', ${category=='type'?`'${p.propertyType}'`:`${p.propertyVal}`})`});
+    const handleQueryAdd = (p) => {
+        setState({property: p, queryString: `mod_${category}('${item.name}', 'add', '${p.propertyName}'${category=='type'?`, '${p.propertyType}'`:''}${p.propertyVal?`, ${p.propertyVal}`:''})`});
     };
 
-    const handleQueryRen = (i) => (p, b) => {
-        console.log(i, rows)
-        setState({blob:b, property: p, queryString: `mod_${category}('${item.name}', 'ren', '${rows[i]&&rows[i].propertyName}', '${p.propertyName}')`});
+    const handleQueryMod = (p) => {
+        setState({property: p, queryString: `mod_${category}('${item.name}', 'mod', '${p.propertyName}', ${category=='type'?`'${p.propertyType}'`: p.propertyVal})`});
+    };
+
+    const handleQueryModRen = (p) => {
+        setState({property: p, queryString: `mod_${category}('${item.name}', 'ren', '${rows[index]&&rows[index].propertyName}', '${p.propertyName}')`});
+    };
+
+    const handleQueryModDef = (p) => {
+        setState({...state, property: p, queryString: `mod_${category}('${item.name}', 'def', '${p.propertyName}')`});
     };
 
     const handleAdd = () => {
         setAction('add');
     };
 
-    const handleMod = (h, p, i) => () => {
-        if (h.ky=="propertyName") {
+    const handleMod = (ky, p, i) => () => {
+        setIndex(i);
+        switch(ky){
+        case 'propertyName':
             setAction('ren');
-            setIndex(i);
-            handleQueryRen(i)(p, {});
-        } else {
-            handleQueryMod(p, {});
+            handleQueryModRen(p);
+            break;
+        case 'propertyObject':
             setAction('mod');
+            handleQueryMod(p);
+            break;
+        case 'default':
+            setAction('def');
+            handleQueryModDef(p);
+            break;
         }
     };
+
 
     const handleDel = (p) => (e) => {
         setState({...state, property: p, queryString: `mod_${category}('${item.name}', 'del', '${p.propertyName}')`});
@@ -93,6 +107,8 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     const handleBack = () => {
         handleCloseError();
         setState(initState);
+        setBlob({});
+        setIndex(null);
         setAction('');
     };
 
@@ -111,6 +127,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                     setAction('');
                     setAnchorEl(null);
                     setState(initState);
+                    setBlob({});
                 }
             );
         } else {
@@ -123,6 +140,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                     setAction('');
                     setAnchorEl(null);
                     setState(initState);
+                    setBlob({});
                 }
             );
         }
@@ -135,6 +153,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     const overview = action=='';
     const add = action=='add';
     const edit = action=='mod';
+    const def = action=='def';
     const del = action=='del';
     const ren = action=='ren';
 
@@ -148,18 +167,20 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     );
 
     const badgeButton = (h, row, i) => (
-        <ButtonBase onClick={handleMod(h, row, i)}>
-            <EditIcon color="primary" style={{fontSize: 20}} />
-        </ButtonBase>
+        !(h.ky=='default'&&row.default!=null) ? (
+            <ButtonBase onClick={handleMod(h.ky, row, i)}>
+                <EditIcon color="primary" style={{fontSize: 20}} />
+            </ButtonBase>
+        ):null
     );
-    console.log(index)
+
     return (
         <SimpleModal
             open={open}
             onClose={onClose}
-            onOk={add||edit||ren?handleClickOk:null}
+            onOk={add||edit||ren||def?handleClickOk:null}
             maxWidth="md"
-            actionButtons={add||edit||ren ? (
+            actionButtons={add||edit||ren||def ? (
                 <Button onClick={handleBack} color="primary">
                     {'Back'}
                 </Button>
@@ -210,20 +231,38 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                                 <EditProvider>
                                     <AddProperty
                                         category={category}
-                                        cb={add?handleQueryAdd:edit?handleQueryMod:handleQueryRen(index)}
+                                        cb={add?handleQueryAdd:ren?handleQueryModRen:handleQueryMod}
                                         dropdownItems={dataTypes}
                                         hasInitVal={add&&category=='type'}
                                         hasPropName={add||ren}
                                         hasType={category=='type'&&!ren}
                                         hasVal={!ren&&category=='enum'}
+                                        onBlob={handleBlob}
                                         input={property}
                                         scope={scope}
                                     />
                                 </EditProvider>
                             </ListItem>
                         </Collapse>
+                        <Collapse in={def} timeout="auto" unmountOnExit>
+                            <ListItem>
+                                <Typography variant="body1" >
+                                    {`Set ${property.propertyName} as default?`}
+                                </Typography>
+                            </ListItem>
+                        </Collapse>
                         <Collapse in={overview||del} timeout="auto" unmountOnExit>
-                            <Overview category={category} badgeButton={badgeButton} buttons={buttons} item={item} link={link} onAdd={handleAdd} onChangeItem={onChangeItem} rows={rows} scope={scope} />
+                            <Overview
+                                category={category}
+                                badgeButton={badgeButton}
+                                buttons={buttons}
+                                item={item}
+                                link={link}
+                                onAdd={handleAdd}
+                                onChangeItem={onChangeItem}
+                                rows={rows}
+                                scope={scope}
+                            />
                         </Collapse>
                     </List>
                 </Grid>

@@ -4,8 +4,10 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 import {EditActions, useEdit} from '../Context';
+import {DownloadBlob} from '../../../Util';
 
 
 const AddEnum = ({enum_, enums, identifier, init}) => {
@@ -28,26 +30,41 @@ const AddEnum = ({enum_, enums, identifier, init}) => {
     };
 
     const en = (enums||[]).find(e=>e.name==enum_);
+    const isBlob = init.constructor===String&&init.includes('/download/tmp/thingsdb-cache');
 
     return(en&&en.members?(
-        <Grid container item xs={3}>
-            <TextField
-                type="text"
-                name="enum"
-                label="Enum"
-                onChange={handleChangeEnum}
-                value={enumMem}
-                variant="standard"
-                select
-                SelectProps={{native: true}}
-                fullWidth
-            >
-                { en.members.map((f, i) => (
-                    <option key={i} value={f[0]}>
-                        {f[0]}
-                    </option>
-                ))}
-            </TextField>
+        <Grid container>
+            <Grid item xs={3}>
+                <TextField
+                    type="text"
+                    name="enum"
+                    label="Enum"
+                    onChange={handleChangeEnum}
+                    value={enumMem}
+                    variant="standard"
+                    select
+                    SelectProps={{native: true}}
+                    fullWidth
+                >
+                    { en.members.map((f, i) => (
+                        <option key={i} value={f[0]}>
+                            {f[0]}
+                        </option>
+                    ))}
+                </TextField>
+            </Grid>
+            {isBlob&&
+                <Grid container item xs={9}>
+                    <Grid container item xs={12} justify="flex-end">
+                        <Typography variant="body2">
+                            {'Blob currently stored in ThingsDB:'}
+                        </Typography>
+                    </Grid>
+                    <Grid container item xs={12} justify="flex-end">
+                        <DownloadBlob val={init} isImg />
+                    </Grid>
+                </Grid>
+            }
         </Grid>
     ) :null);
 };

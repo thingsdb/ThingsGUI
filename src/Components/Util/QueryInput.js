@@ -226,7 +226,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
             ].map(([k, v]) => ({
                 label: k,
                 kind: monaco.languages.CompletionItemKind.Function,
-                insertText: k+'()',
+                insertText: k,
                 documentation: v,
             })));
         } else {
@@ -234,7 +234,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 .map(([k, v]) => ({
                     label: k,
                     kind: monaco.languages.CompletionItemKind.Function,
-                    insertText: k+'()',
+                    insertText: k,
                     documentation: v,
                 }))
             );
@@ -242,7 +242,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 .map(([k, v]) => ({
                     label: k,
                     kind: monaco.languages.CompletionItemKind.Function,
-                    insertText: k+'()',
+                    insertText: k,
                     documentation: v,
                 }))
             );
@@ -250,7 +250,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 .map(([k, v]) => ({
                     label: k,
                     kind: monaco.languages.CompletionItemKind.Function,
-                    insertText: k+'()',
+                    insertText: k,
                     documentation: v,
                 }))
             );
@@ -258,7 +258,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 .map(([k, v]) => ({
                     label: k,
                     kind: monaco.languages.CompletionItemKind.Function,
-                    insertText: k+'()',
+                    insertText: k,
                     documentation: v,
                 }))
             );

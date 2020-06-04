@@ -23,13 +23,13 @@ const withStores = withVlow([{
     keys: ['customTypes']
 }]);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     fullWidth: {
         width: '100%',
     },
 }));
 
-const AddProperty = ({category, cb, customTypes, dropdownItems, enums, hasInitVal, hasPropName, hasType, input, scope, hasVal}) => {
+const AddProperty = ({category, cb, customTypes, dropdownItems, enums, hasInitVal, hasPropName, hasType, onBlob, input, scope, hasVal}) => {
     const classes = useStyles();
     const {propertyName, propertyType} = input;
     const editState = useEdit()[0];
@@ -42,19 +42,21 @@ const AddProperty = ({category, cb, customTypes, dropdownItems, enums, hasInitVa
 
     React.useEffect(()=>{
         if (hasVal) {
-            cb({...input, propertyVal: val}, blob);
+            cb({...input, propertyVal:val});
+            onBlob(blob);
         } else {
-            cb({...input, propertyVal: switchIni?val:null}, blob);
+            cb({...input, propertyVal:switchIni?val:null});
+            onBlob(blob);
         }
     }, [val, switchIni]);
 
-    const handleChange = ({target}) => {
-        const {name, value} = target;
-        cb({...input, [name]: value}, blob);
+    const handlePropertyName = ({target}) => {
+        const { value} = target;
+        cb({...input, propertyName:value});
     };
 
-    const handleType = (t) => {
-        cb({...input, propertyType: t}, blob);
+    const handlePropertyType = (t) => {
+        cb({...input, propertyType:t});
     };
 
     const handleOnChangeType = (t) => {
@@ -75,7 +77,7 @@ const AddProperty = ({category, cb, customTypes, dropdownItems, enums, hasInitVa
                         fullWidth
                         label="Name"
                         name="propertyName"
-                        onChange={handleChange}
+                        onChange={handlePropertyName}
                         spellCheck={false}
                         type="text"
                         value={propertyName}
@@ -86,7 +88,7 @@ const AddProperty = ({category, cb, customTypes, dropdownItems, enums, hasInitVa
             ):null}
             {hasType ? (
                 <Grid item xs={12}>
-                    <AutoSelect cb={handleType} dropdownItems={dropdownItems} input={propertyType} label="Definition" />
+                    <AutoSelect cb={handlePropertyType} dropdownItems={dropdownItems} input={propertyType} label="Definition" />
                 </Grid>
             ) : null}
             {hasVal ? (
@@ -109,7 +111,6 @@ const AddProperty = ({category, cb, customTypes, dropdownItems, enums, hasInitVa
                             dataTypes={allTypes}
                             label="Value"
                             fullWidth
-                            // init={propertyVal==null?'':propertyVal}
                         />
                     </Grid>
                 </React.Fragment>
@@ -147,7 +148,6 @@ const AddProperty = ({category, cb, customTypes, dropdownItems, enums, hasInitVa
                                 dataTypes={allTypes}
                                 label="Value"
                                 fullWidth
-                                // init={propertyVal==null?'':propertyVal}
                             />
                         </Grid>
                     </Collapse>
@@ -173,6 +173,7 @@ AddProperty.propTypes = {
     hasPropName: PropTypes.bool,
     hasType: PropTypes.bool,
     hasVal: PropTypes.bool,
+    onBlob: PropTypes.func.isRequired,
     input: PropTypes.shape({propertyName: PropTypes.string.isRequired, propertyType:PropTypes.string.isRequired, propertyVal:PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object])}).isRequired,
     scope: PropTypes.string.isRequired,
 

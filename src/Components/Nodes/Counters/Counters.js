@@ -60,8 +60,6 @@ const Counters = ({nodeId, offline, counters}) => {
         NodesActions.getCounters(nodeId); // update of the selected node; to get the latest info
     };
 
-    console.log(counters)
-
     return (
         <Grid
             container

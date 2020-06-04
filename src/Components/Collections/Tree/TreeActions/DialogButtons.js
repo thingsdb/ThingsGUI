@@ -8,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 import RemoveThing from './RemoveThing';
 import WatchThings from './WatchThings';
 import {ApplicationActions} from '../../../../Stores';
-import {DownloadBlob} from '../../../Util';
 
 
 const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, tag, thing, isRoot}) => {
@@ -21,7 +20,7 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
     const isParentCustom = Boolean(customTypes.find(c=>c.name==realParentType));
     const canRemove = Boolean(!(child.name === '/' || parent.isTuple || isRoot || isParentCustom));
     const canWatch = Boolean(thing && thing.hasOwnProperty('#'));
-    const canDownload = child.type === 'bytes';
+    // const canDownload = child.type === 'bytes';
 
 
     return (
@@ -61,13 +60,14 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
                     />
                 </Grid>
             }
-            {canDownload &&
+            {/* {canDownload &&
                 <Grid item>
                     <DownloadBlob
                         val={thing}
+                        isFab
                     />
                 </Grid>
-            }
+            } */}
         </React.Fragment>
     );
 };
