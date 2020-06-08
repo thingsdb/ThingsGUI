@@ -47,7 +47,7 @@ const AddBlob = ({identifier, init}) => {
     return(
         <Grid container>
             <Grid item xs={8}>
-                <Grid item xs={12}>
+                <Grid item xs={9}>
                     <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
                         {({getRootProps, getInputProps}) => (
                             <section>
@@ -70,14 +70,14 @@ const AddBlob = ({identifier, init}) => {
                 </Grid>
             </Grid>
             {init&&
-                <Grid container item xs={4}>
-                    <Grid container item xs={12} justify="flex-end">
-                        <Typography variant="body2">
-                            {'Blob currently stored in ThingsDB:'}
-                        </Typography>
-                    </Grid>
+                <Grid container item xs={4} spacing={1} justify="flex-end">
                     <Grid container item xs={12} justify="flex-end">
                         <DownloadBlob val={init} isImg />
+                    </Grid>
+                    <Grid container item xs={12} justify="flex-end">
+                        <Typography variant="caption">
+                            {'Download blob that is currently stored.'}
+                        </Typography>
                     </Grid>
                 </Grid>
             }

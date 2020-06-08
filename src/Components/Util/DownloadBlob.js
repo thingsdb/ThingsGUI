@@ -15,12 +15,12 @@ const useStyles = makeStyles(theme => ({
         border: '1px solid #ddd',
         borderRadius: '4px',
         padding: '5px',
-        width: '150px',
+        width: '250px',
         '&:hover': {
             backgroundColor: fade(theme.palette.common.black, 0.15),
             boxShadow: '0 0 8px 1px rgba(0, 140, 186, 0.5)',
         },
-        margin: theme.spacing(2),
+        // margin: theme.spacing(2),
     },
 }));
 
