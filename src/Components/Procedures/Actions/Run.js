@@ -107,7 +107,6 @@ const Run = ({procedure}) => {
                     }
                     noPadding
                     expand={expandOutput}
-                    unmountOnExit={false}
                 />
             </Grid>
         </React.Fragment>

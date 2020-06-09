@@ -86,8 +86,12 @@ func (app *App) SocketRouter() {
 		return handlers.GetConnection(app.client[s.ID()])
 	})
 
-	app.server.OnEvent("/", "newEditConn", func(s socketio.Conn, data handlers.LoginData) (int, interface{}, util.Message) {
-		return handlers.NewEditConnection(app.client[s.ID()], data)
+	app.server.OnEvent("/", "newConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
+		return handlers.NewConnection(app.client[s.ID()], data)
+	})
+
+	app.server.OnEvent("/", "editConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
+		return handlers.EditConnection(app.client[s.ID()], data)
 	})
 
 	app.server.OnEvent("/", "delConn", func(s socketio.Conn, data handlers.LoginData) (int, interface{}, util.Message) {

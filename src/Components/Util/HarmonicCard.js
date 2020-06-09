@@ -78,10 +78,10 @@ const HarmonicCard = ({buttons, content, expand, noPadding, onRefresh, title, un
 
 HarmonicCard.defaultProps = {
     buttons: null,
-    expand: true,
+    expand: false,
     noPadding: false,
     onRefresh: null,
-    unmountOnExit: true,
+    unmountOnExit: false,
 },
 
 HarmonicCard.propTypes = {

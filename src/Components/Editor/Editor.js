@@ -165,7 +165,6 @@ const Editor = ({match, history}) => {
                             }
                             noPadding
                             expand={expandOutput}
-                            unmountOnExit={false}
                         />
                     </Grid>
                 </React.Fragment>
