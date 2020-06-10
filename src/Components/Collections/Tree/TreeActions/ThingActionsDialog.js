@@ -95,7 +95,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
                     <Typography variant="body1" >
                         {'Detail view of:'}
                     </Typography>
-                    <Typography variant="h4" color='primary' component='span'>
+                    <Typography variant="h4" color='primary' component='span' noWrap display="block">
                         {`${child.name||parent.name}  `}
                     </Typography>
                     <Typography variant="body2" component='span'>

@@ -1,7 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core/styles';
 import ExploreIcon from '@material-ui/icons/Explore';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -80,9 +79,7 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
         <React.Fragment>
             <TreeBranch inset={inset} name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpenClose} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null}>
                 {isWatching ? (
-                    <ListItemIcon>
-                        <ExploreIcon className={classes.green} />
-                    </ListItemIcon>
+                    <ExploreIcon className={classes.green} />
                 ) : null}
             </TreeBranch>
             {show ? (
