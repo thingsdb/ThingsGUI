@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -65,6 +67,11 @@ const Counters = ({nodeId, offline, counters}) => {
         >
             <Grid item xs={12} className={classes.overflow}>
                 <Info header={header} content={counters} />
+            </Grid>
+            <Grid container item xs={12} justify="flex-end">
+                <Box fontSize={10} fontStyle="italic" m={1}>
+                    {`Last reset at: ${moment(counters.started_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                </Box>
             </Grid>
             {offline ? null : (
                 <Grid item container xs={12} spacing={1} >

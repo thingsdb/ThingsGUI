@@ -23,9 +23,7 @@ const withStores = withVlow([{
 const InitStores = () => {
     React.useEffect(() => {
         EventActions.openEventChannel();
-    },
-    [],
-    );
+    },[]);
 
     return null;
 };

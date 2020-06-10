@@ -22,7 +22,7 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identi
     case 'closure': return <AddClosure identifier={identifier} init={init} {...props} />;
     case 'regex': return <AddRegex identifier={identifier} init={init} {...props} />;
     case 'error': return <AddError identifier={identifier} init={init} {...props} />;
-    case 'bytes': return <AddBlob identifier={identifier} {...props} />;
+    case 'bytes': return <AddBlob identifier={identifier} init={init} {...props} />;
     case 'nil': return null;
     case 'thing': return(
         <EditProvider key={dataType}>

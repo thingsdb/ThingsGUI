@@ -44,6 +44,7 @@ type LoginData struct {
 	Token              string `json:"token"`
 	SecureConnection   bool   `json:"secureConnection"`
 	InsecureSkipVerify bool   `json:"insecureSkipVerify"`
+	Memo               string `json:"memo"`
 }
 
 func connect(client *Client, data LoginData) LoginResp {
@@ -256,10 +257,33 @@ func GetConnection(client *Client) (int, interface{}, util.Message) {
 	return message.Status, resp, message
 }
 
+// NewConnection saves a new connection locally
+func NewConnection(client *Client, data map[string]interface{}) (int, interface{}, util.Message) {
+	fn := func(mapping map[string]map[string]interface{}) {
+		name := data["name"]
+		n := name.(string)
+		mapping[n] = data
+	}
+	return NewEditConnection(client, data, fn)
+}
+
+// EditConnection edits a new connection locally
+func EditConnection(client *Client, data map[string]interface{}) (int, interface{}, util.Message) {
+
+	fn := func(mapping map[string]map[string]interface{}) {
+		name := data["name"]
+		n := name.(string)
+		for k, v := range data {
+			mapping[n][k] = v
+		}
+	}
+	return NewEditConnection(client, data, fn)
+}
+
 // NewEditConnection saves a new connection or edits locally
-func NewEditConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
+func NewEditConnection(client *Client, data map[string]interface{}, fn func(map[string]map[string]interface{})) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
-	var mapping = make(map[string]LoginData)
+	var mapping = make(map[string]map[string]interface{})
 
 	newFile, err := util.CreateFile(client.HomePath, client.LogCh)
 	if err != nil {
@@ -273,7 +297,8 @@ func NewEditConnection(client *Client, data LoginData) (int, interface{}, util.M
 		}
 	}
 
-	mapping[data.Name] = data
+	fn(mapping)
+
 	err = util.WriteEncryptedFile(client.HomePath, mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)

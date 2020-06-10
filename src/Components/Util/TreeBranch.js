@@ -87,7 +87,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                     )}
                     {!button ? (
                         type === 'bytes' ? (
-                            <DownloadBlob val={val} isFab={false} />
+                            <DownloadBlob val={val} />
                         ) : type === 'str' ? (
                             <SimpleModal
                                 button={

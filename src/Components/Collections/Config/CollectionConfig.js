@@ -23,7 +23,6 @@ const CollectionConfig = ({collection, close}) => {
 
     return (
         <HarmonicCard
-            expand={false}
             title="INFO"
             content={<CollectionInfo collection={collection} />}
             buttons={
@@ -35,6 +34,7 @@ const CollectionConfig = ({collection, close}) => {
                     ))}
                 </Grid>
             }
+            unmountOnExit
         />
     );
 };

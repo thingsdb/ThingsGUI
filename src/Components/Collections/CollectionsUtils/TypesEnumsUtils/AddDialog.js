@@ -20,26 +20,21 @@ import AddProperty from './AddProperty';
 
 const tag = AddDialogTAG;
 
-const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) => {
+const initState = {
+    queryString: '',
+    name: '',
+    error: '',
+    properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
+};
 
-    const [state, setState] = React.useState({
-        queryString: '',
-        name: '',
-        error: '',
-        properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
-        blob: {}
-    });
-    const {queryString, name, error, properties, blob} = state;
+const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) => {
+    const [state, setState] = React.useState(initState);
+    const {queryString, name, error, properties} = state;
+    const [blob, setBlob] = React.useState({});
 
 
     React.useEffect(() => {
-        setState({
-            queryString: '',
-            name: '',
-            error: '',
-            properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
-            blob: {}
-        });
+        setState(initState);
     },
     [open],
     );
@@ -50,20 +45,30 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
     [name, JSON.stringify(properties)], // TODO STRING
     );
 
+    const handleBlob = (b) => {
+        setBlob({...blob, ...b});
+    };
+
     const handleChange = ({target}) => {
         const {value} = target;
         setState({...state, name: value});
     };
 
-    const handleChangeProperty = (index) => (property, blob) => {
+    const handleChangeProperty = (index) => (property) => {
         setState(prevState => {
             let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
             update.splice(index, 1, property);
-            return {...prevState, properties: update, blob: {...prevState.blob, ...blob}};
+            return {...prevState, properties: update};
         });
     };
 
     const handleRemove = (index) => {
+        setBlob(prevBlob => {
+            let val = properties[index].propertyVal;
+            let update = {...prevBlob};
+            delete update[val];
+            return {...update};
+        });
         setState(prevState => {
             let update = [...prevState.properties];
             update.splice(index, 1);
@@ -171,7 +176,16 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
                             <ArrayLayout
                                 child={(i) => (
                                     <EditProvider>
-                                        <AddProperty category={category} cb={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}} hasType={category=='type'} hasInitVal={category=='enum'} scope={scope} />
+                                        <AddProperty
+                                            category={category}
+                                            cb={handleChangeProperty(i)}
+                                            dropdownItems={dataTypes}
+                                            input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}}
+                                            hasType={category=='type'}
+                                            hasVal={category=='enum'}
+                                            onBlob={handleBlob}
+                                            scope={scope}
+                                        />
                                     </EditProvider>
                                 )}
                                 fullWidth={category=='enum'}

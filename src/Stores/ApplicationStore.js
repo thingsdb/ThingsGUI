@@ -141,18 +141,10 @@ class ApplicationStore extends BaseStore {
         this.setState({openEditor: false, input: ''});
     }
 
-    onGetConn(tag) {
-        this.emit('getConn').done((data) => {
-            this.setState({savedConnections: data||{}});
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
-    onNewConn(config, tag, cb) {
-        this.emit('newEditConn', config).done((_data) => {
+    onEditConn(config, tag, cb) {
+        this.emit('editConn', config).done((_data) => {
             this.setState(prevState => {
-                const savedConn = Object.assign({}, prevState.savedConnections, {[config.name]: config});
+                const savedConn = Object.assign({}, prevState.savedConnections, {[config.name]: {...prevState.savedConnections[config.name], ...config}});
                 const update = Object.assign({}, prevState, {savedConnections: savedConn});
                 return update;
             });
@@ -162,9 +154,22 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onEditConn(config, tag) {
-        this.emit('newEditConn', config).done((_data) => {
+    onGetConn(tag) {
+        this.emit('getConn').done((data) => {
+            this.setState({savedConnections: data||{}});
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
 
+    onNewConn(config, tag, cb) {
+        this.emit('newConn', config).done((_data) => {
+            this.setState(prevState => {
+                const savedConn = Object.assign({}, prevState.savedConnections, {[config.name]: config});
+                const update = Object.assign({}, prevState, {savedConnections: savedConn});
+                return update;
+            });
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });

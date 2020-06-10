@@ -55,11 +55,14 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 
     const handleClickOk = (blob, query) => {
         const b = Object.keys(blob || {}).reduce((res, k) => {if(query.includes(k)){res[k]=blob[k];} return res;},{});
+        const isChildEnum = Boolean(enums.find(c=>c.name==realChildType));
+        const useParent = isChildEnum&&child.id;
+        const tid = useParent?parent.id:child.id||parent.id;
         if (Object.keys(b).length) {
             CollectionActions.blob(
                 scope,
                 query,
-                child.id||parent.id,
+                tid,
                 b,
                 tag,
                 () => {
@@ -71,7 +74,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
             CollectionActions.queryWithReturn(
                 scope,
                 query,
-                child.id||parent.id,
+                tid,
                 tag,
                 () => {
                     ThingsdbActions.getCollections();
@@ -92,7 +95,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
                     <Typography variant="body1" >
                         {'Detail view of:'}
                     </Typography>
-                    <Typography variant="h4" color='primary' component='span'>
+                    <Typography variant="h4" color='primary' component='span' noWrap display="block">
                         {`${child.name||parent.name}  `}
                     </Typography>
                     <Typography variant="body2" component='span'>

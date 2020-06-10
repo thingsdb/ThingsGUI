@@ -10,12 +10,13 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {TableWithButtons} from '../../../Util';
+import {TableWithBadges} from '../../../Util';
 import  UsedByType from './UsedByType';
 
 
-const Overview = ({buttons, category, item, link, onAdd, onChangeItem, rows, scope}) => {
+const Overview = ({badgeButton, buttons, category, item, link, onAdd, onChangeItem, rows, scope}) => {
     const header = [
+        {ky: 'default', label: 'Default'},
         {ky: 'propertyName', label: 'Name'},
         {ky: 'propertyObject', label: category=='type'?'Type':'Value'},
     ];
@@ -38,10 +39,10 @@ const Overview = ({buttons, category, item, link, onAdd, onChangeItem, rows, sco
                 />
             </ListItem>
             <ListItem>
-                <TableWithButtons
-                    header={header}
+                <TableWithBadges
+                    header={category=='type'?header.slice(1):header}
                     rows={rows}
-                    rowClick={()=>null}
+                    badgeButton={badgeButton}
                     buttons={buttons}
                 />
             </ListItem>
@@ -67,6 +68,7 @@ const Overview = ({buttons, category, item, link, onAdd, onChangeItem, rows, sco
 };
 
 Overview.defaultProps = {
+    badgeButton: null,
     buttons: null,
     item: {},
     onAdd: null,
@@ -74,6 +76,7 @@ Overview.defaultProps = {
 };
 
 Overview.propTypes = {
+    badgeButton: PropTypes.func,
     buttons: PropTypes.func,
     category: PropTypes.string.isRequired,
     item: PropTypes.object,

@@ -8,9 +8,10 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import {EditActions, useEdit} from '../Context';
+import {DownloadBlob} from '../../../Util';
 
 
-const AddBlob = ({identifier}) => {
+const AddBlob = ({identifier, init}) => {
     const [newBlob, setBlob] = React.useState('');
     const [fileName, setFileName] = React.useState('');
 
@@ -44,38 +45,54 @@ const AddBlob = ({identifier}) => {
     }, []);
 
     return(
-        <Grid container spacing={1}>
-            <Grid item xs={12}>
-                <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
-                    {({getRootProps, getInputProps}) => (
-                        <section>
-                            <div {...getRootProps()}>
-                                <input {...getInputProps()} />
-                                <p>
-                                    {'Drag "n" drop some files here, or click to select files'}
-                                </p>
-                            </div>
-                        </section>
-                    )}
-                </Dropzone>
+        <Grid container>
+            <Grid item xs={8}>
+                <Grid item xs={9}>
+                    <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
+                        {({getRootProps, getInputProps}) => (
+                            <section>
+                                <div {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                    <p>
+                                        {'Drag "n" drop some files here, or click to select files'}
+                                    </p>
+                                </div>
+                            </section>
+                        )}
+                    </Dropzone>
+                </Grid>
+                <Grid item xs={12}>
+                    <Collapse in={Boolean(newBlob)} timeout="auto" unmountOnExit>
+                        <Typography variant="button" color="primary">
+                            {fileName}
+                        </Typography>
+                    </Collapse>
+                </Grid>
             </Grid>
-            <Grid item xs={12}>
-                <Collapse in={Boolean(newBlob)} timeout="auto" unmountOnExit>
-                    <Typography variant="button" color="primary">
-                        {fileName}
-                    </Typography>
-                </Collapse>
-            </Grid>
+            {init&&
+                <Grid container item xs={4} spacing={1} justify="flex-end">
+                    <Grid container item xs={12} justify="flex-end">
+                        <DownloadBlob val={init} isImg />
+                    </Grid>
+                    <Grid container item xs={12} justify="flex-end">
+                        <Typography variant="caption">
+                            {'Download blob that is currently stored.'}
+                        </Typography>
+                    </Grid>
+                </Grid>
+            }
         </Grid>
     );
 };
 
 AddBlob.defaultProps = {
     identifier: null,
+    init: null
 },
 
 AddBlob.propTypes = {
     identifier: PropTypes.string,
+    init: PropTypes.string,
 };
 
 

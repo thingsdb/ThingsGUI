@@ -67,7 +67,6 @@ const Tokens = ({user}) => {
 
     return (
         <HarmonicCard
-            expand={false}
             title="TOKENS"
             content={user.tokens.length ? (
                 <React.Fragment>

@@ -7,11 +7,11 @@ import {HarmonicCard} from '../../Util';
 
 const CollectionTree = ({collection}) => (
     <HarmonicCard
-        expand={false}
         title="THINGS TREE"
         content={
             <Things collection={collection} />
         }
+        unmountOnExit
     />
 );
 
