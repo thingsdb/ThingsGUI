@@ -20,6 +20,7 @@ import Typography from '@material-ui/core/Typography';
 import {ApplicationStore, ApplicationActions} from '../../../Stores';
 import {isObjectEmpty} from '../../Util';
 import {LoginTAG} from '../../../constants';
+import Memo from './Memo';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -84,6 +85,7 @@ const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
                         </ListItemIcon>
                         <ListItemText primary={k} secondary={v.address} />
                         <ListItemSecondaryAction>
+                            <Memo connection={v} />
                             <IconButton onClick={handleDeleteConn(k)}>
                                 <DeleteIcon color="primary" />
                             </IconButton>

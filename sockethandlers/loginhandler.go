@@ -44,6 +44,7 @@ type LoginData struct {
 	Token              string `json:"token"`
 	SecureConnection   bool   `json:"secureConnection"`
 	InsecureSkipVerify bool   `json:"insecureSkipVerify"`
+	Memo               string `json:"memo"`
 }
 
 func connect(client *Client, data LoginData) LoginResp {

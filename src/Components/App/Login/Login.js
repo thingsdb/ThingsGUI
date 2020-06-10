@@ -26,6 +26,7 @@ const Login = ({connected, loaded, savedConnections}) => {
         form: {
             address: '',
             name: '',
+            memo: '',
         },
         credentials: {
             password: '',
@@ -66,7 +67,7 @@ const Login = ({connected, loaded, savedConnections}) => {
     };
 
     const handleClickSave = () => {
-        const obj = editField === 'name' ? {...form, ...credentials}
+        const obj = editField === 'name' ? {...form, ...credentials, ...security}
             : editField==='credentials' ? {name: form.name, ...credentials}
                 : editField==='security' ? {name: form.name, ...security}
                     : form;
@@ -81,12 +82,12 @@ const Login = ({connected, loaded, savedConnections}) => {
         ApplicationActions.connect({...form, ...credentials, ...security}, tag);
     };
 
-    const handleKeyPress = (event) => {
-        const {key} = event;
-        if (key == 'Enter') {
-            handleClickOk();
-        }
-    };
+    // const handleKeyPress = (event) => {
+    //     const {key} = event;
+    //     if (key == 'Enter') {
+    //         handleClickOk();
+    //     }
+    // };
 
     const handleEditConn = (ky, val) => {
         setState(prevState => {
@@ -98,6 +99,7 @@ const Login = ({connected, loaded, savedConnections}) => {
             const updatedForm = {
                 address: val.address,
                 name: val.name,
+                memo: val.memo
             };
             const updatedSecurity = {
                 insecureSkipVerify: val.insecureSkipVerify,
@@ -124,7 +126,7 @@ const Login = ({connected, loaded, savedConnections}) => {
                 aria-labelledby="form-dialog-title"
                 fullWidth
                 maxWidth="sm"
-                onKeyDown={handleKeyPress}
+                // onKeyDown={handleKeyPress}
             >
                 <DialogTitle id="form-dialog-title">
                     {'Login'}

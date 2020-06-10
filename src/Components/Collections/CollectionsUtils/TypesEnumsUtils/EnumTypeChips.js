@@ -129,7 +129,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
                 onAdd={handleClickAdd}
                 onRefresh={handleRefresh}
                 onDelete={handleClickDelete}
-                title={categoryInit}
+                title={`${categoryInit}s`}
             />
             {buttonsView.add && (
                 <AddDialog
