@@ -23,7 +23,7 @@ import {WatcherTAG} from '../../constants';
 
 const withStores = withVlow([{
     store: EventStore,
-    keys: ['watchIds', 'watchThings', 'watchProcedures', 'watchTypes']
+    keys: ['watchEnums', 'watchIds', 'watchThings', 'watchProcedures', 'watchTypes']
 }, {
     store: ThingsdbStore,
     keys: ['collections']
@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
 
 const tag = WatcherTAG;
 
-const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThings, watchTypes}) => {
+const Watcher = ({collections, customTypes, watchEnums, watchIds, watchProcedures, watchThings, watchTypes}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
     const [state, setState] = React.useState({
@@ -205,6 +205,9 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
                             {Object.keys(watchTypes).length>0&& (
                                 <HarmonicTree items={watchTypes} title="TYPES" jsonView={tabIndex === 1} />
                             )}
+                            {Object.keys(watchEnums).length>0&& (
+                                <HarmonicTree items={watchEnums} title="ENUMS" jsonView={tabIndex === 1} />
+                            )}
                         </List>
                     </Paper>
                 </Collapse>
@@ -215,6 +218,7 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
 
 Watcher.propTypes = {
     /* event store properties */
+    watchEnums: EventStore.types.watchEnums.isRequired,
     watchThings: EventStore.types.watchThings.isRequired,
     watchIds: EventStore.types.watchIds.isRequired,
     watchProcedures: EventStore.types.watchProcedures.isRequired,
