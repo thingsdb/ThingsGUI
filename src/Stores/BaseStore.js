@@ -169,6 +169,32 @@ const ProtoMap = {
     ProtoOnWarn: 5,
 };
 
+const Jobs = {
+    add: 'add',
+    del_enum: 'del_enum', //new
+    del_procedure: 'del_procedure',
+    del_type: 'del_type',
+    del: 'del',
+    emit: 'emit', //new
+    event: 'event', //new
+    mod_enum_add: 'mod_enum_add', //new
+    mod_enum_def: 'mod_enum_def', //new
+    mod_enum_del: 'mod_enum_del', //new
+    mod_enum_mod: 'mod_enum_mod', //new
+    mod_enum_ren: 'mod_enum_ren', //new
+    mod_type_add: 'mod_type_add',
+    mod_type_del: 'mod_type_del',
+    mod_type_mod: 'mod_type_mod',
+    mod_type_ren: 'mod_type_ren', //new
+    new_procedure: 'new_procedure',
+    new_type: 'new_type',
+    remove: 'remove',
+    set_enum: 'set_enum', //new
+    set_type: 'set_type',
+    set: 'set',
+    splice: 'splice',
+};
+
 class EventStore extends BaseStore {
 
     static types = {
@@ -320,74 +346,82 @@ class EventStore extends BaseStore {
     watchUpdate(data) {
         for (let i = 0; i<data.jobs.length; i++) {
             switch(true){
-            case data.jobs[i].hasOwnProperty('set'):
+            case data.jobs[i].hasOwnProperty(Jobs.set):
                 this.set(data['#'], data.jobs[i].set);
                 break;
-            case data.jobs[i].hasOwnProperty('del'):
+            case data.jobs[i].hasOwnProperty(Jobs.del):
                 this.del(data['#'], data.jobs[i].del);
                 break;
-            case data.jobs[i].hasOwnProperty('splice'):
+            case data.jobs[i].hasOwnProperty(Jobs.splice):
                 this.splice(data['#'], data.jobs[i].splice);
                 break;
-            case data.jobs[i].hasOwnProperty('add'):
+            case data.jobs[i].hasOwnProperty(Jobs.add):
                 this.add(data['#'], data.jobs[i].add);
                 break;
-            case data.jobs[i].hasOwnProperty('remove'):
+            case data.jobs[i].hasOwnProperty(Jobs.remove):
                 this.remove(data['#'], data.jobs[i].remove);
                 break;
-            case data.jobs[i].hasOwnProperty('new_procedure'):
+            case data.jobs[i].hasOwnProperty(Jobs.new_procedure):
                 this.new_procedure(data['#'], data.jobs[i].new_procedure);
                 break;
-            case data.jobs[i].hasOwnProperty('del_procedure'):
+            case data.jobs[i].hasOwnProperty(Jobs.del_procedure):
                 this.del_procedure(data['#'], data.jobs[i].del_procedure);
                 break;
-            case data.jobs[i].hasOwnProperty('mod_type_add'):
+            case data.jobs[i].hasOwnProperty(Jobs.mod_type_add):
                 this.mod_type_add(data['#'], data.jobs[i].mod_type_add);
                 break;
-            case data.jobs[i].hasOwnProperty('mod_type_mod'):
+            case data.jobs[i].hasOwnProperty(Jobs.mod_type_mod):
                 this.mod_type_mod(data['#'], data.jobs[i].mod_type_mod);
                 break;
-            case data.jobs[i].hasOwnProperty('mod_type_del'):
+            case data.jobs[i].hasOwnProperty(Jobs.mod_type_del):
                 this.mod_type_del(data['#'], data.jobs[i].mod_type_del);
                 break;
-            case data.jobs[i].hasOwnProperty('mod_type_ren'):
+            case data.jobs[i].hasOwnProperty(Jobs.mod_type_ren):
                 this.mod_type_ren(data['#'], data.jobs[i].mod_type_ren);
                 console.log(data)
                 break;
-            case data.jobs[i].hasOwnProperty('new_type'):
+            case data.jobs[i].hasOwnProperty(Jobs.new_type):
                 this.new_type(data['#'], data.jobs[i].new_type);
                 break;
-            case data.jobs[i].hasOwnProperty('set_type'):
+            case data.jobs[i].hasOwnProperty(Jobs.set_type):
                 this.set_type(data['#'], data.jobs[i].set_type);
                 break;
-            case data.jobs[i].hasOwnProperty('del_type'):
+            case data.jobs[i].hasOwnProperty(Jobs.del_type):
                 this.del_type(data['#'], data.jobs[i].del_type);
                 break;
-            case data.jobs[i].hasOwnProperty('mod_enum_add'):
+            case data.jobs[i].hasOwnProperty(Jobs.mod_enum_add):
                 console.log(data)
                 // this.mod_enum_add(data['#'], data.jobs[i].mod_enum_add);
                 break;
-            case data.jobs[i].hasOwnProperty('mod_enum_mod'):
+            case data.jobs[i].hasOwnProperty(Jobs.mod_enum_mod):
                 console.log(data)
                 // this.mod_enum_mod(data['#'], data.jobs[i].mod_enum_mod);
                 break;
-            case data.jobs[i].hasOwnProperty('mod_enum_def'):
+            case data.jobs[i].hasOwnProperty(Jobs.mod_enum_def):
                 console.log(data)
                 // this.mod_enum_def(data['#'], data.jobs[i].mod_enum_def);
                 break;
-            case data.jobs[i].hasOwnProperty('mod_enum_del'):
+            case data.jobs[i].hasOwnProperty(Jobs.mod_enum_del):
                 console.log(data)
                 // this.mod_enum_del(data['#'], data.jobs[i].mod_enum_del);
                 break;
-            case data.jobs[i].hasOwnProperty('mod_enum_ren'):
+            case data.jobs[i].hasOwnProperty(Jobs.mod_enum_ren):
                 // this.mod_enum_ren(data['#'], data.jobs[i].mod_enum_ren);
                 console.log(data)
                 break;
-            case data.jobs[i].hasOwnProperty('set_enum'):
+            case data.jobs[i].hasOwnProperty(Jobs.set_enum):
                 console.log(data)
                 // this.set_enum(data['#'], data.jobs[i].set_enum);
                 break;
-            case data.jobs[i].hasOwnProperty('del_enum'):
+            case data.jobs[i].hasOwnProperty(Jobs.del_enum):
+                console.log(data)
+                // this.del_enum(data['#'], data.jobs[i].del_enum);
+                break;
+            case data.jobs[i].hasOwnProperty(Jobs.emit):
+                console.log(data)
+                // this.del_enum(data['#'], data.jobs[i].del_enum);
+                break;
+            case data.jobs[i].hasOwnProperty(Jobs.event):
                 console.log(data)
                 // this.del_enum(data['#'], data.jobs[i].del_enum);
                 break;
@@ -396,6 +430,10 @@ class EventStore extends BaseStore {
             }
         }
     }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     editState(propName, scope, id, name, obj) {
         this.setState(prevState => {
@@ -414,174 +452,209 @@ class EventStore extends BaseStore {
         });
     }
 
-    new_procedure(id, newProcedure) {
+    getScope(id) {
         const {watchIds} = this.state;
         let scope = watchIds[id];
-        let name = newProcedure.name;
-        let def = newProcedure['closure']['/'];
-        this.editState('watchProcedures', scope, id, name, def);
+        return scope;
+    };
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    new_procedure(id, newProcedure) {
+        this.editState('watchProcedures', this.getScope(id), id, newProcedure.name, newProcedure['closure']['/']);
     }
 
     del_procedure(id, del) {
-        const {watchIds} = this.state;
-        let scope = watchIds[id];
-        this.deleteState('watchProcedures', scope, id, del);
+        this.deleteState('watchProcedures', this.getScope(id), id, del);
     }
 
-    mod_type_add(id, add) {
-        const {watchIds, watchTypes} = this.state;
-        let scope = watchIds[id];
-        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == add.type_id);
-        type.fields.push([add.name, add.spec]);
-        let obj = {
-            name: type.name,
-            type_id: add.type_id,
-            fields: type.fields,
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // created_at: 1585321625
+    // fields: Array(8)
+    // 0: (2) ["workspace_name", "str"]
+    // 1: (2) ["workspace_users", "[WorkspaceUser]"]
+    // 2: (2) ["settings", "WorkspaceSettings"]
+    // 3: (2) ["warnings_configuration", "WorkspaceWarningsConfiguration"]
+    // 4: (2) ["utc_creation_time", "int"]
+    // 5: (2) ["subscription_history", "[Subscription]"]
+    // 6: (2) ["bot", "WorkspaceUser"]
+    // 7: (2) ["icon", "_LightIcon?"]
+    // length: 8
+    // __proto__: Array(0)
+    // modified_at: 1588070435
+    // name: "_LightWorkspace"
+    // type_id: 31
+
+    getType(id, scope, objId) {
+        const {watchTypes} = this.state;
+        const type = Object.values(watchTypes[scope][id]).find(t => t.type_id == objId);
+        return JSON.parse(JSON.stringify(type)); //copy
+    }
+
+    mod_type(id, mod, modfn) {
+        const scope = this.getScope(id);
+        const type = this.getType(id, scope, mod.type_id);
+        const modType = modfn(type, mod);
+        this.editState('watchTypes', scope, id, type.name, modType);
+    }
+
+    mod_type_add(id, obj) {
+        const modfn = (type, mod) => {
+            type.fields.push([mod.name, mod.spec]);
+            type.modified_at = obj.modified_at;
+            return type;
         };
-        this.editState('watchTypes', scope, id, type.name, obj);
+        this.mod_type(id, obj, modfn);
     }
 
-    mod_type_mod(id, mod) {
-        const {watchIds, watchTypes} = this.state;
-        let scope = watchIds[id];
-        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == mod.type_id);
-        let fieldsIndex = type.fields.findIndex(f => f[0]==mod.name);
-        type.fields.splice(fieldsIndex, 1, [mod.name, mod.spec]);
-        let obj = {
-            name: type.name,
-            type_id: mod.type_id,
-            fields: type.fields,
+    mod_type_mod(id, obj) {
+        const modfn = (type, mod) => {
+            const fieldsIndex = type.fields.findIndex(f => f[0]==mod.name);
+            type.fields.splice(fieldsIndex, 1, [mod.name, mod.spec]);
+            type.modified_at = obj.modified_at;
+            return type;
         };
-        this.editState('watchTypes', scope, id, type.name, obj);
+        this.mod_type(id, obj, modfn);
     }
 
-    mod_type_ren(id, ren) {
-        const {watchIds, watchTypes} = this.state;
-        let scope = watchIds[id];
-        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == ren.type_id);
-        let fieldsIndex = type.fields.findIndex(f => f[0]==ren.name);
-        type.fields.splice(fieldsIndex, 1, [ren.to, type.fields[fieldsIndex][1]]);
-        let obj = {
-            name: type.name,
-            type_id: ren.type_id,
-            fields: type.fields,
+    mod_type_ren(id, obj) {
+        const modfn = (type, mod) => {
+            const fieldsIndex = type.fields.findIndex(f => f[0]==mod.name);
+            let spec = type.fields[fieldsIndex][1];
+            type.fields.splice(fieldsIndex, 1, [mod.to, spec]);
+            type.modified_at = obj.modified_at;
+            return type;
         };
-        this.editState('watchTypes', scope, id, type.name, obj);
+        this.mod_type(id, obj, modfn);
     }
 
-    mod_type_del(id, del) {
-        const {watchIds, watchTypes} = this.state;
-        let scope = watchIds[id];
-        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == del.type_id);
-        let fieldsIndex = type.fields.findIndex(f => f[0]==del.name);
-        type.fields.splice(fieldsIndex, 1);
-        let obj = {
-            name: type.name,
-            type_id: del.type_id,
-            fields: type.fields,
+    mod_type_del(id, obj) {
+        const modfn = (type, mod) => {
+            let fieldsIndex = type.fields.findIndex(f => f[0]==mod.name);
+            type.fields.splice(fieldsIndex, 1);
+            type.modified_at = obj.modified_at;
+            return type;
         };
-        this.editState('watchTypes', scope, id, type.name, obj);
+        this.mod_type(id, obj, modfn);
     }
 
-    new_type(id, newType) {
-        const {watchIds} = this.state;
-        let scope = watchIds[id];
-        let name = newType.name;
-        let obj = {
-            name: newType.name,
-            type_id: newType.type_id,
-            fields: [],
+    new_type(id, obj) {
+        this.editState('watchTypes', scope, id, type.name, {...obj, modified_at: obj.modified_at, fields: []});
+    }
+
+    set_type(id, obj) {
+        const type = this.getType(id, scope, obj.type_id);
+        this.editState('watchTypes', scope, id, type.name, {...type, modified_at: obj.modified_at, fields: obj.fields});
+    }
+
+    del_type(id, obj) {
+        this.deleteState('watchTypes', this.getScope(id), id, this.getType(id, scope, obj.type_id).name);
+    }
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // enums: Array(2)
+    // 0:
+    // created_at: 1591880988
+    // default: "FEMALE"
+    // enum_id: 0
+    // members: Array(3)
+    // 0: (2) ["FEMALE", "female"]
+    // 1: (2) ["MALE", "male"]
+    // 2: (2) ["INTERSEX", "intersex"]
+    // modified_at: null
+    // name: "Gender"
+
+    getEnum(id, scope, objId) {
+        const {watchEnums} = this.state;
+        const enu = Object.values(watchEnums[scope][id]).find(t => t.enum_id == objId);
+        return JSON.parse(JSON.stringify(enu)); //copy
+    }
+
+
+    mod_enum(id, mod, modfn) {
+        const scope = this.getScope(id);
+        const enu = this.getEnum(id, scope, mod.enum_id);
+        const modEnum = modfn(enu, mod);
+        this.editState('watchEnums', scope, id, enu.name, modEnum);
+    }
+
+    mod_enum_add(id, obj) { // enum_id, modified_at, name, value
+        const modfn = (enu, mod) => {
+            enu.members.push([mod.name, mod.value]);
+            enu.modified_at = enu.modified_at;
+            return enu;
         };
-        this.editState('watchTypes', scope, id, name, obj);
+        this.mod_enum(id, obj, modfn);
     }
 
-    set_type(id, set) {
-        const {watchIds, watchTypes} = this.state;
-        let scope = watchIds[id];
-        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == set.type_id);
-        let obj = {
-            name: type.name,
-            type_id: set.type_id,
-            fields: set.fields,
+    mod_enum_mod(id, obj) { // enum_id, modified_at, index, value
+        const modfn = (enu, mod) => {
+            enu.fields.splice(mod.index, 1, [enu.fields[mod.index][0], mod.value]);
+            enu.modified_at = obj.modified_at;
+            return enu;
         };
-        this.editState('watchTypes', scope, id, type.name, obj);
+        this.mod_enum(id, obj, modfn);
     }
 
-    del_type(id, del) {
-        const {watchIds, watchTypes} = this.state;
-        let scope = watchIds[id];
-        let type = Object.values(watchTypes[scope][id]).find(t => t.type_id == del);
-        this.deleteState('watchTypes', scope, id, type.name);
-    }
+    /////HIER GEVBLEVEN
 
-    mod_enum_add(id, add) {  // enum_id, modified_at, name, value
-        const {watchIds, watchEnums} = this.state;
-        let scope = watchIds[id];
-        let type = Object.values(watchEnums[scope][id]).find(t => t.type_id == add.type_id);
-        type.fields.push([add.name, add.spec]);
-        let obj = {
-            name: type.name,
-            type_id: add.type_id,
-            fields: type.fields,
+    mod_enum_ren(id, obj) { // enum_id, modified_at, index, name
+        const modfn = (enu, mod) => {
+            const fieldsIndex = enu.fields.findIndex(f => f[0]==mod.name);
+            let spec = enu.fields[fieldsIndex][1];
+            enu.fields.splice(fieldsIndex, 1, [mod.to, spec]);
+            enu.modified_at = obj.modified_at;
+            return enu;
         };
-        this.editState('watchEnums', scope, id, type.name, obj);
-    }
-
-    mod_enum_mod(id, mod) { // enum_id, modified_at, index, value
-        const {watchIds, watchEnums} = this.state;
-        let scope = watchIds[id];
-        let type = Object.values(watchEnums[scope][id]).find(t => t.type_id == mod.type_id);
-        let fieldsIndex = type.fields.findIndex(f => f[0]==mod.name);
-        type.fields.splice(fieldsIndex, 1, [mod.name, mod.spec]);
-        let obj = {
-            name: type.name,
-            type_id: mod.type_id,
-            fields: type.fields,
-        };
-        this.editState('watchEnums', scope, id, type.name, obj);
-    }
-
-    mod_enum_ren(id, ren) { // enum_id, modified_at, index, name
-        const {watchIds, watchEnums} = this.state;
-        let scope = watchIds[id];
-        let type = Object.values(watchEnums[scope][id]).find(t => t.type_id == ren.type_id);
-        let fieldsIndex = type.fields.findIndex(f => f[0]==ren.name);
-        type.fields.splice(fieldsIndex, 1, [ren.to, type.fields[fieldsIndex][1]]);
-        let obj = {
-            name: type.name,
-            type_id: ren.type_id,
-            fields: type.fields,
-        };
-        this.editState('watchEnums', scope, id, type.name, obj);
+        this.mod_enum(id, obj, modfn);
     }
 
     mod_enum_def(id, del) { // enum_id, index, modified_at
         const {watchIds, watchEnums} = this.state;
         let scope = watchIds[id];
-        let type = Object.values(watchEnums[scope][id]).find(t => t.type_id == del.type_id);
-        let fieldsIndex = type.fields.findIndex(f => f[0]==del.name);
-        type.fields.splice(fieldsIndex, 1);
+        let enu = Object.values(watchEnums[scope][id]).find(t => t.enu_id == del.enu_id);
+        let fieldsIndex = enu.fields.findIndex(f => f[0]==del.name);
+        enu.fields.splice(fieldsIndex, 1);
         let obj = {
-            name: type.name,
-            type_id: del.type_id,
-            fields: type.fields,
+            name: enu.name,
+            enu_id: del.enu_id,
+            fields: enu.fields,
         };
-        this.editState('watchEnums', scope, id, type.name, obj);
+        this.editState('watchEnums', scope, id, enu.name, obj);
     }
 
-    mod_enum_del(id, del) {  // enum_id, index, modified_at
-        const {watchIds, watchEnums} = this.state;
-        let scope = watchIds[id];
-        let type = Object.values(watchEnums[scope][id]).find(t => t.type_id == del.type_id);
-        let fieldsIndex = type.fields.findIndex(f => f[0]==del.name);
-        type.fields.splice(fieldsIndex, 1);
-        let obj = {
-            name: type.name,
-            type_id: del.type_id,
-            fields: type.fields,
+
+    mod_enum_del(id, obj) { // enum_id, index, modified_at
+        const modfn = (enu, mod) => {
+            let fieldsIndex = enu.fields.findIndex(f => f[0]==mod.name);
+            enu.fields.splice(fieldsIndex, 1);
+            enu.modified_at = obj.modified_at;
+            return enu;
         };
-        this.editState('watchEnums', scope, id, type.name, obj);
+        this.mod_enum(id, obj, modfn);
     }
+
+    new_enum(id, obj) {
+        this.editState('watchEnums', scope, id, enu.name, {...obj, modified_at: obj.modified_at, fields: []});
+    }
+
+    set_enum(id, obj) {
+        const enu = this.getEnum(id, scope, obj.enu_id);
+        this.editState('watchEnums', scope, id, enu.name, {...enu, modified_at: obj.modified_at, fields: obj.fields});
+    }
+
+    del_enum(id, obj) {
+        this.deleteState('watchEnums', this.getScope(id), id, this.getEnum(id, scope, obj.enu_id).name);
+    }
+
+
+
 
     set(id, set) {
         const {watchIds} = this.state;
