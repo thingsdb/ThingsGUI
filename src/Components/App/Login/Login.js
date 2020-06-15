@@ -24,7 +24,7 @@ const tag = LoginTAG;
 const Login = ({connected, loaded, savedConnections}) => {
     const initialState = {
         form: {
-            address: '',
+            address: 'localhost:9200',
             name: '',
             memo: '',
         },
@@ -37,12 +37,13 @@ const Login = ({connected, loaded, savedConnections}) => {
             insecureSkipVerify: false,
             secureConnection: false,
         },
+        oldName: '',
         showNewConn: isObjectEmpty(savedConnections),
         openSaveConn: false,
         editField: 'all',
     };
     const [state, setState] = React.useState(initialState);
-    const {credentials, editField, form, security, openSaveConn, showNewConn} = state;
+    const {credentials, editField, form, security, oldName, openSaveConn, showNewConn} = state;
 
     const handleNewConn = () => {
         setState({
@@ -67,11 +68,22 @@ const Login = ({connected, loaded, savedConnections}) => {
     };
 
     const handleClickSave = () => {
-        const obj = editField === 'name' ? {...form, ...credentials, ...security}
-            : editField==='credentials' ? {name: form.name, ...credentials}
-                : editField==='security' ? {name: form.name, ...security}
-                    : form;
-        editField==='name' ? ApplicationActions.newConn(obj, tag, handleClickCloseSaveConn) : ApplicationActions.editConn(obj, tag, handleClickCloseSaveConn);
+        switch(editField){
+        case 'name':
+            const obj = {...form, ...credentials, ...security};
+            oldName ? ApplicationActions.renameConn(obj, oldName, tag, handleClickCloseSaveConn)
+                : ApplicationActions.newConn(obj, tag, handleClickCloseSaveConn);
+            break;
+        case 'credentials':
+            ApplicationActions.editConn({name: form.name, ...credentials}, tag, handleClickCloseSaveConn);
+            break;
+        case 'security':
+            ApplicationActions.editConn({name: form.name, ...security}, tag, handleClickCloseSaveConn);
+            break;
+        case 'address':
+            ApplicationActions.editConn(form, tag, handleClickCloseSaveConn);
+            break;
+        }
     };
 
     const handleClickBack = () => {
@@ -81,13 +93,6 @@ const Login = ({connected, loaded, savedConnections}) => {
     const handleClickOk = () => {
         ApplicationActions.connect({...form, ...credentials, ...security}, tag);
     };
-
-    // const handleKeyPress = (event) => {
-    //     const {key} = event;
-    //     if (key == 'Enter') {
-    //         handleClickOk();
-    //     }
-    // };
 
     const handleEditConn = (ky, val) => {
         setState(prevState => {
@@ -105,7 +110,7 @@ const Login = ({connected, loaded, savedConnections}) => {
                 insecureSkipVerify: val.insecureSkipVerify,
                 secureConnection: val.secureConnection
             };
-            return {...prevState, openSaveConn: true, editField: ky, credentials: updatedCred, form: updatedForm, security: updatedSecurity};
+            return {...prevState, openSaveConn: true, editField: ky, credentials: updatedCred, form: updatedForm, oldName: ky=='name'?val.name:'', security: updatedSecurity};
         });
     };
 

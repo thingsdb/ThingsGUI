@@ -200,13 +200,28 @@ const Watcher = ({collections, customTypes, watchEnums, watchIds, watchProcedure
                                 customTypes={customTypes}
                             />
                             {Object.keys(watchProcedures).length>0&& (
-                                <HarmonicTree items={watchProcedures} title="PROCEDURES" jsonView={tabIndex === 1} />
+                                <HarmonicTree
+                                    items={watchProcedures}
+                                    title="PROCEDURES"
+                                    jsonView={tabIndex === 1}
+                                    jsonReplacer={replacer}
+                                />
                             )}
                             {Object.keys(watchTypes).length>0&& (
-                                <HarmonicTree items={watchTypes} title="TYPES" jsonView={tabIndex === 1} />
+                                <HarmonicTree
+                                    items={watchTypes}
+                                    title="TYPES"
+                                    jsonView={tabIndex === 1}
+                                    jsonReplacer={replacer}
+                                />
                             )}
                             {Object.keys(watchEnums).length>0&& (
-                                <HarmonicTree items={watchEnums} title="ENUMS" jsonView={tabIndex === 1} />
+                                <HarmonicTree
+                                    items={watchEnums}
+                                    title="ENUMS"
+                                    jsonView={tabIndex === 1}
+                                    jsonReplacer={replacer}
+                                />
                             )}
                         </List>
                     </Paper>

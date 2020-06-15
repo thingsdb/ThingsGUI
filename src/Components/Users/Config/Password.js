@@ -98,7 +98,7 @@ const Password = ({user}) => {
         <React.Fragment>
             <ErrorMsg tag={tag} />
             <Typography component="div" variant="caption">
-                {!user.tokens.length && !form.set ? (
+                {!form.set && !user.tokens.length ? (
                     <FormLabel component="label" error>
                         {`This user has no access tokens. Resetting the password would lock out ${user.name}.`}
                     </FormLabel>

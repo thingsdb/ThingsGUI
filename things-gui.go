@@ -94,6 +94,10 @@ func (app *App) SocketRouter() {
 		return handlers.EditConnection(app.client[s.ID()], data)
 	})
 
+	app.server.OnEvent("/", "renameConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
+		return handlers.RenameConnection(app.client[s.ID()], data)
+	})
+
 	app.server.OnEvent("/", "delConn", func(s socketio.Conn, data handlers.LoginData) (int, interface{}, util.Message) {
 		return handlers.DelConnection(app.client[s.ID()], data)
 	})

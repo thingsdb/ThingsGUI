@@ -106,17 +106,6 @@ const getScopes2 = (collections, nodes) => [
     '@thingsdb', ...nodes.map((n) => (`@node:${n.node_id}`)), ...collections.map(c => `@collection:${c.name}`)
 ];
 
-// const getScopes2 = (collections, nodes) => [
-//     [
-//         {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
-//         ...nodes.map(n => ({name: `Node:${n.node_id}`, value: `@node:${n.node_id}`, collectionId: null})),
-//         ...collections.map(c => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
-//     ],
-//     [
-//         '@thingsdb', ...nodes.map((n) => (`@node:${n.node_id}`)), ...collections.map(c => `@collection:${c.name}`)
-//     ]
-// ];
-
 const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
 const allDataTypes = (types) => {
@@ -162,6 +151,12 @@ const revealCustomType = (i) => {
     return i.slice(arr, i.length-(arr+opt));
 };
 
+const swap = (items, index) => {
+    const i = items[0];
+    items[0] = items[index];
+    items[index] = i;
+    return items;
+};
 
 export {
     addDoubleQuotesAroundKeys,
@@ -200,6 +195,7 @@ export {
     SimpleModal,
     StartStopPolling,
     StickyHeadTable,
+    swap,
     TableWithBadges,
     TableWithButtons,
     ThingsTree,

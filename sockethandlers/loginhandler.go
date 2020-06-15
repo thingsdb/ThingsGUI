@@ -260,22 +260,31 @@ func GetConnection(client *Client) (int, interface{}, util.Message) {
 // NewConnection saves a new connection locally
 func NewConnection(client *Client, data map[string]interface{}) (int, interface{}, util.Message) {
 	fn := func(mapping map[string]map[string]interface{}) {
-		name := data["name"]
-		n := name.(string)
-		mapping[n] = data
+		name := data["name"].(string)
+		mapping[name] = data
 	}
 	return NewEditConnection(client, data, fn)
 }
 
-// EditConnection edits a new connection locally
+// EditConnection edits a connection locally
 func EditConnection(client *Client, data map[string]interface{}) (int, interface{}, util.Message) {
-
 	fn := func(mapping map[string]map[string]interface{}) {
-		name := data["name"]
-		n := name.(string)
+		name := data["name"].(string)
 		for k, v := range data {
-			mapping[n][k] = v
+			mapping[name][k] = v
 		}
+	}
+	return NewEditConnection(client, data, fn)
+}
+
+// RenameConnection renames a connection locally
+func RenameConnection(client *Client, data map[string]interface{}) (int, interface{}, util.Message) {
+	fn := func(mapping map[string]map[string]interface{}) {
+		newName := data["newName"].(string)
+		oldName := data["oldName"].(string)
+		mapping[newName] = mapping[oldName]
+		mapping[newName]["name"] = newName
+		delete(mapping, oldName)
 	}
 	return NewEditConnection(client, data, fn)
 }

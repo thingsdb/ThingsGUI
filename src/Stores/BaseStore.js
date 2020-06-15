@@ -1,9 +1,11 @@
 import Vlow from 'vlow';
 import io from 'socket.io-client';
 import PropTypes from 'prop-types';
-import {ErrorActions} from './ErrorStore';
+
 import {ApplicationActions} from './ApplicationStore';
+import {ErrorActions} from './ErrorStore';
 import {LoginTAG, WatcherTAG} from '../constants';
+
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
     reconnection: true,
@@ -169,30 +171,11 @@ const ProtoMap = {
     ProtoOnWarn: 5,
 };
 
-const Jobs = {
-    add: 'add',
-    del_enum: 'del_enum', //new
-    del_procedure: 'del_procedure',
-    del_type: 'del_type',
-    del: 'del',
-    emit: 'emit', //new
-    event: 'event', //new
-    mod_enum_add: 'mod_enum_add', //new
-    mod_enum_def: 'mod_enum_def', //new
-    mod_enum_del: 'mod_enum_del', //new
-    mod_enum_mod: 'mod_enum_mod', //new
-    mod_enum_ren: 'mod_enum_ren', //new
-    mod_type_add: 'mod_type_add',
-    mod_type_del: 'mod_type_del',
-    mod_type_mod: 'mod_type_mod',
-    mod_type_ren: 'mod_type_ren', //new
-    new_procedure: 'new_procedure',
-    new_type: 'new_type',
-    remove: 'remove',
-    set_enum: 'set_enum', //new
-    set_type: 'set_type',
-    set: 'set',
-    splice: 'splice',
+const swap = (items, index) => {
+    const i = items[0];
+    items[0] = items[index];
+    items[index] = i;
+    return items;
 };
 
 class EventStore extends BaseStore {
@@ -318,7 +301,6 @@ class EventStore extends BaseStore {
 
     watchInit(data) {
         let scope = `@collection:${data.collection}`;
-
         this.setState(prevState => {
             const watchIds = {...prevState.watchIds, [data.thing['#']]: scope};
             const watchThings = {...prevState.watchThings, [scope]: {...prevState.watchThings[scope], [data.thing['#']]: data.thing}};
@@ -337,7 +319,6 @@ class EventStore extends BaseStore {
                 res['watchTypes'] = watchTypes;
                 res['watchEnums'] = watchEnums;
             }
-
             return res;
         });
 
@@ -345,89 +326,8 @@ class EventStore extends BaseStore {
 
     watchUpdate(data) {
         for (let i = 0; i<data.jobs.length; i++) {
-            switch(true){
-            case data.jobs[i].hasOwnProperty(Jobs.set):
-                this.set(data['#'], data.jobs[i].set);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.del):
-                this.del(data['#'], data.jobs[i].del);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.splice):
-                this.splice(data['#'], data.jobs[i].splice);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.add):
-                this.add(data['#'], data.jobs[i].add);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.remove):
-                this.remove(data['#'], data.jobs[i].remove);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.new_procedure):
-                this.new_procedure(data['#'], data.jobs[i].new_procedure);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.del_procedure):
-                this.del_procedure(data['#'], data.jobs[i].del_procedure);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.mod_type_add):
-                this.mod_type_add(data['#'], data.jobs[i].mod_type_add);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.mod_type_mod):
-                this.mod_type_mod(data['#'], data.jobs[i].mod_type_mod);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.mod_type_del):
-                this.mod_type_del(data['#'], data.jobs[i].mod_type_del);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.mod_type_ren):
-                this.mod_type_ren(data['#'], data.jobs[i].mod_type_ren);
-                console.log(data)
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.new_type):
-                this.new_type(data['#'], data.jobs[i].new_type);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.set_type):
-                this.set_type(data['#'], data.jobs[i].set_type);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.del_type):
-                this.del_type(data['#'], data.jobs[i].del_type);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.mod_enum_add):
-                console.log(data)
-                // this.mod_enum_add(data['#'], data.jobs[i].mod_enum_add);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.mod_enum_mod):
-                console.log(data)
-                // this.mod_enum_mod(data['#'], data.jobs[i].mod_enum_mod);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.mod_enum_def):
-                console.log(data)
-                // this.mod_enum_def(data['#'], data.jobs[i].mod_enum_def);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.mod_enum_del):
-                console.log(data)
-                // this.mod_enum_del(data['#'], data.jobs[i].mod_enum_del);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.mod_enum_ren):
-                // this.mod_enum_ren(data['#'], data.jobs[i].mod_enum_ren);
-                console.log(data)
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.set_enum):
-                console.log(data)
-                // this.set_enum(data['#'], data.jobs[i].set_enum);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.del_enum):
-                console.log(data)
-                // this.del_enum(data['#'], data.jobs[i].del_enum);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.emit):
-                console.log(data)
-                // this.del_enum(data['#'], data.jobs[i].del_enum);
-                break;
-            case data.jobs[i].hasOwnProperty(Jobs.event):
-                console.log(data)
-                // this.del_enum(data['#'], data.jobs[i].del_enum);
-                break;
-            default:
-
-            }
+            const key = Object.keys(data.jobs[i])[0];
+            this[key](data['#'], data.jobs[i][key]);
         }
     }
 
@@ -458,7 +358,6 @@ class EventStore extends BaseStore {
         return scope;
     };
 
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -472,25 +371,12 @@ class EventStore extends BaseStore {
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    // created_at: 1585321625
-    // fields: Array(8)
-    // 0: (2) ["workspace_name", "str"]
-    // 1: (2) ["workspace_users", "[WorkspaceUser]"]
-    // 2: (2) ["settings", "WorkspaceSettings"]
-    // 3: (2) ["warnings_configuration", "WorkspaceWarningsConfiguration"]
-    // 4: (2) ["utc_creation_time", "int"]
-    // 5: (2) ["subscription_history", "[Subscription]"]
-    // 6: (2) ["bot", "WorkspaceUser"]
-    // 7: (2) ["icon", "_LightIcon?"]
-    // length: 8
-    // __proto__: Array(0)
-    // modified_at: 1588070435
-    // name: "_LightWorkspace"
-    // type_id: 31
+
 
     getType(id, scope, objId) {
         const {watchTypes} = this.state;
         const type = Object.values(watchTypes[scope][id]).find(t => t.type_id == objId);
+        console.log(objId, type, watchTypes);
         return JSON.parse(JSON.stringify(type)); //copy
     }
 
@@ -542,33 +428,24 @@ class EventStore extends BaseStore {
     }
 
     new_type(id, obj) {
-        this.editState('watchTypes', scope, id, type.name, {...obj, modified_at: obj.modified_at, fields: []});
+        this.editState('watchTypes', this.getScope(id), id, obj.name, {...obj, modified_at: obj.modified_at, fields: []});
     }
 
     set_type(id, obj) {
+        const scope = this.getScope(id);
         const type = this.getType(id, scope, obj.type_id);
         this.editState('watchTypes', scope, id, type.name, {...type, modified_at: obj.modified_at, fields: obj.fields});
     }
 
-    del_type(id, obj) {
-        this.deleteState('watchTypes', this.getScope(id), id, this.getType(id, scope, obj.type_id).name);
+    del_type(id, index) {
+        const scope = this.getScope(id);
+        this.deleteState('watchTypes', scope, id, this.getType(id, scope, index).name);
     }
 
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // enums: Array(2)
-    // 0:
-    // created_at: 1591880988
-    // default: "FEMALE"
-    // enum_id: 0
-    // members: Array(3)
-    // 0: (2) ["FEMALE", "female"]
-    // 1: (2) ["MALE", "male"]
-    // 2: (2) ["INTERSEX", "intersex"]
-    // modified_at: null
-    // name: "Gender"
 
     getEnum(id, scope, objId) {
         const {watchEnums} = this.state;
@@ -587,7 +464,7 @@ class EventStore extends BaseStore {
     mod_enum_add(id, obj) { // enum_id, modified_at, name, value
         const modfn = (enu, mod) => {
             enu.members.push([mod.name, mod.value]);
-            enu.modified_at = enu.modified_at;
+            enu.modified_at = obj.modified_at;
             return enu;
         };
         this.mod_enum(id, obj, modfn);
@@ -595,84 +472,71 @@ class EventStore extends BaseStore {
 
     mod_enum_mod(id, obj) { // enum_id, modified_at, index, value
         const modfn = (enu, mod) => {
-            enu.fields.splice(mod.index, 1, [enu.fields[mod.index][0], mod.value]);
+            enu.members.splice(mod.index, 1, [enu.members[mod.index][0], mod.value]);
             enu.modified_at = obj.modified_at;
             return enu;
         };
         this.mod_enum(id, obj, modfn);
     }
-
-    /////HIER GEVBLEVEN
 
     mod_enum_ren(id, obj) { // enum_id, modified_at, index, name
         const modfn = (enu, mod) => {
-            const fieldsIndex = enu.fields.findIndex(f => f[0]==mod.name);
-            let spec = enu.fields[fieldsIndex][1];
-            enu.fields.splice(fieldsIndex, 1, [mod.to, spec]);
+            enu.members.splice(mod.index, 1, [mod.name, enu.members[mod.index][1]]);
             enu.modified_at = obj.modified_at;
             return enu;
         };
         this.mod_enum(id, obj, modfn);
     }
 
-    mod_enum_def(id, del) { // enum_id, index, modified_at
-        const {watchIds, watchEnums} = this.state;
-        let scope = watchIds[id];
-        let enu = Object.values(watchEnums[scope][id]).find(t => t.enu_id == del.enu_id);
-        let fieldsIndex = enu.fields.findIndex(f => f[0]==del.name);
-        enu.fields.splice(fieldsIndex, 1);
-        let obj = {
-            name: enu.name,
-            enu_id: del.enu_id,
-            fields: enu.fields,
+    mod_enum_def(id, obj) { // enum_id, index, modified_at
+        const modfn = (enu, mod) => {
+            enu.default = enu.members[mod.index][0];
+            enu.members = swap(enu.members, mod.index);
+            enu.modified_at = obj.modified_at;
+            return enu;
         };
-        this.editState('watchEnums', scope, id, enu.name, obj);
+        this.mod_enum(id, obj, modfn);
     }
 
 
     mod_enum_del(id, obj) { // enum_id, index, modified_at
         const modfn = (enu, mod) => {
-            let fieldsIndex = enu.fields.findIndex(f => f[0]==mod.name);
-            enu.fields.splice(fieldsIndex, 1);
+            enu.members.splice(mod.index, 1);
             enu.modified_at = obj.modified_at;
+            const lastIndex = enu.members.length-1;
+            enu.default = enu.members[lastIndex][0];
+            enu.members = swap(enu.members, lastIndex);
             return enu;
         };
         this.mod_enum(id, obj, modfn);
     }
 
-    new_enum(id, obj) {
-        this.editState('watchEnums', scope, id, enu.name, {...obj, modified_at: obj.modified_at, fields: []});
-    }
-
     set_enum(id, obj) {
-        const enu = this.getEnum(id, scope, obj.enu_id);
-        this.editState('watchEnums', scope, id, enu.name, {...enu, modified_at: obj.modified_at, fields: obj.fields});
+        const scope = this.getScope(id);
+        this.editState('watchEnums', scope, id, obj.name, {...obj, default: obj.members[0][0], modified_at: null});
     }
 
-    del_enum(id, obj) {
-        this.deleteState('watchEnums', this.getScope(id), id, this.getEnum(id, scope, obj.enu_id).name);
+    del_enum(id, index) {
+        const scope = this.getScope(id);
+        this.deleteState('watchEnums', scope, id, this.getEnum(id, scope, index).name);
     }
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     set(id, set) {
-        const {watchIds} = this.state;
-        let scope = watchIds[id];
         let key = Object.keys(set)[0];
         let obj = set[key].hasOwnProperty('#') ? {'#': set[key]['#']} : set[key];
-        this.editState('watchThings', scope, id, key, obj);
+        this.editState('watchThings', this.getScope(id), id, key, obj);
     }
 
     del(id, del) {
-        const {watchIds} = this.state;
-        let scope = watchIds[id];
-        this.deleteState('watchThings', scope, id, del);
+        this.deleteState('watchThings', this.getScope(id), id, del);
     }
 
     splice(id, splice) {
-        const {watchIds} = this.state;
-        let scope = watchIds[id];
+        const scope = this.getScope(id);
         const prop = Object.keys(splice)[0];
         const index = splice[prop][0];
         const deleteCount = splice[prop][1];
@@ -695,9 +559,7 @@ class EventStore extends BaseStore {
     }
 
     add(id, add) {
-        const {watchIds} = this.state;
-        let scope = watchIds[id];
-
+        const scope = this.getScope(id);
         const prop = Object.keys(add);
         this.setState(prevState => {
             const prev = prevState.watchThings;
@@ -712,9 +574,7 @@ class EventStore extends BaseStore {
     }
 
     remove(id, remove) {
-        const {watchIds} = this.state;
-        let scope = watchIds[id];
-
+        const scope = this.getScope(id);
         const prop = Object.keys(remove);
         this.setState(prevState => {
             const prev = prevState.watchThings;

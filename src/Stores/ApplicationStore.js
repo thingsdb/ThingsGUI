@@ -17,11 +17,12 @@ const ApplicationActions = Vlow.createActions([
     'disconnect',
     'editConn',
     'getConn',
-    'pushNotifications',
     'navigate',
     'newConn',
     'openEditor',
+    'pushNotifications',
     'reconnect',
+    'renameConn',
 ]);
 
 
@@ -144,8 +145,8 @@ class ApplicationStore extends BaseStore {
     onEditConn(config, tag, cb) {
         this.emit('editConn', config).done((_data) => {
             this.setState(prevState => {
-                const savedConn = Object.assign({}, prevState.savedConnections, {[config.name]: {...prevState.savedConnections[config.name], ...config}});
-                const update = Object.assign({}, prevState, {savedConnections: savedConn});
+                const savedConn = {... prevState.savedConnections, [config.name]: {...prevState.savedConnections[config.name], ...config}};
+                const update = {...prevState, savedConnections: savedConn};
                 return update;
             });
             cb();
@@ -165,8 +166,23 @@ class ApplicationStore extends BaseStore {
     onNewConn(config, tag, cb) {
         this.emit('newConn', config).done((_data) => {
             this.setState(prevState => {
-                const savedConn = Object.assign({}, prevState.savedConnections, {[config.name]: config});
-                const update = Object.assign({}, prevState, {savedConnections: savedConn});
+                const savedConn = {... prevState.savedConnections, [config.name]: config};
+                const update = {...prevState, savedConnections: savedConn};
+                return update;
+            });
+            cb();
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onRenameConn(config, oldName, tag, cb) {
+        this.emit('renameConn', {newName: config.name, oldName: oldName}).done((_data) => {
+            this.setState(prevState => {
+                let copy = JSON.parse(JSON.stringify(prevState.savedConnections)); // copy
+                delete copy[oldName];
+                const savedConn =  {...copy, [config.name]: config};
+                const update = {...prevState, savedConnections: savedConn};
                 return update;
             });
             cb();
@@ -180,7 +196,7 @@ class ApplicationStore extends BaseStore {
             this.setState(prevState => {
                 let copy = JSON.parse(JSON.stringify(prevState.savedConnections)); // copy
                 delete copy[config.name];
-                const update = Object.assign({}, prevState, {savedConnections: copy});
+                const update = {...prevState, savedConnections: copy};
                 return update;
             });
         }).fail((event, status, message) => {

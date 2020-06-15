@@ -79,7 +79,8 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
     const val = thingValue(type, thing, customTypes);
 
     // buttons
-    const canToggle = (type === 'thing' && Object.keys(thing).length>1) || type === 'object' || (type === 'array' && thing.length>0) || type === 'closure' || type === 'regex'|| type === 'error' || (type === 'set' && thing['$'].length>0);
+    console.log('t', thing);
+    const canToggle = type === 'object' || type === 'closure' || type === 'regex'|| type === 'error' || (type === 'thing' && Object.keys(thing).length>1) || (type === 'array' && thing.length>0) || (type === 'set' && thing['$'].length>0);
 
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onOpen={handleOpenClose} onRenderChildren={renderChildren} onAction={onAction} />
