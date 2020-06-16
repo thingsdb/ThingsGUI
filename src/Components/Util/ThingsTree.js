@@ -79,7 +79,6 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
     const val = thingValue(type, thing, customTypes);
 
     // buttons
-    console.log('t', thing);
     const canToggle = type === 'object' || type === 'closure' || type === 'regex'|| type === 'error' || (type === 'thing' && Object.keys(thing).length>1) || (type === 'array' && thing.length>0) || (type === 'set' && thing['$'].length>0);
 
     return (

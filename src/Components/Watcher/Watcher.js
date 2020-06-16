@@ -11,6 +11,7 @@ import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import React from 'react';
 import RemoveIcon from '@material-ui/icons/RemoveCircleOutlined';
+import deleteIcon from '@material-ui/icons/Delete';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import TextField from '@material-ui/core/TextField';
@@ -23,7 +24,7 @@ import {WatcherTAG} from '../../constants';
 
 const withStores = withVlow([{
     store: EventStore,
-    keys: ['watchEnums', 'watchIds', 'watchThings', 'watchProcedures', 'watchTypes']
+    keys: ['watchEvents', 'watchEnums', 'watchIds', 'watchThings', 'watchProcedures', 'watchTypes']
 }, {
     store: ThingsdbStore,
     keys: ['collections']
@@ -64,7 +65,7 @@ const useStyles = makeStyles(theme => ({
 
 const tag = WatcherTAG;
 
-const Watcher = ({collections, customTypes, watchEnums, watchIds, watchProcedures, watchThings, watchTypes}) => {
+const Watcher = ({collections, customTypes, watchEvents, watchEnums, watchIds, watchProcedures, watchThings, watchTypes}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
     const [state, setState] = React.useState({
@@ -109,6 +110,10 @@ const Watcher = ({collections, customTypes, watchEnums, watchIds, watchProcedure
             id,
         );
         TypeActions.getTypes(s, tag);
+    };
+
+    const handleRemoveEv = (scope, name) => () => {
+        console.log(scope, name);
     };
 
 
@@ -223,6 +228,14 @@ const Watcher = ({collections, customTypes, watchEnums, watchIds, watchProcedure
                                     jsonReplacer={replacer}
                                 />
                             )}
+                            {Object.keys(watchEvents).length>0&& (
+                                <HarmonicTree
+                                    items={watchEvents}
+                                    title="EVENTS"
+                                    jsonView={tabIndex === 1}
+                                    jsonReplacer={replacer}
+                                />
+                            )}
                         </List>
                     </Paper>
                 </Collapse>
@@ -233,6 +246,7 @@ const Watcher = ({collections, customTypes, watchEnums, watchIds, watchProcedure
 
 Watcher.propTypes = {
     /* event store properties */
+    watchEvents: EventStore.types.watchEvents.isRequired,
     watchEnums: EventStore.types.watchEnums.isRequired,
     watchThings: EventStore.types.watchThings.isRequired,
     watchIds: EventStore.types.watchIds.isRequired,

@@ -53,7 +53,6 @@ const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
     };
 
     const handleConnectToo = (name) => () => {
-        console.log(name)
         ApplicationActions.connectToo({name: name}, tag);
     };
 
@@ -72,7 +71,6 @@ const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
         {title: 'Secure connection', key: 'security', keyList: 'secureConnection', default: false},
     ];
 
-    console.log(savedConnections)
     const sortedConns = orderByName(Object.values(savedConnections));
     return (
         <List>

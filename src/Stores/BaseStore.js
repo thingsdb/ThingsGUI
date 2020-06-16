@@ -159,7 +159,7 @@ const EventActions = Vlow.createActions([
     'unwatch',
     'reWatch',
     'resetWatch',
-    'openEventChannel',
+    'openEvCh',
 ]);
 
 const ProtoMap = {
@@ -182,6 +182,7 @@ class EventStore extends BaseStore {
 
     static types = {
         watchEnums: PropTypes.object,
+        watchEvents: PropTypes.object,
         watchIds: PropTypes.object,
         watchProcedures: PropTypes.object,
         watchThings: PropTypes.object,
@@ -190,6 +191,7 @@ class EventStore extends BaseStore {
 
     static defaults = {
         watchEnums: {},
+        watchEvents: {},
         watchIds: {},
         watchProcedures: {},
         watchThings: {},
@@ -201,10 +203,12 @@ class EventStore extends BaseStore {
         this.state = EventStore.defaults;
     }
 
-    onOpenEventChannel() {
+    // STOREACTIONS
+
+    onOpenEvCh() {
         socket.emit('getEvent');
         socket.on('event', (data) => {
-            console.log(data);
+            console.log(data, this.state);
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);
@@ -240,38 +244,6 @@ class EventStore extends BaseStore {
         });
     }
 
-    unwatch(id) {
-        const {watchIds} = this.state;
-        let scope = watchIds[id];
-
-        this.setState(prevState => {
-
-            let copyThings = JSON.parse(JSON.stringify(prevState.watchThings)); // copy
-            Object.keys(copyThings[scope]).length<2 ? delete copyThings[scope] : delete copyThings[scope][id];
-
-            let copyIds = JSON.parse(JSON.stringify(prevState.watchIds)); // copy
-            delete copyIds[id];
-
-            let res = {watchThings: copyThings, watchIds: copyIds};
-
-            let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures)); // copy
-            if (copyProcedures[scope]&&copyProcedures[scope][id]) {
-                delete copyProcedures[scope];
-
-                let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes)); // copy
-                delete copyTypes[scope];
-
-                let copyEnums = JSON.parse(JSON.stringify(prevState.watchEnums)); // copy
-                delete copyEnums[scope];
-
-                res['watchProcedures'] = copyProcedures;
-                res['watchTypes'] = copyTypes;
-                res['watchEnums'] = copyEnums;
-            }
-            return res;
-        });
-    }
-
     onUnwatch(id, tag=null) {
         const {watchIds} = this.state;
         let scope = watchIds[id];
@@ -293,10 +265,41 @@ class EventStore extends BaseStore {
     }
 
     onResetWatch() {
-        this.setState({
-            watchThings: {},
-            watchIds: {}
+        this.setState(defaults);
+    }
+
+    // HELPER FUNCTIONS
+
+    editState(propName, scope, id, name, obj) {
+        this.setState(prevState => {
+            const prev = prevState[propName];
+            const update = {...prev, [scope]: {...prev[scope], [id]: {...prev[scope][id], [name]: obj}}};
+            return {[propName]: update};
         });
+    }
+    deleteState(propName, scope, id, name) {
+        this.setState(prevState => {
+            const prev = prevState[propName];
+            let copyState = JSON.parse(JSON.stringify(prev[scope][id])); // copy
+            delete copyState[name];
+            const update = {...prev, [scope]: {...prev[scope], [id]: copyState}};
+            return {[propName]: update};
+        });
+    }
+
+    getScope(id) {
+        const {watchIds} = this.state;
+        let scope = watchIds[id];
+        return scope;
+    };
+
+    // WATCH EVENTS
+
+    nodeStatus(data) {
+        if (data=='SHUTTING_DOWN') {
+            ApplicationActions.reconnect();
+            ErrorActions.setToastError('Lost connection with ThingsDB. Trying to reconnect.');
+        }
     }
 
     watchInit(data) {
@@ -327,38 +330,48 @@ class EventStore extends BaseStore {
     watchUpdate(data) {
         for (let i = 0; i<data.jobs.length; i++) {
             const key = Object.keys(data.jobs[i])[0];
-            this[key](data['#'], data.jobs[i][key]);
+            this[key]&&this[key](data['#'], data.jobs[i][key]);
         }
     }
 
+    // ON_UPDATE MUTATIONS
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    editState(propName, scope, id, name, obj) {
-        this.setState(prevState => {
-            const prev = prevState[propName];
-            const update = {...prev, [scope]: {...prev[scope], [id]: {...prev[scope][id], [name]: obj}}};
-            return {[propName]: update};
-        });
-    }
-    deleteState(propName, scope, id, name) {
-        this.setState(prevState => {
-            const prev = prevState[propName];
-            let copyState = JSON.parse(JSON.stringify(prev[scope][id])); // copy
-            delete copyState[name];
-            const update = {...prev, [scope]: {...prev[scope], [id]: copyState}};
-            return {[propName]: update};
-        });
-    }
-
-    getScope(id) {
+    unwatch(id) {
         const {watchIds} = this.state;
         let scope = watchIds[id];
-        return scope;
-    };
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
+        this.setState(prevState => {
+
+            let copyThings = JSON.parse(JSON.stringify(prevState.watchThings)); // copy
+            Object.keys(copyThings[scope]).length<2 ? delete copyThings[scope] : delete copyThings[scope][id];
+
+            let copyIds = JSON.parse(JSON.stringify(prevState.watchIds)); // copy
+            delete copyIds[id];
+
+            let copyEvents = JSON.parse(JSON.stringify(prevState.watchEvents)); // copy
+            copyEvents[scope]&&(Object.keys(copyEvents[scope]).length<2 ? delete copyEvents[scope] : copyEvents[scope][id]&&delete copyEvents[scope][id]);
+
+            let res = {watchThings: copyThings, watchIds: copyIds, watchEvents: copyEvents};
+
+            let copyProcedures = JSON.parse(JSON.stringify(prevState.watchProcedures)); // copy
+            if (copyProcedures[scope]&&copyProcedures[scope][id]) {
+                delete copyProcedures[scope];
+
+                let copyTypes = JSON.parse(JSON.stringify(prevState.watchTypes)); // copy
+                delete copyTypes[scope];
+
+                let copyEnums = JSON.parse(JSON.stringify(prevState.watchEnums)); // copy
+                delete copyEnums[scope];
+
+                res['watchProcedures'] = copyProcedures;
+                res['watchTypes'] = copyTypes;
+                res['watchEnums'] = copyEnums;
+            }
+            return res;
+        });
+    }
+
+    ////// PROCEDURES
 
 
     new_procedure(id, newProcedure) {
@@ -370,13 +383,12 @@ class EventStore extends BaseStore {
     }
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////// TYPES
 
 
     getType(id, scope, objId) {
         const {watchTypes} = this.state;
         const type = Object.values(watchTypes[scope][id]).find(t => t.type_id == objId);
-        console.log(objId, type, watchTypes);
         return JSON.parse(JSON.stringify(type)); //copy
     }
 
@@ -444,7 +456,7 @@ class EventStore extends BaseStore {
 
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////// ENUMS
 
 
     getEnum(id, scope, objId) {
@@ -522,7 +534,7 @@ class EventStore extends BaseStore {
     }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////// THINGS
 
 
     set(id, set) {
@@ -592,11 +604,13 @@ class EventStore extends BaseStore {
         });
     }
 
-    nodeStatus(data) {
-        if (data=='SHUTTING_DOWN') {
-            ApplicationActions.reconnect();
-            ErrorActions.setToastError('Lost connection with ThingsDB. Trying to reconnect.');
-        }
+    event(id, obj) {
+        const scope = this.getScope(id);
+        this.setState(prevState => {
+            const prev = prevState.watchEvents;
+            const update = {...prev, [scope]: {...prev[scope], [id]: {...(prev[scope]&&prev[scope][id]||{}), [obj[0]]: [...(prev[scope]&&prev[scope][id]&&prev[scope][id][obj[0]]||[]), obj[1]]}}};
+            return {watchEvents: update};
+        });
     }
 }
 
