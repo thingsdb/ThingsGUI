@@ -47,6 +47,23 @@ const theme = createMuiTheme({
             secondary: '#00000'
         }
     },
+    overrides: {
+        MuiCssBaseline: {
+            '@global': {
+                '*::-webkit-scrollbar': {
+                    width: '0.7em',
+                    height: '0.6em'
+                },
+                '*::-webkit-scrollbar-track': {
+                    '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+                },
+                '*::-webkit-scrollbar-thumb': {
+                    backgroundColor: 'rgba(85, 161, 255, 0.51)',
+                    outline: '1px solid slategrey'
+                }
+            }
+        }
+    }
 });
 
 

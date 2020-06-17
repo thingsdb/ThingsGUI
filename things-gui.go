@@ -19,7 +19,7 @@ import (
 )
 
 // AppVersion exposes version information
-const AppVersion = "0.2.1"
+const AppVersion = "0.2.2"
 
 var connFile = ".things-gui_config"
 
@@ -92,6 +92,10 @@ func (app *App) SocketRouter() {
 
 	app.server.OnEvent("/", "editConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
 		return handlers.EditConnection(app.client[s.ID()], data)
+	})
+
+	app.server.OnEvent("/", "renameConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
+		return handlers.RenameConnection(app.client[s.ID()], data)
 	})
 
 	app.server.OnEvent("/", "delConn", func(s socketio.Conn, data handlers.LoginData) (int, interface{}, util.Message) {

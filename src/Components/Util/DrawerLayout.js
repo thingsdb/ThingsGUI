@@ -12,20 +12,6 @@ import {makeStyles} from '@material-ui/core/styles';
 
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        '@global': {
-            '*::-webkit-scrollbar': {
-                width: '0.4em'
-            },
-            '*::-webkit-scrollbar-track': {
-                '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
-            },
-            '*::-webkit-scrollbar-thumb': {
-                backgroundColor: theme.palette.primary.main,
-                outline: '1px solid slategrey'
-            }
-        },
-    },
     flex: {
         display: 'flex',
     },
@@ -124,7 +110,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, toast, bottomBar, dra
 
 
     return(
-        <div className={classes.root}>
+        <div>
             <div className={classes.flex}>
                 <div
                     className={clsx(classes.full, {

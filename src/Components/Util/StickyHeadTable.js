@@ -49,7 +49,7 @@ const StickyHeadTable = ({columns, rows, size}) => {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState(columns[0]?columns[0].id:'');
 
-    const handleChangePage = (newPage) => {
+    const handleChangePage = (_e, newPage) => {
         setPage(newPage);
     };
 

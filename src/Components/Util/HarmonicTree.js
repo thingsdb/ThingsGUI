@@ -57,7 +57,7 @@ HarmonicTree.defaultProps = {
     customTypes: {},
     jsonView: false,
     onAction: null,
-    jsonReplacer: ()=>null,
+    jsonReplacer: (k, v)=>v,
 };
 
 HarmonicTree.propTypes = {

@@ -18,7 +18,7 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
 
     // buttons visible
     const isParentCustom = Boolean(customTypes.find(c=>c.name==realParentType));
-    const canRemove = Boolean(!(child.name === '/' || parent.isTuple || isRoot || isParentCustom));
+    const canRemove = Boolean(!(isRoot || isParentCustom || parent.isTuple || child.name === '/' ));
     const canWatch = Boolean(thing && thing.hasOwnProperty('#'));
     // const canDownload = child.type === 'bytes';
 

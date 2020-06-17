@@ -17,18 +17,6 @@ const useStyles = makeStyles(theme => ({
         zIndex: 1500
     },
     paper: {
-        '@global': {
-            '*::-webkit-scrollbar': {
-                width: '0.4em'
-            },
-            '*::-webkit-scrollbar-track': {
-                '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
-            },
-            '*::-webkit-scrollbar-thumb': {
-                backgroundColor: theme.palette.primary.main,
-                outline: '1px solid slategrey'
-            }
-        },
         border: `0.8px solid ${theme.palette.primary.main}`,
         zIndex: 1500
     },

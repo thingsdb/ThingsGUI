@@ -56,11 +56,12 @@ class NodesStore extends BaseStore {
 
     onResetNodesStore() {
         this.setState({
-            counters: {},
-            nodes: [],
-            node: {},
-            connectedNode: {},
+            allNodeInfo: [],
             backups: [],
+            connectedNode: {},
+            counters: {},
+            node: {},
+            nodes: [],
             streamInfo: {},
         });
     }

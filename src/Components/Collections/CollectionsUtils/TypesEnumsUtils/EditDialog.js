@@ -167,7 +167,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     );
 
     const badgeButton = (h, row, i) => (
-        !(h.ky=='default'&&row.default!=null) ? (
+        !(row.default!=null && h.ky=='default') ? (
             <ButtonBase onClick={handleMod(h.ky, row, i)}>
                 <EditIcon color="primary" style={{fontSize: 20}} />
             </ButtonBase>
@@ -235,7 +235,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                                         dropdownItems={dataTypes}
                                         hasInitVal={add&&category=='type'}
                                         hasPropName={add||ren}
-                                        hasType={category=='type'&&!ren}
+                                        hasType={!ren&&category=='type'}
                                         hasVal={!ren&&category=='enum'}
                                         onBlob={handleBlob}
                                         input={property}

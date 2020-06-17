@@ -3,7 +3,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import {withVlow} from 'vlow';
 
 import {Add} from '../Collections/Config';
-import {Menu} from '../Util';
+import {Menu, orderByName} from '../Util';
 import {ApplicationActions, ThingsdbActions, ThingsdbStore} from '../../Stores';
 
 
@@ -26,11 +26,13 @@ const CollectionsMenu = ({collections}) => {
         ApplicationActions.navigate({path: 'collection', index: collection, item: '', scope:''});
     };
 
+    const orderedCollections = orderByName(collections||[]);
+
     return (
         <Menu
             title="collections"
             icon={<DashboardIcon color="primary" />}
-            items={collections}
+            items={orderedCollections}
             addItem={<Add />}
             onClickItem={handleClickCollection}
             onRefresh={handleRefresh}

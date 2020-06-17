@@ -23,7 +23,7 @@ import {WatcherTAG} from '../../constants';
 
 const withStores = withVlow([{
     store: EventStore,
-    keys: ['watchIds', 'watchThings', 'watchProcedures', 'watchTypes']
+    keys: ['watchEvents', 'watchEnums', 'watchIds', 'watchThings', 'watchProcedures', 'watchTypes']
 }, {
     store: ThingsdbStore,
     keys: ['collections']
@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
 
 const tag = WatcherTAG;
 
-const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThings, watchTypes}) => {
+const Watcher = ({collections, customTypes, watchEvents, watchEnums, watchIds, watchProcedures, watchThings, watchTypes}) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
     const [state, setState] = React.useState({
@@ -110,7 +110,6 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
         );
         TypeActions.getTypes(s, tag);
     };
-
 
     const handleWatchButton = (s) => (_, t, v) => {
         const id = v.slice(2, -1);
@@ -200,10 +199,36 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
                                 customTypes={customTypes}
                             />
                             {Object.keys(watchProcedures).length>0&& (
-                                <HarmonicTree items={watchProcedures} title="PROCEDURES" jsonView={tabIndex === 1} />
+                                <HarmonicTree
+                                    items={watchProcedures}
+                                    title="PROCEDURES"
+                                    jsonView={tabIndex === 1}
+                                    jsonReplacer={replacer}
+                                />
                             )}
                             {Object.keys(watchTypes).length>0&& (
-                                <HarmonicTree items={watchTypes} title="TYPES" jsonView={tabIndex === 1} />
+                                <HarmonicTree
+                                    items={watchTypes}
+                                    title="TYPES"
+                                    jsonView={tabIndex === 1}
+                                    jsonReplacer={replacer}
+                                />
+                            )}
+                            {Object.keys(watchEnums).length>0&& (
+                                <HarmonicTree
+                                    items={watchEnums}
+                                    title="ENUMS"
+                                    jsonView={tabIndex === 1}
+                                    jsonReplacer={replacer}
+                                />
+                            )}
+                            {Object.keys(watchEvents).length>0&& (
+                                <HarmonicTree
+                                    items={watchEvents}
+                                    title="EVENTS"
+                                    jsonView={tabIndex === 1}
+                                    jsonReplacer={replacer}
+                                />
                             )}
                         </List>
                     </Paper>
@@ -215,6 +240,8 @@ const Watcher = ({collections, customTypes, watchIds, watchProcedures, watchThin
 
 Watcher.propTypes = {
     /* event store properties */
+    watchEvents: EventStore.types.watchEvents.isRequired,
+    watchEnums: EventStore.types.watchEnums.isRequired,
     watchThings: EventStore.types.watchThings.isRequired,
     watchIds: EventStore.types.watchIds.isRequired,
     watchProcedures: EventStore.types.watchProcedures.isRequired,

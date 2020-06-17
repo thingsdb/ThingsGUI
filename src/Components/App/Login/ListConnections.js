@@ -18,7 +18,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import {ApplicationStore, ApplicationActions} from '../../../Stores';
-import {isObjectEmpty} from '../../Util';
+import {isObjectEmpty, orderByName} from '../../Util';
 import {LoginTAG} from '../../../constants';
 import Memo from './Memo';
 
@@ -65,16 +65,18 @@ const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
     };
 
     const rows = [
+        {title: 'Name', key: 'name', keyList: 'name', default: ''},
         {title: 'Socket address', key: 'address', keyList: 'address', default: ''},
         {title: 'Credentials', key: 'credentials', keyList: 'credentials', default: '*****'},
         {title: 'Secure connection', key: 'security', keyList: 'secureConnection', default: false},
     ];
 
+    const sortedConns = orderByName(Object.values(savedConnections));
     return (
         <List>
-            {Object.entries(savedConnections).map(([k, v]) => (
-                <React.Fragment key={k}>
-                    <ListItem button onClick={handleConnectToo(k)}>
+            {sortedConns.map((v, i) => (
+                <React.Fragment key={i}>
+                    <ListItem button onClick={handleConnectToo(v.name)}>
                         <ListItemIcon>
                             <img
                                 alt="ThingsDB Logo"
@@ -83,21 +85,21 @@ const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
                                 height="25px"
                             />
                         </ListItemIcon>
-                        <ListItemText primary={k} secondary={v.address} />
+                        <ListItemText primary={v.name} secondary={v.address} />
                         <ListItemSecondaryAction>
                             <Memo connection={v} />
-                            <IconButton onClick={handleDeleteConn(k)}>
+                            <IconButton onClick={handleDeleteConn(v.name)}>
                                 <DeleteIcon color="primary" />
                             </IconButton>
-                            <IconButton onClick={handleOpenDetail(k)}>
-                                {openDetail[k] ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
+                            <IconButton onClick={handleOpenDetail(v.name)}>
+                                {openDetail[v.name] ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
                             </IconButton>
                         </ListItemSecondaryAction>
                     </ListItem>
-                    <Collapse in={openDetail[k]} timeout="auto">
+                    <Collapse in={openDetail[v.name]} timeout="auto">
                         <Grid container>
                             {rows.map((r,i)=>(
-                                <Grid key={i} item xs={4}>
+                                <Grid key={i} item xs={6}>
                                     <Card className={classes.card}>
                                         <CardActionArea
                                             focusRipple

@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const HarmonicCard = ({buttons, content, expand, noPadding, onRefresh, title, unmountOnExit}) => {
+const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onRefresh, title, unmountOnExit}) => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(expand);
 
@@ -42,6 +42,7 @@ const HarmonicCard = ({buttons, content, expand, noPadding, onRefresh, title, un
             <CardHeader
                 action={
                     <React.Fragment>
+                        {expanded && actionButtons}
                         {onRefresh && expanded && (
                             <IconButton onClick={handleRefresh}>
                                 <RefreshIcon color="primary" />
@@ -77,6 +78,7 @@ const HarmonicCard = ({buttons, content, expand, noPadding, onRefresh, title, un
 };
 
 HarmonicCard.defaultProps = {
+    actionButtons: null,
     buttons: null,
     expand: false,
     noPadding: false,
@@ -85,6 +87,7 @@ HarmonicCard.defaultProps = {
 },
 
 HarmonicCard.propTypes = {
+    actionButtons: PropTypes.object,
     buttons: PropTypes.object,
     content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.arrayOf(PropTypes.object)]).isRequired,
     expand: PropTypes.bool,

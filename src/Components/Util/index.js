@@ -67,12 +67,13 @@ const checkType = (t) => {
 const thingValue = (type, thing, customTypes=[]) => {
     return type === 'array' ? `[${thing.length}]`
         : type === 'thing' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
-            : type === 'str' || type === 'number' || type === 'bool' || type === 'bytes' ? `${thing}`
-                : type === 'closure' || type === 'regex' || type === 'error' ? `{${Object.keys(thing)[0]}}`
-                    : type === null || type === 'nil' ? 'nil'
-                        : type === 'wrap' ? `<${customTypes.length?customTypes.find(t=> t.type_id==thing['&'][0]).name:thing['&'][0]}, #${thing['&'][1]['#']}>`
-                            : type === 'set' ? `[${thing['$'].length}]`
-                                : '';
+            : type === 'object' ? `[${Object.keys(thing).length}]`
+                : type === 'str' || type === 'number' || type === 'bool' || type === 'bytes' ? `${thing}`
+                    : type === 'closure' || type === 'regex' || type === 'error' ? `{${Object.keys(thing)[0]}}`
+                        : type === null || type === 'nil' ? 'nil'
+                            : type === 'wrap' ? `<${customTypes.length?customTypes.find(t=> t.type_id==thing['&'][0]).name:thing['&'][0]}, #${thing['&'][1]['#']}>`
+                                : type === 'set' ? `[${thing['$'].length}]`
+                                    : '';
 };
 
 const isObjectEmpty = (obj) => obj.constructor === Object && Object.entries(obj).length === 0;
@@ -105,17 +106,6 @@ const getScopes = (collections) => [
 const getScopes2 = (collections, nodes) => [
     '@thingsdb', ...nodes.map((n) => (`@node:${n.node_id}`)), ...collections.map(c => `@collection:${c.name}`)
 ];
-
-// const getScopes2 = (collections, nodes) => [
-//     [
-//         {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
-//         ...nodes.map(n => ({name: `Node:${n.node_id}`, value: `@node:${n.node_id}`, collectionId: null})),
-//         ...collections.map(c => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
-//     ],
-//     [
-//         '@thingsdb', ...nodes.map((n) => (`@node:${n.node_id}`)), ...collections.map(c => `@collection:${c.name}`)
-//     ]
-// ];
 
 const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
@@ -162,6 +152,12 @@ const revealCustomType = (i) => {
     return i.slice(arr, i.length-(arr+opt));
 };
 
+const swap = (items, index) => {
+    const i = items[0];
+    items[0] = items[index];
+    items[index] = i;
+    return items;
+};
 
 export {
     addDoubleQuotesAroundKeys,
@@ -200,6 +196,7 @@ export {
     SimpleModal,
     StartStopPolling,
     StickyHeadTable,
+    swap,
     TableWithBadges,
     TableWithButtons,
     ThingsTree,

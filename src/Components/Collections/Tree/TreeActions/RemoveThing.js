@@ -24,7 +24,7 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
 
     const handleBuildQuery = (child, parent) => {
         const q = parent.type === 'thing' ? `#${parent.id}.del('${child.name}');`
-            : parent.type === 'set' ? `#${parent.id}.${parent.name}.remove(#${parent.id}.${parent.name}.find(|s| (s.id()==${child.id}) ));`
+            : parent.type === 'set' ? `#${parent.id}.${parent.name}.remove(#${child.id});`
                 : `#${parent.id}.${parent.name}.splice(${child.index}, 1);`;
         setQuery(q);
     };
