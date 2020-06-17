@@ -3,7 +3,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import {withVlow} from 'vlow';
 
 import {Add} from '../Users/Config';
-import {Menu} from '../Util';
+import {Menu, orderByName} from '../Util';
 import {ApplicationActions, ThingsdbActions, ThingsdbStore} from '../../Stores';
 import {isObjectEmpty} from '../Util';
 
@@ -33,11 +33,14 @@ const UsersMenu = ({user, users}) => {
         : isObjectEmpty(user) ? []
             : [user];
 
+
+    const orderedUsers = orderByName(users2);
+
     return (
         <Menu
             title="users"
             icon={<PersonIcon color="primary" />}
-            items={users2}
+            items={orderedUsers}
             addItem={<Add />}
             onClickItem={handleClickUser}
             onRefresh={handleRefresh}

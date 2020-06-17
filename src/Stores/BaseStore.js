@@ -208,7 +208,6 @@ class EventStore extends BaseStore {
     onOpenEvCh() {
         socket.emit('getEvent');
         socket.on('event', (data) => {
-            console.log(data, this.state);
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);
@@ -265,7 +264,14 @@ class EventStore extends BaseStore {
     }
 
     onResetWatch() {
-        this.setState(defaults);
+        this.setState({
+            watchEnums: {},
+            watchEvents: {},
+            watchIds: {},
+            watchProcedures: {},
+            watchThings: {},
+            watchTypes: {},
+        });
     }
 
     // HELPER FUNCTIONS
@@ -291,7 +297,7 @@ class EventStore extends BaseStore {
         const {watchIds} = this.state;
         let scope = watchIds[id];
         return scope;
-    };
+    }
 
     // WATCH EVENTS
 

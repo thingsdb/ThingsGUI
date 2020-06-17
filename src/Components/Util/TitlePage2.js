@@ -9,7 +9,7 @@ const TitlePage2 = ({preTitle, title, sideContent, content}) => {
 
     return (
         <Grid container spacing={1} alignItems="flex-start">
-            <Grid container spacing={1} item md={9} sm={12}>
+            <Grid container spacing={1} item md={8} sm={12}>
                 <Grid item xs={12}>
                     <Card>
                         <CardContent>
@@ -24,7 +24,7 @@ const TitlePage2 = ({preTitle, title, sideContent, content}) => {
                 </Grid>
                 {content}
             </Grid>
-            <Grid container spacing={1} item md={3} sm={12}>
+            <Grid container spacing={1} item md={4} sm={12}>
                 {sideContent}
             </Grid>
         </Grid>

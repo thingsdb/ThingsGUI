@@ -67,12 +67,13 @@ const checkType = (t) => {
 const thingValue = (type, thing, customTypes=[]) => {
     return type === 'array' ? `[${thing.length}]`
         : type === 'thing' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
-            : type === 'str' || type === 'number' || type === 'bool' || type === 'bytes' ? `${thing}`
-                : type === 'closure' || type === 'regex' || type === 'error' ? `{${Object.keys(thing)[0]}}`
-                    : type === null || type === 'nil' ? 'nil'
-                        : type === 'wrap' ? `<${customTypes.length?customTypes.find(t=> t.type_id==thing['&'][0]).name:thing['&'][0]}, #${thing['&'][1]['#']}>`
-                            : type === 'set' ? `[${thing['$'].length}]`
-                                : '';
+            : type === 'object' ? `[${Object.keys(thing).length}]`
+                : type === 'str' || type === 'number' || type === 'bool' || type === 'bytes' ? `${thing}`
+                    : type === 'closure' || type === 'regex' || type === 'error' ? `{${Object.keys(thing)[0]}}`
+                        : type === null || type === 'nil' ? 'nil'
+                            : type === 'wrap' ? `<${customTypes.length?customTypes.find(t=> t.type_id==thing['&'][0]).name:thing['&'][0]}, #${thing['&'][1]['#']}>`
+                                : type === 'set' ? `[${thing['$'].length}]`
+                                    : '';
 };
 
 const isObjectEmpty = (obj) => obj.constructor === Object && Object.entries(obj).length === 0;

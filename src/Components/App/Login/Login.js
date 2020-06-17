@@ -70,9 +70,8 @@ const Login = ({connected, loaded, savedConnections}) => {
     const handleClickSave = () => {
         switch(editField){
         case 'name':
-            const obj = {...form, ...credentials, ...security};
-            oldName ? ApplicationActions.renameConn(obj, oldName, tag, handleClickCloseSaveConn)
-                : ApplicationActions.newConn(obj, tag, handleClickCloseSaveConn);
+            oldName ? ApplicationActions.renameConn({...form, ...credentials, ...security}, oldName, tag, handleClickCloseSaveConn)
+                : ApplicationActions.newConn({...form, ...credentials, ...security}, tag, handleClickCloseSaveConn);
             break;
         case 'credentials':
             ApplicationActions.editConn({name: form.name, ...credentials}, tag, handleClickCloseSaveConn);

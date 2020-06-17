@@ -16,18 +16,6 @@ const useStyles = makeStyles(theme => ({
         padding: 0,
     },
     list: {
-        '@global': {
-            '*::-webkit-scrollbar': {
-                width: '0.4em'
-            },
-            '*::-webkit-scrollbar-track': {
-                '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
-            },
-            '*::-webkit-scrollbar-thumb': {
-                backgroundColor: theme.palette.primary.main,
-                outline: '1px solid slategrey'
-            }
-        },
         '& .MuiTextField-root': {
             margin: theme.spacing(1),
         },

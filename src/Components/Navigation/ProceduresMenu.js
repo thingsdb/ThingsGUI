@@ -61,14 +61,14 @@ const ProceduresMenu = ({procedures}) => {
         setOpen(false);
     };
 
-    const orderedProcedure = orderByName(procedures[scope]||[]);
+    const orderedProcedures = orderByName(procedures[scope]||[]);
 
     return (
         <React.Fragment>
             <Menu
                 title="procedures"
                 icon={<PlayArrowIcon color="primary" />}
-                items={orderedProcedure}
+                items={orderedProcedures}
                 addItem={
                     <Button className={classes.buttonBase} onClick={handleClickAdd} >
                         <AddBoxIcon className={classes.icon} />

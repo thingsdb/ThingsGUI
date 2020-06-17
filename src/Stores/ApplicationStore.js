@@ -120,14 +120,14 @@ class ApplicationStore extends BaseStore {
     onDisconnect() {
         EventActions.resetWatch();
         this.emit('disconn').done((data) => {
-            this.setState({
-                connected: data.Connected,
-                match: {},
-            });
             CollectionActions.resetCollectionStore();
             ErrorActions.resetToastError();
             ThingsdbActions.resetThingsStore();
             NodesActions.resetNodesStore();
+            this.setState({
+                connected: data.Connected,
+                match: {},
+            });
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 

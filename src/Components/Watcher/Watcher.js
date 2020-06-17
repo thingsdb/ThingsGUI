@@ -11,7 +11,6 @@ import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import React from 'react';
 import RemoveIcon from '@material-ui/icons/RemoveCircleOutlined';
-import deleteIcon from '@material-ui/icons/Delete';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import TextField from '@material-ui/core/TextField';
@@ -111,11 +110,6 @@ const Watcher = ({collections, customTypes, watchEvents, watchEnums, watchIds, w
         );
         TypeActions.getTypes(s, tag);
     };
-
-    const handleRemoveEv = (scope, name) => () => {
-        console.log(scope, name);
-    };
-
 
     const handleWatchButton = (s) => (_, t, v) => {
         const id = v.slice(2, -1);

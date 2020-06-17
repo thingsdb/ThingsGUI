@@ -1,3 +1,5 @@
+/*eslint-disable react/no-multi-comp*/
+/*eslint-disable react/jsx-props-no-spreading*/
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -5,7 +7,6 @@ import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Slide from '@material-ui/core/Slide';
-import Typography from '@material-ui/core/Typography';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 import {CollectionActions} from '../../../Stores';
@@ -58,7 +59,7 @@ const CollectionTree = ({collection}) => {
             </Dialog>
         </React.Fragment>
     );
-}
+};
 
 CollectionTree.propTypes = {
     collection: PropTypes.object.isRequired,
