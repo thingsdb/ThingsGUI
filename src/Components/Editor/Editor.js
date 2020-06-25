@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
 import {ApplicationStore, CollectionActions, EditorActions, EditorStore, ErrorActions, NodesActions} from '../../Stores';
-import {ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput} from '../Util';
+import {DragdownCard, ErrorMsg, HarmonicCard, TitlePage2, QueryInput, QueryOutput} from '../Util';
 import SelectScope from './SelectScope';
 import EditorSideContent from './EditorSideContent';
 import {EditorTAG} from '../../constants';
@@ -22,26 +22,15 @@ const withStores = withVlow([{
     keys: ['history']
 }]);
 
-const useStyles = makeStyles(() => ({
-    dragger: {
-        cursor: 'ns-resize',
-    },
-    background: {
-        backgroundColor: '#000',
-    },
-}));
 
 const tag = EditorTAG;
 
 const Editor = ({match, history}) => {
-    const classes = useStyles();
     const [query, setQuery] = React.useState('');
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState('');
     const [queryInput, setQueryInput] = React.useState('');
 
-    const [isResizing, setIsResizing] = React.useState(false);
-    const [newHeight, setNewHeight] = React.useState(200);
     const [expandOutput, setExpandOutput] = React.useState(false);
     const [suggestion, setSuggestion] = React.useState(0);
 
@@ -51,41 +40,26 @@ const Editor = ({match, history}) => {
     },[]);
 
     React.useEffect(() => {
-        if (isResizing) {
-            window.addEventListener('mousemove', handleMousemove);
-            window.addEventListener('mouseup', handleMouseup);
-        } else {
-            window.removeEventListener('mousemove', handleMousemove);
-            window.removeEventListener('mouseup', handleMouseup);
-        }
-    },[isResizing, handleMousemove, handleMouseup]);
-
-    React.useEffect(() => {
         setQueryInput(match.item);
     }, [match.item]);
 
-
-    const handleMousedown = () => {
-        setIsResizing(true);
+    const handleOnChangeScope = (s) => {
+        handleCloseError();
+        setScope(s);
     };
 
-    const handleMousemove = React.useCallback((event) => {
-        let el = document.getElementById('editor');
-        let height = event.clientY - el.offsetTop;
-        if (height > 100) {
-            setNewHeight(height);
-        }
-
-    }, []);
-
-    const handleMouseup = React.useCallback(() => {
-        setIsResizing(false);
-    }, []);
-
+    const handleCloseError = () => {
+        ErrorActions.removeMsgError(tag);
+    };
 
     const handleInput = (value) => {
         handleCloseError();
         setQuery(value);
+    };
+
+    const handleOutput = (out) => {
+        setExpandOutput(true);
+        setOutput(out);
     };
 
     const handleQueryInput = (value) => {
@@ -111,13 +85,13 @@ const Editor = ({match, history}) => {
                 break;
             case 38: // ARROW UP
                 if (history.length) {
-                    let s = goUp(suggestion+1, history.length);
+                    let s = goUpTheList(suggestion-1, history.length);
                     handleSuggestion(s);
                 }
                 break;
             case 40: // ARROW DOWN
                 if (history.length) {
-                    let s = goDown(suggestion-1, history.length);
+                    let s = goDownTheList(suggestion+1, history.length);
                     handleSuggestion(s);
                 }
                 break;
@@ -137,26 +111,12 @@ const Editor = ({match, history}) => {
         }
     };
 
-    const goUp = (s, length) => s==length?0:s;
-    const goDown = (s, length) => s<0?length-1:s;
+    const goDownTheList = (s, length) => s==length?0:s;
+    const goUpTheList = (s, length) => s<0?length-1:s;
 
     const handleSuggestion = (s) => {
         setSuggestion(s);
         setQueryInput(history[s]);
-    };
-
-    const handleOutput = (out) => {
-        setExpandOutput(true);
-        setOutput(out);
-    };
-
-    const handleOnChangeScope = (s) => {
-        handleCloseError();
-        setScope(s);
-    };
-
-    const handleCloseError = () => {
-        ErrorActions.removeMsgError(tag);
     };
 
     return (
@@ -171,14 +131,13 @@ const Editor = ({match, history}) => {
                         </Card>
                     </Grid>
                     <Grid item xs={12}>
-                        <Card id='editor' style={{height: newHeight}} className={classes.background}>
-                            <div onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
-                                <QueryInput onChange={handleInput} input={queryInput} height={newHeight-25} />
-                            </div>
-                            <Grid container item xs={12} alignItems="flex-end" justify="center" >
-                                <DragHandleIcon className={classes.dragger} onMouseDown={handleMousedown} />
-                            </Grid>
-                        </Card>
+                        <DragdownCard>
+                            {(height) => (
+                                <div onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
+                                    <QueryInput onChange={handleInput} input={queryInput} height={height-25} />
+                                </div>
+                            )}
+                        </DragdownCard>
                     </Grid>
                     <Grid item xs={12}>
                         <HarmonicCard
