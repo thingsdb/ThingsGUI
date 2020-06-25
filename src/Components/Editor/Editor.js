@@ -103,14 +103,46 @@ const Editor = ({match, history}) => {
     };
 
     const handleKeyUp = (e) => {
-        const {key, ctrlKey, keyCode} = e;
-        if (ctrlKey && key == 'Enter') {
-            handleSubmit();
+        const {ctrlKey, keyCode} = e;
+        if (ctrlKey) {
+            switch(keyCode) {
+            case 13: // ENTER
+                handleSubmit();
+                break;
+            case 38: // ARROW UP
+                if (history.length) {
+                    let s = goUp(suggestion+1, history.length);
+                    handleSuggestion(s);
+                }
+                break;
+            case 40: // ARROW DOWN
+                if (history.length) {
+                    let s = goDown(suggestion-1, history.length);
+                    handleSuggestion(s);
+                }
+                break;
+            }
         }
-        if (ctrlKey && keyCode == '38') {
-            setSuggestion(suggestion+1==history.length?0:suggestion+1);
-            setQueryInput(history[suggestion]);
+    };
+
+    const handleKeyDown = (e) => { // capture CTRL-SHIFT-c/v
+        const {ctrlKey, keyCode, shiftKey} = e;
+        if (ctrlKey && shiftKey) {
+            switch(keyCode) {
+            case 86: // v
+            case 67: // c
+                e.preventDefault();
+                break;
+            }
         }
+    };
+
+    const goUp = (s, length) => s==length?0:s;
+    const goDown = (s, length) => s<0?length-1:s;
+
+    const handleSuggestion = (s) => {
+        setSuggestion(s);
+        setQueryInput(history[s]);
     };
 
     const handleOutput = (out) => {
@@ -140,7 +172,7 @@ const Editor = ({match, history}) => {
                     </Grid>
                     <Grid item xs={12}>
                         <Card id='editor' style={{height: newHeight}} className={classes.background}>
-                            <div onKeyUp={handleKeyUp}>
+                            <div onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
                                 <QueryInput onChange={handleInput} input={queryInput} height={newHeight-25} />
                             </div>
                             <Grid container item xs={12} alignItems="flex-end" justify="center" >
