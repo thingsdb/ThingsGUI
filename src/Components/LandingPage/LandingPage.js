@@ -8,11 +8,12 @@ import IconButton from '@material-ui/core/IconButton';
 import React from 'react';
 import Slide from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
+// import {version} from '../../package.json';
 
 import LandingContent from './LandingContent';
 import {TopBar} from '../Navigation';
 
-const version='version: 0.2.2';
+const version='version: 0.2.3';
 
 const useStyles = makeStyles(() => ({
     avatar: {

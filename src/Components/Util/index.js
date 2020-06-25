@@ -7,6 +7,7 @@ import CardMultiButton from './CardMultiButton';
 import ChipsCard from './ChipsCard';
 import Closure from './Closure';
 import DownloadBlob from './DownloadBlob';
+import DragdownCard from './DragdownCard';
 import DrawerLayout from './DrawerLayout';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
@@ -173,6 +174,7 @@ export {
     ChipsCard,
     Closure,
     DownloadBlob,
+    DragdownCard,
     DrawerLayout,
     duration,
     ErrorMsg,
