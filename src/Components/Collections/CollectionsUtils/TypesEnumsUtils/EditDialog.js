@@ -17,7 +17,7 @@ import {CollectionActions, ErrorActions} from '../../../../Stores';
 import {EditDialogTAG} from '../../../../constants';
 import {ErrorMsg, SimpleModal, WarnPopover} from '../../../Util';
 import {EditProvider} from '../Context';
-import AddProperty from './AddProperty';
+import {PropertyInitVal, PropertyMethod, PropertyName, PropertyType, PropertyVal} from './AddEditProperty';
 import Overview from './Overview';
 
 const tag = EditDialogTAG;
@@ -25,10 +25,11 @@ const tag = EditDialogTAG;
 const initState = {
     property: {
         default: null,
+        definition: '',
         propertyName: '',
         propertyObject:null,
         propertyType: '',
-        propertyVal: null
+        propertyVal: null,
     },
     queryString: '',
 };
@@ -37,7 +38,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     const [state, setState] = React.useState(initState);
     const {queryString, property} = state;
     const [action, setAction] = React.useState('');
-    const [index, setIndex] = React.useState(null);
+    const [oldname, setOldname] = React.useState(null);
     const [blob, setBlob] = React.useState({});
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -55,35 +56,75 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     };
 
     const handleQueryAdd = (p) => {
-        setState({property: p, queryString: `mod_${category}('${item.name}', 'add', '${p.propertyName}'${category=='type'?`, '${p.propertyType}'`:''}${p.propertyVal?`, ${p.propertyVal}`:''})`});
+        setState(prev=>{
+            const update = {...prev.property, ...p}
+            return({
+                property: update,
+                queryString: `mod_${category}('${item.name}', 'add', '${update.propertyName}'${category=='type'?`, '${update.propertyType||update.definition}'`:''}${update.propertyVal?`, ${update.propertyVal}`:''})`
+            });
+        });
     };
 
     const handleQueryMod = (p) => {
-        setState({property: p, queryString: `mod_${category}('${item.name}', 'mod', '${p.propertyName}', ${category=='type'?`'${p.propertyType}'`: p.propertyVal})`});
+        setState(prev=>{
+            const update = {...prev.property, ...p}
+            return({
+                property: update,
+                queryString: `mod_${category}('${item.name}', 'mod', '${update.propertyName}', ${category=='type'?`'${update.propertyType}'`: update.propertyVal})`
+            });
+        });
     };
 
-    const handleQueryModRen = (p) => {
-        setState({property: p, queryString: `mod_${category}('${item.name}', 'ren', '${rows[index]&&rows[index].propertyName}', '${p.propertyName}')`});
+    const handleQueryModRen = (p, n=null) => {
+        const name = n===null ? oldname : n;
+        setState(prev=>{
+            return({
+                property: {...prev.property, ...p},
+                queryString: `mod_${category}('${item.name}', 'ren', '${name}', '${p.propertyName}')`
+            });
+        });
     };
 
     const handleQueryModDef = (p) => {
-        setState({...state, property: p, queryString: `mod_${category}('${item.name}', 'def', '${p.propertyName}')`});
+        setState(prev=>{
+            const update = {...prev.property, ...p}
+            return({
+                property: update,
+                queryString: `mod_${category}('${item.name}', 'def', '${update.propertyName}')`
+            });
+        });
     };
 
-    const handleAdd = () => {
-        setAction('add');
+    const handleQueryModMet = (p) => {
+        setState(prev=>{
+            const update = {...prev.property, ...p}
+            return({
+                property: update,
+                queryString: `mod_${category}('${item.name}', 'mod', '${update.propertyName}', ${update.definition})`
+
+            });
+        });
     };
 
-    const handleMod = (ky, p, i) => () => {
-        setIndex(i);
+
+    const handleAdd = (ky) => {
+        setAction(`add${ky}`);
+    };
+
+    const handleMod = (ky, p) => () => {
+        setOldname(p.propertyName);
         switch(ky){
         case 'propertyName':
             setAction('ren');
-            handleQueryModRen(p);
+            handleQueryModRen(p, p.propertyName);
             break;
         case 'propertyObject':
             setAction('mod');
             handleQueryMod(p);
+            break;
+        case 'definition':
+            setAction('met');
+            handleQueryModMet(p);
             break;
         case 'default':
             setAction('def');
@@ -108,7 +149,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
         handleCloseError();
         setState(initState);
         setBlob({});
-        setIndex(null);
+        setOldname(null);
         setAction('');
     };
 
@@ -151,11 +192,14 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     };
 
     const overview = action=='';
-    const add = action=='add';
+    const addField = action=='addField';
+    const addMethod = action=='addMethod';
+    const add = addField || addMethod;
     const edit = action=='mod';
     const def = action=='def';
     const del = action=='del';
     const ren = action=='ren';
+    const met = action=='met';
 
     const buttons = (row) => (
         <React.Fragment>
@@ -168,7 +212,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
 
     const badgeButton = (h, row, i) => (
         !(row.default!=null && h.ky=='default') ? (
-            <ButtonBase onClick={handleMod(h.ky, row, i)}>
+            <ButtonBase onClick={handleMod(h.ky, row)}>
                 <EditIcon color="primary" style={{fontSize: 20}} />
             </ButtonBase>
         ):null
@@ -178,9 +222,9 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
         <SimpleModal
             open={open}
             onClose={onClose}
-            onOk={add||edit||ren||def?handleClickOk:null}
+            onOk={!overview||!del?handleClickOk:null}
             maxWidth="md"
-            actionButtons={add||edit||ren||def ? (
+            actionButtons={!overview||!del? (
                 <Button onClick={handleBack} color="primary">
                     {'Back'}
                 </Button>
@@ -226,21 +270,35 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                                 />
                             </ListItem>
                         </Collapse>
-                        <Collapse in={add || edit || ren} timeout="auto" unmountOnExit>
+                        <Collapse in={add || edit || ren || met} timeout="auto" unmountOnExit>
                             <ListItem>
                                 <EditProvider>
-                                    <AddProperty
-                                        category={category}
-                                        cb={add?handleQueryAdd:ren?handleQueryModRen:handleQueryMod}
-                                        dropdownItems={dataTypes}
-                                        hasInitVal={add&&category=='type'}
-                                        hasPropName={add||ren}
-                                        hasType={!ren&&category=='type'}
-                                        hasVal={!ren&&category=='enum'}
-                                        onBlob={handleBlob}
-                                        input={property}
-                                        scope={scope}
-                                    />
+                                    <Grid container item xs={12} spacing={1} alignItems="center" >
+                                        {add||ren ? (
+                                            <Grid item xs={12}>
+                                                <PropertyName cb={add?handleQueryAdd:handleQueryModRen} input={property.propertyName||''} />
+                                            </Grid>
+                                        ):null}
+                                        {!ren&&!met&&!addMethod&&category=='type' ? (
+                                            <Grid item xs={12}>
+                                                <PropertyType cb={addField?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={property.propertyType||''} />
+                                            </Grid>
+                                        ) : null}
+                                        {addMethod||met&&category=='type' ? (
+                                            <Grid item xs={12}>
+                                                <PropertyMethod cb={addMethod?handleQueryAdd:handleQueryMod} input={property.definition||''} />
+                                            </Grid>
+                                        ) : null}
+                                        {!ren&&category=='enum' ? (
+                                            <Grid item xs={12}>
+                                                <PropertyVal category={category} cb={add?handleQueryAdd:handleQueryMod} onBlob={handleBlob} scope={scope} />
+                                            </Grid>
+                                        ) : addField&&category=='type' ? (
+                                            <Grid item xs={12}>
+                                                <PropertyInitVal category={category} cb={handleQueryAdd} onBlob={handleBlob} scope={scope} />
+                                            </Grid>
+                                        ) : null}
+                                    </Grid>
                                 </EditProvider>
                             </ListItem>
                         </Collapse>

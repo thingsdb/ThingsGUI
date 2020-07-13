@@ -23,6 +23,9 @@ import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import StartStopPolling from './StartStopPolling';
 import StickyHeadTable from './StickyHeadTable';
+import Switching from './Switching';
+import Tabs from './Tabs';
+import TableExtra from './TableExtra';
 import TableWithBadges from './TableWithBadges';
 import TableWithButtons from './TableWithButtons';
 import ThingsTree from './ThingsTree';
@@ -199,6 +202,9 @@ export {
     StartStopPolling,
     StickyHeadTable,
     swap,
+    Switching,
+    Tabs,
+    TableExtra,
     TableWithBadges,
     TableWithButtons,
     ThingsTree,

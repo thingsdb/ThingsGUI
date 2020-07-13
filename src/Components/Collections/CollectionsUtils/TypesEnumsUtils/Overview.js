@@ -1,32 +1,34 @@
 /* eslint-disable react/no-multi-comp */
-import AddIcon from '@material-ui/icons/Add';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {TableWithBadges} from '../../../Util';
+import {Tabs, TableExtra} from '../../../Util';
 import  UsedByType from './UsedByType';
+import Methods from './Methods';
 
 
 const Overview = ({badgeButton, buttons, category, item, link, onAdd, onChangeItem, rows, scope}) => {
-    const header = [
+    const header1 = [
         {ky: 'default', label: 'Default'},
         {ky: 'propertyName', label: 'Name'},
         {ky: 'propertyObject', label: category=='type'?'Type':'Value'},
     ];
 
-    const handleAdd = () => {
-        onAdd();
+    const header2 = [
+        {ky: 'propertyName', label: 'Name'},
+        {ky: 'definition', label: 'Definition'},
+    ];
+
+    const rows2 = Object.entries(item.methods||{}).reduce((res, k) => {res.push({propertyName: k[0], definition: k[1].definition}); return res;},[]);
+
+    const handleAdd = (ky) => () => {
+        onAdd(ky);
     };
 
     return (
-
         <React.Fragment>
             <ListItem>
                 <ListItemText
@@ -38,30 +40,16 @@ const Overview = ({badgeButton, buttons, category, item, link, onAdd, onChangeIt
                     }
                 />
             </ListItem>
-            <ListItem>
-                <TableWithBadges
-                    header={category=='type'?header.slice(1):header}
-                    rows={rows}
-                    badgeButton={badgeButton}
-                    buttons={buttons}
-                />
-            </ListItem>
-            <ListItem>
-                <Grid container>
-                    {onAdd && (
-                        <Grid item xs={1}>
-                            <Button onClick={handleAdd} >
-                                <AddIcon color="primary" />
-                            </Button>
-                        </Grid>
-                    )}
-                    <Grid container item xs={onAdd?11:12} justify="flex-end">
-                        <Box fontSize={10} fontStyle="italic" m={1}>
-                            {`Created on: ${moment(item.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}${item.modified_at?`, last modified on: ${moment(item.modified_at*1000).format('YYYY-MM-DD HH:mm:ss')}`:''}`}
-                        </Box>
-                    </Grid>
-                </Grid>
-            </ListItem>
+            {category === 'type' ? (
+                <Tabs headers={["Fields", "Methods"]} panels={[
+                    <TableExtra badgeButton={badgeButton} buttons={buttons} createdAt={item.created_at} header={header1} modifiedAt={item.modified_at} onAdd={handleAdd('Fields')} rows={rows} />,
+                    <TableExtra badgeButton={badgeButton} buttons={buttons} createdAt={item.created_at} header={header2} modifiedAt={item.modified_at} onAdd={handleAdd('Methods')} rows={rows2} />
+                ]} />
+            ) : category === 'enum'? (
+                <ListItem>
+                    <TableExtra badgeButton={badgeButton} buttons={buttons} createdAt={item.created_at} header={header1} modifiedAt={item.modified_at} onAdd={handleAdd('Fields')} rows={rows} />
+                </ListItem>
+            ) :null}
             <UsedByType name={item.name} onChangeItem={onChangeItem} scope={scope} />
         </React.Fragment>
     );

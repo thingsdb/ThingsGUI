@@ -51,13 +51,21 @@ const Closure = ({input, cb}) => {
     React.useEffect(() => {
         const c = `|${variables}|${body}`;
         const v = input;
-        if(v&&v!=c) {
-            let endVarArr = v.indexOf('|', 1);
-            let vars = v.slice(1, endVarArr).split(',');
-            let b = v.slice(endVarArr+1);
+        if(v) {
+            if (v!=c) {
+                let endVarArr = v.indexOf('|', 1);
+                let vars = v.slice(1, endVarArr).split(',');
+                let b = v.slice(endVarArr+1);
+                setState({
+                    variables: endVarArr==1?[]:vars,
+                    body: b,
+                });
+            }
+
+        } else {
             setState({
-                variables: endVarArr==1?[]:vars,
-                body: b,
+                variables: [],
+                body: '',
             });
         }
     },

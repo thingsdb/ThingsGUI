@@ -130,6 +130,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
                 onRefresh={handleRefresh}
                 onDelete={handleClickDelete}
                 title={`${categoryInit}s`}
+                warnExpression={i=>i.wrap_only}
             />
             {buttonsView.add && (
                 <AddDialog
