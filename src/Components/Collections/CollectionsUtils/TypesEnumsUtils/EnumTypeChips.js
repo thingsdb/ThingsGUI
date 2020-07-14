@@ -1,14 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles} from '@material-ui/core/styles';
-import CheckIcon from '@material-ui/icons/Check';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import {ChipsCard, DownloadBlob} from '../../../Util';
-import {AddDialog, AddLink, EditDialog, ViewDialog} from '.';
+import {ChipsCard} from '../../../Util';
+import {AddDialog, EditDialog, ViewDialog} from '.';
 
 
 const useStyles = makeStyles(theme => ({
@@ -17,7 +16,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onSetQueryInput, scope, tag, view}) => {
+
+const TypeChips = ({buttonsView, categoryInit, datatypes, headers, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onSetQueryInput, queries, rows, scope, tag, view}) => {
     const classes = useStyles();
     const [items, setItems] = React.useState([]);
 
@@ -52,32 +52,17 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
     };
 
     const handleClickAdd = () => {
-        onChange('add', categoryInit, '');
+        onChange('add', '', categoryInit);
     };
     const handleCloseAdd= () => {
         onClose('add', categoryInit);
-    };
-
-    const handleClickView = (n) => () => {
-        onChange('view', categoryInit, n);
-    };
-
-    const handleChangeView = (n, c) => {
-        onClose('view');
-        onChange('view', c, n);
     };
 
     const handleCloseView = () => {
         onClose('view', categoryInit);
     };
 
-    const handleClickEdit = (n, c) => () => {
-        onChange('edit', c, n);
-    };
-    const handleChangeEdit = (n, c) => {
-        onClose('edit');
-        onChange('edit', c, n);
-    };
+
     const handleCloseEdit = () => {
         onClose('edit', categoryInit);
     };
@@ -87,7 +72,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
         if (bv.view) {
             b.push({
                 icon: <ViewIcon fontSize="small" />,
-                onClick: handleClickView(n),
+                onClick: onChange('view')(n, c),
             });
         }
         if (bv.run) {
@@ -99,26 +84,12 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
         if (bv.edit) {
             b.push({
                 icon: <img src="/img/view-edit.png" alt="view/edit" draggable="false" width="20" />,
-                onClick: handleClickEdit(n, categoryInit),
+                onClick: onChange('edit')(n, c),
             });
         }
 
         return b;
     };
-
-    const item = view.name&&items?items.find(i=>i.name==view.name):{};
-    const rows = item[fields] ? item[fields].map(c=>{
-        const isBlob = c[1].constructor===String&&c[1].includes('/download/tmp/thingsdb-cache');
-        const objectProof = !isBlob&&c[1].constructor===Object?JSON.stringify(c[1]):c[1];
-        const obj = isBlob? <DownloadBlob val={c[1]} /> : noLink ? objectProof : <AddLink name={objectProof} scope={scope} onChange={view.view?handleChangeView:handleChangeEdit} />;
-        return({
-            default: item.default===c[0]? <CheckIcon />: null,
-            propertyName: c[0],
-            propertyType: categoryInit=='type'?c[1]:'',
-            propertyVal: categoryInit=='type'?'':c[1],
-            propertyObject: obj,
-        });
-    }):[];
 
     return (
         <Grid className={classes.spacing} item xs={12}>
@@ -141,6 +112,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
                     onClose={handleCloseAdd}
                     open={view.add}
                     scope={scope}
+                    queries={queries.add}
                 />
             )}
             {buttonsView.edit && (
@@ -148,21 +120,24 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
                     dataTypes={datatypes}
                     category={categoryInit}
                     getInfo={handleCallback}
+                    headers={headers[categoryInit]}
                     item={item}
                     link={`https://docs.thingsdb.net/v0/data-types/${categoryInit}/`}
-                    onChangeItem={handleChangeEdit}
+                    onChangeItem={onChange('edit')}
                     onClose={handleCloseEdit}
                     open={view.edit}
                     rows={rows}
                     scope={scope}
+                    queries={queries.mod}
                 />
             )}
             {buttonsView.view && (
                 <ViewDialog
                     category={categoryInit}
+                    headers={headers[categoryInit]}
                     item={item}
                     link={`https://docs.thingsdb.net/v0/data-types/${categoryInit}/`}
-                    onChangeItem={handleChangeView}
+                    onChangeItem={onChange('view')}
                     onClose={handleCloseView}
                     open={view.view}
                     rows={rows}
@@ -173,9 +148,8 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, fields, noLink, on
     );
 };
 
-EnumTypeChips.defaultProps = {
+TypeChips.defaultProps = {
     datatypes: [],
-    noLink: false,
     onChange: ()=>null,
     onClose: ()=>null,
     onDelete: ()=>null,
@@ -184,18 +158,19 @@ EnumTypeChips.defaultProps = {
     onSetQueryInput: ()=>null,
 };
 
-EnumTypeChips.propTypes = {
+TypeChips.propTypes = {
     buttonsView: PropTypes.object.isRequired,
     categoryInit: PropTypes.string.isRequired,
     datatypes: PropTypes.arrayOf(PropTypes.string),
-    fields: PropTypes.string.isRequired,
-    noLink: PropTypes.bool,
+    headers: PropTypes.object.isRequired,
     onChange: PropTypes.func,
     onClose: PropTypes.func,
     onDelete: PropTypes.func,
     onInfo: PropTypes.func,
     onMakeInstanceInit: PropTypes.func,
     onSetQueryInput: PropTypes.func,
+    queries: PropTypes.func.isRequired,
+    rows: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
     tag: PropTypes.string.isRequired,
     view: PropTypes.object.isRequired,

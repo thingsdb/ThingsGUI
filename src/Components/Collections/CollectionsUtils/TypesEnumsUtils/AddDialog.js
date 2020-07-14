@@ -16,7 +16,6 @@ import {AddDialogTAG} from '../../../../constants';
 import {ArrayLayout, ErrorMsg, SimpleModal, Switching} from '../../../Util';
 import {CollectionActions} from '../../../../Stores';
 import {EditProvider} from '../Context';
-import AddProperty from './AddProperty';
 import {PropertyMethod, PropertyName, PropertyType, PropertyVal} from './AddEditProperty';
 
 const tag = AddDialogTAG;
@@ -28,7 +27,7 @@ const initState = {
     properties: [{propertyName: '', propertyType: '', propertyVal: '', definition: ''}],
 };
 
-const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) => {
+const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, scope}) => {
     const [state, setState] = React.useState(initState);
     const {queryString, name, error, properties} = state;
     const [blob, setBlob] = React.useState({});
@@ -40,7 +39,10 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
     );
 
     React.useEffect(() => { // keep this useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-        setState({...state, queryString: `set_${category}("${name}", {${properties.map(v=>`${v.propertyName}: ${category=='type'?`'${v.propertyType||v.definition}'`:`${v.propertyVal}`}`)}})`});
+        setState({...state, queryString: queries[category](name, properties)[]});
+
+
+            // `set_${category}("${name}", {${properties.map(v=>`${v.propertyName}: ${category=='type'?`'${v.propertyType||v.definition}'`:`${v.propertyVal}`}`)}})`});
     },
     [name, JSON.stringify(properties)], // TODO STRING
     );
@@ -232,6 +234,7 @@ AddDialog.propTypes = {
     getInfo: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool,
+    queries: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
 };

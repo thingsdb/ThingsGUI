@@ -34,7 +34,7 @@ const initState = {
     queryString: '',
 };
 
-const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onClose, open, rows, scope}) => {
+const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChangeItem, onClose, open, queries, rows, scope}) => {
     const [state, setState] = React.useState(initState);
     const {queryString, property} = state;
     const [action, setAction] = React.useState('');
@@ -192,14 +192,28 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     };
 
     const overview = action=='';
-    const addField = action=='addField';
-    const addMethod = action=='addMethod';
-    const add = addField || addMethod;
+    const addField = action=='addFields';
+    const addMethod = action=='addMethods';
+    const addMember = action=='addMembers';
+    const add = addField || addMethod || addMember;
     const edit = action=='mod';
     const def = action=='def';
     const del = action=='del';
     const ren = action=='ren';
     const met = action=='met';
+
+    const showOverview = overview||del;
+    const showSubmitBack = !showOverview;
+    const showTextFields = add || edit || ren || met;
+    const showDefault = def;
+    const showQuery = Boolean(queryString);
+
+    const showName = add||ren;
+    const showType = !ren&&!met&&!addMethod&&category=='type';
+    const showVal = !ren&&category=='enum';
+    const showValIni = addField&&category=='type';
+    const showMethod = addMethod||met&&category=='type';
+
 
     const buttons = (row) => (
         <React.Fragment>
@@ -222,9 +236,9 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
         <SimpleModal
             open={open}
             onClose={onClose}
-            onOk={!overview||!del?handleClickOk:null}
+            onOk={showSubmitBack?handleClickOk:null}
             maxWidth="md"
-            actionButtons={!overview||!del? (
+            actionButtons={showSubmitBack ? (
                 <Button onClick={handleBack} color="primary">
                     {'Back'}
                 </Button>
@@ -246,7 +260,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                 </Grid>
                 <Grid item xs={12}>
                     <List disablePadding dense>
-                        <Collapse in={Boolean(queryString)} timeout="auto">
+                        <Collapse in={showQuery} timeout="auto">
                             <ListItem>
                                 <TextField
                                     name="queryString"
@@ -270,30 +284,30 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                                 />
                             </ListItem>
                         </Collapse>
-                        <Collapse in={add || edit || ren || met} timeout="auto" unmountOnExit>
+                        <Collapse in={showTextFields} timeout="auto" unmountOnExit>
                             <ListItem>
                                 <EditProvider>
                                     <Grid container item xs={12} spacing={1} alignItems="center" >
-                                        {add||ren ? (
+                                        {showName ? (
                                             <Grid item xs={12}>
                                                 <PropertyName cb={add?handleQueryAdd:handleQueryModRen} input={property.propertyName||''} />
                                             </Grid>
                                         ):null}
-                                        {!ren&&!met&&!addMethod&&category=='type' ? (
+                                        {showType? (
                                             <Grid item xs={12}>
                                                 <PropertyType cb={addField?handleQueryAdd:handleQueryMod} dropdownItems={dataTypes} input={property.propertyType||''} />
                                             </Grid>
                                         ) : null}
-                                        {addMethod||met&&category=='type' ? (
+                                        {showMethod ? (
                                             <Grid item xs={12}>
                                                 <PropertyMethod cb={addMethod?handleQueryAdd:handleQueryMod} input={property.definition||''} />
                                             </Grid>
                                         ) : null}
-                                        {!ren&&category=='enum' ? (
+                                        {showVal? (
                                             <Grid item xs={12}>
                                                 <PropertyVal category={category} cb={add?handleQueryAdd:handleQueryMod} onBlob={handleBlob} scope={scope} />
                                             </Grid>
-                                        ) : addField&&category=='type' ? (
+                                        ) : showValIni ? (
                                             <Grid item xs={12}>
                                                 <PropertyInitVal category={category} cb={handleQueryAdd} onBlob={handleBlob} scope={scope} />
                                             </Grid>
@@ -302,18 +316,19 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                                 </EditProvider>
                             </ListItem>
                         </Collapse>
-                        <Collapse in={def} timeout="auto" unmountOnExit>
+                        <Collapse in={showDefault} timeout="auto" unmountOnExit>
                             <ListItem>
                                 <Typography variant="body1" >
                                     {`Set ${property.propertyName} as default?`}
                                 </Typography>
                             </ListItem>
                         </Collapse>
-                        <Collapse in={overview||del} timeout="auto" unmountOnExit>
+                        <Collapse in={showOverview} timeout="auto" unmountOnExit>
                             <Overview
                                 category={category}
                                 badgeButton={badgeButton}
                                 buttons={buttons}
+                                headers={headers}
                                 item={item}
                                 link={link}
                                 onAdd={handleAdd}
@@ -340,12 +355,14 @@ EditDialog.propTypes = {
     dataTypes: PropTypes.arrayOf(PropTypes.string),
     category: PropTypes.string.isRequired,
     getInfo: PropTypes.func.isRequired,
+    headers: PropTypes.object.isRequired,
     item: PropTypes.object,
     link: PropTypes.string.isRequired,
     onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool,
-    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
+    queries: PropTypes.object.isRequired,
+    rows: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
 };
 

@@ -33,10 +33,15 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
         display: 'flex',
-        height: 224,
     },
     tabs: {
         borderRight: `1px solid ${theme.palette.divider}`,
+        paddingRight: theme.spacing(2),
+        marginRight: theme.spacing(1),
+        minWidth: 150,
+    },
+    panels: {
+        maxWidth: '80%',
     },
 }));
 
@@ -63,7 +68,7 @@ export default function VerticalTabs({headers, panels}) {
                 ))}
             </Tabs>
             {panels.map((v, i)=>(
-                <TabPanel key={i} value={value} index={i}>
+                <TabPanel className={classes.panels} key={i} value={value} index={i}>
                     {v}
                 </TabPanel>
             ))}

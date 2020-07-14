@@ -9,7 +9,7 @@ import {SimpleModal} from '../../../Util';
 import Overview from './Overview';
 
 
-const ViewDialog = ({category, item, link, onChangeItem, onClose, open, rows, scope}) => (
+const ViewDialog = ({category, headers, item, link, onChangeItem, onClose, open, rows, scope}) => (
     <SimpleModal
         open={open}
         onClose={onClose}
@@ -28,7 +28,7 @@ const ViewDialog = ({category, item, link, onChangeItem, onClose, open, rows, sc
             </Grid>
             <Grid item xs={12}>
                 <List disablePadding dense>
-                    <Overview category={category} item={item} link={link} onChangeItem={onChangeItem} rows={rows} scope={scope} />
+                    <Overview headers={headers} item={item} link={link} onChangeItem={onChangeItem} rows={rows} scope={scope} />
                 </List>
             </Grid>
         </Grid>
@@ -43,12 +43,13 @@ ViewDialog.defaultProps = {
 
 ViewDialog.propTypes = {
     category: PropTypes.string.isRequired,
+    headers: PropTypes.object.isRequired,
     item: PropTypes.object,
     link: PropTypes.string.isRequired,
     onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool,
-    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
+    rows: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
 };
 
