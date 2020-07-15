@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles} from '@material-ui/core/styles';
+import CheckIcon from '@material-ui/icons/Check';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import {ChipsCard} from '../../../Util';
-import {AddDialog, EditDialog, ViewDialog} from '.';
+import {ChipsCard, DownloadBlob} from '../../../Util';
+import {AddDialog, AddLink, EditDialog, ViewDialog} from '.';
 
 
 const useStyles = makeStyles(theme => ({
@@ -16,8 +17,64 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const headers = {
+    type: {
+        Fields: [
+            {ky: 'propertyName', label: 'Name'},
+            {ky: 'propertyObject', label: 'Type'},
+        ],
+        Methods: [
+            {ky: 'propertyName', label: 'Name'},
+            {ky: 'definition', label: 'Definition'},
+        ]
+    },
+    enum: {
+        Members: [
+            {ky: 'default', label: 'Default'},
+            {ky: 'propertyName', label: 'Name'},
+            {ky: 'propertyObject', label: 'Value'},
+        ]
+    }
+};
 
-const TypeChips = ({buttonsView, categoryInit, datatypes, headers, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onSetQueryInput, queries, rows, scope, tag, view}) => {
+const queries = {
+    add: {
+        type: (name, list) => `set_type("${name}", {${list.map(v=>`${v.propertyName}: ${v.propertyType?`'${v.propertyType}'`:`${v.definition}`}`)}})` ,
+        enum: (name, list) => `set_enum("${name}", {${list.map(v=>`${v.propertyName}: ${v.propertyVal}`)}})`
+    },
+    mod: {
+        add: {
+            type: (name, update) => ( `mod_type('${name}', 'add', '${update.propertyName}', ` + (
+                update.definition ? `${update.definition})`
+                    : `'${update.propertyType}'${update.propertyVal?`, ${update.propertyVal}`:''})`
+            )),
+            enum: (name, update) => `mod_enum('${name}', 'add', '${update.propertyName}', ${update.propertyVal})`
+        },
+        mod: {
+            type: (name, update) => ( update.propertyType ?
+                `mod_type('${name}', 'mod', '${update.propertyName}', '${update.propertyType}'` + (update.callback ? `, ${update.callback}` : '') + ')'
+                    : `mod_type('${name}', 'mod', '${update.propertyName}', ${update.definition}` + (update.callback ? `, ${update.callback}` : '') + ')'
+            ),
+            enum: (name, update) => `mod_enum('${name}', 'mod', '${update.propertyName}', ${update.propertyVal})`
+        },
+        ren: {
+            type: (name, oldname, newname) => `mod_type('${name}', 'ren', '${oldname}', '${newname}')`,
+            enum: (name, oldname, newname) => `mod_enum('${name}', 'ren', '${oldname}', '${newname}')`
+        },
+        def: {
+            enum: (name, update) => `mod_enum('${name}', 'def', '${update.propertyName}')`
+        },
+        del: {
+            type: (name, update) => `mod_type('${name}', 'del', '${update.propertyName}')`,
+            enum: (name, update) => `mod_enum('${name}', 'del', '${update.propertyName}')`
+        },
+        wpo: {
+            type: (name, update) => `mod_type('${name}', 'wpo', ${update.wpo})`,
+        },
+    }
+};
+
+const EnumTypeChips = ({buttonsView, categoryInit, datatypes, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onSetQueryInput, scope, tag, view}) => {
     const classes = useStyles();
     const [items, setItems] = React.useState([]);
 
@@ -52,7 +109,7 @@ const TypeChips = ({buttonsView, categoryInit, datatypes, headers, onChange, onC
     };
 
     const handleClickAdd = () => {
-        onChange('add', '', categoryInit);
+        onChange('add')('', categoryInit);
     };
     const handleCloseAdd= () => {
         onClose('add', categoryInit);
@@ -67,12 +124,19 @@ const TypeChips = ({buttonsView, categoryInit, datatypes, headers, onChange, onC
         onClose('edit', categoryInit);
     };
 
+    const handleChangeViaButton = (a, n) => () => {
+        onChange(a)(n, categoryInit)
+    };
+    const handleChangeViaLink = (a) => (n, c) => {
+        onChange(a)(n, c)
+    };
+
     const buttons = (bv) => (n)=>{
         let b = [];
         if (bv.view) {
             b.push({
                 icon: <ViewIcon fontSize="small" />,
-                onClick: onChange('view')(n, c),
+                onClick: handleChangeViaButton('view', n),
             });
         }
         if (bv.run) {
@@ -84,11 +148,34 @@ const TypeChips = ({buttonsView, categoryInit, datatypes, headers, onChange, onC
         if (bv.edit) {
             b.push({
                 icon: <img src="/img/view-edit.png" alt="view/edit" draggable="false" width="20" />,
-                onClick: onChange('edit')(n, c),
+                onClick: handleChangeViaButton('edit', n),
             });
         }
 
         return b;
+    };
+
+    const item = view.name&&items&&items.find(i=>i.name==view.name)||{};
+    const fields = categoryInit==='type'?'fields':'members';
+    const noLink = categoryInit==='enum';
+    const obj = item[fields] ? item[fields].map(([n,v])=>{
+        const isBlob = v.constructor===String&&v.includes('/download/tmp/thingsdb-cache');
+        const objectProof = !isBlob&&v.constructor===Object?JSON.stringify(v):v;
+        const obj = isBlob? <DownloadBlob val={v} /> : noLink ? objectProof : <AddLink name={objectProof} scope={scope} onChange={view.view?handleChangeViaLink('view'):handleChangeViaLink('edit')} />;
+        return({
+            default: item.default===n ? <CheckIcon /> : null,
+            propertyName: n,
+            propertyType: categoryInit==='type'?v:'',
+            propertyVal: categoryInit==='type'?'':v,
+            propertyObject: obj,
+            wpo: item.wpo
+        });
+    }):[];
+
+    const rows = {
+        Members: item[fields] ? obj : [],
+        Fields: item[fields] ? obj : [],
+        Methods: Object.entries(item.methods||{}).reduce((res, k) => {res.push({propertyName: k[0], definition: k[1].definition}); return res;},[])
     };
 
     return (
@@ -148,7 +235,7 @@ const TypeChips = ({buttonsView, categoryInit, datatypes, headers, onChange, onC
     );
 };
 
-TypeChips.defaultProps = {
+EnumTypeChips.defaultProps = {
     datatypes: [],
     onChange: ()=>null,
     onClose: ()=>null,
@@ -158,19 +245,16 @@ TypeChips.defaultProps = {
     onSetQueryInput: ()=>null,
 };
 
-TypeChips.propTypes = {
+EnumTypeChips.propTypes = {
     buttonsView: PropTypes.object.isRequired,
     categoryInit: PropTypes.string.isRequired,
     datatypes: PropTypes.arrayOf(PropTypes.string),
-    headers: PropTypes.object.isRequired,
     onChange: PropTypes.func,
     onClose: PropTypes.func,
     onDelete: PropTypes.func,
     onInfo: PropTypes.func,
     onMakeInstanceInit: PropTypes.func,
     onSetQueryInput: PropTypes.func,
-    queries: PropTypes.func.isRequired,
-    rows: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
     tag: PropTypes.string.isRequired,
     view: PropTypes.object.isRequired,

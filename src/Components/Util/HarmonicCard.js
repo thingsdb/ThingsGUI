@@ -62,7 +62,7 @@ const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onRef
                 }}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit={unmountOnExit}>
-                {noPadding? content : (
+                {noPadding ? content : (
                     <CardContent>
                         {content}
                     </CardContent>

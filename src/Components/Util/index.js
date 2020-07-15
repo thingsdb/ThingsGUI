@@ -19,6 +19,7 @@ import LocalErrorMsg from './LocalErrorMsg';
 import Menu from './Menu';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
+import RefreshContainer from './RefreshContainer';
 import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import StartStopPolling from './StartStopPolling';
@@ -194,6 +195,7 @@ export {
     LocalErrorMsg,
     Menu,
     orderByName,
+    RefreshContainer,
     QueryInput,
     QueryOutput,
     revealCustomType,

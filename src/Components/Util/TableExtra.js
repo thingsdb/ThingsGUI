@@ -43,6 +43,7 @@ TableExtra.defaultProps = {
     buttons: null,
     createdAt: null,
     modifiedAt: null,
+    onAdd: null,
 };
 
 TableExtra.propTypes = {
@@ -51,7 +52,7 @@ TableExtra.propTypes = {
     createdAt: PropTypes.number,
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     modifiedAt: PropTypes.number,
-    onAdd: PropTypes.func.isRequired,
+    onAdd: PropTypes.func,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 

@@ -39,10 +39,8 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
     );
 
     React.useEffect(() => { // keep this useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-        setState({...state, queryString: queries[category](name, properties)[]});
-
-
-            // `set_${category}("${name}", {${properties.map(v=>`${v.propertyName}: ${category=='type'?`'${v.propertyType||v.definition}'`:`${v.propertyVal}`}`)}})`});
+        console.log(name, properties)
+        setState({...state, queryString: queries[category](name, properties)});
     },
     [name, JSON.stringify(properties)], // TODO STRING
     );

@@ -6,8 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Switch from '@material-ui/core/Switch';
+import Typography from '@material-ui/core/Typography';
 
-import PropertyVal from './PropertyVal';
+import {Closure} from '../../../../Util';
 
 
 const useStyles = makeStyles(() => ({
@@ -16,7 +17,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const PropertyInitVal = ({category, cb, onBlob, scope}) => {
+const PropertyCallback = ({cb}) => {
     const classes = useStyles();
     const [switchIni, setSwitch] = React.useState(false);
 
@@ -28,12 +29,8 @@ const PropertyInitVal = ({category, cb, onBlob, scope}) => {
         }
     };
 
-    const handleVal = (v) => {
-        cb(v);
-    };
-
-    const handleBlob = (b) => {
-        onBlob(b);
+    const handleClosure = (c) => {
+        cb({callback:c});
     };
 
     return (
@@ -48,23 +45,23 @@ const PropertyInitVal = ({category, cb, onBlob, scope}) => {
                             onChange={handleSwitch}
                         />
                     )}
-                    label="Add initial value or closure"
+                    label="Add a closure that will be called on each existing instance and can be used to set a new value"
                 />
             </Grid>
             <Collapse className={classes.fullWidth} in={switchIni} timeout="auto" unmountOnExit>
-                <PropertyVal category={category} cb={handleVal} onBlob={handleBlob} scope={scope} />
+                <Typography variant="caption">
+                    {'Callback'}
+                </Typography>
+                <Closure cb={handleClosure} />
             </Collapse>
         </React.Fragment>
     );
 };
 
-PropertyInitVal.propTypes = {
-    category: PropTypes.string.isRequired,
+PropertyCallback.propTypes = {
     cb: PropTypes.func.isRequired,
-    onBlob: PropTypes.func.isRequired,
-    scope: PropTypes.string.isRequired,
 };
 
-export default PropertyInitVal;
+export default PropertyCallback;
 
 

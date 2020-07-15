@@ -30,7 +30,7 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
 
     return (
         <TableContainer className={classes.container}>
-            <Table padding="none" stickyHeader>
+            <Table padding="none">
                 <TableHead>
                     <TableRow>
                         {header.map((h, i) => (

@@ -1,0 +1,69 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { amber } from '@material-ui/core/colors';
+import { withStyles } from '@material-ui/core/styles';
+import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Switch from '@material-ui/core/Switch';
+import Typography from '@material-ui/core/Typography';
+
+
+const WarnSwitch = withStyles({
+    switchBase: {
+        color: amber[300],
+        '&$checked': {
+                color: amber[500],
+        },
+        '&$checked + $track': {
+                backgroundColor: amber[500],
+        },
+    },
+    checked: {},
+    track: {},
+  })(Switch);
+
+const Wpo = ({cb, input}) => {
+    const [switchIni, setSwitch] = React.useState(input);
+
+    React.useEffect(()=>{
+        setSwitch(input);
+    },[input]);
+
+    const handleSetWpo = ({target}) => {
+        const {checked} = target;
+        setSwitch(checked);
+        cb({wpo:checked})
+    };
+
+    return (
+        <Typography component="div" variant="caption">
+            <FormLabel>
+                {`Wrap-only mode`}
+            </FormLabel>
+            <Grid component="label" container alignItems="center" spacing={1}>
+                <Grid item>
+                    {'Disabled'}
+                </Grid>
+                <Grid item>
+                    <WarnSwitch
+                        checked={switchIni}
+                        onChange={handleSetWpo}
+                    />
+                </Grid>
+                <Grid item>
+                    {'Enabled'}
+                </Grid>
+            </Grid>
+        </Typography>
+    );
+};
+
+Wpo.propTypes = {
+    cb: PropTypes.func.isRequired,
+    input: PropTypes.bool.isRequired,
+};
+
+export default Wpo;
+
+

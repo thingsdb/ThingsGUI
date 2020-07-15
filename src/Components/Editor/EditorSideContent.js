@@ -95,7 +95,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         setViewProcedure({open: false, name: ''});
     };
 
-    const handleChange = (a, c, n) => {
+    const handleChange = (a) => (n, c) => {
         switch(a){
         case 'view':
             if (c=='type') {
@@ -116,7 +116,7 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
         }
     };
 
-    const handleClose = (a, c) => {
+    const handleClose = (_a, c) => {
         if (c=='type') {
             setViewType({open: false, name: ''});
         } else {
@@ -158,7 +158,6 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                     <EnumTypeChips
                         buttonsView={{add: false, edit: false, run: true, view: true}}
                         categoryInit="type"
-                        fields="fields"
                         onChange={handleChange}
                         onClose={handleClose}
                         onDelete={TypeActions.deleteType}
@@ -172,8 +171,6 @@ const EditorSideContent = ({scope, onSetQueryInput, tag}) => {
                     <EnumTypeChips
                         buttonsView={{add: false, edit: false, run: true, view: true}}
                         categoryInit="enum"
-                        fields="members"
-                        noLink
                         onChange={handleChange}
                         onClose={handleClose}
                         onDelete={EnumActions.deleteEnum}
