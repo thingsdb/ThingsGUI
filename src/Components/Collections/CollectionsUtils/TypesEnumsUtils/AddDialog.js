@@ -39,7 +39,6 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
     );
 
     React.useEffect(() => { // keep this useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-        console.log(name, properties)
         setState({...state, queryString: queries[category](name, properties)});
     },
     [name, JSON.stringify(properties)], // TODO STRING
@@ -105,7 +104,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
 
     const handleSwitching = (index) => (check) => {
         setState(prevState => {
-            const prop = check?{propertyType: ''}:{definition: ''}
+            const prop = check?{propertyType: ''}:{definition: ''};
             let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
             update.splice(index, 1, {...prevState.properties[index], ...prop});
             return {...prevState, properties: update};

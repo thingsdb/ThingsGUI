@@ -43,18 +43,15 @@ const queries = {
         enum: (name, list) => `set_enum("${name}", {${list.map(v=>`${v.propertyName}: ${v.propertyVal}`)}})`
     },
     mod: {
-        add: {
-            type: (name, update) => ( `mod_type('${name}', 'add', '${update.propertyName}', ` + (
-                update.definition ? `${update.definition})`
-                    : `'${update.propertyType}'${update.propertyVal?`, ${update.propertyVal}`:''})`
-            )),
+        addField: {
+            type: (name, update) => `mod_type('${name}', 'add', '${update.propertyName}', '${update.propertyType}'${update.propertyVal?`, ${update.propertyVal}`:''})`,
             enum: (name, update) => `mod_enum('${name}', 'add', '${update.propertyName}', ${update.propertyVal})`
         },
+        addMethod: {
+            type: (name, update) => `mod_type('${name}', 'add', '${update.propertyName}', ${update.definition})`,
+        },
         mod: {
-            type: (name, update) => ( update.propertyType ?
-                `mod_type('${name}', 'mod', '${update.propertyName}', '${update.propertyType}'` + (update.callback ? `, ${update.callback}` : '') + ')'
-                    : `mod_type('${name}', 'mod', '${update.propertyName}', ${update.definition}` + (update.callback ? `, ${update.callback}` : '') + ')'
-            ),
+            type: (name, update) => ( `mod_type('${name}', 'mod', '${update.propertyName}', '${update.propertyType}'` + (update.callback ? `, ${update.callback}` : '') + ')'),
             enum: (name, update) => `mod_enum('${name}', 'mod', '${update.propertyName}', ${update.propertyVal})`
         },
         ren: {
@@ -71,32 +68,30 @@ const queries = {
         wpo: {
             type: (name, update) => `mod_type('${name}', 'wpo', ${update.wpo})`,
         },
+        met: {
+            type: (name, update) => (`mod_type('${name}', 'mod', '${update.propertyName}', ${update.definition}` + (update.callback ? `, ${update.callback}` : '') + ')'),
+        }
     }
 };
 
-const EnumTypeChips = ({buttonsView, categoryInit, datatypes, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onSetQueryInput, scope, tag, view}) => {
+
+
+const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onSetQueryInput, scope, tag, view}) => {
     const classes = useStyles();
-    const [items, setItems] = React.useState([]);
 
     React.useEffect(() => {
-        handleRefresh();
+        onInfo(scope, tag);
     }, [scope]);
 
-    const handleItems = (t) => {
-        setItems(t);
-    };
-
-    const handleRefresh = () => onInfo(scope, tag, handleItems);
-    const handleCallback = (s, t) => onInfo(s, t, handleItems);
+    const handleCallback = (s, t) => onInfo(s, t);
 
     const handleClickDelete = (n, cb, tag) => {
         onDelete(
             scope,
             n,
             tag,
-            (p) => {
+            () => {
                 cb();
-                handleItems(p);
             }
         );
     };
@@ -125,10 +120,10 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, onChange, onClose,
     };
 
     const handleChangeViaButton = (a, n) => () => {
-        onChange(a)(n, categoryInit)
+        onChange(a)(n, categoryInit);
     };
     const handleChangeViaLink = (a) => (n, c) => {
-        onChange(a)(n, c)
+        onChange(a)(n, c);
     };
 
     const buttons = (bv) => (n)=>{
@@ -182,13 +177,11 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, onChange, onClose,
         <Grid className={classes.spacing} item xs={12}>
             <ChipsCard
                 buttons={buttons(buttonsView)}
-                expand={false}
                 items={items}
                 onAdd={handleClickAdd}
-                onRefresh={handleRefresh}
                 onDelete={handleClickDelete}
-                title={`${categoryInit}s`}
                 warnExpression={i=>i.wrap_only}
+                title={`${categoryInit}s`}
             />
             {buttonsView.add && (
                 <AddDialog
@@ -243,12 +236,14 @@ EnumTypeChips.defaultProps = {
     onInfo: ()=>null,
     onMakeInstanceInit: ()=>null,
     onSetQueryInput: ()=>null,
+    items: [],
 };
 
 EnumTypeChips.propTypes = {
     buttonsView: PropTypes.object.isRequired,
     categoryInit: PropTypes.string.isRequired,
     datatypes: PropTypes.arrayOf(PropTypes.string),
+    items: PropTypes.arrayOf(PropTypes.object),
     onChange: PropTypes.func,
     onClose: PropTypes.func,
     onDelete: PropTypes.func,

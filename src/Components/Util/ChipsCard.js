@@ -1,5 +1,4 @@
 import { fade, makeStyles } from '@material-ui/core/styles';
-import {ErrorMsg, HarmonicCard, SimpleModal, CardMultiButton} from '../Util';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -13,6 +12,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Switch from '@material-ui/core/Switch';
 
 import {ChipsCardTAG} from '../../constants';
+import {ErrorMsg, HarmonicCardContent, SimpleModal, CardMultiButton} from '../Util';
 
 
 const useStyles = makeStyles(theme => ({
@@ -77,7 +77,7 @@ const orderByName = (arr) => arr.sort((a, b) => {
 
 const tag = ChipsCardTAG;
 
-const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefresh, title, warnExpression}) => {
+const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExpression}) => {
     const classes = useStyles();
     const [deleteItem, setDeleteItem] = React.useState('');
     const [switchDel, setSwitchDel] = React.useState(false);
@@ -119,9 +119,7 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
 
     return (
         <React.Fragment>
-            <HarmonicCard
-                title={title.toUpperCase()}
-                expand={expand}
+            <HarmonicCardContent
                 content={
                     <Grid container spacing={2}>
                         <Grid container item xs={12}>
@@ -176,8 +174,6 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
                         {moreButtons}
                     </React.Fragment>
                 }
-                onRefresh={onRefresh}
-                unmountOnExit
             />
             <SimpleModal
                 open={Boolean(deleteItem)}
@@ -210,22 +206,18 @@ const ChipsCard = ({buttons, expand, items, moreButtons, onAdd, onDelete, onRefr
 };
 
 ChipsCard.defaultProps = {
-    expand: null,
     items: [],
     moreButtons: null,
-    onRefresh: null,
     warnExpression: ()=>false,
 },
 
 ChipsCard.propTypes = {
-    expand: PropTypes.bool,
     items: PropTypes.arrayOf(PropTypes.object),
     moreButtons: PropTypes.object,
     onAdd: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
-    onRefresh: PropTypes.func,
-    title: PropTypes.string.isRequired,
     buttons: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
     warnExpression: PropTypes.func,
 };
 

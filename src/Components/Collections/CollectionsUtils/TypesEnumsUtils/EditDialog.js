@@ -1,17 +1,17 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
@@ -38,23 +38,41 @@ const initState = {
     queryString: '',
 };
 
+const initShow = {
+    name: false,
+    type: false,
+    val: false,
+    valInit: false,
+    method: false,
+    callback: false,
+};
+
 const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChangeItem, onClose, open, queries, rows, scope}) => {
     const [state, setState] = React.useState(initState);
     const {queryString, property} = state;
     const [action, setAction] = React.useState('');
-    const [key, setKey] = React.useState('');
     const [oldname, setOldname] = React.useState(null);
     const [blob, setBlob] = React.useState({});
+    const [show, setShow] = React.useState(initShow);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
 
     React.useEffect(() => {
-        setState(initState);
         setAction('');
     },
     [open],
     );
+
+    React.useEffect(() => {
+        handleWpo();
+    },
+    [item.wrap_only],
+    );
+
+    const handleWpo = () => {
+        setState({...initState, property: {...initState.property, wpo: item.wrap_only}});
+    };
 
     const handleBlob = (b) => {
         setBlob(b);
@@ -62,9 +80,8 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
     const handleQuery = (p, a) => {
         const act = a||action;
-        console.log(act, p)
         setState(prev=>{
-            const update = {...prev.property, ...p}
+            const update = {...prev.property, ...p};
             return({
                 property: update,
                 queryString: queries[act]?queries[act][category](item.name, update):''
@@ -84,12 +101,30 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
     const handleQueryWpo = (p) => {
         setAction('wpo');
-        handleQuery(p, 'wpo')
+        handleQuery(p, 'wpo');
     };
 
-    const handleAdd = (ky) => {
-        setAction('add');
-        setKey(ky);
+    const handleAdd = (kys) => {
+        kys.map((i) => {
+            switch(i.ky){
+            case 'propertyObject':
+                setShow({...initShow,
+                    name: true,
+                    type: category=='type',
+                    valInit: category=='type',
+                    val: category=='enum',
+                });
+                setAction('addField');
+                break;
+            case 'definition':
+                setShow({...initShow,
+                    name: true,
+                    method: true,
+                });
+                setAction('addMethod');
+                break;
+            }
+        });
     };
 
     const handleMod = (ky, p) => () => {
@@ -98,16 +133,24 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         case 'propertyName':
             setAction('ren');
             handleQueryRen(p, p.propertyName);
+            setShow({...initShow, name: true});
             break;
         case 'propertyObject':
             setAction('mod');
             handleQuery(p, 'mod');
-            setKey('Fields');
+            setShow({...initShow,
+                type: category=='type',
+                val: category=='enum',
+                callback: category=='type',
+            });
             break;
         case 'definition':
-            setAction('mod');
-            handleQuery(p, 'mod');
-            setKey('Methods');
+            setAction('met');
+            handleQuery(p, 'met');
+            setShow({...initShow,
+                method: true,
+                callback: true,
+            });
             break;
         case 'default':
             setAction('def');
@@ -130,10 +173,11 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
     const handleBack = () => {
         handleCloseError();
-        setState(initState);
+        handleWpo();
+        setAction('');
+        setAnchorEl(null);
         setBlob({});
         setOldname(null);
-        setAction('');
     };
 
     const handleClickOk = () => {
@@ -148,10 +192,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                 tag,
                 () => {
                     getInfo(scope, tag);
-                    setAction('');
-                    setAnchorEl(null);
-                    setState(initState);
-                    setBlob({});
+                    handleBack();
                 }
             );
         } else {
@@ -161,10 +202,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                 tag,
                 (_data) => {
                     getInfo(scope, tag);
-                    setAction('');
-                    setAnchorEl(null);
-                    setState(initState);
-                    setBlob({});
+                    handleBack();
                 }
             );
         }
@@ -175,8 +213,9 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     };
 
     const overview = action=='';
-    const add = action=='add';
+    const add = action=='addField'||action=='addMethod';
     const mod = action=='mod';
+    const met = action=='met';
     const def = action=='def';
     const del = action=='del';
     const ren = action=='ren';
@@ -184,17 +223,11 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
     const showOverview = overview||del;
     const showSubmitBack = !showOverview;
-    const showTextFields = add || mod || ren;
+    const showTextFields = add || mod || met || ren;
     const showDefault = def;
     const showQuery = Boolean(queryString);
 
-    const showName = add||ren;
-    const showType = !ren&&key!='Methods'&&category=='type';
-    const showVal = !ren&&category=='enum';
-    const showValIni = add&&key=='Fields'&&category=='type';
-    const showMethod = (mod||add)&&key=='Methods'&&category=='type';
-    const showCallback = mod&&category=='type';
-    const showWpo = category=='type';
+    const showWpo = category=='type'&&overview;
     const showWpoWarning = wpo;
 
 
@@ -214,8 +247,6 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
             </ButtonBase>
         ):null
     );
-
-    console.log(item, property)
 
     return (
         <SimpleModal
@@ -273,31 +304,31 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                             <ListItem>
                                 <EditProvider>
                                     <Grid container item xs={12} spacing={1} alignItems="center" >
-                                        {showName ? (
+                                        {show.name ? (
                                             <Grid item xs={12}>
                                                 <PropertyName cb={ren?handleQueryRen:handleQuery} input={property.propertyName||''} />
                                             </Grid>
                                         ) : null}
-                                        {showType? (
+                                        {show.type? (
                                             <Grid item xs={12}>
                                                 <PropertyType cb={handleQuery} dropdownItems={dataTypes} input={property.propertyType||''} />
                                             </Grid>
                                         ) : null}
-                                        {showMethod ? (
+                                        {show.method ? (
                                             <Grid item xs={12}>
                                                 <PropertyMethod cb={handleQuery} input={property.definition||''} />
                                             </Grid>
                                         ) : null}
-                                        {showVal? (
+                                        {show.val? (
                                             <Grid item xs={12}>
                                                 <PropertyVal category={category} cb={handleQuery} onBlob={handleBlob} scope={scope} />
                                             </Grid>
-                                        ) : showValIni ? (
+                                        ) : show.valInit ? (
                                             <Grid item xs={12}>
                                                 <PropertyInitVal category={category} cb={handleQuery} onBlob={handleBlob} scope={scope} />
                                             </Grid>
                                         ) : null}
-                                        {showCallback ? (
+                                        {show.callback ? (
                                             <Grid item xs={12}>
                                                 <PropertyCallback cb={handleQuery} />
                                             </Grid>
@@ -315,13 +346,18 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                         </Collapse>
                         <Collapse in={showWpo||showWpoWarning} timeout="auto" unmountOnExit>
                             <ListItem>
-                                <Wpo cb={handleQueryWpo} input={item.wrap_only} />
+                                <ListItemText
+                                    primary="Wrap-only mode:"
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <Wpo cb={handleQueryWpo} input={property.wpo} />
                             </ListItem>
                         </Collapse>
                         <Collapse in={showWpoWarning} timeout="auto" unmountOnExit>
                             <ListItem>
                                 <Typography variant="body2" >
-                                    {`On submit you will ${property.wpo?'enable':'disable'} wrap-only mode, no instances of the type can be created and the type can not be used by other type unless that type is also in wrap-only mode.`}
+                                    {`On submit you will ${property.wpo?'enable':'disable'} wrap-only mode, no instances of "${item.name}" can be created and this type can only be used by types that are also in wrap-only mode.`}
                                 </Typography>
                             </ListItem>
                         </Collapse>

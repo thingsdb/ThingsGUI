@@ -25,7 +25,7 @@ const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
 
     const pattern = '\\b' + name + '\\b';
     const re= new RegExp(pattern);
-    const u = customTypes[scope]?customTypes[scope].filter(i=>
+    const u = customTypes[scope]&&name?customTypes[scope].filter(i=>
         re.test(`${i.fields}`)
     ):[];
 

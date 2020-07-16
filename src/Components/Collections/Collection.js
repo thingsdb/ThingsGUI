@@ -1,14 +1,16 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import {withVlow} from 'vlow';
 import { makeStyles} from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
+import Grid from '@material-ui/core/Grid';
+import React from 'react';
 
 import {ApplicationStore, ThingsdbStore} from '../../Stores';
 import {CollectionConfig} from './Config';
-import {findItem, isObjectEmpty, TitlePage} from '../Util';
+import {findItem, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Util';
 import CollectionProcedures from './Procedures';
 import CollectionTree from './Tree';
 import CollectionEnumsTypes from './EnumsTypes';
+import {ProcedureActions} from '../../Stores';
+import {CollectionProceduresTAG} from '../../constants';
 
 
 const withStores = withVlow([{
@@ -29,6 +31,10 @@ const Collection = ({match, collections}) => {
     const classes = useStyles();
     const selectedCollection = findItem(match.index, collections);
 
+    const handleRefresh = () => {
+        ProcedureActions.getProcedures(`@collection:${selectedCollection.name}`, CollectionProceduresTAG);
+    };
+
     return (
         isObjectEmpty(selectedCollection) ? null : (
             <TitlePage
@@ -38,7 +44,9 @@ const Collection = ({match, collections}) => {
                     <React.Fragment>
                         <Grid container item md={7} xs={12}>
                             <Grid className={classes.spacing} item xs={12}>
-                                <CollectionConfig collection={selectedCollection} close={(collections.length-1)!=match.index} />
+                                <HarmonicCardHeader title="INFO" unmountOnExit>
+                                    <CollectionConfig collection={selectedCollection} close={(collections.length-1)!=match.index} />
+                                </HarmonicCardHeader >
                             </Grid>
                             <Grid item xs={12}>
                                 <CollectionTree collection={selectedCollection} />
@@ -46,11 +54,11 @@ const Collection = ({match, collections}) => {
                         </Grid>
                         <Grid container item md={5} xs={12}>
                             <Grid className={classes.spacing} item xs={12}>
-                                <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
+                                <HarmonicCardHeader title="PROCEDURES" onRefresh={handleRefresh} unmountOnExit>
+                                    <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
+                                </HarmonicCardHeader >
                             </Grid>
-                            <Grid className={classes.spacing} item xs={12}>
-                                <CollectionEnumsTypes scope={`@collection:${selectedCollection.name}`} />
-                            </Grid>
+                            <CollectionEnumsTypes scope={`@collection:${selectedCollection.name}`} />
                         </Grid>
                     </React.Fragment>
                 }

@@ -25,7 +25,7 @@ const PropertyCallback = ({cb}) => {
         const {checked} = target;
         setSwitch(checked);
         if (!checked) {
-            cb({propertyVal:''})
+            cb({propertyVal:''});
         }
     };
 

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { amber } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
-import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -13,17 +12,17 @@ const WarnSwitch = withStyles({
     switchBase: {
         color: amber[300],
         '&$checked': {
-                color: amber[500],
+            color: amber[500],
         },
         '&$checked + $track': {
-                backgroundColor: amber[500],
+            backgroundColor: amber[500],
         },
     },
     checked: {},
     track: {},
-  })(Switch);
+})(Switch);
 
-const Wpo = ({cb, input}) => {
+const Wpo = ({cb, input, disabled}) => {
     const [switchIni, setSwitch] = React.useState(input);
 
     React.useEffect(()=>{
@@ -32,15 +31,14 @@ const Wpo = ({cb, input}) => {
 
     const handleSetWpo = ({target}) => {
         const {checked} = target;
-        setSwitch(checked);
-        cb({wpo:checked})
+        if(!disabled) {
+            setSwitch(checked);
+            cb({wpo:checked});
+        }
     };
 
     return (
         <Typography component="div" variant="caption">
-            <FormLabel>
-                {`Wrap-only mode`}
-            </FormLabel>
             <Grid component="label" container alignItems="center" spacing={1}>
                 <Grid item>
                     {'Disabled'}
@@ -59,9 +57,16 @@ const Wpo = ({cb, input}) => {
     );
 };
 
+Wpo.defaultProps = {
+    cb: ()=>null,
+    input: false,
+    disabled: false,
+};
+
 Wpo.propTypes = {
-    cb: PropTypes.func.isRequired,
-    input: PropTypes.bool.isRequired,
+    cb: PropTypes.func,
+    input: PropTypes.bool,
+    disabled: PropTypes.bool,
 };
 
 export default Wpo;

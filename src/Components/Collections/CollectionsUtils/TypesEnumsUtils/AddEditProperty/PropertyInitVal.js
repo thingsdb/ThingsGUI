@@ -24,7 +24,7 @@ const PropertyInitVal = ({category, cb, onBlob, scope}) => {
         const {checked} = target;
         setSwitch(checked);
         if (!checked) {
-            cb({propertyVal:''})
+            cb({propertyVal:''});
         }
     };
 

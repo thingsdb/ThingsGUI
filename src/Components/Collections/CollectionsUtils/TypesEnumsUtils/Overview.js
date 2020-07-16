@@ -11,8 +11,8 @@ import  UsedByType from './UsedByType';
 
 const Overview = ({badgeButton, buttons, headers, item, link, onAdd, onChangeItem, rows, scope}) => {
 
-    const handleAdd = (ky) => () => {
-        onAdd(ky);
+    const handleAdd = (kys) => () => {
+        onAdd(kys);
     };
 
     const kys = Object.keys(headers);
@@ -32,7 +32,7 @@ const Overview = ({badgeButton, buttons, headers, item, link, onAdd, onChangeIte
             <Tabs
                 headers={kys}
                 panels={kys.map((v, i) => (
-                    <TableExtra key={i} badgeButton={badgeButton} buttons={buttons} createdAt={item.created_at} header={headers[v]} modifiedAt={item.modified_at} onAdd={onAdd&&handleAdd(v)} rows={rows[v]} />
+                    <TableExtra key={i} badgeButton={badgeButton} buttons={buttons} createdAt={item.created_at} header={headers[v]} modifiedAt={item.modified_at} onAdd={onAdd&&handleAdd(headers[v])} rows={rows[v]} />
                 ))}
             />
             <UsedByType name={item.name} onChangeItem={onChangeItem} scope={scope} />

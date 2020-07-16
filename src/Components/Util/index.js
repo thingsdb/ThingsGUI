@@ -12,6 +12,8 @@ import DrawerLayout from './DrawerLayout';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
 import HarmonicCard from './HarmonicCard';
+import HarmonicCardContent from './HarmonicCardContent';
+import HarmonicCardHeader from './HarmonicCardHeader';
 import HarmonicTree from './HarmonicTree';
 import Info from './Info';
 import ListHeader from './ListHeader';
@@ -37,6 +39,7 @@ import TitlePage2 from './TitlePage2';
 import TopBarMenu from './TopBarMenu';
 import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
+import TwoLabelSwitch from './TwoLabelSwitch';
 import VariablesArray from './VariablesArray';
 import WarnPopover from './WarnPopover';
 
@@ -188,6 +191,8 @@ export {
     getScopes,
     getScopes2,
     HarmonicCard,
+    HarmonicCardContent,
+    HarmonicCardHeader,
     HarmonicTree,
     Info,
     isObjectEmpty,
@@ -218,6 +223,7 @@ export {
     TopBarMenu,
     TreeBranch,
     TreeIcon,
+    TwoLabelSwitch,
     VariablesArray,
     WarnPopover,
 };
