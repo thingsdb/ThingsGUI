@@ -1,15 +1,18 @@
 /* eslint-disable react/no-multi-comp */
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import {SimpleModal} from '../../../Util';
 import Overview from './Overview';
+import {Wpo} from './AddEditProperty';
 
 
-const ViewDialog = ({category, item, link, onChangeItem, onClose, open, rows, scope}) => (
+const ViewDialog = ({category, headers, item, link, onChangeItem, onClose, open, rows, scope}) => (
     <SimpleModal
         open={open}
         onClose={onClose}
@@ -28,7 +31,19 @@ const ViewDialog = ({category, item, link, onChangeItem, onClose, open, rows, sc
             </Grid>
             <Grid item xs={12}>
                 <List disablePadding dense>
-                    <Overview category={category} item={item} link={link} onChangeItem={onChangeItem} rows={rows} scope={scope} />
+                    {item.wrap_only!==undefined ? (
+                        <React.Fragment>
+                            <ListItem>
+                                <ListItemText
+                                    primary="Wrap-only mode:"
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <Wpo input={item.wrap_only} disabled />
+                            </ListItem>
+                        </React.Fragment>
+                    ) : null}
+                    <Overview headers={headers} item={item} link={link} onChangeItem={onChangeItem} rows={rows} scope={scope} />
                 </List>
             </Grid>
         </Grid>
@@ -43,12 +58,13 @@ ViewDialog.defaultProps = {
 
 ViewDialog.propTypes = {
     category: PropTypes.string.isRequired,
+    headers: PropTypes.object.isRequired,
     item: PropTypes.object,
     link: PropTypes.string.isRequired,
     onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool,
-    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
+    rows: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
 };
 

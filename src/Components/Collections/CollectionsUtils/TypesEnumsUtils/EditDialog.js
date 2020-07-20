@@ -1,5 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
@@ -8,6 +9,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -17,7 +19,7 @@ import {CollectionActions, ErrorActions} from '../../../../Stores';
 import {EditDialogTAG} from '../../../../constants';
 import {ErrorMsg, SimpleModal, WarnPopover} from '../../../Util';
 import {EditProvider} from '../Context';
-import AddProperty from './AddProperty';
+import {PropertyCallback, PropertyInitVal, PropertyMethod, PropertyName, PropertyType, PropertyVal, Wpo} from './AddEditProperty';
 import Overview from './Overview';
 
 const tag = EditDialogTAG;
@@ -25,76 +27,141 @@ const tag = EditDialogTAG;
 const initState = {
     property: {
         default: null,
+        definition: '',
         propertyName: '',
         propertyObject:null,
         propertyType: '',
-        propertyVal: null
+        propertyVal: null,
+        callback: '',
+        wpo: false,
     },
     queryString: '',
 };
 
-const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onClose, open, rows, scope}) => {
+const initShow = {
+    name: false,
+    type: false,
+    val: false,
+    valInit: false,
+    method: false,
+    callback: false,
+};
+
+const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChangeItem, onClose, open, queries, rows, scope}) => {
     const [state, setState] = React.useState(initState);
     const {queryString, property} = state;
     const [action, setAction] = React.useState('');
-    const [index, setIndex] = React.useState(null);
+    const [oldname, setOldname] = React.useState(null);
     const [blob, setBlob] = React.useState({});
+    const [show, setShow] = React.useState(initShow);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
 
     React.useEffect(() => {
-        setState(initState);
         setAction('');
     },
     [open],
     );
 
+    React.useEffect(() => {
+        handleWpo();
+    },
+    [item.wrap_only],
+    );
+
+    const handleWpo = () => {
+        setState({...initState, property: {...initState.property, wpo: item.wrap_only}});
+    };
+
     const handleBlob = (b) => {
         setBlob(b);
     };
 
-    const handleQueryAdd = (p) => {
-        setState({property: p, queryString: `mod_${category}('${item.name}', 'add', '${p.propertyName}'${category=='type'?`, '${p.propertyType}'`:''}${p.propertyVal?`, ${p.propertyVal}`:''})`});
+    const handleQuery = (p, a) => {
+        const act = a||action;
+        setState(prev=>{
+            const update = {...prev.property, ...p};
+            return({
+                property: update,
+                queryString: queries[act]?queries[act][category](item.name, update):''
+            });
+        });
     };
 
-    const handleQueryMod = (p) => {
-        setState({property: p, queryString: `mod_${category}('${item.name}', 'mod', '${p.propertyName}', ${category=='type'?`'${p.propertyType}'`: p.propertyVal})`});
+    const handleQueryRen = (p, n=null) => {
+        const name = n===null ? oldname : n;
+        setState(prev=>{
+            return({
+                property: {...prev.property, ...p},
+                queryString: queries.ren[category](item.name, name, p.propertyName)
+            });
+        });
     };
 
-    const handleQueryModRen = (p) => {
-        setState({property: p, queryString: `mod_${category}('${item.name}', 'ren', '${rows[index]&&rows[index].propertyName}', '${p.propertyName}')`});
+    const handleQueryWpo = (p) => {
+        setAction('wpo');
+        handleQuery(p, 'wpo');
     };
 
-    const handleQueryModDef = (p) => {
-        setState({...state, property: p, queryString: `mod_${category}('${item.name}', 'def', '${p.propertyName}')`});
+    const handleAdd = (kys) => {
+        kys.map((i) => {
+            switch(i.ky){
+            case 'propertyObject':
+                setShow({...initShow,
+                    name: true,
+                    type: category=='type',
+                    valInit: category=='type',
+                    val: category=='enum',
+                });
+                setAction('addField');
+                break;
+            case 'definition':
+                setShow({...initShow,
+                    name: true,
+                    method: true,
+                });
+                setAction('addMethod');
+                break;
+            }
+        });
     };
 
-    const handleAdd = () => {
-        setAction('add');
-    };
-
-    const handleMod = (ky, p, i) => () => {
-        setIndex(i);
+    const handleMod = (ky, p) => () => {
+        setOldname(p.propertyName);
         switch(ky){
         case 'propertyName':
             setAction('ren');
-            handleQueryModRen(p);
+            handleQueryRen(p, p.propertyName);
+            setShow({...initShow, name: true});
             break;
         case 'propertyObject':
             setAction('mod');
-            handleQueryMod(p);
+            handleQuery(p, 'mod');
+            setShow({...initShow,
+                type: category=='type',
+                val: category=='enum',
+                callback: category=='type',
+            });
+            break;
+        case 'definition':
+            setAction('met');
+            handleQuery(p, 'met');
+            setShow({...initShow,
+                method: true,
+                callback: true,
+            });
             break;
         case 'default':
             setAction('def');
-            handleQueryModDef(p);
+            handleQuery(p, 'def');
             break;
         }
     };
 
 
     const handleDel = (p) => (e) => {
-        setState({...state, property: p, queryString: `mod_${category}('${item.name}', 'del', '${p.propertyName}')`});
+        setState({...state, property: p, queryString:  queries.del[category](item.name, p)});
         setAnchorEl(e.currentTarget);
         setAction('del');
     };
@@ -106,10 +173,11 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
 
     const handleBack = () => {
         handleCloseError();
-        setState(initState);
-        setBlob({});
-        setIndex(null);
+        handleWpo();
         setAction('');
+        setAnchorEl(null);
+        setBlob({});
+        setOldname(null);
     };
 
     const handleClickOk = () => {
@@ -124,10 +192,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                 tag,
                 () => {
                     getInfo(scope, tag);
-                    setAction('');
-                    setAnchorEl(null);
-                    setState(initState);
-                    setBlob({});
+                    handleBack();
                 }
             );
         } else {
@@ -137,10 +202,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                 tag,
                 (_data) => {
                     getInfo(scope, tag);
-                    setAction('');
-                    setAnchorEl(null);
-                    setState(initState);
-                    setBlob({});
+                    handleBack();
                 }
             );
         }
@@ -151,11 +213,23 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
     };
 
     const overview = action=='';
-    const add = action=='add';
-    const edit = action=='mod';
+    const add = action=='addField'||action=='addMethod';
+    const mod = action=='mod';
+    const met = action=='met';
     const def = action=='def';
     const del = action=='del';
     const ren = action=='ren';
+    const wpo = action=='wpo';
+
+    const showOverview = overview||del;
+    const showSubmitBack = !showOverview;
+    const showTextFields = add || mod || met || ren;
+    const showDefault = def;
+    const showQuery = Boolean(queryString);
+
+    const showWpo = category=='type'&&overview;
+    const showWpoWarning = wpo;
+
 
     const buttons = (row) => (
         <React.Fragment>
@@ -168,7 +242,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
 
     const badgeButton = (h, row, i) => (
         !(row.default!=null && h.ky=='default') ? (
-            <ButtonBase onClick={handleMod(h.ky, row, i)}>
+            <ButtonBase onClick={handleMod(h.ky, row)}>
                 <EditIcon color="primary" style={{fontSize: 20}} />
             </ButtonBase>
         ):null
@@ -178,9 +252,9 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
         <SimpleModal
             open={open}
             onClose={onClose}
-            onOk={add||edit||ren||def?handleClickOk:null}
+            onOk={showSubmitBack?handleClickOk:null}
             maxWidth="md"
-            actionButtons={add||edit||ren||def ? (
+            actionButtons={showSubmitBack ? (
                 <Button onClick={handleBack} color="primary">
                     {'Back'}
                 </Button>
@@ -202,7 +276,7 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                 </Grid>
                 <Grid item xs={12}>
                     <List disablePadding dense>
-                        <Collapse in={Boolean(queryString)} timeout="auto">
+                        <Collapse in={showQuery} timeout="auto">
                             <ListItem>
                                 <TextField
                                     name="queryString"
@@ -226,36 +300,72 @@ const EditDialog = ({dataTypes, category, getInfo, item, link, onChangeItem, onC
                                 />
                             </ListItem>
                         </Collapse>
-                        <Collapse in={add || edit || ren} timeout="auto" unmountOnExit>
+                        <Collapse in={showTextFields} timeout="auto" unmountOnExit>
                             <ListItem>
                                 <EditProvider>
-                                    <AddProperty
-                                        category={category}
-                                        cb={add?handleQueryAdd:ren?handleQueryModRen:handleQueryMod}
-                                        dropdownItems={dataTypes}
-                                        hasInitVal={add&&category=='type'}
-                                        hasPropName={add||ren}
-                                        hasType={!ren&&category=='type'}
-                                        hasVal={!ren&&category=='enum'}
-                                        onBlob={handleBlob}
-                                        input={property}
-                                        scope={scope}
-                                    />
+                                    <Grid container item xs={12} spacing={1} alignItems="center" >
+                                        {show.name ? (
+                                            <Grid item xs={12}>
+                                                <PropertyName cb={ren?handleQueryRen:handleQuery} input={property.propertyName||''} />
+                                            </Grid>
+                                        ) : null}
+                                        {show.type? (
+                                            <Grid item xs={12}>
+                                                <PropertyType cb={handleQuery} dropdownItems={dataTypes} input={property.propertyType||''} />
+                                            </Grid>
+                                        ) : null}
+                                        {show.method ? (
+                                            <Grid item xs={12}>
+                                                <PropertyMethod cb={handleQuery} input={property.definition||''} />
+                                            </Grid>
+                                        ) : null}
+                                        {show.val? (
+                                            <Grid item xs={12}>
+                                                <PropertyVal category={category} cb={handleQuery} onBlob={handleBlob} scope={scope} />
+                                            </Grid>
+                                        ) : show.valInit ? (
+                                            <Grid item xs={12}>
+                                                <PropertyInitVal category={category} cb={handleQuery} onBlob={handleBlob} scope={scope} />
+                                            </Grid>
+                                        ) : null}
+                                        {show.callback ? (
+                                            <Grid item xs={12}>
+                                                <PropertyCallback cb={handleQuery} />
+                                            </Grid>
+                                        ) : null}
+                                    </Grid>
                                 </EditProvider>
                             </ListItem>
                         </Collapse>
-                        <Collapse in={def} timeout="auto" unmountOnExit>
+                        <Collapse in={showDefault} timeout="auto" unmountOnExit>
                             <ListItem>
                                 <Typography variant="body1" >
                                     {`Set ${property.propertyName} as default?`}
                                 </Typography>
                             </ListItem>
                         </Collapse>
-                        <Collapse in={overview||del} timeout="auto" unmountOnExit>
+                        <Collapse in={showWpo||showWpoWarning} timeout="auto" unmountOnExit>
+                            <ListItem>
+                                <ListItemText
+                                    primary="Wrap-only mode:"
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <Wpo cb={handleQueryWpo} input={property.wpo} />
+                            </ListItem>
+                        </Collapse>
+                        <Collapse in={showWpoWarning} timeout="auto" unmountOnExit>
+                            <ListItem>
+                                <Typography variant="body2" >
+                                    {`On submit you will ${property.wpo?'enable':'disable'} wrap-only mode, no instances of "${item.name}" can be created and this type can only be used by types that are also in wrap-only mode.`}
+                                </Typography>
+                            </ListItem>
+                        </Collapse>
+                        <Collapse in={showOverview} timeout="auto">
                             <Overview
-                                category={category}
                                 badgeButton={badgeButton}
                                 buttons={buttons}
+                                headers={headers}
                                 item={item}
                                 link={link}
                                 onAdd={handleAdd}
@@ -282,12 +392,14 @@ EditDialog.propTypes = {
     dataTypes: PropTypes.arrayOf(PropTypes.string),
     category: PropTypes.string.isRequired,
     getInfo: PropTypes.func.isRequired,
+    headers: PropTypes.object.isRequired,
     item: PropTypes.object,
     link: PropTypes.string.isRequired,
     onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool,
-    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
+    queries: PropTypes.object.isRequired,
+    rows: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
 };
 

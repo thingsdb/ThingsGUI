@@ -1,32 +1,23 @@
 /* eslint-disable react/no-multi-comp */
-import AddIcon from '@material-ui/icons/Add';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {TableWithBadges} from '../../../Util';
+import {Tabs, TableExtra} from '../../../Util';
 import  UsedByType from './UsedByType';
 
 
-const Overview = ({badgeButton, buttons, category, item, link, onAdd, onChangeItem, rows, scope}) => {
-    const header = [
-        {ky: 'default', label: 'Default'},
-        {ky: 'propertyName', label: 'Name'},
-        {ky: 'propertyObject', label: category=='type'?'Type':'Value'},
-    ];
+const Overview = ({badgeButton, buttons, headers, item, link, onAdd, onChangeItem, rows, scope}) => {
 
-    const handleAdd = () => {
-        onAdd();
+    const handleAdd = (kys) => () => {
+        onAdd(kys);
     };
 
-    return (
+    const kys = Object.keys(headers);
 
+    return (
         <React.Fragment>
             <ListItem>
                 <ListItemText
@@ -38,30 +29,12 @@ const Overview = ({badgeButton, buttons, category, item, link, onAdd, onChangeIt
                     }
                 />
             </ListItem>
-            <ListItem>
-                <TableWithBadges
-                    header={category=='type'?header.slice(1):header}
-                    rows={rows}
-                    badgeButton={badgeButton}
-                    buttons={buttons}
-                />
-            </ListItem>
-            <ListItem>
-                <Grid container>
-                    {onAdd && (
-                        <Grid item xs={1}>
-                            <Button onClick={handleAdd} >
-                                <AddIcon color="primary" />
-                            </Button>
-                        </Grid>
-                    )}
-                    <Grid container item xs={onAdd?11:12} justify="flex-end">
-                        <Box fontSize={10} fontStyle="italic" m={1}>
-                            {`Created on: ${moment(item.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}${item.modified_at?`, last modified on: ${moment(item.modified_at*1000).format('YYYY-MM-DD HH:mm:ss')}`:''}`}
-                        </Box>
-                    </Grid>
-                </Grid>
-            </ListItem>
+            <Tabs
+                headers={kys}
+                panels={kys.map((v, i) => (
+                    <TableExtra key={i} badgeButton={badgeButton} buttons={buttons} createdAt={item.created_at} header={headers[v]} modifiedAt={item.modified_at} onAdd={onAdd&&handleAdd(headers[v])} rows={rows[v]} />
+                ))}
+            />
             <UsedByType name={item.name} onChangeItem={onChangeItem} scope={scope} />
         </React.Fragment>
     );
@@ -78,12 +51,12 @@ Overview.defaultProps = {
 Overview.propTypes = {
     badgeButton: PropTypes.func,
     buttons: PropTypes.func,
-    category: PropTypes.string.isRequired,
+    headers: PropTypes.object.isRequired,
     item: PropTypes.object,
     link: PropTypes.string.isRequired,
     onAdd: PropTypes.func,
     onChangeItem: PropTypes.func,
-    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
+    rows: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
 };
 

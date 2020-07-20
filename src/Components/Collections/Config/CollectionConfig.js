@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import CollectionInfo from './CollectionInfo';
 import RemoveCollection from './Remove';
 import RenameCollection from './Rename';
-import {HarmonicCard} from '../../Util';
+import {HarmonicCardContent} from '../../Util';
 
 
 const CollectionConfig = ({collection, close}) => {
@@ -22,8 +22,7 @@ const CollectionConfig = ({collection, close}) => {
     ];
 
     return (
-        <HarmonicCard
-            title="INFO"
+        <HarmonicCardContent
             content={<CollectionInfo collection={collection} />}
             buttons={
                 <Grid container spacing={1}>
@@ -34,7 +33,6 @@ const CollectionConfig = ({collection, close}) => {
                     ))}
                 </Grid>
             }
-            unmountOnExit
         />
     );
 };

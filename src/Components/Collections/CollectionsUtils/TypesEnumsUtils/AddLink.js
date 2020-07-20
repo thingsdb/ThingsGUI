@@ -22,6 +22,7 @@ const AddLink = ({customTypes, enums, name, onChange, scope}) => {
     const handleChange = (name, category) => () => {
         onChange(name, category);
     };
+
     return( typeItems.includes(stripped)? (
         <React.Fragment>
             {name.length-stripped.length>1?name[0]:null}

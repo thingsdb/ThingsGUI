@@ -13,10 +13,10 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {AddDialogTAG} from '../../../../constants';
-import {ArrayLayout, ErrorMsg, SimpleModal} from '../../../Util';
+import {ArrayLayout, ErrorMsg, SimpleModal, Switching} from '../../../Util';
 import {CollectionActions} from '../../../../Stores';
 import {EditProvider} from '../Context';
-import AddProperty from './AddProperty';
+import {PropertyMethod, PropertyName, PropertyType, PropertyVal} from './AddEditProperty';
 
 const tag = AddDialogTAG;
 
@@ -24,14 +24,13 @@ const initState = {
     queryString: '',
     name: '',
     error: '',
-    properties: [{propertyName: '', propertyType: '', propertyVal: ''}],
+    properties: [{propertyName: '', propertyType: '', propertyVal: '', definition: ''}],
 };
 
-const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) => {
+const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, scope}) => {
     const [state, setState] = React.useState(initState);
     const {queryString, name, error, properties} = state;
     const [blob, setBlob] = React.useState({});
-
 
     React.useEffect(() => {
         setState(initState);
@@ -40,7 +39,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
     );
 
     React.useEffect(() => { // keep this useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-        setState({...state, queryString: `set_${category}("${name}", {${properties.map(v=>`${v.propertyName}: ${category=='type'?`'${v.propertyType}'`:`${v.propertyVal}`}`)}})`});
+        setState({...state, queryString: queries[category](name, properties)});
     },
     [name, JSON.stringify(properties)], // TODO STRING
     );
@@ -57,7 +56,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
     const handleChangeProperty = (index) => (property) => {
         setState(prevState => {
             let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-            update.splice(index, 1, property);
+            update.splice(index, 1, {...prevState.properties[index], ...property});
             return {...prevState, properties: update};
         });
     };
@@ -101,6 +100,15 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
                 }
             );
         }
+    };
+
+    const handleSwitching = (index) => (check) => {
+        setState(prevState => {
+            const prop = check?{propertyType: ''}:{definition: ''};
+            let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
+            update.splice(index, 1, {...prevState.properties[index], ...prop});
+            return {...prevState, properties: update};
+        });
     };
 
     return (
@@ -176,16 +184,27 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, scope}) =
                             <ArrayLayout
                                 child={(i) => (
                                     <EditProvider>
-                                        <AddProperty
-                                            category={category}
-                                            cb={handleChangeProperty(i)}
-                                            dropdownItems={dataTypes}
-                                            input={properties[i]||{propertyName:'', propertyType:'', propertyVal:''}}
-                                            hasType={category=='type'}
-                                            hasVal={category=='enum'}
-                                            onBlob={handleBlob}
-                                            scope={scope}
-                                        />
+                                        <Grid container item xs={12} spacing={1} alignItems="center" >
+                                            <Grid item xs={12}>
+                                                <PropertyName cb={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
+                                            </Grid>
+                                            {category=='type' ? (
+                                                <Switching
+                                                    one={
+                                                        <PropertyType cb={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
+                                                    }
+                                                    two={
+                                                        <PropertyMethod cb={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
+                                                    }
+                                                    cb={handleSwitching(i)}
+                                                />
+                                            ) : null}
+                                            {category=='enum' ? (
+                                                <Grid item xs={12}>
+                                                    <PropertyVal category={category} cb={handleChangeProperty(i)} onBlob={handleBlob} scope={scope} />
+                                                </Grid>
+                                            ) : null}
+                                        </Grid>
                                     </EditProvider>
                                 )}
                                 fullWidth={category=='enum'}
@@ -212,6 +231,7 @@ AddDialog.propTypes = {
     getInfo: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool,
+    queries: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
 };

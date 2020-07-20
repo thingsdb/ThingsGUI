@@ -25,10 +25,6 @@ const CollectionProcedures = ({procedures, scope}) => {
 
     }, [scope]);
 
-    const handleRefresh = () => {
-        ProcedureActions.getProcedures(scope, tag);
-    };
-
 
     const [open, setOpen] = React.useState({
         add: false,
@@ -92,13 +88,11 @@ const CollectionProcedures = ({procedures, scope}) => {
         <React.Fragment>
             <ChipsCard
                 buttons={buttons}
-                expand={false}
                 items={procedures[scope]||[]}
                 onAdd={handleClickAdd}
                 onDelete={handleClickDelete}
-                onRefresh={handleRefresh}
-                title="procedures"
                 warnExpression={i=>i.with_side_effects}
+                title="procedures"
             />
             <ProcedureDialogs name={name} open={open} onClose={handleClose} procedures={procedures[scope]||[]} scope={scope} />
         </React.Fragment>

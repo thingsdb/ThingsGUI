@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import DragHandleIcon from '@material-ui/icons/DragHandle';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 

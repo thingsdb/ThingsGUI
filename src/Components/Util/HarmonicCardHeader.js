@@ -1,7 +1,5 @@
-import {makeStyles} from '@material-ui/core/styles';
+/* eslint-disable react-hooks/exhaustive-deps */
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -11,21 +9,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-const useStyles = makeStyles(() => ({
-    padding: {
-        paddingTop: 0,
-        paddingBottom: 0,
-        paddingLeft: 0,
-        paddingRight: 0,
-    },
-}));
-
-const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onRefresh, title, unmountOnExit}) => {
-    const classes = useStyles();
+const HarmonicCardHeader = ({actionButtons, children, expand, onExpand, onRefresh, title, unmountOnExit}) => {
     const [expanded, setExpanded] = React.useState(expand);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
+        onExpand(!expanded);
         onRefresh&&!expanded?onRefresh():null;
     };
 
@@ -34,7 +23,9 @@ const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onRef
     };
 
     React.useEffect(() => {
-        setExpanded(expand);
+        if(expand!==expanded){
+            setExpanded(expand);
+        }
     }, [expand]);
 
     return (
@@ -62,39 +53,28 @@ const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onRef
                 }}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit={unmountOnExit}>
-                {noPadding ? content : (
-                    <CardContent>
-                        {content}
-                    </CardContent>
-                )}
-                {buttons ? (
-                    <CardActions className={noPadding?classes.padding:null}>
-                        {buttons}
-                    </CardActions>
-                ) : null}
+                {children}
             </Collapse>
         </Card>
     );
 };
 
-HarmonicCard.defaultProps = {
+HarmonicCardHeader.defaultProps = {
     actionButtons: null,
-    buttons: null,
     expand: false,
-    noPadding: false,
+    onExpand: ()=>null,
     onRefresh: null,
     unmountOnExit: false,
 },
 
-HarmonicCard.propTypes = {
+HarmonicCardHeader.propTypes = {
     actionButtons: PropTypes.object,
-    buttons: PropTypes.object,
-    content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.arrayOf(PropTypes.object)]).isRequired,
+    children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
     expand: PropTypes.bool,
-    noPadding: PropTypes.bool,
+    onExpand: PropTypes.func,
     onRefresh: PropTypes.func,
     title: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     unmountOnExit: PropTypes.bool,
 };
 
-export default HarmonicCard;
+export default HarmonicCardHeader;

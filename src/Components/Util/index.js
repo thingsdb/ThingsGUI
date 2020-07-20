@@ -12,6 +12,8 @@ import DrawerLayout from './DrawerLayout';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
 import HarmonicCard from './HarmonicCard';
+import HarmonicCardContent from './HarmonicCardContent';
+import HarmonicCardHeader from './HarmonicCardHeader';
 import HarmonicTree from './HarmonicTree';
 import Info from './Info';
 import ListHeader from './ListHeader';
@@ -19,10 +21,14 @@ import LocalErrorMsg from './LocalErrorMsg';
 import Menu from './Menu';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
+import RefreshContainer from './RefreshContainer';
 import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import StartStopPolling from './StartStopPolling';
 import StickyHeadTable from './StickyHeadTable';
+import Switching from './Switching';
+import Tabs from './Tabs';
+import TableExtra from './TableExtra';
 import TableWithBadges from './TableWithBadges';
 import TableWithButtons from './TableWithButtons';
 import ThingsTree from './ThingsTree';
@@ -33,6 +39,7 @@ import TitlePage2 from './TitlePage2';
 import TopBarMenu from './TopBarMenu';
 import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
+import TwoLabelSwitch from './TwoLabelSwitch';
 import VariablesArray from './VariablesArray';
 import WarnPopover from './WarnPopover';
 
@@ -184,6 +191,8 @@ export {
     getScopes,
     getScopes2,
     HarmonicCard,
+    HarmonicCardContent,
+    HarmonicCardHeader,
     HarmonicTree,
     Info,
     isObjectEmpty,
@@ -191,6 +200,7 @@ export {
     LocalErrorMsg,
     Menu,
     orderByName,
+    RefreshContainer,
     QueryInput,
     QueryOutput,
     revealCustomType,
@@ -199,6 +209,9 @@ export {
     StartStopPolling,
     StickyHeadTable,
     swap,
+    Switching,
+    Tabs,
+    TableExtra,
     TableWithBadges,
     TableWithButtons,
     ThingsTree,
@@ -210,6 +223,7 @@ export {
     TopBarMenu,
     TreeBranch,
     TreeIcon,
+    TwoLabelSwitch,
     VariablesArray,
     WarnPopover,
 };
