@@ -278,7 +278,7 @@ class NodesStore extends BaseStore {
     }
 
     onAddBackup(nodeId, config, tag, cb) {
-        const query = `new_backup('${config.file}'${config.time ? `, '${config.time}'${config.repeat ? `, ${config.repeat}`:''}`:''});`;
+        const query = `new_backup('${config.file}'${config.time ? `, '${config.time}'`:', now()'}${config.repeat ? `, ${config.repeat}${config.maxFiles?`, ${config.maxFiles}`:``}`:''})`;
         this.emit('query', {
             scope: `@node:${nodeId}`,
             query
@@ -288,13 +288,14 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 
-    onDelBackup(nodeId, backupId) {
-        const query = `del_backup(${backupId});`;
+    onDelBackup(nodeId, backupId, cb, removeFile=false) {
+        const query = `del_backup(${backupId}, ${removeFile});`;
         this.emit('query', {
             scope: `@node:${nodeId}`,
             query
         }).done((_data) => {
             this.onGetBackups(nodeId);
+            cb();
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 

@@ -28,6 +28,7 @@ const useStyles = makeStyles(theme => ({
     overflow: {
         marginTop: theme.spacing(2),
         overflowY: 'auto',
+        overflowX: 'auto',
         maxHeight: '400px',
     },
     green: {
@@ -42,6 +43,8 @@ const header = [
     {ky: 'id', label: 'ID'},
     {ky: 'created_at', label: 'Created on'},
     {ky: 'file_template', label: 'File template'},
+    {ky: 'files', label: 'Files'},
+    {ky: 'max_files', label: 'Max files'},
     {ky: 'next_run', label: 'Next run at (UTC)'},
     {ky: 'repeat', label: 'Repeat after (sec)'},
     {ky: 'result_code', label: 'Result code'},
@@ -81,6 +84,7 @@ const Backup = ({nodeId, offline, backups}) => {
                 <FailedIcon color="error" />
             </Tooltip>
         );
+        b.files = b.files.map(v=>v+'\n');
         return b;
     });
 

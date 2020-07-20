@@ -16,7 +16,12 @@ import {AddBackupTAG} from '../../../constants';
 
 const initialState = {
     show: false,
-    form: {},
+    form: {
+        file: '',
+        time: '',
+        repeat: '',
+        maxFiles: '',
+    },
     switches: {
         time: false,
         repeat: false,
@@ -31,16 +36,8 @@ const Add = ({nodeId}) => {
 
     const handleClickOpen = () => {
         setState({
+            ...initialState,
             show: true,
-            form: {
-                file: '',
-                time: '',
-                repeat: '',
-            },
-            switches: {
-                time: false,
-                repeat: false,
-            },
         });
     };
 
@@ -85,6 +82,7 @@ const Add = ({nodeId}) => {
                 file: form.file,
                 time: switches.time ? form.time : null,
                 repeat: switches.repeat ? form.repeat : null,
+                maxFiles: form.maxFiles
             },
             tag,
             () => setState({...state, show: false})
@@ -160,6 +158,30 @@ const Add = ({nodeId}) => {
                 <Collapse in={switches.repeat} timeout="auto" unmountOnExit>
                     <ListItem>
                         <TimePeriodPicker cb={handleRepeat} />
+                    </ListItem>
+                    <ListItem>
+                        <ListItemText
+                            primary="Maximum files stored"
+                            primaryTypographyProps={{
+                                variant: 'caption'
+                            }}
+                            secondary={
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="maxFiles"
+                                    inputProps={{min: '1'}}
+                                    type="number"
+                                    value={form.maxFiles}
+                                    spellCheck={false}
+                                    onChange={handleOnChange}
+                                    fullWidth
+                                />
+                            }
+                            secondaryTypographyProps={{
+                                component: 'div'
+                            }}
+                        />
                     </ListItem>
                 </Collapse>
             </List>

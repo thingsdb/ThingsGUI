@@ -18,8 +18,8 @@ const TableWithButtons = ({header, rows, rowClick, buttons}) => {
             <TableHead>
                 <TableRow>
                     {header.map((h, i) => (
-                        <TableCell key={h.ky} align={i?'right':'left'}>
-                            <Typography variant="caption" align={i?'right':'left'}>
+                        <TableCell key={h.ky} align={i?'center':'left'}>
+                            <Typography variant="caption" align={i?'center':'left'}>
                                 {h.label}
                             </Typography>
                         </TableCell>
