@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {Add} from './Config';
+import {Add, Restore} from './Config';
 import OpenNodeGraph from './SVGNodes/OpenNodeGraph';
 
 const useStyles = makeStyles(theme => ({
@@ -28,6 +28,9 @@ const NodeButtons = ({nodes}) => {
                 </Grid>
                 <Grid item>
                     <OpenNodeGraph nodes={nodes} />
+                </Grid>
+                <Grid item>
+                    <Restore nodes={nodes} />
                 </Grid>
             </Grid>
         </Grid>

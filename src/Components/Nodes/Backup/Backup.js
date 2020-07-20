@@ -65,7 +65,7 @@ const Backup = ({nodeId, offline, backups}) => {
 
     const rows = JSON.parse(JSON.stringify(backups)); // copy
 
-    rows.map(b=> {
+    rows.forEach(b=> {
         b.created_at = moment(b.created_at*1000).format('YYYY-MM-DD HH:mm:ss');
         b.next_run = b.next_run == 'pending' ? (
             <Tooltip disableFocusListener disableTouchListener title='pending'>
@@ -85,7 +85,6 @@ const Backup = ({nodeId, offline, backups}) => {
             </Tooltip>
         );
         b.files = b.files.map(v=>v+'\n');
-        return b;
     });
 
     return (

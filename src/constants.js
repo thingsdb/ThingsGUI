@@ -30,3 +30,4 @@ export const TokensTAG = '28';
 export const ChipsCardTAG = '29';
 export const WatcherTAG = '30';
 export const RemoveBackupTAG = '31';
+export const RestoreNodeTAG = '32';

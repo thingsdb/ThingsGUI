@@ -105,7 +105,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     };
 
     const handleAdd = (kys) => {
-        kys.map((i) => {
+        kys.forEach((i) => {
             switch(i.ky){
             case 'propertyObject':
                 setShow({...initShow,

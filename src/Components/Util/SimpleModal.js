@@ -23,7 +23,7 @@ const SimpleModal = ({
 
 
     const handleClose = () => {
-        onClose();
+        onClose&&onClose();
     };
 
     const handleOk = () => {
@@ -57,9 +57,11 @@ const SimpleModal = ({
                             {'Submit'}
                         </Button>
                     ) : null}
-                    <Button onClick={handleClose} color="primary">
-                        {'Close'}
-                    </Button>
+                    {onClose ? (
+                        <Button onClick={handleClose} color="primary">
+                            {'Close'}
+                        </Button>
+                    ):null}
                 </DialogActions>
             </Dialog>
         </React.Fragment>
@@ -71,6 +73,7 @@ SimpleModal.defaultProps = {
     button: null,
     disableOk: null,
     maxWidth: null,
+    onClose: null,
     onKeyPress: ()=>null,
     onOk: null,
     title: null,
@@ -79,10 +82,10 @@ SimpleModal.defaultProps = {
 SimpleModal.propTypes = {
     actionButtons: PropTypes.object,
     button: PropTypes.object,
-    children: PropTypes.object.isRequired,
+    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.object]).isRequired,
     disableOk: PropTypes.bool,
     maxWidth: PropTypes.string,
-    onClose: PropTypes.func.isRequired,
+    onClose: PropTypes.func,
     onKeyPress: PropTypes.func,
     onOk: PropTypes.func,
     open: PropTypes.bool.isRequired,

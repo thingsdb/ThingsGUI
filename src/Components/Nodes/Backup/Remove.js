@@ -21,6 +21,7 @@ const Remove = ({nodeId, backup}) => {
 
     const handleClickClose = () => {
         setShow(false);
+        setDeleteFile(false);
     };
 
     const handleDeleteFile = ({target}) => {
@@ -39,7 +40,7 @@ const Remove = ({nodeId, backup}) => {
                     <DeleteIcon color="primary" />
                 </IconButton>
             }
-            title={`Remove`}
+            title={`Remove back up with ID: ${backup.id}`}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
