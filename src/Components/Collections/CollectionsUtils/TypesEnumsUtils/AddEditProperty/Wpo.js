@@ -10,12 +10,12 @@ import Typography from '@material-ui/core/Typography';
 
 const WarnSwitch = withStyles({
     switchBase: {
-        color: amber[300],
+        color: amber[700],
         '&$checked': {
-            color: amber[500],
+            color: amber[700],
         },
         '&$checked + $track': {
-            backgroundColor: amber[500],
+            backgroundColor: amber[700],
         },
     },
     checked: {},

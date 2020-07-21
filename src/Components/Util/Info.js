@@ -20,12 +20,14 @@ const Info = ({header, content}) => {
         <Grid container spacing={1}>
             {header.map(h => (
                 <React.Fragment key={h.ky}>
-                    <Grid item xs={12} className={classes.grid}>
-                        <Typography variant="subtitle2">
-                            {h.title + ':'}
-                        </Typography>
-                        <Divider />
-                    </Grid>
+                    {h.title ? (
+                        <Grid item xs={12} className={classes.grid}>
+                            <Typography variant="subtitle2">
+                                {h.title + ':'}
+                            </Typography>
+                            <Divider />
+                        </Grid>
+                    ) : null}
                     {h.labels.map(l => (
                         <Grid key={l.ky} container item xs={12}>
                             <Grid item xs={6}>

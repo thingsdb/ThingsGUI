@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const SimpleModal = ({
     actionButtons,
@@ -19,6 +20,7 @@ const SimpleModal = ({
     onOk,
     open,
     title,
+    tooltipMsgOk,
     ...props}) => {
 
 
@@ -53,9 +55,13 @@ const SimpleModal = ({
                 <DialogActions>
                     {actionButtons}
                     {onOk ? (
-                        <Button onClick={handleOk} disabled={disableOk} color="primary">
-                            {'Submit'}
-                        </Button>
+                        <Tooltip disableFocusListener disableTouchListener title={tooltipMsgOk}>
+                            <span>
+                                <Button onClick={handleOk} disabled={disableOk} color="primary">
+                                    {'Submit'}
+                                </Button>
+                            </span>
+                        </Tooltip>
                     ) : null}
                     {onClose ? (
                         <Button onClick={handleClose} color="primary">
@@ -77,6 +83,7 @@ SimpleModal.defaultProps = {
     onKeyPress: ()=>null,
     onOk: null,
     title: null,
+    tooltipMsgOk: '',
 },
 
 SimpleModal.propTypes = {
@@ -90,6 +97,7 @@ SimpleModal.propTypes = {
     onOk: PropTypes.func,
     open: PropTypes.bool.isRequired,
     title: PropTypes.string,
+    tooltipMsgOk: PropTypes.string,
 };
 
 export default SimpleModal;

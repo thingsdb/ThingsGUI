@@ -47,9 +47,9 @@ const Remove = ({nodeId, backup}) => {
         >
             <React.Fragment>
                 <ErrorMsg tag={tag} />
-                <Typography component="div" variant="caption">
+                <Typography component="div" variant="body1">
                     <FormLabel component="label">
-                        {'Do you want to delete related backup files from disk (or Google Cloud Storage)?'}
+                        {'Do you also want to delete related backup files from disk (or Google Cloud Storage)?'}
                     </FormLabel>
                     <TwoLabelSwitch
                         input={deleteFile}
