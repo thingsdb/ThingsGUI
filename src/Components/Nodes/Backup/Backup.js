@@ -14,9 +14,10 @@ import SuccessIcon from '@material-ui/icons/Check';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
-import { TableWithButtons, StartStopPolling } from '../../Util';
+import {FixedList, TableWithButtons, StartStopPolling} from '../../Util';
 import {NodesActions, NodesStore} from '../../../Stores';
 import Add from './Add';
+import BackupInfo from './BackupInfo';
 import Remove from './Remove';
 
 const withStores = withVlow([{
@@ -28,6 +29,7 @@ const useStyles = makeStyles(theme => ({
     overflow: {
         marginTop: theme.spacing(2),
         overflowY: 'auto',
+        overflowX: 'auto',
         maxHeight: '400px',
     },
     green: {
@@ -40,14 +42,22 @@ const useStyles = makeStyles(theme => ({
 
 const header = [
     {ky: 'id', label: 'ID'},
-    {ky: 'created_at', label: 'Created on'},
-    {ky: 'file_template', label: 'File template'},
-    {ky: 'next_run', label: 'Next run at (UTC)'},
-    {ky: 'repeat', label: 'Repeat after (sec)'},
     {ky: 'result_code', label: 'Result code'},
     {ky: 'result_message', label: 'Result message'},
-
+    {ky: 'file_template', label: 'File template'},
+    {ky: 'files', label: 'Files'},
+    {ky: 'max_files', label: 'Max files'},
+    {ky: 'next_run', label: 'Next run at (UTC)'},
+    {ky: 'repeat', label: 'Repeat after (sec)'},
+    {ky: 'created_at', label: 'Created on'},
 ];
+
+const headerTable = [
+    {ky: 'id', label: 'ID'},
+    {ky: 'result_code', label: 'Result code'},
+    {ky: 'file_template', label: 'File template'},
+];
+
 
 const Backup = ({nodeId, offline, backups}) => {
     const classes = useStyles();
@@ -56,13 +66,16 @@ const Backup = ({nodeId, offline, backups}) => {
         NodesActions.getBackups(nodeId); // update of the selected node; to get the latest info
     };
 
-    const handleRowClick = () => null;
-
-    const handleButtons = (backup) => <Remove nodeId={nodeId} backup={backup} />;
+    const handleButtons = (backup) => (
+        <React.Fragment>
+            <Remove nodeId={nodeId} backup={backup} />
+            <BackupInfo header={header} item={backup} />
+        </React.Fragment>
+    );
 
     const rows = JSON.parse(JSON.stringify(backups)); // copy
 
-    rows.map(b=> {
+    rows.forEach(b=> {
         b.created_at = moment(b.created_at*1000).format('YYYY-MM-DD HH:mm:ss');
         b.next_run = b.next_run == 'pending' ? (
             <Tooltip disableFocusListener disableTouchListener title='pending'>
@@ -81,7 +94,7 @@ const Backup = ({nodeId, offline, backups}) => {
                 <FailedIcon color="error" />
             </Tooltip>
         );
-        return b;
+        b.files = <FixedList dense items={b.files} />;
     });
 
     return (
@@ -91,7 +104,7 @@ const Backup = ({nodeId, offline, backups}) => {
         >
             <Grid item xs={12} className={classes.overflow}>
                 {backups.length ? (
-                    <TableWithButtons header={header} rows={rows} rowClick={handleRowClick} buttons={handleButtons} />
+                    <TableWithButtons header={headerTable} rows={rows} buttons={handleButtons} />
                 ) : (
                     <Typography variant="subtitle2">
                         {'no backup information'}

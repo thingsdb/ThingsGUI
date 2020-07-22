@@ -21,6 +21,7 @@ const NodesActions = Vlow.createActions([
     'getStreamInfo',
     'resetCounters',
     'resetNodesStore',
+    'restore',
     'setLoglevel',
     'shutdown',
 ]);
@@ -112,12 +113,12 @@ class NodesStore extends BaseStore {
         const query = 'nodes_info();';
         const obj = {};
         const length = nodes.length;
-        nodes.slice(0, -1).map((n,i) => // need all nodes -1
+        nodes.slice(0, -1).forEach((n,i) => // need all nodes -1
             this.emit('query', {
                 scope: `@node:${n.node_id}`,
                 query
             }).done((data) => {
-                data.slice(i).map(s=>{
+                data.slice(i).forEach(s=>{
                     if(s.stream&&s.stream.includes('node-out')){
                         obj[s.node_id] = obj[s.node_id]?[...obj[s.node_id], n.node_id]:[n.node_id];
                     } else if(s.stream&&s.stream.includes('node-in')) {
@@ -142,7 +143,7 @@ class NodesStore extends BaseStore {
         const query = '{node_info: node_info(), counters: counters()};';
         const length = nodes.length;
         const arr = [];
-        nodes.map((n,i) =>
+        nodes.forEach((n,i) =>
             this.emit('query', {
                 scope: `@node:${n.node_id}`,
                 query
@@ -221,6 +222,18 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
+    onRestore(fileName, takeAccess, tag, cb) {
+        const query = `restore('${fileName}', ${takeAccess})`;
+        this.emit('query', {
+            scope: '@thingsdb',
+            query
+        }).done((data) => {
+            cb();
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
     onShutdown(nodeId, tag, cb) {
         const query = 'shutdown(); {nodes: nodes_info()};';
         this.emit('query', {
@@ -278,7 +291,7 @@ class NodesStore extends BaseStore {
     }
 
     onAddBackup(nodeId, config, tag, cb) {
-        const query = `new_backup('${config.file}'${config.time ? `, '${config.time}'${config.repeat ? `, ${config.repeat}`:''}`:''});`;
+        const query = `new_backup('${config.file}'${config.time ? `, '${config.time}'`:', now()'}${config.repeat ? `, ${config.repeat}${config.maxFiles?`, ${config.maxFiles}`:''}`:''})`;
         this.emit('query', {
             scope: `@node:${nodeId}`,
             query
@@ -288,13 +301,14 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 
-    onDelBackup(nodeId, backupId) {
-        const query = `del_backup(${backupId});`;
+    onDelBackup(nodeId, backupId, cb, removeFile=false) {
+        const query = `del_backup(${backupId}, ${removeFile});`;
         this.emit('query', {
             scope: `@node:${nodeId}`,
             query
         }).done((_data) => {
             this.onGetBackups(nodeId);
+            cb();
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 

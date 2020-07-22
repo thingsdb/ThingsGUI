@@ -258,7 +258,7 @@ class EventStore extends BaseStore {
     onReWatch() {
         const {watchIds} = this.state;
         this.onWatch('@n');
-        Object.entries(watchIds).map(([id, scope]) => {
+        Object.entries(watchIds).forEach(([id, scope]) => {
             this.onWatch(scope, id);
         });
     }

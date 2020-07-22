@@ -77,10 +77,10 @@ const UserAccess = ({user, collections, close}) => {
 
     React.useEffect(() => {
         let s = {};
-        scopes.map(({_name, value}) => {
+        scopes.forEach(({_name, value}) => {
             s = Object.assign({}, s, getSwitches(value, ''));
         });
-        user.access.map(({scope, privileges}) => {
+        user.access.forEach(({scope, privileges}) => {
             s = Object.assign({}, s, getSwitches(scope, privileges));
         });
         setSwitches(s);

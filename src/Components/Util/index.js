@@ -11,6 +11,7 @@ import DragdownCard from './DragdownCard';
 import DrawerLayout from './DrawerLayout';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
+import FixedList from './FixedList';
 import HarmonicCard from './HarmonicCard';
 import HarmonicCardContent from './HarmonicCardContent';
 import HarmonicCardHeader from './HarmonicCardHeader';
@@ -27,6 +28,7 @@ import SimpleModal from './SimpleModal';
 import StartStopPolling from './StartStopPolling';
 import StickyHeadTable from './StickyHeadTable';
 import Switching from './Switching';
+import SwitchOpen from './SwitchOpen';
 import Tabs from './Tabs';
 import TableExtra from './TableExtra';
 import TableWithBadges from './TableWithBadges';
@@ -188,6 +190,7 @@ export {
     ErrorToast,
     fancyName,
     findItem,
+    FixedList,
     getScopes,
     getScopes2,
     HarmonicCard,
@@ -210,6 +213,7 @@ export {
     StickyHeadTable,
     swap,
     Switching,
+    SwitchOpen,
     Tabs,
     TableExtra,
     TableWithBadges,

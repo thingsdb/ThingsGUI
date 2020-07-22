@@ -26,8 +26,8 @@ const EditActions = {
         dispatch((state) => {
             let copy = JSON.parse(JSON.stringify(blob)); //copy
             let keys={};
-            Object.keys(copy).map(k=> {
-                data.map(v=> {
+            Object.keys(copy).forEach(k=> {
+                data.forEach(v=> {
                     if (keys[k]||v.includes(k)){
                         keys[k]=true;
                     } else {
@@ -35,7 +35,7 @@ const EditActions = {
                     }
                 });
             });
-            Object.entries(keys).map(([k, v]) => !v&&delete copy[k]);
+            Object.entries(keys).forEach(([k, v]) => !v&&delete copy[k]);
             return {blob: {...state.blob, ...copy}};
         });
     },

@@ -1,25 +1,28 @@
 import Button from '@material-ui/core/Button';
-import Collapse from '@material-ui/core/Collapse';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 
-import { ErrorMsg, SimpleModal, TimePicker, TimePeriodPicker } from '../../Util';
+import { ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker } from '../../Util';
 import {NodesActions} from '../../../Stores';
 import {AddBackupTAG} from '../../../constants';
 
 const initialState = {
     show: false,
-    form: {},
+    form: {
+        file: '',
+        time: '',
+        repeat: '',
+        maxFiles: '',
+    },
     switches: {
         time: false,
         repeat: false,
+        maxFiles: false,
     },
 };
 
@@ -31,16 +34,8 @@ const Add = ({nodeId}) => {
 
     const handleClickOpen = () => {
         setState({
+            ...initialState,
             show: true,
-            form: {
-                file: '',
-                time: '',
-                repeat: '',
-            },
-            switches: {
-                time: false,
-                repeat: false,
-            },
         });
     };
 
@@ -48,10 +43,9 @@ const Add = ({nodeId}) => {
         setState({...state, show: false});
     };
 
-    const handleSwitch = ({target}) => {
-        const {id, checked} = target;
+    const handleSwitch = (ky) => (checked) => {
         setState(prevState => {
-            const updatedSwitches = Object.assign({}, prevState.switches, {[id]: checked});
+            const updatedSwitches = Object.assign({}, prevState.switches, {[ky]: checked});
             return {...prevState, switches: updatedSwitches};
         });
     };
@@ -59,22 +53,13 @@ const Add = ({nodeId}) => {
     const handleOnChange = ({target}) => {
         const {id, value} = target;
         setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
-            return {...prevState, form: updatedForm};
+            return {...prevState, form: {...prevState.form, [id]: value}};
         });
     };
 
-    const handleTime = (time) => {
+    const handleChange = (ky) => (value) => {
         setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {time: time});
-            return {...prevState, form: updatedForm, errors: {}};
-        });
-    };
-
-    const handleRepeat = (repeat) => {
-        setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {repeat: repeat});
-            return {...prevState, form: updatedForm, errors: {}};
+            return {...prevState, form: {...prevState.form, [ky]: value}};
         });
     };
 
@@ -85,6 +70,7 @@ const Add = ({nodeId}) => {
                 file: form.file,
                 time: switches.time ? form.time : null,
                 repeat: switches.repeat ? form.repeat : null,
+                maxFiles: switches.maxFiles ? form.maxFiles : null,
             },
             tag,
             () => setState({...state, show: false})
@@ -97,75 +83,6 @@ const Add = ({nodeId}) => {
             handleClickOk();
         }
     };
-
-    const Content = (
-        <React.Fragment>
-            <ErrorMsg tag={tag} />
-            <List>
-                <ListItem>
-                    <ListItemText
-                        primary="For more information, see:"
-                        secondary={
-                            <Link target="_blank" href="https://docs.thingsdb.net/v0/node-api/new_backup/">
-                                {'https://docs.thingsdb.net/v0/node-api/new_backup/'}
-                            </Link>
-                        }
-                    />
-                </ListItem>
-                <ListItem>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="file"
-                        label="File"
-                        type="text"
-                        value={form.file}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        placeholder="/tmp/example.tar.gz"
-                        fullWidth
-                    />
-                </ListItem>
-                <ListItem>
-                    <FormControlLabel
-                        control={(
-                            <Switch
-                                checked={switches.time}
-                                color="primary"
-                                id="time"
-                                onChange={handleSwitch}
-                            />
-                        )}
-                        label="Add time [optional]"
-                    />
-                </ListItem>
-                <Collapse in={switches.time} timeout="auto" unmountOnExit>
-                    <ListItem>
-                        <TimePicker cb={handleTime} />
-                    </ListItem>
-                </Collapse>
-                <ListItem>
-                    <FormControlLabel
-                        control={(
-                            <Switch
-                                checked={switches.repeat}
-                                color="primary"
-                                id="repeat"
-                                onChange={handleSwitch}
-                            />
-                        )}
-                        label="Add continuous repeat [optional]"
-                    />
-                </ListItem>
-                <Collapse in={switches.repeat} timeout="auto" unmountOnExit>
-                    <ListItem>
-                        <TimePeriodPicker cb={handleRepeat} />
-                    </ListItem>
-                </Collapse>
-            </List>
-        </React.Fragment>
-    );
-
 
     return (
         <SimpleModal
@@ -180,7 +97,67 @@ const Add = ({nodeId}) => {
             onClose={handleClickClose}
             onKeyPress={handleKeyPress}
         >
-            {Content}
+            <ErrorMsg tag={tag} />
+            <List dense disablePadding>
+                <ListItem dense disableGutters>
+                    <ListItemText
+                        primary="For more information, see:"
+                        secondary={
+                            <Link target="_blank" href="https://docs.thingsdb.net/v0/node-api/new_backup/">
+                                {'https://docs.thingsdb.net/v0/node-api/new_backup/'}
+                            </Link>
+                        }
+                    />
+                </ListItem>
+                <ListItem dense disableGutters>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="file"
+                        label="File"
+                        type="text"
+                        value={form.file}
+                        spellCheck={false}
+                        onChange={handleOnChange}
+                        placeholder="/tmp/example.tar.gz"
+                        fullWidth
+                    />
+                </ListItem>
+                <ListItem dense disableGutters>
+                    <SwitchOpen label="Add time [optional]" onCallback={handleSwitch('time')}>
+                        <TimePicker cb={handleChange('time')} />
+                    </SwitchOpen>
+                </ListItem>
+                <ListItem dense disableGutters>
+                    <SwitchOpen label="Add continuous repeat [optional]" onCallback={handleSwitch('repeat')}>
+                        <TimePeriodPicker cb={handleChange('repeat')} />
+                        <SwitchOpen label="Add continuous repeat [optional]" onCallback={handleSwitch('maxFiles')}>
+                            <ListItemText
+                                primary="Maximum number of files stored"
+                                primaryTypographyProps={{
+                                    variant: 'caption'
+                                }}
+                                secondary={
+                                    <TextField
+                                        autoFocus
+                                        margin="dense"
+                                        id="maxFiles"
+                                        inputProps={{min: '1'}}
+                                        type="number"
+                                        value={form.maxFiles}
+                                        spellCheck={false}
+                                        onChange={handleOnChange}
+                                        fullWidth
+                                    />
+                                }
+                                secondaryTypographyProps={{
+                                    component: 'div'
+                                }}
+                            />
+                        </SwitchOpen>
+                    </SwitchOpen>
+                </ListItem>
+            </List>
         </SimpleModal>
     );
 };

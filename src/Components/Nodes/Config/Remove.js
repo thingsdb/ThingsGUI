@@ -36,16 +36,6 @@ const Remove = ({node}) => {
         }
     };
 
-
-    const Content = (
-        <React.Fragment>
-            <ErrorMsg tag={tag} />
-            <DialogContentText>
-                {'Are you sure you want to remove this node?'}
-            </DialogContentText>
-        </React.Fragment>
-    );
-
     return(
         <SimpleModal
             button={
@@ -59,7 +49,10 @@ const Remove = ({node}) => {
             onClose={handleClickClose}
             onKeyPress={handleKeyPress}
         >
-            {Content}
+            <ErrorMsg tag={tag} />
+            <DialogContentText>
+                {'Are you sure you want to remove this node?'}
+            </DialogContentText>
         </SimpleModal>
     );
 };
