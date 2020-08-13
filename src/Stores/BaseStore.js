@@ -542,10 +542,24 @@ class EventStore extends BaseStore {
 
     ////// THINGS
 
+    _set(set) {
+        let obj;
+        if (Array.isArray(set)){
+            obj = set.map(s=>this._set(s));
+        } else if (set.hasOwnProperty('$')){
+            obj = set['$'].map(s =>s.hasOwnProperty('#') ? {'#': s['#']} : s);
+        } else {
+            obj = set.hasOwnProperty('#') ? {'#': set['#']} : set;
+        }
+
+        return obj;
+    }
+
 
     set(id, set) {
         let key = Object.keys(set)[0];
-        let obj = set[key].hasOwnProperty('#') ? {'#': set[key]['#']} : set[key];
+        let obj = this._set(set[key])
+
         this.editState('watchThings', this.getScope(id), id, key, obj);
     }
 
@@ -566,7 +580,7 @@ class EventStore extends BaseStore {
             const copyArr = [...prev[scope][id][prop]];
 
             if (length>2) {
-                copyArr.splice(index, deleteCount, ...splice[prop].slice(2));
+                copyArr.splice(index, deleteCount, ...this._set(splice[prop].slice(2)));
             } else {
                 copyArr.splice(index, deleteCount);
             }
