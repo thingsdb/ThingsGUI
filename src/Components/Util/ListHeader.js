@@ -42,9 +42,9 @@ const groupSigning = {
     '(' : ['(', ')'],
 };
 
-const ListHeader = ({children, canCollapse, groupSign, items, name, onAdd, onDelete, onRefresh, unmountOnExit}) => {
+const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAdd, onDelete, onRefresh, unmountOnExit}) => {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(isOpen);
 
     const handleOpen = () => {
         setOpen(true);
@@ -95,6 +95,7 @@ const ListHeader = ({children, canCollapse, groupSign, items, name, onAdd, onDel
 
 ListHeader.defaultProps = {
     canCollapse: true,
+    isOpen: false,
     name: '',
     onDelete: ()=>null,
     unmountOnExit: false,
@@ -104,6 +105,7 @@ ListHeader.propTypes = {
     children: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]).isRequired,
     canCollapse: PropTypes.bool,
     groupSign: PropTypes.string.isRequired,
+    isOpen: PropTypes.bool,
     items: PropTypes.arrayOf(PropTypes.string).isRequired,
     name: PropTypes.string,
     onAdd: PropTypes.func.isRequired,
