@@ -15,7 +15,7 @@ const initialState = {
     show: false,
     form: {
         file: '',
-        time: '',
+        time: null,
         repeat: '',
         maxFiles: '',
     },
