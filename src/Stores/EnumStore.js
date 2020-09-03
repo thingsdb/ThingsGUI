@@ -7,6 +7,7 @@ const EnumActions = Vlow.createActions([
     'getEnum',
     'getEnums',
     'deleteEnum',
+    'renameEnum'
 ]);
 
 
@@ -66,6 +67,23 @@ class EnumStore extends BaseStore {
                 return {enums};
             });
             cb(data);
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+            return [];
+        });
+    }
+
+    onRenameEnum(oldName, newName, scope, tag, cb=()=>null) {
+        const query = `rename_enum('${oldName}', '${newName}'); enums_info();`;
+        this.emit('query', {
+            query,
+            scope
+        }).done((data) => {
+            this.setState(prevState => {
+                const enums = Object.assign({}, prevState.enums, {[scope]: data});
+                return {enums};
+            });
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             return [];

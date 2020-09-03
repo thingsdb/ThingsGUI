@@ -208,7 +208,6 @@ class EventStore extends BaseStore {
     onOpenEvCh() {
         socket.emit('getEvent');
         socket.on('event', (data) => {
-            console.log(data)
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
                 this.watchInit(data.Data);
@@ -609,11 +608,9 @@ class EventStore extends BaseStore {
     remove(id, remove) {
         const scope = this.getScope(id);
         const prop = Object.keys(remove)[0];
-        console.log(remove, prop)
         this.setState(prevState => {
             const prev = prevState.watchThings;
             const copySet = new Set([...prevState.watchThings[scope][id][prop]['$']]);
-            console.log(copySet)
             for (let i = 0; i<remove[prop].length; i++ ) {
                 copySet.forEach(function(t){
                     if (t['#'] == remove[prop][i]) {

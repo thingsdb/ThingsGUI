@@ -9,6 +9,7 @@ import Closure from './Closure';
 import DownloadBlob from './DownloadBlob';
 import DragdownCard from './DragdownCard';
 import DrawerLayout from './DrawerLayout';
+import EditName from './EditName';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
 import FixedList from './FixedList';
@@ -186,6 +187,7 @@ export {
     DragdownCard,
     DrawerLayout,
     duration,
+    EditName,
     ErrorMsg,
     ErrorToast,
     fancyName,

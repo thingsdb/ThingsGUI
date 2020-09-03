@@ -141,6 +141,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
                         onClose={handleClose}
                         onDelete={TypeActions.deleteType}
                         onInfo={TypeActions.getTypes}
+                        onRename={TypeActions.renameType}
                         scope={scope}
                         tag={tag}
                         view={viewType}
@@ -157,6 +158,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
                         onClose={handleClose}
                         onDelete={EnumActions.deleteEnum}
                         onInfo={EnumActions.getEnums}
+                        onRename={EnumActions.renameEnum}
                         scope={scope}
                         tag={tag}
                         view={viewEnum}
