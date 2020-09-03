@@ -547,7 +547,7 @@ class EventStore extends BaseStore {
         if (Array.isArray(set)){
             obj = set.map(s=>this._set(s));
         } else if (set.hasOwnProperty('$')){
-            obj = set['$'].map(s =>s.hasOwnProperty('#') ? {'#': s['#']} : s);
+            obj = {'$': set['$'].map(s =>s.hasOwnProperty('#') ? {'#': s['#']} : s)};
         } else {
             obj = set.hasOwnProperty('#') ? {'#': set['#']} : set;
         }
@@ -592,12 +592,12 @@ class EventStore extends BaseStore {
 
     add(id, add) {
         const scope = this.getScope(id);
-        const prop = Object.keys(add);
+        const prop = Object.keys(add)[0];
         this.setState(prevState => {
             const prev = prevState.watchThings;
             const copySet = new Set([...prev[scope][id][prop]['$']]);
             for (let i = 0; i<add[prop].length; i++ ) {
-                copySet.add(add[prop][i]);
+                copySet.add({'#': add[prop][i]['#']});
             }
             const newSet = {'$': [...copySet]};
             const watchThings = {...prev, [scope]: {...prev[scope], [id]: {...prev[scope][id], [prop]: newSet}}};
@@ -607,7 +607,7 @@ class EventStore extends BaseStore {
 
     remove(id, remove) {
         const scope = this.getScope(id);
-        const prop = Object.keys(remove);
+        const prop = Object.keys(remove)[0];
         this.setState(prevState => {
             const prev = prevState.watchThings;
             const copySet = new Set([...prevState.watchThings[scope][id][prop]['$']]);

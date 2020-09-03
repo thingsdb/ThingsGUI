@@ -76,7 +76,7 @@ const queries = {
 
 
 
-const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onSetQueryInput, scope, tag, view}) => {
+const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
     const classes = useStyles();
 
     React.useEffect(() => {
@@ -206,6 +206,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
                     onChangeItem={onChange('edit')}
                     onClose={handleCloseEdit}
                     open={view.edit}
+                    onRename={onRename}
                     rows={rows}
                     scope={scope}
                     queries={queries.mod}
@@ -235,6 +236,7 @@ EnumTypeChips.defaultProps = {
     onDelete: ()=>null,
     onInfo: ()=>null,
     onMakeInstanceInit: ()=>null,
+    onRename: ()=>null,
     onSetQueryInput: ()=>null,
     items: [],
 };
@@ -249,6 +251,7 @@ EnumTypeChips.propTypes = {
     onDelete: PropTypes.func,
     onInfo: PropTypes.func,
     onMakeInstanceInit: PropTypes.func,
+    onRename: PropTypes.func,
     onSetQueryInput: PropTypes.func,
     scope: PropTypes.string.isRequired,
     tag: PropTypes.string.isRequired,

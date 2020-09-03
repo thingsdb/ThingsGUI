@@ -5,6 +5,7 @@ export default {
         },
         closure: {
             'call': 'Call a closure.',
+            'def': 'Returns the closure definition using spaces, line-breaks and indentation (4 spaces).',
             'doc': 'Returns a doc string from a closure. An empty string ("") is returned if the closure has no doc string.'
         },
         enum: {
@@ -57,8 +58,10 @@ export default {
             'upper': 'Return a new string in which all case-based characters are in upper case.',
         },
         thing: {
+            'assign': 'Copies properties from a given thing. Existing properties will be overwritten and new properties will be added. If this function is used on an instance of a custom Type, all properties of the source must be valid according the type specification, otherwise an exception will be raised and no properties will be copied.',
             'del': 'Delete a property from a thing.',
             'each': 'Iterate over all properties on a thing.',
+            'emit': 'Emit an event to all watchers of a thing. The event is a string value which you are free to choose. It is possible, but not required, to send extra arguments with the event.',
             'filter': 'When this method is used on a thing, then a new thing will be returned with only the properties that pass the test.',
             'get': 'Return the value of a property on a thing by a given property name. If the property is not found then the return value will be nil, unless an alternative return value is given.',
             'has': 'Determines if a thing has a given property.',
@@ -89,6 +92,7 @@ export default {
         'enum_info': 'Return info about the enumerator type.',
         'enums_info': 'Return info about all the enumerator types in the current scope',
         'err': 'Returns an error.',
+        'event_id': 'Returns the current event ID for the running query. The return value will be nil if the query does not require an event.',
         'float': 'Returns a float from a specified value. If no value is given, the default float 0.0 is returned. If the specified value is of type raw, then the initial characters of the string are converted until a non-digit character is found. Initial white space is ignored and the number may start with an optional + or - sign. Type bool values are converted to 1.0 for true and 0.0 for false.',
         'has_enum': 'Determine if the current scope has a given enumerator type',
         'has_type': 'Determines if a Type exists in the current @collection scope.',
@@ -123,6 +127,8 @@ export default {
         'randint': 'Returns pseudo-random random integer number between a given range. The first argument specifies the start of the range and must have a value less than the second argument when specifies the end of the range. The start is inclusive and the end is exclusive, for example: randint(0, 2) will return either 0 or 1.',
         'range': 'This function returns a list of numbers, starting from 0 by default, and increments by 1 (by default), and ends at a specified number.',
         'refs': 'Returns the reference count of a value. The count returned is generally one higher than you might expect, because it includes the (temporary) reference.',
+        'rename_enum': 'Rename an enum type.',
+        'rename_type': 'Rename a type.',
         'return': 'The return function moves the argument to the output of the current query/closure call. If no return is specified, then the last value will be the value which is returned. A second argument can be given to the return function which can be used to specify how deep the result should be returned. The default deep value is set to 1, but any value between 0 and 127 is possible. A query can run different procedures and/or closures which might have change the deep value. In case you need to know the current deep value, the function deep() can be used. When no arguments are used the return value will be nil.',
         'set': 'Returns a new empty set. If an array is given, then all elements in the given array must be or type thing and a new set is returned based on the given things. Instead of an array, it is also possible to provide things comma separated.',
         'set_enum': 'Create a new enumerator type',
@@ -131,6 +137,7 @@ export default {
         'thing': 'Returns a thing from a specified value. If no value is given, a new thing is returned.',
         'try': 'Try a statement and if the statement fails with an error, then the error is returned. It is also possible to catch only specific errors.',
         'type': 'Returns the type name of a value.',
+        'type_assert': 'Raises a type_err() if the specified expression evaluates to false.',
         'type_count': 'Returns the number of instances of a given Type within a collection.',
         'type_info': 'Returns information about a given Type.',
         'types_info': 'Returns Type information about all the types within a collection.',
@@ -175,12 +182,13 @@ export default {
         'users_info': 'Returns user information for all users withing ThingsDB. This function requires GRANT privileges on the .thingsdb scope since it exposes user access and token information.',
     },
     procedures: {
-        'new_procedure': 'Delete a procedure.',
-        'has_procedure': 'Determines if a procedure exists in the current scope.',
         'del_procedure': 'Creates a new procedure to the @thingsdb or a @collection scope. The name of the procedure must be unique within the scope. The given closure will be copied to the procedure, so this is not a reference to a given closure.',
+        'has_procedure': 'Determines if a procedure exists in the current scope.',
+        'new_procedure': 'Delete a procedure.',
         'procedure_doc': 'Returns the doc string for a given procedure. An empty string is returned if the procedure has no doc string.',
-        'procedures_info': 'Returns information about a procedure.',
         'procedure_info': 'Returns procedure information for all procedures in the scope.',
+        'procedures_info': 'Returns information about a procedure.',
+        'rename_procedure': 'Rename a procedure.',
         'run': 'Run a procedure.',
     },
     docs: {

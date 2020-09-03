@@ -15,7 +15,7 @@ const initialState = {
     show: false,
     form: {
         file: '',
-        time: '',
+        time: null,
         repeat: '',
         maxFiles: '',
     },
@@ -131,12 +131,8 @@ const Add = ({nodeId}) => {
                 <ListItem dense disableGutters>
                     <SwitchOpen label="Add continuous repeat [optional]" onCallback={handleSwitch('repeat')}>
                         <TimePeriodPicker cb={handleChange('repeat')} />
-                        <SwitchOpen label="Add continuous repeat [optional]" onCallback={handleSwitch('maxFiles')}>
+                        <SwitchOpen label="Add maximum to files stored [optional]" onCallback={handleSwitch('maxFiles')}>
                             <ListItemText
-                                primary="Maximum number of files stored"
-                                primaryTypographyProps={{
-                                    variant: 'caption'
-                                }}
                                 secondary={
                                     <TextField
                                         autoFocus

@@ -7,6 +7,7 @@ const TypeActions = Vlow.createActions([
     'getType',
     'getTypes',
     'deleteType',
+    'renameType'
 ]);
 
 
@@ -66,6 +67,23 @@ class TypeStore extends BaseStore {
                 return {customTypes};
             });
             cb(data);
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+            return [];
+        });
+    }
+
+    onRenameType(oldName, newName, scope, tag, cb=()=>null) {
+        const query = `rename_type('${oldName}', '${newName}'); types_info();`;
+        this.emit('query', {
+            query,
+            scope
+        }).done((data) => {
+            this.setState(prevState => {
+                const customTypes = Object.assign({}, prevState.customTypes, {[scope]: data});
+                return {customTypes};
+            });
+            cb();
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             return [];

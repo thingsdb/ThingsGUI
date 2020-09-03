@@ -291,7 +291,7 @@ class NodesStore extends BaseStore {
     }
 
     onAddBackup(nodeId, config, tag, cb) {
-        const query = `new_backup('${config.file}'${config.time ? `, '${config.time}'`:', now()'}${config.repeat ? `, ${config.repeat}${config.maxFiles?`, ${config.maxFiles}`:''}`:''})`;
+        const query = `new_backup('${config.file}'${config.time ? `, ${config.time}`:', now()'}${config.repeat ? `, ${config.repeat}${config.maxFiles?`, ${config.maxFiles}`:''}`:''})`;
         this.emit('query', {
             scope: `@node:${nodeId}`,
             query

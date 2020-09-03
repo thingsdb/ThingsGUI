@@ -7,6 +7,7 @@ const ProcedureActions = Vlow.createActions([
     'getProcedure',
     'getProcedures',
     'deleteProcedure',
+    'renameProcedure',
     'runProcedure'
 ]);
 
@@ -87,6 +88,23 @@ class ProcedureStore extends BaseStore {
             cb(data);
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onRenameProcedure(oldName, newName, scope, tag, cb=()=>null) {
+        const query = `rename_procedure('${oldName}', '${newName}'); procedures_info();`;
+        this.emit('query', {
+            query,
+            scope
+        }).done((data) => {
+            this.setState(prevState => {
+                const procedures = Object.assign({}, prevState.procedures, {[scope]: data});
+                return {procedures};
+            });
+            cb();
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+            return [];
         });
     }
 }

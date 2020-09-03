@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ErrorActions} from '../../../../Stores';
 import {EditDialogTAG} from '../../../../constants';
-import {ErrorMsg, SimpleModal, WarnPopover} from '../../../Util';
+import {EditName, ErrorMsg, SimpleModal, WarnPopover} from '../../../Util';
 import {EditProvider} from '../Context';
 import {PropertyCallback, PropertyInitVal, PropertyMethod, PropertyName, PropertyType, PropertyVal, Wpo} from './AddEditProperty';
 import Overview from './Overview';
@@ -47,7 +47,7 @@ const initShow = {
     callback: false,
 };
 
-const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChangeItem, onClose, open, queries, rows, scope}) => {
+const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChangeItem, onClose, open, onRename, queries, rows, scope}) => {
     const [state, setState] = React.useState(initState);
     const {queryString, property} = state;
     const [action, setAction] = React.useState('');
@@ -248,6 +248,10 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         ):null
     );
 
+    const handleRename = (oldName, newName) => {
+        onRename(oldName, newName, scope, tag, onClose);
+    };
+
     return (
         <SimpleModal
             open={open}
@@ -266,9 +270,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                         <Typography variant="body1" >
                             {`Customizing ThingDB ${category}:`}
                         </Typography>
-                        <Typography variant="h4" color='primary' component='span'>
-                            {item.name||`Add new ${category}`}
-                        </Typography>
+                        <EditName name={item.name||`Add new ${category}`} fn={handleRename} />
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
@@ -398,6 +400,7 @@ EditDialog.propTypes = {
     onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool,
+    onRename: PropTypes.func.isRequired,
     queries: PropTypes.object.isRequired,
     rows: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,

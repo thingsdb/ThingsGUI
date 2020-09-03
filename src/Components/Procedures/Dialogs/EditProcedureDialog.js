@@ -14,7 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ProcedureActions} from '../../../Stores';
-import {Closure, ErrorMsg, SimpleModal} from '../../Util';
+import {Closure, EditName, ErrorMsg, SimpleModal} from '../../Util';
 import {EditProcedureDialogTAG} from '../../../constants';
 
 const useStyles = makeStyles(theme => ({
@@ -67,6 +67,10 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
         );
     };
 
+    const handleRename = (oldName, newName) => {
+        ProcedureActions.renameProcedure(oldName, newName, scope, tag, onClose);
+    };
+
     return (
         <SimpleModal
             button={button}
@@ -88,9 +92,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
                         <Typography variant="body1" >
                             {'Customizing ThingDB procedure:'}
                         </Typography>
-                        <Typography variant="h4" color='primary' component='span'>
-                            {procedure.name||''}
-                        </Typography>
+                        <EditName name={procedure.name||''} fn={handleRename} />
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
