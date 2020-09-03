@@ -19,7 +19,7 @@ import (
 )
 
 // AppVersion exposes version information
-const AppVersion = "0.2.6"
+const AppVersion = "0.2.7"
 
 var connFile = ".things-gui_config"
 
