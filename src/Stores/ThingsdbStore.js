@@ -280,38 +280,22 @@ class ThingsdbStore extends BaseStore {
     // No need for GRANT rights hereafter.
     checkBeforeUserUpdate(q, tag, cb=()=>null) {
         const {user} = this.state;
-        if (user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
-        user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT') ) {
-            const query=`${q}; users_info();`;
-            this.emit('query', {
-                scope,
-                query
-            }).done((data) => {
-                this.setState({
-                    users: data
-                });
-                cb();
-            }).fail((event, status, message) => {
-                ErrorActions.setMsgError(tag, message.Log);
+        const ky = user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
+                        user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT') ? 'users' : 'user';
 
+        const query=`${q}; ${ky}_info();`;
+        this.emit('query', {
+            scope,
+            query
+        }).done((data) => {
+            this.setState({
+                [ky]: data
             });
+            cb();
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
 
-        } else {
-            const query=`${q}; user_info();`;
-            this.emit('query', {
-                scope,
-                query
-            }).done((data) => {
-                this.setState({
-                    user: data
-                });
-                cb();
-            }).fail((event, status, message) => {
-                ErrorActions.setMsgError(tag, message.Log);
-
-            });
-
-        }
+        });
     }
 
     onGrant(name, collection, access, tag) {
