@@ -558,7 +558,7 @@ class EventStore extends BaseStore {
 
     set(id, set) {
         let key = Object.keys(set)[0];
-        let obj = this._set(set[key])
+        let obj = this._set(set[key]);
 
         this.editState('watchThings', this.getScope(id), id, key, obj);
     }

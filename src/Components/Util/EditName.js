@@ -17,11 +17,11 @@ const EditName = ({name, fn}) => {
     const [show, setShow] = React.useState(false);
 
     const handleClickOpenEdit = () => {
-        setShow(true)
+        setShow(true);
     };
 
     const handleClickCloseEdit = () => {
-        setShow(false)
+        setShow(false);
         setNewName('');
     };
 
@@ -31,7 +31,7 @@ const EditName = ({name, fn}) => {
     };
 
     const handleClickSend = () => {
-        fn(name, newName)
+        fn(name, newName);
     };
 
     return (

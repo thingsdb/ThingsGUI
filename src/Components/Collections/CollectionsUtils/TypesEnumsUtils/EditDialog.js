@@ -240,7 +240,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         </React.Fragment>
     );
 
-    const badgeButton = (h, row, i) => (
+    const badgeButton = (h, row, _i) => (
         !(row.default!=null && h.ky=='default') ? (
             <ButtonBase onClick={handleMod(h.ky, row)}>
                 <EditIcon color="primary" style={{fontSize: 20}} />
