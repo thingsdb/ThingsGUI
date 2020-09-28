@@ -45,6 +45,7 @@ type LoginData struct {
 	SecureConnection   bool   `json:"secureConnection"`
 	InsecureSkipVerify bool   `json:"insecureSkipVerify"`
 	Memo               string `json:"memo"`
+	IsToken            bool   `json:"isToken"`
 }
 
 func connect(client *Client, data LoginData) LoginResp {
@@ -84,19 +85,19 @@ func connect(client *Client, data LoginData) LoginResp {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 	}
-	if data.Token == "" {
+	if data.IsToken {
+		err := client.Connection.AuthToken(data.Token)
+		if err != nil {
+			return LoginResp{Connected: false, ConnErr: err}
+		}
+		client.Token = data.Token
+	} else {
 		err := client.Connection.AuthPassword(data.User, data.Password)
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err}
 		}
 		client.User = data.User
 		client.Pass = data.Password
-	} else {
-		err := client.Connection.AuthToken(data.Token)
-		if err != nil {
-			return LoginResp{Connected: false, ConnErr: err}
-		}
-		client.Token = data.Token
 	}
 	return LoginResp{Connected: true}
 }
@@ -173,22 +174,21 @@ func reconnect(client *Client) bool {
 	if err != nil {
 		client.LogCh <- err.Error()
 		return false
-	} else {
-		if client.Token == "" {
-			err := client.Connection.AuthPassword(client.User, client.Pass)
-			if err != nil {
-				client.LogCh <- err.Error()
-				return false
-			}
-		} else {
-			err := client.Connection.AuthToken(client.Token)
-			if err != nil {
-				client.LogCh <- err.Error()
-				return false
-			}
-		}
-		return true
 	}
+	if client.Token == "" {
+		err := client.Connection.AuthPassword(client.User, client.Pass)
+		if err != nil {
+			client.LogCh <- err.Error()
+			return false
+		}
+	} else {
+		err := client.Connection.AuthToken(client.Token)
+		if err != nil {
+			client.LogCh <- err.Error()
+			return false
+		}
+	}
+	return true
 }
 
 // Reconnect to ThingsDB when a connection is lost.

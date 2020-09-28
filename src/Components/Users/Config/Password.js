@@ -56,21 +56,21 @@ const Password = ({user}) => {
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form);  return d; }, {});
         setState({...state, errors: err});
-        if (!Object.values(err).some(d => Boolean(d))) {
-            if (form.set) {
+        if (form.set) {
+            if (!Object.values(err).some(d => Boolean(d))) {
                 ThingsdbActions.password(
                     user.name,
                     form.password,
                     tag,
                     () => setState({...state, show: false})
                 );
-            } else {
-                ThingsdbActions.resetPassword(
-                    user.name,
-                    tag,
-                    () => setState({...state, show: false})
-                );
             }
+        } else {
+            ThingsdbActions.resetPassword(
+                user.name,
+                tag,
+                () => setState({...state, show: false})
+            );
         }
     };
 

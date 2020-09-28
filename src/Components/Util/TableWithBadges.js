@@ -12,9 +12,18 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(() => ({
+    box: {
+        maxWidth: 300,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
     container: {
         maxHeight: 300,
     },
+    emptyCell: {
+        width: 50
+    }
 }));
 
 const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
@@ -45,27 +54,25 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
                 </TableHead>
                 <TableBody>
                     {rows.map((row, ri) => (
-                        <TableRow hover={badgeButton!==null} key={ri} onMouseEnter={mouseEnter(ri)} onMouseLeave={mouseLeave}>
+                        <TableRow key={ri} onMouseEnter={mouseEnter(ri)} onMouseLeave={mouseLeave}>
                             {header.map((h, i) => (
                                 <TableCell key={h.ky} align={i?'right':'left'}>
-                                    <Typography component="div">
-                                        <Badge
-                                            badgeContent={
-                                                badgeButton&&index==ri?badgeButton(h, row, ri):null
-                                            }
-                                        >
-                                            <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
-                                                {row[h.ky]}
-                                            </Box>
-                                        </Badge>
-                                    </Typography>
+                                    <Badge
+                                        badgeContent={
+                                            badgeButton&&index==ri?badgeButton(h, row, ri):null
+                                        }
+                                    >
+                                        <Box className={classes.box} component="div" fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                            {row[h.ky]}
+                                        </Box>
+                                    </Badge>
                                 </TableCell>
                             ))}
-                            {buttons&& (
+                            {buttons ? (
                                 <TableCell align='right'>
                                     {buttons(row)}
                                 </TableCell>
-                            )}
+                            ) : <TableCell className={classes.emptyCell} />}
                         </TableRow>
                     ))}
                 </TableBody>

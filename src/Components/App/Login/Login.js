@@ -32,6 +32,7 @@ const Login = ({connected, loaded, savedConnections}) => {
             password: '',
             token: '',
             user: '',
+            isToken: false,
         },
         security: {
             insecureSkipVerify: false,
@@ -98,7 +99,8 @@ const Login = ({connected, loaded, savedConnections}) => {
             const updatedCred = {
                 password: val.password,
                 token: val.token,
-                user: val.user
+                user: val.user,
+                isToken: val.isToken,
             };
             const updatedForm = {
                 address: val.address,

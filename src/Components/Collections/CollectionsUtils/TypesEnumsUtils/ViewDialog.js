@@ -1,54 +1,127 @@
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable no-unused-vars */
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import ViewIcon from '@material-ui/icons/Visibility';
 
 import {SimpleModal} from '../../../Util';
 import Overview from './Overview';
 import {Wpo} from './AddEditProperty';
 
 
-const ViewDialog = ({category, headers, item, link, onChangeItem, onClose, open, rows, scope}) => (
-    <SimpleModal
-        open={open}
-        onClose={onClose}
-        maxWidth="md"
-    >
-        <Grid container spacing={1}>
-            <Grid container spacing={1} item xs={12}>
-                <Grid item xs={8}>
-                    <Typography variant="body1" >
-                        {`View ThingDB ${category}:`}
-                    </Typography>
-                    <Typography variant="h4" color='primary' component='span'>
-                        {item.name||''}
-                    </Typography>
+const ViewDialog = ({category, headers, item, link, onChangeItem, onClose, open, rows, scope}) => {
+    const [openView, setOpenView] = React.useState(false);
+    const [viewItem, setViewItem] = React.useState(null);
+
+    const handleOpenView = (ky, row) => () => {
+        setOpenView(true);
+        setViewItem(row);
+    };
+
+    const handleCloseView = () => {
+        setOpenView(false);
+        setViewItem(null);
+    };
+
+    const badgeButton = (h, row, _i) => (
+        h.ky === 'definition' ? (
+            <ButtonBase onClick={handleOpenView(h.ky, row)}>
+                <ViewIcon color="primary" style={{fontSize: 20}} />
+            </ButtonBase>
+        ):null
+    );
+
+
+    return(
+        <SimpleModal
+            open={open}
+            onClose={onClose}
+            maxWidth="md"
+        >
+            <Grid container spacing={1}>
+                <Grid container spacing={1} item xs={12}>
+                    <Grid item xs={8}>
+                        <Typography variant="body1" >
+                            {`View ThingDB ${category}:`}
+                        </Typography>
+                        <Typography variant="h4" color='primary' component='span'>
+                            {item.name||''}
+                        </Typography>
+                    </Grid>
                 </Grid>
+                <Grid item xs={12}>
+                    <List disablePadding dense>
+                        {item.wrap_only!==undefined ? (
+                            <React.Fragment>
+                                <ListItem>
+                                    <ListItemText
+                                        primary="Wrap-only mode:"
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <Wpo input={item.wrap_only} disabled />
+                                </ListItem>
+                            </React.Fragment>
+                        ) : null}
+                        <Overview badgeButton={badgeButton} headers={headers} item={item} link={link} onChangeItem={onChangeItem} rows={rows} scope={scope} />
+                    </List>
+                </Grid>
+                {viewItem&&
+                    <SimpleModal
+                        open={openView}
+                        onClose={handleCloseView}
+                        maxWidth="md"
+                    >
+                        <Grid container spacing={1}>
+                            <Grid container spacing={1} item xs={12}>
+                                <Grid item xs={8}>
+                                    <Typography variant="body1" >
+                                        {'View definition:'}
+                                    </Typography>
+                                    <Typography variant="h4" color='primary' component='span'>
+                                        {viewItem.propertyName||''}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <List disablePadding dense>
+                                    <ListItem>
+                                        <TextField
+                                            type="text"
+                                            variant="standard"
+                                            value={viewItem.definition||''}
+                                            fullWidth
+                                            multiline
+                                            InputProps={{
+                                                readOnly: true,
+                                                disableUnderline: true,
+                                            }}
+                                            inputProps={{
+                                                style: {
+                                                    fontFamily: 'monospace',
+                                                },
+                                            }}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                        />
+                                    </ListItem>
+                                </List>
+                            </Grid>
+                        </Grid>
+                    </SimpleModal>}
             </Grid>
-            <Grid item xs={12}>
-                <List disablePadding dense>
-                    {item.wrap_only!==undefined ? (
-                        <React.Fragment>
-                            <ListItem>
-                                <ListItemText
-                                    primary="Wrap-only mode:"
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <Wpo input={item.wrap_only} disabled />
-                            </ListItem>
-                        </React.Fragment>
-                    ) : null}
-                    <Overview headers={headers} item={item} link={link} onChangeItem={onChangeItem} rows={rows} scope={scope} />
-                </List>
-            </Grid>
-        </Grid>
-    </SimpleModal>
-);
+        </SimpleModal>
+
+    );
+};
 
 ViewDialog.defaultProps = {
     item: {},

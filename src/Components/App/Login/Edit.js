@@ -15,7 +15,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const Edit = ({credentials, form, security, onChange, editField}) => {
     const [show, setShow] = React.useState(false);
-    const [loginWith, setLoginWith] = React.useState('credentials');
+    const [loginWith, setLoginWith] = React.useState(credentials.isToken? 'token':'pass');
 
     const handleOnChangeCredentials = ({target}) => {
         const {id, value} = target;
@@ -33,10 +33,10 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
 
     const handleLoginWith = ({target}) => {
         const {value} = target;
-        if (value=='credentials') {
-            onChange('credentials', {user: '', password: ''});
+        if (value=='pass') {
+            onChange('credentials', {user: '', password: '', isToken: false});
         } else {
-            onChange('credentials', {token: ''});
+            onChange('credentials', {token: '', isToken: true});
         }
         setLoginWith(value);
     };
@@ -52,7 +52,7 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
     const showName = editField==='name';
     const showSecurity = editField==='security';
     const showToken = loginWith=='token';
-    const showUserPass = loginWith=='credentials';
+    const showUserPass = loginWith=='pass';
 
     return (
         <React.Fragment>
@@ -87,9 +87,9 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
                 <FormControl margin="none" size="small" fullWidth>
                     <RadioGroup aria-label="position" name="position" value={loginWith} onChange={handleLoginWith} row>
                         <FormControlLabel
-                            value="credentials"
+                            value="pass"
                             control={<Radio color="primary" />}
-                            label="with credentials"
+                            label="with password"
                             labelPlacement="end"
                         />
                         <FormControlLabel
