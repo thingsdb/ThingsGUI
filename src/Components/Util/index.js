@@ -174,7 +174,7 @@ const scaleToBinBytes = (bytes) => {
     const metricLabel = ['bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
     const l = String(bytes).length;
     const i = Math.floor(l/3);
-    const number = bytes/1024**i
+    const number = bytes/1024**i;
     const rounded = Math.round(number);
 
     return `${rounded === number ? '' : '~'}${rounded} ${metricLabel[i]}`;
