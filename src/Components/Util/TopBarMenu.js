@@ -25,7 +25,7 @@ const TopBarMenu = ({ children, menuIcon}) => {
         return () => {
             document.removeEventListener('mousedown', handleMenuClose);
         };
-    }, [handleMenuClose]); //TODO
+    }, [handleMenuClose]);
 
     const handleMenuOpen = ({currentTarget}) => {
         setAnchorEl(currentTarget);
