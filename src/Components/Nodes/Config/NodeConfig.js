@@ -4,8 +4,9 @@ import {withVlow} from 'vlow';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
+import moment from 'moment';
 
-import { Info } from '../../Util';
+import { Info, scaleToBinBytes } from '../../Util';
 import Loglevel from './Loglevel';
 import Shutdown from './Shutdown';
 import {NodesActions, NodesStore} from '../../../Stores';
@@ -32,7 +33,7 @@ const header = [
         {ky: 'log_level', label: 'Log level'},
         {ky: 'ip_support', label: 'IP support'},
         {ky: 'storage_path', label: 'Storage path'},
-        {ky: 'uptime', label: 'Uptime'},
+        {ky: 'uptime', label: 'Uptime', fn: (d) =>  moment.duration(d , 'second').humanize()},
         {ky: 'zone', label: 'Zone'},
         {ky: 'scheduled_backups', label: 'Scheduled backups'},
         {ky: 'connected_clients', label: 'Connected clients'},
@@ -67,6 +68,9 @@ const header = [
         {ky: 'msgpack_version', label: 'Msgpack version'},
         {ky: 'libuv_version', label: 'Libuv version'},
         {ky: 'yajl_version', label: 'Yajl version'},
+    ]},
+    {ky: 'title6', title: 'QUERIES', labels: [
+        {ky: 'result_size_limit', label: 'Result size limit', fn: scaleToBinBytes},
     ]},
 
 ];

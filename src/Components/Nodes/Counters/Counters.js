@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { Buttons } from '../Utils';
-import { Info } from '../../Util';
+import { Info, scaleToBinBytes } from '../../Util';
 import {NodesActions, NodesStore} from '../../../Stores';
 import CountersReset from './CountersReset';
 
@@ -29,8 +29,9 @@ const header = [
     {ky: 'title1', title: 'QUERIES', labels: [
         {ky: 'queries_success', label: 'Successful queries'},
         {ky: 'queries_with_error', label: 'Queries with error'},
-        {ky: 'average_query_duration', label: 'Average query duration'},
-        {ky: 'longest_query_duration', label: 'Longest query duration'},
+        {ky: 'average_query_duration', label: 'Average query duration', fn: (d) => d.toFixed(3) + ' s'},
+        {ky: 'longest_query_duration', label: 'Longest query duration', fn: (d) => d.toFixed(3) + ' s'},
+        {ky: 'largest_result_size', label: 'Largest result size', fn: scaleToBinBytes},
     ]},
     {ky: 'title2', title: 'WATCHER', labels: [
         {ky: 'watcher_failed', label: 'Watcher failed'},
@@ -46,8 +47,8 @@ const header = [
         {ky: 'events_committed', label: 'Events committed'},
         {ky: 'events_quorum_lost', label: 'Events quorum lost'},
         {ky: 'events_unaligned', label: 'Events unaligned'},
-        {ky: 'longest_event_duration', label: 'Longest event duration'},
-        {ky: 'average_event_duration', label: 'Average event duration'},
+        {ky: 'longest_event_duration', label: 'Longest event duration', fn: (d) => d.toFixed(3) + ' s'},
+        {ky: 'average_event_duration', label: 'Average event duration', fn: (d) => d.toFixed(3) + ' s'},
     ]}
 ];
 

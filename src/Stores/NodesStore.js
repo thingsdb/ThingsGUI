@@ -74,7 +74,6 @@ class NodesStore extends BaseStore {
             scope: '@node',
             query
         }).done((data) => {
-            data.connectedNode.uptime =  moment.duration(data.connectedNode.uptime , 'second').humanize();
             if (!deepEqual(data.nodes, nodes)|| data.connectedNode.node_id != node.node_id){
                 this.setState({
                     nodes: data.nodes,
@@ -99,7 +98,6 @@ class NodesStore extends BaseStore {
             scope: '@node',
             query
         }).done((data) => {
-            data.uptime =  moment.duration(data.uptime , 'second').humanize();
             if (!deepEqual(data, connectedNode)){
                 this.setState({
                     connectedNode: data,
@@ -170,7 +168,6 @@ class NodesStore extends BaseStore {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            data.uptime =  moment.duration(data.uptime , 'second').humanize();
             if (!deepEqual(data, node)){
                 this.setState({
                     node: data,
@@ -200,7 +197,6 @@ class NodesStore extends BaseStore {
             scope: `@node:${nodeId}`,
             query
         }).done((data) => {
-            data.uptime =  moment.duration(data.uptime , 'second').humanize();
             this.setState({
                 node: data
             });
