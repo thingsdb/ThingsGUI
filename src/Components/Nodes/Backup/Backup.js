@@ -2,19 +2,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
-import Button from '@material-ui/core/Button';
 import FailedIcon from '@material-ui/icons/Clear';
 import Grid from '@material-ui/core/Grid';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import SuccessIcon from '@material-ui/icons/Check';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
-import {FixedList, TableWithButtons, StartStopPolling} from '../../Util';
+import { Buttons } from '../Utils';
+import {FixedList, TableWithButtons} from '../../Util';
 import {NodesActions, NodesStore} from '../../../Stores';
 import Add from './Add';
 import BackupInfo from './BackupInfo';
@@ -58,6 +57,7 @@ const headerTable = [
     {ky: 'file_template', label: 'File template'},
 ];
 
+const link = 'https://docs.thingsdb.net/v0/node-api/backup_info/';
 
 const Backup = ({nodeId, offline, backups}) => {
     const classes = useStyles();
@@ -112,21 +112,11 @@ const Backup = ({nodeId, offline, backups}) => {
                 )}
             </Grid>
             {offline ? null : (
-                <Grid item container xs={12} spacing={1} >
-                    <Grid item>
-                        <Add nodeId={nodeId} />
-                    </Grid>
-                    <Grid item>
-                        <Tooltip disableFocusListener disableTouchListener title="Refresh backup info">
-                            <Button variant="outlined" color="primary" onClick={handleRefresh} >
-                                <RefreshIcon color="primary" />
-                            </Button>
-                        </Tooltip>
-                    </Grid>
-                    <Grid item>
-                        <StartStopPolling onPoll={handleRefresh} title="backups info" variant="outlined" />
-                    </Grid>
-                </Grid>
+                <Buttons
+                    extraButtons={[<Add key="add_button" nodeId={nodeId} />]}
+                    link={link}
+                    onRefresh={handleRefresh}
+                />
             )}
         </Grid>
     );

@@ -1,17 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Tooltip from '@material-ui/core/Tooltip';
 
-import { Info, StartStopPolling } from '../../Util';
+import { Info } from '../../Util';
 import Loglevel from './Loglevel';
 import Shutdown from './Shutdown';
 import {NodesActions, NodesStore} from '../../../Stores';
+import { Buttons } from '../Utils';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -73,6 +71,8 @@ const header = [
 
 ];
 
+const link = 'https://docs.thingsdb.net/v0/node-api/node_info/';
+
 const NodeConfig = ({nodeId, offline, node}) => {
     const classes = useStyles();
 
@@ -89,24 +89,11 @@ const NodeConfig = ({nodeId, offline, node}) => {
                 <Info header={header} content={node} />
             </Grid>
             {offline ? null : (
-                <Grid item container xs={12} spacing={1} >
-                    <Grid item>
-                        <Loglevel node={node} />
-                    </Grid>
-                    <Grid item>
-                        <Shutdown node={node} />
-                    </Grid>
-                    <Grid item>
-                        <Tooltip disableFocusListener disableTouchListener title="Refresh node info">
-                            <Button variant="outlined" color="primary" onClick={handleRefresh} >
-                                <RefreshIcon color="primary" />
-                            </Button>
-                        </Tooltip>
-                    </Grid>
-                    <Grid item>
-                        <StartStopPolling onPoll={handleRefresh} title="node info" variant="outlined" />
-                    </Grid>
-                </Grid>
+                <Buttons
+                    extraButtons={[<Loglevel key="loglevel_button" node={node} />, <Shutdown key="shutdown_button" node={node} />]}
+                    link={link}
+                    onRefresh={handleRefresh}
+                />
             )}
         </Grid>
     );

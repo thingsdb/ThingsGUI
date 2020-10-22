@@ -2,17 +2,15 @@
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Tooltip from '@material-ui/core/Tooltip';
 
-import { Info, StartStopPolling } from '../../Util';
-import CountersReset from './CountersReset';
+import { Buttons } from '../Utils';
+import { Info } from '../../Util';
 import {NodesActions, NodesStore} from '../../../Stores';
+import CountersReset from './CountersReset';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -53,6 +51,8 @@ const header = [
     ]}
 ];
 
+const link = 'https://docs.thingsdb.net/v0/node-api/counters/';
+
 const Counters = ({nodeId, offline, counters}) => {
     const classes = useStyles();
 
@@ -74,21 +74,11 @@ const Counters = ({nodeId, offline, counters}) => {
                 </Box>
             </Grid>
             {offline ? null : (
-                <Grid item container xs={12} spacing={1} >
-                    <Grid item>
-                        <CountersReset nodeId={nodeId} />
-                    </Grid>
-                    <Grid item>
-                        <Tooltip disableFocusListener disableTouchListener title="Refresh counters">
-                            <Button variant="outlined" color="primary" onClick={handleRefresh} >
-                                <RefreshIcon color="primary" />
-                            </Button>
-                        </Tooltip>
-                    </Grid>
-                    <Grid item>
-                        <StartStopPolling onPoll={handleRefresh} title="counters" variant="outlined" />
-                    </Grid>
-                </Grid>
+                <Buttons
+                    extraButtons={[<CountersReset key="counters_reset_button" nodeId={nodeId} />]}
+                    link={link}
+                    onRefresh={handleRefresh}
+                />
             )}
         </Grid>
 
