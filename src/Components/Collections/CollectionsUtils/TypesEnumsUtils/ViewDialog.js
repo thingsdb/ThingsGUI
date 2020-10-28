@@ -13,7 +13,6 @@ import ViewIcon from '@material-ui/icons/Visibility';
 
 import {SimpleModal} from '../../../Util';
 import Overview from './Overview';
-import {Wpo} from './AddEditProperty';
 
 
 const ViewDialog = ({category, headers, item, link, onChangeItem, onClose, open, rows, scope}) => {
@@ -59,16 +58,12 @@ const ViewDialog = ({category, headers, item, link, onChangeItem, onClose, open,
                 <Grid item xs={12}>
                     <List disablePadding dense>
                         {item.wrap_only!==undefined ? (
-                            <React.Fragment>
-                                <ListItem>
-                                    <ListItemText
-                                        primary="Wrap-only mode:"
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <Wpo input={item.wrap_only} disabled />
-                                </ListItem>
-                            </React.Fragment>
+                            <ListItem>
+                                <ListItemText
+                                    primary="Wrap-only mode:"
+                                    secondary={item.wrap_only ? 'Enabled' : 'Disabled'}
+                                />
+                            </ListItem>
                         ) : null}
                         <Overview badgeButton={badgeButton} headers={headers} item={item} link={link} onChangeItem={onChangeItem} rows={rows} scope={scope} />
                     </List>

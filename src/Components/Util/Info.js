@@ -37,7 +37,7 @@ const Info = ({header, content}) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <Typography variant="subtitle2">
-                                    {content[l.ky]}
+                                    {l.fn ? l.fn(content[l.ky]) : content[l.ky]}
                                 </Typography>
                             </Grid>
                         </Grid>

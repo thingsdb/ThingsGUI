@@ -33,7 +33,7 @@ const VariablesArray = ({input, cb}) => {
             setMyItems(input);
         }
     },
-    [JSON.stringify(input)],
+    [JSON.stringify(input)], // TODO stringify
     );
 
     const handleChange = ({target}) => {

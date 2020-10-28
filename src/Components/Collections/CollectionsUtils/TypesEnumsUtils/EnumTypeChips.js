@@ -81,7 +81,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
 
     React.useEffect(() => {
         onInfo(scope, tag);
-    }, [scope]);
+    }, [scope, tag]);
 
     const handleCallback = (s, t) => onInfo(s, t);
 

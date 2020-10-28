@@ -2,17 +2,15 @@
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Tooltip from '@material-ui/core/Tooltip';
 
-import { Info, StartStopPolling } from '../../Util';
-import CountersReset from './CountersReset';
+import { Buttons } from '../Utils';
+import { Info, scaleToBinBytes } from '../../Util';
 import {NodesActions, NodesStore} from '../../../Stores';
+import CountersReset from './CountersReset';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -31,8 +29,9 @@ const header = [
     {ky: 'title1', title: 'QUERIES', labels: [
         {ky: 'queries_success', label: 'Successful queries'},
         {ky: 'queries_with_error', label: 'Queries with error'},
-        {ky: 'average_query_duration', label: 'Average query duration'},
-        {ky: 'longest_query_duration', label: 'Longest query duration'},
+        {ky: 'average_query_duration', label: 'Average query duration', fn: (d) => d.toFixed(3) + ' s'},
+        {ky: 'longest_query_duration', label: 'Longest query duration', fn: (d) => d.toFixed(3) + ' s'},
+        {ky: 'largest_result_size', label: 'Largest result size', fn: scaleToBinBytes},
     ]},
     {ky: 'title2', title: 'WATCHER', labels: [
         {ky: 'watcher_failed', label: 'Watcher failed'},
@@ -48,10 +47,12 @@ const header = [
         {ky: 'events_committed', label: 'Events committed'},
         {ky: 'events_quorum_lost', label: 'Events quorum lost'},
         {ky: 'events_unaligned', label: 'Events unaligned'},
-        {ky: 'longest_event_duration', label: 'Longest event duration'},
-        {ky: 'average_event_duration', label: 'Average event duration'},
+        {ky: 'longest_event_duration', label: 'Longest event duration', fn: (d) => d.toFixed(3) + ' s'},
+        {ky: 'average_event_duration', label: 'Average event duration', fn: (d) => d.toFixed(3) + ' s'},
     ]}
 ];
+
+const link = 'https://docs.thingsdb.net/v0/node-api/counters/';
 
 const Counters = ({nodeId, offline, counters}) => {
     const classes = useStyles();
@@ -74,21 +75,11 @@ const Counters = ({nodeId, offline, counters}) => {
                 </Box>
             </Grid>
             {offline ? null : (
-                <Grid item container xs={12} spacing={1} >
-                    <Grid item>
-                        <CountersReset nodeId={nodeId} />
-                    </Grid>
-                    <Grid item>
-                        <Tooltip disableFocusListener disableTouchListener title="Refresh counters">
-                            <Button variant="outlined" color="primary" onClick={handleRefresh} >
-                                <RefreshIcon color="primary" />
-                            </Button>
-                        </Tooltip>
-                    </Grid>
-                    <Grid item>
-                        <StartStopPolling onPoll={handleRefresh} title="counters" variant="outlined" />
-                    </Grid>
-                </Grid>
+                <Buttons
+                    extraButtons={[<CountersReset key="counters_reset_button" nodeId={nodeId} />]}
+                    link={link}
+                    onRefresh={handleRefresh}
+                />
             )}
         </Grid>
 
