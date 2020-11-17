@@ -77,11 +77,14 @@ const orderByName = (arr) => arr.sort((a, b) => {
 
 const tag = ChipsCardTAG;
 
+const step = 20;
+
 const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExpression}) => {
     const classes = useStyles();
     const [deleteItem, setDeleteItem] = React.useState('');
     const [switchDel, setSwitchDel] = React.useState(false);
     const [searchString, setSearchString] = React.useState('');
+    const [maxAmount, setMaxAmount] = React.useState(step);
 
 
     const handleClickDelete = () => {
@@ -107,6 +110,7 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
     const handleSearchString = ({target}) => {
         const {value} = target;
         setSearchString(value);
+        setMaxAmount(step);
     };
 
     const remove = (name)=>(
@@ -114,6 +118,10 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
             icon: <RemoveIcon fontSize="small" />,
             onClick: handleOpenDelete(name),
         });
+
+    const handleClickLoadMore = () => {
+        setMaxAmount(maxAmount=>maxAmount+step);
+    };
 
     let searchList = orderByName(searchString?items.filter(i=>i.name.includes(searchString)):items);
 
@@ -143,7 +151,7 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
                         </Grid>
                         <Grid item xs={12}>
                             {
-                                searchList && searchList.length ? searchList.map((listitem, index) => (
+                                searchList && searchList.length ? searchList.slice(0, maxAmount).map((listitem, index) => (
                                     <React.Fragment key={index}>
                                         <CardMultiButton
                                             label={listitem.name}
@@ -159,6 +167,15 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
                                 )
                             }
                         </Grid>
+                        {searchList && (searchList.length > maxAmount) &&
+                            <Grid container justify="center" alignItems="center" item xs={12}>
+                                <Grid item>
+                                    <Button onClick={handleClickLoadMore}>
+                                        {'Load more'}
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        }
                     </Grid>
                 }
                 buttons={

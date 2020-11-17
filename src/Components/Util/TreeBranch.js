@@ -1,9 +1,9 @@
 /* eslint-disable react/no-multi-comp */
+import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Collapse from '@material-ui/core/Collapse';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Collapse from '@material-ui/core/Collapse';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import OpenIcon from '@material-ui/icons/OpenInNewOutlined';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -12,9 +12,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
 
-import {DownloadBlob, SimpleModal, TreeIcon} from '../Util';
+import {DownloadBlob, StringDialog, TreeIcon} from '../Util';
 
 
 const useStyles = makeStyles(() => ({
@@ -31,7 +30,6 @@ const useStyles = makeStyles(() => ({
 const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpen, onRenderChildren, type, val, inset}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
-    const [open, setOpen] = React.useState(false);
 
     const renderChildren = () => {
         return onRenderChildren();
@@ -40,14 +38,6 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
     const handleClick = () => {
         setShow(!show);
         onOpen(!show);
-    };
-
-    const handleOpenStringDialog = () => {
-        setOpen(true);
-    };
-
-    const handleCloseStringDialog = () => {
-        setOpen(false);
     };
 
     return (
@@ -89,20 +79,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                         type === 'bytes' ? (
                             <DownloadBlob val={val} />
                         ) : type === 'str' ? (
-                            <SimpleModal
-                                button={
-                                    <Button onClick={handleOpenStringDialog} >
-                                        <OpenIcon color="primary" />
-                                    </Button>
-                                }
-                                title="Show string"
-                                open={open}
-                                onClose={handleCloseStringDialog}
-                            >
-                                <Typography align="justify" variant="body2">
-                                    {val}
-                                </Typography>
-                            </SimpleModal>
+                            <StringDialog name={name} text={val} />
                         ) : null
                     ):null}
                 </ListItemSecondaryAction>

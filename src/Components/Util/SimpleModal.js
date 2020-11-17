@@ -39,7 +39,6 @@ const SimpleModal = ({
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
-                fullWidth
                 maxWidth={maxWidth?maxWidth:'xs'}
                 onKeyDown={onKeyPress}
                 {...props}
