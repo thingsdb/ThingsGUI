@@ -6,7 +6,6 @@ import OpenIcon from '@material-ui/icons/OpenInNewOutlined';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 
 import {Copy, DownloadTextFile, SimpleModal} from '../Util';
 

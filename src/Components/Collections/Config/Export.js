@@ -66,10 +66,10 @@ const Export = ({collection}) => {
         <SimpleModal
             button={
                 <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                    {'View collection setup script'}
+                    {'View setup script'}
                 </Button>
             }
-            title={`View the collection setup script of ${name}.`}
+            title={`View the setup script of ${name}.`}
             open={show}
             onClose={handleClickClose}
             maxWidth="md"
