@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 
 import CollectionInfo from './CollectionInfo';
+import ExportCollection from './Export';
 import RemoveCollection from './Remove';
 import RenameCollection from './Rename';
 import {HarmonicCardContent} from '../../Util';
@@ -18,6 +19,10 @@ const CollectionConfig = ({collection, close}) => {
         {
             name: 'remove',
             component: <RemoveCollection collection={collection} close={close} />
+        },
+        {
+            name: 'export',
+            component: <ExportCollection collection={collection} />
         },
     ];
 

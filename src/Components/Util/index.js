@@ -6,7 +6,9 @@ import CardButton from './CardButton';
 import CardMultiButton from './CardMultiButton';
 import ChipsCard from './ChipsCard';
 import Closure from './Closure';
+import Copy from './Copy';
 import DownloadBlob from './DownloadBlob';
+import DownloadTextFile from './DownloadTextFile';
 import DragdownCard from './DragdownCard';
 import DrawerLayout from './DrawerLayout';
 import EditName from './EditName';
@@ -28,12 +30,13 @@ import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import StartStopPolling from './StartStopPolling';
 import StickyHeadTable from './StickyHeadTable';
+import StringDialog from './StringDialog';
 import Switching from './Switching';
 import SwitchOpen from './SwitchOpen';
-import Tabs from './Tabs';
 import TableExtra from './TableExtra';
 import TableWithBadges from './TableWithBadges';
 import TableWithButtons from './TableWithButtons';
+import Tabs from './Tabs';
 import ThingsTree from './ThingsTree';
 import TimePeriodPicker from './TimePeriodPicker';
 import TimePicker from './TimePicker';
@@ -193,7 +196,9 @@ export {
     checkType,
     ChipsCard,
     Closure,
+    Copy,
     DownloadBlob,
+    DownloadTextFile,
     DragdownCard,
     DrawerLayout,
     duration,
@@ -224,6 +229,7 @@ export {
     SimpleModal,
     StartStopPolling,
     StickyHeadTable,
+    StringDialog,
     swap,
     Switching,
     SwitchOpen,
