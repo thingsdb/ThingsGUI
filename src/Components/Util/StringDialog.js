@@ -49,7 +49,6 @@ const StringDialog = ({name, text}) => {
             open={open}
             onClose={handleClose}
             maxWidth="md"
-            fullWidth
             actionButtons={
                 <React.Fragment>
                     <Copy reference={reference} />

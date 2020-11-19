@@ -73,7 +73,6 @@ const Export = ({collection}) => {
             open={show}
             onClose={handleClickClose}
             maxWidth="md"
-            fullWidth
             actionButtons={
                 <React.Fragment>
                     <Copy reference={reference} />
