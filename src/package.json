@@ -1,6 +1,6 @@
 {
   "name": "things-gui",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "ThingsGUI",
   "main": "index.js",
   "repository": {
