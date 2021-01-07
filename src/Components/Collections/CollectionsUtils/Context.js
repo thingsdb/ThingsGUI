@@ -77,8 +77,10 @@ const reducer = (state, action) => {
 
 const EditProvider = ({ children }) => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
+    const memoValue = React.useMemo(() => ({state, dispatch}), [state, dispatch]);
+
     return (
-        <StoreContext.Provider value={{ state, dispatch }}>
+        <StoreContext.Provider value={memoValue}>
             {children}
         </StoreContext.Provider>
     );

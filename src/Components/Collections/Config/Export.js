@@ -82,17 +82,17 @@ const Export = ({collection}) => {
         >
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                        <ErrorMsg tag={tag} />
-                        <Typography variant="body2">
-                            {'This setup script includes all enums, types and procedures.'}
-                        </Typography>
-                        <Typography variant="subtitle2" component="span" className={classes.warnColor}>
-                            {'Note: '}
-                            <Box fontStyle="italic" component="span">
-                                {'export() '}
-                            </Box>
-                            {'is an experimental function and may change in the future.'}
-                        </Typography>
+                    <ErrorMsg tag={tag} />
+                    <Typography variant="body2">
+                        {'This setup script includes all enums, types and procedures.'}
+                    </Typography>
+                    <Typography variant="subtitle2" component="span" className={classes.warnColor}>
+                        {'Note: '}
+                        <Box fontStyle="italic" component="span">
+                            {'export() '}
+                        </Box>
+                        {'is an experimental function and may change in the future.'}
+                    </Typography>
                 </Grid>
                 <Grid className={classes.border} container item xs={12}>
                     <Typography className={classes.label} variant="caption">
