@@ -71,17 +71,17 @@ const Login = ({connected, loaded, savedConnections}) => {
     const handleClickSave = () => {
         switch(editField){
         case 'name':
-            oldName ? ApplicationActions.renameConn({...form, ...credentials, ...security}, oldName, tag, handleClickCloseSaveConn)
-                : ApplicationActions.newConn({...form, ...credentials, ...security}, tag, handleClickCloseSaveConn);
+            oldName ? ApplicationActions.renameCachedConn({...form, ...credentials, ...security}, oldName, tag, handleClickCloseSaveConn)
+                : ApplicationActions.newCachedConn({...form, ...credentials, ...security}, tag, handleClickCloseSaveConn);
             break;
         case 'credentials':
-            ApplicationActions.editConn({name: form.name, ...credentials}, tag, handleClickCloseSaveConn);
+            ApplicationActions.editCachedConn({name: form.name, ...credentials}, tag, handleClickCloseSaveConn);
             break;
         case 'security':
-            ApplicationActions.editConn({name: form.name, ...security}, tag, handleClickCloseSaveConn);
+            ApplicationActions.editCachedConn({name: form.name, ...security}, tag, handleClickCloseSaveConn);
             break;
         case 'address':
-            ApplicationActions.editConn(form, tag, handleClickCloseSaveConn);
+            ApplicationActions.editCachedConn(form, tag, handleClickCloseSaveConn);
             break;
         }
     };
@@ -91,7 +91,7 @@ const Login = ({connected, loaded, savedConnections}) => {
     };
 
     const handleClickOk = () => {
-        ApplicationActions.connect({...form, ...credentials, ...security}, tag);
+        ApplicationActions.connectToNew({...form, ...credentials, ...security}, tag);
     };
 
     const handleEditConn = (ky, val) => {
@@ -132,7 +132,6 @@ const Login = ({connected, loaded, savedConnections}) => {
                 aria-labelledby="form-dialog-title"
                 fullWidth
                 maxWidth="sm"
-                // onKeyDown={handleKeyPress}
             >
                 <DialogTitle id="form-dialog-title">
                     {'Login'}

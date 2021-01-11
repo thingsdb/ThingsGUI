@@ -5,6 +5,7 @@ import {withVlow} from 'vlow';
 
 import App from './App';
 import AppLoader from './AppLoader';
+import Auth from './Auth';
 import Login from './Login';
 import InitStores from './InitStores';
 import {ApplicationActions, ApplicationStore} from '../../Stores';
@@ -69,13 +70,14 @@ const theme = createMuiTheme({
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['loaded', 'connected', 'seekConnection']
+    keys: ['authOnly', 'loaded', 'connected', 'seekConnection']
 }]);
 
-const Root = ({loaded, connected, seekConnection}) => {
+const Root = ({authOnly, loaded, connected, seekConnection}) => {
     React.useEffect(() => {
         ApplicationActions.pushNotifications();
-        ApplicationActions.getConn(LoginTAG); // errmsg shown at Login dialog
+        ApplicationActions.isAuthOnly();
+        ApplicationActions.getCachedConn(LoginTAG); // errmsg shown at Login dialog
     },
     [],
     );
@@ -84,12 +86,16 @@ const Root = ({loaded, connected, seekConnection}) => {
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
             <InitStores />
-            {loaded ? connected ? <App /> : <Login /> : <AppLoader connect={seekConnection} />}
+            {loaded ? (
+                connected ? <App />
+                    : authOnly ? <Auth /> : <Login />
+            ) : <AppLoader connect={seekConnection} />}
         </MuiThemeProvider>
     );
 };
 
 Root.propTypes = {
+    authOnly: ApplicationStore.authOnly.isRequired,
     loaded: ApplicationStore.types.loaded.isRequired,
     connected: ApplicationStore.types.connected.isRequired,
     seekConnection: ApplicationStore.types.seekConnection.isRequired,

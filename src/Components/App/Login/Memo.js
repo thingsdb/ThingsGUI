@@ -25,7 +25,7 @@ const Memo = ({connection}) => {
     };
 
     const handleClickSave = () => {
-        ApplicationActions.editConn({name: connection.name, memo: memo}, tag, handleOpen);
+        ApplicationActions.editCachedConn({name: connection.name, memo: memo}, tag, handleOpen);
     };
 
     return (
