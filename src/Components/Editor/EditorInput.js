@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {withVlow} from 'vlow';
+import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
+import CardActions from '@material-ui/core/CardActions';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -18,10 +19,22 @@ const withStores = withVlow([{
     keys: ['history']
 }]);
 
+const useStyles = makeStyles(() => ({
+    cardAction: {
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
+        padding: 0
+    },
+}));
+
 
 const tag = EditorTAG;
 
+
+
+
 const Editor = ({height, history, input, match, onExpand, onOutput, scope}) => {
+    const classes = useStyles();
     const [query, setQuery] = React.useState('');
     const [queryInput, setQueryInput] = React.useState('');
     const [suggestion, setSuggestion] = React.useState(0);
@@ -49,12 +62,9 @@ const Editor = ({height, history, input, match, onExpand, onOutput, scope}) => {
     };
 
     const handleSubmit = () => {
-        onExpand(false);
-        setTimeout(()=> { // can result in -> Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function. in Editor (created by WithVlow()(Editor)) in WithVlow()(Editor) (created by App)
-            onOutput(null);
-            CollectionActions.rawQuery(scope, query, tag, handleOutput);
-        }, 300);
-
+        // onExpand(false);
+        // onOutput(null);
+        CollectionActions.rawQuery(scope, query, tag, handleOutput);
         EditorActions.setHistory(query);
     };
 
@@ -103,19 +113,19 @@ const Editor = ({height, history, input, match, onExpand, onOutput, scope}) => {
 
     return (
         <React.Fragment>
-            <Grid container justify="flex-end">
+            <div onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
+                <QueryInput onChange={handleInput} input={queryInput} height={height-75} />
+            </div>
+            <CardActions className={classes.cardAction} disableSpacing>
                 <Button
                     onClick={handleSubmit}
                     variant="text"
                     color="primary"
-                    size="large"
+                    size="medium"
                 >
                     {'Submit'}
                 </Button>
-            </Grid>
-            <div onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
-                <QueryInput onChange={handleInput} input={queryInput} height={height-25} />
-            </div>
+            </CardActions>
         </React.Fragment>
     );
 };

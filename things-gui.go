@@ -32,7 +32,7 @@ var (
 
 // Init parses the flags
 func Init() {
-	flag.StringVar(&host, "host", "0.0.0.0", "Specific host for the http webserver.")
+	flag.StringVar(&host, "host", "localhost", "Specific host for the http webserver.")
 	flag.UintVar(&port, "port", 5000, "Specific port for the http webserver.")
 	flag.UintVar(&timeout, "timeout", 0, "Connect and query timeout in seconds")
 	flag.BoolVar(&disableOpenBrowser, "disable-open-browser", false, "opens ThingsGUI in your default browser")
