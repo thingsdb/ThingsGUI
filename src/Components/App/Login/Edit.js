@@ -1,4 +1,5 @@
 import Collapse from '@material-ui/core/Collapse';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
@@ -22,9 +23,19 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
         onChange('credentials', {[id]: value});
     };
 
-    const handleOnChangeForm = ({target}) => {
-        const {id, value} = target;
-        onChange('form', {[id]: value});
+    const handleOnChangeName = ({target}) => {
+        const {value} = target;
+        onChange('form', {name: value});
+    };
+
+    const handleOnChangeAddress = ({target}) => {
+        const {value} = target;
+        onChange('form', {address: value});
+    };
+
+    const handleClickAwayCheck = () => {
+        const tls = form.address.includes('https://');
+        onChange('security', {secureConnection: tls});
     };
 
     const handleClickShow = () => {
@@ -65,23 +76,25 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
                     type="text"
                     value={form.name}
                     spellCheck={false}
-                    onChange={handleOnChangeForm}
+                    onChange={handleOnChangeName}
                     fullWidth
                     disabled={!showName}
                 />
             </Collapse>
             <Collapse in={showAll||showAddress} timeout="auto" unmountOnExit>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="address"
-                    label="Socket Address"
-                    type="text"
-                    value={form.address}
-                    spellCheck={false}
-                    onChange={handleOnChangeForm}
-                    fullWidth
-                />
+                <ClickAwayListener onClickAway={handleClickAwayCheck}>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="address"
+                        label="Socket Address"
+                        type="text"
+                        value={form.address}
+                        spellCheck={false}
+                        onChange={handleOnChangeAddress}
+                        fullWidth
+                    />
+                </ClickAwayListener>
             </Collapse>
             <Collapse in={showAll||showCred} timeout="auto" unmountOnExit>
                 <FormControl margin="none" size="small" fullWidth>
