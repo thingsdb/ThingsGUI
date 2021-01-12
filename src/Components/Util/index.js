@@ -138,7 +138,8 @@ const allDataTypes = (types) => {
         'set',
         'thing',
         ...types.map(c=>c.name)
-    ];
+    ].sort();
+
     return(dataTypes);
 };
 
