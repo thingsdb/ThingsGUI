@@ -183,13 +183,13 @@ func AuthOnly(client *Client, address string, authMethod string) (int, AuthResp,
 }
 
 // AuthToken connects to ThingsDB using the token and env variables
-func AuthToken(client *Client, token string, address string, ssl bool, aic bool) (int, interface{}, util.Message) {
+func AuthToken(client *Client, data map[string]string, address string, ssl bool, aic bool) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 
 	var mapping LoginData
 	mapping.Address = address
 	mapping.IsToken = true
-	mapping.Token = token
+	mapping.Token = data["token"]
 	mapping.SecureConnection = ssl
 	mapping.InsecureSkipVerify = aic
 
@@ -208,14 +208,14 @@ func AuthToken(client *Client, token string, address string, ssl bool, aic bool)
 }
 
 // AuthPass connects to ThingsDB using a user+pass and env variables
-func AuthPass(client *Client, user string, pass string, address string, ssl bool, aic bool) (int, interface{}, util.Message) {
+func AuthPass(client *Client, data map[string]string, address string, ssl bool, aic bool) (int, interface{}, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 
 	var mapping LoginData
 	mapping.Address = address
 	mapping.IsToken = false
-	mapping.User = user
-	mapping.Password = pass
+	mapping.User = data["user"]
+	mapping.Password = data["pass"]
 	mapping.SecureConnection = ssl
 	mapping.InsecureSkipVerify = aic
 

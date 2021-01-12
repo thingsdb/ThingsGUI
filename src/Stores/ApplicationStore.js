@@ -114,7 +114,7 @@ class ApplicationStore extends BaseStore {
     }
 
     onIsAuthOnly() {
-        this.emit('authPass').done((data) => {
+        this.emit('authOnly').done((data) => {
             this.setState({
                 authOnly: data.AuthOnly,
                 authMethod: data.AuthMethod,
@@ -123,11 +123,11 @@ class ApplicationStore extends BaseStore {
     }
 
     onAuthToken(token, tag) {
-        this.connect('authToken', token, tag);
+        this.connect('authToken', {token: token}, tag);
     }
 
     onAuthPass(user, pass, tag) {
-        this.connect('authToken', user, pass, tag);
+        this.connect('authPass', {user: user, pass: pass}, tag);
     }
 
     onReconnect() {

@@ -30,7 +30,7 @@ const tag = AuthTAG;
 
 const Auth = ({authOnly, authMethod, connected, loaded}) => {
     const [show, setShow] = React.useState(false);
-    const [loginWith, setLoginWith] = React.useState(authMethod||'token');
+    const [loginWith, setLoginWith] = React.useState(authMethod||'pass');
     const [form, setForm] = React.useState({
         token: '',
         user: '',
@@ -65,7 +65,7 @@ const Auth = ({authOnly, authMethod, connected, loaded}) => {
             onClose={() => null}
             aria-labelledby="form-dialog-title"
             fullWidth
-            maxWidth="sm"
+            maxWidth="xs"
         >
             <DialogTitle id="form-dialog-title">
                 {'Login'}
@@ -144,13 +144,9 @@ const Auth = ({authOnly, authMethod, connected, loaded}) => {
                 </Collapse>
             </DialogContent>
             <DialogActions>
-                <Grid container>
-                    <Grid item xs={6} container justify="flex-end">
-                        <Button onClick={handleClickOk} color="primary">
-                            {'Connect'}
-                        </Button>
-                    </Grid>
-                </Grid>
+                <Button onClick={handleClickOk} color="primary">
+                    {'Connect'}
+                </Button>
             </DialogActions>
         </Dialog>
     );

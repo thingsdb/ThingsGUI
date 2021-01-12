@@ -77,12 +77,12 @@ func (app *App) SocketRouter() {
 		return handlers.AuthOnly(app.client[s.ID()], thingsguiAddress, thingsguiAuthMethod)
 	})
 
-	app.server.OnEvent("/", "authToken", func(s socketio.Conn, token string) (int, interface{}, util.Message) {
-		return handlers.AuthToken(app.client[s.ID()], token, thingsguiAddress, thingsguiSsl, thingsguiAic)
+	app.server.OnEvent("/", "authToken", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
+		return handlers.AuthToken(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
 	})
 
-	app.server.OnEvent("/", "authPass", func(s socketio.Conn, user string, pass string) (int, interface{}, util.Message) {
-		return handlers.AuthPass(app.client[s.ID()], user, pass, thingsguiAddress, thingsguiSsl, thingsguiAic)
+	app.server.OnEvent("/", "authPass", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
+		return handlers.AuthPass(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
 	})
 
 	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {

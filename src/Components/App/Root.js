@@ -95,7 +95,7 @@ const Root = ({authOnly, loaded, connected, seekConnection}) => {
 };
 
 Root.propTypes = {
-    authOnly: ApplicationStore.authOnly.isRequired,
+    authOnly: ApplicationStore.types.authOnly.isRequired,
     loaded: ApplicationStore.types.loaded.isRequired,
     connected: ApplicationStore.types.connected.isRequired,
     seekConnection: ApplicationStore.types.seekConnection.isRequired,

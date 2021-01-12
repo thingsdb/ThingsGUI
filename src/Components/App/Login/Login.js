@@ -16,12 +16,12 @@ import ListConnections from './ListConnections';
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['loaded', 'connected', 'savedConnections']
+    keys: ['loaded', 'connected', 'cachedConnections']
 }]);
 
 const tag = LoginTAG;
 
-const Login = ({connected, loaded, savedConnections}) => {
+const Login = ({connected, loaded, cachedConnections}) => {
     const initialState = {
         form: {
             address: 'localhost:9200',
@@ -39,7 +39,7 @@ const Login = ({connected, loaded, savedConnections}) => {
             secureConnection: false,
         },
         oldName: '',
-        showNewConn: isObjectEmpty(savedConnections),
+        showNewConn: isObjectEmpty(cachedConnections),
         openSaveConn: false,
         editField: 'all',
     };
@@ -149,7 +149,7 @@ const Login = ({connected, loaded, savedConnections}) => {
                     <DialogActions>
                         <Grid container>
                             <Grid item xs={6} container justify="flex-start" >
-                                <Collapse in={Boolean(savedConnections&&Object.keys(savedConnections).length)} timeout="auto" unmountOnExit>
+                                <Collapse in={Boolean(cachedConnections&&Object.keys(cachedConnections).length)} timeout="auto" unmountOnExit>
                                     <Grid item xs={3}>
                                         <Button onClick={handleClickBack} color="primary">
                                             {'Connections'}
@@ -178,7 +178,7 @@ const Login = ({connected, loaded, savedConnections}) => {
 Login.propTypes = {
     connected: ApplicationStore.types.connected.isRequired,
     loaded: ApplicationStore.types.loaded.isRequired,
-    savedConnections: ApplicationStore.types.savedConnections.isRequired,
+    cachedConnections: ApplicationStore.types.cachedConnections.isRequired,
 };
 
 export default withStores(Login);
