@@ -18,6 +18,14 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
     const [show, setShow] = React.useState(false);
     const [loginWith, setLoginWith] = React.useState(credentials.isToken? 'token':'pass');
 
+    const showAll = editField==='all';
+    const showAddress = editField==='address';
+    const showCred = editField==='credentials';
+    const showName = editField==='name';
+    const showSecurity = editField==='security';
+    const showToken = loginWith=='token';
+    const showUserPass = loginWith=='pass';
+
     const handleOnChangeCredentials = ({target}) => {
         const {id, value} = target;
         onChange('credentials', {[id]: value});
@@ -34,8 +42,10 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
     };
 
     const handleClickAwayCheck = () => {
-        const tls = form.address.includes('https://');
-        onChange('security', {secureConnection: tls});
+        if(showAll){
+            const tls = form.address.startsWith('https://');
+            onChange('security', {secureConnection: tls});
+        }
     };
 
     const handleClickShow = () => {
@@ -56,14 +66,6 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
         const {id, checked} = target;
         onChange('security', {[id]: checked});
     };
-
-    const showAll = editField==='all';
-    const showAddress = editField==='address';
-    const showCred = editField==='credentials';
-    const showName = editField==='name';
-    const showSecurity = editField==='security';
-    const showToken = loginWith=='token';
-    const showUserPass = loginWith=='pass';
 
     return (
         <React.Fragment>
