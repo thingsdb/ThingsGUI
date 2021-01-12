@@ -30,6 +30,7 @@ const tag = CollectionTypesTAG;
 const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
     const classes = useStyles();
     const types = [
+        'code',
         'str',
         'utf8',
         'raw',

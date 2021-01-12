@@ -125,6 +125,7 @@ const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
 const allDataTypes = (types) => {
     const dataTypes = [
+        'code',
         'str',
         'int',
         'float',
