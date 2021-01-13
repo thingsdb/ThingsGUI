@@ -7,7 +7,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Radio from '@material-ui/core/Radio';
@@ -23,12 +22,12 @@ import {AuthTAG} from '../../constants';
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['authOnly', 'authMethod', 'loaded', 'connected']
+    keys: ['authMethod']
 }]);
 
 const tag = AuthTAG;
 
-const Auth = ({authOnly, authMethod, connected, loaded}) => {
+const Auth = ({authMethod}) => {
     const [show, setShow] = React.useState(false);
     const [loginWith, setLoginWith] = React.useState(authMethod||'pass');
     const [form, setForm] = React.useState({
@@ -59,13 +58,21 @@ const Auth = ({authOnly, authMethod, connected, loaded}) => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        const {key} = event;
+        if (key == 'Enter') {
+            handleClickOk();
+        }
+    };
+
     return (
         <Dialog
-            open={authOnly && loaded && !connected}
+            open
             onClose={() => null}
             aria-labelledby="form-dialog-title"
             fullWidth
             maxWidth="xs"
+            onKeyPress={handleKeyPress}
         >
             <DialogTitle id="form-dialog-title">
                 {'Login'}
@@ -153,10 +160,7 @@ const Auth = ({authOnly, authMethod, connected, loaded}) => {
 };
 
 Auth.propTypes = {
-    authOnly: ApplicationStore.types.authOnly.isRequired,
     authMethod: ApplicationStore.types.authMethod.isRequired,
-    connected: ApplicationStore.types.connected.isRequired,
-    loaded: ApplicationStore.types.loaded.isRequired,
 };
 
 export default withStores(Auth);

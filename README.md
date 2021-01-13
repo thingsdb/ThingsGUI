@@ -142,6 +142,12 @@ You can save the connection configuration locally if you like to speed up the pr
 
 <img src="markdownImg/savedConnections.png?" alt="alt Login" style="zoom:80%;" />
 
+#### Fixed address mode
+When you configure an `.env` file containing `THINGSGUI_ADDRESS` then the GUI has a fixed address and the login only displays the [Authentication](#authentication). The `.env` variables that can be configured are:
+* `THINGSGUI_ADDRESS`: ThingsDB socket address
+* `THINGSGUI_AUTH_METHOD`: method of authentication; either a token, user+pass or both.
+* `THINGSGUI_SSL`: Needs a secure connection or not
+* `THINGSGUI_AIC`: Allow insecure certificates or not
 
 
 ## ThingsGUI tour

@@ -16,12 +16,12 @@ import ListConnections from './ListConnections';
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['loaded', 'connected', 'cachedConnections']
+    keys: ['cachedConnections']
 }]);
 
 const tag = LoginTAG;
 
-const Login = ({connected, loaded, cachedConnections}) => {
+const Login = ({cachedConnections}) => {
     const initialState = {
         form: {
             address: 'localhost:9200',
@@ -127,7 +127,7 @@ const Login = ({connected, loaded, cachedConnections}) => {
                 <Edit form={form} credentials={credentials} security={security} onChange={handleOnChange} editField={editField} />
             </SimpleModal>
             <Dialog
-                open={loaded && !connected}
+                open
                 onClose={() => null}
                 aria-labelledby="form-dialog-title"
                 fullWidth
@@ -176,8 +176,6 @@ const Login = ({connected, loaded, cachedConnections}) => {
 };
 
 Login.propTypes = {
-    connected: ApplicationStore.types.connected.isRequired,
-    loaded: ApplicationStore.types.loaded.isRequired,
     cachedConnections: ApplicationStore.types.cachedConnections.isRequired,
 };
 
