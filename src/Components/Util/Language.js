@@ -186,7 +186,7 @@ export default {
         'shutdown':'Shutdown the node in the selected scope. This is a clean shutdown, allowing all other nodes (and clients) to disconnect.',
     },
     thingsdb: {
-        'collection_info': 'Returns information about a specific collection. This function requires READ privileges on the requested collection, or MODIFY privileges on the @thingsdb scope.',
+        'collection_info': 'Returns information about a specific collection. This function requires QUERY privileges on the requested collection, or EVENT privileges on the @thingsdb scope.',
         'collections_info': 'Returns collection information for all collections in ThingsDB.',
         'del_collection': 'Delete a collection.',
         'del_expired': 'Delete all expired tokens. Extends to all users.',
