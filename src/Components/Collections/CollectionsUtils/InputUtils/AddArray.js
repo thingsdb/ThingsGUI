@@ -75,16 +75,17 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
                     {childTypes.length == 1 ? null : (
                         <Grid item xs={4}>
                             <TextField
+                                fullWidth
                                 id="dataType"
-                                type="text"
-                                name="dataType"
                                 label="Data type"
+                                margin="dense"
+                                name="dataType"
                                 onChange={handleChange}
-                                value={dataType}
-                                variant="standard"
                                 select
                                 SelectProps={{native: true}}
-                                fullWidth
+                                type="text"
+                                value={dataType}
+                                variant="standard"
                             >
                                 {(childTypes.length?childTypes:dataTypes).map(p => (
                                     <option key={p} value={p}>

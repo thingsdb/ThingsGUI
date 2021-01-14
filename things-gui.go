@@ -15,30 +15,22 @@ import (
 	util "./util"
 	engineio "github.com/googollee/go-engine.io"
 	socketio "github.com/googollee/go-socket.io"
+	"github.com/joho/godotenv"
 	things "github.com/thingsdb/go-thingsdb"
 )
 
 // AppVersion exposes version information
-const AppVersion = "0.2.11"
+const AppVersion = "0.2.12"
 
 var connFile = ".things-gui_config"
 
 var (
-	host               string
-	port               uint
-	timeout            uint
-	disableOpenBrowser bool
+	// env variables
+	thingsguiAddress    string
+	thingsguiAuthMethod string
+	thingsguiSsl        bool
+	thingsguiAic        bool
 )
-
-// Init parses the flags
-func Init() {
-	flag.StringVar(&host, "host", "0.0.0.0", "Specific host for the http webserver.")
-	flag.UintVar(&port, "port", 5000, "Specific port for the http webserver.")
-	flag.UintVar(&timeout, "timeout", 0, "Connect and query timeout in seconds")
-	flag.BoolVar(&disableOpenBrowser, "disable-open-browser", false, "opens ThingsGUI in your default browser")
-
-	flag.Parse()
-}
 
 // App type
 type App struct {
@@ -48,6 +40,21 @@ type App struct {
 	disableOpenBrowser bool
 	timeout            uint16
 	client             map[string]*handlers.Client
+}
+
+// Init parses the flags
+func (app *App) Init() {
+	var port uint
+	var timeout uint
+
+	flag.StringVar(&app.host, "host", "localhost", "Specific host for the http webserver.")
+	flag.UintVar(&port, "port", 5000, "Specific port for the http webserver.")
+	flag.UintVar(&timeout, "timeout", 0, "Connect and query timeout in seconds")
+	flag.BoolVar(&app.disableOpenBrowser, "disable-open-browser", false, "opens ThingsGUI in your default browser")
+	flag.Parse()
+
+	app.port = uint16(port)
+	app.timeout = uint16(timeout)
 }
 
 // SocketRouter socketio
@@ -66,12 +73,28 @@ func (app *App) SocketRouter() {
 		return nil
 	})
 
+	app.server.OnEvent("/", "authOnly", func(s socketio.Conn) (int, handlers.AuthResp, util.Message) {
+		return handlers.AuthOnly(app.client[s.ID()], thingsguiAddress, thingsguiAuthMethod)
+	})
+
+	app.server.OnEvent("/", "authToken", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
+		return handlers.AuthToken(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
+	})
+
+	app.server.OnEvent("/", "authPass", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
+		return handlers.AuthPass(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
+	})
+
 	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
 		return handlers.Connected(app.client[s.ID()].Connection)
 	})
 
-	app.server.OnEvent("/", "conn", func(s socketio.Conn, data handlers.LoginData) (int, handlers.LoginResp, util.Message) {
-		return handlers.Connect(app.client[s.ID()], data)
+	app.server.OnEvent("/", "connToNew", func(s socketio.Conn, data handlers.LoginData) (int, handlers.LoginResp, util.Message) {
+		return handlers.ConnectToNew(app.client[s.ID()], data)
+	})
+
+	app.server.OnEvent("/", "connViaCache", func(s socketio.Conn, data handlers.LoginData) (int, interface{}, util.Message) {
+		return handlers.ConnectViaCache(app.client[s.ID()], data)
 	})
 
 	app.server.OnEvent("/", "reconn", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
@@ -82,28 +105,24 @@ func (app *App) SocketRouter() {
 		return handlers.Disconnect(app.client[s.ID()])
 	})
 
-	app.server.OnEvent("/", "getConn", func(s socketio.Conn) (int, interface{}, util.Message) {
-		return handlers.GetConnection(app.client[s.ID()])
+	app.server.OnEvent("/", "getCachedConn", func(s socketio.Conn) (int, interface{}, util.Message) {
+		return handlers.GetCachedConnection(app.client[s.ID()])
 	})
 
-	app.server.OnEvent("/", "newConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
-		return handlers.NewConnection(app.client[s.ID()], data)
+	app.server.OnEvent("/", "newCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
+		return handlers.NewCachedConnection(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "editConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
-		return handlers.EditConnection(app.client[s.ID()], data)
+	app.server.OnEvent("/", "editCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
+		return handlers.EditCachedConnection(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "renameConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
-		return handlers.RenameConnection(app.client[s.ID()], data)
+	app.server.OnEvent("/", "renameCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
+		return handlers.RenameCachedConnection(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "delConn", func(s socketio.Conn, data handlers.LoginData) (int, interface{}, util.Message) {
-		return handlers.DelConnection(app.client[s.ID()], data)
-	})
-
-	app.server.OnEvent("/", "connToo", func(s socketio.Conn, data handlers.LoginData) (int, interface{}, util.Message) {
-		return handlers.ConnectionToo(app.client[s.ID()], data)
+	app.server.OnEvent("/", "delCachedConn", func(s socketio.Conn, data handlers.LoginData) (int, interface{}, util.Message) {
+		return handlers.DelCachedConnection(app.client[s.ID()], data)
 	})
 
 	app.server.OnEvent("/", "log", func(s socketio.Conn) {
@@ -183,6 +202,26 @@ func open(url string) error { //https://stackoverflow.com/questions/39320371/how
 	return exec.Command(cmd, args...).Run()
 }
 
+// newEditConnection saves a new connection or edits locally
+func getEnvVariables() error {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println(err)
+		return fmt.Errorf("Error loading .env file")
+	}
+	thingsguiAddress = os.Getenv("THINGSGUI_ADDRESS")
+	thingsguiAuthMethod = os.Getenv("THINGSGUI_AUTH_METHOD")
+	if os.Getenv("THINGSGUI_SSL") == "true" {
+		thingsguiSsl = true
+		if os.Getenv("THINGSGUI_AIC") == "true" {
+			thingsguiAic = true
+		}
+
+	}
+
+	return nil
+}
+
 func (app *App) quit() {
 	for _, v := range app.client {
 		if v != nil {
@@ -231,19 +270,22 @@ func (app *App) Start() {
 
 func main() {
 	var err error
+
+	err = getEnvVariables()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	app := App{}
+
 	// init
-	Init()
-	a := App{}
-	a.host = host
-	a.port = uint16(port)
-	a.timeout = uint16(timeout)
-	a.disableOpenBrowser = disableOpenBrowser
-	a.client = make(map[string]*handlers.Client)
+	app.Init()
+	app.client = make(map[string]*handlers.Client)
 
 	options := &engineio.Options{
-		PingTimeout: time.Duration(timeout+120) * time.Second,
+		PingTimeout: time.Duration(app.timeout+120) * time.Second,
 	}
-	a.server, err = socketio.NewServer(options)
+	app.server, err = socketio.NewServer(options)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -254,11 +296,11 @@ func main() {
 	go func() {
 		for sig := range c {
 			if sig == os.Interrupt {
-				a.quit()
+				app.quit()
 				os.Exit(1)
 			}
 		}
 	}()
 
-	a.Start()
+	app.Start()
 }

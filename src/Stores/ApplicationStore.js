@@ -9,36 +9,43 @@ import {NodesActions} from './NodesStore';
 import {ThingsdbActions} from './ThingsdbStore';
 
 const ApplicationActions = Vlow.createActions([
+    'isAuthOnly',
+    'authToken',
+    'authPass',
     'closeEditor',
-    'connect',
     'connected',
-    'connectToo',
-    'delConn',
+    'connectToNew',
+    'connectViaCache',
+    'delCachedConn',
     'disconnect',
-    'editConn',
-    'getConn',
+    'editCachedConn',
+    'getCachedConn',
     'navigate',
-    'newConn',
+    'newCachedConn',
     'openEditor',
     'pushNotifications',
     'reconnect',
-    'renameConn',
+    'renameCachedConn',
 ]);
 
 
 class ApplicationStore extends BaseStore {
 
     static types = {
+        authOnly: PropTypes.bool,
+        authMethod:PropTypes.string,
         loaded: PropTypes.bool,
         connected: PropTypes.bool,
         seekConnection: PropTypes.bool,
         match: PropTypes.shape({path: PropTypes.string, index: PropTypes.number, item: PropTypes.string, scope: PropTypes.string}),
         openEditor: PropTypes.bool,
         input: PropTypes.string,
-        savedConnections: PropTypes.object
+        cachedConnections: PropTypes.object
     }
 
     static defaults = {
+        authOnly: false,
+        authMethod: '',
         loaded: false,
         connected: false,
         seekConnection: true,
@@ -50,7 +57,7 @@ class ApplicationStore extends BaseStore {
         },
         openEditor: false,
         input: '',
-        savedConnections: {}
+        cachedConnections: {}
     }
 
     constructor() {
@@ -98,10 +105,29 @@ class ApplicationStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
+    onConnectToNew(config, tag) {
+        this.connect('connToNew', config, tag);
+    }
 
+    onConnectViaCache(config, tag) {
+        this.connect('connViaCache', config, tag);
+    }
 
-    onConnect(config, tag) {
-        this.connect('conn', config, tag);
+    onIsAuthOnly() {
+        this.emit('authOnly').done((data) => {
+            this.setState({
+                authOnly: data.AuthOnly,
+                authMethod: data.AuthMethod,
+            });
+        });
+    }
+
+    onAuthToken(token, tag) {
+        this.connect('authToken', {token: token}, tag);
+    }
+
+    onAuthPass(user, pass, tag) {
+        this.connect('authPass', {user: user, pass: pass}, tag);
     }
 
     onReconnect() {
@@ -131,6 +157,68 @@ class ApplicationStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
+    onEditCachedConn(config, tag, cb) {
+        this.emit('editCachedConn', config).done((_data) => {
+            this.setState(prevState => {
+                const savedConn = {... prevState.cachedConnections, [config.name]: {...prevState.cachedConnections[config.name], ...config}};
+                const update = {...prevState, cachedConnections: savedConn};
+                return update;
+            });
+            cb();
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onGetCachedConn(tag) {
+        this.emit('getCachedConn').done((data) => {
+            this.setState({cachedConnections: data||{}});
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onNewCachedConn(config, tag, cb) {
+        this.emit('newCachedConn', config).done((_data) => {
+            this.setState(prevState => {
+                const savedConn = {... prevState.cachedConnections, [config.name]: config};
+                const update = {...prevState, cachedConnections: savedConn};
+                return update;
+            });
+            cb();
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onRenameCachedConn(config, oldName, tag, cb) {
+        this.emit('renameCachedConn', {newName: config.name, oldName: oldName}).done((_data) => {
+            this.setState(prevState => {
+                let copy = JSON.parse(JSON.stringify(prevState.cachedConnections)); // copy
+                delete copy[oldName];
+                const savedConn =  {...copy, [config.name]: config};
+                const update = {...prevState, cachedConnections: savedConn};
+                return update;
+            });
+            cb();
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onDelCachedConn(config, tag) {
+        this.emit('delCachedConn', config).done((_data) => {
+            this.setState(prevState => {
+                let copy = JSON.parse(JSON.stringify(prevState.cachedConnections)); // copy
+                delete copy[config.name];
+                const update = {...prevState, cachedConnections: copy};
+                return update;
+            });
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
     onNavigate(match) {
         this.setState({match});
     }
@@ -140,72 +228,6 @@ class ApplicationStore extends BaseStore {
     }
     onCloseEditor() {
         this.setState({openEditor: false, input: ''});
-    }
-
-    onEditConn(config, tag, cb) {
-        this.emit('editConn', config).done((_data) => {
-            this.setState(prevState => {
-                const savedConn = {... prevState.savedConnections, [config.name]: {...prevState.savedConnections[config.name], ...config}};
-                const update = {...prevState, savedConnections: savedConn};
-                return update;
-            });
-            cb();
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
-    onGetConn(tag) {
-        this.emit('getConn').done((data) => {
-            this.setState({savedConnections: data||{}});
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
-    onNewConn(config, tag, cb) {
-        this.emit('newConn', config).done((_data) => {
-            this.setState(prevState => {
-                const savedConn = {... prevState.savedConnections, [config.name]: config};
-                const update = {...prevState, savedConnections: savedConn};
-                return update;
-            });
-            cb();
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
-    onRenameConn(config, oldName, tag, cb) {
-        this.emit('renameConn', {newName: config.name, oldName: oldName}).done((_data) => {
-            this.setState(prevState => {
-                let copy = JSON.parse(JSON.stringify(prevState.savedConnections)); // copy
-                delete copy[oldName];
-                const savedConn =  {...copy, [config.name]: config};
-                const update = {...prevState, savedConnections: savedConn};
-                return update;
-            });
-            cb();
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
-    onDelConn(config, tag) {
-        this.emit('delConn', config).done((_data) => {
-            this.setState(prevState => {
-                let copy = JSON.parse(JSON.stringify(prevState.savedConnections)); // copy
-                delete copy[config.name];
-                const update = {...prevState, savedConnections: copy};
-                return update;
-            });
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
-    onConnectToo(config, tag) {
-        this.connect('connToo', config, tag);
     }
 }
 

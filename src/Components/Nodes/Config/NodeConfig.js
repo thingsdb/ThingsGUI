@@ -71,6 +71,9 @@ const header = [
     ]},
     {ky: 'title6', title: 'QUERIES', labels: [
         {ky: 'result_size_limit', label: 'Result size limit', fn: scaleToBinBytes},
+        {ky: 'cached_queries', label: 'Cached queries'},
+        {ky: 'threshold_query_cache', label: 'Threshold query cache'},
+        {ky: 'cache_expiration_time', label: 'Cache expiration time', fn: (d) =>  moment.duration(d , 'second').humanize()},
     ]},
 
 ];

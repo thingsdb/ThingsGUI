@@ -32,6 +32,8 @@ const header = [
         {ky: 'average_query_duration', label: 'Average query duration', fn: (d) => d.toFixed(3) + ' s'},
         {ky: 'longest_query_duration', label: 'Longest query duration', fn: (d) => d.toFixed(3) + ' s'},
         {ky: 'largest_result_size', label: 'Largest result size', fn: scaleToBinBytes},
+        {ky: 'queries_from_cache', label: 'Queries from cache'},
+        {ky: 'wasted_cache', label: 'Wasted cache'},
     ]},
     {ky: 'title2', title: 'WATCHER', labels: [
         {ky: 'watcher_failed', label: 'Watcher failed'},

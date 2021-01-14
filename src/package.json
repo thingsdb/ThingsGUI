@@ -1,6 +1,6 @@
 {
   "name": "things-gui",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "ThingsGUI",
   "main": "index.js",
   "repository": {
@@ -55,9 +55,9 @@
   },
   "devDependencies": {
     "babel-eslint": "10.1.0",
-    "eslint": "6.8.0",
-    "eslint-plugin-react": "^7.17.0",
-    "eslint-plugin-react-hooks": "^2.5.1",
+    "eslint": "7.14.0",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "moment-locales-webpack-plugin": "^1.2.0"
   }
 }

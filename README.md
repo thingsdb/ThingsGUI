@@ -105,7 +105,7 @@ ThingsGUI can be started with the following command:
 things-gui
 ```
 
-The ThingsGUI web interface opens in your default browser and the web server listens on http://0.0.0.0:5000/.
+The ThingsGUI web interface opens in your default browser and the web server listens on http://localhost:5000/.
 
 If you want to change the default host and port for the web server, you can add  `-host` and `-port` argument flags. If you don't want ThingsGUI to open immediately in a browser on start, you can add the argument flag `-disable-open-browser.
 
@@ -142,6 +142,12 @@ You can save the connection configuration locally if you like to speed up the pr
 
 <img src="markdownImg/savedConnections.png?" alt="alt Login" style="zoom:80%;" />
 
+#### Fixed address mode
+When you configure an `.env` file containing `THINGSGUI_ADDRESS` then the GUI has a fixed address and the login only displays the [Authentication](#authentication). The `.env` variables that can be configured are:
+* `THINGSGUI_ADDRESS`: ThingsDB socket address
+* `THINGSGUI_AUTH_METHOD`: method of authentication; either a token, user+pass or both.
+* `THINGSGUI_SSL`: Needs a secure connection or not
+* `THINGSGUI_AIC`: Allow insecure certificates or not
 
 
 ## ThingsGUI tour
@@ -174,7 +180,7 @@ Basic information about the collection can be found in the __INFO__ container. I
 
 The __THINGS TREE__ panel contains a tree-like overview of all the [properties](https://docs.thingsdb.net/v0/overview/properties/) stored in the selected collection.
 
-Clicking a property will open a dialog where you can add, edit, delete and watch a property. It really depends on the type (e.g. string, integer, list, thing etc.) of the property which of the above mentioned actions are possible. A link to the code editor is also included. For example in the image above you can see two round icon buttons, indicating that this particular property has a delete action to delete this property from the root thing and it has an action that serves as a link to the code editor. 
+Clicking a property will open a dialog where you can add, edit, delete and watch a property. It really depends on the type (e.g. string, integer, list, thing etc.) of the property which of the above mentioned actions are possible. A link to the code editor is also included. For example in the image above you can see two round icon buttons, indicating that this particular property has a delete action to delete this property from the root thing and it has an action that serves as a link to the code editor.
 
 To modify the __root thing__ you need to click on the  <img src="markdownImg/keyToolIcon.png" alt="alt watch" style="zoom:40%;" /> icon that you can find at the bottom of the __THINGS TREE__ container under all the root properties.
 
@@ -198,7 +204,7 @@ __Need-to-know__
 
 * If there are still instances of the type you delete, then all instances will be converted to normal things. No properties will be removed in this process. With `type_count(..)` you can view the number of instances of a certain type.
 
-  
+
 
 ### Users
 
@@ -217,7 +223,7 @@ If you have `GRANT` rights it is possible to modify the [access rules](https://d
 
 #### Tokens (3)
 
-If you have `MODIFY` rights it is possible to add and delete access tokens of yourself. If it involves other users you need `GRANT` rights to do this. 
+If you have `MODIFY` rights it is possible to add and delete access tokens of yourself. If it involves other users you need `GRANT` rights to do this.
 
 
 
@@ -263,13 +269,13 @@ The [watcher](https://docs.thingsdb.net/v0/watching/) can be found in the side p
 
 
 
-You can add things to the watcher by entering the thing's id and scope in the input fields at the top of the watcher. 
+You can add things to the watcher by entering the thing's id and scope in the input fields at the top of the watcher.
 
-It is also possible to add things from within the __THINGS TREE__. As mentioned before, clicking a property in the __THINGS TREE__ panel opens up a dialog, if this property is of type `thing` or `custom type`, you find a watch button <img src="markdownImg/turnWatchingOnIcon.png" alt="alt watch" style="zoom:30%;" />. Clicking the button turns on watching. You see this thing appearing in the watcher. The same icon, but in green, also appears in the things tree to remind you that you are watching this thing. The watch button in the dialog will change to the turn-watching-off button<img src="markdownImg/turnWatchingOffIcon.png" alt="alt watch" style="zoom:30%;" />. 
+It is also possible to add things from within the __THINGS TREE__. As mentioned before, clicking a property in the __THINGS TREE__ panel opens up a dialog, if this property is of type `thing` or `custom type`, you find a watch button <img src="markdownImg/turnWatchingOnIcon.png" alt="alt watch" style="zoom:30%;" />. Clicking the button turns on watching. You see this thing appearing in the watcher. The same icon, but in green, also appears in the things tree to remind you that you are watching this thing. The watch button in the dialog will change to the turn-watching-off button<img src="markdownImg/turnWatchingOffIcon.png" alt="alt watch" style="zoom:30%;" />.
 
 
 
-What does it actually mean when you are watching a thing? Now you will get real time updates of that thing. You see every change that you did yourself or others. However watching goes as far (or actually as deep) as the next thing you encounter nested in the watched thing. For example if the thing you watch includes 3 properties `name`, `employees` and `address`, which are of type `string`, `list` and `thing` respectively. You will see the changes in `name` and`employees`, but not in `address`, because `address` is another thing, with another id. To watch the changes in `address` you can add `address` to the watch list directly by clicking the <img src="markdownImg/addWatchIcon.png" alt="alt watch" style="zoom:20%;" /> (or off course you can add it in any of the other ways mentioned previously). Now you have two things in your watch list, which you can watch closely. You can remove a thing from the watcher by clicking <img src="markdownImg/removeWatchIcon.png" alt="alt watch" style="zoom:20%;" /> (or by clicking the <img src="markdownImg/turnWatchingOffIcon.png" alt="alt watch" style="zoom:30%;" /> button in the thing's dialog from within the __THINGS TREE__). 
+What does it actually mean when you are watching a thing? Now you will get real time updates of that thing. You see every change that you did yourself or others. However watching goes as far (or actually as deep) as the next thing you encounter nested in the watched thing. For example if the thing you watch includes 3 properties `name`, `employees` and `address`, which are of type `string`, `list` and `thing` respectively. You will see the changes in `name` and`employees`, but not in `address`, because `address` is another thing, with another id. To watch the changes in `address` you can add `address` to the watch list directly by clicking the <img src="markdownImg/addWatchIcon.png" alt="alt watch" style="zoom:20%;" /> (or off course you can add it in any of the other ways mentioned previously). Now you have two things in your watch list, which you can watch closely. You can remove a thing from the watcher by clicking <img src="markdownImg/removeWatchIcon.png" alt="alt watch" style="zoom:20%;" /> (or by clicking the <img src="markdownImg/turnWatchingOffIcon.png" alt="alt watch" style="zoom:30%;" /> button in the thing's dialog from within the __THINGS TREE__).
 
 __Need-to-know__
 
@@ -277,7 +283,7 @@ __Need-to-know__
 
 * It is also possible to watch the procedures and types of a collection. Watching the root thing of a collection includes the procedures and types as well. You will find them in the watch list under __PROCEDURES__ and __TYPES__.
 
-  
+
 
 
 ### Editor

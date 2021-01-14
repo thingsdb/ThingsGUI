@@ -1,13 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
-import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 
 const useStyles = makeStyles(() => ({
+    cardAction: {
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        padding: 0
+    },
     dragger: {
         cursor: 'ns-resize',
     },
@@ -54,9 +59,9 @@ const DragdownCard = ({children}) => {
     return (
         <Card id='editor' style={{height: newHeight}} className={classes.background}>
             {children(newHeight)}
-            <Grid container item xs={12} alignItems="flex-end" justify="center" >
+            <CardActions disableSpacing className={classes.cardAction}>
                 <DragHandleIcon className={classes.dragger} onMouseDown={handleMousedown} />
-            </Grid>
+            </CardActions>
         </Card>
     );
 };

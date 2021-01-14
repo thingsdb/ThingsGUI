@@ -16,12 +16,12 @@ import ListConnections from './ListConnections';
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['loaded', 'connected', 'savedConnections']
+    keys: ['cachedConnections']
 }]);
 
 const tag = LoginTAG;
 
-const Login = ({connected, loaded, savedConnections}) => {
+const Login = ({cachedConnections}) => {
     const initialState = {
         form: {
             address: 'localhost:9200',
@@ -39,7 +39,7 @@ const Login = ({connected, loaded, savedConnections}) => {
             secureConnection: false,
         },
         oldName: '',
-        showNewConn: isObjectEmpty(savedConnections),
+        showNewConn: isObjectEmpty(cachedConnections),
         openSaveConn: false,
         editField: 'all',
     };
@@ -71,17 +71,17 @@ const Login = ({connected, loaded, savedConnections}) => {
     const handleClickSave = () => {
         switch(editField){
         case 'name':
-            oldName ? ApplicationActions.renameConn({...form, ...credentials, ...security}, oldName, tag, handleClickCloseSaveConn)
-                : ApplicationActions.newConn({...form, ...credentials, ...security}, tag, handleClickCloseSaveConn);
+            oldName ? ApplicationActions.renameCachedConn({...form, ...credentials, ...security}, oldName, tag, handleClickCloseSaveConn)
+                : ApplicationActions.newCachedConn({...form, ...credentials, ...security}, tag, handleClickCloseSaveConn);
             break;
         case 'credentials':
-            ApplicationActions.editConn({name: form.name, ...credentials}, tag, handleClickCloseSaveConn);
+            ApplicationActions.editCachedConn({name: form.name, ...credentials}, tag, handleClickCloseSaveConn);
             break;
         case 'security':
-            ApplicationActions.editConn({name: form.name, ...security}, tag, handleClickCloseSaveConn);
+            ApplicationActions.editCachedConn({name: form.name, ...security}, tag, handleClickCloseSaveConn);
             break;
         case 'address':
-            ApplicationActions.editConn(form, tag, handleClickCloseSaveConn);
+            ApplicationActions.editCachedConn(form, tag, handleClickCloseSaveConn);
             break;
         }
     };
@@ -91,7 +91,7 @@ const Login = ({connected, loaded, savedConnections}) => {
     };
 
     const handleClickOk = () => {
-        ApplicationActions.connect({...form, ...credentials, ...security}, tag);
+        ApplicationActions.connectToNew({...form, ...credentials, ...security}, tag);
     };
 
     const handleEditConn = (ky, val) => {
@@ -127,12 +127,11 @@ const Login = ({connected, loaded, savedConnections}) => {
                 <Edit form={form} credentials={credentials} security={security} onChange={handleOnChange} editField={editField} />
             </SimpleModal>
             <Dialog
-                open={loaded && !connected}
+                open
                 onClose={() => null}
                 aria-labelledby="form-dialog-title"
                 fullWidth
                 maxWidth="sm"
-                // onKeyDown={handleKeyPress}
             >
                 <DialogTitle id="form-dialog-title">
                     {'Login'}
@@ -150,7 +149,7 @@ const Login = ({connected, loaded, savedConnections}) => {
                     <DialogActions>
                         <Grid container>
                             <Grid item xs={6} container justify="flex-start" >
-                                <Collapse in={Boolean(savedConnections&&Object.keys(savedConnections).length)} timeout="auto" unmountOnExit>
+                                <Collapse in={Boolean(cachedConnections&&Object.keys(cachedConnections).length)} timeout="auto" unmountOnExit>
                                     <Grid item xs={3}>
                                         <Button onClick={handleClickBack} color="primary">
                                             {'Connections'}
@@ -177,9 +176,7 @@ const Login = ({connected, loaded, savedConnections}) => {
 };
 
 Login.propTypes = {
-    connected: ApplicationStore.types.connected.isRequired,
-    loaded: ApplicationStore.types.loaded.isRequired,
-    savedConnections: ApplicationStore.types.savedConnections.isRequired,
+    cachedConnections: ApplicationStore.types.cachedConnections.isRequired,
 };
 
 export default withStores(Login);

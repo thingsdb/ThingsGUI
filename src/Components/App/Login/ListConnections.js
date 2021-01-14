@@ -24,7 +24,7 @@ import Memo from './Memo';
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['savedConnections']
+    keys: ['cachedConnections']
 }]);
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const tag = LoginTAG;
 
-const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
+const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
     const classes = useStyles();
     const [openDetail, setOpenDetail] = React.useState({});
 
@@ -53,7 +53,7 @@ const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
     };
 
     const handleConnectToo = (name) => () => {
-        ApplicationActions.connectToo({name: name}, tag);
+        ApplicationActions.connectViaCache({name: name}, tag);
     };
 
     const handleClick = (ky, val) => () => {
@@ -61,7 +61,7 @@ const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
     };
 
     const handleDeleteConn = (name) => () => {
-        ApplicationActions.delConn({name: name}, tag);
+        ApplicationActions.delCachedConn({name: name}, tag);
     };
 
     const rows = [
@@ -71,7 +71,7 @@ const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
         {title: 'Secure connection', key: 'security', keyList: 'secureConnection', default: false},
     ];
 
-    const sortedConns = orderByName(Object.values(savedConnections));
+    const sortedConns = orderByName(Object.values(cachedConnections));
     return (
         <List>
             {sortedConns.map((v, i) => (
@@ -120,7 +120,7 @@ const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
                     </Collapse>
                 </React.Fragment>
             ))}
-            {isObjectEmpty(savedConnections) &&
+            {isObjectEmpty(cachedConnections) &&
                 <ListItem>
                     <ListItemText secondary="No saved connections" secondaryTypographyProps={{variant: 'caption'}} />
                 </ListItem>
@@ -135,7 +135,7 @@ const ListConnections = ({onClickNewConn, onEdit, savedConnections}) => {
 ListConnections.propTypes = {
     onClickNewConn: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired,
-    savedConnections: ApplicationStore.types.savedConnections.isRequired,
+    cachedConnections: ApplicationStore.types.cachedConnections.isRequired,
 };
 
 export default withStores(ListConnections);

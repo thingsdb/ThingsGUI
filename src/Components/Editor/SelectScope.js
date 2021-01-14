@@ -42,7 +42,6 @@ const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
                     fontSize: '2.125rem',
                 },
             }}
-
             onChange={handleOnChangeScope}
             style={{lineHeight: '2.2rem'}}
             value={name}

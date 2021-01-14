@@ -25,7 +25,7 @@ const PropertyVal = ({category, cb, customTypes, enums, onBlob, scope}) => {
     const [dataType, setDataType] = React.useState('str');
 
     const allTypes = allDataTypes([...customTypes[scope]||[], ...enums[scope]||[]]);
-    const dataTypes = category=='type'?allTypes: ['str', 'int', 'float', 'thing', 'bytes'];
+    const dataTypes = category=='type'?allTypes: ['str', 'int', 'float', 'thing', 'bytes', 'code'];
 
     React.useEffect(()=>{
         cb({propertyVal:val});

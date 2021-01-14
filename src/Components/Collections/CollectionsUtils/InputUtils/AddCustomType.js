@@ -18,73 +18,71 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const typeConv = {
-    'bool': ['bool'],
-    'bytes': ['bytes'],
-    'closure': ['closure'],
-    'error': ['error'],
-    'float': ['float'],
-    'int': ['int'],
-    'list': ['list'],
-    'nil': ['nil'],
-    'regex': ['regex'],
-    'set': ['set'],
-    'str': ['str'],
-    'thing': ['thing'],
-    'utf8': ['str'],
-    'raw': ['str', 'bytes'],
-    'uint': ['int'],
-    'pint': ['int'],
-    'nint': ['int'],
-    'number': ['int', 'float'],
+    'bool': ['bool', 'code', 'code'],
+    'bytes': ['bytes', 'code'],
+    'code': ['code'],
+    'closure': ['closure', 'code'],
+    'datetime': ['datetime'],
+    'error': ['error', 'code'],
+    'float': ['float', 'code'],
+    'int': ['int', 'code'],
+    'list': ['list', 'code'],
+    'nil': ['nil', 'code'],
+    'regex': ['regex', 'code'],
+    'set': ['set', 'code'],
+    'str': ['str', 'code'],
+    'thing': ['thing', 'code'],
+    'timeval': ['timeval'],
+    'utf8': ['str', 'code'],
+    'raw': ['str', 'bytes', 'code'],
+    'uint': ['int', 'code'],
+    'pint': ['int', 'code'],
+    'nint': ['int', 'code'],
+    'number': ['int', 'float', 'code'],
 };
 
+const optional = (t) => {
+    let ftype = [];
+    if (t.slice(-1)=='?') {
+        t = t.slice(0, -1);
+        ftype = ['nil'];
+    }
+    return([t, ftype]);
+};
+
+const fntype = (t, ftype, dataTypes) => {
+    if(t.slice(-1) == '>'){
+        t = t.split('<')[0];
+    }
+    return(t == 'any' ? dataTypes
+        : typeConv[t] ? [...ftype, ...typeConv[t]]
+            : [...ftype, t]);
+};
+
+const array = (t, ftype, arrayType, def, dataTypes) => {
+    let fchldtype;
+
+    ftype = [...ftype, arrayType];
+    t = t.slice(1, -1) ? t.slice(1, -1) : def;
+    [t, fchldtype] = optional(t);
+    fchldtype = fntype(t, ftype, dataTypes);
+
+    return([ftype, fchldtype]);
+};
 
 const typing = ([fprop, type], dataTypes) =>  {
     let t = type.trim();
-    let opt=false;
-    let arr=false;
     let ftype = [];
     let fchldtype = null;
 
-
-    if (t.slice(-1)=='?') {
-        opt = true;
-        t = t.slice(0, -1);
-    }
+    [t, ftype] = optional(t);
 
     if (t[0]=='[') {
-        arr=true;
-        ftype = opt?['nil', 'list']:['list'];
-        t = t.slice(1, -1)?t.slice(1, -1):'any';
+        [ftype, fchldtype] = array(t, ftype, 'list', 'any', dataTypes);
     } else if (t[0]=='{') {
-        arr=true;
-        ftype = opt?['nil', 'set']:['set'];
-        t = t.slice(1, -1)?t.slice(1, -1):'thing';
+        [ftype, fchldtype] = array(t, ftype, 'set', 'thing', dataTypes);
     } else {
-        if (opt) {
-            ftype= t=='any' ? dataTypes
-                : typeConv[t] ? ['nil', ...typeConv[t]]
-                    : ['nil', t];
-
-        } else {
-            ftype= t=='any' ? dataTypes
-                : typeConv[t] ? typeConv[t]
-                    : [t];
-        }
-    }
-
-    // if array, set childtypes
-    if (arr) {
-        if (t.slice(-1)=='?') {
-            t = t.slice(0, -1);
-            fchldtype= t=='any' ? dataTypes
-                : typeConv[t] ? ['nil', ...typeConv[t]]
-                    : ['nil', t];
-        } else {
-            fchldtype= t=='any' ? dataTypes
-                : typeConv[t] ? typeConv[t]
-                    : [t];
-        }
+        ftype = fntype(t, ftype, dataTypes);
     }
 
     return(
@@ -102,9 +100,7 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
     React.useEffect(() => {
         EditActions.updateVal(parentDispatch,`${type}{${array}}`, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
-    },
-    [],
-    );
+    },[]);
 
     const handleChangeType = (n) => ({target}) => {
         const {value} = target;
@@ -133,7 +129,6 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
     const typeObj = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
     const typeFields = typeObj?typeObj.fields.map(c=>typing(c, dataTypes)):[];
 
-
     return(
         typeFields&&(
             <Grid item xs={12}>
@@ -142,27 +137,29 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
                         <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
                             <Grid item xs={2}>
                                 <TextField
-                                    type="text"
-                                    name="property"
+                                    disabled
+                                    fullWidth
                                     label="Property"
+                                    margin="dense"
+                                    name="property"
+                                    type="text"
                                     value={fprop}
                                     variant="standard"
-                                    fullWidth
-                                    disabled
                                 />
                             </Grid>
                             <Grid item xs={2}>
                                 <TextField
-                                    type="text"
-                                    name="dataType"
+                                    disabled={ftype.length<2}
+                                    fullWidth
                                     label="Data type"
+                                    margin="dense"
+                                    name="dataType"
                                     onChange={handleChangeType(fprop)}
-                                    value={dataType[fprop]||ftype[0]}
-                                    variant="standard"
                                     select
                                     SelectProps={{native: true}}
-                                    fullWidth
-                                    disabled={ftype.length<2}
+                                    type="text"
+                                    value={dataType[fprop]||ftype[0]}
+                                    variant="standard"
                                 >
                                     {ftype.map( p => (
                                         <option key={p} value={p}>

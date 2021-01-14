@@ -125,20 +125,24 @@ const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
 const allDataTypes = (types) => {
     const dataTypes = [
-        'str',
-        'int',
-        'float',
         'bool',
         'bytes',
         'closure',
-        'regex',
+        'code',
+        'datetime',
         'error',
-        'nil',
+        'float',
+        'int',
         'list',
+        'nil',
+        'regex',
         'set',
+        'str',
         'thing',
+        'timeval',
         ...types.map(c=>c.name)
-    ];
+    ].sort();
+
     return(dataTypes);
 };
 
