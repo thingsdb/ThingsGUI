@@ -22,6 +22,7 @@ const typeConv = {
     'bytes': ['bytes'],
     'code': ['code'],
     'closure': ['closure'],
+    'datetime': ['datetime'],
     'error': ['error'],
     'float': ['float'],
     'int': ['int'],
@@ -31,6 +32,7 @@ const typeConv = {
     'set': ['set'],
     'str': ['str'],
     'thing': ['thing'],
+    'timeval': ['timeval'],
     'utf8': ['str'],
     'raw': ['str', 'bytes'],
     'uint': ['int'],
@@ -135,27 +137,29 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
                         <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
                             <Grid item xs={2}>
                                 <TextField
-                                    type="text"
-                                    name="property"
+                                    disabled
+                                    fullWidth
                                     label="Property"
+                                    margin="dense"
+                                    name="property"
+                                    type="text"
                                     value={fprop}
                                     variant="standard"
-                                    fullWidth
-                                    disabled
                                 />
                             </Grid>
                             <Grid item xs={2}>
                                 <TextField
-                                    type="text"
-                                    name="dataType"
+                                    disabled={ftype.length<2}
+                                    fullWidth
                                     label="Data type"
+                                    margin="dense"
+                                    name="dataType"
                                     onChange={handleChangeType(fprop)}
-                                    value={dataType[fprop]||ftype[0]}
-                                    variant="standard"
                                     select
                                     SelectProps={{native: true}}
-                                    fullWidth
-                                    disabled={ftype.length<2}
+                                    type="text"
+                                    value={dataType[fprop]||ftype[0]}
+                                    variant="standard"
                                 >
                                     {ftype.map( p => (
                                         <option key={p} value={p}>

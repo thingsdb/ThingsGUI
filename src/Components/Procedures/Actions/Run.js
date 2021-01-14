@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const dataTypes = ['str', 'int', 'float', 'bool', 'nil', 'list', 'thing']; // Supported types
+const dataTypes = ['bool', 'code', 'datetime', 'float', 'int', 'list', 'nil', 'str', 'thing', 'timeval']; // Supported types
 const tag = RunProcedureTAG;
 const scope = '@thingsdb';
 const Run = ({procedure}) => {

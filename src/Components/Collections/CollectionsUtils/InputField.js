@@ -15,7 +15,7 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identi
 
     // EditProvider needs a key to distinguish the instance
     switch(dataType){
-    case 'code': return <AddCode identifier={identifier} init={init} {...props} />;
+    case 'code': return <AddCode identifier={identifier} init={init} label="Fill in .ti code" link="https://docs.thingsdb.net/v0/collection-api/" numLines="4" />;
     case 'str': return <AddStr identifier={identifier} init={init} {...props} />;
     case 'int': return <AddInt identifier={identifier} init={init} {...props} />;
     case 'float': return <AddFloat identifier={identifier} init={init} {...props} />;
@@ -24,6 +24,8 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identi
     case 'regex': return <AddRegex identifier={identifier} init={init} {...props} />;
     case 'error': return <AddError identifier={identifier} init={init} {...props} />;
     case 'bytes': return <AddBlob identifier={identifier} init={init} {...props} />;
+    case 'datetime': return <AddCode identifier={identifier} init={init} label="Fill in a datetime" link="https://docs.thingsdb.net/v0/data-types/datetime/" numLines="1" />;
+    case 'timeval': return <AddCode identifier={identifier} init={init} label="Fill in a timeval" link="https://docs.thingsdb.net/v0/data-types/timeval/" numLines="1" />;
     case 'nil': return null;
     case 'thing': return(
         <EditProvider key={dataType}>

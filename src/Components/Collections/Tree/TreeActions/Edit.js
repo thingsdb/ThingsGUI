@@ -44,11 +44,13 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
         : child.type == 'closure' ? thing['/']
             : child.type == 'regex' ? thing['*']
                 : child.type == 'error' ? `err(${thing.error_code}, '${thing.error_msg}')`
-                    : thing;
+                    : child.type == 'datetime' ? `datetime("${thing}")`
+                        :child.type == 'timeval' ? `timeval(${thing})`
+                            : thing;
 
     return(
         <List disablePadding dense className={classes.list}>
-            <ListItem className={classes.listItem} >
+            <ListItem className={classes.listItem}>
                 <BuildQueryString
                     child={{
                         id: null,

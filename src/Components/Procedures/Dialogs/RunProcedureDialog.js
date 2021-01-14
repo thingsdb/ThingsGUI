@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const tag = RunProcedureDialogTAG;
-const dataTypes = ['str', 'int', 'float', 'bool', 'nil', 'list', 'thing']; // Supported types
+const dataTypes = ['bool', 'code', 'datetime', 'float', 'int', 'list', 'nil', 'str', 'thing', 'timeval']; // Supported types
 
 const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const classes = useStyles();

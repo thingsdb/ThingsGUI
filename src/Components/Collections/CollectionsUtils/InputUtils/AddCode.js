@@ -1,12 +1,14 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 /* eslint-disable react-hooks/exhaustive-deps */
+import Link from '@material-ui/core/Link';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
 import {EditActions, useEdit} from '../Context';
 
-const AddCode = ({identifier, init, ...props}) => {
+
+const AddCode = ({identifier, init, label, link, numLines}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
@@ -30,10 +32,16 @@ const AddCode = ({identifier, init, ...props}) => {
             onChange={handleOnChange}
             fullWidth
             multiline
-            rows="4"
+            rows={numLines}
             rowsMax="10"
-            variant="outlined"
-            {...props}
+            variant="standard"
+            label={label}
+            margin="dense"
+            helperText={
+                <Link target="_blank" href={link}>
+                    {link}
+                </Link>
+            }
         />
     );
 };
@@ -46,6 +54,9 @@ AddCode.defaultProps = {
 AddCode.propTypes = {
     identifier: PropTypes.string,
     init: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    label: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    numLines: PropTypes.string.isRequired,
 };
 
 export default AddCode;
