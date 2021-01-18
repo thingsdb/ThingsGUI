@@ -17,6 +17,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 const Edit = ({credentials, form, security, onChange, editField}) => {
     const [show, setShow] = React.useState(false);
     const [loginWith, setLoginWith] = React.useState(credentials.isToken? 'token':'pass');
+    const [clickAwayActive, setClickAwayActive] = React.useState(false);
 
     const showAll = editField==='all';
     const showAddress = editField==='address';
@@ -38,13 +39,15 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
 
     const handleOnChangeAddress = ({target}) => {
         const {value} = target;
+        setClickAwayActive(true);
         onChange('form', {address: value});
     };
 
     const handleClickAwayCheck = () => {
         if(showAll){
+            setClickAwayActive(false);
             const tls = form.address.startsWith('https://');
-            onChange('security', {secureConnection: tls});
+            onChange('security', {secureConnection: tls, insecureSkipVerify: false});
         }
     };
 
@@ -63,8 +66,13 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
     };
 
     const handleSwitchSSL = ({target}) => {
-        const {id, checked} = target;
-        onChange('security', {[id]: checked});
+        const {checked} = target;
+        onChange('security', {secureConnection: checked, insecureSkipVerify: false});
+    };
+
+    const handleSwitchISV = ({target}) => {
+        const {checked} = target;
+        onChange('security', {insecureSkipVerify: checked});
     };
 
     return (
@@ -84,7 +92,7 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
                 />
             </Collapse>
             <Collapse in={showAll||showAddress} timeout="auto" unmountOnExit>
-                <ClickAwayListener onClickAway={handleClickAwayCheck}>
+                <ClickAwayListener onClickAway={handleClickAwayCheck} touchEvent={clickAwayActive && 'onTouchEnd'} mouseEvent={clickAwayActive && 'onClick'}>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -187,7 +195,7 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
                                 checked={security.insecureSkipVerify}
                                 color="primary"
                                 id="insecureSkipVerify"
-                                onChange={handleSwitchSSL}
+                                onChange={handleSwitchISV}
                             />
                         )}
                         label="Allow insecure certificates"

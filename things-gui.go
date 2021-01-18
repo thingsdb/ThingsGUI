@@ -206,10 +206,7 @@ func open(url string) error { //https://stackoverflow.com/questions/39320371/how
 
 // newEditConnection saves a new connection or edits locally
 func (app *App) getEnvVariables() error {
-	err := godotenv.Load(app.envPath)
-	if err != nil {
-		fmt.Println(err)
-	}
+	godotenv.Load(app.envPath)
 	thingsguiAddress = os.Getenv("THINGSGUI_ADDRESS")
 	thingsguiAuthMethod = os.Getenv("THINGSGUI_AUTH_METHOD")
 	if os.Getenv("THINGSGUI_SSL") == "true" {
