@@ -209,7 +209,6 @@ func (app *App) getEnvVariables() error {
 	err := godotenv.Load(app.envPath)
 	if err != nil {
 		fmt.Println(err)
-		return fmt.Errorf("Error loading .env file")
 	}
 	thingsguiAddress = os.Getenv("THINGSGUI_ADDRESS")
 	thingsguiAuthMethod = os.Getenv("THINGSGUI_AUTH_METHOD")
