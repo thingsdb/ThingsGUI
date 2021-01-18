@@ -34,12 +34,13 @@ var (
 
 // App type
 type App struct {
+	client             map[string]*handlers.Client
+	disableOpenBrowser bool
+	envPath            string
 	host               string
 	port               uint16
 	server             *socketio.Server
-	disableOpenBrowser bool
 	timeout            uint16
-	client             map[string]*handlers.Client
 }
 
 // Init parses the flags
@@ -48,6 +49,7 @@ func (app *App) Init() {
 	var timeout uint
 
 	flag.StringVar(&app.host, "host", "localhost", "Specific host for the http webserver.")
+	flag.StringVar(&app.envPath, "env", ".env", "Path of .env file.")
 	flag.UintVar(&port, "port", 5000, "Specific port for the http webserver.")
 	flag.UintVar(&timeout, "timeout", 0, "Connect and query timeout in seconds")
 	flag.BoolVar(&app.disableOpenBrowser, "disable-open-browser", false, "opens ThingsGUI in your default browser")
@@ -203,8 +205,8 @@ func open(url string) error { //https://stackoverflow.com/questions/39320371/how
 }
 
 // newEditConnection saves a new connection or edits locally
-func getEnvVariables() error {
-	err := godotenv.Load()
+func (app *App) getEnvVariables() error {
+	err := godotenv.Load(app.envPath)
 	if err != nil {
 		fmt.Println(err)
 		return fmt.Errorf("Error loading .env file")
@@ -270,16 +272,16 @@ func (app *App) Start() {
 
 func main() {
 	var err error
-
-	err = getEnvVariables()
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	app := App{}
 
 	// init
 	app.Init()
+
+	err = app.getEnvVariables()
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	app.client = make(map[string]*handlers.Client)
 
 	options := &engineio.Options{
