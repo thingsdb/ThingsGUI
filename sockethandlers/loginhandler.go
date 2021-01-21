@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"bytes"
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -171,8 +173,28 @@ func ConnectViaCache(client *Client, data LoginData) (int, interface{}, util.Mes
 	return message.Status, resp, message
 }
 
+// AuthKey connects to ThingsDB via a key and API request to get the access token
+func AuthKey(client *Client, data map[string]string, address string, ssl bool, aic bool, tokenAPI string) (int, interface{}, util.Message) {
+	jsonData := map[string]string{"key": data["key"]} // url.Query().Get("key")}
+	jsonValue, _ := json.Marshal(jsonData)
+	response, err := http.Post(tokenAPI, "application/json", bytes.NewBuffer(jsonValue))
+	if err != nil {
+		return internalError(err)
+	}
+
+	type Resp struct {
+		Token string `json:"token"`
+	}
+
+	var resp Resp
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	d := map[string]string{"token": resp.Token}
+	return AuthToken(client, d, address, ssl, aic)
+}
+
 // AuthOnly checks if the address and auth method are provided in the .env file; in that case only auth can be supplied by the user
-func AuthOnly(client *Client, address string, authMethod string) (int, AuthResp, util.Message) {
+func AuthOnly(address string, authMethod string) (int, AuthResp, util.Message) {
 	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
 	var auth AuthResp
 	if address != "" {
@@ -197,7 +219,7 @@ func AuthToken(client *Client, data map[string]string, address string, ssl bool,
 		client,
 		mapping,
 	)
-
+	print(resp.Connected)
 	if resp.Connected {
 		client.Connection.EnableKeepAlive()
 		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}

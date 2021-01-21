@@ -13,7 +13,10 @@ const socket = io.connect(`${window.location.protocol}//${window.location.host}`
     reconnectionDelayMax: 5000,
     pingInterval: 10000,
     reconnectionAttempts: Infinity,
-    transports: ['websocket']
+    transports: ['websocket'],
+    // query: {
+    //     key: (new URL(window.location)).searchParams.get('key')
+    // }
 });
 
 class _SocketRequest {
