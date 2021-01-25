@@ -9,7 +9,7 @@ import Auth from './Auth';
 import Login from './Login';
 import InitStores from './InitStores';
 import {ApplicationActions, ApplicationStore} from '../../Stores';
-import {LoginTAG} from '../../constants';
+import {AuthTAG, LoginTAG} from '../../constants';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -80,7 +80,7 @@ const Root = ({authOnly, loaded, connected, seekConnection}) => {
         ApplicationActions.isAuthOnly();
         ApplicationActions.getCachedConn(LoginTAG); // errmsg shown at Login dialog
         if(key){
-            ApplicationActions.authKey(key);
+            ApplicationActions.authKey(key, AuthTAG);
         }
     },
     [],

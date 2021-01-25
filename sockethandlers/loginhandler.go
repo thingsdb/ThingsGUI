@@ -178,8 +178,13 @@ func AuthKey(client *Client, data map[string]string, address string, ssl bool, a
 	jsonData := map[string]string{"key": data["key"]} // url.Query().Get("key")}
 	jsonValue, _ := json.Marshal(jsonData)
 	response, err := http.Post(tokenAPI, "application/json", bytes.NewBuffer(jsonValue))
+
 	if err != nil {
 		return internalError(err)
+	}
+
+	if response.StatusCode < 200 || response.StatusCode > 299 {
+		return internalError(fmt.Errorf("Invalid key"))
 	}
 
 	type Resp struct {
