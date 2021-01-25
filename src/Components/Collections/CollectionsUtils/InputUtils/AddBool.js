@@ -1,4 +1,3 @@
-/*eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -10,8 +9,9 @@ const AddBool = ({identifier, init}) => {
     const {val} = editState;
 
     React.useEffect(()=>{
+        console.log('bool')
         EditActions.updateVal(dispatch, init, identifier);
-    }, []);
+    }, [dispatch, init, identifier]);
 
     const handleOnChange = (b) => {
         EditActions.updateVal(dispatch, b, identifier);

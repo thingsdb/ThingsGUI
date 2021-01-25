@@ -1,5 +1,4 @@
 /*eslint-disable react/jsx-props-no-spreading*/
-/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import Collapse from '@material-ui/core/Collapse';
@@ -28,7 +27,7 @@ const AddBlob = ({identifier, init}) => {
             });
         }
     },
-    [fileName],
+    [blob, dispatch, fileName, identifier, newBlob],
     );
 
     const handleDropzone = React.useCallback(acceptedFiles => {
