@@ -219,7 +219,7 @@ func AuthToken(client *Client, data map[string]string, address string, ssl bool,
 		client,
 		mapping,
 	)
-	print(resp.Connected)
+
 	if resp.Connected {
 		client.Connection.EnableKeepAlive()
 		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}

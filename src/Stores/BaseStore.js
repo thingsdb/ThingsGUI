@@ -14,9 +14,6 @@ const socket = io.connect(`${window.location.protocol}//${window.location.host}`
     pingInterval: 10000,
     reconnectionAttempts: Infinity,
     transports: ['websocket'],
-    // query: {
-    //     key: (new URL(window.location)).searchParams.get('key')
-    // }
 });
 
 class _SocketRequest {
