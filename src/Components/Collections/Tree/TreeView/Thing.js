@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core/styles';
 import ExploreIcon from '@material-ui/icons/Explore';
 import PropTypes from 'prop-types';

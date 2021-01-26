@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 import React from 'react';
 
 
 const EditActions = {
     update: (dispatch, data) => {
-        dispatch((state) => {
+        dispatch(() => {
             return {...data};
         });
     },

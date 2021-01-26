@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable no-unused-vars */
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -52,7 +50,7 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
             scope,
             queryString,
             tag,
-            (_data) => {
+            () => {
                 ProcedureActions.getProcedures(scope, tag, cb);
                 onClose();
             }

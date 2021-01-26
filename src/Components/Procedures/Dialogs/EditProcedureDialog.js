@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable no-unused-vars */
 import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -17,7 +15,7 @@ import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, EditName, ErrorMsg, SimpleModal} from '../../Util';
 import {EditProcedureDialogTAG} from '../../../constants';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     warnColor: {
         color: amber[700],
     },
@@ -48,7 +46,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             scope,
             closure,
             tag,
-            (_data) => {
+            () => {
                 handleSubmit();
             }
         );
@@ -60,7 +58,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             scope,
             queryString,
             tag,
-            (_data) => {
+            () => {
                 ProcedureActions.getProcedures(scope, tag, cb);
                 onClose();
             }

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
@@ -33,7 +32,6 @@ const ArrayLayout = ({child, onAdd, onRemove, fullWidth}) => {
     };
 
     return(
-
         <Grid container spacing={2}>
             {renderChildren()}
             <Grid container item spacing={1} xs={fullWidth?3:6} justify="center" alignItems="center">

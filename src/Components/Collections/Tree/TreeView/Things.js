@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable no-unused-vars */
 import Divider from '@material-ui/core/Divider';
 import ExploreIcon from '@material-ui/icons/Explore';
 import List from '@material-ui/core/List';
@@ -70,7 +68,7 @@ const ThingRoot = ({things, collection, watchIds}) => {
             >
                 <ThingRestrict
                     thing={things[collection.collection_id]}
-                    onChildren={(k, v, _i, _isArray) => (
+                    onChildren={(k, v) => (
                         <Thing
                             key={k}
                             className={classes.thing}

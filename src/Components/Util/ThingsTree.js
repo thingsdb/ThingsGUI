@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
@@ -111,7 +110,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                 scope,
                 queryString,
                 tag,
-                (_data) => {
+                () => {
                     getInfo(scope, tag);
                     onClose();
                 }

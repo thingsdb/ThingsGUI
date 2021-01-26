@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
@@ -198,7 +197,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                 scope,
                 queryString,
                 tag,
-                (_data) => {
+                () => {
                     getInfo(scope, tag);
                     handleBack();
                 }
@@ -238,7 +237,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         </React.Fragment>
     );
 
-    const badgeButton = (h, row, _i) => (
+    const badgeButton = (h, row) => (
         !(row.default!=null && h.ky=='default') ? (
             <ButtonBase onClick={handleMod(h.ky, row)}>
                 <EditIcon color="primary" style={{fontSize: 20}} />
