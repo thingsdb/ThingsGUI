@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 /* eslint-disable react-hooks/exhaustive-deps */
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
@@ -10,29 +9,29 @@ import {EditActions, useEdit} from '../Context';
 import {DownloadBlob} from '../../../Util';
 
 
-const AddEnum = ({enum_, enums, identifier, init}) => {
+const AddEnum = ({enumName, enums, identifier, init}) => {
     const [enumMem, setEnumMem] = React.useState('');
     const dispatch = useEdit()[1];
 
+    const _enum = (enums || []).find(e => e.name === enumName);
+    const isBlob = init.constructor === String && init.includes('/download/tmp/thingsdb-cache');
+
     React.useEffect(()=>{
-        const en = (enums||[]).find(e=>e.name==enum_);
-        if (en) {
-            const e = init ? init.constructor===Object ? en.members.find(i=> i[1]['#']==init['#']) : en.members.find(i=> i[1]==init)||en.members[0] : en.members[0];
+        if (_enum) {
+            const e = init ? (init.constructor === Object ? _enum.members.find(i => i[1]['#'] === init['#']) : _enum.members.find(i => i[1] === init) || _enum.members[0])
+                : _enum.members[0];
             setEnumMem(e[0]);
-            EditActions.updateVal(dispatch, `${enum_}{${e[0]}}`, identifier);
+            EditActions.updateVal(dispatch, `${enumName}{${e[0]}}`, identifier);
         }
-    }, [enums.length]);
+    }, [_enum]);
 
     const handleChangeEnum = ({target}) => {
         const {value} = target;
         setEnumMem(value);
-        EditActions.updateVal(dispatch, `${enum_}{${value}}`, identifier);
+        EditActions.updateVal(dispatch, `${enumName}{${value}}`, identifier);
     };
 
-    const en = (enums||[]).find(e=>e.name==enum_);
-    const isBlob = init.constructor===String&&init.includes('/download/tmp/thingsdb-cache');
-
-    return(en&&en.members?(
+    return(_enum&&_enum.members?(
         <Grid container>
             <Grid item xs={3}>
                 <TextField
@@ -46,7 +45,7 @@ const AddEnum = ({enum_, enums, identifier, init}) => {
                     SelectProps={{native: true}}
                     fullWidth
                 >
-                    { en.members.map((f, i) => (
+                    { _enum.members.map((f, i) => (
                         <option key={i} value={f[0]}>
                             {f[0]}
                         </option>
@@ -74,7 +73,7 @@ AddEnum.defaultProps = {
     init: '',
 };
 AddEnum.propTypes = {
-    enum_: PropTypes.string.isRequired,
+    enumName: PropTypes.string.isRequired,
     enums: PropTypes.arrayOf(PropTypes.object).isRequired,
     identifier: PropTypes.string,
     init: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),

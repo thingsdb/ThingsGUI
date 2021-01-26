@@ -26,7 +26,7 @@ const CollectionTree = ({collection}) => {
         setOpen(!open);
     };
     const handleRefresh = () => {
-        CollectionActions.queryWithReturnDepth(collection);
+        CollectionActions.queryWithReturnDepth(collection.collection_id, collection.name);
     };
     return(
         <React.Fragment>

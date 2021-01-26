@@ -52,7 +52,7 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identi
             <EditProvider key={dataType}>
                 <AddCustomType customTypes={customTypes} enums={enums} dataTypes={dataTypes} type={dataType} parentDispatch={dispatch} identifier={identifier} {...props} />
             </EditProvider>
-        ) : <AddEnum identifier={identifier} enum_={dataType} enums={enums} init={init} {...props} />
+        ) : <AddEnum identifier={identifier} enumName={dataType} enums={enums} init={init} {...props} />
     );
     }
 };

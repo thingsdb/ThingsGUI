@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
@@ -38,42 +36,61 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
     [open],
     );
 
-    React.useEffect(() => { // keep this useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-        setState({...state, queryString: queries[category](name, properties)});
-    },
-    [name, JSON.stringify(properties)], // TODO STRING
-    );
-
     const handleBlob = (b) => {
         setBlob({...blob, ...b});
     };
 
     const handleChange = ({target}) => {
         const {value} = target;
-        setState({...state, name: value});
+        const qry = queries[category](value, properties);
+        setState({...state, name: value, queryString: qry});
     };
 
     const handleChangeProperty = (index) => (property) => {
         setState(prevState => {
-            let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
+            let update = [...prevState.properties];
             update.splice(index, 1, {...prevState.properties[index], ...property});
-            return {...prevState, properties: update};
+            const qry = queries[category](prevState.name, update);
+            return {...prevState, properties: update, queryString: qry};
+        });
+    };
+
+    const handleAdd = (index) => {
+        setState(prevState => {
+            let update = [...prevState.properties];
+            update.splice(index, 1, {propertyName: '', propertyType: '', propertyVal: '', definition: ''});
+            const qry = queries[category](prevState.name, update);
+            return {...prevState, properties: update, queryString: qry};
         });
     };
 
     const handleRemove = (index) => {
-        setBlob(prevBlob => {
-            let val = properties[index].propertyVal;
-            let update = {...prevBlob};
-            delete update[val];
-            return {...update};
-        });
+        if(category === 'enum'){
+            setBlob(prevBlob => {
+                let val = properties[index].propertyVal;
+                let update = {...prevBlob};
+                delete update[val];
+                return {...update};
+            });
+        }
         setState(prevState => {
             let update = [...prevState.properties];
             update.splice(index, 1);
-            return {...prevState, properties: update};
+            const qry = queries[category](prevState.name, update);
+            return {...prevState, properties: update, queryString: qry};
         });
     };
+
+    const handleSwitching = (index) => (check) => {
+        setState(prevState => {
+            const prop = check ? {propertyType: ''} : {definition: ''};
+            let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
+            update.splice(index, 1, {...prevState.properties[index], ...prop});
+            const qry = queries[category](prevState.name, update);
+            return {...prevState, properties: update, queryString: qry};
+        });
+    };
+
 
     const handleClickOk = () => {
         const b = Object.keys(blob || {}).reduce((res, k) => {if(queryString.includes(k)){res[k]=blob[k];} return res;},{});
@@ -100,15 +117,6 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                 }
             );
         }
-    };
-
-    const handleSwitching = (index) => (check) => {
-        setState(prevState => {
-            const prop = check?{propertyType: ''}:{definition: ''};
-            let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
-            update.splice(index, 1, {...prevState.properties[index], ...prop});
-            return {...prevState, properties: update};
-        });
     };
 
     return (
@@ -188,7 +196,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                                             <Grid item xs={12}>
                                                 <PropertyName cb={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
                                             </Grid>
-                                            {category=='type' ? (
+                                            {category === 'type' ? (
                                                 <Switching
                                                     one={
                                                         <PropertyType cb={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
@@ -199,15 +207,16 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                                                     cb={handleSwitching(i)}
                                                 />
                                             ) : null}
-                                            {category=='enum' ? (
+                                            {category === 'enum' ? (
                                                 <Grid item xs={12}>
-                                                    <PropertyVal category={category} cb={handleChangeProperty(i)} onBlob={handleBlob} scope={scope} />
+                                                    <PropertyVal category={category} onVal={handleChangeProperty(i)} onBlob={handleBlob} scope={scope} />
                                                 </Grid>
                                             ) : null}
                                         </Grid>
                                     </EditProvider>
                                 )}
-                                fullWidth={category=='enum'}
+                                fullWidth={category === 'enum'}
+                                onAdd={handleAdd}
                                 onRemove={handleRemove}
                             />
                         </ListItem>

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {fade, makeStyles} from '@material-ui/core/styles';
 import DownloadIcon from '@material-ui/icons/SaveAlt';
@@ -20,7 +19,6 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: fade(theme.palette.common.black, 0.15),
             boxShadow: '0 0 8px 1px rgba(0, 140, 186, 0.5)',
         },
-        // margin: theme.spacing(2),
     },
 }));
 

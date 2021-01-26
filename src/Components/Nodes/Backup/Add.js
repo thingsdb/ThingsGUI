@@ -125,12 +125,12 @@ const Add = ({nodeId}) => {
                 </ListItem>
                 <ListItem dense disableGutters>
                     <SwitchOpen label="Add time [optional]" onCallback={handleSwitch('time')}>
-                        <TimePicker cb={handleChange('time')} />
+                        <TimePicker onTimestamp={handleChange('time')} />
                     </SwitchOpen>
                 </ListItem>
                 <ListItem dense disableGutters>
                     <SwitchOpen label="Add continuous repeat [optional]" onCallback={handleSwitch('repeat')}>
-                        <TimePeriodPicker cb={handleChange('repeat')} />
+                        <TimePeriodPicker onTimeProduct={handleChange('repeat')} />
                         <SwitchOpen label="Add maximum to files stored [optional]" onCallback={handleSwitch('maxFiles')}>
                             <ListItemText
                                 secondary={

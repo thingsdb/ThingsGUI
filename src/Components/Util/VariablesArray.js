@@ -25,7 +25,7 @@ const VariablesArray = ({input, cb}) => {
             cb(myItems);
         }
     },
-    [myItems.length],
+    [myItems],
     );
 
     React.useEffect(() => {
@@ -33,7 +33,7 @@ const VariablesArray = ({input, cb}) => {
             setMyItems(input);
         }
     },
-    [JSON.stringify(input)], // TODO stringify
+    [input],
     );
 
     const handleChange = ({target}) => {

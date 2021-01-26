@@ -19,7 +19,7 @@ const withStores = withVlow([{
 }]);
 
 
-const PropertyVal = ({category, cb, customTypes, enums, onBlob, scope}) => {
+const PropertyVal = ({category, onVal, customTypes, enums, onBlob, scope}) => {
     const editState = useEdit()[0];
     const {val, blob} = editState;
     const [dataType, setDataType] = React.useState('str');
@@ -28,7 +28,7 @@ const PropertyVal = ({category, cb, customTypes, enums, onBlob, scope}) => {
     const dataTypes = category=='type'?allTypes: ['str', 'int', 'float', 'thing', 'bytes', 'code'];
 
     React.useEffect(()=>{
-        cb({propertyVal:val});
+        onVal({propertyVal:val});
         onBlob(blob);
     }, [val]);
 
@@ -64,7 +64,7 @@ const PropertyVal = ({category, cb, customTypes, enums, onBlob, scope}) => {
 
 PropertyVal.propTypes = {
     category: PropTypes.string.isRequired,
-    cb: PropTypes.func.isRequired,
+    onVal: PropTypes.func.isRequired,
     onBlob: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
 

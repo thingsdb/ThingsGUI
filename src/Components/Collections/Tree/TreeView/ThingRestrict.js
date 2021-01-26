@@ -28,9 +28,9 @@ const ThingRestrict = ({thing, onChildren}) => {
         setMore({...more, [c]: true});
     };
 
-    const handleBounds = (bounds) => {
+    const handleBounds = React.useCallback((bounds) => {
         setBounds(bounds);
-    };
+    }, []);
 
     const renderThing = ([k, v, i=null], count) => {
         return(

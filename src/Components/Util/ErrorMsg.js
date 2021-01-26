@@ -1,6 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import Link from '@material-ui/core/Link';
@@ -21,11 +18,11 @@ const ErrorMsg = ({tag, msgError}) => {
         return () => {
             handleCloseError();
         };
-    }, []);
+    }, [handleCloseError]);
 
-    const handleCloseError = () => {
+    const handleCloseError = React.useCallback(() => {
         ErrorActions.removeMsgError(tag);
-    };
+    }, [tag]);
 
     const link = (msgErr) => {
         const startIndex = msgErr.search(/https/);

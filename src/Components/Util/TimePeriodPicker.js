@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
@@ -28,14 +27,14 @@ const timeUnit = [
     },
 ];
 
-const TimePeriodPicker = ({cb}) => {
+const TimePeriodPicker = ({onTimeProduct}) => {
     const [state, setState] = React.useState({
         number: '1',
         unit: timeUnit[0].value,
     });
 
     React.useEffect(() => {
-        cb(`${state.number }*${state.unit}`);
+        onTimeProduct(`${state.number }*${state.unit}`);
     },
     [state.number, state.unit],
     );
@@ -82,7 +81,7 @@ const TimePeriodPicker = ({cb}) => {
 };
 
 TimePeriodPicker.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onTimeProduct: PropTypes.func.isRequired,
 };
 
 export default TimePeriodPicker;

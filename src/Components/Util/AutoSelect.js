@@ -43,7 +43,7 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
     },[]);
 
     React.useEffect(() => {
-        if (input!=text) {
+        if (input !== text) {
             setText(input);
         }
     },

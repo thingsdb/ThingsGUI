@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { amber } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';

@@ -50,12 +50,11 @@ const Closure = ({input, cb}) => {
 
     React.useEffect(() => {
         const c = `|${variables}|${body}`;
-        const v = input;
-        if(v) {
-            if (v!=c) {
-                let endVarArr = v.indexOf('|', 1);
-                let vars = v.slice(1, endVarArr).split(',');
-                let b = v.slice(endVarArr+1);
+        if(input) {
+            if (input!=c) {
+                let endVarArr = input.indexOf('|', 1);
+                let vars = input.slice(1, endVarArr).split(',');
+                let b = input.slice(endVarArr+1);
                 setState({
                     variables: endVarArr==1?[]:vars,
                     body: b,
@@ -86,26 +85,6 @@ const Closure = ({input, cb}) => {
 
     return(
         <Grid className={classes.container} container>
-            {/* <Grid container item xs={12}>
-                <Typography variant="caption">
-                    {'Arguments'}
-                </Typography>
-            </Grid>
-            <Grid container item xs={12}>
-                <Grid item xs={1} container justify="flex-start">
-                    <Typography variant="h3" color="primary">
-                        {'|'}
-                    </Typography>
-                </Grid>
-                <Grid item xs={10} container >
-                    <VariablesArray cb={handleVarArray} input={variables} />
-                </Grid>
-                <Grid item xs={1} container justify="flex-end">
-                    <Typography variant="h3" color="primary">
-                        {'|'}
-                    </Typography>
-                </Grid>
-            </Grid> */}
             <Grid className={classes.border} container item xs={12}>
                 <Typography className={classes.label} variant="caption">
                     {'Arguments'}

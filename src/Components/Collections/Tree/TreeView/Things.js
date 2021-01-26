@@ -1,6 +1,5 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import Divider from '@material-ui/core/Divider';
 import ExploreIcon from '@material-ui/icons/Explore';
 import List from '@material-ui/core/List';
@@ -56,8 +55,8 @@ const ThingRoot = ({things, collection, watchIds}) => {
     const fetched = things.hasOwnProperty(collection.collection_id);
 
     React.useEffect(() => {
-        CollectionActions.queryWithReturnDepth(collection);
-    }, [collection.name]);
+        CollectionActions.queryWithReturnDepth(collection.collection_id, collection.name);
+    }, [collection.collection_id, collection.name]);
 
     const isWatching = Boolean(watchIds[collection.collection_id]);
 

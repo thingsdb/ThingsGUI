@@ -1,6 +1,4 @@
-/* eslint-disable react/no-multi-comp */
 /* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
@@ -67,12 +65,12 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     React.useEffect(() => {
         handleWpo();
     },
-    [item.wrap_only],
+    [handleWpo],
     );
 
-    const handleWpo = () => {
+    const handleWpo = React.useCallback(() => {
         setState({...initState, property: {...initState.property, wpo: item.wrap_only}});
-    };
+    }, [item.wrap_only]);
 
     const handleBlob = (b) => {
         setBlob(b);
@@ -323,11 +321,11 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                                         ) : null}
                                         {show.val? (
                                             <Grid item xs={12}>
-                                                <PropertyVal category={category} cb={handleQuery} onBlob={handleBlob} scope={scope} />
+                                                <PropertyVal category={category} onVal={handleQuery} onBlob={handleBlob} scope={scope} />
                                             </Grid>
                                         ) : show.valInit ? (
                                             <Grid item xs={12}>
-                                                <PropertyInitVal category={category} cb={handleQuery} onBlob={handleBlob} scope={scope} />
+                                                <PropertyInitVal category={category} onVal={handleQuery} onBlob={handleBlob} scope={scope} />
                                             </Grid>
                                         ) : null}
                                         {show.callback ? (
