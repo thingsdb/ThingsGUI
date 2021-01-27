@@ -30,6 +30,7 @@ var (
 	thingsguiAuthMethod string
 	thingsguiSsl        bool
 	thingsguiAic        bool
+	thingsguiTokenApi   string
 )
 
 // App type
@@ -75,8 +76,12 @@ func (app *App) SocketRouter() {
 		return nil
 	})
 
+	app.server.OnEvent("/", "authKey", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
+		return handlers.AuthKey(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic, thingsguiTokenApi)
+	})
+
 	app.server.OnEvent("/", "authOnly", func(s socketio.Conn) (int, handlers.AuthResp, util.Message) {
-		return handlers.AuthOnly(app.client[s.ID()], thingsguiAddress, thingsguiAuthMethod)
+		return handlers.AuthOnly(thingsguiAddress, thingsguiAuthMethod)
 	})
 
 	app.server.OnEvent("/", "authToken", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
@@ -216,6 +221,7 @@ func (app *App) getEnvVariables() error {
 		}
 
 	}
+	thingsguiTokenApi = os.Getenv("THINGSGUI_TOKEN_API")
 
 	return nil
 }

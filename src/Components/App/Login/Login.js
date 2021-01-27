@@ -115,7 +115,6 @@ const Login = ({cachedConnections}) => {
         });
     };
 
-
     return (
         <React.Fragment>
             <SimpleModal
