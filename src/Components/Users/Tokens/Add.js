@@ -135,7 +135,7 @@ const Add = ({user}) => {
                 </ListItem>
                 <Collapse in={switches.expirationTime} timeout="auto" unmountOnExit>
                     <ListItem>
-                        <TimePicker onTimestamp={handleExpirationTime} />
+                        <TimePicker onChange={handleExpirationTime} />
                     </ListItem>
                 </Collapse>
             </List>

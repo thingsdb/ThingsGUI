@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const VariablesArray = ({input, onVariables}) => {
+const VariablesArray = ({input, onChange}) => {
     const classes = useStyles();
     const [item, setItem] = React.useState('');
     const [error, setError] = React.useState('');
@@ -22,7 +22,7 @@ const VariablesArray = ({input, onVariables}) => {
     const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
         if(!deepEqual(myItems, input)) {
-            onVariables(myItems);
+            onChange(myItems);
         }
     },
     [myItems],
@@ -94,7 +94,7 @@ VariablesArray.defaultProps = {
 };
 
 VariablesArray.propTypes = {
-    onVariables: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     input: PropTypes.arrayOf(PropTypes.any),
 };
 

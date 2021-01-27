@@ -193,22 +193,22 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                                     <EditProvider>
                                         <Grid container item xs={12} spacing={1} alignItems="center" >
                                             <Grid item xs={12}>
-                                                <PropertyName onName={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
+                                                <PropertyName onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
                                             </Grid>
                                             {category === 'type' ? (
                                                 <Switching
                                                     one={
-                                                        <PropertyType onType={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
+                                                        <PropertyType onChange={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
                                                     }
                                                     two={
-                                                        <PropertyMethod onMethod={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
+                                                        <PropertyMethod onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
                                                     }
-                                                    onSwitching={handleSwitching(i)}
+                                                    onChange={handleSwitching(i)}
                                                 />
                                             ) : null}
                                             {category === 'enum' ? (
                                                 <Grid item xs={12}>
-                                                    <PropertyVal category={category} onVal={handleChangeProperty(i)} onBlob={handleBlob} scope={scope} />
+                                                    <PropertyVal category={category} onChange={handleChangeProperty(i)} onBlob={handleBlob} scope={scope} />
                                                 </Grid>
                                             ) : null}
                                         </Grid>

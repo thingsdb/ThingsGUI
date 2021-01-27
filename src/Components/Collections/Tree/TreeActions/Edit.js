@@ -69,14 +69,14 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
             <ListItem className={classes.listItem}>
                 {addNewProperty && (
                     <PropInit
-                        onName={handleOnChangeName}
+                        onChange={handleOnChangeName}
                         input={newProperty}
                         thing={thing}
                     />
                 )}
                 {canChangeType && (
                     <TypeInit
-                        onType={handleOnChangeType}
+                        onChange={handleOnChangeType}
                         type={child.type}
                         customTypes={customTypes}
                         dataTypes={dataTypes}

@@ -129,7 +129,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                             </Typography>
                         </ListItem>
                         <ListItem>
-                            <Closure input={closure} onClosure={handleClosure} />
+                            <Closure input={closure} onChange={handleClosure} />
                         </ListItem>
                         <ListItem>
                             <Grid container item xs={11} justify="flex-end">

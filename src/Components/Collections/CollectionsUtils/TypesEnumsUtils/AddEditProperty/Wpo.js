@@ -21,7 +21,7 @@ const WarnSwitch = withStyles({
     track: {},
 })(Switch);
 
-const Wpo = ({onWpo, input, disabled}) => {
+const Wpo = ({onChange, input, disabled}) => {
     const [switchIni, setSwitch] = React.useState(input);
 
     React.useEffect(()=>{
@@ -32,7 +32,7 @@ const Wpo = ({onWpo, input, disabled}) => {
         const {checked} = target;
         if(!disabled) {
             setSwitch(checked);
-            onWpo({wpo:checked});
+            onChange({wpo:checked});
         }
     };
 
@@ -57,13 +57,13 @@ const Wpo = ({onWpo, input, disabled}) => {
 };
 
 Wpo.defaultProps = {
-    onWpo: ()=>null,
+    onChange: ()=>null,
     input: false,
     disabled: false,
 };
 
 Wpo.propTypes = {
-    onWpo: PropTypes.func,
+    onChange: PropTypes.func,
     input: PropTypes.bool,
     disabled: PropTypes.bool,
 };

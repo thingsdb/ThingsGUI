@@ -4,13 +4,13 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
-const TimePicker = ({onTimestamp}) => {
+const TimePicker = ({onChange}) => {
     const [date, setDate] = React.useState(new Date().toISOString().slice(0, 10));
     const [time, setTime] = React.useState(new Date().toISOString().slice(11, 16));
 
     React.useEffect(() => {
         const timestamp = Date.parse(`${date}T${time}Z`)/1000;
-        onTimestamp(timestamp);
+        onChange(timestamp);
     },
     [time, date],
     );
@@ -56,7 +56,7 @@ const TimePicker = ({onTimestamp}) => {
 };
 
 TimePicker.propTypes = {
-    onTimestamp: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
 };
 
 export default TimePicker;

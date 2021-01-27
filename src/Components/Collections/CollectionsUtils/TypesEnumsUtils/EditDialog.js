@@ -305,31 +305,31 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                                     <Grid container item xs={12} spacing={1} alignItems="center" >
                                         {show.name ? (
                                             <Grid item xs={12}>
-                                                <PropertyName onName={ren?handleQueryRen:handleQuery} input={property.propertyName||''} />
+                                                <PropertyName onChange={ren?handleQueryRen:handleQuery} input={property.propertyName||''} />
                                             </Grid>
                                         ) : null}
                                         {show.type? (
                                             <Grid item xs={12}>
-                                                <PropertyType onType={handleQuery} dropdownItems={dataTypes} input={property.propertyType||''} />
+                                                <PropertyType onChange={handleQuery} dropdownItems={dataTypes} input={property.propertyType||''} />
                                             </Grid>
                                         ) : null}
                                         {show.method ? (
                                             <Grid item xs={12}>
-                                                <PropertyMethod onMethod={handleQuery} input={property.definition||''} />
+                                                <PropertyMethod onChange={handleQuery} input={property.definition||''} />
                                             </Grid>
                                         ) : null}
                                         {show.val? (
                                             <Grid item xs={12}>
-                                                <PropertyVal category={category} onVal={handleQuery} onBlob={handleBlob} scope={scope} />
+                                                <PropertyVal category={category} onChange={handleQuery} onBlob={handleBlob} scope={scope} />
                                             </Grid>
                                         ) : show.valInit ? (
                                             <Grid item xs={12}>
-                                                <PropertyInitVal category={category} onVal={handleQuery} onBlob={handleBlob} scope={scope} />
+                                                <PropertyInitVal category={category} onChange={handleQuery} onBlob={handleBlob} scope={scope} />
                                             </Grid>
                                         ) : null}
                                         {show.callback ? (
                                             <Grid item xs={12}>
-                                                <PropertyCallback onCallback={handleQuery} />
+                                                <PropertyCallback onChange={handleQuery} />
                                             </Grid>
                                         ) : null}
                                     </Grid>
@@ -350,7 +350,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                                 />
                             </ListItem>
                             <ListItem>
-                                <Wpo onWpo={handleQueryWpo} input={property.wpo} />
+                                <Wpo onChange={handleQueryWpo} input={property.wpo} />
                             </ListItem>
                         </Collapse>
                         <Collapse in={showWpoWarning} timeout="auto" unmountOnExit>

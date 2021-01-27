@@ -5,15 +5,15 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 
-const ThingsBounds = ({ onBounds, total }) => {
+const ThingsBounds = ({ onChange, total }) => {
     const [from, setFrom] = React.useState('0');
     const [till, setTill] = React.useState('99');
 
     React.useEffect(()=>{
         if(from.length){
-            onBounds({from:Number.parseInt(from), till:Number.parseInt(till)});
+            onChange({from:Number.parseInt(from), till:Number.parseInt(till)});
         }
-    }, [from, onBounds, till]);
+    }, [from, onChange, till]);
 
 
     const handleOnChangeFrom = ({target}) => {
@@ -71,7 +71,7 @@ const ThingsBounds = ({ onBounds, total }) => {
 };
 
 ThingsBounds.propTypes = {
-    onBounds:PropTypes.func.isRequired,
+    onChange:PropTypes.func.isRequired,
     total:PropTypes.number.isRequired,
 };
 

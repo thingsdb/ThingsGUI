@@ -27,14 +27,14 @@ const timeUnit = [
     },
 ];
 
-const TimePeriodPicker = ({onTimeProduct}) => {
+const TimePeriodPicker = ({onChange}) => {
     const [state, setState] = React.useState({
         number: '1',
         unit: timeUnit[0].value,
     });
 
     React.useEffect(() => {
-        onTimeProduct(`${state.number }*${state.unit}`);
+        onChange(`${state.number }*${state.unit}`);
     },
     [state.number, state.unit],
     );
@@ -81,7 +81,7 @@ const TimePeriodPicker = ({onTimeProduct}) => {
 };
 
 TimePeriodPicker.propTypes = {
-    onTimeProduct: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
 };
 
 export default TimePeriodPicker;

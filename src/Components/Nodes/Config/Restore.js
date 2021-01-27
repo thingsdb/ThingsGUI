@@ -124,7 +124,7 @@ const Restore = ({nodes}) => {
                         input={takeAccess}
                         labelOne="no"
                         labelTwo="yes"
-                        onCallback={handleTakeAccess}
+                        onChange={handleTakeAccess}
                     />
                 </Typography>
             </SimpleModal>

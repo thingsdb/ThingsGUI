@@ -126,7 +126,7 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
                             </Typography>
                         </ListItem>
                         <ListItem>
-                            <Closure onClosure={handleClosure} />
+                            <Closure onChange={handleClosure} />
                         </ListItem>
                     </List>
                 </Grid>

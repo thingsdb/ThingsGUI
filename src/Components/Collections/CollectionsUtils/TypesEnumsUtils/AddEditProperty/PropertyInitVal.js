@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const PropertyInitVal = ({category, onVal, onBlob, scope}) => {
+const PropertyInitVal = ({category, onChange, onBlob, scope}) => {
     const classes = useStyles();
     const [switchIni, setSwitch] = React.useState(false);
 
@@ -23,12 +23,12 @@ const PropertyInitVal = ({category, onVal, onBlob, scope}) => {
         const {checked} = target;
         setSwitch(checked);
         if (!checked) {
-            onVal({propertyVal:''});
+            onChange({propertyVal:''});
         }
     };
 
     const handleVal = (v) => {
-        onVal(v);
+        onChange(v);
     };
 
     const handleBlob = (b) => {
@@ -51,7 +51,7 @@ const PropertyInitVal = ({category, onVal, onBlob, scope}) => {
                 />
             </Grid>
             <Collapse className={classes.fullWidth} in={switchIni} timeout="auto" unmountOnExit>
-                <PropertyVal category={category} onVal={handleVal} onBlob={handleBlob} scope={scope} />
+                <PropertyVal category={category} onChange={handleVal} onBlob={handleBlob} scope={scope} />
             </Collapse>
         </React.Fragment>
     );
@@ -59,7 +59,7 @@ const PropertyInitVal = ({category, onVal, onBlob, scope}) => {
 
 PropertyInitVal.propTypes = {
     category: PropTypes.string.isRequired,
-    onVal: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     onBlob: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
 };

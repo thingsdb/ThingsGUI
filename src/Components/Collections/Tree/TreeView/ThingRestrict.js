@@ -59,7 +59,7 @@ const ThingRestrict = ({thing, onChildren}) => {
     return (
         <React.Fragment>
             {(isArray?thing.length:Object.values(thing).length)>100 && (
-                <ThingsBounds onBounds={handleBounds} total={isArray?thing.length:Object.keys(thing).length} />
+                <ThingsBounds onChange={handleBounds} total={isArray?thing.length:Object.keys(thing).length} />
             )}
             {renderChildren()}
         </React.Fragment>

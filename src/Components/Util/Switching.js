@@ -12,14 +12,14 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Switching = ({one, two, onSwitching}) => {
+const Switching = ({one, two, onChange}) => {
     const classes = useStyles();
     const [switchOI, setSwitch] = React.useState(false);
 
     const handleSwitch = ({target}) => {
         const {checked} = target;
         setSwitch(checked);
-        onSwitching(checked);
+        onChange(checked);
     };
 
     return (
@@ -54,7 +54,7 @@ const Switching = ({one, two, onSwitching}) => {
 };
 
 Switching.propTypes = {
-    onSwitching: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     one: PropTypes.object.isRequired,
     two: PropTypes.object.isRequired,
 };
