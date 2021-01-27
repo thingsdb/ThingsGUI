@@ -59,14 +59,6 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
                     />
                 </Grid>
             }
-            {/* {canDownload &&
-                <Grid item>
-                    <DownloadBlob
-                        val={thing}
-                        isFab
-                    />
-                </Grid>
-            } */}
         </React.Fragment>
     );
 };

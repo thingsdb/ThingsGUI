@@ -179,7 +179,13 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
     const handleClickOk = () => {
         handleCloseError();
-        const b = Object.keys(blob || {}).reduce((res, k) => {if(queryString.includes(k)){res[k]=blob[k];} return res;},{});
+        const b = Object.keys(blob || {}).reduce((res, k) => {
+            if(queryString.includes(k)){
+                res[k]=blob[k];
+            }
+            return res;
+        },{});
+
         if (Object.keys(b).length) {
             CollectionActions.blob(
                 scope,

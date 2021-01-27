@@ -92,7 +92,13 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
 
 
     const handleClickOk = () => {
-        const b = Object.keys(blob || {}).reduce((res, k) => {if(queryString.includes(k)){res[k]=blob[k];} return res;},{});
+        const b = Object.keys(blob || {}).reduce((res, k) => {
+            if(queryString.includes(k)){
+                res[k]=blob[k];
+            }
+            return res;
+        },{});
+
         if (Object.keys(b).length) {
             CollectionActions.blob(
                 scope,

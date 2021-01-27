@@ -30,7 +30,7 @@ const PropertyVal = ({category, onChange, customTypes, enums, onBlob, scope}) =>
     React.useEffect(()=>{
         onChange({propertyVal:val});
         onBlob(blob);
-    }, [val]);
+    }, [val, blob]);
 
     const handleOnChangeType = (t) => {
         setDataType(t);
