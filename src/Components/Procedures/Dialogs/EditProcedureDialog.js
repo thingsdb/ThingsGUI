@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const tag = EditProcedureDialogTAG;
-const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
+const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const classes = useStyles();
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');
@@ -59,7 +59,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             queryString,
             tag,
             () => {
-                ProcedureActions.getProcedures(scope, tag, cb);
+                ProcedureActions.getProcedures(scope, tag);
                 onClose();
             }
         );
@@ -129,7 +129,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
                             </Typography>
                         </ListItem>
                         <ListItem>
-                            <Closure input={closure} cb={handleClosure} />
+                            <Closure input={closure} onClosure={handleClosure} />
                         </ListItem>
                         <ListItem>
                             <Grid container item xs={11} justify="flex-end">
@@ -148,7 +148,6 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
 EditProcedureDialog.defaultProps = {
     button: null,
     procedure: {},
-    cb: () => null,
 };
 
 EditProcedureDialog.propTypes = {
@@ -157,7 +156,6 @@ EditProcedureDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     procedure: PropTypes.object,
     scope: PropTypes.string.isRequired,
-    cb: PropTypes.func,
 };
 
 export default EditProcedureDialog;

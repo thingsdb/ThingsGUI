@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-const AutoSelect = ({cb, label, dropdownItems, input}) => {
+const AutoSelect = ({onVal, label, dropdownItems, input}) => {
     const classes = useStyles();
     const textRef = React.useRef(null);
     const [text, setText] = React.useState(input);
@@ -81,7 +81,7 @@ const AutoSelect = ({cb, label, dropdownItems, input}) => {
 
     const handleText = (v) => {
         setText(v);
-        cb(v);
+        onVal(v);
     };
 
     return (
@@ -128,7 +128,7 @@ AutoSelect.defaultProps = {
 };
 
 AutoSelect.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onVal: PropTypes.func.isRequired,
     dropdownItems: PropTypes.arrayOf(PropTypes.string).isRequired,
     input: PropTypes.string,
     label: PropTypes.string.isRequired,

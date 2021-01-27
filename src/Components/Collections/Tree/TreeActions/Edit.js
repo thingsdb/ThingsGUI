@@ -69,14 +69,14 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
             <ListItem className={classes.listItem}>
                 {addNewProperty && (
                     <PropInit
-                        cb={handleOnChangeName}
+                        onName={handleOnChangeName}
                         input={newProperty}
                         thing={thing}
                     />
                 )}
                 {canChangeType && (
                     <TypeInit
-                        cb={handleOnChangeType}
+                        onType={handleOnChangeType}
                         type={child.type}
                         customTypes={customTypes}
                         dataTypes={dataTypes}
@@ -94,7 +94,6 @@ Edit.defaultProps = {
 },
 
 Edit.propTypes = {
-    // cb: PropTypes.func.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     enums: PropTypes.arrayOf(PropTypes.object).isRequired,
     parent: PropTypes.shape({

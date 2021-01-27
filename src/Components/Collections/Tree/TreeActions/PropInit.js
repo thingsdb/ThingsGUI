@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-const PropInit = ({cb, input, thing}) => {
+const PropInit = ({onName, input, thing}) => {
     const [error, setError] = React.useState('');
 
     const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
@@ -11,7 +11,7 @@ const PropInit = ({cb, input, thing}) => {
         const {value} = target;
         const err = errorTxt(value);
         setError(err);
-        cb(value);
+        onName(value);
     };
 
     return(
@@ -34,7 +34,7 @@ PropInit.defaultProps = {
 },
 
 PropInit.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onName: PropTypes.func.isRequired,
     input: PropTypes.string.isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
 };

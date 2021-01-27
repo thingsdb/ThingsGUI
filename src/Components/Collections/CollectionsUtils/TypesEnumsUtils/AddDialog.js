@@ -193,17 +193,17 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                                     <EditProvider>
                                         <Grid container item xs={12} spacing={1} alignItems="center" >
                                             <Grid item xs={12}>
-                                                <PropertyName cb={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
+                                                <PropertyName onName={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
                                             </Grid>
                                             {category === 'type' ? (
                                                 <Switching
                                                     one={
-                                                        <PropertyType cb={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
+                                                        <PropertyType onType={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
                                                     }
                                                     two={
-                                                        <PropertyMethod cb={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
+                                                        <PropertyMethod onMethod={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
                                                     }
-                                                    cb={handleSwitching(i)}
+                                                    onSwitching={handleSwitching(i)}
                                                 />
                                             ) : null}
                                             {category === 'enum' ? (

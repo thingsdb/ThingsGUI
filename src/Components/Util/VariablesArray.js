@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const VariablesArray = ({input, cb}) => {
+const VariablesArray = ({input, onVariables}) => {
     const classes = useStyles();
     const [item, setItem] = React.useState('');
     const [error, setError] = React.useState('');
@@ -22,7 +22,7 @@ const VariablesArray = ({input, cb}) => {
     const [myItems, setMyItems] = React.useState([]);
     React.useEffect(() => {
         if(!deepEqual(myItems, input)) {
-            cb(myItems);
+            onVariables(myItems);
         }
     },
     [myItems],
@@ -75,7 +75,6 @@ const VariablesArray = ({input, cb}) => {
             {myItems.map((listitem, index) => <Chip key={index} id={listitem} className={classes.chip} label={listitem} onDelete={handleClick(index)} color="primary" />)}
             <TextField
                 name="input"
-                // label="Variable"
                 type="text"
                 value={item}
                 spellCheck={false}
@@ -95,7 +94,7 @@ VariablesArray.defaultProps = {
 };
 
 VariablesArray.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onVariables: PropTypes.func.isRequired,
     input: PropTypes.arrayOf(PropTypes.any),
 };
 

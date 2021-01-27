@@ -40,7 +40,7 @@ const PropertyVal = ({category, onVal, customTypes, enums, onBlob, scope}) => {
         <React.Fragment>
             <Grid item xs={12}>
                 <TypeInit
-                    cb={handleOnChangeType}
+                    onType={handleOnChangeType}
                     type={''}
                     customTypes={customTypes[scope]||[]}
                     dataTypes={dataTypes}

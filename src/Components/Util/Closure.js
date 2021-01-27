@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Closure = ({input, cb}) => {
+const Closure = ({input, onClosure}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
         variables: [],
@@ -74,12 +74,12 @@ const Closure = ({input, cb}) => {
     const handleBody = ({target}) => {
         const {value} = target;
         setState({...state, body: value});
-        cb(`|${variables}|${value}`);
+        onClosure(`|${variables}|${value}`);
     };
 
     const handleVarArray = (items) => {
         setState({...state, variables: items});
-        cb(`|${items}|${body}`);
+        onClosure(`|${items}|${body}`);
     };
 
 
@@ -89,7 +89,7 @@ const Closure = ({input, cb}) => {
                 <Typography className={classes.label} variant="caption">
                     {'Arguments'}
                 </Typography>
-                <VariablesArray cb={handleVarArray} input={variables} />
+                <VariablesArray onVariables={handleVarArray} input={variables} />
             </Grid>
             <Grid item xs={12} container justify="center">
                 <TextField
@@ -116,7 +116,7 @@ Closure.defaultProps = {
 },
 
 Closure.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onClosure: PropTypes.func.isRequired,
     input: PropTypes.string,
 };
 

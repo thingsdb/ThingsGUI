@@ -4,12 +4,12 @@ import TextField from '@material-ui/core/TextField';
 
 import {EditActions, useEdit} from '../../CollectionsUtils';
 
-const TypeInit = ({type, customTypes, dataTypes, cb, input}) => {
+const TypeInit = ({type, customTypes, dataTypes, onType, input}) => {
     const dispatch = useEdit()[1];
 
     const handleOnChangeType = ({target}) => {
         const {value} = target;
-        cb(value);
+        onType(value);
         EditActions.update(dispatch, {
             query: '',
             val: '',
@@ -42,7 +42,7 @@ const TypeInit = ({type, customTypes, dataTypes, cb, input}) => {
 
 
 TypeInit.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onType: PropTypes.func.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     type: PropTypes.string.isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,

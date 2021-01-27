@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-const PropertyName = ({cb, input}) => {
+const PropertyName = ({onName, input}) => {
     const [propertyName, setPropertyName] = React.useState(input);
 
     const handlePropertyName = ({target}) => {
         const { value} = target;
         setPropertyName(value);
-        cb({propertyName:value});
+        onName({propertyName:value});
     };
 
     return (
@@ -27,7 +27,7 @@ const PropertyName = ({cb, input}) => {
 };
 
 PropertyName.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onName: PropTypes.func.isRequired,
     input: PropTypes.string.isRequired,
 };
 

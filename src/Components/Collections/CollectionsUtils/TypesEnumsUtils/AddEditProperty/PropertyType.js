@@ -4,13 +4,13 @@ import React from 'react';
 import {AutoSelect} from '../../../../Util';
 
 
-const PropertyType = ({cb, dropdownItems, input}) => {
+const PropertyType = ({onType, dropdownItems, input}) => {
     const handlePropertyType = (t) => {
-        cb({propertyType:t});
+        onType({propertyType:t});
     };
 
     return (
-        <AutoSelect cb={handlePropertyType} dropdownItems={dropdownItems} input={input} label="Definition" />
+        <AutoSelect onVal={handlePropertyType} dropdownItems={dropdownItems} input={input} label="Definition" />
     );
 };
 
@@ -19,7 +19,7 @@ PropertyType.defaultProps = {
 };
 
 PropertyType.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onType: PropTypes.func.isRequired,
     dropdownItems: PropTypes.arrayOf(PropTypes.string),
     input: PropTypes.string.isRequired,
 };

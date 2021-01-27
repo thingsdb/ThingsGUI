@@ -4,10 +4,10 @@ import Typography from '@material-ui/core/Typography';
 
 import {Closure} from '../../../../Util';
 
-const PropertyMethod = ({cb, input}) => {
+const PropertyMethod = ({onMethod, input}) => {
 
     const handleClosure = (c) => {
-        cb({definition:c});
+        onMethod({definition:c});
     };
 
     return (
@@ -15,13 +15,13 @@ const PropertyMethod = ({cb, input}) => {
             <Typography variant="caption">
                 {'Definition'}
             </Typography>
-            <Closure input={input} cb={handleClosure} />
+            <Closure input={input} onClosure={handleClosure} />
         </React.Fragment>
     );
 };
 
 PropertyMethod.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onMethod: PropTypes.func.isRequired,
     input: PropTypes.string.isRequired,
 };
 

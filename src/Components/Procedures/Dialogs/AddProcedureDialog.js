@@ -14,7 +14,7 @@ import {AddProcedureDialogTAG} from '../../../constants';
 
 const tag = AddProcedureDialogTAG;
 
-const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
+const AddProcedureDialog = ({button, open, onClose, scope}) => {
     const [state, setState] = React.useState({
         queryString: 'new_procedure("", )',
         procedureName: '',
@@ -51,7 +51,7 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
             queryString,
             tag,
             () => {
-                ProcedureActions.getProcedures(scope, tag, cb);
+                ProcedureActions.getProcedures(scope, tag);
                 onClose();
             }
         );
@@ -126,7 +126,7 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
                             </Typography>
                         </ListItem>
                         <ListItem>
-                            <Closure cb={handleClosure} />
+                            <Closure onClosure={handleClosure} />
                         </ListItem>
                     </List>
                 </Grid>
@@ -137,7 +137,6 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
 
 AddProcedureDialog.defaultProps = {
     button: null,
-    cb: ()=>null,
 };
 
 AddProcedureDialog.propTypes = {
@@ -145,7 +144,6 @@ AddProcedureDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
-    cb: PropTypes.func,
 };
 
 export default AddProcedureDialog;

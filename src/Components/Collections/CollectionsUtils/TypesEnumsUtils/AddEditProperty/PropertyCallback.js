@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const PropertyCallback = ({cb}) => {
+const PropertyCallback = ({onCallback}) => {
     const classes = useStyles();
     const [switchIni, setSwitch] = React.useState(false);
 
@@ -24,12 +24,12 @@ const PropertyCallback = ({cb}) => {
         const {checked} = target;
         setSwitch(checked);
         if (!checked) {
-            cb({propertyVal:''});
+            onCallback({propertyVal:''});
         }
     };
 
     const handleClosure = (c) => {
-        cb({callback:c});
+        onCallback({callback:c});
     };
 
     return (
@@ -51,14 +51,14 @@ const PropertyCallback = ({cb}) => {
                 <Typography variant="caption">
                     {'Callback'}
                 </Typography>
-                <Closure cb={handleClosure} />
+                <Closure onClosure={handleClosure} />
             </Collapse>
         </React.Fragment>
     );
 };
 
 PropertyCallback.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onCallback: PropTypes.func.isRequired,
 };
 
 export default PropertyCallback;
