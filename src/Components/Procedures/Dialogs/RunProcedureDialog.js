@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -23,7 +21,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const tag = RunProcedureDialogTAG;
-const dataTypes = ['str', 'int', 'float', 'bool', 'nil', 'list', 'thing']; // Supported types
+const dataTypes = ['bool', 'code', 'datetime', 'float', 'int', 'list', 'nil', 'str', 'thing', 'timeval']; // Supported types
 
 const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const classes = useStyles();

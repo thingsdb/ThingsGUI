@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
@@ -11,9 +10,6 @@ import {ListHeader} from '../../../Util';
 import {EditActions, useEdit} from '../Context';
 
 const useStyles = makeStyles(theme => ({
-    fullWidth: {
-        width: '100%',
-    },
     nested: {
         paddingLeft: theme.spacing(6),
         paddingBottom: theme.spacing(1),
@@ -65,16 +61,17 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
                             </Grid>
                             <Grid item xs={3}>
                                 <TextField
+                                    fullWidth
                                     id="dataType"
-                                    type="text"
-                                    name="dataType"
                                     label="Data type"
+                                    margin="dense"
+                                    name="dataType"
                                     onChange={handleChangeType(v)}
-                                    value={dataType[v]||dataTypes[0]}
-                                    variant="standard"
                                     select
                                     SelectProps={{native: true}}
-                                    fullWidth
+                                    type="text"
+                                    value={dataType[v]||dataTypes[0]}
+                                    variant="standard"
                                 >
                                     {dataTypes.map( p => (
                                         <option key={p} value={p}>

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core/styles';
 import ExploreIcon from '@material-ui/icons/Explore';
 import PropTypes from 'prop-types';
@@ -72,7 +71,7 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
     };
 
     const handleOpenClose = (open) => {
-        open && thing && thing['#'] && CollectionActions.queryWithReturnDepth(collection, thing['#']);
+        open && thing && thing['#'] && CollectionActions.queryWithReturnDepth(collection.collection_id, collection.name, thing['#']);
     };
 
     return (

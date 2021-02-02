@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import { amber } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';

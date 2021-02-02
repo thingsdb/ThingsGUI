@@ -19,7 +19,7 @@ const withStores = withVlow([{
 }]);
 
 
-const PropertyVal = ({category, cb, customTypes, enums, onBlob, scope}) => {
+const PropertyVal = ({category, onChange, customTypes, enums, onBlob, scope}) => {
     const editState = useEdit()[0];
     const {val, blob} = editState;
     const [dataType, setDataType] = React.useState('str');
@@ -28,9 +28,9 @@ const PropertyVal = ({category, cb, customTypes, enums, onBlob, scope}) => {
     const dataTypes = category=='type'?allTypes: ['str', 'int', 'float', 'thing', 'bytes', 'code'];
 
     React.useEffect(()=>{
-        cb({propertyVal:val});
+        onChange({propertyVal:val});
         onBlob(blob);
-    }, [val]);
+    }, [val, blob]);
 
     const handleOnChangeType = (t) => {
         setDataType(t);
@@ -40,7 +40,7 @@ const PropertyVal = ({category, cb, customTypes, enums, onBlob, scope}) => {
         <React.Fragment>
             <Grid item xs={12}>
                 <TypeInit
-                    cb={handleOnChangeType}
+                    onChange={handleOnChangeType}
                     type={''}
                     customTypes={customTypes[scope]||[]}
                     dataTypes={dataTypes}
@@ -64,7 +64,7 @@ const PropertyVal = ({category, cb, customTypes, enums, onBlob, scope}) => {
 
 PropertyVal.propTypes = {
     category: PropTypes.string.isRequired,
-    cb: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     onBlob: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
 

@@ -20,7 +20,7 @@ import (
 )
 
 // AppVersion exposes version information
-const AppVersion = "0.2.11"
+const AppVersion = "0.2.13"
 
 var connFile = ".things-gui_config"
 
@@ -30,16 +30,18 @@ var (
 	thingsguiAuthMethod string
 	thingsguiSsl        bool
 	thingsguiAic        bool
+	thingsguiTokenApi   string
 )
 
 // App type
 type App struct {
+	client             map[string]*handlers.Client
+	disableOpenBrowser bool
+	envPath            string
 	host               string
 	port               uint16
 	server             *socketio.Server
-	disableOpenBrowser bool
 	timeout            uint16
-	client             map[string]*handlers.Client
 }
 
 // Init parses the flags
@@ -48,6 +50,7 @@ func (app *App) Init() {
 	var timeout uint
 
 	flag.StringVar(&app.host, "host", "localhost", "Specific host for the http webserver.")
+	flag.StringVar(&app.envPath, "env", ".env", "Path of .env file.")
 	flag.UintVar(&port, "port", 5000, "Specific port for the http webserver.")
 	flag.UintVar(&timeout, "timeout", 0, "Connect and query timeout in seconds")
 	flag.BoolVar(&app.disableOpenBrowser, "disable-open-browser", false, "opens ThingsGUI in your default browser")
@@ -73,8 +76,12 @@ func (app *App) SocketRouter() {
 		return nil
 	})
 
+	app.server.OnEvent("/", "authKey", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
+		return handlers.AuthKey(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic, thingsguiTokenApi)
+	})
+
 	app.server.OnEvent("/", "authOnly", func(s socketio.Conn) (int, handlers.AuthResp, util.Message) {
-		return handlers.AuthOnly(app.client[s.ID()], thingsguiAddress, thingsguiAuthMethod)
+		return handlers.AuthOnly(thingsguiAddress, thingsguiAuthMethod)
 	})
 
 	app.server.OnEvent("/", "authToken", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
@@ -203,12 +210,8 @@ func open(url string) error { //https://stackoverflow.com/questions/39320371/how
 }
 
 // newEditConnection saves a new connection or edits locally
-func getEnvVariables() error {
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println(err)
-		return fmt.Errorf("Error loading .env file")
-	}
+func (app *App) getEnvVariables() error {
+	godotenv.Load(app.envPath)
 	thingsguiAddress = os.Getenv("THINGSGUI_ADDRESS")
 	thingsguiAuthMethod = os.Getenv("THINGSGUI_AUTH_METHOD")
 	if os.Getenv("THINGSGUI_SSL") == "true" {
@@ -218,6 +221,7 @@ func getEnvVariables() error {
 		}
 
 	}
+	thingsguiTokenApi = os.Getenv("THINGSGUI_TOKEN_API")
 
 	return nil
 }
@@ -270,16 +274,16 @@ func (app *App) Start() {
 
 func main() {
 	var err error
-
-	err = getEnvVariables()
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	app := App{}
 
 	// init
 	app.Init()
+
+	err = app.getEnvVariables()
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	app.client = make(map[string]*handlers.Client)
 
 	options := &engineio.Options{

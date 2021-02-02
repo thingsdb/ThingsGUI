@@ -16,7 +16,8 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
 
     keywords: [
         'nil', 'true', 'false',
-        ...Object.keys(Language.noType),
+        ...Object.keys(Language.collection),
+        ...Object.keys(Language.errors),
         ...Object.keys(Language.node),
         ...Object.keys(Language.thingsdb),
         ...Object.keys(Language.procedures),
@@ -25,6 +26,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         ...Object.keys(Language.types.datetime),
         ...Object.keys(Language.types.enum),
         ...Object.keys(Language.types.error),
+        ...Object.keys(Language.types.future),
         ...Object.keys(Language.types.list),
         ...Object.keys(Language.types.set),
         ...Object.keys(Language.types.string),
@@ -220,6 +222,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 ...Object.entries(Language.types.datetime),
                 ...Object.entries(Language.types.enum),
                 ...Object.entries(Language.types.error),
+                ...Object.entries(Language.types.future),
                 ...Object.entries(Language.types.list),
                 ...Object.entries(Language.types.set),
                 ...Object.entries(Language.types.string),
@@ -232,7 +235,15 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 documentation: v,
             })));
         } else {
-            suggestions.push(...Object.entries(Language.noType)
+            suggestions.push(...Object.entries(Language.collection)
+                .map(([k, v]) => ({
+                    label: k,
+                    kind: monaco.languages.CompletionItemKind.Function,
+                    insertText: k,
+                    documentation: v,
+                }))
+            );
+            suggestions.push(...Object.entries(Language.errors)
                 .map(([k, v]) => ({
                     label: k,
                     kind: monaco.languages.CompletionItemKind.Function,
@@ -322,7 +333,6 @@ class QueryInput extends React.Component {
             scrollBeyondLastLine: false
         });
         this._editor.setModel(model);
-        // onChange(input);
         this._subscription = model.onDidChangeContent(() => {
             let v = model.getValue();
             onChange(v);

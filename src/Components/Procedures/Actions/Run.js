@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -24,7 +23,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const dataTypes = ['str', 'int', 'float', 'bool', 'nil', 'list', 'thing']; // Supported types
+const dataTypes = ['bool', 'code', 'datetime', 'float', 'int', 'list', 'nil', 'str', 'thing', 'timeval']; // Supported types
 const tag = RunProcedureTAG;
 const scope = '@thingsdb';
 const Run = ({procedure}) => {

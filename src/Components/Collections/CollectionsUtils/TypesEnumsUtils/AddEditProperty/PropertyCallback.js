@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles } from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -17,7 +16,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const PropertyCallback = ({cb}) => {
+const PropertyCallback = ({onChange}) => {
     const classes = useStyles();
     const [switchIni, setSwitch] = React.useState(false);
 
@@ -25,12 +24,12 @@ const PropertyCallback = ({cb}) => {
         const {checked} = target;
         setSwitch(checked);
         if (!checked) {
-            cb({propertyVal:''});
+            onChange({propertyVal:''});
         }
     };
 
     const handleClosure = (c) => {
-        cb({callback:c});
+        onChange({callback:c});
     };
 
     return (
@@ -52,14 +51,14 @@ const PropertyCallback = ({cb}) => {
                 <Typography variant="caption">
                     {'Callback'}
                 </Typography>
-                <Closure cb={handleClosure} />
+                <Closure onChange={handleClosure} />
             </Collapse>
         </React.Fragment>
     );
 };
 
 PropertyCallback.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
 };
 
 export default PropertyCallback;

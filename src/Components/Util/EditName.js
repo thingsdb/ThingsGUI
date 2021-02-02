@@ -1,6 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import Collapse from '@material-ui/core/Collapse';
 import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/Close';
@@ -47,10 +44,8 @@ const EditName = ({name, fn}) => {
             <Collapse in={show} timeout="auto" unmountOnExit>
                 <TextField
                     name="newName"
-                    // label="Name"
                     type="text"
                     value={newName}
-                    // fullWidth
                     multiline
                     onChange={handleChange}
                     color="secondary"

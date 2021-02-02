@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import Grid from '@material-ui/core/Grid';
@@ -30,20 +29,22 @@ const tag = CollectionTypesTAG;
 const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
     const classes = useStyles();
     const types = [
-        'code',
-        'str',
-        'utf8',
-        'raw',
-        'bytes',
-        'bool',
-        'int',
-        'pint',
-        'nint',
-        'uint',
-        'float',
-        'number',
-        'thing',
         'any',
+        'bool',
+        'bytes',
+        'code',
+        'datetime',
+        'float',
+        'int',
+        'nint',
+        'number',
+        'pint',
+        'raw',
+        'str',
+        'thing',
+        'timeval',
+        'uint',
+        'utf8',
         ...(customTypes[scope]||[]).map(c=>c.name),
         ...(enums[scope]||[]).map(c=>c.name)
     ];
@@ -93,12 +94,12 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
     });
 
     React.useEffect(()=>{
-        handleRefreshTypes();
         handleRefreshEnums();
-    },[]);
+        handleRefreshTypes();
+    },[handleRefreshEnums, handleRefreshTypes]);
 
-    const handleRefreshEnums = () => EnumActions.getEnums(scope, tag);
-    const handleRefreshTypes = () => TypeActions.getTypes(scope, tag);
+    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, tag), [scope]);
+    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, tag), [scope]);
 
     const handleChange = (a) => (n, c) => {
         if (c=='type') {

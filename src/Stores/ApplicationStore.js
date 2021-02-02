@@ -10,6 +10,7 @@ import {ThingsdbActions} from './ThingsdbStore';
 
 const ApplicationActions = Vlow.createActions([
     'isAuthOnly',
+    'authKey',
     'authToken',
     'authPass',
     'closeEditor',
@@ -96,10 +97,12 @@ class ApplicationStore extends BaseStore {
 
     onConnected() {
         this.emit('connected').done((data) => {
+            this.setState({
+                connected: data.Connected,
+            });
             setTimeout(() => {
                 this.setState({
                     loaded: data.Loaded,
-                    connected: data.Connected,
                 });
             }, 2000);
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
@@ -120,6 +123,10 @@ class ApplicationStore extends BaseStore {
                 authMethod: data.AuthMethod,
             });
         });
+    }
+
+    onAuthKey(key, tag) {
+        this.connect('authKey', {key: key}, tag);
     }
 
     onAuthToken(token, tag) {

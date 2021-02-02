@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import Link from '@material-ui/core/Link';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';

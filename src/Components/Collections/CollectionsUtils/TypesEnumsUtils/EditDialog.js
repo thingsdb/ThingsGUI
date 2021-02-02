@@ -1,6 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Collapse from '@material-ui/core/Collapse';
@@ -67,12 +64,12 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     React.useEffect(() => {
         handleWpo();
     },
-    [item.wrap_only],
+    [handleWpo],
     );
 
-    const handleWpo = () => {
+    const handleWpo = React.useCallback(() => {
         setState({...initState, property: {...initState.property, wpo: item.wrap_only}});
-    };
+    }, [item.wrap_only]);
 
     const handleBlob = (b) => {
         setBlob(b);
@@ -182,7 +179,13 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
     const handleClickOk = () => {
         handleCloseError();
-        const b = Object.keys(blob || {}).reduce((res, k) => {if(queryString.includes(k)){res[k]=blob[k];} return res;},{});
+        const b = Object.keys(blob || {}).reduce((res, k) => {
+            if(queryString.includes(k)){
+                res[k]=blob[k];
+            }
+            return res;
+        },{});
+
         if (Object.keys(b).length) {
             CollectionActions.blob(
                 scope,
@@ -200,7 +203,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                 scope,
                 queryString,
                 tag,
-                (_data) => {
+                () => {
                     getInfo(scope, tag);
                     handleBack();
                 }
@@ -240,7 +243,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         </React.Fragment>
     );
 
-    const badgeButton = (h, row, _i) => (
+    const badgeButton = (h, row) => (
         !(row.default!=null && h.ky=='default') ? (
             <ButtonBase onClick={handleMod(h.ky, row)}>
                 <EditIcon color="primary" style={{fontSize: 20}} />
@@ -308,31 +311,31 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                                     <Grid container item xs={12} spacing={1} alignItems="center" >
                                         {show.name ? (
                                             <Grid item xs={12}>
-                                                <PropertyName cb={ren?handleQueryRen:handleQuery} input={property.propertyName||''} />
+                                                <PropertyName onChange={ren?handleQueryRen:handleQuery} input={property.propertyName||''} />
                                             </Grid>
                                         ) : null}
                                         {show.type? (
                                             <Grid item xs={12}>
-                                                <PropertyType cb={handleQuery} dropdownItems={dataTypes} input={property.propertyType||''} />
+                                                <PropertyType onChange={handleQuery} dropdownItems={dataTypes} input={property.propertyType||''} />
                                             </Grid>
                                         ) : null}
                                         {show.method ? (
                                             <Grid item xs={12}>
-                                                <PropertyMethod cb={handleQuery} input={property.definition||''} />
+                                                <PropertyMethod onChange={handleQuery} input={property.definition||''} />
                                             </Grid>
                                         ) : null}
                                         {show.val? (
                                             <Grid item xs={12}>
-                                                <PropertyVal category={category} cb={handleQuery} onBlob={handleBlob} scope={scope} />
+                                                <PropertyVal category={category} onChange={handleQuery} onBlob={handleBlob} scope={scope} />
                                             </Grid>
                                         ) : show.valInit ? (
                                             <Grid item xs={12}>
-                                                <PropertyInitVal category={category} cb={handleQuery} onBlob={handleBlob} scope={scope} />
+                                                <PropertyInitVal category={category} onChange={handleQuery} onBlob={handleBlob} scope={scope} />
                                             </Grid>
                                         ) : null}
                                         {show.callback ? (
                                             <Grid item xs={12}>
-                                                <PropertyCallback cb={handleQuery} />
+                                                <PropertyCallback onChange={handleQuery} />
                                             </Grid>
                                         ) : null}
                                     </Grid>
@@ -353,7 +356,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                                 />
                             </ListItem>
                             <ListItem>
-                                <Wpo cb={handleQueryWpo} input={property.wpo} />
+                                <Wpo onChange={handleQueryWpo} input={property.wpo} />
                             </ListItem>
                         </Collapse>
                         <Collapse in={showWpoWarning} timeout="auto" unmountOnExit>

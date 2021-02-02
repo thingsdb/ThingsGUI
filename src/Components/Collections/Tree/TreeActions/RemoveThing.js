@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
@@ -19,15 +18,11 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
     const [query, setQuery] = React.useState('');
 
     React.useEffect(() => {
-        handleBuildQuery(child, parent);
-    }, [child.index, child.id, child.name, parent.id, parent.name, parent.type]);
-
-    const handleBuildQuery = (child, parent) => {
         const q = parent.type === 'thing' ? `#${parent.id}.del('${child.name}');`
             : parent.type === 'set' ? `#${parent.id}.${parent.name}.remove(#${child.id});`
                 : `#${parent.id}.${parent.name}.splice(${child.index}, 1);`;
         setQuery(q);
-    };
+    }, [child.index, child.id, child.name, parent.id, parent.name, parent.type]);
 
     const handleClickOpen = () => {
         setShow(true);

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -18,25 +17,27 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const typeConv = {
-    'bool': ['bool'],
-    'bytes': ['bytes'],
+    'bool': ['bool', 'code', 'code'],
+    'bytes': ['bytes', 'code'],
     'code': ['code'],
-    'closure': ['closure'],
-    'error': ['error'],
-    'float': ['float'],
-    'int': ['int'],
-    'list': ['list'],
-    'nil': ['nil'],
-    'regex': ['regex'],
-    'set': ['set'],
-    'str': ['str'],
-    'thing': ['thing'],
-    'utf8': ['str'],
-    'raw': ['str', 'bytes'],
-    'uint': ['int'],
-    'pint': ['int'],
-    'nint': ['int'],
-    'number': ['int', 'float'],
+    'closure': ['closure', 'code'],
+    'datetime': ['datetime'],
+    'error': ['error', 'code'],
+    'float': ['float', 'code'],
+    'int': ['int', 'code'],
+    'list': ['list', 'code'],
+    'nil': ['nil', 'code'],
+    'regex': ['regex', 'code'],
+    'set': ['set', 'code'],
+    'str': ['str', 'code'],
+    'thing': ['thing', 'code'],
+    'timeval': ['timeval'],
+    'utf8': ['str', 'code'],
+    'raw': ['str', 'bytes', 'code'],
+    'uint': ['int', 'code'],
+    'pint': ['int', 'code'],
+    'nint': ['int', 'code'],
+    'number': ['int', 'float', 'code'],
 };
 
 const optional = (t) => {
@@ -135,27 +136,29 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
                         <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
                             <Grid item xs={2}>
                                 <TextField
-                                    type="text"
-                                    name="property"
+                                    disabled
+                                    fullWidth
                                     label="Property"
+                                    margin="dense"
+                                    name="property"
+                                    type="text"
                                     value={fprop}
                                     variant="standard"
-                                    fullWidth
-                                    disabled
                                 />
                             </Grid>
                             <Grid item xs={2}>
                                 <TextField
-                                    type="text"
-                                    name="dataType"
+                                    disabled={ftype.length<2}
+                                    fullWidth
                                     label="Data type"
+                                    margin="dense"
+                                    name="dataType"
                                     onChange={handleChangeType(fprop)}
-                                    value={dataType[fprop]||ftype[0]}
-                                    variant="standard"
                                     select
                                     SelectProps={{native: true}}
-                                    fullWidth
-                                    disabled={ftype.length<2}
+                                    type="text"
+                                    value={dataType[fprop]||ftype[0]}
+                                    variant="standard"
                                 >
                                     {ftype.map( p => (
                                         <option key={p} value={p}>

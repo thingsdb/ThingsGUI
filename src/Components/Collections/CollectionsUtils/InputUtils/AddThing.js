@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -33,7 +32,7 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
         EditActions.updateVal(parentDispatch, arr, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
     },
-    [array.length],
+    [array, blob, identifier, parentDispatch],
     );
 
     const handleChangeProperty = ({target}) => {
@@ -75,29 +74,31 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
                 <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
                     <Grid item xs={3}>
                         <TextField
+                            autoFocus
+                            fullWidth
                             id="property"
-                            type="text"
-                            name="property"
                             label="Property"
+                            margin="dense"
+                            name="property"
                             onChange={handleChangeProperty}
+                            type="text"
                             value={property}
                             variant="standard"
-                            fullWidth
-                            autoFocus
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
+                            fullWidth
                             id="dataType"
-                            type="text"
-                            name="dataType"
                             label="Data type"
+                            margin="dense"
+                            name="dataType"
                             onChange={handleChangeType}
-                            value={dataType}
-                            variant="standard"
                             select
                             SelectProps={{native: true}}
-                            fullWidth
+                            type="text"
+                            value={dataType}
+                            variant="standard"
                         >
                             {dataTypes.map( p => (
                                 <option key={p} value={p}>

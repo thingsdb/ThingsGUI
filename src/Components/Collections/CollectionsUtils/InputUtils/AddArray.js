@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -25,18 +24,12 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
     const {array, val, blob} = editState;
 
     React.useEffect(() => {
-        setDataType(childTypes[0]||dataTypes[0]);
-    },
-    [childTypes.length, dataTypes.length],
-    );
-
-    React.useEffect(() => {
         let arr = isSet?`set([${array}])`:`[${array}]`;
 
         EditActions.updateVal(parentDispatch, arr, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
     },
-    [array.length],
+    [array, blob, identifier, isSet, parentDispatch],
     );
 
     const handleChange = ({target}) => {
@@ -75,16 +68,17 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
                     {childTypes.length == 1 ? null : (
                         <Grid item xs={4}>
                             <TextField
+                                fullWidth
                                 id="dataType"
-                                type="text"
-                                name="dataType"
                                 label="Data type"
+                                margin="dense"
+                                name="dataType"
                                 onChange={handleChange}
-                                value={dataType}
-                                variant="standard"
                                 select
                                 SelectProps={{native: true}}
-                                fullWidth
+                                type="text"
+                                value={dataType}
+                                variant="standard"
                             >
                                 {(childTypes.length?childTypes:dataTypes).map(p => (
                                     <option key={p} value={p}>

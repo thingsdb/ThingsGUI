@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {withVlow} from 'vlow';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
@@ -44,13 +43,13 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
 
     React.useEffect(() => {
         handleGetAdditionals();
-    }, [scope]);
+    }, [handleGetAdditionals]);
 
-    const handleRefreshEnums = () => EnumActions.getEnums(scope, tag);
-    const handleRefreshTypes = () => TypeActions.getTypes(scope, tag);
-    const handleRefreshProcedures = () => ProcedureActions.getProcedures(scope, tag);
+    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, tag), [scope, tag]);
+    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, tag), [scope, tag]);
+    const handleRefreshProcedures = React.useCallback(() => ProcedureActions.getProcedures(scope, tag), [scope, tag]);
 
-    const handleGetAdditionals = () => {
+    const handleGetAdditionals = React.useCallback(() => {
         if (scope&&!scope.includes('@node')) {
             handleRefreshProcedures();
             if (!scope.includes('@thingsdb')) {
@@ -58,7 +57,7 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
                 handleRefreshEnums();
             }
         }
-    };
+    }, [handleRefreshEnums, handleRefreshTypes, handleRefreshProcedures, scope]);
 
     const makeTypeInstanceInit = (n, customTypeNames, customTypes, circularRefFlag, target) => {
         if (customTypeNames.includes(n)) {

@@ -1,6 +1,4 @@
 /*eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -72,11 +70,10 @@ const UserAccess = ({user, collections, close}) => {
         return ({[scope]: s});
     };
 
-    const scopes = getScopes(collections)[0];
-
 
     React.useEffect(() => {
         let s = {};
+        const scopes = getScopes(collections)[0];
         scopes.forEach(({_name, value}) => {
             s = Object.assign({}, s, getSwitches(value, ''));
         });
@@ -85,7 +82,7 @@ const UserAccess = ({user, collections, close}) => {
         });
         setSwitches(s);
     },
-    [user, collections.length]
+    [user, collections]
     );
 
 

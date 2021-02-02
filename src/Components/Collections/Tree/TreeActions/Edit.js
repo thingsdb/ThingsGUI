@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import List from '@material-ui/core/List';
@@ -44,11 +43,13 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
         : child.type == 'closure' ? thing['/']
             : child.type == 'regex' ? thing['*']
                 : child.type == 'error' ? `err(${thing.error_code}, '${thing.error_msg}')`
-                    : thing;
+                    : child.type == 'datetime' ? `datetime("${thing}")`
+                        :child.type == 'timeval' ? `timeval(${thing})`
+                            : thing;
 
     return(
         <List disablePadding dense className={classes.list}>
-            <ListItem className={classes.listItem} >
+            <ListItem className={classes.listItem}>
                 <BuildQueryString
                     child={{
                         id: null,
@@ -68,14 +69,14 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
             <ListItem className={classes.listItem}>
                 {addNewProperty && (
                     <PropInit
-                        cb={handleOnChangeName}
+                        onChange={handleOnChangeName}
                         input={newProperty}
                         thing={thing}
                     />
                 )}
                 {canChangeType && (
                     <TypeInit
-                        cb={handleOnChangeType}
+                        onChange={handleOnChangeType}
                         type={child.type}
                         customTypes={customTypes}
                         dataTypes={dataTypes}
@@ -93,7 +94,6 @@ Edit.defaultProps = {
 },
 
 Edit.propTypes = {
-    // cb: PropTypes.func.isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     enums: PropTypes.arrayOf(PropTypes.object).isRequired,
     parent: PropTypes.shape({
