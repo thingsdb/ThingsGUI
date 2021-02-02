@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
@@ -7,21 +6,22 @@ import React from 'react';
 import RemoveIcon from '@material-ui/icons/Remove';
 
 
-const ArrayLayout = ({child, onRemove, fullWidth}) => {
-    const [items, setItems] = React.useState(1);
+const ArrayLayout = ({child, onAdd, onRemove, fullWidth}) => {
+    const [count, setCount] = React.useState(1);
 
     const handleAdd = () => {
-        setItems(items+1);
+        setCount(count+1);
+        onAdd(count);
     };
 
     const handleRemove = () => {
-        setItems(items-1);
-        onRemove(items-1);
+        setCount(count-1);
+        onRemove(count-1);
     };
 
     const renderChildren = () => {
         const children = [];
-        for (let i = 0; i < items; i++) {
+        for (let i = 0; i < count; i++) {
             children.push(
                 <Grid key={i} item xs={fullWidth?9:6}>
                     {child(i)}
@@ -32,7 +32,6 @@ const ArrayLayout = ({child, onRemove, fullWidth}) => {
     };
 
     return(
-
         <Grid container spacing={2}>
             {renderChildren()}
             <Grid container item spacing={1} xs={fullWidth?3:6} justify="center" alignItems="center">
@@ -42,7 +41,7 @@ const ArrayLayout = ({child, onRemove, fullWidth}) => {
                     </Fab>
                 </Grid>
                 <Grid item>
-                    <Fab color="primary" onClick={handleRemove} disabled={items==1} size="small">
+                    <Fab color="primary" onClick={handleRemove} disabled={count==1} size="small">
                         <RemoveIcon fontSize="small" />
                     </Fab>
                 </Grid>
@@ -53,11 +52,13 @@ const ArrayLayout = ({child, onRemove, fullWidth}) => {
 };
 ArrayLayout.defaultProps = {
     fullWidth: false,
+    onAdd: () => null
 };
 
 ArrayLayout.propTypes = {
     child: PropTypes.func.isRequired,
     fullWidth: PropTypes.bool,
+    onAdd: PropTypes.func,
     onRemove: PropTypes.func.isRequired,
 };
 

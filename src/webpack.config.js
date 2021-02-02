@@ -2,6 +2,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
@@ -11,6 +12,7 @@ const BUILD_DIR = path.resolve(__dirname, '../static/js');
 const APP_DIR = path.resolve(__dirname, '');
 
 const config = {
+    mode: process.env.NODE_ENV === 'production' ? 'production': 'development',
     entry: APP_DIR + '/Components/index.js',
     output: {
         path: BUILD_DIR,
@@ -20,11 +22,13 @@ const config = {
     module: {
         rules: [{
             test: /\.js?/,
-            loader: 'babel-loader',
-            query: {
-                cacheDirectory: true
-            },
-            exclude: /node_modules/
+            exclude: /node_modules/,
+            use: {
+                loader: 'babel-loader',
+                options: {
+                    cacheDirectory: true
+                }
+            }
         }, {
             test: /\.css$/,
             use: ['style-loader', 'css-loader']
@@ -60,13 +64,22 @@ const config = {
     optimization: {
         splitChunks: {
             cacheGroups: {
-                vendors: {
+                defaultVendors: {
                     test: /[\\/]node_modules[\\/]/,
                     name: 'vendors',
                     chunks: 'all'
                 }
             }
-        }
+        },
+        minimize: process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'analyze',
+        minimizer: [
+            new TerserPlugin({
+                parallel: true,
+                terserOptions: {
+                    ecma: 6,
+                },
+            }),
+        ],
     },
     performance: {
         hints: process.env.NODE_ENV === 'production' ? 'warning' : false,

@@ -1,5 +1,4 @@
 /*eslint-disable react/jsx-props-no-spreading*/
-/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import Collapse from '@material-ui/core/Collapse';
@@ -12,23 +11,22 @@ import {DownloadBlob} from '../../../Util';
 
 
 const AddBlob = ({identifier, init}) => {
-    const [newBlob, setBlob] = React.useState('');
     const [fileName, setFileName] = React.useState('');
 
     const [editState, dispatch] = useEdit();
     const {blob} = editState;
 
-    React.useEffect(() => {
-        let f = fileName;
-        f = fileName.replace('.', '_');
-        if (f != '' && newBlob != '') {
+    const handleUpdate = React.useCallback((f, b) =>  {
+        f = f.replaceAll('.', '_');
+        f = f.replaceAll('-', '_');
+        if (f != '' && b != '') {
             EditActions.updateVal(dispatch, f, identifier);
             EditActions.update(dispatch, {
-                blob: {...blob, [f]: newBlob}
+                blob: {...blob, [f]: b}
             });
         }
     },
-    [fileName],
+    [blob, dispatch, identifier],
     );
 
     const handleDropzone = React.useCallback(acceptedFiles => {
@@ -38,11 +36,12 @@ const AddBlob = ({identifier, init}) => {
         reader.onload = () => {
             const binaryStr = reader.result;
             var encodedData = btoa(binaryStr);
-            setBlob(encodedData);
-            setFileName(acceptedFiles[0].name);
+            const filename = acceptedFiles[0].name;
+            setFileName(filename);
+            handleUpdate(filename, encodedData);
         };
         acceptedFiles.forEach(file => reader.readAsBinaryString(file));
-    }, []);
+    }, [handleUpdate]);
 
     return(
         <Grid container>
@@ -62,7 +61,7 @@ const AddBlob = ({identifier, init}) => {
                     </Dropzone>
                 </Grid>
                 <Grid item xs={12}>
-                    <Collapse in={Boolean(newBlob)} timeout="auto" unmountOnExit>
+                    <Collapse in={Boolean(fileName)} timeout="auto" unmountOnExit>
                         <Typography variant="button" color="primary">
                             {fileName}
                         </Typography>

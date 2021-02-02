@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import Button from '@material-ui/core/Button';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import PropTypes from 'prop-types';

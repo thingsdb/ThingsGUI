@@ -19,7 +19,7 @@ const AddClosure = ({identifier, init}) => {
     };
 
     return(
-        <Closure input={val[identifier]||(val.constructor === Object?'':val)} cb={handleUpdateVal} />
+        <Closure input={val[identifier]||(val.constructor === Object?'':val)} onChange={handleUpdateVal} />
     );
 };
 

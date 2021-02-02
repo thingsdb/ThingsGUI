@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -11,32 +10,28 @@ const BuildQueryString = ({child, customTypes, enums, parent}) => {
 
     React.useEffect(() => {
         handleBuildQuery(child.type, child.index, child.name, parent.id, parent.name, parent.type);
-    }, [val, child.type, child.index, child.name, parent.id, parent.name, parent.type]); // note: call handleBuildQuery when one of the items in the dependency array update. Not when handleBuildQuery updates. handleBuildQuery will be latest version when one of the items update. Unlike useCallback or useMemo; useCallback will return a memoized version of the callback that only changes if one of the dependencies has changed.
+    }, [handleBuildQuery, val, child.type, child.index, child.name, parent.id, parent.name, parent.type]); // note: call handleBuildQuery when one of the items in the dependency array update. Not when handleBuildQuery updates. handleBuildQuery will be latest version when one of the items update. Unlike useCallback or useMemo; useCallback will return a memoized version of the callback that only changes if one of the dependencies has changed.
 
-    const handleBuildQuery = (childType, childIndex, childName, parentId, parentName, parentType) => {
+    const handleBuildQuery = React.useCallback((childType, childIndex, childName, parentId, parentName, parentType) => {
         let v;
         let q = '';
         v = input(val, childType);
-        q = buildQueryAdd(parentId, parentName, parentType, childName, childIndex, v);
+        q = parentType==='list' ? (childIndex===null ? `#${parentId}.${parentName}.push(${v});` : `#${parentId}.${parentName}[${childIndex}] = ${v};`)
+            : parentType==='thing' ? `#${parentId}.${childName} = ${v};`
+                : parentType==='set' ? `#${parentId}.${parentName}.add(${v});`
+                    : [...customTypes.map(c=>c.name), ...enums.map(e=>e.name)].includes(parentType) ? `#${parentId}.${childName} = ${v};`
+                        : '';
 
         EditActions.update(dispatch, {
             query: q,
         });
 
-    };
+    }, [customTypes, enums, dispatch, val]);
 
     const input = (childVal, childType) => {
         return childType == 'str' ? (childVal[0]=='\''? `${childVal}`:`'${childVal}'`)
             : childType == 'nil' ? 'nil'
                 : `${childVal}`;
-    };
-
-    const buildQueryAdd = (parentId, parentName, parentType, childName, childIndex, value) => {
-        return parentType==='list' ? (childIndex===null ? `#${parentId}.${parentName}.push(${value});` : `#${parentId}.${parentName}[${childIndex}] = ${value};`)
-            : parentType==='thing' ? `#${parentId}.${childName} = ${value};`
-                : parentType==='set' ? `#${parentId}.${parentName}.add(${value});`
-                    : [...customTypes.map(c=>c.name), ...enums.map(e=>e.name)].includes(parentType) ? `#${parentId}.${childName} = ${value};`
-                        : '';
     };
 
     return(
