@@ -45,6 +45,11 @@ const Modules = ({nodeId, offline, modules}) => {
         NodesActions.getModules(nodeId); // update of the selected node; to get the latest info
     };
 
+    // const handleRestart = (module) => {
+    //     NodesActions.restartModule(nodeId, module.name); // update of the selected node; to get the latest info
+    // };
+
+
     const handleButtons = (module) => (
         <React.Fragment>
             <Remove nodeId={nodeId} item={module} />

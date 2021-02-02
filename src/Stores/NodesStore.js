@@ -350,7 +350,7 @@ class NodesStore extends BaseStore {
     }
 
     onAddModule(nodeId, config, tag, cb) {
-        const query = `new_module('${config.name}', '${config.file}'${config.configuration ? `, ${config.configuration}` : null})`;
+        const query = `new_module('${config.name}', '${config.file}'${config.configuration ? `, ${config.configuration}` : ''})`;
         this.emit('query', {
             scope: '@thingsdb',
             query
@@ -371,15 +371,16 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRenameModule(nodeId, oldName, newName, cb) {
-        const query = `rename_module('${oldName}', '${newName}');`;
+    onRenameModule(nodeId, name, newName, tag, cb) {
+        const query = `rename_module('${name}', '${newName}');`;
         this.emit('query', {
             scope: '@thingsdb',
             query
         }).done((_data) => {
+            this.onGetModule(nodeId, newName);
             this.onGetModules(nodeId);
             cb();
-        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+        }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 
     onRestartModule(nodeId, name, cb) {
@@ -393,26 +394,27 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onSetModuleConf(nodeId, name, configuration, cb) {
+    onSetModuleConf(nodeId, name, configuration, tag, cb) {
         const query = `set_module_conf('${name}', ${configuration});`;
         this.emit('query', {
             scope: '@thingsdb',
             query
         }).done((_data) => {
-            this.onGetModules(nodeId);
+            this.onGetModule(nodeId, name);
             cb();
-        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+        }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 
-    onSetModuleScope(nodeId, name, scope, cb) {
+    onSetModuleScope(nodeId, name, scope, tag, cb) {
         const query = `set_module_scope('${name}', '${scope}');`;
         this.emit('query', {
             scope: '@thingsdb',
             query
         }).done((_data) => {
+            this.onGetModule(nodeId, name);
             this.onGetModules(nodeId);
             cb();
-        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+        }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 }
 

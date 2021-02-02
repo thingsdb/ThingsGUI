@@ -59,7 +59,7 @@ const Add = ({nodeId}) => {
             nodeId,
             {
                 name: form.name,
-                file: switches.time ? form.time : null,
+                file: form.file,
                 configuration: switches.config ? form.config : null,
             },
             tag,
@@ -114,10 +114,9 @@ const Add = ({nodeId}) => {
                 </ListItem>
                 <ListItem dense disableGutters>
                     <TextField
-                        autoFocus
                         margin="dense"
                         id="file"
-                        label="File path"
+                        label="File"
                         type="text"
                         value={form.file}
                         spellCheck={false}
@@ -128,7 +127,6 @@ const Add = ({nodeId}) => {
                 <ListItem dense disableGutters>
                     <SwitchOpen label="Add configuration [optional]" onChange={handleSwitch('config')}>
                         <TextField
-                            autoFocus
                             margin="dense"
                             id="config"
                             label="Configuration"
