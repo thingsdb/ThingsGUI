@@ -3,26 +3,33 @@
 import deepEqual from 'deep-equal';
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
 const NodesActions = Vlow.createActions([
     'addBackup',
+    'addModule',
     'addNode',
     'delBackup',
+    'delModule',
     'delNode',
     'getBackups',
     'getConnectedNode',
     'getCounters',
     'getDashboardInfo',
+    'getModule',
+    'getModules',
     'getNode',
     'getNodes',
     'getStreamInfo',
+    'renameModule',
+    'restartModule',
     'resetCounters',
     'resetNodesStore',
     'restore',
     'setLoglevel',
+    'setModuleConf',
+    'setModuleScope',
     'shutdown',
 ]);
 
@@ -34,6 +41,8 @@ class NodesStore extends BaseStore {
         backups: PropTypes.arrayOf(PropTypes.object),
         connectedNode: PropTypes.object,
         counters: PropTypes.object,
+        _module: PropTypes.object,
+        modules: PropTypes.arrayOf(PropTypes.object),
         node: PropTypes.object,
         nodes: PropTypes.arrayOf(PropTypes.object),
         streamInfo: PropTypes.object,
@@ -44,6 +53,8 @@ class NodesStore extends BaseStore {
         backups: [],
         connectedNode: {},
         counters: {},
+        _module: {},
+        modules: [],
         node: {},
         nodes: [],
         streamInfo: {},
@@ -308,7 +319,101 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
+    onGetModules(nodeId) {
+        const {modules} = this.state;
+        const query = 'modules_info();';
+        this.emit('query', {
+            scope: `@node:${nodeId}`,
+            query
+        }).done((data) => {
+            if (!deepEqual(data, modules)){
+                this.setState({
+                    modules: data,
+                });
+            }
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
 
+    onGetModule(nodeId, name) {
+        const {_module} = this.state;
+        const query = `module_info('${name}');`;
+        this.emit('query', {
+            scope: `@node:${nodeId}`,
+            query
+        }).done((data) => {
+            if (!deepEqual(data, _module)){
+                this.setState({
+                    _module: data,
+                });
+            }
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+    onAddModule(nodeId, config, tag, cb) {
+        const query = `new_module('${config.name}', '${config.file}'${config.configuration ? `, ${config.configuration}` : null})`;
+        this.emit('query', {
+            scope: '@thingsdb',
+            query
+        }).done((_data) => {
+            this.onGetModules(nodeId);
+            cb();
+        }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
+    }
+
+    onDelModule(nodeId, name, cb) {
+        const query = `del_module('${name}');`;
+        this.emit('query', {
+            scope: '@thingsdb',
+            query
+        }).done((_data) => {
+            this.onGetModules(nodeId);
+            cb();
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+    onRenameModule(nodeId, oldName, newName, cb) {
+        const query = `rename_module('${oldName}', '${newName}');`;
+        this.emit('query', {
+            scope: '@thingsdb',
+            query
+        }).done((_data) => {
+            this.onGetModules(nodeId);
+            cb();
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+    onRestartModule(nodeId, name, cb) {
+        const query = `restart_module('${name}');`;
+        this.emit('query', {
+            scope: `@node:${nodeId}`,
+            query
+        }).done((_data) => {
+            this.onGetModules(nodeId);
+            cb();
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+    onSetModuleConf(nodeId, name, configuration, cb) {
+        const query = `set_module_conf('${name}', ${configuration});`;
+        this.emit('query', {
+            scope: '@thingsdb',
+            query
+        }).done((_data) => {
+            this.onGetModules(nodeId);
+            cb();
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+    onSetModuleScope(nodeId, name, scope, cb) {
+        const query = `set_module_scope('${name}', '${scope}');`;
+        this.emit('query', {
+            scope: '@thingsdb',
+            query
+        }).done((_data) => {
+            this.onGetModules(nodeId);
+            cb();
+        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
 }
 
 export {NodesActions, NodesStore};

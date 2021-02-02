@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import {Backup} from './Backup';
 import {Counters} from './Counters';
 import {NodeConfig} from './Config';
+import {Modules} from './Modules';
 import {NodesActions} from '../../Stores';
 
 
@@ -16,6 +17,7 @@ const Node = ({selectedNode}) => {
         NodesActions.getNode(selectedNode.node_id); // update of the selected node; to get the latest info
         NodesActions.getCounters(selectedNode.node_id); // update of the selected node counters; to get the latest info
         NodesActions.getBackups(selectedNode.node_id);
+        NodesActions.getModules(selectedNode.node_id);
     }, [selectedNode.node_id]);
 
     const handleChangeTab = (_event, newValue) => {
@@ -31,6 +33,9 @@ const Node = ({selectedNode}) => {
         case 2:
             NodesActions.getBackups(selectedNode.node_id);
             break;
+        case 3:
+            NodesActions.getModules(selectedNode.node_id);
+            break;
         }
     };
 
@@ -42,6 +47,7 @@ const Node = ({selectedNode}) => {
                 <Tab label="Node Info" />
                 <Tab label="Counters" />
                 <Tab label="Backup" />
+                <Tab label="Modules" />
             </Tabs>
             {tabIndex === 0 &&
                 <NodeConfig nodeId={selectedNode.node_id} offline={offline} />
@@ -51,6 +57,9 @@ const Node = ({selectedNode}) => {
             }
             {tabIndex === 2 &&
                 <Backup nodeId={selectedNode.node_id} offline={offline} />
+            }
+            {tabIndex === 3 &&
+                <Modules nodeId={selectedNode.node_id} offline={offline} />
             }
         </React.Fragment>
     ) : null;

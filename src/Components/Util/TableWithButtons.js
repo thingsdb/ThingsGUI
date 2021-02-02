@@ -29,7 +29,7 @@ const TableWithButtons = ({header, rows, buttons}) => (
                         <TableCell key={h.ky} align={i?'right':'left'}>
                             <Typography component="div">
                                 <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
-                                    {row[h.ky]}
+                                    {h.fn ? h.fn(row[h.ky]) : row[h.ky]}
                                 </Box>
                             </Typography>
                         </TableCell>
