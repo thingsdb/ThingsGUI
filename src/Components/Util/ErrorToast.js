@@ -1,18 +1,18 @@
-import React from 'react';
-import Card from '@material-ui/core/Card';
-import CloseIcon from '@material-ui/icons/Close';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import IconButton from '@material-ui/core/IconButton';
-import Slide from '@material-ui/core/Slide';
-import WarningIcon from '@material-ui/icons/Warning';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { amber } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionActions from '@material-ui/core/AccordionActions';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import Card from '@material-ui/core/Card';
+import CloseIcon from '@material-ui/icons/Close';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import IconButton from '@material-ui/core/IconButton';
+import React from 'react';
+import Slide from '@material-ui/core/Slide';
+import Typography from '@material-ui/core/Typography';
+import WarningIcon from '@material-ui/icons/Warning';
 
 import { ErrorActions, ErrorStore } from '../../Stores';
 
@@ -53,8 +53,8 @@ const ErrorToast = ({toastErrors}) => {
                 {[...toastErrors].map((e, i) => (
                     <Slide key={i} direction="up" in timeout={{enter: 500}}>
                         <Card className={classes.card}>
-                            <ExpansionPanel className={classes.panel}>
-                                <ExpansionPanelSummary
+                            <Accordion className={classes.panel}>
+                                <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
@@ -63,18 +63,18 @@ const ErrorToast = ({toastErrors}) => {
                                     <Typography>
                                         {'Warning'}
                                     </Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
+                                </AccordionSummary>
+                                <AccordionDetails>
                                     <Typography variant="caption">
                                         {e}
                                     </Typography>
-                                </ExpansionPanelDetails>
-                                <ExpansionPanelActions>
+                                </AccordionDetails>
+                                <AccordionActions>
                                     <IconButton onClick={handleCloseError(i)}>
                                         <CloseIcon />
                                     </IconButton>
-                                </ExpansionPanelActions>
-                            </ExpansionPanel>
+                                </AccordionActions>
+                            </Accordion>
                         </Card>
                     </Slide>
                 ))}

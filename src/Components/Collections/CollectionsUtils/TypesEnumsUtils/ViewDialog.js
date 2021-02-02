@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable no-unused-vars */
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -29,7 +27,7 @@ const ViewDialog = ({category, headers, item, link, onChangeItem, onClose, open,
         setViewItem(null);
     };
 
-    const badgeButton = (h, row, _i) => (
+    const badgeButton = (h, row) => (
         h.ky === 'definition' ? (
             <ButtonBase onClick={handleOpenView(h.ky, row)}>
                 <ViewIcon color="primary" style={{fontSize: 20}} />

@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable react-hooks/exhaustive-deps */
 import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -7,15 +5,15 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 
-const ThingBounds = ({ onBounds, total }) => {
+const ThingsBounds = ({ onChange, total }) => {
     const [from, setFrom] = React.useState('0');
     const [till, setTill] = React.useState('99');
 
     React.useEffect(()=>{
         if(from.length){
-            onBounds({from:Number.parseInt(from), till:Number.parseInt(till)});
+            onChange({from:Number.parseInt(from), till:Number.parseInt(till)});
         }
-    }, [from, till]);
+    }, [from, onChange, till]);
 
 
     const handleOnChangeFrom = ({target}) => {
@@ -72,9 +70,9 @@ const ThingBounds = ({ onBounds, total }) => {
     );
 };
 
-ThingBounds.propTypes = {
-    onBounds:PropTypes.func.isRequired,
+ThingsBounds.propTypes = {
+    onChange:PropTypes.func.isRequired,
     total:PropTypes.number.isRequired,
 };
 
-export default ThingBounds;
+export default ThingsBounds;

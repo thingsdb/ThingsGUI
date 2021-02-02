@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import Grid from '@material-ui/core/Grid';
@@ -95,12 +94,12 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
     });
 
     React.useEffect(()=>{
-        handleRefreshTypes();
         handleRefreshEnums();
-    },[]);
+        handleRefreshTypes();
+    },[handleRefreshEnums, handleRefreshTypes]);
 
-    const handleRefreshEnums = () => EnumActions.getEnums(scope, tag);
-    const handleRefreshTypes = () => TypeActions.getTypes(scope, tag);
+    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, tag), [scope]);
+    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, tag), [scope]);
 
     const handleChange = (a) => (n, c) => {
         if (c=='type') {

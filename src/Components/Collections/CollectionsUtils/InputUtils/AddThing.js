@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -33,7 +32,7 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
         EditActions.updateVal(parentDispatch, arr, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
     },
-    [array.length],
+    [array, blob, identifier, parentDispatch],
     );
 
     const handleChangeProperty = ({target}) => {

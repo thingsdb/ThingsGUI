@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles} from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
 import Grid from '@material-ui/core/Grid';
@@ -81,7 +80,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
 
     React.useEffect(() => {
         onInfo(scope, tag);
-    }, [scope, tag]);
+    }, [onInfo, scope, tag]);
 
     const handleCallback = (s, t) => onInfo(s, t);
 

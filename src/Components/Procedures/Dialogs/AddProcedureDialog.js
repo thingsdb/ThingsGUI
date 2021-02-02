@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable no-unused-vars */
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -16,7 +14,7 @@ import {AddProcedureDialogTAG} from '../../../constants';
 
 const tag = AddProcedureDialogTAG;
 
-const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
+const AddProcedureDialog = ({button, open, onClose, scope}) => {
     const [state, setState] = React.useState({
         queryString: 'new_procedure("", )',
         procedureName: '',
@@ -52,8 +50,8 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
             scope,
             queryString,
             tag,
-            (_data) => {
-                ProcedureActions.getProcedures(scope, tag, cb);
+            () => {
+                ProcedureActions.getProcedures(scope, tag);
                 onClose();
             }
         );
@@ -128,7 +126,7 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
                             </Typography>
                         </ListItem>
                         <ListItem>
-                            <Closure cb={handleClosure} />
+                            <Closure onChange={handleClosure} />
                         </ListItem>
                     </List>
                 </Grid>
@@ -139,7 +137,6 @@ const AddProcedureDialog = ({button, open, onClose, scope, cb}) => {
 
 AddProcedureDialog.defaultProps = {
     button: null,
-    cb: ()=>null,
 };
 
 AddProcedureDialog.propTypes = {
@@ -147,7 +144,6 @@ AddProcedureDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
-    cb: PropTypes.func,
 };
 
 export default AddProcedureDialog;

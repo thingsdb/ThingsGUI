@@ -12,14 +12,14 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const SwitchOpen = ({children, label, onCallback}) => {
+const SwitchOpen = ({children, label, onChange}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
     const handleSwitch = ({target}) => {
         const {checked} = target;
         setOpen(checked);
-        onCallback(checked);
+        onChange(checked);
     };
 
     return (
@@ -47,13 +47,13 @@ const SwitchOpen = ({children, label, onCallback}) => {
 };
 
 SwitchOpen.defaultProps = {
-    onCallback: ()=>null,
+    onChange: ()=>null,
 };
 
 SwitchOpen.propTypes = {
     children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.object]).isRequired,
     label: PropTypes.string.isRequired,
-    onCallback: PropTypes.func,
+    onChange: PropTypes.func,
 };
 
 export default SwitchOpen;

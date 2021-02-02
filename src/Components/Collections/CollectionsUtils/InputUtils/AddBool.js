@@ -1,4 +1,4 @@
-/*eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -20,7 +20,7 @@ const AddBool = ({identifier, init}) => {
     const v = val[identifier]||(val.constructor === Object?'':val);
 
     return(
-        <BoolInput input={`${v}`} cb={handleOnChange} />
+        <BoolInput input={`${v}`} onChange={handleOnChange} />
     );
 };
 

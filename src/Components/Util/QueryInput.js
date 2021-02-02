@@ -322,7 +322,6 @@ class QueryInput extends React.Component {
             scrollBeyondLastLine: false
         });
         this._editor.setModel(model);
-        // onChange(input);
         this._subscription = model.onDidChangeContent(() => {
             let v = model.getValue();
             onChange(v);

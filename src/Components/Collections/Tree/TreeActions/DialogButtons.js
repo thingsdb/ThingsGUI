@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
 import CodeIcon from '@material-ui/icons/Code';
@@ -60,14 +59,6 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
                     />
                 </Grid>
             }
-            {/* {canDownload &&
-                <Grid item>
-                    <DownloadBlob
-                        val={thing}
-                        isFab
-                    />
-                </Grid>
-            } */}
         </React.Fragment>
     );
 };

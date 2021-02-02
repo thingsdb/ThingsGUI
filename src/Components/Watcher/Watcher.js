@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
 import AddIcon from '@material-ui/icons/Add';
@@ -73,12 +72,11 @@ const Watcher = ({collections, customTypes, watchEvents, watchEnums, watchIds, w
     });
     const {scope, thingId} = state;
 
-    const scopes = collections.map(c=>`@collection:${c.name}`);
+    const scopes = React.useMemo(() => collections.map(c=>`@collection:${c.name}`), [collections]);
+
     React.useEffect(() => {
-        setState({...state, scope: scopes[0]});
-    },
-    [scopes.length],
-    );
+        setState((state) => ({...state, scope: scopes[0]}));
+    }, [scopes]);
 
     const handleChangeTab = (_event, newValue) => {
         setTabIndex(newValue);

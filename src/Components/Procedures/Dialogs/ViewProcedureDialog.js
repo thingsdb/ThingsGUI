@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';

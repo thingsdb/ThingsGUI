@@ -1,17 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import {AutoSelect} from '../../../../Util';
 
 
-const PropertyType = ({cb, dropdownItems, input}) => {
+const PropertyType = ({onChange, dropdownItems, input}) => {
     const handlePropertyType = (t) => {
-        cb({propertyType:t});
+        onChange({propertyType:t});
     };
 
     return (
-        <AutoSelect cb={handlePropertyType} dropdownItems={dropdownItems} input={input} label="Definition" />
+        <AutoSelect onChange={handlePropertyType} dropdownItems={dropdownItems} input={input} label="Definition" />
     );
 };
 
@@ -20,7 +19,7 @@ PropertyType.defaultProps = {
 };
 
 PropertyType.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     dropdownItems: PropTypes.arrayOf(PropTypes.string),
     input: PropTypes.string.isRequired,
 };

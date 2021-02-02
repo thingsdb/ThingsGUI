@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { amber } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -32,16 +31,13 @@ const nodeNotReady = (nodes) => {
 const Restore = ({nodes}) => {
     const [state, setState] = React.useState(initialState);
     const {show, fileName, takeAccess, showRedirectModal} = state;
-    const [intervalId, setIntervalId] = React.useState(null);
 
     React.useEffect(()=>{
+        let id;
         if(show){
-            let id = setInterval(() => NodesActions.getNodes(), 2000);
-            setIntervalId(id);
-        } else {
-            clearInterval(intervalId);
-            setIntervalId(null);
+            id = setInterval(() => NodesActions.getNodes(), 2000);
         }
+        return () => clearInterval(id);
     }, [show]);
 
     const handleClickOpen = () => {
@@ -128,7 +124,7 @@ const Restore = ({nodes}) => {
                         input={takeAccess}
                         labelOne="no"
                         labelTwo="yes"
-                        onCallback={handleTakeAccess}
+                        onChange={handleTakeAccess}
                     />
                 </Typography>
             </SimpleModal>

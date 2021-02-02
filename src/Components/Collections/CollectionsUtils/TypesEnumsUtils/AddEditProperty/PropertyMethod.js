@@ -1,14 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import {Closure} from '../../../../Util';
 
-const PropertyMethod = ({cb, input}) => {
+const PropertyMethod = ({onChange, input}) => {
 
     const handleClosure = (c) => {
-        cb({definition:c});
+        onChange({definition:c});
     };
 
     return (
@@ -16,13 +15,13 @@ const PropertyMethod = ({cb, input}) => {
             <Typography variant="caption">
                 {'Definition'}
             </Typography>
-            <Closure input={input} cb={handleClosure} />
+            <Closure input={input} onChange={handleClosure} />
         </React.Fragment>
     );
 };
 
 PropertyMethod.propTypes = {
-    cb: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     input: PropTypes.string.isRequired,
 };
 

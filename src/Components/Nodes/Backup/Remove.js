@@ -55,7 +55,7 @@ const Remove = ({nodeId, backup}) => {
                         input={deleteFile}
                         labelOne="no"
                         labelTwo="yes"
-                        onCallback={handleDeleteFile}
+                        onChange={handleDeleteFile}
                     />
                 </Typography>
             </React.Fragment>

@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-/* eslint-disable no-unused-vars */
 import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -17,14 +15,14 @@ import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, EditName, ErrorMsg, SimpleModal} from '../../Util';
 import {EditProcedureDialogTAG} from '../../../constants';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     warnColor: {
         color: amber[700],
     },
 }));
 
 const tag = EditProcedureDialogTAG;
-const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
+const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const classes = useStyles();
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');
@@ -48,7 +46,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             scope,
             closure,
             tag,
-            (_data) => {
+            () => {
                 handleSubmit();
             }
         );
@@ -60,8 +58,8 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
             scope,
             queryString,
             tag,
-            (_data) => {
-                ProcedureActions.getProcedures(scope, tag, cb);
+            () => {
+                ProcedureActions.getProcedures(scope, tag);
                 onClose();
             }
         );
@@ -131,7 +129,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
                             </Typography>
                         </ListItem>
                         <ListItem>
-                            <Closure input={closure} cb={handleClosure} />
+                            <Closure input={closure} onChange={handleClosure} />
                         </ListItem>
                         <ListItem>
                             <Grid container item xs={11} justify="flex-end">
@@ -150,7 +148,6 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope, cb}) => {
 EditProcedureDialog.defaultProps = {
     button: null,
     procedure: {},
-    cb: () => null,
 };
 
 EditProcedureDialog.propTypes = {
@@ -159,7 +156,6 @@ EditProcedureDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     procedure: PropTypes.object,
     scope: PropTypes.string.isRequired,
-    cb: PropTypes.func,
 };
 
 export default EditProcedureDialog;

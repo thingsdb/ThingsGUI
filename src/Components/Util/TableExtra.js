@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import AddIcon from '@material-ui/icons/Add';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';

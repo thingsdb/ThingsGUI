@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -28,9 +27,9 @@ const ThingRestrict = ({thing, onChildren}) => {
         setMore({...more, [c]: true});
     };
 
-    const handleBounds = (bounds) => {
+    const handleBounds = React.useCallback((bounds) => {
         setBounds(bounds);
-    };
+    }, []);
 
     const renderThing = ([k, v, i=null], count) => {
         return(
@@ -60,7 +59,7 @@ const ThingRestrict = ({thing, onChildren}) => {
     return (
         <React.Fragment>
             {(isArray?thing.length:Object.values(thing).length)>100 && (
-                <ThingsBounds onBounds={handleBounds} total={isArray?thing.length:Object.keys(thing).length} />
+                <ThingsBounds onChange={handleBounds} total={isArray?thing.length:Object.keys(thing).length} />
             )}
             {renderChildren()}
         </React.Fragment>

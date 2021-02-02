@@ -4,7 +4,7 @@ import React from 'react';
 import Switch from '@material-ui/core/Switch';
 
 
-const TwoLabelSwitch = ({input, labelOne, labelTwo, onCallback}) => (
+const TwoLabelSwitch = ({input, labelOne, labelTwo, onChange}) => (
     <Grid>
         <Grid component="label" container alignItems="center" spacing={1}>
             <Grid item>
@@ -13,7 +13,7 @@ const TwoLabelSwitch = ({input, labelOne, labelTwo, onCallback}) => (
             <Grid item>
                 <Switch
                     checked={input}
-                    onChange={onCallback}
+                    onChange={onChange}
                 />
             </Grid>
             <Grid item>
@@ -27,7 +27,7 @@ TwoLabelSwitch.propTypes = {
     input: PropTypes.bool.isRequired,
     labelOne: PropTypes.string.isRequired,
     labelTwo: PropTypes.string.isRequired,
-    onCallback: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
 };
 
 export default TwoLabelSwitch;

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
 import clsx from 'clsx';
@@ -86,7 +85,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, toast, bottomBar, dra
             window.removeEventListener('mousemove', handleMousemove);
             window.removeEventListener('mouseup', handleMouseup);
         }
-    },[isResizing]);
+    },[handleMousemove, handleMouseup, isResizing]);
 
 
     const handleMousedown = () => {

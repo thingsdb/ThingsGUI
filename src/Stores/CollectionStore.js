@@ -38,9 +38,9 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQueryWithReturnDepth(collection, thingId=null, depth=1) {
+    onQueryWithReturnDepth(collectionId, collectionName, thingId=null, depth=1) {
         const query = thingId ? `return(#${thingId}, ${depth})` : `return(thing(.id()), ${depth})`;
-        const scope = `@collection:${collection.name}`;
+        const scope = `@collection:${collectionName}`;
         this.emit('query', {
             query,
             scope
@@ -49,7 +49,7 @@ class CollectionStore extends BaseStore {
                 const things = thingId ?
                     Object.assign({}, prevState.things, {[thingId]: data})
                     :
-                    Object.assign({}, prevState.things, {[collection.collection_id]: data});
+                    Object.assign({}, prevState.things, {[collectionId]: data});
                 return {things};
             });
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));

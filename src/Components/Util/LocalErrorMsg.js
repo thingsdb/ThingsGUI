@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import PropTypes from 'prop-types';
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';

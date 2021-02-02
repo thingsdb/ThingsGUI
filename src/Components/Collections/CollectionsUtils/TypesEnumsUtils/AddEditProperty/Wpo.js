@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { amber } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -22,7 +21,7 @@ const WarnSwitch = withStyles({
     track: {},
 })(Switch);
 
-const Wpo = ({cb, input, disabled}) => {
+const Wpo = ({onChange, input, disabled}) => {
     const [switchIni, setSwitch] = React.useState(input);
 
     React.useEffect(()=>{
@@ -33,7 +32,7 @@ const Wpo = ({cb, input, disabled}) => {
         const {checked} = target;
         if(!disabled) {
             setSwitch(checked);
-            cb({wpo:checked});
+            onChange({wpo:checked});
         }
     };
 
@@ -58,13 +57,13 @@ const Wpo = ({cb, input, disabled}) => {
 };
 
 Wpo.defaultProps = {
-    cb: ()=>null,
+    onChange: ()=>null,
     input: false,
     disabled: false,
 };
 
 Wpo.propTypes = {
-    cb: PropTypes.func,
+    onChange: PropTypes.func,
     input: PropTypes.bool,
     disabled: PropTypes.bool,
 };

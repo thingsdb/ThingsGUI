@@ -12,12 +12,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AddBool = ({input, cb}) => {
+const BoolInput = ({input, onChange}) => {
     const classes = useStyles();
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        cb(value);
+        onChange(value);
     };
 
     return(
@@ -38,9 +38,9 @@ const AddBool = ({input, cb}) => {
     );
 };
 
-AddBool.propTypes = {
-    cb: PropTypes.func.isRequired,
+BoolInput.propTypes = {
+    onChange: PropTypes.func.isRequired,
     input: PropTypes.string.isRequired,
 };
 
-export default AddBool;
+export default BoolInput;

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/AddCircleOutlined';
 import Chip from '@material-ui/core/Chip';

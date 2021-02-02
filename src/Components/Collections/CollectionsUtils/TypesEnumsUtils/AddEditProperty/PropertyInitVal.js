@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { makeStyles } from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -16,7 +15,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const PropertyInitVal = ({category, cb, onBlob, scope}) => {
+const PropertyInitVal = ({category, onChange, onBlob, scope}) => {
     const classes = useStyles();
     const [switchIni, setSwitch] = React.useState(false);
 
@@ -24,12 +23,12 @@ const PropertyInitVal = ({category, cb, onBlob, scope}) => {
         const {checked} = target;
         setSwitch(checked);
         if (!checked) {
-            cb({propertyVal:''});
+            onChange({propertyVal:''});
         }
     };
 
     const handleVal = (v) => {
-        cb(v);
+        onChange(v);
     };
 
     const handleBlob = (b) => {
@@ -52,7 +51,7 @@ const PropertyInitVal = ({category, cb, onBlob, scope}) => {
                 />
             </Grid>
             <Collapse className={classes.fullWidth} in={switchIni} timeout="auto" unmountOnExit>
-                <PropertyVal category={category} cb={handleVal} onBlob={handleBlob} scope={scope} />
+                <PropertyVal category={category} onChange={handleVal} onBlob={handleBlob} scope={scope} />
             </Collapse>
         </React.Fragment>
     );
@@ -60,7 +59,7 @@ const PropertyInitVal = ({category, cb, onBlob, scope}) => {
 
 PropertyInitVal.propTypes = {
     category: PropTypes.string.isRequired,
-    cb: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     onBlob: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
 };

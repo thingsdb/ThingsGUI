@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
