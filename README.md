@@ -215,15 +215,15 @@ The __USERS__ panel shows all the [users](https://docs.thingsdb.net/v0/thingsdb-
 #### Configuration (1)
 
 If you have `GRANT` rights it is possible to add, rename and delete a user and to set and reset the password.
-If you have `MODIFY` rights it is still possible to set and reset your own password.
+If you have `EVENT` rights it is still possible to set and reset your own password.
 
 #### Access rules (2)
 
-If you have `GRANT` rights it is possible to modify the [access rules](https://docs.thingsdb.net/v0/thingsdb-api/grant/) of yourself and others. The access rules are specific for every [scope](https://docs.thingsdb.net/v0/overview/scopes/), including the different collections and nodes there are. For example it is possible to grant someone `MODIFY` rights to one specific collection only, and exclude the user from other ones.
+If you have `GRANT` rights it is possible to modify the [access rules](https://docs.thingsdb.net/v0/thingsdb-api/grant/) of yourself and others. The access rules are specific for every [scope](https://docs.thingsdb.net/v0/overview/scopes/), including the different collections and nodes there are. For example it is possible to grant someone `EVENT` rights to one specific collection only, and exclude the user from other ones.
 
 #### Tokens (3)
 
-If you have `MODIFY` rights it is possible to add and delete access tokens of yourself. If it involves other users you need `GRANT` rights to do this.
+If you have `EVENT` rights it is possible to add and delete access tokens of yourself. If it involves other users you need `GRANT` rights to do this.
 
 
 
@@ -307,4 +307,4 @@ __Need-to-know__
 * The header above the editor also indicates which scope you are in.
 * Hitting `Ctrl+Enter` will send the request as well as clicking the __SUBMIT__ button.
 * The output can be displayed in either the __THINGS TREE__ view or in plain __JSON__ text.
-* It is also possible to work with temporary [variables](https://docs.thingsdb.net/v0/overview/variable/). A variable can be created with `READ` privileges since they do not modify the collection data.
+* It is also possible to work with temporary [variables](https://docs.thingsdb.net/v0/overview/variable/). A variable can be created with `QUERY` privileges since this does not create an event.

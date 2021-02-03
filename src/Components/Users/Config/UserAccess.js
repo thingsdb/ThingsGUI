@@ -16,12 +16,12 @@ import {UserAccessTAG} from '../../../constants';
 
 const privileges = [
     {
-        ky: 'read',
-        label: 'READ',
+        ky: 'query',
+        label: 'QUERY',
     },
     {
-        ky: 'modify',
-        label: 'MODIFY',
+        ky: 'event',
+        label: 'EVENT',
     },
     {
         ky: 'grant',
@@ -45,8 +45,8 @@ const UserAccess = ({user, collections, close}) => {
     const getSwitches = (scope, privileges) => {
         let s = {
             full: false,
-            read: false,
-            modify: false,
+            query: false,
+            event: false,
             grant: false,
             watch: false,
             run: false,
@@ -54,14 +54,14 @@ const UserAccess = ({user, collections, close}) => {
 
         s.full = privileges.includes('FULL');
         if (s.full) {
-            s.read = true;
-            s.modify = true;
+            s.query = true;
+            s.event = true;
             s.grant = true;
             s.watch = true;
             s.run = true;
         } else {
-            s.read = privileges.includes('READ');
-            s.modify = privileges.includes('MODIFY');
+            s.query = privileges.includes('QUERY');
+            s.event = privileges.includes('EVENT');
             s.grant = privileges.includes('GRANT');
             s.watch = privileges.includes('WATCH');
             s.run = privileges.includes('RUN');
