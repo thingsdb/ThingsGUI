@@ -40,7 +40,7 @@ const StringDialog = ({name, text}) => {
     return(
         <SimpleModal
             button={
-                <Button onClick={handleOpen} >
+                <Button color="primary" onClick={handleOpen} >
                     <OpenIcon color="primary" />
                 </Button>
             }

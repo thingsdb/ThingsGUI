@@ -70,7 +70,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                 <ListItemSecondaryAction>
                     {onAction&&onAction(name, type, val)}
                     {canToggle&& (
-                        <Button onClick={handleClick} >
+                        <Button color="primary" onClick={handleClick} >
                             {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
                         </Button>
                     )}

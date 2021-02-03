@@ -49,7 +49,7 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
                 {more[count] && renderChildren(count+1)}
                 {(count+1)%visibleNumber == 0 && !more[count] ? (
                     <ListItem className={classes.justifyContent}>
-                        <Button onClick={handleMore(count)}>
+                        <Button color="primary" onClick={handleMore(count)}>
                             {'LOAD MORE'}
                             <ExpandMoreIcon color="primary" />
                         </Button>

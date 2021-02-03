@@ -36,7 +36,7 @@ const EditName = ({name, fn}) => {
             <Collapse in={!show} timeout="auto">
                 <Typography variant="h4" color='primary' component='span'>
                     {newName||name}
-                    <IconButton onClick={handleClickOpenEdit}>
+                    <IconButton color="primary" onClick={handleClickOpenEdit}>
                         <EditIcon color="primary" />
                     </IconButton>
                 </Typography>
@@ -62,10 +62,10 @@ const EditName = ({name, fn}) => {
                         shrink: true,
                     }}
                 />
-                <IconButton onClick={handleClickSend}>
+                <IconButton color="primary" onClick={handleClickSend}>
                     <SendIcon color="primary" />
                 </IconButton>
-                <IconButton onClick={handleClickCloseEdit}>
+                <IconButton color="primary" onClick={handleClickCloseEdit}>
                     <CancelIcon color="primary" />
                 </IconButton>
             </Collapse>

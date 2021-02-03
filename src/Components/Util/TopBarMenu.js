@@ -6,7 +6,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles} from '@material-ui/core/styles';
 
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
+    color: {
+        color: theme.palette.text.primary
+    },
     menu: {
         top: 40,
         position: 'relative',
@@ -41,8 +44,8 @@ const TopBarMenu = ({ children, menuIcon}) => {
                     <IconButton
                         aria-haspopup="true"
                         aria-owns={isOpen ? 'menu' : null}
-                        color="inherit"
                         onClick={handleMenuOpen}
+                        className={classes.color}
                     >
                         {menuIcon}
                     </IconButton>

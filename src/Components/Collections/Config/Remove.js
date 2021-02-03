@@ -57,7 +57,7 @@ const Remove = ({collection, close}) => {
             title={`Remove collection ${name}?`}
             open={show}
             actionButtons={
-                <Button onClick={handleClickOk} disabled={!switchDel} className={classes.warning} >
+                <Button color="primary" onClick={handleClickOk} disabled={!switchDel} className={classes.warning} >
                     {'Submit'}
                 </Button>
             }

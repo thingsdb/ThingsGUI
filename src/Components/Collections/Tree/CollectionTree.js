@@ -38,7 +38,7 @@ const CollectionTree = ({collection}) => {
                 unmountOnExit
                 onRefresh={handleRefresh}
                 actionButtons={
-                    <IconButton edge="start" color="default" onClick={handleOpen} aria-label="close">
+                    <IconButton edge="start" color="primary" onClick={handleOpen} aria-label="close">
                         <OpenInNewIcon color="primary" />
                     </IconButton>
                 }
@@ -47,7 +47,7 @@ const CollectionTree = ({collection}) => {
                 <div>
                     <TopBar
                         pageIcon={
-                            <IconButton edge="start" color="default" onClick={handleOpen} aria-label="close">
+                            <IconButton edge="start" color="primary" onClick={handleOpen} aria-label="close">
                                 <ExpandMoreIcon />
                             </IconButton>
                         }

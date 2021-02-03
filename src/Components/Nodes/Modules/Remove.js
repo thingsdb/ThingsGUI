@@ -1,7 +1,7 @@
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import PropTypes from 'prop-types';
 import React from 'react';
-import DeleteIcon from '@material-ui/icons/DeleteOutlined';
-import IconButton from '@material-ui/core/IconButton';
 
 import {NodesActions} from '../../../Stores';
 import {ErrorMsg, SimpleModal} from '../../Util';
@@ -27,9 +27,9 @@ const Remove = ({nodeId, item}) => {
     return (
         <SimpleModal
             button={
-                <IconButton onClick={handleClickOpen}>
+                <Button color="primary" onClick={handleClickOpen}>
                     <DeleteIcon color="primary" />
-                </IconButton>
+                </Button>
             }
             title={`Remove module: ${item.name}`}
             open={show}

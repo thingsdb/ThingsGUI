@@ -115,12 +115,12 @@ const Watcher = ({collections, customTypes, watchEvents, watchEnums, watchIds, w
 
         return(t=='thing'&& (onWatch ? (
             <Tooltip disableFocusListener disableTouchListener title="Turn watching off">
-                <Button onClick={handleUnwatch(id)} size="small" >
+                <Button color="primary" onClick={handleUnwatch(id)} size="small" >
                     <RemoveIcon size="small" className={classes.red} />
                 </Button>
             </Tooltip>
         ): (
-            <Button onClick={handleClickWatch(s, id)} size="small" >
+            <Button color="primary" onClick={handleClickWatch(s, id)} size="small" >
                 <AddOutlinedIcon size="small" className={classes.green}  />
             </Button>
         )));

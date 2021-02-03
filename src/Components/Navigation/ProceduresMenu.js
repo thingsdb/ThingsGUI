@@ -70,7 +70,7 @@ const ProceduresMenu = ({procedures}) => {
                 icon={<PlayArrowIcon color="primary" />}
                 items={orderedProcedures}
                 addItem={
-                    <Button className={classes.buttonBase} onClick={handleClickAdd} >
+                    <Button color="primary" className={classes.buttonBase} onClick={handleClickAdd} >
                         <AddBoxIcon className={classes.icon} />
                     </Button>}
                 onClickItem={handleClickProcedure}

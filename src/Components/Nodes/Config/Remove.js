@@ -39,7 +39,7 @@ const Remove = ({node}) => {
     return(
         <SimpleModal
             button={
-                <Button onClick={handleClickOpen}>
+                <Button color="primary" onClick={handleClickOpen}>
                     <DeleteIcon color="primary" />
                 </Button>
             }

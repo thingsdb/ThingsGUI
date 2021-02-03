@@ -44,11 +44,11 @@ const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onRef
                     <React.Fragment>
                         {expanded && actionButtons}
                         {onRefresh && expanded && (
-                            <IconButton onClick={handleRefresh}>
+                            <IconButton color="primary" onClick={handleRefresh}>
                                 <RefreshIcon color="primary" />
                             </IconButton>
                         )}
-                        <IconButton onClick={handleExpandClick}>
+                        <IconButton color="primary" onClick={handleExpandClick}>
                             {expanded ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
                         </IconButton>
                     </React.Fragment>

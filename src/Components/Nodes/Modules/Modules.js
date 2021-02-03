@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -45,15 +46,10 @@ const Modules = ({nodeId, offline, modules}) => {
         NodesActions.getModules(nodeId); // update of the selected node; to get the latest info
     };
 
-    // const handleRestart = (module) => {
-    //     NodesActions.restartModule(nodeId, module.name); // update of the selected node; to get the latest info
-    // };
-
-
-    const handleButtons = (module) => (
+    const handleButtons = (_module) => (
         <React.Fragment>
-            <Remove nodeId={nodeId} item={module} />
-            <ModuleInfo nodeId={nodeId} item={module} />
+            <Remove nodeId={nodeId} item={_module} />
+            <ModuleInfo nodeId={nodeId} item={_module} />
         </React.Fragment>
     );
 

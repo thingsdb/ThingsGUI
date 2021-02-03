@@ -37,11 +37,11 @@ const WarnPopover = ({anchorEl, onClose, onOk, description}) => {
             <Typography variant="body2">
                 {description}
             </Typography>
-            <Button onClick={onClose}>
+            <Button color="primary" onClick={onClose}>
                 {'Close'}
             </Button>
             {onOk && (
-                <Button onClick={onOk}>
+                <Button color="primary" onClick={onOk}>
                     {'Ok'}
                 </Button>
             )}

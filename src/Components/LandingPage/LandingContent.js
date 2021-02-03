@@ -139,7 +139,7 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={1}>
-                                    <IconButton onClick={handleRefresh} size="medium">
+                                    <IconButton color="primary" onClick={handleRefresh} size="medium">
                                         <RefreshIcon color="primary" style={{ fontSize: 50 }}  />
                                     </IconButton>
                                 </Grid>

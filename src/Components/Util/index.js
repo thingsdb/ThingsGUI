@@ -21,6 +21,7 @@ import HarmonicCardHeader from './HarmonicCardHeader';
 import HarmonicTree from './HarmonicTree';
 import Info from './Info';
 import ListHeader from './ListHeader';
+import LocalMsg from './LocalMsg';
 import LocalErrorMsg from './LocalErrorMsg';
 import Menu from './Menu';
 import QueryInput from './QueryInput';
@@ -221,6 +222,7 @@ export {
     Info,
     isObjectEmpty,
     ListHeader,
+    LocalMsg,
     LocalErrorMsg,
     Menu,
     orderByName,

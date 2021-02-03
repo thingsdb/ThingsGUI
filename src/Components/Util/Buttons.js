@@ -20,7 +20,7 @@ const Buttons = ({children}) => {
                 {children}
             </span>
             {!isMouseInside ? (
-                <Button onClick={mouseEnter}>
+                <Button color="primary" onClick={mouseEnter}>
                     <MoreVertIcon color="primary" />
                 </Button>
             ): null}

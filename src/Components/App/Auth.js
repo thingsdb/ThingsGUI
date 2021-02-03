@@ -120,7 +120,7 @@ const Auth = ({authMethod}) => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton onClick={handleClickShow}>
+                                    <IconButton color="primary" onClick={handleClickShow}>
                                         {show ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
                                 </InputAdornment>
@@ -141,7 +141,7 @@ const Auth = ({authMethod}) => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton onClick={handleClickShow}>
+                                    <IconButton color="primary" onClick={handleClickShow}>
                                         {show ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
                                 </InputAdornment>

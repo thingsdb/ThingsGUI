@@ -38,7 +38,7 @@ const ThingRestrict = ({thing, onChildren}) => {
                 {more[count] && renderChildren(count+1)}
                 {!more[count] && (count+1)%visibleNumber == 0 ? (
                     <ListItem className={classes.justifyContent}>
-                        <Button onClick={handleMore(count)}>
+                        <Button color="primary" onClick={handleMore(count)}>
                             {'LOAD MORE'}
                             <ExpandMoreIcon color="primary" />
                         </Button>

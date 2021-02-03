@@ -34,7 +34,7 @@ const BottomBar = () => {
         <div style={{position:'fixed', left:'50%', transform: 'translate(-50%, -2%)', bottom: 0, zIndex: 2}}>
             <Toolbar>
                 {bottomInfo.map((v, i) => (
-                    <Button key={i} href={v.url} variant='text'>
+                    <Button color="primary" key={i} href={v.url} variant='text'>
                         <img
                             alt={v.name}
                             src={v.icon}

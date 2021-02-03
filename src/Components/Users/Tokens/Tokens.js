@@ -114,7 +114,7 @@ const Tokens = ({user}) => {
                                                                     inputRef={reference}
                                                                 />
                                                                 <Tooltip className={classes.copyButton} disableFocusListener disableTouchListener title="Copy to Clipboard">
-                                                                    <Button onClick={handleRef(reference)}>
+                                                                    <Button color="primary" onClick={handleRef(reference)}>
                                                                         <FileCopyIcon color="primary" />
                                                                     </Button>
                                                                 </Tooltip>
