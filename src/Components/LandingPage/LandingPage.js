@@ -13,11 +13,14 @@ import Typography from '@material-ui/core/Typography';
 import LandingContent from './LandingContent';
 import {TopBar} from '../Navigation';
 
-const version='version: 0.2.13';
+const version='version: 0.2.14';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     avatar: {
         height: 35,
+    },
+    color: {
+        color: theme.palette.text.primary
     },
 }));
 
@@ -57,7 +60,7 @@ const LandingPage = () => {
                             </Typography>
                         }
                         pageIcon={
-                            <IconButton edge="start" color="default" onClick={handleClose} aria-label="close">
+                            <IconButton className={classes.color} edge="start" onClick={handleClose} aria-label="close">
                                 <ExpandLessIcon />
                             </IconButton>
                         }

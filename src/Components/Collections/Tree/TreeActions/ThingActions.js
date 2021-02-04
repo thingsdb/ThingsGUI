@@ -18,7 +18,7 @@ const ThingActions = ({child, parent, thing, scope, isRoot}) => {
 
     return (
         <React.Fragment>
-            <Button onClick={handleClickOpen} >
+            <Button color="primary" onClick={handleClickOpen} >
                 <BuildIcon color="primary" />
             </Button>
             {show ? (

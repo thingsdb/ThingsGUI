@@ -22,7 +22,7 @@ const TableExtra = ({badgeButton, buttons, createdAt, header, modifiedAt, onAdd,
         <Grid container item xs={12}>
             {onAdd && (
                 <Grid item xs={2}>
-                    <Button onClick={onAdd} >
+                    <Button color="primary" onClick={onAdd} >
                         <AddIcon color="primary" />
                     </Button>
                 </Grid>

@@ -70,7 +70,7 @@ const ErrorToast = ({toastErrors}) => {
                                     </Typography>
                                 </AccordionDetails>
                                 <AccordionActions>
-                                    <IconButton onClick={handleCloseError(i)}>
+                                    <IconButton color="primary" onClick={handleCloseError(i)}>
                                         <CloseIcon />
                                     </IconButton>
                                 </AccordionActions>

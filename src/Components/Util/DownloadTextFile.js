@@ -22,7 +22,7 @@ const DownloadTextFile = ({name, text}) => {
 
     return(
         <Tooltip className={classes.tooltip} disableFocusListener disableTouchListener title="Download">
-            <Button href={href} download={`thingsgui_${name||'text'}`}>
+            <Button color="primary" href={href} download={`thingsgui_${name||'text'}`}>
                 <DownloadIcon color="primary" />
             </Button>
         </Tooltip>

@@ -135,7 +135,7 @@ const Password = ({user}) => {
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton onClick={handleClickShowPassword}>
+                                <IconButton color="primary" onClick={handleClickShowPassword}>
                                     {showPassword ? <Visibility /> : <VisibilityOff />}
                                 </IconButton>
                             </InputAdornment>

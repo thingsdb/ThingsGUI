@@ -4,7 +4,6 @@ import Collapse from '@material-ui/core/Collapse';
 import ConnectedIcon from '@material-ui/icons/Power';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -60,7 +59,7 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                     <TableCell size="small" colSpan={buttons&&rows.length ? buttons(rows[0]).length : 1} align="right">
                         {onRefresh&&(
                             <Tooltip disableFocusListener disableTouchListener title="Refresh nodes info">
-                                <Button onClick={onRefresh}>
+                                <Button color="primary" onClick={onRefresh}>
                                     <RefreshIcon color="primary" />
                                 </Button>
                             </Tooltip>
@@ -97,9 +96,9 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                                     ))
                                 ) : null}
                                 <TableCell size="small" align="right" style={{borderBottom: isopen?'none':null}}>
-                                    <IconButton onClick={handleClickRow(ri)}>
+                                    <Button color="primary" onClick={handleClickRow(ri)}>
                                         {isopen ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
-                                    </IconButton>
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                             {isopen ? (

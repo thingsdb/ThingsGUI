@@ -76,7 +76,7 @@ class StartStopPolling extends React.Component {
         const {polling} = this.state;
         return (
             <Tooltip disableFocusListener disableTouchListener title={polling?`Stop polling ${title}`:`Start polling ${title}`}>
-                <Button variant={variant} onClick={polling?this.handleStopPoll:this.handleStartPoll}>
+                <Button color="primary" variant={variant} onClick={polling?this.handleStopPoll:this.handleStartPoll}>
                     <ScheduleIcon className={polling?classes.green:classes.disabled} />
                 </Button>
             </Tooltip>

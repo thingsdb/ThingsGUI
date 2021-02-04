@@ -170,7 +170,7 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
                         {searchList && (searchList.length > maxAmount) &&
                             <Grid container justify="center" alignItems="center" item xs={12}>
                                 <Grid item>
-                                    <Button onClick={handleClickLoadMore}>
+                                    <Button color="primary" onClick={handleClickLoadMore}>
                                         {'Load more'}
                                     </Button>
                                 </Grid>
@@ -196,7 +196,7 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
                 open={Boolean(deleteItem)}
                 onClose={handleCloseDelete}
                 actionButtons={
-                    <Button onClick={handleClickDelete} disabled={!switchDel} className={classes.warning}>
+                    <Button color="primary" onClick={handleClickDelete} disabled={!switchDel} className={classes.warning}>
                         {'Submit'}
                     </Button>
                 }

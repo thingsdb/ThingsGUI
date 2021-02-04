@@ -27,7 +27,7 @@ const Remove = ({token, tag}) => {
     return (
         <React.Fragment>
             <Tooltip disableFocusListener disableTouchListener title="Remove token">
-                <Button onClick={handleClick}>
+                <Button color="primary" onClick={handleClick}>
                     <DeleteIcon color="primary" />
                 </Button>
             </Tooltip>

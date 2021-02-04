@@ -146,7 +146,7 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton onClick={handleClickShow}>
+                                    <IconButton color="primary" onClick={handleClickShow}>
                                         {show ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
                                 </InputAdornment>
@@ -167,7 +167,7 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton onClick={handleClickShow}>
+                                    <IconButton color="primary" onClick={handleClickShow}>
                                         {show ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
                                 </InputAdornment>

@@ -236,7 +236,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
     const buttons = (row) => (
         <React.Fragment>
-            <Button onClick={handleDel(row)} >
+            <Button color="primary" onClick={handleDel(row)} >
                 <DeleteIcon color="primary" />
             </Button>
             <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} onOk={handleClickOk} description={`Are you sure you want to remove '${property.propertyName?property.propertyName:''}'`} />

@@ -26,10 +26,10 @@ const TableWithButtons = ({header, rows, buttons}) => (
             {rows.map((row, ri) => (
                 <TableRow key={ri}>
                     {header.map((h, i) => (
-                        <TableCell key={h.ky} align={i?'right':'left'}>
-                            <Typography component="div">
+                        <TableCell key={h.ky} align={i?'center':'left'}>
+                            <Typography component="div" align={i?'center':'left'}>
                                 <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
-                                    {row[h.ky]}
+                                    {h.fn ? h.fn(row[h.ky]) : row[h.ky]}
                                 </Box>
                             </Typography>
                         </TableCell>

@@ -1,7 +1,7 @@
+import Button from '@material-ui/core/Button';
+import MoreIcon from '@material-ui/icons/MoreHoriz';
 import PropTypes from 'prop-types';
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import MoreIcon from '@material-ui/icons/MoreHoriz';
 
 import {Info, SimpleModal} from '../../Util';
 
@@ -19,9 +19,9 @@ const BackupInfo = ({header, item}) => {
     return (
         <SimpleModal
             button={
-                <IconButton onClick={handleClickOpen}>
+                <Button color="primary" onClick={handleClickOpen}>
                     <MoreIcon color="primary" />
-                </IconButton>
+                </Button>
             }
             open={show}
             onClose={handleClickClose}

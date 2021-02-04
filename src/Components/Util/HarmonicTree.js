@@ -23,7 +23,7 @@ const HarmonicTree = ({customTypes, items, jsonView, title, onAction, jsonReplac
             <ListItem>
                 <ListItemText primary={title} />
                 <ListItemSecondaryAction>
-                    <Button onClick={handleClick} >
+                    <Button color="primary" onClick={handleClick} >
                         {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
                     </Button>
                 </ListItemSecondaryAction>

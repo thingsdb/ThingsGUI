@@ -1,16 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
-import DialogContentText from '@material-ui/core/DialogContentText';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
-import {RemoveNodeTAG} from '../../../constants';
+import {ErrorMsg, SimpleModal} from '../../Util';
+import {RemoveModuleTAG} from '../../../constants';
 
-const tag = RemoveNodeTAG;
+const tag = RemoveModuleTAG;
 
-const Remove = ({node}) => {
+const Remove = ({nodeId, item}) => {
     const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -22,43 +21,29 @@ const Remove = ({node}) => {
     };
 
     const handleClickOk = () => {
-        NodesActions.delNode(
-            node.node_id,
-            tag,
-            () => setShow(false)
-        );
+        NodesActions.delModule(nodeId, item.name, handleClickClose);
     };
 
-    const handleKeyPress = (event) => {
-        const {key} = event;
-        if (key == 'Enter') {
-            handleClickOk();
-        }
-    };
-
-    return(
+    return (
         <SimpleModal
             button={
                 <Button color="primary" onClick={handleClickOpen}>
                     <DeleteIcon color="primary" />
                 </Button>
             }
-            title="CAUTION"
+            title={`Remove module: ${item.name}`}
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
-            onKeyPress={handleKeyPress}
         >
             <ErrorMsg tag={tag} />
-            <DialogContentText>
-                {'Are you sure you want to remove this node?'}
-            </DialogContentText>
         </SimpleModal>
     );
 };
 
 Remove.propTypes = {
-    node: PropTypes.object.isRequired,
+    nodeId: PropTypes.number.isRequired,
+    item: PropTypes.object.isRequired,
 };
 
 export default Remove;

@@ -76,14 +76,14 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                 <Typography variant="h3" className={classes.sidepadding} color="primary">
                     {groupSigning[groupSign][1]}
                 </Typography>
-                <IconButton onClick={onAdd}>
+                <IconButton color="primary" onClick={onAdd}>
                     <AddIcon color="primary" />
                 </IconButton>
-                <IconButton onClick={onRefresh}>
+                <IconButton color="primary" onClick={onRefresh}>
                     <RemoveIcon color="primary" />
                 </IconButton>
                 {canCollapse && (
-                    <IconButton onClick={open ? handleClose : handleOpen}>
+                    <IconButton color="primary" onClick={open ? handleClose : handleOpen}>
                         {open ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
                     </IconButton>
                 )}

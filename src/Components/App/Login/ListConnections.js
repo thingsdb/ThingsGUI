@@ -88,10 +88,10 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
                         <ListItemText primary={v.name} secondary={v.address} />
                         <ListItemSecondaryAction>
                             <Memo connection={v} />
-                            <IconButton onClick={handleDeleteConn(v.name)}>
+                            <IconButton color="primary" onClick={handleDeleteConn(v.name)}>
                                 <DeleteIcon color="primary" />
                             </IconButton>
-                            <IconButton onClick={handleOpenDetail(v.name)}>
+                            <IconButton color="primary" onClick={handleOpenDetail(v.name)}>
                                 {openDetail[v.name] ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
                             </IconButton>
                         </ListItemSecondaryAction>

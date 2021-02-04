@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 const DrawerLayout = ({open, onClose, topbar, mainContent, toast, bottomBar, drawerTitle, drawerContent}) => {
     const classes = useStyles();
     const [isResizing, setIsResizing] = React.useState(false);
-    const [newWidth, setNewWidth] = React.useState(600);
+    const [newWidth, setNewWidth] = React.useState(650);
 
 
     React.useEffect(() => {
@@ -137,7 +137,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, toast, bottomBar, dra
                     />
                     <div className={open ? classes.open : classes.close}>
                         <div className={classes.drawerHeader}>
-                            <IconButton onClick={onClose}>
+                            <IconButton color="primary" onClick={onClose}>
                                 {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
                             </IconButton>
                             <Typography variant="body1">

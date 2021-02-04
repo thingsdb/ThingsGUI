@@ -33,3 +33,6 @@ export const WatcherTAG = '31';
 export const RemoveBackupTAG = '32';
 export const RestoreNodeTAG = '33';
 export const ExportCollectionTAG = '34';
+export const AddModuleTAG = '35';
+export const RemoveModuleTAG = '36';
+export const ModuleInfoTAG = '37';

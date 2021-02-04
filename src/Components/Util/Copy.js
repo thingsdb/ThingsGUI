@@ -25,7 +25,7 @@ const Copy = ({reference}) => {
 
     return(
         <Tooltip className={classes.tooltip} disableFocusListener disableTouchListener title="Copy to Clipboard">
-            <Button onClick={handleRef}>
+            <Button color="primary" onClick={handleRef}>
                 <FileCopyIcon color="primary" />
             </Button>
         </Tooltip>

@@ -31,7 +31,7 @@ const RefreshContainer = ({actionButtons, buttons, content, noPadding, onRefresh
                     <React.Fragment>
                         {actionButtons}
                         {onRefresh && (
-                            <IconButton onClick={handleRefresh}>
+                            <IconButton color="primary" onClick={handleRefresh}>
                                 <RefreshIcon color="primary" />
                             </IconButton>
                         )}

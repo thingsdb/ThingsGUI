@@ -126,7 +126,7 @@ const Add = ({collections}) => {
     return(
         <SimpleModal
             button={
-                <Button className={classes.buttonBase} onClick={handleClickOpen} >
+                <Button className={classes.buttonBase} color="primary" onClick={handleClickOpen} >
                     <AddBoxIcon className={classes.icon} color="primary" />
                 </Button>
             }

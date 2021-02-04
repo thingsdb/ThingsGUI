@@ -31,7 +31,7 @@ const Memo = ({connection}) => {
     return (
         <React.Fragment>
             <Tooltip disableFocusListener disableTouchListener title={connection.memo}>
-                <IconButton onClick={handleOpen}>
+                <IconButton color="primary" onClick={handleOpen}>
                     <MessageIcon color="primary" />
                 </IconButton>
             </Tooltip>
