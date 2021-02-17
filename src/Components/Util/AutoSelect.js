@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import PropTypes from 'prop-types';
-import React from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grid from '@material-ui/core/Grid';
-import Popper from '@material-ui/core/Popper';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
 import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import PropTypes from 'prop-types';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
     list: {
@@ -26,21 +27,27 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
+const BATCH = 50;
+
 const AutoSelect = ({onChange, label, dropdownItems, input}) => {
     const classes = useStyles();
     const textRef = React.useRef(null);
+    const [end, setEnd] = React.useState(BATCH);
     const [text, setText] = React.useState(input);
     const [list, setList] = React.useState(dropdownItems);
-    const [anchorEl, setAnchorEl] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
     const [width, setWidth] = React.useState(null);
 
 
     React.useEffect(() => {
-        window.addEventListener('resize', handleRefSize);
+        if(anchorEl){
+            window.addEventListener('resize', handleRefSize);
+            setWidth(textRef.current.offsetWidth);
+        }
         return () => {
             window.removeEventListener('resize', handleRefSize);
         };
-    },[]);
+    },[anchorEl]);
 
     React.useEffect(() => {
         if (input !== text) {
@@ -58,7 +65,6 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
 
     const handleChange = (e) => {
         const {value} = e.target;
-        setAnchorEl(true);
         handleText(value);
 
         // filter dropdown list
@@ -68,15 +74,16 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
 
     const handleClick = (i) => () => {
         handleText(i);
-        setAnchorEl(false);
+        handleClose();
     };
 
-    const handleOpen = () => {
-        setAnchorEl(true);
+    const handleOpen = ({currentTarget}) => {
+        setAnchorEl(currentTarget);
     };
 
     const handleClose = () => {
-        setAnchorEl(false);
+        setAnchorEl(null);
+        setEnd(BATCH);
     };
 
     const handleText = (v) => {
@@ -84,11 +91,20 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
         onChange(v);
     };
 
+    const handleScroll = (e) => {
+        const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+        if (bottom && (list.slice(0, end).length % BATCH === 0)) {
+            setEnd(end => end + BATCH);
+        }
+    };
+
     return (
         <ClickAwayListener onClickAway={handleClose}>
             <Grid item xs={12}>
                 <TextField
+                    autoComplete="off"
                     fullWidth
+                    inputRef={textRef}
                     label={label}
                     name="text"
                     onChange={handleChange}
@@ -97,25 +113,31 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
                     type="text"
                     value={text}
                     variant="standard"
-                    inputRef={textRef}
                 />
 
                 <Popper
-                    open={Boolean(anchorEl)&&Boolean(list.length)}
                     anchorEl={() => textRef.current}
-                    onClose={handleClose}
-                    placement="bottom"
                     className={classes.popper}
-                    style={width?{width:width}:textRef.current?{width:textRef.current.offsetWidth}:null}
+                    onClose={handleClose}
+                    open={Boolean(anchorEl) && Boolean(list.length)}
+                    placement="bottom"
+                    style={width ? { width: width } : textRef.current ? { width: textRef.current.offsetWidth } : null}
+                    transition
                 >
                     <Paper className={classes.paper} elevation={3}>
-                        <List className={classes.list}>
-                            {list.map( (p, i) => (
-                                <ListItem button key={i} onClick={handleClick(p)} >
-                                    {p}
-                                </ListItem>
+                        <MenuList onScroll={handleScroll} className={classes.list} id="menu-list-grow">
+                            {list.slice(0, end).map( (item, index) => (
+                                <MenuItem
+                                    dense
+                                    key={`menu_item_${index}`}
+                                    onClick={handleClick(item)}
+                                >
+                                    <ListItemText
+                                        secondary={item}
+                                    />
+                                </MenuItem>
                             ))}
-                        </List>
+                        </MenuList>
                     </Paper>
                 </Popper>
             </Grid>
