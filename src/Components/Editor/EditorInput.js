@@ -18,20 +18,17 @@ const withStores = withVlow([{
     keys: ['history']
 }]);
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     cardAction: {
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end',
-        padding: 0
+        paddingTop: theme.spacing(1),
+        paddingBottom: 0,
+        paddingLeft: theme.spacing(1),
+        paddingRight: 0
     },
 }));
 
 
 const tag = EditorTAG;
-
-
-
-
 const Editor = ({height, history, input, match, onExpand, onOutput, scope}) => {
     const classes = useStyles();
     const [query, setQuery] = React.useState('');
@@ -116,14 +113,14 @@ const Editor = ({height, history, input, match, onExpand, onOutput, scope}) => {
     return (
         <React.Fragment>
             <div onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
-                <QueryInput onChange={handleInput} input={queryInput} height={height-80} />
+                <QueryInput onChange={handleInput} input={queryInput} height={height-60} />
             </div>
             <CardActions className={classes.cardAction} disableSpacing>
                 <Button
                     onClick={handleSubmit}
-                    variant="text"
+                    variant="outlined"
                     color="primary"
-                    size="medium"
+                    size="small"
                 >
                     {'Submit'}
                 </Button>

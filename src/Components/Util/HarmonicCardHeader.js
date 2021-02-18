@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import Collapse from '@material-ui/core/Collapse';
@@ -9,7 +10,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
+const useStyles = makeStyles(theme => ({
+    padding: {
+        padding: theme.spacing(1)
+    }
+}));
+
 const HarmonicCardHeader = ({actionButtons, children, expand, onExpand, onRefresh, title, unmountOnExit}) => {
+    const classes = useStyles();
     const [expanded, setExpanded] = React.useState(expand);
 
     const handleExpandClick = () => {
@@ -44,6 +52,7 @@ const HarmonicCardHeader = ({actionButtons, children, expand, onExpand, onRefres
                         </IconButton>
                     </React.Fragment>
                 }
+                className={classes.padding}
                 title={title}
                 titleTypographyProps={{
                     variant: 'body1',

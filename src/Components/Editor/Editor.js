@@ -1,5 +1,7 @@
+import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
@@ -16,10 +18,19 @@ const withStores = withVlow([{
     keys: ['match']
 }]);
 
+const useStyles = makeStyles(() => ({
+    cardAction: {
+        display: 'flex',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        padding: 0
+    },
+}));
 
 const tag = EditorTAG;
 
 const Editor = ({match}) => {
+    const classes = useStyles();
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState('');
     const [input, setInput] = React.useState('');
@@ -53,21 +64,21 @@ const Editor = ({match}) => {
 
     return (
         <TitlePage2
-            preTitle='Customize your query:'
+            preTitle='SCOPE:'
             title={<SelectScope scope={match.scope} onChangeScope={handleOnChangeScope} />}
             content={
                 <React.Fragment>
-                    <Grid item xs={12}>
-                        <Card id='errMsg'>
-                            <ErrorMsg tag={tag} />
-                        </Card>
-                    </Grid>
                     <Grid item xs={12}>
                         <DragdownCard>
                             {(height) => (
                                 <EditorInput height={height} input={input} onExpand={handleExpand} onOutput={handleOutput} scope={scope} />
                             )}
                         </DragdownCard>
+                        <Card>
+                            <CardActions className={classes.cardAction} disableSpacing>
+                                <ErrorMsg tag={tag} />
+                            </CardActions>
+                        </Card>
                     </Grid>
                     <Grid item xs={12}>
                         <HarmonicCard

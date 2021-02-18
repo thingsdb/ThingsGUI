@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(() => ({
     cardAction: {
+        // display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'center',
         padding: 0
@@ -25,7 +26,7 @@ const DragdownCard = ({children}) => {
     const classes = useStyles();
 
     const [isResizing, setIsResizing] = React.useState(false);
-    const [newHeight, setNewHeight] = React.useState(200);
+    const [newHeight, setNewHeight] = React.useState(500);
 
     React.useEffect(() => {
         if (isResizing) {
@@ -56,9 +57,9 @@ const DragdownCard = ({children}) => {
 
 
     return (
-        <Card id='editor' style={{height: newHeight}} className={classes.background}>
+        <Card id='editor' style={{height: newHeight}}>
             {children(newHeight)}
-            <CardActions disableSpacing className={classes.cardAction}>
+            <CardActions className={classes.cardAction}>
                 <DragHandleIcon className={classes.dragger} onMouseDown={handleMousedown} />
             </CardActions>
         </Card>

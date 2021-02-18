@@ -11,13 +11,16 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-const useStyles = makeStyles(() => ({
-    padding: {
+const useStyles = makeStyles(theme => ({
+    noPadding: {
         paddingTop: 0,
         paddingBottom: 0,
         paddingLeft: 0,
         paddingRight: 0,
     },
+    padding: {
+        padding: theme.spacing(1)
+    }
 }));
 
 const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onRefresh, title, unmountOnExit}) => {
@@ -53,6 +56,7 @@ const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onRef
                         </IconButton>
                     </React.Fragment>
                 }
+                className={classes.padding}
                 title={title}
                 titleTypographyProps={{
                     variant: 'body1',
@@ -68,7 +72,7 @@ const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onRef
                     </CardContent>
                 )}
                 {buttons ? (
-                    <CardActions className={noPadding?classes.padding:null}>
+                    <CardActions className={noPadding?classes.noPadding:null}>
                         {buttons}
                     </CardActions>
                 ) : null}
