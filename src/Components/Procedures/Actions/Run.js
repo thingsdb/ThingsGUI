@@ -55,7 +55,7 @@ const Run = ({procedure}) => {
                     <CardContent>
                         <Grid container item xs={12} spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant="body1" >
+                                <Typography variant="body2" >
                                     {'RUN PROCEDURE'}
                                 </Typography>
                                 {procedure.with_side_effects&&(
@@ -94,9 +94,9 @@ const Run = ({procedure}) => {
                     title={
                         <Button
                             onClick={handleClickRun}
-                            variant="text"
+                            variant="outlined"
                             color="primary"
-                            size="large"
+                            size="small"
                         >
                             {'Run'}
                         </Button>

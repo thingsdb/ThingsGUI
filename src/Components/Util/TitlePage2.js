@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
 
 const useStyles = makeStyles(theme => ({
     padding: {
@@ -18,25 +19,44 @@ const TitlePage2 = ({preTitle, title, sideContent, content}) => {
     const classes = useStyles();
     return (
         <Grid direction="row" container spacing={1} alignItems="flex-start">
-            <Grid container spacing={1} item md={8} sm={12}>
+            <Grid container spacing={1} item lg={8} md={12}>
+                <Hidden lgUp>
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardHeader
+                                action={title}
+                                className={classes.padding}
+                                title={preTitle}
+                                titleTypographyProps={{
+                                    variant: 'body2',
+                                    display: 'inline',
+                                    noWrap: true,
+                                    component: 'span',
+                                }}
+                            />
+                        </Card>
+                    </Grid>
+                </Hidden>
                 {content}
             </Grid>
-            <Grid container spacing={1} item md={4} sm={12}>
-                <Grid item xs={12}>
-                    <Card>
-                        <CardHeader
-                            action={title}
-                            className={classes.padding}
-                            title={preTitle}
-                            titleTypographyProps={{
-                                variant: 'body1',
-                                display: 'inline',
-                                noWrap: true,
-                                component: 'span',
-                            }}
-                        />
-                    </Card>
-                </Grid>
+            <Grid container spacing={1} item lg={4} md={12}>
+                <Hidden mdDown>
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardHeader
+                                action={title}
+                                className={classes.padding}
+                                title={preTitle}
+                                titleTypographyProps={{
+                                    variant: 'body2',
+                                    display: 'inline',
+                                    noWrap: true,
+                                    component: 'span',
+                                }}
+                            />
+                        </Card>
+                    </Grid>
+                </Hidden>
                 {sideContent}
             </Grid>
         </Grid>

@@ -1,14 +1,15 @@
-import React from 'react';
-import Card from '@material-ui/core/Card';
+import {withVlow} from 'vlow';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import React from 'react';
 import StorageIcon from '@material-ui/icons/Storage';
 import VisibleIcon from '@material-ui/icons/Visibility';
-import {withVlow} from 'vlow';
 
 import {ApplicationStore} from '../../Stores';
 import {BottomBar, CollectionsMenu, ProcedureMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
@@ -30,6 +31,7 @@ const withStores = withVlow([{
 
 const App = ({match}) => {
     const [open, setOpen] = React.useState(false);
+    const [menuOpen, setMenuOpen] = React.useState(true);
     const [drawerContent, setDrawerContent] = React.useState(0);
 
     const pages = {
@@ -48,6 +50,14 @@ const App = ({match}) => {
         setOpen(false);
     };
 
+    const handleMenuOpen = () => {
+        setMenuOpen(true);
+    };
+
+    const handleMenuClose = () => {
+        setMenuOpen(false);
+    };
+
     return(
         <React.Fragment>
             <HeaderTitle />
@@ -57,7 +67,7 @@ const App = ({match}) => {
                 topbar={
                     <TopBar
                         additionals={
-                            <TopBarMenu menuIcon={<MenuIcon />}>
+                            <TopBarMenu menuIcon={<MoreVertIcon />} menuTooltip="Nodes & Watcher">
                                 <List>
                                     <ListItem button onClick={handleDrawerOpen(0)} >
                                         <ListItemIcon>
@@ -74,38 +84,24 @@ const App = ({match}) => {
                                 </List>
                             </TopBarMenu>
                         }
+                        menuIcon={
+                            <IconButton edge="start" onClick={handleMenuOpen} aria-label="close">
+                                <MenuIcon />
+                            </IconButton>
+                        }
                         pageIcon={<LandingPage />}
                     />
                 }
                 mainContent={
                     <Grid container alignItems="flex-start">
-                        <Grid container spacing={1} item xs={12} sm={12} md={3} lg={2} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
-                            <Grid item xs={12} sm={3} md={12}>
-                                <Card>
-                                    <CollectionsMenu />
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12} sm={3} md={12}>
-                                <Card>
-                                    <UsersMenu />
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12} sm={3} md={12}>
-                                <Card>
-                                    <ProcedureMenu />
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12} sm={3} md={12}>
-                                <Card>
-                                    <QueryEditorMenu />
-                                </Card>
-                            </Grid>
-                        </Grid>
-                        <Grid container item xs={12} sm={12} md={9} lg={10} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
+                        <Grid container item xs={12} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
                             {pages[match.path]}
                         </Grid>
                     </Grid>
                 }
+                menuOpen={menuOpen}
+                onMenuClose={handleMenuClose}
+                menus={[<CollectionsMenu key="collections_menu" />, <UsersMenu key="users_menu" />, <ProcedureMenu key="procedures_menu" />, <QueryEditorMenu key="editor_menu" />]}
                 bottomBar={<BottomBar />}
                 drawerTitle={drawerContent ? 'NODES' : 'WATCHER'}
                 drawerContent={drawerContent ? <Nodes /> : <Watcher />}

@@ -55,7 +55,7 @@ const HarmonicCardHeader = ({actionButtons, children, expand, onExpand, onRefres
                 className={classes.padding}
                 title={title}
                 titleTypographyProps={{
-                    variant: 'body1',
+                    variant: 'body2',
                     display: 'block',
                     noWrap: true,
                     component: 'span',
