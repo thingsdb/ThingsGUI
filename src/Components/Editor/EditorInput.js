@@ -36,11 +36,15 @@ const Editor = ({height, history, input, match, onExpand, onOutput, scope}) => {
     const [suggestion, setSuggestion] = React.useState(0);
 
     React.useEffect(() => {
-        setQueryInput(match.item);
+        if(match.item){
+            setQueryInput(match.item);
+        }
     }, [match.item]);
 
     React.useEffect(() => {
-        setQueryInput(input);
+        if(input){
+            setQueryInput(input);
+        }
     }, [input]);
 
     const handleCloseError = () => {
