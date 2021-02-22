@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles(theme => ({
     padding: {
-        paddingTop: theme.spacing(1),
+        paddingTop: theme.spacing(1.50),
         paddingBottom: theme.spacing(1.75),
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1.75),
