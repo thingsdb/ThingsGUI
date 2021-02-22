@@ -14,9 +14,7 @@ const withStores = withVlow([{
 
 
 const Nodes = ({nodes, connectedNode}) => {
-    // React.useEffect(() => {
-    //     NodesActions.getNodes(NodesActions.getStreamInfo);
-    // }, []);
+
     const handleRefresh = () => {
         NodesActions.getNodes();
     };
