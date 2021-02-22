@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
+import DragHandleIcon from '@material-ui/icons/DragHandle';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -51,15 +52,22 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-start',
     },
     dragger: {
+        display: 'flex',
         width: 5,
         cursor: 'ew-resize',
         position: 'absolute',
         top: 0,
         bottom: 0,
         zIndex: 3,
+        alignItems: 'center',
+        justifyContent: 'center',
+
     },
     draggerClose: {
         width: 0,
+    },
+    draggerIcon: {
+        transform: 'rotate(90deg)'
     },
     open: {
         display: 'block',
@@ -134,7 +142,9 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, toast, bottomBar, dra
                     <div
                         onMouseDown={handleMousedown}
                         className={open ? classes.dragger : classes.draggerClose}
-                    />
+                    >
+                        <DragHandleIcon color="primary" className={classes.draggerIcon} />
+                    </div>
                     <div className={open ? classes.open : classes.close}>
                         <div className={classes.drawerHeader}>
                             <IconButton color="primary" onClick={onClose}>
