@@ -14,10 +14,6 @@ const withStores = withVlow([{
 
 const CollectionsMenu = ({collections}) => {
 
-    React.useEffect(() => {
-        ThingsdbActions.getCollections();
-    }, []);
-
     const handleRefresh = () => {
         ThingsdbActions.getCollections();
     };

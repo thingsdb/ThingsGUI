@@ -14,10 +14,6 @@ const withStores = withVlow([{
 
 
 const UsersMenu = ({user, users}) => {
-    React.useEffect(() => {
-        ThingsdbActions.getUser();
-        setTimeout(()=>ThingsdbActions.getUsers(), 1000);
-    }, []);
 
     const handleRefresh = () => {
         ThingsdbActions.getUser();

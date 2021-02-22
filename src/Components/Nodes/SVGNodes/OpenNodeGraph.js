@@ -1,6 +1,8 @@
 import { makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -19,22 +21,32 @@ const withStores = withVlow([{
 
 const useStyles = makeStyles(() => ({
     graph: {
-        backgroundColor: '#000'
+        backgroundColor: '#000',
+        height: 600
     },
 }));
 
 const OpenNodeGraph = ({nodes, streamInfo}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
+
+    const handleLoading = React.useCallback(() => {
+        setTimeout(()=> {
+            setLoading(false);
+        }, 1000);
+    }, []);
 
     React.useEffect(() => {
         if (open) {
-            NodesActions.getStreamInfo();
+            setLoading(true);
+            NodesActions.getStreamInfo(handleLoading);
         }
-    }, [open]);
+    }, [handleLoading, open]);
 
     const handleRefresh = () => {
-        NodesActions.getStreamInfo();
+        setLoading(true);
+        NodesActions.getStreamInfo(handleLoading);
     };
 
     const handleClickOpen = () => {
@@ -70,9 +82,14 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             onClose={handleClickClose}
             maxWidth="md"
         >
-            <Grid className={classes.graph} container justify="center">
+            <Grid className={classes.graph} container justify="center" alignItems="center">
                 <Grid item>
-                    <NodeGraph data={nodes} streamInfo={streamInfo} />
+                    {loading ? <CircularProgress />
+                        :
+                        <Fade>
+                            <NodeGraph data={nodes} streamInfo={streamInfo} />
+                        </Fade>
+                    }
                 </Grid>
             </Grid>
         </SimpleModal>
