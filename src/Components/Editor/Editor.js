@@ -18,12 +18,15 @@ const withStores = withVlow([{
     keys: ['match']
 }]);
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     cardAction: {
         display: 'flex',
         alignItems: 'flex-end',
-        justifyContent: 'center',
-        padding: 0
+        justifyContent: 'flex-start',
+        paddingTop: theme.spacing(1),
+        paddingBottom: 0,
+        paddingLeft: theme.spacing(1),
+        paddingRight: 0
     },
 }));
 
@@ -69,16 +72,16 @@ const Editor = ({match}) => {
             content={
                 <React.Fragment>
                     <Grid item xs={12}>
-                        <DragdownCard>
-                            {(height) => (
-                                <EditorInput height={height} input={input} onExpand={handleExpand} onOutput={handleOutput} scope={scope} />
-                            )}
-                        </DragdownCard>
                         <Card>
                             <CardActions className={classes.cardAction} disableSpacing>
                                 <ErrorMsg tag={tag} />
                             </CardActions>
                         </Card>
+                        <DragdownCard>
+                            {(height) => (
+                                <EditorInput height={height} input={input} onExpand={handleExpand} onOutput={handleOutput} scope={scope} />
+                            )}
+                        </DragdownCard>
                     </Grid>
                     <Grid item xs={12}>
                         <HarmonicCard

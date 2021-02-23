@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     cardAction: {
         paddingTop: theme.spacing(1),
         paddingBottom: 0,
-        paddingLeft: theme.spacing(1),
+        paddingLeft: theme.spacing(2),
         paddingRight: 0
     },
 }));

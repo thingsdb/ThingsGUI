@@ -149,7 +149,6 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, onMenuClose
     const handleMouseup = React.useCallback(() => {
         setIsResizing(false);
     }, []);
-    console.log(menuOpen)
 
     return(
         <div>
