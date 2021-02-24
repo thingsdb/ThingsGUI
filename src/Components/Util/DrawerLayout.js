@@ -1,4 +1,4 @@
-import {makeStyles, useTheme} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -21,41 +21,58 @@ const useStyles = makeStyles((theme) => ({
     },
     body: {
         overflowY: 'auto',
-        height: 'calc(100% - 65px)',
+        height: 'calc(100% - 121px)', // footerHeight (60) + footerMarginTop (5) + topBarHeight (48) + appBarMarginBottom (8) = 121
     },
     footer: {
-        boxShadow: '0 -2px 10px 0 rgba(31,30,30,1)',
+        boxShadow: '0 -2px 4px 0 rgba(31,30,30,1)',
         borderRadius: 20,
         marginTop: 5,
         height: 60,
+        bottom: 0
     },
     full: {
-        position: 'relative',
-        zIndex: 1,
+        display: 'flex',
+        flex: '1 0 auto',
+        flexDirection: 'column',
+        height: '100%',
         overflowY: 'auto',
-        height: '100vh',
-        transition: theme.transitions.create('margin', {
+        position: 'fixed',
+        zIndex: 1,
+        transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
     },
     shrink: {
-        position: 'relative',
-        transition: theme.transitions.create('margin', {
+        position: 'fixed',
+        transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
     drawerOpen: {
         boxShadow: '-2px 0 5px 0 rgba(31,30,30,1)',
-        position: 'relative',
-        right: 0,
-        zIndex: 2,
+        display: 'flex',
+        flex: '1 0 auto',
+        flexDirection: 'column',
+        height: '100%',
         overflowY: 'auto',
-        height: '100vh',
+        position: 'fixed',
+        right: 0,
+        zIndex: 1200,
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     },
     drawerClose: {
         marginRight: '0px',
+        width: 0,
+        height: '100%',
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
     },
     drawerHeader: {
         display: 'flex',
@@ -64,15 +81,15 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-start',
     },
     dragger: {
-        display: 'flex',
-        width: 5,
+        alignItems: 'center',
+        bottom: 0,
         cursor: 'ew-resize',
+        display: 'flex',
+        justifyContent: 'center',
         position: 'absolute',
         top: 0,
-        bottom: 0,
+        width: 5,
         zIndex: 3,
-        alignItems: 'center',
-        justifyContent: 'center',
 
     },
     draggerClose: {
@@ -88,7 +105,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'none'
     },
     menuDrawer: {
-        position: 'relative',
         width: drawerWidth,
         flexShrink: 0,
     },
@@ -96,6 +112,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '2px 0 5px 0 rgba(31,30,30,1)',
         borderColor: theme.palette.background.paper,
         width: drawerWidth,
+        top: 'unset',
     },
     menuDrawerHeader: {
         display: 'flex',
@@ -106,16 +123,14 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
     },
     menuDrawerClose: {
-        position: 'relative',
         width: 0,
     },
 }));
 
 
 
-const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, onMenuClose, menus, toast, bottomBar, drawerTitle, drawerContent}) => {
+const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toast, bottomBar, drawerTitle, drawerContent}) => {
     const classes = useStyles();
-    const theme = useTheme();
     const [isResizing, setIsResizing] = React.useState(false);
     const [newWidth, setNewWidth] = React.useState(650);
 
@@ -152,6 +167,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, onMenuClose
 
     return(
         <div>
+            {topbar}
             <div className={classes.flex}>
                 <Drawer
                     className={clsx(classes.menuDrawerClose, {
@@ -164,12 +180,6 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, onMenuClose
                         paper: classes.menuDrawerPaper,
                     }}
                 >
-                    <div className={classes.menuDrawerHeader}>
-                        <IconButton onClick={onMenuClose}>
-                            {theme.direction === 'ltr' ? <ChevronLeftIcon color="primary" /> : <ChevronRightIcon color="primary" />}
-                        </IconButton>
-                    </div>
-                    <Divider />
                     <List>
                         {menus.map((item, index) => (
                             <ListItem key={`menu_item_${index}`}>
@@ -182,13 +192,17 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, onMenuClose
                     className={clsx(classes.full, {
                         [classes.shrink]: open || menuOpen,
                     })}
-                    style={open && menuOpen ? {width: `calc(100% - ${newWidth + drawerWidth}px)`, marginLeft: drawerWidth}
-                        : open ? {width: `calc(100% - ${newWidth}px)`}
-                            : menuOpen ? {width: `calc(100% - ${drawerWidth}px)`, marginLeft: drawerWidth}
-                                : {width:'100%'}}
+                    style={{
+                        width: open && menuOpen ? `calc(100% - ${newWidth + drawerWidth}px)`
+                            : open ? `calc(100% - ${newWidth}px)`
+                                : menuOpen ? `calc(100% - ${drawerWidth}px)`
+                                    : '100%',
+                        marginLeft: menuOpen ? drawerWidth : null,
+                        transition: isResizing ? 'none' : null
+
+                    }}
                 >
                     <div className={classes.body}>
-                        {topbar}
                         {mainContent}
                     </div>
                     <div className={classes.footer}>
@@ -199,7 +213,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, onMenuClose
                     className={clsx(classes.drawerClose, {
                         [classes.drawerOpen]: open,
                     })}
-                    style={open ? {width: newWidth } : {width: '0%'}}
+                    style={open ? {width: newWidth } : null}
                 >
                     <div
                         onMouseDown={handleMousedown}
@@ -233,7 +247,6 @@ DrawerLayout.defaultProps = {
 DrawerLayout.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    onMenuClose: PropTypes.func.isRequired,
     menuOpen: PropTypes.bool.isRequired,
     menus: PropTypes.arrayOf(PropTypes.object).isRequired,
     topbar: PropTypes.object.isRequired,

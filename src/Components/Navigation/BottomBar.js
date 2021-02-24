@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 
 
-
 const bottomInfo = [
     {
         name: 'github',
@@ -40,7 +39,7 @@ const BottomBar = () => {
                             src={v.icon}
                             draggable='false'
                             width='40em'
-                            style={{opacity:'0.4'}}
+                            style={{opacity:'0.6'}}
                         />
                     </Button>
                 ))}

@@ -30,7 +30,6 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.secondary.main,
         flexGrow: 1,
         marginBottom: theme.spacing(1),
-
     },
     flex: {
         display: 'flex',

@@ -6,6 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
+import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import React from 'react';
 import StorageIcon from '@material-ui/icons/Storage';
@@ -85,8 +86,8 @@ const App = ({match}) => {
                             </TopBarMenu>
                         }
                         menuIcon={
-                            <IconButton edge="start" onClick={handleMenuOpen} aria-label="close">
-                                <MenuIcon />
+                            <IconButton edge="start" onClick={menuOpen ? handleMenuClose : handleMenuOpen} aria-label="close">
+                                { menuOpen ? <MenuOpenIcon /> : <MenuIcon />}
                             </IconButton>
                         }
                         pageIcon={<LandingPage />}
@@ -100,7 +101,6 @@ const App = ({match}) => {
                     </Grid>
                 }
                 menuOpen={menuOpen}
-                onMenuClose={handleMenuClose}
                 menus={[<CollectionsMenu key="collections_menu" />, <UsersMenu key="users_menu" />, <ProcedureMenu key="procedures_menu" />, <QueryEditorMenu key="editor_menu" />]}
                 bottomBar={<BottomBar />}
                 drawerTitle={drawerContent ? 'NODES' : 'WATCHER'}
