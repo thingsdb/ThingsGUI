@@ -3,7 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -31,9 +31,9 @@ const RefreshContainer = ({actionButtons, buttons, content, noPadding, onRefresh
                     <React.Fragment>
                         {actionButtons}
                         {onRefresh && (
-                            <IconButton color="primary" onClick={handleRefresh}>
+                            <Button color="primary" onClick={handleRefresh}>
                                 <RefreshIcon color="primary" />
-                            </IconButton>
+                            </Button>
                         )}
                     </React.Fragment>
                 }

@@ -85,11 +85,11 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             <Grid className={classes.graph} container justify="center" alignItems="center">
                 <Grid item>
                     {loading ? <CircularProgress />
-                        :
-                        <Fade>
-                            <NodeGraph data={nodes} streamInfo={streamInfo} />
-                        </Fade>
-                    }
+                        : (
+                            <Fade>
+                                <NodeGraph data={nodes} streamInfo={streamInfo} />
+                            </Fade>
+                        )}
                 </Grid>
             </Grid>
         </SimpleModal>

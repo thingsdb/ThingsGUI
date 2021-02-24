@@ -7,7 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -88,12 +88,12 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
                         <ListItemText primary={v.name} secondary={v.address} />
                         <ListItemSecondaryAction>
                             <Memo connection={v} />
-                            <IconButton color="primary" onClick={handleDeleteConn(v.name)}>
+                            <Button color="primary" onClick={handleDeleteConn(v.name)}>
                                 <DeleteIcon color="primary" />
-                            </IconButton>
-                            <IconButton color="primary" onClick={handleOpenDetail(v.name)}>
+                            </Button>
+                            <Button color="primary" onClick={handleOpenDetail(v.name)}>
                                 {openDetail[v.name] ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-                            </IconButton>
+                            </Button>
                         </ListItemSecondaryAction>
                     </ListItem>
                     <Collapse in={openDetail[v.name]} timeout="auto">

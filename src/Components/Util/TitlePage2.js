@@ -8,10 +8,10 @@ import Hidden from '@material-ui/core/Hidden';
 
 const useStyles = makeStyles(theme => ({
     padding: {
-        paddingTop: theme.spacing(1.50),
-        paddingBottom: theme.spacing(1.75),
+        paddingTop: theme.spacing(1.25),
+        paddingBottom: theme.spacing(1),
         paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
+        paddingRight: theme.spacing(4),
     }
 }));
 

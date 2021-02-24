@@ -7,7 +7,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -120,9 +119,9 @@ const Auth = ({authMethod}) => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton color="primary" onClick={handleClickShow}>
+                                    <Button color="primary" onClick={handleClickShow}>
                                         {show ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
+                                    </Button>
                                 </InputAdornment>
                             ),
                         }}
@@ -141,9 +140,9 @@ const Auth = ({authMethod}) => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton color="primary" onClick={handleClickShow}>
+                                    <Button color="primary" onClick={handleClickShow}>
                                         {show ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
+                                    </Button>
                                 </InputAdornment>
                             ),
                         }}

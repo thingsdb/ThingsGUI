@@ -55,15 +55,21 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
             position="static"
         >
             <Toolbar className={classes.toolbar}>
-                <div>
-                    {menuIcon}
-                </div>
-                <div>
-                    {pageIcon}
-                </div>
-                <div className={classes.flexGrow}>
-                    {title}
-                </div>
+                {menuIcon &&
+                    <div className={classes.flexGrow}>
+                        {menuIcon}
+                    </div>
+                }
+                {pageIcon &&
+                    <div className={classes.flexGrow}>
+                        {pageIcon}
+                    </div>
+                }
+                {title &&
+                    <div className={classes.flexGrow}>
+                        {title}
+                    </div>
+                }
                 <div >
                     <TopBarMenu menuIcon={<AccountCircle />} menuTooltip="Logout">
                         <List>

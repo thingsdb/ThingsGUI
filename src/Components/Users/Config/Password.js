@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
@@ -135,9 +135,9 @@ const Password = ({user}) => {
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton color="primary" onClick={handleClickShowPassword}>
+                                <Button color="primary" onClick={handleClickShowPassword}>
                                     {showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
+                                </Button>
                             </InputAdornment>
                         ),
                     }}

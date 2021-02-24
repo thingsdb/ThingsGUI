@@ -2,7 +2,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import PropTypes from 'prop-types';
 import Radio from '@material-ui/core/Radio';
@@ -146,9 +146,9 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton color="primary" onClick={handleClickShow}>
+                                    <Button color="primary" onClick={handleClickShow}>
                                         {show ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
+                                    </Button>
                                 </InputAdornment>
                             ),
                         }}
@@ -167,9 +167,9 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton color="primary" onClick={handleClickShow}>
+                                    <Button color="primary" onClick={handleClickShow}>
                                         {show ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
+                                    </Button>
                                 </InputAdornment>
                             ),
                         }}

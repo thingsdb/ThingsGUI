@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import IconButton from '@material-ui/core/IconButton';
 import React from 'react';
 import Slide from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
@@ -60,9 +59,9 @@ const LandingPage = () => {
                             </Typography>
                         }
                         pageIcon={
-                            <IconButton className={classes.color} edge="start" onClick={handleClose} aria-label="close">
+                            <Button className={classes.color} onClick={handleClose} aria-label="close">
                                 <ExpandLessIcon />
-                            </IconButton>
+                            </Button>
                         }
                     />
                 </div>

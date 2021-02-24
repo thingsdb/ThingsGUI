@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import Divider from '@material-ui/core/Divider';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 import Drawer from '@material-ui/core/Drawer';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
@@ -223,9 +223,9 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     </div>
                     <div className={open ? classes.open : classes.close}>
                         <div className={classes.drawerHeader}>
-                            <IconButton color="primary" onClick={onClose}>
+                            <Button color="primary" onClick={onClose}>
                                 {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
-                            </IconButton>
+                            </Button>
                             <Typography variant="body2">
                                 {drawerTitle}
                             </Typography>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
 import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles} from '@material-ui/core/styles';
@@ -41,14 +41,14 @@ const TopBarMenu = ({ children, menuIcon, menuTooltip}) => {
         <React.Fragment>
             <Tooltip disableFocusListener disableTouchListener title={menuTooltip}>
                 <div>
-                    <IconButton
+                    <Button
                         aria-haspopup="true"
                         aria-owns={isOpen ? 'menu' : null}
                         onClick={handleMenuOpen}
                         className={classes.color}
                     >
                         {menuIcon}
-                    </IconButton>
+                    </Button>
                 </div>
             </Tooltip>
             <Popover

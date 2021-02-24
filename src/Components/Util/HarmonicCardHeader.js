@@ -5,7 +5,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -16,7 +16,10 @@ const useStyles = makeStyles(theme => ({
         paddingBottom: theme.spacing(1),
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
-    }
+    },
+    action: {
+        marginTop: 0,
+    },
 }));
 
 const HarmonicCardHeader = ({actionButtons, children, expand, onExpand, onRefresh, title, unmountOnExit}) => {
@@ -46,13 +49,13 @@ const HarmonicCardHeader = ({actionButtons, children, expand, onExpand, onRefres
                     <React.Fragment>
                         {expanded && actionButtons}
                         {onRefresh && expanded && (
-                            <IconButton color="primary" onClick={handleRefresh}>
+                            <Button color="primary" onClick={handleRefresh}>
                                 <RefreshIcon color="primary" />
-                            </IconButton>
+                            </Button>
                         )}
-                        <IconButton color="primary" onClick={handleExpandClick}>
+                        <Button color="primary" onClick={handleExpandClick}>
                             {expanded ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-                        </IconButton>
+                        </Button>
                     </React.Fragment>
                 }
                 className={classes.padding}
@@ -62,6 +65,9 @@ const HarmonicCardHeader = ({actionButtons, children, expand, onExpand, onRefres
                     display: 'block',
                     noWrap: true,
                     component: 'span',
+                }}
+                classes={{
+                    action: classes.action,
                 }}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit={unmountOnExit}>
