@@ -1,6 +1,6 @@
 import {withVlow} from 'vlow';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -86,9 +86,9 @@ const App = ({match}) => {
                             </TopBarMenu>
                         }
                         menuIcon={
-                            <Button onClick={menuOpen ? handleMenuClose : handleMenuOpen} aria-label="close">
+                            <IconButton edge="start" onClick={menuOpen ? handleMenuClose : handleMenuOpen} aria-label="close">
                                 { menuOpen ? <MenuOpenIcon /> : <MenuIcon />}
-                            </Button>
+                            </IconButton>
                         }
                         pageIcon={<LandingPage />}
                     />

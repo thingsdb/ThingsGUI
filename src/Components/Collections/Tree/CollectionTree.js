@@ -1,13 +1,14 @@
 /*eslint-disable react/no-multi-comp*/
 /*eslint-disable react/jsx-props-no-spreading*/
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Slide from '@material-ui/core/Slide';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 import {CollectionActions} from '../../../Stores';
 import {HarmonicCard} from '../../Util';
@@ -47,9 +48,9 @@ const CollectionTree = ({collection}) => {
                 <div>
                     <TopBar
                         pageIcon={
-                            <Button color="primary" onClick={handleOpen} aria-label="close">
+                            <IconButton edge="start" color="primary" onClick={handleOpen} aria-label="close">
                                 <ExpandMoreIcon />
-                            </Button>
+                            </IconButton>
                         }
                     />
                 </div>

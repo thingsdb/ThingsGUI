@@ -29,6 +29,10 @@ func handlerThingsdbGIF(w http.ResponseWriter, r *http.Request) {
 	util.HandleFileRequest(w, "./static/img/thingsdb.gif", "image/gif")
 }
 
+func handlerThingsguiLogo(w http.ResponseWriter, r *http.Request) {
+	util.HandleFileRequest(w, "./static/img/thingsgui-logo.png", "image/png")
+}
+
 func handlerThingsdbLogo(w http.ResponseWriter, r *http.Request) {
 	util.HandleFileRequest(w, "./static/img/thingsdb-logo.png", "image/png")
 }

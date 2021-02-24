@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import IconButton from '@material-ui/core/IconButton';
 import React from 'react';
 import Slide from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
@@ -44,7 +45,7 @@ const LandingPage = () => {
             <Button variant="text" color="primary" onClick={handleClickOpen}>
                 <img
                     alt="ThingsDB Logo"
-                    src="/img/thingsdb-logo.png"
+                    src="/img/thingsgui-logo.png"
                     className={classes.avatar}
                     draggable='false'
                 />
@@ -59,9 +60,9 @@ const LandingPage = () => {
                             </Typography>
                         }
                         pageIcon={
-                            <Button className={classes.color} onClick={handleClose} aria-label="close">
+                            <IconButton edge="start" className={classes.color} onClick={handleClose} aria-label="close">
                                 <ExpandLessIcon />
-                            </Button>
+                            </IconButton>
                         }
                     />
                 </div>

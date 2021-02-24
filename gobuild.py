@@ -69,6 +69,7 @@ binfiles = [
     ("./static/js/editor.worker.js", "FileEditorWorkerJS"),
     ("./static/fonts/monaco-font.ttf", "FileMonacoFontTTF"),
     ("./static/img/thingsdb.gif", "FileThingsdbGIF"),
+    ("./static/img/thingsgui-logo.png", "FileThingsguiLogo"),
     ("./static/img/thingsdb-logo.png", "FileThingsdbLogo"),
     ("./static/img/githubLogo.svg", "FileGithubLogo"),
     ("./static/img/facebookLogo.png", "FileFacebookLogo"),
