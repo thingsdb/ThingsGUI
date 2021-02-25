@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TopBarMenu = ({ children, menuIcon}) => {
+const TopBarMenu = ({ children, menuIcon, menuTooltip}) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -39,11 +39,12 @@ const TopBarMenu = ({ children, menuIcon}) => {
 
     return (
         <React.Fragment>
-            <Tooltip disableFocusListener disableTouchListener title="menu">
+            <Tooltip disableFocusListener disableTouchListener title={menuTooltip}>
                 <div>
                     <IconButton
                         aria-haspopup="true"
                         aria-owns={isOpen ? 'menu' : null}
+                        edge="end"
                         onClick={handleMenuOpen}
                         className={classes.color}
                     >
@@ -76,6 +77,7 @@ const TopBarMenu = ({ children, menuIcon}) => {
 TopBarMenu.propTypes = {
     children: PropTypes.object.isRequired,
     menuIcon: PropTypes.object.isRequired,
+    menuTooltip: PropTypes.string.isRequired,
 };
 
 export default TopBarMenu;

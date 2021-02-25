@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     },
     card: {
         backgroundColor: '#141719',
-        padding: theme.spacing(2),
+        padding: theme.spacing(1),
         overflowX: 'auto',
     },
     tabs: {

@@ -6,7 +6,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import PeopleIcon from '@material-ui/icons/People';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -139,9 +139,9 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={1}>
-                                    <IconButton color="primary" onClick={handleRefresh} size="medium">
+                                    <Button color="primary" onClick={handleRefresh} size="medium">
                                         <RefreshIcon color="primary" style={{ fontSize: 50 }}  />
-                                    </IconButton>
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </CardContent>

@@ -5,7 +5,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import RemoveIcon from '@material-ui/icons/HighlightOff';
 import React from 'react';
@@ -76,16 +76,16 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                 <Typography variant="h3" className={classes.sidepadding} color="primary">
                     {groupSigning[groupSign][1]}
                 </Typography>
-                <IconButton color="primary" onClick={onAdd}>
+                <Button color="primary" onClick={onAdd}>
                     <AddIcon color="primary" />
-                </IconButton>
-                <IconButton color="primary" onClick={onRefresh}>
+                </Button>
+                <Button color="primary" onClick={onRefresh}>
                     <RemoveIcon color="primary" />
-                </IconButton>
+                </Button>
                 {canCollapse && (
-                    <IconButton color="primary" onClick={open ? handleClose : handleOpen}>
+                    <Button color="primary" onClick={open ? handleClose : handleOpen}>
                         {open ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-                    </IconButton>
+                    </Button>
                 )}
             </Grid>
         </Grid>

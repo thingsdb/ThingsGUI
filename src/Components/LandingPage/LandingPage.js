@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import LandingContent from './LandingContent';
 import {TopBar} from '../Navigation';
 
-const version='version: 0.2.14';
+const version='version: 0.3.0';
 
 const useStyles = makeStyles(theme => ({
     avatar: {
@@ -45,7 +45,7 @@ const LandingPage = () => {
             <Button variant="text" color="primary" onClick={handleClickOpen}>
                 <img
                     alt="ThingsDB Logo"
-                    src="/img/thingsdb-logo.png"
+                    src="/img/thingsgui-logo.png"
                     className={classes.avatar}
                     draggable='false'
                 />
@@ -60,7 +60,7 @@ const LandingPage = () => {
                             </Typography>
                         }
                         pageIcon={
-                            <IconButton className={classes.color} edge="start" onClick={handleClose} aria-label="close">
+                            <IconButton edge="start" className={classes.color} onClick={handleClose} aria-label="close">
                                 <ExpandLessIcon />
                             </IconButton>
                         }

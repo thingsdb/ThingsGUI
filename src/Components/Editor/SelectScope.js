@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import React from 'react';
-import PropTypes from 'prop-types';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import {NodesStore, ThingsdbStore} from '../../Stores';
 import {getScopes2} from '../Util';
@@ -16,7 +17,18 @@ const withStores = withVlow([{
     keys: ['nodes']
 }]);
 
+const useStyles = makeStyles(theme => ({
+    icon: {
+        color: theme.palette.primary.main,
+    },
+    input: {
+        color: theme.palette.primary.main,
+        fontSize: '1.5rem',
+    }
+}));
+
 const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
+    const classes = useStyles();
     const [name, setName] = React.useState(scope|| collections[0] ? `@collection:${collections[0].name}` : '@thingsdb');
     const scopes = getScopes2(collections, nodes);
 
@@ -33,17 +45,20 @@ const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
 
     return (
         <NativeSelect
+            classes={{
+                icon: classes.icon
+            }}
             disableUnderline
             IconComponent={ExpandMore}
             id="scope"
             inputProps={{
                 style: {
                     color:'#3a6394',
-                    fontSize: '2.125rem',
-                },
+                    fontSize: '1.5rem',
+                }
             }}
             onChange={handleOnChangeScope}
-            style={{lineHeight: '2.2rem'}}
+            style={{lineHeight: '2rem'}}
             value={name}
             variant="outlined"
         >

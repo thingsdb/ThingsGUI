@@ -20,7 +20,7 @@ import (
 )
 
 // AppVersion exposes version information
-const AppVersion = "0.2.14"
+const AppVersion = "0.3.0"
 
 var connFile = ".things-gui_config"
 
@@ -251,6 +251,7 @@ func (app *App) Start() {
 	http.HandleFunc("/js/editor.worker.js", handlerEditorWorkerJS)
 	http.HandleFunc("/fonts/monaco-font.ttf", handlerMonacoFontTTF)
 	http.HandleFunc("/img/thingsdb.gif", handlerThingsdbGIF)
+	http.HandleFunc("/img/thingsgui-logo.png", handlerThingsguiLogo)
 	http.HandleFunc("/img/thingsdb-logo.png", handlerThingsdbLogo)
 	http.HandleFunc("/img/githubLogo.svg", handlerGithubLogo)
 	http.HandleFunc("/img/facebookLogo.png", handlerFacebookLogo)

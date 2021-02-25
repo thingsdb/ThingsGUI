@@ -1,5 +1,5 @@
 import React from 'react';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import {withVlow} from 'vlow';
 
 import {Add} from '../Collections/Config';
@@ -14,10 +14,6 @@ const withStores = withVlow([{
 
 const CollectionsMenu = ({collections}) => {
 
-    React.useEffect(() => {
-        ThingsdbActions.getCollections();
-    }, []);
-
     const handleRefresh = () => {
         ThingsdbActions.getCollections();
     };
@@ -31,7 +27,7 @@ const CollectionsMenu = ({collections}) => {
     return (
         <Menu
             title="collections"
-            icon={<DashboardIcon color="primary" />}
+            icon={<LibraryBooksIcon color="primary" />}
             items={orderedCollections}
             addItem={<Add />}
             onClickItem={handleClickCollection}

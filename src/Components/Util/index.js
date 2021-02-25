@@ -179,12 +179,14 @@ const swap = (items, index) => {
 };
 
 const scaleToBinBytes = (bytes) => {
+    if(bytes === 0) {
+        return '0 bytes';
+    }
     const metricLabel = ['bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-    const l = String(bytes).length;
-    const i = Math.floor(l/3);
-    const number = bytes/1024**i;
+    let i = Math.floor(Math.log(Math.ceil(bytes)) / Math.log(1024));
+    i = i > 8 ? 8 : i;
+    const number = bytes/(1024**i);
     const rounded = Math.round(number);
-
     return `${rounded === number ? '' : '~'}${rounded} ${metricLabel[i]}`;
 };
 

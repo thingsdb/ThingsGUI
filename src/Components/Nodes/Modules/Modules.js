@@ -1,7 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import {makeStyles} from '@material-ui/core';
 import {withVlow} from 'vlow';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import moment from 'moment';
 import PropTypes from 'prop-types';

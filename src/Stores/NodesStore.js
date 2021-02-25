@@ -117,7 +117,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onGetStreamInfo(){
+    onGetStreamInfo(callback=()=>null){
         const {nodes, streamInfo} = this.state;
         const query = 'nodes_info();';
         const obj = {};
@@ -138,11 +138,13 @@ class NodesStore extends BaseStore {
                 if ((length-2)==i && !deepEqual(obj, streamInfo)){
                     this.setState({streamInfo: obj});
                 }
+                callback();
             }).fail((event, status, message) => {
                 ErrorActions.setToastError(message.Log);
                 if ((length-2)==i && !deepEqual(obj, streamInfo)){
                     this.setState({streamInfo: obj});
                 }
+                callback();
             })
         );
     }

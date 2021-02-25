@@ -316,7 +316,7 @@ class EventStore extends BaseStore {
             let res = {watchThings: watchThings, watchIds: watchIds};
 
             if (data.procedures) {
-                let proc = data.procedures.reduce((res, item) => { res[item.name] = item.definition; return res;}, {});
+                let proc = data.procedures.reduce((res, item) => { res[item.name] = item; return res;}, {});
                 let typ = data.types.reduce((res, item) => { res[item.name] = item; return res;}, {});
                 let enu = data.enums.reduce((res, item) => { res[item.name] = item; return res;}, {});
 

@@ -30,9 +30,11 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.secondary.main,
         flexGrow: 1,
         marginBottom: theme.spacing(1),
-
     },
     flex: {
+        display: 'flex',
+    },
+    flexGrow: {
         flexGrow: 1,
     },
     toolbar: {
@@ -41,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const TopBar = ({additionals, pageIcon, user, title}) => {
+const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
     const classes = useStyles();
     const handleClickLogout = () => {
         ApplicationActions.disconnect();
@@ -53,14 +55,23 @@ const TopBar = ({additionals, pageIcon, user, title}) => {
             position="static"
         >
             <Toolbar className={classes.toolbar}>
-                <div className={classes.flex}>
-                    {pageIcon}
-                </div>
-                <div className={classes.flex}>
-                    {title}
-                </div>
+                {menuIcon &&
+                    <div className={classes.flexGrow}>
+                        {menuIcon}
+                    </div>
+                }
+                {pageIcon &&
+                    <div className={classes.flexGrow}>
+                        {pageIcon}
+                    </div>
+                }
+                {title &&
+                    <div className={classes.flexGrow}>
+                        {title}
+                    </div>
+                }
                 <div >
-                    <TopBarMenu menuIcon={<AccountCircle />}>
+                    <TopBarMenu menuIcon={<AccountCircle />} menuTooltip="Logout">
                         <List>
                             <ListItem>
                                 <ListItemIcon>
@@ -87,11 +98,13 @@ const TopBar = ({additionals, pageIcon, user, title}) => {
 
 TopBar.defaultProps = {
     additionals: null,
+    menuIcon: null,
     title: null,
 };
 
 TopBar.propTypes = {
     additionals: PropTypes.object,
+    menuIcon: PropTypes.object,
     pageIcon: PropTypes.object.isRequired,
     title: PropTypes.object,
 

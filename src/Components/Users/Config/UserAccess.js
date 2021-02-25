@@ -136,7 +136,7 @@ const UserAccess = ({user, collections, close}) => {
                     <CardContent>
                         <Grid container item xs={12} spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant="body1" >
+                                <Typography variant="body2" >
                                     {'ACCESS RULES'}
                                 </Typography>
                             </Grid>

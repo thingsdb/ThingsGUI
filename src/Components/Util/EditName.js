@@ -2,7 +2,7 @@ import Collapse from '@material-ui/core/Collapse';
 import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/Close';
 import SendIcon from '@material-ui/icons/Send';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -36,9 +36,9 @@ const EditName = ({name, fn}) => {
             <Collapse in={!show} timeout="auto">
                 <Typography variant="h4" color='primary' component='span'>
                     {newName||name}
-                    <IconButton color="primary" onClick={handleClickOpenEdit}>
+                    <Button color="primary" onClick={handleClickOpenEdit}>
                         <EditIcon color="primary" />
-                    </IconButton>
+                    </Button>
                 </Typography>
             </Collapse>
             <Collapse in={show} timeout="auto" unmountOnExit>
@@ -62,12 +62,12 @@ const EditName = ({name, fn}) => {
                         shrink: true,
                     }}
                 />
-                <IconButton color="primary" onClick={handleClickSend}>
+                <Button color="primary" onClick={handleClickSend}>
                     <SendIcon color="primary" />
-                </IconButton>
-                <IconButton color="primary" onClick={handleClickCloseEdit}>
+                </Button>
+                <Button color="primary" onClick={handleClickCloseEdit}>
                     <CancelIcon color="primary" />
-                </IconButton>
+                </Button>
             </Collapse>
         </React.Fragment>
     );

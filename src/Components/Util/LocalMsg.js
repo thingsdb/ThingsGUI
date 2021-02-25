@@ -4,7 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import CloseIcon from '@material-ui/icons/Close';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles} from '@material-ui/core/styles';
 
@@ -40,9 +40,9 @@ const LocalMsg = ({icon, msg, onClose}) => {
                     </Grid>
                     {onClose && (
                         <Grid item xs={2}>
-                            <IconButton color="primary" aria-label="settings" onClick={handleCloseError}>
+                            <Button color="primary" aria-label="settings" onClick={handleCloseError}>
                                 <CloseIcon />
-                            </IconButton>
+                            </Button>
                         </Grid>
                     )}
                 </Grid>
