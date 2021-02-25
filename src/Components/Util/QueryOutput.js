@@ -11,7 +11,7 @@ import {ThingsTree} from '../Util';
 const useStyles = makeStyles(theme => ({
     card: {
         backgroundColor: '#000',
-        padding: theme.spacing(2),
+        padding: theme.spacing(1),
         overflowX: 'auto',
 
     },
