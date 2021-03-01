@@ -33,6 +33,11 @@ func handlerThingsdbGIF(w http.ResponseWriter, r *http.Request) {
 	w.Write(FileThingsdbGIF)
 }
 
+func handlerThingsguiLogo(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "image/png")
+	w.Write(FileThingsguiLogo)
+}
+
 func handlerThingsdbLogo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "image/png")
 	w.Write(FileThingsdbLogo)
