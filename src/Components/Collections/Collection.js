@@ -6,11 +6,11 @@ import React from 'react';
 import {ApplicationStore, ThingsdbStore} from '../../Stores';
 import {CollectionConfig} from './Config';
 import {findItem, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Util';
-import CollectionProcedures from './Procedures';
+import {Procedures, Timers} from './ProceduresTimers';
 import CollectionTree from './Tree';
 import CollectionEnumsTypes from './EnumsTypes';
 import {ProcedureActions} from '../../Stores';
-import {CollectionProceduresTAG} from '../../constants';
+import {ProceduresTAG} from '../../constants';
 
 
 const withStores = withVlow([{
@@ -32,7 +32,7 @@ const Collection = ({match, collections}) => {
     const selectedCollection = findItem(match.index, collections);
 
     const handleRefresh = () => {
-        ProcedureActions.getProcedures(`@collection:${selectedCollection.name}`, CollectionProceduresTAG);
+        ProcedureActions.getProcedures(`@collection:${selectedCollection.name}`, ProceduresTAG);
     };
 
     return (
@@ -55,7 +55,12 @@ const Collection = ({match, collections}) => {
                         <Grid container item md={5} xs={12}>
                             <Grid className={classes.spacing} item xs={12}>
                                 <HarmonicCardHeader title="PROCEDURES" onRefresh={handleRefresh} unmountOnExit>
-                                    <CollectionProcedures scope={`@collection:${selectedCollection.name}`} />
+                                    <Procedures scope={`@collection:${selectedCollection.name}`} />
+                                </HarmonicCardHeader >
+                            </Grid>
+                            <Grid className={classes.spacing} item xs={12}>
+                                <HarmonicCardHeader title="TIMERS" onRefresh={handleRefresh} unmountOnExit>
+                                    <Timers scope={`@collection:${selectedCollection.name}`} />
                                 </HarmonicCardHeader >
                             </Grid>
                             <CollectionEnumsTypes scope={`@collection:${selectedCollection.name}`} />

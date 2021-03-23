@@ -2,19 +2,21 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
-import {ProcedureActions} from '../../../Stores';
+import {ProcedureActions, TimerActions} from '../../../Stores';
 import {RemoveProcedureTAG} from '../../../constants';
 
 
 const tag = RemoveProcedureTAG;
 
-const Remove = ({procedure, scope, close}) => {
+const Remove = ({item, scope, close, type}) => {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState('');
 
+    let identifier = type === 'procedure' ? item.name : item.id;
+
     React.useEffect(() => {
-        setName(procedure.name);
-    }, [procedure.name]);
+        setName(identifier);
+    }, [identifier]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -25,12 +27,8 @@ const Remove = ({procedure, scope, close}) => {
     };
 
     const handleClickOk = () => {
-        ProcedureActions.deleteProcedure(
-            scope,
-            procedure.name,
-            tag,
-            close?handleClickClose:()=>null,
-        );
+        let fn = type === 'procedure' ? ProcedureActions.deleteProcedure : TimerActions.deleteTimer
+        fn(scope, identifier, tag, close ? handleClickClose : () => null);
     };
 
     return(
@@ -53,9 +51,10 @@ Remove.defaultProps = {
 };
 
 Remove.propTypes = {
-    procedure: PropTypes.object.isRequired,
+    item: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
     close: PropTypes.bool,
+    type: PropTypes.string.isRequired,
 };
 
 export default Remove;

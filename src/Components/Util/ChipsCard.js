@@ -75,11 +75,9 @@ const orderByName = (arr) => arr.sort((a, b) => {
     return 0;
 });
 
-const tag = ChipsCardTAG;
-
 const step = 20;
 
-const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExpression}) => {
+const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, tag, title, warnExpression}) => {
     const classes = useStyles();
     const [deleteItem, setDeleteItem] = React.useState('');
     const [switchDel, setSwitchDel] = React.useState(false);
@@ -88,7 +86,7 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
 
 
     const handleClickDelete = () => {
-        onDelete(deleteItem, handleCloseDelete, tag);
+        onDelete(deleteItem, handleCloseDelete, ChipsCardTAG);
     };
 
     const handleClickAdd = () => {
@@ -148,6 +146,7 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
                                     />
                                 </div>
                             </Grid>
+                            <ErrorMsg tag={tag} />
                         </Grid>
                         <Grid item xs={12}>
                             {
@@ -204,7 +203,7 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
                 title={deleteItem?`Are you sure you want to remove '${deleteItem}'?`:''}
             >
                 <React.Fragment>
-                    <ErrorMsg tag={tag} />
+                    <ErrorMsg tag={ChipsCardTAG} />
                     <FormControlLabel
                         control={(
                             <Switch
@@ -234,6 +233,7 @@ ChipsCard.propTypes = {
     onAdd: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
     buttons: PropTypes.func.isRequired,
+    tag: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     warnExpression: PropTypes.func,
 };

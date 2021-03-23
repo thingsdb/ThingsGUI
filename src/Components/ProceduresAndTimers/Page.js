@@ -1,56 +1,42 @@
-import {withVlow} from 'vlow';
+import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
 import {findItem, isObjectEmpty, TitlePage} from '../Util';
-import {ApplicationStore, ProcedureActions, ProcedureStore} from '../../Stores';
 import {Edit, Remove, Run, View} from './Actions';
 import {EditProvider} from '../Collections/CollectionsUtils';
 
-const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}, {
-    store: ProcedureStore,
-    keys: ['procedures']
-}]);
 
+const Page = ({match, list, scope, type}) => {
 
-const scope = '@thingsdb';
-const Procedure = ({match, procedures}) => {
-
-    React.useEffect(() => {
-        ProcedureActions.getProcedures(scope);
-    }, []);
-
-    const selectedProcedure = findItem(match.index, procedures[scope]||[]);
+    const selectedItem = findItem(match.index, list[scope]||[]);
 
     const buttons = [
         {
             name: 'view',
-            component: <View procedure={selectedProcedure} />
+            component: <View item={selectedItem} type={type} />
         },
         {
             name: 'edit',
-            component: <Edit procedure={selectedProcedure} scope={scope} />
+            component: <Edit item={selectedItem} scope={scope} type={type} />
         },
         {
             name: 'remove',
-            component: <Remove procedure={selectedProcedure} scope={scope} close={(procedures[scope].length-1)!=match.index} />
+            component: <Remove item={selectedItem} scope={scope} close={(list[scope].length-1) != match.index} type={type} />
         },
     ];
 
     return (
-        isObjectEmpty(selectedProcedure) ? null
+        isObjectEmpty(selectedItem) ? null
             : (
                 <TitlePage
-                    preTitle='Customizing ThingDB procedure:'
-                    title={selectedProcedure.name}
+                    preTitle={`Customizing ThingDB ${type}:`}
+                    title={selectedItem.name || ''}
                     content={
                         <React.Fragment>
                             <Grid container spacing={1} item md={9} sm={12}>
                                 <EditProvider>
-                                    <Run procedure={selectedProcedure} />
+                                    <Run item={selectedItem} type={type} />
                                 </EditProvider>
                             </Grid>
                             <Grid container item md={3} sm={12} spacing={1} justify="center" alignItems="center" >
@@ -67,11 +53,11 @@ const Procedure = ({match, procedures}) => {
     );
 };
 
-Procedure.propTypes = {
-    /* Application properties */
-    match: ApplicationStore.types.match.isRequired,
-    /* procedures properties */
-    procedures: ProcedureStore.types.procedures.isRequired,
+Page.propTypes = {
+    match: PropTypes.object.isRequired,
+    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+    scope: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
 };
 
-export default withStores(Procedure);
+export default Page;

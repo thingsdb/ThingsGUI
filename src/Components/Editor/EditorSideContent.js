@@ -5,10 +5,12 @@ import React from 'react';
 import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import {EnumActions, ProcedureActions, TypeActions, EnumStore, ProcedureStore, TypeStore} from '../../Stores';
+import {EnumActions, ProcedureActions, TypeActions, EnumStore, ProcedureStore, TypeStore, TimerActions, TimerStore} from '../../Stores';
 import {ChipsCard, HarmonicCardHeader, WarnPopover} from '../Util';
-import {ViewProcedureDialog} from '../Procedures/Dialogs';
+import {ViewProcedureDialog} from '../ProceduresAndTimers/ProcedureDialogs';
+import {ViewTimerDialog} from '../ProceduresAndTimers/TimerDialogs';
 import {EnumTypeChips} from '../Collections/CollectionsUtils/TypesEnumsUtils';
+import {ProceduresTAG, TimersTAG} from '../../constants';
 
 const withStores = withVlow([{
     store: EnumStore,
@@ -17,14 +19,22 @@ const withStores = withVlow([{
     store: TypeStore,
     keys: ['customTypes']
 }, {
+    store: TimerStore,
+    keys: ['timers']
+}, {
     store: ProcedureStore,
     keys: ['procedures']
 }]);
 
-const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInput, tag}) => {
+const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInput, tag, timers}) => {
     const [viewProcedure, setViewProcedure] = React.useState({
         open: false,
         name: '',
+        expand: false,
+    });
+    const [viewTimer, setViewTimer] = React.useState({
+        open: false,
+        id: '',
         expand: false,
     });
     const [viewEnum, setViewEnum] = React.useState({
@@ -48,16 +58,18 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
     const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, tag), [scope, tag]);
     const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, tag), [scope, tag]);
     const handleRefreshProcedures = React.useCallback(() => ProcedureActions.getProcedures(scope, tag), [scope, tag]);
+    const handleRefreshTimers = React.useCallback(() => TimerActions.getTimers(scope, tag), [scope, tag]);
 
     const handleGetAdditionals = React.useCallback(() => {
         if (scope&&!scope.includes('@node')) {
             handleRefreshProcedures();
+            handleRefreshTimers();
             if (!scope.includes('@thingsdb')) {
                 handleRefreshTypes();
                 handleRefreshEnums();
             }
         }
-    }, [handleRefreshEnums, handleRefreshTypes, handleRefreshProcedures, scope]);
+    }, [handleRefreshEnums, handleRefreshTypes, handleRefreshProcedures, handleRefreshTimers, scope]);
 
     const makeTypeInstanceInit = (n, customTypeNames, customTypes, circularRefFlag, target) => {
         if (customTypeNames.includes(n)) {
@@ -167,19 +179,36 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
         <React.Fragment>
             <WarnPopover anchorEl={anchorEl} onClose={handleCloseWarn} description={warnDescription} />
             {scope&&scope.includes('@node') ? null : (
-                <Grid item xs={12}>
-                    <HarmonicCardHeader expand={viewProcedure.expand} onExpand={handleExpand('procedure')} title="PROCEDURES" onRefresh={handleRefreshProcedures} unmountOnExit>
-                        <ChipsCard
-                            buttons={buttons(handleClickViewProcedure, handleClickRunProcedure)}
-                            items={procedures[scope]}
-                            onAdd={handleClickAddProcedure}
-                            onDelete={handleClickDeleteProcedure}
-                            title="procedures"
-                            warnExpression={i=>i.with_side_effects}
-                        />
-                        <ViewProcedureDialog open={viewProcedure.open} onClose={handleCloseViewProcedure} procedure={viewProcedure.name?(procedures?procedures[scope]:[]).find(i=>i.name==viewProcedure.name):{}} />
-                    </HarmonicCardHeader>
-                </Grid>
+                <React.Fragment>
+                    <Grid item xs={12}>
+                        <HarmonicCardHeader expand={viewProcedure.expand} onExpand={handleExpand('procedure')} title="PROCEDURES" onRefresh={handleRefreshProcedures} unmountOnExit>
+                            <ChipsCard
+                                buttons={buttons(handleClickViewProcedure, handleClickRunProcedure)}
+                                items={procedures[scope]}
+                                onAdd={handleClickAddProcedure}
+                                onDelete={handleClickDeleteProcedure}
+                                tag={ProceduresTAG}
+                                title="procedures"
+                                warnExpression={i=>i.with_side_effects}
+                            />
+                            <ViewProcedureDialog open={viewProcedure.open} onClose={handleCloseViewProcedure} procedure={viewProcedure.name?(procedures?procedures[scope]:[]).find(i=>i.name==viewProcedure.name):{}} />
+                        </HarmonicCardHeader>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <HarmonicCardHeader expand={viewProcedure.expand} onExpand={handleExpand('procedure')} title="PROCEDURES" onRefresh={handleRefreshProcedures} unmountOnExit>
+                            <ChipsCard
+                                buttons={buttons(handleClickViewTimer, handleClickRunTimer)}
+                                items={timers[scope]}
+                                onAdd={handleClickAddTimer}
+                                onDelete={handleClickDeleteTimer}
+                                tag={TimersTAG}
+                                title="timers"
+                                warnExpression={i=>i.with_side_effects}
+                            />
+                            <ViewTimerDialog open={viewTimer.open} onClose={handleCloseViewTimer} timer={viewTimer.id?(timers?timers[scope]:[]).find(i=>i.id==viewProcedure.id):{}} />
+                        </HarmonicCardHeader>
+                    </Grid>
+                </React.Fragment>
             )}
             {scope&&scope.includes('@collection') ? (
                 <React.Fragment>
@@ -237,6 +266,8 @@ EditorSideContent.propTypes = {
     enums: EnumStore.types.enums.isRequired,
     /* procedures properties */
     procedures: ProcedureStore.types.procedures.isRequired,
+    /* timers properties */
+    timers: TimerStore.types.timers.isRequired,
 };
 
 export default withStores(EditorSideContent);

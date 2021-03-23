@@ -15,7 +15,7 @@ import VisibleIcon from '@material-ui/icons/Visibility';
 import {ApplicationStore} from '../../Stores';
 import {BottomBar, CollectionsMenu, ProcedureMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
 import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
-import {Procedure} from '../Procedures';
+import {Procedure, Timer} from '../ProceduresAndTimers';
 import Collection from '../Collections';
 import Editor from '../Editor';
 import HeaderTitle from './HeaderTitle';
@@ -39,6 +39,7 @@ const App = ({match}) => {
         collection: <Collection />,
         user: <User />,
         procedure: <Procedure />,
+        timer: <Timer />,
         query: <Editor />,
     };
 
