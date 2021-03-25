@@ -7,7 +7,7 @@ import {Edit, Remove, Run, View} from './Actions';
 import {EditProvider} from '../Collections/CollectionsUtils';
 
 
-const Page = ({match, list, scope, type}) => {
+const Page = ({itemKey, match, list, scope, type}) => {
 
     const selectedItem = findItem(match.index, list[scope]||[]);
 
@@ -31,7 +31,7 @@ const Page = ({match, list, scope, type}) => {
             : (
                 <TitlePage
                     preTitle={`Customizing ThingDB ${type}:`}
-                    title={selectedItem.name || ''}
+                    title={selectedItem[itemKey] || ''}
                     content={
                         <React.Fragment>
                             <Grid container spacing={1} item md={9} sm={12}>
@@ -54,6 +54,7 @@ const Page = ({match, list, scope, type}) => {
 };
 
 Page.propTypes = {
+    itemKey: PropTypes.string.isRequired,
     match: PropTypes.object.isRequired,
     list: PropTypes.arrayOf(PropTypes.object).isRequired,
     scope: PropTypes.string.isRequired,

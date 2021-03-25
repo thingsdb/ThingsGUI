@@ -21,7 +21,7 @@ const Procedure = ({match, procedures}) => {
     }, []);
 
     return (
-        <Page match={match} list={procedures} scope={scope} type="procedure" />
+        <Page match={match} list={procedures} scope={scope} type="procedure" itemKey="name" />
     );
 };
 

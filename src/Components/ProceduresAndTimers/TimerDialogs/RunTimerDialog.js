@@ -70,8 +70,11 @@ const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
             <Grid container spacing={1}>
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
+                        <Typography variant="body1" >
+                            {'Run  ThingDB timer:'}
+                        </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {`Run timer${timer?`: ${timer.id}`:''}`}
+                            {timer.id || ''}
                         </Typography>
                     </Grid>
                 </Grid>

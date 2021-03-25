@@ -40,7 +40,7 @@ const ViewTimerDialog = ({button, open, onClose, timer}) => {
                             {'View ThingDB timer:'}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {timer.id||''}
+                            {timer.id || ''}
                         </Typography>
                     </Grid>
                 </Grid>

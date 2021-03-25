@@ -12,12 +12,15 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import {ProcedureActions, TimerActions} from '../../../Stores';
-import {ErrorMsg, HarmonicCard, QueryOutput, changeSingleToDoubleQuotes, addDoubleQuotesAroundKeys} from '../../Util';
+import {ErrorMsg, QueryOutput, changeSingleToDoubleQuotes, addDoubleQuotesAroundKeys} from '../../Util';
 import {useEdit, InputField} from '../../Collections/CollectionsUtils';
 import {RunProcedureTAG} from '../../../constants';
 
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
+    button: {
+        margin: theme.spacing(2),
+    },
     warnColor: {
         color: amber[700],
     },
@@ -30,15 +33,14 @@ const scope = '@thingsdb';
 const Run = ({item, type}) => {
     const classes = useStyles();
     const [output, setOutput] = React.useState('');
-    const [expandOutput, setExpandOutput] = React.useState(false);
     const editState = useEdit()[0];
     const {val} = editState;
 
     const handleResult = (data) => {
-        setExpandOutput(true);
         setOutput(data);
     };
     const handleClickRun = () => {
+        console.log(val)
         const jsonProof = changeSingleToDoubleQuotes(addDoubleQuotesAroundKeys(val)); // make it json proof
 
         if(type === 'procedure') {
@@ -50,25 +52,6 @@ const Run = ({item, type}) => {
 
     return (
         <React.Fragment>
-            <Grid item xs={12}>
-                <Card>
-                    <CardContent>
-                        <Grid container item xs={12} spacing={2}>
-                            <Grid item xs={12}>
-                                <Typography variant="body2" >
-                                    {`RUN ${type.toUpperCase()}`}
-                                </Typography>
-                                {item.with_side_effects && (
-                                    <Typography variant="caption" className={classes.warnColor}>
-                                        {`Note: this ${type} generates an event.`}
-                                    </Typography>
-                                )}
-                                <ErrorMsg tag={tag} />
-                            </Grid>
-                        </Grid>
-                    </CardContent>
-                </Card>
-            </Grid>
             {type === 'procedure' &&
                 <Grid item xs={12}>
                     <Card>
@@ -92,23 +75,34 @@ const Run = ({item, type}) => {
                 </Grid>
             }
             <Grid item xs={12}>
-                <HarmonicCard
-                    title={
-                        <Button
-                            onClick={handleClickRun}
-                            variant="outlined"
-                            color="primary"
-                            size="small"
-                        >
-                            {'Run'}
-                        </Button>
-                    }
-                    content={
-                        <QueryOutput output={output} />
-                    }
-                    noPadding
-                    expand={expandOutput}
-                />
+                <Card>
+                    <Grid container item xs={12}>
+                        <Grid item xs={12}>
+                            <Button
+                                className={classes.button}
+                                onClick={handleClickRun}
+                                variant="outlined"
+                                color="primary"
+                                size="small"
+                            >
+                                {'Run'}
+                            </Button>
+                        </Grid>
+                        {item.with_side_effects && (
+                            <Grid item xs={12}>
+                                <Typography variant="caption" className={classes.warnColor}>
+                                    {`Note: this ${type} generates an event.`}
+                                </Typography>
+                            </Grid>
+                        )}
+                        <Grid item xs={12}>
+                            <ErrorMsg tag={tag} />
+                        </Grid>
+                    </Grid>
+                </Card>
+            </Grid>
+            <Grid item xs={12}>
+                <QueryOutput output={output} />
             </Grid>
         </React.Fragment>
     );

@@ -80,6 +80,9 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                         <Typography variant="body1" >
                             {'Customizing ThingDB timer:'}
                         </Typography>
+                        <Typography variant="h4" color='primary' component='span'>
+                            {timer.id || ''}
+                        </Typography>
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
