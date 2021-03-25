@@ -10,6 +10,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {SimpleModal} from '../../Util';
+import {ViewTimerDialogTAG} from '../../../constants';
+import {TimerActions} from '../../../Stores';
 
 const useStyles = makeStyles(() => ({
     warnColor: {
@@ -17,8 +19,24 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const ViewTimerDialog = ({button, open, onClose, timer}) => {
+const tag = ViewTimerDialogTAG;
+
+const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
     const classes = useStyles();
+    const [args, setArgs] = React.useState([]);
+
+    React.useEffect(() => {
+        if(open) {
+            TimerActions.getTimerArgs(
+                scope,
+                timer.id,
+                tag,
+                (a) => {
+                    setArgs(a);
+                });
+        }
+    }, [open, scope, timer.id]);
+
     return (
         <SimpleModal
             button={button}
@@ -58,6 +76,12 @@ const ViewTimerDialog = ({button, open, onClose, timer}) => {
                             <ListItemText
                                 primary="Next run"
                                 secondary={timer.next_run}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemText
+                                primary="Timer arguments"
+                                secondary={`[${args}]`}
                             />
                         </ListItem>
                         <ListItem>
@@ -103,6 +127,7 @@ ViewTimerDialog.propTypes = {
     button: PropTypes.object,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
+    scope: PropTypes.string.isRequired,
     timer: PropTypes.object,
 };
 

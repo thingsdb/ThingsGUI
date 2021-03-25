@@ -238,7 +238,7 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
                                 title="timers"
                                 warnExpression={i=>i.with_side_effects}
                             />
-                            <ViewTimerDialog open={viewTimer.open} onClose={handleCloseViewTimer} timer={viewTimer.id?(timers?timers[scope]:[]).find(i=>i.id==viewTimer.id):{}} />
+                            <ViewTimerDialog open={viewTimer.open} onClose={handleCloseViewTimer} scope={scope} timer={viewTimer.id?(timers?timers[scope]:[]).find(i=>i.id==viewTimer.id):{}} />
                         </HarmonicCardHeader>
                     </Grid>
                 </React.Fragment>

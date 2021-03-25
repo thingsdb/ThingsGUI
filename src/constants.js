@@ -41,3 +41,4 @@ export const ModuleInfoTAG = '39';
 export const AddTimerDialogTAG = '40';
 export const EditTimerDialogTAG = '41';
 export const RunTimerDialogTAG = '42';
+export const ViewTimerDialogTAG = '43';

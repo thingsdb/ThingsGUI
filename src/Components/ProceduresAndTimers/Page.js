@@ -14,7 +14,7 @@ const Page = ({itemKey, match, list, scope, type}) => {
     const buttons = [
         {
             name: 'view',
-            component: <View item={selectedItem} type={type} />
+            component: <View item={selectedItem} scope={scope} type={type} />
         },
         {
             name: 'edit',

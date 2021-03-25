@@ -5,7 +5,7 @@ import { CardButton } from '../../Util';
 import ViewProcedureDialog from '../ProcedureDialogs/ViewProcedureDialog';
 import ViewTimerDialog from '../TimerDialogs/ViewTimerDialog';
 
-const View = ({item, type}) => {
+const View = ({item, scope, type}) => {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -32,6 +32,7 @@ const View = ({item, type}) => {
             }
             open={open}
             onClose={handleClickClose}
+            scope={scope}
             timer={item}
         />
     ));
@@ -40,6 +41,7 @@ const View = ({item, type}) => {
 View.propTypes = {
     item: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
+    scope: PropTypes.string.isRequired,
 };
 
 export default View;

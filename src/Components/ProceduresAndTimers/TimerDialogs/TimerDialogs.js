@@ -30,7 +30,7 @@ const TimerDialogs = ({id, timers, scope, open, onClose}) => {
 
     return (
         <React.Fragment>
-            <ViewTimerDialog open={view} onClose={handleCloseView} timer={selectedTimer||{}} />
+            <ViewTimerDialog open={view} onClose={handleCloseView} timer={selectedTimer||{}} scope={scope} />
             <AddTimerDialog open={add} onClose={handleCloseAdd} scope={scope} />
             <EditTimerDialog open={edit} onClose={handleCloseEdit} timer={selectedTimer||{}} scope={scope} />
             <EditProvider>
