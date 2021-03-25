@@ -6,6 +6,8 @@ import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
+import useStateCallback from './useStateCallback';
+
 const useStyles = makeStyles(theme => ({
     chip: {
         padding: theme.spacing(1),
@@ -13,61 +15,46 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-
 const VariablesArray = ({input, onChange}) => {
     const classes = useStyles();
     const [item, setItem] = React.useState('');
-    const [error, setError] = React.useState('');
 
-    const [myItems, setMyItems] = React.useState([]);
-    React.useEffect(() => {
-        if(!deepEqual(myItems, input)) {
-            onChange(myItems);
-        }
-    },
-    [myItems],
-    );
+    const [myItems, setMyItems] = useStateCallback([]);
 
     React.useEffect(() => {
         if(!deepEqual(myItems, input)) {
             setMyItems(input);
         }
-    },
-    [input],
-    );
+    }, [input]);
 
     const handleChange = ({target}) => {
         const {value} = target;
         setItem(value);
-        setError('');
     };
 
     const handleKeypress = (event) => {
         const {key} = event;
         if (key == 'Enter') {
-            const err = /^[a-zA-Z].*/.test(item) ? '':'start variable name with a word character';
-            setError(err);
-            if (!err) {
-                let currentcontent = item.trim();
-                if (!currentcontent) {
-                    return;
-                }
-                setMyItems(prevItems => {
-                    const newArray = [...prevItems];
-                    newArray.push(currentcontent);
-                    return newArray;
-                });
-                setItem('');
+            let currentcontent = item.trim();
+            if (!currentcontent) {
+                return;
             }
+            setMyItems(prevItems => {
+                const newArray = [...prevItems];
+                newArray.push(currentcontent);
+                return newArray;
+            }, onChange);
+            setItem('');
         }
     };
 
     const handleClick = (index) => () => {
-        setMyItems(prevItems => {
-            const newArray = [...prevItems];
-            newArray.splice(index, 1);
-            return newArray;
-        });
+        setMyItems(
+            prevItems => {
+                const newArray = [...prevItems];
+                newArray.splice(index, 1);
+                return newArray;
+            }, onChange);
     };
 
     return (
@@ -82,8 +69,7 @@ const VariablesArray = ({input, onChange}) => {
                 variant="outlined"
                 style={{ width: 150 }}
                 onKeyDown={handleKeypress}
-                error={Boolean(error)}
-                helperText={error||'Add + hit "Enter"'}
+                helperText={'Add + hit "Enter"'}
             />
         </div>
     );

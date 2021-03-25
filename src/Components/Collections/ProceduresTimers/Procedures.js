@@ -33,6 +33,7 @@ const Procedures = ({procedures, scope}) => {
 
     return (
         <Card
+            itemKey={'name'}
             onDelete={handleClickDelete}
             onDialogs={(name, open, handleClose) => <ProcedureDialogs name={name} open={open} onClose={handleClose} procedures={procedures[scope]||[]} scope={scope} />}
             list={procedures[scope] || []}

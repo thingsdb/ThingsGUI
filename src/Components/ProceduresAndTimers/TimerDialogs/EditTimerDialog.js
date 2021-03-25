@@ -20,7 +20,10 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+const replaceNull = (items) => items.map(item => item === null ? 'nil' : item);
+
 const tag = EditTimerDialogTAG;
+
 const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
     const classes = useStyles();
     const [queryString, setQueryString] = React.useState('set_timer_args()');
@@ -34,18 +37,17 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                 tag,
                 (a) => {
                     setArgs(a);
-                    setQueryString(`set_timer_args(${timer.id}, [${a}])`);
+                    setQueryString(`set_timer_args(${timer.id}, [${replaceNull(a)}])`);
                 });
         }
     }, [open, scope, timer.id]);
 
     const handleChangeArgs = (a) => {
         setArgs(a);
-        setQueryString(`set_timer_args(${timer.id}, [${a}])`);
+        setQueryString(`set_timer_args(${timer.id}, [${replaceNull(a)}])`);
     };
 
     const handleClickOk = () => {
-        TimerActions.setTimerArgs(timer.id, args, scope, tag, () => onClose());
         CollectionActions.rawQuery(
             scope,
             queryString,
@@ -116,10 +118,34 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                             </Typography>
                         </ListItem>
                         <ListItem>
+                            <TextField
+                                name="timer"
+                                type="text"
+                                variant="standard"
+                                value={timer.definition}
+                                fullWidth
+                                multiline
+                                InputProps={{
+                                    readOnly: true,
+                                    disableUnderline: true,
+                                }}
+                                inputProps={{
+                                    style: {
+                                        fontFamily: 'monospace',
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </ListItem>
+                        <ListItem>
                             <ListItemText
                                 primary="Set arguments"
                             />
-                            <VariablesArray input={args} onChange={handleChangeArgs} />
+                        </ListItem>
+                        <ListItem>
+                            <VariablesArray input={replaceNull(args)} onChange={handleChangeArgs} />
                         </ListItem>
                     </List>
                 </Grid>

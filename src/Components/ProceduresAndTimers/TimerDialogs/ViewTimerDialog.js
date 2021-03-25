@@ -61,6 +61,11 @@ const ViewTimerDialog = ({button, open, onClose, timer}) => {
                             />
                         </ListItem>
                         <ListItem>
+                            <ListItemText
+                                primary="Closure"
+                            />
+                        </ListItem>
+                        <ListItem>
                             <TextField
                                 name="timer"
                                 type="text"

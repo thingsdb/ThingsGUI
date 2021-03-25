@@ -7,7 +7,7 @@ import ViewIcon from '@material-ui/icons/Visibility';
 import {ChipsCard} from '../../Util';
 
 
-const Card = ({onDialogs, list, onDelete, tag}) => {
+const Card = ({itemKey, onDialogs, list, onDelete, tag}) => {
     const [identifier, setIdentifier] = React.useState(null);
 
     const [open, setOpen] = React.useState({
@@ -55,6 +55,7 @@ const Card = ({onDialogs, list, onDelete, tag}) => {
         <React.Fragment>
             <ChipsCard
                 buttons={buttons}
+                itemKey={itemKey}
                 items={list}
                 onAdd={handleClickAdd}
                 onDelete={handleClickDelete}
@@ -68,6 +69,7 @@ const Card = ({onDialogs, list, onDelete, tag}) => {
 };
 
 Card.propTypes = {
+    itemKey: PropTypes.string.isRequired,
     onDelete: PropTypes.func.isRequired,
     onDialogs: PropTypes.func.isRequired,
     list: PropTypes.arrayOf(PropTypes.object).isRequired,

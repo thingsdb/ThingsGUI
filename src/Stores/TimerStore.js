@@ -80,10 +80,10 @@ class TimerStore extends BaseStore {
     }
 
     onRunTimer(scope, timer, tag,  cb=()=>null) {
-        this.emit('run', {
-            scope,
-            timer,
-            args: '',
+        const query = timer.with_side_effects ? `wse(run(${timer.id}));` : `run(${timer.id});` ;
+        this.emit('query', {
+            query,
+            scope
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {

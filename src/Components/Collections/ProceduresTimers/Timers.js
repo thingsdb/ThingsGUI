@@ -22,10 +22,10 @@ const Timers = ({timers, scope}) => {
     }, [scope]);
 
 
-    const handleClickDelete = (n, cb, tag) => {
+    const handleClickDelete = (id, cb, tag) => {
         TimerActions.deleteTimer(
             scope,
-            n,
+            id,
             tag,
             ()=> cb()
         );
@@ -33,6 +33,7 @@ const Timers = ({timers, scope}) => {
 
     return (
         <Card
+            itemKey={'id'}
             onDelete={handleClickDelete}
             onDialogs={(name, open, handleClose) => <TimerDialogs id={name} open={open} onClose={handleClose} timers={timers[scope]||[]} scope={scope} />}
             list={timers[scope] || []}

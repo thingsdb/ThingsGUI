@@ -44,7 +44,7 @@ const Run = ({item, type}) => {
         if(type === 'procedure') {
             ProcedureActions.runProcedure(scope, item.name, jsonProof, tag, handleResult);
         } else {
-            TimerActions.runTimer(scope, item.id, tag, handleResult);
+            TimerActions.runTimer(scope, item, tag, handleResult);
         }
     };
 

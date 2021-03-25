@@ -20,7 +20,7 @@ const initState = {
     closure: '',
     error: '',
     queryString: 'new_timer()',
-    repeat: null,
+    repeat: 'nil',
     start: null,
 };
 
@@ -51,7 +51,7 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
 
     const handleSwitchRepeat = (open) => {
         if(!open) {
-            handleChangeRepeat(null);
+            handleChangeRepeat('nil');
         }
     };
 
@@ -127,6 +127,8 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
                             <ListItemText
                                 primary="Add start"
                             />
+                        </ListItem>
+                        <ListItem>
                             <TimePicker onChange={handleChangeStart} />
                         </ListItem>
                         <ListItem>
@@ -135,9 +137,9 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
                             </SwitchOpen>
                         </ListItem>
                         <ListItem>
-                            <Typography variant="body1">
-                                {'Add closure'}
-                            </Typography>
+                            <ListItemText
+                                primary="Add closure"
+                            />
                         </ListItem>
                         <ListItem>
                             <Closure onChange={handleChangeClosure} />

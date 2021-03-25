@@ -40,7 +40,7 @@ const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
     const handleClickOk = () => {
         TimerActions.runTimer(
             scope,
-            timer.id,
+            timer,
             tag,
             handleResult,
         );
@@ -82,7 +82,7 @@ const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
                     <List disablePadding dense>
                         <React.Fragment>
                             <ListItem>
-                                <ListItemText primary="Output:" primaryTypographyProps={{variant: 'body1'}} />
+                                <ListItemText primary="Output:" />
                             </ListItem>
                             <div id="output">
                                 <QueryOutput output={output} />

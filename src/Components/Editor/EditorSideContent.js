@@ -10,7 +10,7 @@ import {ChipsCard, HarmonicCardHeader, WarnPopover} from '../Util';
 import {ViewProcedureDialog} from '../ProceduresAndTimers/ProcedureDialogs';
 import {ViewTimerDialog} from '../ProceduresAndTimers/TimerDialogs';
 import {EnumTypeChips} from '../Collections/CollectionsUtils/TypesEnumsUtils';
-import {ProceduresTAG, TimersTAG} from '../../constants';
+import {EditorTAG, EnumsTAG, ProceduresTAG, TimersTAG, TypesTAG} from '../../constants';
 
 const withStores = withVlow([{
     store: EnumStore,
@@ -26,7 +26,7 @@ const withStores = withVlow([{
     keys: ['procedures']
 }]);
 
-const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInput, tag, timers}) => {
+const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInput, timers}) => {
     const [viewProcedure, setViewProcedure] = React.useState({
         open: false,
         name: '',
@@ -34,7 +34,7 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
     });
     const [viewTimer, setViewTimer] = React.useState({
         open: false,
-        id: '',
+        id: null,
         expand: false,
     });
     const [viewEnum, setViewEnum] = React.useState({
@@ -55,10 +55,10 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
         handleGetAdditionals();
     }, [handleGetAdditionals]);
 
-    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, tag), [scope, tag]);
-    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, tag), [scope, tag]);
-    const handleRefreshProcedures = React.useCallback(() => ProcedureActions.getProcedures(scope, tag), [scope, tag]);
-    const handleRefreshTimers = React.useCallback(() => TimerActions.getTimers(scope, tag), [scope, tag]);
+    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, EnumsTAG), [scope]);
+    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, TypesTAG), [scope]);
+    const handleRefreshProcedures = React.useCallback(() => ProcedureActions.getProcedures(scope, ProceduresTAG), [scope]);
+    const handleRefreshTimers = React.useCallback(() => TimerActions.getTimers(scope, TimersTAG), [scope]);
 
     const handleGetAdditionals = React.useCallback(() => {
         if (scope&&!scope.includes('@node')) {
@@ -100,17 +100,13 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
     };
 
     const handleClickRunProcedure = (n) => () => {
-        let p = (procedures?procedures[scope]:[]).find(i=>i.name==n);
+        let p = (procedures[scope] || []).find(i=>i.name==n);
         const i = p.with_side_effects ? `wse(run('${n}',${p.arguments.map(a=>` <${a}>` )}))` : `run('${n}',${p.arguments.map(a=>` <${a}>` )})`;
         onSetQueryInput(i);
     };
 
     const handleClickAddProcedure = () => {
-        onSetQueryInput('new_procedure("...", ...)');
-    };
-
-    const handleCloseWarn = () => {
-        setAnchorEl(null);
+        onSetQueryInput('new_procedure(');
     };
 
     const handleClickViewProcedure = (n) => () => {
@@ -119,6 +115,35 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
 
     const handleCloseViewProcedure = () => {
         setViewProcedure({...viewProcedure, open: false, name: ''});
+    };
+
+    const handleClickDeleteTimer = (id, cb, tag) => {
+        TimerActions.deleteTimer(
+            scope,
+            id,
+            tag,
+            () => {
+                cb();
+            }
+        );
+    };
+
+    const handleClickRunTimer = (id) => () => {
+        let t = (timers[scope] || []).find(i=>i.id==id);
+        const i = t.with_side_effects ? `wse(run(${id}))` : `run(${id})`;
+        onSetQueryInput(i);
+    };
+
+    const handleClickAddTimer = () => {
+        onSetQueryInput('new_timer(');
+    };
+
+    const handleClickViewTimer = (id) => () => {
+        setViewTimer({...viewTimer, open: true, id: id});
+    };
+
+    const handleCloseViewTimer = () => {
+        setViewTimer({...viewTimer, open: false, id: null});
     };
 
     const handleChange = (a) => (n, c) => {
@@ -172,7 +197,14 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
         case 'procedure':
             setViewProcedure({...viewProcedure, expand: check});
             break;
+        case 'timer':
+            setViewTimer({...viewTimer, expand: check});
+            break;
         }
+    };
+
+    const handleCloseWarn = () => {
+        setAnchorEl(null);
     };
 
     return (
@@ -195,9 +227,10 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
                         </HarmonicCardHeader>
                     </Grid>
                     <Grid item xs={12}>
-                        <HarmonicCardHeader expand={viewProcedure.expand} onExpand={handleExpand('procedure')} title="PROCEDURES" onRefresh={handleRefreshProcedures} unmountOnExit>
+                        <HarmonicCardHeader expand={viewTimer.expand} onExpand={handleExpand('timer')} title="TIMERS" onRefresh={handleRefreshTimers} unmountOnExit>
                             <ChipsCard
                                 buttons={buttons(handleClickViewTimer, handleClickRunTimer)}
+                                itemKey={'id'}
                                 items={timers[scope]}
                                 onAdd={handleClickAddTimer}
                                 onDelete={handleClickDeleteTimer}
@@ -205,7 +238,7 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
                                 title="timers"
                                 warnExpression={i=>i.with_side_effects}
                             />
-                            <ViewTimerDialog open={viewTimer.open} onClose={handleCloseViewTimer} timer={viewTimer.id?(timers?timers[scope]:[]).find(i=>i.id==viewProcedure.id):{}} />
+                            <ViewTimerDialog open={viewTimer.open} onClose={handleCloseViewTimer} timer={viewTimer.id?(timers?timers[scope]:[]).find(i=>i.id==viewTimer.id):{}} />
                         </HarmonicCardHeader>
                     </Grid>
                 </React.Fragment>
@@ -225,7 +258,7 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
                                 onMakeInstanceInit={makeTypeInstanceInit}
                                 onSetQueryInput={onSetQueryInput}
                                 scope={scope}
-                                tag={tag}
+                                tag={TypesTAG}
                                 view={{view: viewType.open, name: viewType.name}}
                             />
                         </HarmonicCardHeader>
@@ -243,7 +276,7 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
                                 onMakeInstanceInit={makeEnumInstanceInit}
                                 onSetQueryInput={onSetQueryInput}
                                 scope={scope}
-                                tag={tag}
+                                tag={EnumsTAG}
                                 view={{view: viewEnum.open, name: viewEnum.name}}
                             />
                         </HarmonicCardHeader>
@@ -258,7 +291,6 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
 EditorSideContent.propTypes = {
     scope: PropTypes.string.isRequired,
     onSetQueryInput: PropTypes.func.isRequired,
-    tag: PropTypes.string.isRequired,
 
     /* types properties */
     customTypes: TypeStore.types.customTypes.isRequired,

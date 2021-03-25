@@ -27,7 +27,7 @@ const TimePicker = ({onChange}) => {
 
     return (
         <Grid container item xs={12} spacing={1}>
-            <Grid item xs={6}>
+            <Grid item>
                 <TextField
                     id="data"
                     label="Date"
@@ -39,7 +39,7 @@ const TimePicker = ({onChange}) => {
                     }}
                 />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item>
                 <TextField
                     id="time"
                     label="Time (UTC)"

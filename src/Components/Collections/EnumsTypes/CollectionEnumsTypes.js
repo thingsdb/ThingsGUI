@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {CollectionTypesTAG} from '../../../constants';
+import {EnumsTAG, TypesTAG} from '../../../constants';
 import {EnumActions, EnumStore, TypeActions, TypeStore} from '../../../Stores';
 import {EnumTypeChips} from '../CollectionsUtils/TypesEnumsUtils';
 import {HarmonicCardHeader} from '../../Util';
@@ -24,7 +24,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const tag = CollectionTypesTAG;
+const enumsTag = TypesTAG;
+const typesTag = EnumsTAG;
 
 const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
     const classes = useStyles();
@@ -98,8 +99,8 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
         handleRefreshTypes();
     },[handleRefreshEnums, handleRefreshTypes]);
 
-    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, tag), [scope]);
-    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, tag), [scope]);
+    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, enumsTag), [scope]);
+    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, typesTag), [scope]);
 
     const handleChange = (a) => (n, c) => {
         if (c=='type') {
@@ -145,7 +146,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
                         onInfo={TypeActions.getTypes}
                         onRename={TypeActions.renameType}
                         scope={scope}
-                        tag={tag}
+                        tag={typesTag}
                         view={viewType}
                     />
                 </HarmonicCardHeader>
@@ -162,7 +163,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
                         onInfo={EnumActions.getEnums}
                         onRename={EnumActions.renameEnum}
                         scope={scope}
-                        tag={tag}
+                        tag={enumsTag}
                         view={viewEnum}
                     />
                 </HarmonicCardHeader>

@@ -47,6 +47,7 @@ import TopBarMenu from './TopBarMenu';
 import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
 import TwoLabelSwitch from './TwoLabelSwitch';
+import useStateCallback from './useStateCallback';
 import VariablesArray from './VariablesArray';
 import WarnPopover from './WarnPopover';
 
@@ -93,9 +94,17 @@ const thingValue = (type, thing, customTypes=[]) => {
 
 const isObjectEmpty = (obj) => obj.constructor === Object && Object.entries(obj).length === 0;
 const findItem = (index, target) => target.length ? (index+1 > target.length ? {}: target[index]) : {}; //findItem(index-1, target) : target[index]) : {};
-const orderByName = (arr) => arr.sort((a, b) => {
-    const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+const orderByName = (arr, key='name') => arr.sort((a, b) => {
+    let nameA,
+        nameB;
+    if(typeof a[key] === 'string') {
+        nameA = a[key].toUpperCase(); // ignore upper and lowercase
+        nameB = b[key].toUpperCase(); // ignore upper and lowercase
+    } else {
+        nameA = a[key];
+        nameB = b[key];
+    }
+
     if (nameA < nameB) {
         return -1;
     }
@@ -255,6 +264,7 @@ export {
     TreeBranch,
     TreeIcon,
     TwoLabelSwitch,
+    useStateCallback,
     VariablesArray,
     WarnPopover,
 };
