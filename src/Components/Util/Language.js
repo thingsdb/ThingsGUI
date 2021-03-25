@@ -86,7 +86,9 @@ export default {
         },
         thing: {
             'assign': 'Copies properties from a given thing. Existing properties will be overwritten and new properties will be added. If this function is used on an instance of a custom Type, all properties of the source must be valid according the type specification, otherwise an exception will be raised and no properties will be copied.',
+            'copy': 'Copy a thing to a new thing. A Type is not preserved.',
             'del': 'Delete a property from a thing.',
+            'dup': 'Duplicate a thing while preserving the Type.',
             'each': 'Iterate over all properties on a thing.',
             'emit': 'Emit an event to all watchers of a thing. The event is a string value which you are free to choose. It is possible, but not required, to send extra arguments with the event.',
             'equals': 'Determines if a thing is equal to another thing.',
@@ -104,6 +106,8 @@ export default {
             'wrap': 'Wrap a thing with a Type.',
         },
         type: {
+            'copy': 'Copy a thing to a new thing. A Type is not preserved.',
+            'dup': 'Duplicate a thing while preserving the Type.',
             'unwrap': 'Unwrap a wrapped thing.',
         }
     },
