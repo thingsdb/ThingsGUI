@@ -1,9 +1,9 @@
 import { fade, makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -12,7 +12,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Switch from '@material-ui/core/Switch';
 
 import {ChipsCardTAG} from '../../constants';
-import {ErrorMsg, HarmonicCardContent, orderByName, SimpleModal, CardMultiButton} from '../Util';
+import {ErrorMsg, HarmonicCardContent, orderByName, SimpleModal, TableWithButtons} from '../Util';
 
 
 const useStyles = makeStyles(theme => ({
@@ -61,9 +61,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const step = 20;
+const step = 5;
 
-const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, title, warnExpression}) => {
+const TableCard = ({buttons, header, itemKey, items, moreButtons, onAdd, onDelete, tag}) => {
     const classes = useStyles();
     const [deleteItem, setDeleteItem] = React.useState('');
     const [switchDel, setSwitchDel] = React.useState(false);
@@ -107,7 +107,7 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
         setMaxAmount(maxAmount=>maxAmount+step);
     };
 
-    let searchList = orderByName(searchString?items.filter(i=>i[itemKey].includes(searchString)):items, itemKey);
+    let searchList = orderByName(searchString?items.filter(i=>String(i[itemKey]).includes(searchString)):items, itemKey);
 
     return (
         <React.Fragment>
@@ -135,22 +135,18 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
                             <ErrorMsg tag={tag} />
                         </Grid>
                         <Grid item xs={12}>
-                            {
-                                searchList && searchList.length ? searchList.slice(0, maxAmount).map((listitem, index) => (
-                                    <React.Fragment key={index}>
-                                        <CardMultiButton
-                                            label={`${listitem[itemKey]}`}
-                                            buttons={[...buttons(listitem[itemKey]), remove(listitem[itemKey])]}
-                                            color="primary"
-                                            warn={warnExpression(listitem)}
-                                        />
-                                    </React.Fragment>
-                                )) :  (
-                                    <Box fontSize={12} fontStyle="italic" m={1}>
-                                        {`No ${title}`}
-                                    </Box>
-                                )
-                            }
+
+                            <TableWithButtons
+                                header={header}
+                                rows={searchList && searchList.length ? searchList.slice(0, maxAmount): []}
+                                buttons={(listitem) =>
+                                    [...buttons(listitem[itemKey]), remove(listitem[itemKey])].map((b, i)=>(
+                                        <IconButton color="primary" key={i} onClick={b.onClick} size="small">
+                                            {b.icon}
+                                        </IconButton>
+                                    ))
+                                }
+                            />
                         </Grid>
                         {searchList && (searchList.length > maxAmount) &&
                             <Grid container justify="center" alignItems="center" item xs={12}>
@@ -207,14 +203,14 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
     );
 };
 
-ChipsCard.defaultProps = {
+TableCard.defaultProps = {
     itemKey: 'name',
     items: [],
     moreButtons: null,
-    warnExpression: ()=>false,
 },
 
-ChipsCard.propTypes = {
+TableCard.propTypes = {
+    header: PropTypes.arrayOf(PropTypes.object).isRequired,
     itemKey: PropTypes.string,
     items: PropTypes.arrayOf(PropTypes.object),
     moreButtons: PropTypes.object,
@@ -222,8 +218,6 @@ ChipsCard.propTypes = {
     onDelete: PropTypes.func.isRequired,
     buttons: PropTypes.func.isRequired,
     tag: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    warnExpression: PropTypes.func,
 };
 
-export default ChipsCard;
+export default TableCard;

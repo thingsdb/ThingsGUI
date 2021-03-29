@@ -1,7 +1,7 @@
 import { amber } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Table from '@material-ui/core/Table';
@@ -22,12 +22,15 @@ import {ErrorMsg, HarmonicCard} from '../../Util';
 import {TokensTAG} from '../../../constants';
 
 const useStyles = makeStyles(theme => ({
+    box: {
+        marginLeft: 0,
+    },
     copyButton: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
     },
     textfield: {
-        marginLeft: theme.spacing(1),
+        // marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         width: 175,
     },
@@ -74,8 +77,8 @@ const Tokens = ({user}) => {
                         <TableHead>
                             <TableRow>
                                 {header.map((h, i) => (
-                                    <TableCell key={h.ky} align={i?'right':'left'}>
-                                        <Typography variant="caption" align={i?'right':'left'}>
+                                    <TableCell key={h.ky} align={'left'}>
+                                        <Typography variant="caption" align={'left'}>
                                             {h.label}
                                         </Typography>
                                     </TableCell>
@@ -87,7 +90,7 @@ const Tokens = ({user}) => {
                             {rows.map((row, ri) => (
                                 <TableRow key={ri}>
                                     {header.map((h, i) => (
-                                        <TableCell key={h.ky} align={i?'right':'left'}>
+                                        <TableCell key={h.ky} align={'left'}>
                                             <Typography component="div">
                                                 {h.ky=='key' ? (
                                                     <RefWrap>
@@ -122,7 +125,7 @@ const Tokens = ({user}) => {
                                                         )}
                                                     </RefWrap>
                                                 ) : (
-                                                    <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                                    <Box className={classes.box} fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
                                                         {row[h.ky]}
                                                     </Box>
                                                 )}

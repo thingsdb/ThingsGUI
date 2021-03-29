@@ -24,6 +24,7 @@ import ListHeader from './ListHeader';
 import LocalMsg from './LocalMsg';
 import LocalErrorMsg from './LocalErrorMsg';
 import Menu from './Menu';
+import moment from 'moment';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import RefreshContainer from './RefreshContainer';
@@ -34,6 +35,7 @@ import StickyHeadTable from './StickyHeadTable';
 import StringDialog from './StringDialog';
 import Switching from './Switching';
 import SwitchOpen from './SwitchOpen';
+import TableCard from './TableCard';
 import TableExtra from './TableExtra';
 import TableWithBadges from './TableWithBadges';
 import TableWithButtons from './TableWithButtons';
@@ -199,6 +201,8 @@ const scaleToBinBytes = (bytes) => {
     return `${rounded === number ? '' : '~'}${rounded} ${metricLabel[i]}`;
 };
 
+const nextRunFn = (t) => (t === 'pending' ? t : moment(t).format('YYYY-MM-DD HH:mm'));
+
 export {
     addDoubleQuotesAroundKeys,
     allDataTypes,
@@ -236,6 +240,7 @@ export {
     LocalMsg,
     LocalErrorMsg,
     Menu,
+    nextRunFn,
     orderByName,
     RefreshContainer,
     QueryInput,
@@ -251,6 +256,7 @@ export {
     Switching,
     SwitchOpen,
     Tabs,
+    TableCard,
     TableExtra,
     TableWithBadges,
     TableWithButtons,

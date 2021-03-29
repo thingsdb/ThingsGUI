@@ -2,11 +2,14 @@ import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
@@ -29,23 +32,25 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
     const [queryString, setQueryString] = React.useState('set_timer_args()');
     const [args, setArgs] = React.useState([]);
 
-    React.useEffect(() => {
-        if(open) {
-            TimerActions.getTimerArgs(
-                scope,
-                timer.id,
-                tag,
-                (a) => {
-                    setArgs(a);
-                    setQueryString(`set_timer_args(${timer.id}, [${replaceNull(a)}])`);
-                });
-        }
-    }, [open, scope, timer.id]);
-
-    const handleChangeArgs = (a) => {
+    const handleChangeArgs = React.useCallback((a) => {
         setArgs(a);
         setQueryString(`set_timer_args(${timer.id}, [${replaceNull(a)}])`);
-    };
+    }, [timer.id]);
+
+    const handleRefresh = React.useCallback(() => {
+        TimerActions.getTimerArgs(
+            scope,
+            timer.id,
+            tag,
+            handleChangeArgs);
+    }, [scope, timer.id, handleChangeArgs]);
+
+
+    React.useEffect(() => {
+        if(open) {
+            handleRefresh();
+        }
+    }, [open, handleRefresh]);
 
     const handleClickOk = () => {
         CollectionActions.rawQuery(
@@ -146,6 +151,11 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                             <ListItemText
                                 primary="Set arguments"
                             />
+                            <ListItemSecondaryAction>
+                                <IconButton edge="end" aria-label="refresh" onClick={handleRefresh}>
+                                    <RefreshIcon color="primary" />
+                                </IconButton>
+                            </ListItemSecondaryAction>
                         </ListItem>
                         <ListItem>
                             <VariablesArray input={replaceNull(args)} onChange={handleChangeArgs} />

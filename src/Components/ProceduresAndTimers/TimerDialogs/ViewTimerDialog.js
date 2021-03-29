@@ -1,15 +1,18 @@
 import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {SimpleModal} from '../../Util';
+import {nextRunFn, SimpleModal} from '../../Util';
 import {ViewTimerDialogTAG} from '../../../constants';
 import {TimerActions} from '../../../Stores';
 
@@ -25,17 +28,21 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
     const classes = useStyles();
     const [args, setArgs] = React.useState([]);
 
+    const handleRefresh = React.useCallback(() => {
+        TimerActions.getTimerArgs(
+            scope,
+            timer.id,
+            tag,
+            (a) => {
+                setArgs(a);
+            });
+    }, [scope, timer.id]);
+
     React.useEffect(() => {
         if(open) {
-            TimerActions.getTimerArgs(
-                scope,
-                timer.id,
-                tag,
-                (a) => {
-                    setArgs(a);
-                });
+            handleRefresh();
         }
-    }, [open, scope, timer.id]);
+    }, [open, handleRefresh]);
 
     return (
         <SimpleModal
@@ -64,6 +71,18 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                 </Grid>
                 <Grid item xs={12}>
                     <List disablePadding dense>
+                        <ListItem>
+                            <ListItemText
+                                primary="ID"
+                                secondary={timer.id}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemText
+                                primary="Documentation"
+                                secondary={timer.doc}
+                            />
+                        </ListItem>
                         {timer.user &&
                             <ListItem>
                                 <ListItemText
@@ -75,7 +94,13 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                         <ListItem>
                             <ListItemText
                                 primary="Next run"
-                                secondary={timer.next_run}
+                                secondary={nextRunFn(timer.next_run)}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemText
+                                primary="Repeat"
+                                secondary={timer.repeat + ' seconds'}
                             />
                         </ListItem>
                         <ListItem>
@@ -83,31 +108,39 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                                 primary="Timer arguments"
                                 secondary={`[${args}]`}
                             />
+                            <ListItemSecondaryAction>
+                                <IconButton edge="end" aria-label="refresh" onClick={handleRefresh}>
+                                    <RefreshIcon color="primary" />
+                                </IconButton>
+                            </ListItemSecondaryAction>
                         </ListItem>
                         <ListItem>
                             <ListItemText
-                                primary="Closure"
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <TextField
-                                name="timer"
-                                type="text"
-                                variant="standard"
-                                value={timer.definition}
-                                fullWidth
-                                multiline
-                                InputProps={{
-                                    readOnly: true,
-                                    disableUnderline: true,
-                                }}
-                                inputProps={{
-                                    style: {
-                                        fontFamily: 'monospace',
-                                    },
-                                }}
-                                InputLabelProps={{
-                                    shrink: true,
+                                primary="Definition"
+                                secondary={
+                                    <TextField
+                                        name="timer"
+                                        type="text"
+                                        variant="standard"
+                                        value={timer.definition}
+                                        fullWidth
+                                        multiline
+                                        InputProps={{
+                                            readOnly: true,
+                                            disableUnderline: true,
+                                        }}
+                                        inputProps={{
+                                            style: {
+                                                fontFamily: 'monospace',
+                                            },
+                                        }}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                }
+                                secondaryTypographyProps={{
+                                    component: 'div'
                                 }}
                             />
                         </ListItem>

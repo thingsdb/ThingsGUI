@@ -1,5 +1,5 @@
 import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/DeleteOutlined';
+import DeleteIcon from '@material-ui/icons/Delete';
 import PropTypes from 'prop-types';
 import React from 'react';
 

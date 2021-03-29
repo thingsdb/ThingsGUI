@@ -6,6 +6,7 @@ import {TimerDialogs} from '../../ProceduresAndTimers';
 import {TimerActions, TimerStore} from '../../../Stores';
 import {TimersTAG} from '../../../constants';
 import Card from'./Card';
+import {nextRunFn} from '../../Util';
 
 
 const withStores = withVlow([{
@@ -13,12 +14,17 @@ const withStores = withVlow([{
     keys: ['timers']
 }]);
 
+const header = [
+    {ky: 'id', label: 'ID'},
+    {ky: 'doc', label: 'Documentation', fn: (d) => d.length > 20 ? d.slice(0, 20) + '...' : d},
+    {ky: 'next_run', label: 'Next run', fn: nextRunFn},
+];
+
 const tag = TimersTAG;
 
 const Timers = ({timers, scope}) => {
     React.useEffect(() => {
         TimerActions.getTimers(scope, tag);
-
     }, [scope]);
 
 
@@ -33,6 +39,7 @@ const Timers = ({timers, scope}) => {
 
     return (
         <Card
+            header={header}
             itemKey={'id'}
             onDelete={handleClickDelete}
             onDialogs={(name, open, handleClose) => <TimerDialogs id={name} open={open} onClose={handleClose} timers={timers[scope]||[]} scope={scope} />}

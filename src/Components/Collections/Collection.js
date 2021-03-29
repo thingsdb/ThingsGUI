@@ -9,8 +9,8 @@ import {findItem, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Util';
 import {Procedures, Timers} from './ProceduresTimers';
 import CollectionTree from './Tree';
 import CollectionEnumsTypes from './EnumsTypes';
-import {ProcedureActions} from '../../Stores';
-import {ProceduresTAG} from '../../constants';
+import {ProcedureActions, TimerActions} from '../../Stores';
+import {ProceduresTAG, TimersTAG} from '../../constants';
 
 
 const withStores = withVlow([{
@@ -31,8 +31,12 @@ const Collection = ({match, collections}) => {
     const classes = useStyles();
     const selectedCollection = findItem(match.index, collections);
 
-    const handleRefresh = () => {
+    const handleRefreshProcedures = () => {
         ProcedureActions.getProcedures(`@collection:${selectedCollection.name}`, ProceduresTAG);
+    };
+
+    const handleRefreshTimers = () => {
+        TimerActions.getTimers(`@collection:${selectedCollection.name}`, TimersTAG);
     };
 
     return (
@@ -54,12 +58,12 @@ const Collection = ({match, collections}) => {
                         </Grid>
                         <Grid container item md={5} xs={12}>
                             <Grid className={classes.spacing} item xs={12}>
-                                <HarmonicCardHeader title="PROCEDURES" onRefresh={handleRefresh} unmountOnExit>
+                                <HarmonicCardHeader title="PROCEDURES" onRefresh={handleRefreshProcedures} unmountOnExit>
                                     <Procedures scope={`@collection:${selectedCollection.name}`} />
                                 </HarmonicCardHeader >
                             </Grid>
                             <Grid className={classes.spacing} item xs={12}>
-                                <HarmonicCardHeader title="TIMERS" onRefresh={handleRefresh} unmountOnExit>
+                                <HarmonicCardHeader title="TIMERS" onRefresh={handleRefreshTimers} unmountOnExit>
                                     <Timers scope={`@collection:${selectedCollection.name}`} />
                                 </HarmonicCardHeader >
                             </Grid>

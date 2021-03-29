@@ -4,10 +4,10 @@ import React from 'react';
 import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import {ChipsCard} from '../../Util';
+import {ChipsCard, TableCard} from '../../Util';
 
 
-const Card = ({itemKey, onDialogs, list, onDelete, tag}) => {
+const Card = ({header, itemKey, onDialogs, list, onDelete, tag}) => {
     const [identifier, setIdentifier] = React.useState(null);
 
     const [open, setOpen] = React.useState({
@@ -53,22 +53,39 @@ const Card = ({itemKey, onDialogs, list, onDelete, tag}) => {
 
     return (
         <React.Fragment>
-            <ChipsCard
-                buttons={buttons}
-                itemKey={itemKey}
-                items={list}
-                onAdd={handleClickAdd}
-                onDelete={handleClickDelete}
-                warnExpression={item => item.with_side_effects}
-                tag={tag}
-                title="procedures"
-            />
+            {itemKey === 'name' ? (
+                <ChipsCard
+                    buttons={buttons}
+                    itemKey={itemKey}
+                    items={list}
+                    onAdd={handleClickAdd}
+                    onDelete={handleClickDelete}
+                    warnExpression={item => item.with_side_effects}
+                    tag={tag}
+                    title={`${itemKey}s`}
+                />
+            ) : (
+                <TableCard
+                    buttons={buttons}
+                    header={header}
+                    itemKey={itemKey}
+                    items={list}
+                    onAdd={handleClickAdd}
+                    onDelete={handleClickDelete}
+                    tag={tag}
+                />
+            )}
             {onDialogs(identifier, open, handleClose)}
         </React.Fragment>
     );
 };
 
+Card.defaultProps = {
+    header: [],
+};
+
 Card.propTypes = {
+    header: PropTypes.arrayOf(PropTypes.object),
     itemKey: PropTypes.string.isRequired,
     onDelete: PropTypes.func.isRequired,
     onDialogs: PropTypes.func.isRequired,

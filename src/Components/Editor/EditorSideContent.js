@@ -6,11 +6,11 @@ import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
 import {EnumActions, ProcedureActions, TypeActions, EnumStore, ProcedureStore, TypeStore, TimerActions, TimerStore} from '../../Stores';
-import {ChipsCard, HarmonicCardHeader, WarnPopover} from '../Util';
+import {ChipsCard, HarmonicCardHeader, nextRunFn, TableCard, WarnPopover} from '../Util';
 import {ViewProcedureDialog} from '../ProceduresAndTimers/ProcedureDialogs';
 import {ViewTimerDialog} from '../ProceduresAndTimers/TimerDialogs';
 import {EnumTypeChips} from '../Collections/CollectionsUtils/TypesEnumsUtils';
-import {EditorTAG, EnumsTAG, ProceduresTAG, TimersTAG, TypesTAG} from '../../constants';
+import {EnumsTAG, ProceduresTAG, TimersTAG, TypesTAG} from '../../constants';
 
 const withStores = withVlow([{
     store: EnumStore,
@@ -25,6 +25,12 @@ const withStores = withVlow([{
     store: ProcedureStore,
     keys: ['procedures']
 }]);
+
+const header = [
+    {ky: 'id', label: 'ID'},
+    {ky: 'doc', label: 'Documentation', fn: (d) => d.length > 20 ? d.slice(0, 20) + '...' : d},
+    {ky: 'next_run', label: 'Next run', fn: nextRunFn},
+];
 
 const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInput, timers}) => {
     const [viewProcedure, setViewProcedure] = React.useState({
@@ -228,15 +234,14 @@ const EditorSideContent = ({customTypes, enums, procedures, scope, onSetQueryInp
                     </Grid>
                     <Grid item xs={12}>
                         <HarmonicCardHeader expand={viewTimer.expand} onExpand={handleExpand('timer')} title="TIMERS" onRefresh={handleRefreshTimers} unmountOnExit>
-                            <ChipsCard
+                            <TableCard
                                 buttons={buttons(handleClickViewTimer, handleClickRunTimer)}
+                                header={header}
                                 itemKey={'id'}
                                 items={timers[scope]}
                                 onAdd={handleClickAddTimer}
                                 onDelete={handleClickDeleteTimer}
                                 tag={TimersTAG}
-                                title="timers"
-                                warnExpression={i=>i.with_side_effects}
                             />
                             <ViewTimerDialog open={viewTimer.open} onClose={handleCloseViewTimer} scope={scope} timer={viewTimer.id?(timers?timers[scope]:[]).find(i=>i.id==viewTimer.id):{}} />
                         </HarmonicCardHeader>

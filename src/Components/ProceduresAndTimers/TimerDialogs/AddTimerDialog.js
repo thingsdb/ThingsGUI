@@ -1,5 +1,6 @@
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -98,6 +99,16 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
                 </Grid>
                 <Grid item xs={12}>
                     <List disablePadding dense>
+                        <ListItem>
+                            <ListItemText
+                                primary="For more information, see:"
+                                secondary={
+                                    <Link target="_blank" href="https://docs.thingsdb.net/v0/timers-api/new_timer/">
+                                        {'https://docs.thingsdb.net/v0/timers-api/new_timer/'}
+                                    </Link>
+                                }
+                            />
+                        </ListItem>
                         <Collapse in={Boolean(queryString)} timeout="auto">
                             <ListItem>
                                 <TextField

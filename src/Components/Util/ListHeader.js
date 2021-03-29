@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/AddCircleOutlined';
+import AddIcon from '@material-ui/icons/AddCircle';
 import Chip from '@material-ui/core/Chip';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
