@@ -21,7 +21,7 @@ const Timer = ({match, timers}) => {
     }, []);
 
     return (
-        <Page match={match} list={timers} scope={scope} type="timer" itemKey="id" />
+        <Page match={match} data={timers} scope={scope} type="timer" itemKey="id" />
     );
 };
 

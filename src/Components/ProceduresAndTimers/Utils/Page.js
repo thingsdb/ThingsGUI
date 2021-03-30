@@ -7,9 +7,9 @@ import {Edit, Remove, Run, View} from '../Actions';
 import {EditProvider} from '../../Collections/CollectionsUtils';
 
 
-const Page = ({itemKey, match, list, scope, type}) => {
+const Page = ({itemKey, match, data, scope, type}) => {
 
-    const selectedItem = findItem(match.index, list[scope]||[]);
+    const selectedItem = findItem(match.index, data[scope]||[]);
 
     const buttons = [
         {
@@ -22,7 +22,7 @@ const Page = ({itemKey, match, list, scope, type}) => {
         },
         {
             name: 'remove',
-            component: <Remove item={selectedItem} scope={scope} close={(list[scope].length-1) != match.index} type={type} />
+            component: <Remove item={selectedItem} scope={scope} close={(data[scope].length-1) != match.index} type={type} />
         },
     ];
 
@@ -31,15 +31,15 @@ const Page = ({itemKey, match, list, scope, type}) => {
             : (
                 <TitlePage
                     preTitle={`Customizing ThingDB ${type}:`}
-                    title={selectedItem[itemKey] || ''}
+                    title={`${selectedItem[itemKey]}` || ''}
                     content={
                         <React.Fragment>
-                            <Grid container spacing={1} item md={9} sm={12}>
+                            <Grid container spacing={1} item md={8} sm={12}>
                                 <EditProvider>
                                     <Run item={selectedItem} type={type} />
                                 </EditProvider>
                             </Grid>
-                            <Grid container item md={3} sm={12} spacing={1} justify="center" alignItems="center" >
+                            <Grid container item md={4} sm={12} spacing={1} justify="center" alignItems="center" >
                                 {buttons.map(button => (
                                     <Grid key={button.name} item>
                                         {button.component}
@@ -56,7 +56,7 @@ const Page = ({itemKey, match, list, scope, type}) => {
 Page.propTypes = {
     itemKey: PropTypes.string.isRequired,
     match: PropTypes.object.isRequired,
-    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+    data: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
 };

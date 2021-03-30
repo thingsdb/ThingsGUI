@@ -2,6 +2,8 @@ import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -50,60 +52,48 @@ const Run = ({item, type}) => {
     };
 
     return (
-        <React.Fragment>
-            {type === 'procedure' &&
-                <Grid item xs={12}>
-                    <Card>
-                        <CardContent>
-                            <Grid item xs={12}>
-                                <List disablePadding dense>
-                                    {item.arguments.length !== 0 && (
-                                        <React.Fragment>
-                                            <ListItem>
-                                                <ListItemText primary="Arguments:" primaryTypographyProps={{variant: 'h6'}} />
-                                            </ListItem>
-                                            <ListItem>
-                                                <InputField dataType="variable" dataTypes={dataTypes} variables={item.arguments} />
-                                            </ListItem>
-                                        </React.Fragment>
-                                    )}
-                                </List>
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            }
-            <Grid item xs={12}>
-                <Card>
-                    <Grid container item xs={12}>
-                        <Grid item xs={12}>
-                            <Button
-                                className={classes.button}
-                                onClick={handleClickRun}
-                                variant="outlined"
-                                color="primary"
-                                size="small"
-                            >
-                                {'Run'}
-                            </Button>
-                        </Grid>
-                        {item.with_side_effects && (
-                            <Grid item xs={12}>
-                                <Typography variant="caption" className={classes.warnColor}>
-                                    {`Note: this ${type} generates an event.`}
-                                </Typography>
-                            </Grid>
-                        )}
-                        <Grid item xs={12}>
-                            <ErrorMsg tag={tag} />
-                        </Grid>
-                    </Grid>
-                </Card>
-            </Grid>
-            <Grid item xs={12}>
-                <QueryOutput output={output} />
-            </Grid>
-        </React.Fragment>
+        <Grid item xs={12}>
+            <Card>
+                {type === 'procedure' && item.arguments.length !== 0 && (
+                    <CardContent>
+                        <List disablePadding dense>
+                            <ListItem disableGutters>
+                                <ListItemText primary="Arguments" primaryTypographyProps={{variant: 'button'}} />
+                            </ListItem>
+                            <ListItem>
+                                <InputField dataType="variable" dataTypes={dataTypes} variables={item.arguments} />
+                            </ListItem>
+                        </List>
+                    </CardContent>
+                )}
+                <CardHeader
+                    title="Click RUN and view the output below."
+                    titleTypographyProps={{
+                        variant:'subtitle2'
+                    }}
+                    subheader={item.with_side_effects ? `Note: this ${type} generates an event.` : ''}
+                    subheaderTypographyProps={{
+                        className: classes.warnColor,
+                        variant: 'caption'
+                    }}
+                    action={
+                        <Button
+                            className={classes.button}
+                            onClick={handleClickRun}
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                        >
+                            {'Run'}
+                        </Button>
+                    }
+                />
+                <CardActions disableSpacing>
+                    <QueryOutput output={output} />
+                </CardActions>
+                <ErrorMsg tag={tag} />
+            </Card>
+        </Grid>
     );
 };
 

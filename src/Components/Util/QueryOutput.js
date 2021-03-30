@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#000',
         padding: theme.spacing(1),
         overflowX: 'auto',
+        width: '100%'
 
     },
     tabs: {
