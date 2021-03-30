@@ -76,7 +76,7 @@ const Tokens = ({user}) => {
                     <Table padding="none">
                         <TableHead>
                             <TableRow>
-                                {header.map((h, i) => (
+                                {header.map((h) => (
                                     <TableCell key={h.ky} align={'left'}>
                                         <Typography variant="caption" align={'left'}>
                                             {h.label}
@@ -89,7 +89,7 @@ const Tokens = ({user}) => {
                         <TableBody>
                             {rows.map((row, ri) => (
                                 <TableRow key={ri}>
-                                    {header.map((h, i) => (
+                                    {header.map((h) => (
                                         <TableCell key={h.ky} align={'left'}>
                                             <Typography component="div">
                                                 {h.ky=='key' ? (

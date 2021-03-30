@@ -2,7 +2,7 @@ import {withVlow} from 'vlow';
 import React from 'react';
 
 import {ApplicationStore, ProcedureActions, ProcedureStore} from '../../Stores';
-import Page from './Page';
+import {Page} from './Utils';
 
 const withStores = withVlow([{
     store: ApplicationStore,

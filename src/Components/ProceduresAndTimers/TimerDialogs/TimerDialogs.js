@@ -8,7 +8,7 @@ import ViewTimerDialog from './ViewTimerDialog';
 import {EditProvider} from '../../Collections/CollectionsUtils';
 
 
-const TimerDialogs = ({id, timers, scope, open, onClose}) => {
+const TimerDialogs = ({dialogsView, id, timers, scope, open, onClose}) => {
     const {add, edit, run, view} = open;
     const handleCloseEdit = () => {
         onClose({edit: false});
@@ -30,12 +30,13 @@ const TimerDialogs = ({id, timers, scope, open, onClose}) => {
 
     return (
         <React.Fragment>
-            <ViewTimerDialog open={view} onClose={handleCloseView} timer={selectedTimer||{}} scope={scope} />
-            <AddTimerDialog open={add} onClose={handleCloseAdd} scope={scope} />
-            <EditTimerDialog open={edit} onClose={handleCloseEdit} timer={selectedTimer||{}} scope={scope} />
-            <EditProvider>
-                <RunTimerDialog open={run} onClose={handleCloseRun} timer={selectedTimer||{}} scope={scope} />
-            </EditProvider>
+            {dialogsView.view && <ViewTimerDialog open={view} onClose={handleCloseView} timer={selectedTimer||{}} scope={scope} />}
+            {dialogsView.add && <AddTimerDialog open={add} onClose={handleCloseAdd} scope={scope} />}
+            {dialogsView.edit && <EditTimerDialog open={edit} onClose={handleCloseEdit} timer={selectedTimer||{}} scope={scope} />}
+            {dialogsView.run &&
+                <EditProvider>
+                    <RunTimerDialog open={run} onClose={handleCloseRun} timer={selectedTimer||{}} scope={scope} />
+                </EditProvider>}
         </React.Fragment>
     );
 };
@@ -45,6 +46,7 @@ TimerDialogs.defaultProps = {
 };
 
 TimerDialogs.propTypes = {
+    dialogsView: PropTypes.object.isRequired,
     id: PropTypes.number,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.shape({

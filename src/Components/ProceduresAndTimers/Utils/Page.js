@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
-import {findItem, isObjectEmpty, TitlePage} from '../Util';
-import {Edit, Remove, Run, View} from './Actions';
-import {EditProvider} from '../Collections/CollectionsUtils';
+import {findItem, isObjectEmpty, TitlePage} from '../../Util';
+import {Edit, Remove, Run, View} from '../Actions';
+import {EditProvider} from '../../Collections/CollectionsUtils';
 
 
 const Page = ({itemKey, match, list, scope, type}) => {

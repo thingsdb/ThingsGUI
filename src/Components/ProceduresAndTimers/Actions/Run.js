@@ -40,7 +40,6 @@ const Run = ({item, type}) => {
         setOutput(data);
     };
     const handleClickRun = () => {
-        console.log(val)
         const jsonProof = changeSingleToDoubleQuotes(addDoubleQuotesAroundKeys(val)); // make it json proof
 
         if(type === 'procedure') {

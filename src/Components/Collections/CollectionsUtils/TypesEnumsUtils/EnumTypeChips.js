@@ -125,7 +125,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
         onChange(a)(n, c);
     };
 
-    const buttons = (bv) => (n)=>{
+    const buttons = (bv) => (n) => {
         let b = [];
         if (bv.view) {
             b.push({

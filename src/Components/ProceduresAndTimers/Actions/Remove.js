@@ -27,7 +27,7 @@ const Remove = ({item, scope, close, type}) => {
     };
 
     const handleClickOk = () => {
-        let fn = type === 'procedure' ? ProcedureActions.deleteProcedure : TimerActions.deleteTimer
+        let fn = type === 'procedure' ? ProcedureActions.deleteProcedure : TimerActions.deleteTimer;
         fn(scope, identifier, tag, close ? handleClickClose : () => null);
     };
 
