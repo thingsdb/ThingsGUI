@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
-import RemoveIcon from '@material-ui/icons/HighlightOff';
+import RemoveIcon from '@material-ui/icons/RemoveCircle';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
