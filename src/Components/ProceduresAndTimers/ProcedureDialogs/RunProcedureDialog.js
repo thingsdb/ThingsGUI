@@ -76,8 +76,11 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
             <Grid container spacing={1}>
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
+                        <Typography variant="body1" >
+                            {'Run ThingDB procedure:'}
+                        </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {`Run procedure${procedure?`: ${procedure.name}`:''}`}
+                            {procedure.name || ''}
                         </Typography>
                     </Grid>
                 </Grid>

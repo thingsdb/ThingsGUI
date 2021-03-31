@@ -95,7 +95,7 @@ const Editor = ({match}) => {
                     </Grid>
                 </React.Fragment>
             }
-            sideContent={<EditorSideContent scope={scope} onSetQueryInput={handleInput} tag={tag} />}
+            sideContent={scope ? <EditorSideContent scope={scope} onSetQueryInput={handleInput} /> : null}
         />
     );
 };

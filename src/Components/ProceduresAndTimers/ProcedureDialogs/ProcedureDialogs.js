@@ -8,7 +8,7 @@ import ViewProcedureDialog from './ViewProcedureDialog';
 import {EditProvider} from '../../Collections/CollectionsUtils';
 
 
-const ProcedureDialogs = ({name, procedures, scope, open, onClose}) => {
+const ProcedureDialogs = ({dialogsView, name, procedures, scope, open, onClose}) => {
     const {add, edit, run, view} = open;
     const handleCloseEdit = () => {
         onClose({edit: false});
@@ -30,12 +30,13 @@ const ProcedureDialogs = ({name, procedures, scope, open, onClose}) => {
 
     return (
         <React.Fragment>
-            <ViewProcedureDialog open={view} onClose={handleCloseView} procedure={selectedProcedure||{}} />
-            <AddProcedureDialog open={add} onClose={handleCloseAdd} scope={scope} />
-            <EditProcedureDialog open={edit} onClose={handleCloseEdit} procedure={selectedProcedure||{}} scope={scope} />
-            <EditProvider>
-                <RunProcedureDialog open={run} onClose={handleCloseRun} procedure={selectedProcedure||{}} scope={scope} />
-            </EditProvider>
+            {dialogsView.view && <ViewProcedureDialog open={view} onClose={handleCloseView} procedure={selectedProcedure||{}} />}
+            {dialogsView.add && <AddProcedureDialog open={add} onClose={handleCloseAdd} scope={scope} />}
+            {dialogsView.edit && <EditProcedureDialog open={edit} onClose={handleCloseEdit} procedure={selectedProcedure||{}} scope={scope} />}
+            {dialogsView.run &&
+                <EditProvider>
+                    <RunProcedureDialog open={run} onClose={handleCloseRun} procedure={selectedProcedure||{}} scope={scope} />
+                </EditProvider>}
         </React.Fragment>
     );
 };
@@ -45,6 +46,7 @@ ProcedureDialogs.defaultProps = {
 };
 
 ProcedureDialogs.propTypes = {
+    dialogsView: PropTypes.object.isRequired,
     name: PropTypes.string,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.shape({

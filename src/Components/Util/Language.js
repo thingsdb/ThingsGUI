@@ -86,7 +86,9 @@ export default {
         },
         thing: {
             'assign': 'Copies properties from a given thing. Existing properties will be overwritten and new properties will be added. If this function is used on an instance of a custom Type, all properties of the source must be valid according the type specification, otherwise an exception will be raised and no properties will be copied.',
+            'copy': 'Copy a thing to a new thing. A Type is not preserved.',
             'del': 'Delete a property from a thing.',
+            'dup': 'Duplicate a thing while preserving the Type.',
             'each': 'Iterate over all properties on a thing.',
             'emit': 'Emit an event to all watchers of a thing. The event is a string value which you are free to choose. It is possible, but not required, to send extra arguments with the event.',
             'equals': 'Determines if a thing is equal to another thing.',
@@ -104,6 +106,8 @@ export default {
             'wrap': 'Wrap a thing with a Type.',
         },
         type: {
+            'copy': 'Copy a thing to a new thing. A Type is not preserved.',
+            'dup': 'Duplicate a thing while preserving the Type.',
             'unwrap': 'Unwrap a wrapped thing.',
         }
     },
@@ -250,13 +254,23 @@ export default {
         'users_info': 'Returns user information for all users withing ThingsDB. This function requires GRANT privileges on the .thingsdb scope since it exposes user access and token information.',
     },
     procedures: {
-        'del_procedure': 'Creates a new procedure to the @thingsdb or a @collection scope. The name of the procedure must be unique within the scope. The given closure will be copied to the procedure, so this is not a reference to a given closure.',
+        'del_procedure': 'Delete a procedure.',
         'has_procedure': 'Determines if a procedure exists in the current scope.',
-        'new_procedure': 'Delete a procedure.',
+        'new_procedure': 'Creates a new procedure to the @thingsdb or a @collection scope. The name of the procedure must be unique within the scope. The given closure will be copied to the procedure, so this is not a reference to a given closure.',
         'procedure_doc': 'Returns the doc string for a given procedure. An empty string is returned if the procedure has no doc string.',
         'procedure_info': 'Returns procedure information for all procedures in the scope.',
         'procedures_info': 'Returns information about a procedure.',
         'rename_procedure': 'Rename a procedure.',
         'run': 'Run a procedure.',
+    },
+    timers: {
+        'del_timer': 'Delete a timer.',
+        'has_timer': 'Determines if a timer exists in the current scope.',
+        'new_timer': 'Creates a new timer to the @thingsdb or a @collection scope. The given closure will be copied to the timer, so this is not a reference to the given closure.',
+        'run': 'Run a timer.',
+        'set_timer_args': 'Set timer arguments. If less than the required arguments are given, then the remaining arguments will be set using nil. More arguments than the closure accepts are simply removed and thus not used.',
+        'timer_args': 'Get timer arguments as a tuple.',
+        'timer_info': 'Returns information about a timer.',
+        'timers_info': 'Returns timer information about all timers in the scope.',
     },
 };

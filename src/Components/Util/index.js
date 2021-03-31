@@ -24,6 +24,7 @@ import ListHeader from './ListHeader';
 import LocalMsg from './LocalMsg';
 import LocalErrorMsg from './LocalErrorMsg';
 import Menu from './Menu';
+import moment from 'moment';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import RefreshContainer from './RefreshContainer';
@@ -34,6 +35,7 @@ import StickyHeadTable from './StickyHeadTable';
 import StringDialog from './StringDialog';
 import Switching from './Switching';
 import SwitchOpen from './SwitchOpen';
+import TableCard from './TableCard';
 import TableExtra from './TableExtra';
 import TableWithBadges from './TableWithBadges';
 import TableWithButtons from './TableWithButtons';
@@ -47,6 +49,7 @@ import TopBarMenu from './TopBarMenu';
 import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
 import TwoLabelSwitch from './TwoLabelSwitch';
+import useStateCallback from './useStateCallback';
 import VariablesArray from './VariablesArray';
 import WarnPopover from './WarnPopover';
 
@@ -93,9 +96,17 @@ const thingValue = (type, thing, customTypes=[]) => {
 
 const isObjectEmpty = (obj) => obj.constructor === Object && Object.entries(obj).length === 0;
 const findItem = (index, target) => target.length ? (index+1 > target.length ? {}: target[index]) : {}; //findItem(index-1, target) : target[index]) : {};
-const orderByName = (arr) => arr.sort((a, b) => {
-    const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+const orderByName = (arr, key='name') => arr.sort((a, b) => {
+    let nameA,
+        nameB;
+    if(typeof a[key] === 'string') {
+        nameA = a[key].toUpperCase(); // ignore upper and lowercase
+        nameB = b[key].toUpperCase(); // ignore upper and lowercase
+    } else {
+        nameA = a[key];
+        nameB = b[key];
+    }
+
     if (nameA < nameB) {
         return -1;
     }
@@ -190,6 +201,8 @@ const scaleToBinBytes = (bytes) => {
     return `${rounded === number ? '' : '~'}${rounded} ${metricLabel[i]}`;
 };
 
+const nextRunFn = (t) => (t === 'pending' ? t : moment(t).format('YYYY-MM-DD HH:mm'));
+
 export {
     addDoubleQuotesAroundKeys,
     allDataTypes,
@@ -227,6 +240,7 @@ export {
     LocalMsg,
     LocalErrorMsg,
     Menu,
+    nextRunFn,
     orderByName,
     RefreshContainer,
     QueryInput,
@@ -242,6 +256,7 @@ export {
     Switching,
     SwitchOpen,
     Tabs,
+    TableCard,
     TableExtra,
     TableWithBadges,
     TableWithButtons,
@@ -255,6 +270,7 @@ export {
     TreeBranch,
     TreeIcon,
     TwoLabelSwitch,
+    useStateCallback,
     VariablesArray,
     WarnPopover,
 };

@@ -13,9 +13,9 @@ import StorageIcon from '@material-ui/icons/Storage';
 import VisibleIcon from '@material-ui/icons/Visibility';
 
 import {ApplicationStore} from '../../Stores';
-import {BottomBar, CollectionsMenu, ProcedureMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
+import {BottomBar, CollectionsMenu, ProceduresMenu, TimersMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
 import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
-import {Procedure} from '../Procedures';
+import {Procedure, Timer} from '../ProceduresAndTimers';
 import Collection from '../Collections';
 import Editor from '../Editor';
 import HeaderTitle from './HeaderTitle';
@@ -39,6 +39,7 @@ const App = ({match}) => {
         collection: <Collection />,
         user: <User />,
         procedure: <Procedure />,
+        timer: <Timer />,
         query: <Editor />,
     };
 
@@ -101,7 +102,7 @@ const App = ({match}) => {
                     </Grid>
                 }
                 menuOpen={menuOpen}
-                menus={[<CollectionsMenu key="collections_menu" />, <UsersMenu key="users_menu" />, <ProcedureMenu key="procedures_menu" />, <QueryEditorMenu key="editor_menu" />]}
+                menus={[<CollectionsMenu key="collections_menu" />, <UsersMenu key="users_menu" />, <ProceduresMenu key="procedures_menu" />, <TimersMenu key="timers_menu" />, <QueryEditorMenu key="editor_menu" />]}
                 bottomBar={<BottomBar />}
                 drawerTitle={drawerContent ? 'NODES' : 'WATCHER'}
                 drawerContent={drawerContent ? <Nodes /> : <Watcher />}

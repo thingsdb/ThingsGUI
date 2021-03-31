@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/AddCircleOutlined';
+import AddIcon from '@material-ui/icons/AddCircle';
 import Chip from '@material-ui/core/Chip';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
-import RemoveIcon from '@material-ui/icons/HighlightOff';
+import RemoveIcon from '@material-ui/icons/RemoveCircle';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 

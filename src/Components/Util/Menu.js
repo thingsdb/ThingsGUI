@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
+const Menu = ({title, icon, itemKey, items, addItem, onClickItem, onRefresh}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
@@ -76,7 +76,7 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
                                 {icon}
                             </ListItemIcon>
                             <ListItemText
-                                primary={item.name}
+                                primary={item[itemKey]}
                                 primaryTypographyProps={{
                                     display: 'block',
                                     noWrap: true,
@@ -101,11 +101,13 @@ const Menu = ({title, icon, items, addItem, onClickItem, onRefresh}) => {
 };
 
 Menu.defaultProps = {
+    itemKey: 'name',
     onRefresh: null,
 };
 
 Menu.propTypes = {
     title: PropTypes.string.isRequired,
+    itemKey: PropTypes.string,
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
     icon: PropTypes.element.isRequired,
     addItem: PropTypes.object.isRequired,

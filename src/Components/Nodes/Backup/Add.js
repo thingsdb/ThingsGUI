@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-import { ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker } from '../../Util';
+import {ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker} from '../../Util';
 import {NodesActions} from '../../../Stores';
 import {AddBackupTAG} from '../../../constants';
 

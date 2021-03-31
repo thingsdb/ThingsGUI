@@ -46,7 +46,7 @@ const TimePeriodPicker = ({onChange}) => {
 
     return (
         <Grid item container xs={12} spacing={1} >
-            <Grid item xs={3}>
+            <Grid item>
                 <TextField
                     autoFocus
                     margin="dense"
@@ -59,7 +59,7 @@ const TimePeriodPicker = ({onChange}) => {
                     fullWidth
                 />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item>
                 <TextField
                     margin="dense"
                     id="unit"

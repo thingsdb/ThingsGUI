@@ -63,10 +63,14 @@ const TitlePage2 = ({preTitle, title, sideContent, content}) => {
     );
 };
 
+TitlePage2.defaultProps = {
+    sideContent: null,
+};
+
 TitlePage2.propTypes = {
     preTitle: PropTypes.string.isRequired,
     title: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
-    sideContent: PropTypes.object.isRequired,
+    sideContent: PropTypes.object,
     content: PropTypes.object.isRequired,
 };
 

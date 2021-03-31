@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import React from 'react';
 
-import {AddProcedureDialog} from '../Procedures';
+import {AddProcedureDialog} from '../ProceduresAndTimers';
 import {Menu, orderByName} from '../Util';
 import {ApplicationActions, ProcedureActions, ProcedureStore} from '../../Stores';
 

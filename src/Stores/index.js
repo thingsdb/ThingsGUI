@@ -7,6 +7,7 @@ import {ErrorActions, ErrorStore} from './ErrorStore';
 import {NodesActions, NodesStore} from './NodesStore';
 import {ProcedureActions, ProcedureStore} from './ProcedureStore';
 import {ThingsdbActions, ThingsdbStore} from './ThingsdbStore';
+import {TimerActions, TimerStore} from './TimerStore';
 import {TypeActions, TypeStore} from './TypeStore';
 
 
@@ -20,5 +21,6 @@ export {
     NodesActions, NodesStore,
     ProcedureActions, ProcedureStore,
     ThingsdbActions, ThingsdbStore,
+    TimerActions, TimerStore,
     TypeActions, TypeStore,
 };

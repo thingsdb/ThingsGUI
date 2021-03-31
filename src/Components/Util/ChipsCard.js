@@ -7,12 +7,12 @@ import Grid from '@material-ui/core/Grid';
 import InputBase from '@material-ui/core/InputBase';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RemoveIcon from '@material-ui/icons/Cancel';
+import RemoveIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import Switch from '@material-ui/core/Switch';
 
 import {ChipsCardTAG} from '../../constants';
-import {ErrorMsg, HarmonicCardContent, SimpleModal, CardMultiButton} from '../Util';
+import {ErrorMsg, HarmonicCardContent, orderByName, SimpleModal, CardMultiButton} from '../Util';
 
 
 const useStyles = makeStyles(theme => ({
@@ -61,25 +61,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const orderByName = (arr) => arr.sort((a, b) => {
-    const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    const nameB = b.name.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-        return -1;
-    }
-    if (nameA > nameB) {
-        return 1;
-    }
-
-    // names must be equal
-    return 0;
-});
-
-const tag = ChipsCardTAG;
-
 const step = 20;
 
-const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExpression}) => {
+const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, title, warnExpression}) => {
     const classes = useStyles();
     const [deleteItem, setDeleteItem] = React.useState('');
     const [switchDel, setSwitchDel] = React.useState(false);
@@ -88,7 +72,7 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
 
 
     const handleClickDelete = () => {
-        onDelete(deleteItem, handleCloseDelete, tag);
+        onDelete(deleteItem, handleCloseDelete, ChipsCardTAG);
     };
 
     const handleClickAdd = () => {
@@ -123,7 +107,7 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
         setMaxAmount(maxAmount=>maxAmount+step);
     };
 
-    let searchList = orderByName(searchString?items.filter(i=>i.name.includes(searchString)):items);
+    let searchList = orderByName(searchString?items.filter(i=>i[itemKey].includes(searchString)):items, itemKey);
 
     return (
         <React.Fragment>
@@ -148,14 +132,15 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
                                     />
                                 </div>
                             </Grid>
+                            <ErrorMsg tag={tag} />
                         </Grid>
                         <Grid item xs={12}>
                             {
                                 searchList && searchList.length ? searchList.slice(0, maxAmount).map((listitem, index) => (
                                     <React.Fragment key={index}>
                                         <CardMultiButton
-                                            label={listitem.name}
-                                            buttons={[...buttons(listitem.name), remove(listitem.name)]}
+                                            label={`${listitem[itemKey]}`}
+                                            buttons={[...buttons(listitem[itemKey]), remove(listitem[itemKey])]}
                                             color="primary"
                                             warn={warnExpression(listitem)}
                                         />
@@ -204,7 +189,7 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
                 title={deleteItem?`Are you sure you want to remove '${deleteItem}'?`:''}
             >
                 <React.Fragment>
-                    <ErrorMsg tag={tag} />
+                    <ErrorMsg tag={ChipsCardTAG} />
                     <FormControlLabel
                         control={(
                             <Switch
@@ -223,17 +208,20 @@ const ChipsCard = ({buttons, items, moreButtons, onAdd, onDelete, title, warnExp
 };
 
 ChipsCard.defaultProps = {
+    itemKey: 'name',
     items: [],
     moreButtons: null,
     warnExpression: ()=>false,
 },
 
 ChipsCard.propTypes = {
+    itemKey: PropTypes.string,
     items: PropTypes.arrayOf(PropTypes.object),
     moreButtons: PropTypes.object,
     onAdd: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
     buttons: PropTypes.func.isRequired,
+    tag: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     warnExpression: PropTypes.func,
 };

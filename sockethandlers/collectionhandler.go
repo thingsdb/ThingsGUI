@@ -122,6 +122,7 @@ func Run(client *Client, data Data, timeout uint16) (int, interface{}, util.Mess
 		}
 		args = util.Convert(args)
 	}
+
 	resp, err := client.Connection.Run(data.Procedure, args, data.Scope, timeout)
 	if err != nil {
 		message = util.CreateThingsDBError(err)

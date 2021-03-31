@@ -39,7 +39,7 @@ const ViewProcedureDialog = ({button, open, onClose, procedure}) => {
                             {'View ThingDB procedure:'}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {procedure.name||''}
+                            {procedure.name || ''}
                         </Typography>
                     </Grid>
                 </Grid>

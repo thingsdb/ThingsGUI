@@ -45,7 +45,7 @@ const theme = createMuiTheme({
         },
         text: {
             primary: '#eee',
-            secondary: '#00000'
+            secondary: '#aaa'
         }
     },
     overrides: {

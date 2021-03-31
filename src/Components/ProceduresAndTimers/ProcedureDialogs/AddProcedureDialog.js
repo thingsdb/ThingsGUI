@@ -1,7 +1,9 @@
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -84,6 +86,16 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
                 <Grid item xs={12}>
                     <List disablePadding dense>
                         <Collapse in={Boolean(queryString)} timeout="auto">
+                            <ListItem>
+                                <ListItemText
+                                    primary="For more information, see:"
+                                    secondary={
+                                        <Link target="_blank" href="https://docs.thingsdb.net/v0/procedures-api/new_procedure/">
+                                            {'https://docs.thingsdb.net/v0/procedures-api/new_procedure/'}
+                                        </Link>
+                                    }
+                                />
+                            </ListItem>
                             <ListItem>
                                 <TextField
                                     name="queryString"
