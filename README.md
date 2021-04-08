@@ -8,28 +8,29 @@ Tool for managing ThingsDB user accounts, nodes and collections. ThingsGUI is a 
 * [Installation](#installation)
   * [Pre-compiled](#pre-compiled)
   * [Compile from source](#compile-from-source)
-* [Start ThingsGUI](#starting-thingsgui)
-  * [Command-line arguments](#command-line-arguments)
+* [Start ThingsGUI](#start-thingsgui)
+  * [Command line](#command-line)
   * [Login](#login)
-    * [Socket Address](#socket-address)
-    * [Authentication](#authentication)
-    * [Secure connection (TLS)](#secure-connection-tls)
-    * [Saving connections](#save-connections)
+    * [Socket Address](#socket-address-(1))
+    * [Authentication](#authentication-(2))
+    * [Secure connection (TLS)](#secure-connection-(tls)-(3))
+    * [Saving connections](#saving-connections-(4))
+    * [Fixed address mode](#fixed-address-mode)
 * [ThingsGUI tour](#thingsgui-tour)
   * [Dashboard](#dashboard)
   * [Collections](#collections)
-    * [Configuration](#configuration)
-    * [Things tree](#things-tree)
-    * [Procedures](#procedures)
-    * [Timers](#timers)
-    * [Types](#types)
-    * [Enums](#enums)
+    * [Collection configuration](#collection-configuration-(1))
+    * [Things tree](#things-tree-(2))
+    * [Procedures](#procedures-(3))
+    * [Timers](#timers-(4))
+    * [Types](#types-(5))
+    * [Enums](#enums-(6))
   * [Users](#users)
-    * [Configuration](#configuration)
-    * [Access rules](#access-rule)
-    * [Tokens](#tokens)
+    * [User configuration](#user-configuration-(1))
+    * [Access rules](#access-rule-(2))
+    * [Tokens](#tokens-(3))
   * [Nodes](#nodes)
-    * [Configuration](#configuration)
+    * [Node configuration](#node-configuration)
     * [Backup](#Backup)
     * [Modules](#modules)
   * [Watcher](#watcher)
@@ -105,7 +106,7 @@ Last, the gobuild.py script can be used to build the binary:
 
 ## Start ThingsGUI
 
-### Command line with related argument flags
+### Command line
 
 ThingsGUI can be started with the following command:
 
@@ -184,7 +185,7 @@ ThingsDB can contain multiple [collections](https://docs.thingsdb.net/v0/overvie
 
 Each collection has its own overview containing the following elements.
 
-#### Configuration (1)
+#### Collection configuration (1)
 
 Basic information about the collection can be found in the __INFO__ container. It is possible to create, rename and delete a collection depending on your personal access rules. A collection name must conform to certain [naming rules](https://docs.thingsdb.net/v0/overview/names/).
 
@@ -248,7 +249,7 @@ It is possible to add, edit and delete an enum.
 
 The __USERS__ panel shows all the [users](https://docs.thingsdb.net/v0/thingsdb-api/) if you have `GRANT` rights. Otherwise the list will only contain you.
 
-#### Configuration (1)
+#### User configuration (1)
 
 If you have `GRANT` rights it is possible to add, rename and delete a user and to set and reset the password.
 If you have `EVENT` rights it is still possible to set and reset your own password.
@@ -271,7 +272,7 @@ The [nodes](https://docs.thingsdb.net/v0/node-api/) can be found in the side pan
 
 
 
-#### Configuration
+#### Node configuration
 
 In this panel you can add a new node, view the stream graph (which shows how the nodes are connected to each other), and [restore](https://docs.thingsdb.net/v0/thingsdb-api/restore/) from a backup file.
 
