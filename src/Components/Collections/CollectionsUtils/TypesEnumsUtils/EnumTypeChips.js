@@ -21,6 +21,7 @@ const headers = {
         Fields: [
             {ky: 'propertyName', label: 'Name'},
             {ky: 'propertyObject', label: 'Type'},
+            {ky: 'propertyRelation', label: 'Relation'}
         ],
         Methods: [
             {ky: 'propertyName', label: 'Name'},
@@ -155,13 +156,24 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
     const obj = item[fields] ? item[fields].map(([n,v])=>{
         const isBlob = v.constructor===String&&v.includes('/download/tmp/thingsdb-cache');
         const objectProof = !isBlob&&v.constructor===Object?JSON.stringify(v):v;
-        const obj = isBlob? <DownloadBlob val={v} /> : noLink ? objectProof : <AddLink name={objectProof} scope={scope} onChange={view.view?handleChangeViaLink('view'):handleChangeViaLink('edit')} />;
+        const obj = isBlob ? <DownloadBlob val={v} /> : noLink ? objectProof : <AddLink name={objectProof} scope={scope} onChange={view.view?handleChangeViaLink('view'):handleChangeViaLink('edit')} />;
+        const relation = item.relations[n];
+        const rtype = <AddLink name={relation.type} scope={scope} onChange={view.view?handleChangeViaLink('view'):handleChangeViaLink('edit')} />;
+        const rdef = <AddLink name={relation.definition} scope={scope} onChange={view.view?handleChangeViaLink('view'):handleChangeViaLink('edit')} />;
         return({
             default: item.default===n ? <CheckIcon /> : null,
             propertyName: n,
-            propertyType: categoryInit==='type'?v:'',
-            propertyVal: categoryInit==='type'?'':v,
+            propertyType: categoryInit==='type' ? v : '',
+            propertyVal: categoryInit==='type' ? '' : v,
             propertyObject: obj,
+            propertyRelation: relation ? (
+                <React.Fragment>
+                    {`${relation.property} on `}
+                    {rtype}
+                    {' as '}
+                    {rdef}
+                </React.Fragment>
+            ) : 'no relation',
             wpo: item.wpo
         });
     }):[];
