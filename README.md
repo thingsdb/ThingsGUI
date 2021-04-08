@@ -27,7 +27,7 @@ Tool for managing ThingsDB user accounts, nodes and collections. ThingsGUI is a 
     * [Enums](#enums-(6))
   * [Users](#users)
     * [User configuration](#user-configuration-(1))
-    * [Access rules](#access-rule-(2))
+    * [Access rules](#access-rules-(2))
     * [Tokens](#tokens-(3))
   * [Nodes](#nodes)
     * [Node configuration](#node-configuration)
@@ -197,7 +197,7 @@ The __THINGS TREE__ panel contains a tree-like overview of all the [properties](
 
 Clicking a property will open a dialog where you can add, edit, delete and watch a property. It really depends on the type (e.g. string, integer, list, thing etc.) of the property which of the above mentioned actions are possible. A link to the code editor is also included. For example in the image above you can see two round icon buttons, indicating that this particular property has a delete action to delete this property from the root thing and it has an action that serves as a link to the code editor.
 
-To modify the __root thing__ you need to click on the  <img src="readme/img/key_tool_icon.png" alt="alt watch" style="zoom:20%;" /> icon that you can find at the bottom of the __THINGS TREE__ container under all the root properties.
+To modify the __root thing__ you need to click on the  <img src="readme/img/key_tool_icon.png" alt="alt watch" width="20px" /> icon that you can find at the bottom of the __THINGS TREE__ container under all the root properties.
 
 #### Procedures (3)
 
@@ -314,9 +314,9 @@ The [watcher](https://docs.thingsdb.net/v0/watching/) can also be found in the s
 
 You can add things to the watcher by entering the thing's id and scope in the input fields at the top of the watcher.
 
-It is also possible to add things from within the __THINGS TREE__. As mentioned before, clicking a property in the __THINGS TREE__ panel opens up a dialog If this property is of type `thing` or `custom type`, you find a watch button <img src="readme/img/turn_watching_on_icon.png" alt="alt watch" style="zoom:20%;" />. Click the button and you see the thing appearing in the watcher. The same icon, but in green, also appears in the things tree to remind you that you are watching this thing. The watch button in the dialog will change to a turn-watching-off button<img src="readme/img/turn_watching_off_icon.png" alt="alt watch" style="zoom:20%;" />.
+It is also possible to add things from within the __THINGS TREE__. As mentioned before, clicking a property in the __THINGS TREE__ panel opens up a dialog If this property is of type `thing` or `custom type`, you find a watch button <img src="readme/img/turn_watching_on_icon.png" alt="alt watch" width="20px" />. Click the button and you see the thing appearing in the watcher. The same icon, but in green, also appears in the things tree to remind you that you are watching this thing. The watch button in the dialog will change to a turn-watching-off button<img src="readme/img/turn_watching_off_icon.png" alt="alt watch" width="20px" />.
 
-What it means to watch a thing is that you will receive real time updates. You see every change that you did yourself or others. However watching goes as deep as the next thing you encounter nested within the watched thing. For example if the thing you watch includes 3 properties `name`, `employees` and `address`, which are of type `string`, `list` and `thing` respectively. You will see the changes in `name` and `employees`, but not in `address`, because `address` is another thing, with another id. To watch the changes in `address` you can add `address` to the watch list directly by clicking the <img src="readme/img/add_watch_icon.png" alt="alt watch" style="zoom:20%;" /> . You can remove a thing from the watcher by clicking <img src="readme/img/remove_watch_icon.png" alt="alt watch" style="zoom:20%;" />.
+What it means to watch a thing is that you will receive real time updates. You see every change that you did yourself or others. However watching goes as deep as the next thing you encounter nested within the watched thing. For example if the thing you watch includes 3 properties `name`, `employees` and `address`, which are of type `string`, `list` and `thing` respectively. You will see the changes in `name` and `employees`, but not in `address`, because `address` is another thing, with another id. To watch the changes in `address` you can add `address` to the watch list directly by clicking the <img src="readme/img/add_watch_icon.png" alt="alt watch" width="20px" /> . You can remove a thing from the watcher by clicking <img src="readme/img/remove_watch_icon.png" alt="alt watch" width="20px" />.
 
 ---
 
