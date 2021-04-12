@@ -102,15 +102,15 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
     const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, enumsTag), [scope]);
     const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, typesTag), [scope]);
 
-    const handleChange = (a) => (n, c) => {
+    const handleChange = React.useCallback((a) => (n, c) => {
         if (c=='type') {
-            setViewEnum({...viewEnum, [a]: false, name: ''});
-            setViewType({...viewType, [a]: true, expand: true, name: n});
+            setViewEnum(viewEnum => ({...viewEnum, [a]: false, name: ''}));
+            setViewType(viewType => ({...viewType, [a]: true, expand: true, name: n}));
         } else {
-            setViewType({...viewType, [a]: false, name: ''});
-            setViewEnum({...viewEnum, [a]: true, expand: true, name: n});
+            setViewType(viewType => ({...viewType, [a]: false, name: ''}));
+            setViewEnum(viewEnum => ({...viewEnum, [a]: true, expand: true, name: n}));
         }
-    };
+    }, []);
 
     const handleClose = (a, c) => {
         if (c=='type') {

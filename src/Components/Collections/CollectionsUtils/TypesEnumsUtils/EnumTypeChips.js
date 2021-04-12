@@ -7,7 +7,7 @@ import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
 import {ChipsCard, DownloadBlob} from '../../../Util';
-import {AddDialog, AddLink, EditDialog, ViewDialog} from '.';
+import {AddDialog, AddLink, EditDialog, Relation, ViewDialog} from '.';
 
 
 const useStyles = makeStyles(theme => ({
@@ -18,18 +18,18 @@ const useStyles = makeStyles(theme => ({
 
 const headers = {
     type: {
-        Fields: [
+        fields: [
             {ky: 'propertyName', label: 'Name'},
             {ky: 'propertyObject', label: 'Type'},
             {ky: 'propertyRelation', label: 'Relation'}
         ],
-        Methods: [
+        methods: [
             {ky: 'propertyName', label: 'Name'},
             {ky: 'definition', label: 'Definition'},
         ]
     },
     enum: {
-        Members: [
+        members: [
             {ky: 'default', label: 'Default'},
             {ky: 'propertyName', label: 'Name'},
             {ky: 'propertyObject', label: 'Value'},
@@ -55,8 +55,14 @@ const queries = {
             enum: (name, update) => `mod_enum('${name}', 'mod', '${update.propertyName}', ${update.propertyVal})`
         },
         ren: {
-            type: (name, oldname, newname) => `mod_type('${name}', 'ren', '${oldname}', '${newname}')`,
-            enum: (name, oldname, newname) => `mod_enum('${name}', 'ren', '${oldname}', '${newname}')`
+            type: (name, update) => `mod_type('${name}', 'ren', '${update.oldname}', '${update.newname}')`,
+            enum: (name, update) => `mod_enum('${name}', 'ren', '${update.oldname}', '${update.newname}')`
+        },
+        rel: {
+            type: (name, update) => `mod_type('${name}', 'rel', '${update.relation.property}', '${update.relation.propertyToo}')`,
+        },
+        delRel: {
+            type: (name, update) => `mod_type('${name}', 'rel', '${update.propertyName}', nil)`,
         },
         def: {
             enum: (name, update) => `mod_enum('${name}', 'def', '${update.propertyName}')`
@@ -74,7 +80,46 @@ const queries = {
     }
 };
 
+const fmrows = (callback, fields, isType, item, scope, view ) => item[fields] ? item[fields].map(([n,v])=> {
+    const isBlob = v.constructor === String && v.includes('/download/tmp/thingsdb-cache');
+    let obj;
+    if(isBlob) {
+        obj = <DownloadBlob val={v} />;
+    } else {
+        const str = v.constructor === Object ? JSON.stringify(v) : v;
+        obj = !isType ? str : <AddLink name={str} scope={scope} onChange={view.view ? callback('view') : callback('edit')} />;
+    }
 
+    const relation = item.relations && item.relations[n];
+
+    return({
+        default: item.default === n ? <CheckIcon /> : null,
+        propertyName: n,
+        propertyType: isType ? v : '',
+        propertyVal: isType ? '' : v,
+        propertyObject: obj,
+        propertyRelation: <Relation onChange={callback} relation={relation} scope={scope} view={view.view ? 'view' : 'edit'} />,
+        wpo: item.wpo
+    });
+}):[];
+
+const tableInfo = {
+    type: (callback, items, scope, view) => {
+        const item = view.name && items && items.find(i => i.name == view.name) || {};
+        const rows = {
+            fields: fmrows(callback, 'fields', true, item, scope, view),
+            methods: Object.entries(item.methods||{}).reduce((res, k) => {res.push({propertyName: k[0], definition: k[1].definition}); return res;},[]),
+        };
+        return [item, rows];
+    },
+    enum: (callback, items, scope, view) => {
+        const item = view.name && items && items.find(i => i.name == view.name) || {};
+        const rows = {
+            members: fmrows(callback, 'members', false, item, scope, view),
+        };
+        return [item, rows];
+    },
+};
 
 const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
     const classes = useStyles();
@@ -122,9 +167,6 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
     const handleChangeViaButton = (a, n) => () => {
         onChange(a)(n, categoryInit);
     };
-    const handleChangeViaLink = (a) => (n, c) => {
-        onChange(a)(n, c);
-    };
 
     const buttons = (bv) => (n) => {
         let b = [];
@@ -150,39 +192,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
         return b;
     };
 
-    const item = view.name&&items&&items.find(i=>i.name==view.name)||{};
-    const fields = categoryInit==='type'?'fields':'members';
-    const noLink = categoryInit==='enum';
-    const obj = item[fields] ? item[fields].map(([n,v])=>{
-        const isBlob = v.constructor===String&&v.includes('/download/tmp/thingsdb-cache');
-        const objectProof = !isBlob&&v.constructor===Object?JSON.stringify(v):v;
-        const obj = isBlob ? <DownloadBlob val={v} /> : noLink ? objectProof : <AddLink name={objectProof} scope={scope} onChange={view.view?handleChangeViaLink('view'):handleChangeViaLink('edit')} />;
-        const relation = item.relations[n];
-        const rtype = <AddLink name={relation.type} scope={scope} onChange={view.view?handleChangeViaLink('view'):handleChangeViaLink('edit')} />;
-        const rdef = <AddLink name={relation.definition} scope={scope} onChange={view.view?handleChangeViaLink('view'):handleChangeViaLink('edit')} />;
-        return({
-            default: item.default===n ? <CheckIcon /> : null,
-            propertyName: n,
-            propertyType: categoryInit==='type' ? v : '',
-            propertyVal: categoryInit==='type' ? '' : v,
-            propertyObject: obj,
-            propertyRelation: relation ? (
-                <React.Fragment>
-                    {`${relation.property} on `}
-                    {rtype}
-                    {' as '}
-                    {rdef}
-                </React.Fragment>
-            ) : 'no relation',
-            wpo: item.wpo
-        });
-    }):[];
-
-    const rows = {
-        Members: item[fields] ? obj : [],
-        Fields: item[fields] ? obj : [],
-        Methods: Object.entries(item.methods||{}).reduce((res, k) => {res.push({propertyName: k[0], definition: k[1].definition}); return res;},[])
-    };
+    const [item, rows] = React.useMemo(() => tableInfo[categoryInit](onChange, items, scope, view), [categoryInit, onChange, items, scope, view]);
 
     return (
         <Grid className={classes.spacing} item xs={12}>

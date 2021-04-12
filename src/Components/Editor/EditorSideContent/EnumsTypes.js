@@ -56,14 +56,14 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
         return `${n}{...}`;
     };
 
-    const handleChange = (a) => (n, c) => {
+    const handleChange = React.useCallback((a) => (n, c) => {
         switch(a){
         case 'view':
             if (c=='type') {
-                setViewEnum({...viewEnum, open: false, name: ''});
+                setViewEnum(viewEnum => ({...viewEnum, open: false, name: ''}));
                 setViewType({open: true, expand: true, name: n});
             } else {
-                setViewType({...viewType, open: false, name: ''});
+                setViewType(viewType => ({...viewType, open: false, name: ''}));
                 setViewEnum({open: true, expand: true, name: n});
             }
             break;
@@ -75,7 +75,7 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
             }
             break;
         }
-    };
+    }, [onSetQueryInput]);
 
     const handleClose = (_a, c) => {
         if (c=='type') {
