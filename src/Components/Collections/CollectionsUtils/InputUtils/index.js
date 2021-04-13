@@ -8,6 +8,7 @@ import AddEnum from './AddEnum';
 import AddError from './AddError';
 import AddFloat from './AddFloat';
 import AddInt from './AddInt';
+import AddNil from './AddNil';
 import AddRegex from './AddRegex';
 import AddStr from './AddStr';
 import AddThing from './AddThing';
@@ -24,6 +25,7 @@ export {
     AddError,
     AddFloat,
     AddInt,
+    AddNil,
     AddRegex,
     AddStr,
     AddThing,

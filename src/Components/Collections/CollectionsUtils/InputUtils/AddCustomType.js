@@ -16,6 +16,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+
 const typeConv = {
     'bool': ['bool', 'code', 'code'],
     'bytes': ['bytes', 'code'],
@@ -89,8 +90,10 @@ const typing = ([fprop, type], dataTypes) =>  {
     );
 };
 
+
 const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentDispatch}) => {
     const classes = useStyles();
+    const [typeFields, setTypeFields] = React.useState([]);
     const [dataType, setDataType] = React.useState({});
 
     const [editState, dispatch] = useEdit();
@@ -101,16 +104,22 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
         EditActions.updateBlob(parentDispatch, array, blob);
     },[]);
 
+    const updateTypeFields = React.useCallback(() => {
+        const typeObj = customTypes.find(c => c.name == (type[0] == '<' ? type.slice(1, -1) : type));
+        const typef = typeObj ? typeObj.fields.map(c=>typing(c, dataTypes)) : [];
+        setTypeFields(typef);
+    }, [customTypes, dataTypes, type]);
+
+    React.useEffect(() => {
+        updateTypeFields();
+    },[updateTypeFields]);
+
     const handleChangeType = (n) => ({target}) => {
         const {value} = target;
         setDataType({...dataType, [n]: value});
-        if (value == 'nil') {
-            EditActions.updateVal(dispatch, {...val, [n]: 'nil'});
-        }
     };
 
     const handleAdd = () => {
-        console.log(val, dataType)
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
         EditActions.update(dispatch, {
             array:  s,
@@ -119,15 +128,9 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
         EditActions.updateBlob(parentDispatch, s, blob);
     };
     const handleRefresh = () => {
-        EditActions.update(dispatch, {
-            array:  [],
-        });
+        EditActions.update(dispatch, {array: []});
         EditActions.updateVal(parentDispatch,`${type}{}`, identifier);
-
     };
-
-    const typeObj = React.useMemo(() => customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
-    const typeFields = React.useMemo(() => typeObj?typeObj.fields.map(c=>typing(c, dataTypes)):[], [typeObj, dataTypes]);
 
     return(
         typeFields&&(
