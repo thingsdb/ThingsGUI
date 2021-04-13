@@ -18,13 +18,14 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onRefresh, title, unmountOnExit}) => {
+const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onCleanup, onRefresh, title, unmountOnExit}) => {
     const classes = useStyles();
 
     return (
         <HarmonicCardHeader
             actionButtons={actionButtons}
             expand={expand}
+            onCleanup={onCleanup}
             onRefresh={onRefresh}
             title={title}
             unmountOnExit={unmountOnExit}
@@ -49,7 +50,8 @@ HarmonicCard.defaultProps = {
     buttons: null,
     expand: false,
     noPadding: false,
-    onRefresh: null,
+    onCleanup: () => null,
+    onRefresh: () => null,
     unmountOnExit: false,
 },
 
@@ -59,6 +61,7 @@ HarmonicCard.propTypes = {
     content: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.arrayOf(PropTypes.object)]).isRequired,
     expand: PropTypes.bool,
     noPadding: PropTypes.bool,
+    onCleanup: PropTypes.func,
     onRefresh: PropTypes.func,
     title: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
     unmountOnExit: PropTypes.bool,

@@ -27,7 +27,10 @@ const CollectionTree = ({collection}) => {
         setOpen(!open);
     };
     const handleRefresh = () => {
-        CollectionActions.queryWithReturnDepth(collection.collection_id, collection.name);
+        CollectionActions.refreshThings(collection.name);
+    };
+    const handleCleanup = () => {
+        CollectionActions.cleanupThings(collection.collection_id);
     };
     return(
         <React.Fragment>
@@ -37,6 +40,7 @@ const CollectionTree = ({collection}) => {
                     <Things collection={collection} />
                 }
                 unmountOnExit
+                onCleanup={handleCleanup}
                 onRefresh={handleRefresh}
                 actionButtons={
                     <Button color="primary" onClick={handleOpen} aria-label="close">

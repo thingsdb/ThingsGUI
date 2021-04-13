@@ -2,16 +2,23 @@
 
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
+
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
+// importing any method from Util creates a webpack error.
+// import {depthOf} from '../Components/Util';
+
 
 const CollectionActions = Vlow.createActions([
     'blob',
-    'queryWithReturn',
-    'queryWithReturnDepth',
-    'rawQuery',
-    'download',
+    'cleanupThings',
     'cleanupTmp',
+    'download',
+    'getThings',
+    'queryWithReturn',
+    'rawQuery',
+    'refreshThings',
+    'removeThing',
     'resetCollectionStore'
 ]);
 
@@ -38,8 +45,9 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQueryWithReturnDepth(collectionId, collectionName, thingId=null, depth=1) {
-        const query = thingId ? `return(#${thingId}, ${depth})` : `return(thing(.id()), ${depth})`;
+    onGetThings(collectionId, collectionName, thingId=null) {
+        console.log('getThings')
+        const query = thingId ? `#${thingId}` : 'thing(.id())';
         const scope = `@collection:${collectionName}`;
         this.emit('query', {
             query,
@@ -53,6 +61,40 @@ class CollectionStore extends BaseStore {
                 return {things};
             });
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+    onRefreshThings(collectionName) {
+        const {things} = this.state;
+        const keys = Object.keys(things);
+
+        if(keys.length) {
+            console.log('refreshThings')
+            const query = `[${keys.map(k => `#${k}`)}]`;
+            const scope = `@collection:${collectionName}`;
+            this.emit('query', {
+                query,
+                scope
+            }).done((data) => {
+                this.setState({things: data.reduce((res, d) => {res[d['#']] = d ;return res;}, {})});
+            }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+        }
+    }
+
+    onRemoveThing(thingId) {
+        if(thingId) {
+            console.log('removeThing', thingId)
+            this.setState(prevState => {
+                let update = {...prevState.things};
+                delete update[thingId];
+                return {things: {...update}};
+            });
+        }
+    }
+
+    onCleanupThings(collectionId) {
+        console.log('cleanupThings')
+        const {things} = this.state;
+        this.setState({things: {[collectionId]: things[collectionId]}});
     }
 
     onQueryWithReturn(scope, q, thingId, tag, cb) {

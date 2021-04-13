@@ -51,9 +51,10 @@ const useStyles = makeStyles(theme => ({
 const ThingRoot = ({things, collection, watchIds}) => {
     const classes = useStyles();
     const fetched = things.hasOwnProperty(collection.collection_id);
+    console.log(things)
 
     React.useEffect(() => {
-        CollectionActions.queryWithReturnDepth(collection.collection_id, collection.name);
+        CollectionActions.getThings(collection.collection_id, collection.name);
     }, [collection.collection_id, collection.name]);
 
     const isWatching = Boolean(watchIds[collection.collection_id]);

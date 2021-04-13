@@ -11,7 +11,6 @@ import {EditActions, useEdit} from '../Context';
 const AddCode = ({identifier, init, label, link, numLines}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
-    console.log(init)
 
     React.useEffect(()=>{
         EditActions.updateVal(dispatch, init, identifier);
@@ -54,7 +53,8 @@ AddCode.defaultProps = {
 
 AddCode.propTypes = {
     identifier: PropTypes.string,
-    init: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    /* eslint-disable react/forbid-prop-types */
+    init: PropTypes.any,
     label: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
     numLines: PropTypes.string.isRequired,

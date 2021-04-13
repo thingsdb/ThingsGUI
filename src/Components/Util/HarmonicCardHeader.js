@@ -22,25 +22,30 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const HarmonicCardHeader = ({actionButtons, children, expand, onExpand, onRefresh, title, unmountOnExit}) => {
+const HarmonicCardHeader = ({actionButtons, children, expand, onCleanup, onExpand, onRefresh, title, unmountOnExit}) => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(expand);
+
+    // React.useEffect(() => {
+    //     if(!expanded) {
+    //         onCleanup();
+    //     }
+    // }, [expanded]);
+
+    React.useEffect(() => {
+        setExpanded(expand);
+    }, [expand]);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
         onExpand(!expanded);
-        onRefresh&&!expanded?onRefresh():null;
-    };
 
-    const handleRefresh = () => {
-        onRefresh();
-    };
-
-    React.useEffect(() => {
-        if(expand!==expanded){
-            setExpanded(expand);
+        if(!expanded) {
+            onRefresh();
+        } else {
+            onCleanup();
         }
-    }, [expand]);
+    };
 
     return (
         <Card>
@@ -49,7 +54,7 @@ const HarmonicCardHeader = ({actionButtons, children, expand, onExpand, onRefres
                     <React.Fragment>
                         {expanded && actionButtons}
                         {onRefresh && expanded && (
-                            <Button color="primary" onClick={handleRefresh}>
+                            <Button color="primary" onClick={onRefresh}>
                                 <RefreshIcon color="primary" />
                             </Button>
                         )}
@@ -80,8 +85,9 @@ const HarmonicCardHeader = ({actionButtons, children, expand, onExpand, onRefres
 HarmonicCardHeader.defaultProps = {
     actionButtons: null,
     expand: false,
-    onExpand: ()=>null,
-    onRefresh: null,
+    onCleanup: () => null,
+    onExpand: () => null,
+    onRefresh: () => null,
     unmountOnExit: false,
 },
 
@@ -89,6 +95,7 @@ HarmonicCardHeader.propTypes = {
     actionButtons: PropTypes.object,
     children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
     expand: PropTypes.bool,
+    onCleanup: PropTypes.func,
     onExpand: PropTypes.func,
     onRefresh: PropTypes.func,
     title: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]).isRequired,
