@@ -110,6 +110,7 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
     };
 
     const handleAdd = () => {
+        console.log(val, dataType)
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
         EditActions.update(dispatch, {
             array:  s,
@@ -125,8 +126,8 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
 
     };
 
-    const typeObj = React.useCallback(customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
-    const typeFields = typeObj?typeObj.fields.map(c=>typing(c, dataTypes)):[];
+    const typeObj = React.useMemo(() => customTypes.find(c=> c.name==(type[0]=='<'?type.slice(1, -1):type)), [type]);
+    const typeFields = React.useMemo(() => typeObj?typeObj.fields.map(c=>typing(c, dataTypes)):[], [typeObj, dataTypes]);
 
     return(
         typeFields&&(

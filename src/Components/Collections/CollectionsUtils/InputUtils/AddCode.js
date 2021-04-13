@@ -11,6 +11,7 @@ import {EditActions, useEdit} from '../Context';
 const AddCode = ({identifier, init, label, link, numLines}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
+    console.log(init)
 
     React.useEffect(()=>{
         EditActions.updateVal(dispatch, init, identifier);
