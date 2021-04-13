@@ -74,7 +74,6 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
         if(open) {
             thing && thing['#'] && CollectionActions.getThings(collection.collection_id, collection.name, thing['#']);
         } else {
-            console.log(thing)
             CollectionActions.removeThing(thing['#']);
         }
     };

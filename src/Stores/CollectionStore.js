@@ -46,7 +46,6 @@ class CollectionStore extends BaseStore {
     }
 
     onGetThings(collectionId, collectionName, thingId=null) {
-        console.log('getThings')
         const query = thingId ? `#${thingId}` : 'thing(.id())';
         const scope = `@collection:${collectionName}`;
         this.emit('query', {
@@ -68,7 +67,6 @@ class CollectionStore extends BaseStore {
         const keys = Object.keys(things);
 
         if(keys.length) {
-            console.log('refreshThings')
             const query = `[${keys.map(k => `#${k}`)}]`;
             const scope = `@collection:${collectionName}`;
             this.emit('query', {
@@ -82,7 +80,6 @@ class CollectionStore extends BaseStore {
 
     onRemoveThing(thingId) {
         if(thingId) {
-            console.log('removeThing', thingId)
             this.setState(prevState => {
                 let update = {...prevState.things};
                 delete update[thingId];
@@ -92,7 +89,6 @@ class CollectionStore extends BaseStore {
     }
 
     onCleanupThings(collectionId) {
-        console.log('cleanupThings')
         const {things} = this.state;
         this.setState({things: {[collectionId]: things[collectionId]}});
     }
