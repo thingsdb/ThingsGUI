@@ -13,13 +13,15 @@ const CollectionActions = Vlow.createActions([
     'blob',
     'cleanupThings',
     'cleanupTmp',
+    'decCounter',
     'download',
     'getThings',
+    'incCounter',
     'queryWithReturn',
     'rawQuery',
     'refreshThings',
     'removeThing',
-    'resetCollectionStore'
+    'resetCollectionStore',
 ]);
 
 
@@ -27,10 +29,12 @@ class CollectionStore extends BaseStore {
 
     static types = {
         things: PropTypes.object,
+        thingCounters: PropTypes.object,
     }
 
     static defaults = {
         things: {},
+        thingCounters: {},
     }
 
     constructor() {
@@ -40,8 +44,27 @@ class CollectionStore extends BaseStore {
 
 
     onResetCollectionStore() {
-        this.setState({
-            things: {},
+        this.setState(CollectionStore.defaults);
+    }
+
+    onIncCounter(thingId) {
+        this.setState(prevState => {
+            let counter = (prevState.thingCounters[thingId] || 0) + 1;
+            return {thingCounters: {...prevState.thingCounters, [thingId]: counter}};
+        });
+    }
+
+    onDecCounter(thingId) {
+        this.setState(prevState => {
+            let update = {...prevState.thingCounters};
+            let counter = update[thingId];
+            if(counter && counter > 1) {
+                counter = counter - 1;
+                return {thingCounters: {...prevState.thingCounters, [thingId]: counter}};
+            } else {
+                delete update[thingId];
+                return {thingCounters: update};
+            }
         });
     }
 
@@ -59,6 +82,7 @@ class CollectionStore extends BaseStore {
                     Object.assign({}, prevState.things, {[collectionId]: data});
                 return {things};
             });
+            this.onIncCounter(thingId || collectionId);
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
@@ -80,17 +104,25 @@ class CollectionStore extends BaseStore {
 
     onRemoveThing(thingId) {
         if(thingId) {
-            this.setState(prevState => {
-                let update = {...prevState.things};
-                delete update[thingId];
-                return {things: {...update}};
-            });
+            const {thingCounters, things} = this.state;
+            console.log(thingCounters, things);
+            if (thingCounters[thingId] < 2) {
+                this.setState(prevState => {
+                    let update = {...prevState.things};
+                    delete update[thingId];
+                    return {things: update};
+                });
+            }
+            this.onDecCounter(thingId);
         }
     }
 
     onCleanupThings(collectionId) {
         const {things} = this.state;
-        this.setState({things: {[collectionId]: things[collectionId]}});
+        this.setState({
+            things: {[collectionId]: things[collectionId]},
+            thingCounters: {[collectionId]: 1}
+        });
     }
 
     onQueryWithReturn(scope, q, thingId, tag, cb) {
