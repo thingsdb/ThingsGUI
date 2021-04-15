@@ -39,7 +39,7 @@ const AddCode = ({identifier, init, label, link, numLines}) => {
             margin="dense"
             helperText={
                 <Link target="_blank" href={link}>
-                    {link}
+                    {'ThingsDocs'}
                 </Link>
             }
         />

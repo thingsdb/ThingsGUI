@@ -9,7 +9,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {AddDialogTAG} from '../../../../constants';
+import {AddDialogTAG} from '../../../../Constants/Tags';
 import {ArrayLayout, ErrorMsg, SimpleModal, Switching} from '../../../Util';
 import {CollectionActions} from '../../../../Stores';
 import {EditProvider} from '../Context';
@@ -188,7 +188,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                                 primary="Add properties"
                                 secondary={
                                     <Link target="_blank" href={link}>
-                                        {link}
+                                        {'ThingsDocs'}
                                     </Link>
                                 }
                             />

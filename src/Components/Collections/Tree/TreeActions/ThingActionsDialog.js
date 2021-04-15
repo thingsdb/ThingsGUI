@@ -9,7 +9,7 @@ import Edit from './Edit';
 import SubmitButton from './SubmitButton';
 import {CollectionActions, EnumActions, ThingsdbActions, TypeActions} from '../../../../Stores';
 import {allDataTypes, ErrorMsg, SimpleModal} from '../../../Util';
-import {ThingActionsDialogTAG} from '../../../../constants';
+import {ThingActionsDialogTAG} from '../../../../Constants/Tags';
 
 const tag = ThingActionsDialogTAG;
 

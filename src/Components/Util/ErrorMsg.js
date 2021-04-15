@@ -5,6 +5,7 @@ import {withVlow} from 'vlow';
 
 import LocalErrorMsg from './LocalErrorMsg';
 import { ErrorActions, ErrorStore } from '../../Stores';
+import {ERRORS} from '../../Constants/Errors';
 
 
 const withStores = withVlow([{
@@ -12,7 +13,74 @@ const withStores = withVlow([{
     keys: ['msgError']
 }]);
 
+
+const parseErrorMsg = (errMsg) => {
+    let errObj = {
+        errMsg: errMsg,
+        errCode: '',
+        errLinks: [],
+        errLeftover: ''
+    };
+
+    let reErrCode = /\(([-][0-9]*)\)/gi;
+    let reLink = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/gi;
+
+    // Get error code
+    let res1;
+    if((res1 = reErrCode.exec(errMsg)) !== null){
+        errObj.errCode = res1[1];
+    }
+
+    // Get links
+    let res2;
+    let prevLastIndex = reErrCode.lastIndex;
+    while ((res2 = reLink.exec(errMsg)) !== null) {
+        errObj.errLinks.push({
+            link: res2[0],
+            preLink: errMsg.slice(prevLastIndex, res2.index),
+        });
+
+        prevLastIndex = reLink.lastIndex;
+    }
+
+    errObj.errLeftover= errObj.errLinks.slice(-1).postLink = errMsg.slice(prevLastIndex);
+
+    return errObj;
+};
+
+const parseError = (errMsg) => {
+    const errObj = parseErrorMsg(errMsg);
+    const error = ERRORS[errObj.errCode];
+    return([
+        (
+            <React.Fragment key="error_title">
+                {error ? (
+                    <Link target="_blank" href={error.link}>
+                        {error.label}
+                    </Link>
+                ) : errObj.errCode ? `(${errObj.errCode}) `
+                    : ''}
+            </React.Fragment>
+        ),
+        (
+            <React.Fragment key="error_body">
+                {errObj.errLinks.map(({link, preLink}) => (
+                    <React.Fragment key={`err_${link}$`}>
+                        {`${preLink} `}
+                        <Link target="_blank" href={link}>
+                            {`ThingsDocs ${link.split('/').slice(-1)}`}
+                        </Link>
+                    </React.Fragment>
+                ))}
+                {` ${errObj.errLeftover}`}
+            </React.Fragment>
+        )
+    ]);
+};
+
 const ErrorMsg = ({tag, msgError}) => {
+    const msg = msgError[tag];
+    const [title, body] = React.useMemo(() => msg ? parseError(msg) : ['', ''], [msg]);
 
     React.useEffect(()=>{
         return () => {
@@ -24,34 +92,9 @@ const ErrorMsg = ({tag, msgError}) => {
         ErrorActions.removeMsgError(tag);
     }, [tag]);
 
-    const link = (msgErr) => {
-        const startIndex = msgErr.search(/https/);
-        const length = msgErr.slice(startIndex).search(/;/);
-        if (length!=-1&&length!=0) {
-            return(
-                <React.Fragment>
-                    {msgErr.slice(0, startIndex)}
-                    <Link target="_blank" href={msgErr.slice(startIndex, startIndex+length)}>
-                        {msgErr.slice(startIndex, startIndex+length)}
-                    </Link>
-                    {msgErr.includes('https', startIndex+length) ? link(msgErr.slice(startIndex+length)):msgErr.slice(startIndex+length)}
-                </React.Fragment>
-            );
-        } else {
-            return(
-                <React.Fragment>
-                    {msgErr.slice(0, startIndex)}
-                    <Link target="_blank" href={msgErr.slice(startIndex)}>
-                        {msgErr.slice(startIndex)}
-                    </Link>
-                </React.Fragment>
-            );
-        }
-    };
-
 
     return (
-        <LocalErrorMsg msgError={msgError[tag] && msgError[tag].includes('https') ? link(msgError[tag]): msgError[tag]} onClose={handleCloseError} />
+        <LocalErrorMsg title={title} body={body} onClose={handleCloseError} />
     );
 };
 

@@ -1,25 +1,29 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import CloseIcon from '@material-ui/icons/Close';
 import Collapse from '@material-ui/core/Collapse';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles} from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     avatar: {
         backgroundColor: 'transparent',
     },
-    typography: {
-        marginBottom: theme.spacing(1),
+    collapse: {
+        width: '100%'
     },
 }));
 
 
-const LocalMsg = ({icon, msg, onClose}) => {
+const LocalMsg = ({icon, title, body, onClose}) => {
     const classes = useStyles();
 
     const handleCloseError = () => {
@@ -27,38 +31,44 @@ const LocalMsg = ({icon, msg, onClose}) => {
     };
 
     return (
-        <Collapse in={Boolean(msg)} timeout="auto" unmountOnExit>
-            <Typography className={classes.typography} component="div" variant="caption">
-                <Grid component="label" container alignItems="center" spacing={2} item xs={12}>
-                    <Grid item xs={2} >
+        <Collapse className={classes.collapse} in={Boolean(body)} timeout="auto" unmountOnExit>
+            <List>
+                <ListItem>
+                    <ListItemAvatar>
                         <Avatar className={classes.avatar}>
                             {icon}
                         </Avatar>
-                    </Grid>
-                    <Grid item xs={8}>
-                        {msg}
-                    </Grid>
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={title}
+                        secondary={body}
+                        primaryTypographyProps={{
+                            variant: 'caption'
+                        }}
+                    />
                     {onClose && (
-                        <Grid item xs={2}>
-                            <Button color="primary" aria-label="settings" onClick={handleCloseError}>
+                        <ListItemSecondaryAction>
+                            <IconButton color="primary" onClick={handleCloseError}>
                                 <CloseIcon />
-                            </Button>
-                        </Grid>
+                            </IconButton>
+                        </ListItemSecondaryAction>
                     )}
-                </Grid>
-            </Typography>
+                </ListItem>
+            </List>
         </Collapse>
     );
 };
 
 LocalMsg.defaultProps = {
-    msg: '',
+    title: '',
+    body: '',
     onClose: null,
     icon: null
 };
 
 LocalMsg.propTypes = {
-    msg: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     onClose: PropTypes.func,
     icon: PropTypes.object,
 };

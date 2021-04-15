@@ -6,7 +6,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
-import {RemoveNodeTAG} from '../../../constants';
+import {RemoveNodeTAG} from '../../../Constants/Tags';
 
 const tag = RemoveNodeTAG;
 

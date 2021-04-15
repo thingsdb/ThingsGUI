@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {NodesActions} from '../../../Stores';
 import {ErrorMsg, SimpleModal, TwoLabelSwitch} from '../../Util';
-import {RemoveBackupTAG} from '../../../constants';
+import {RemoveBackupTAG} from '../../../Constants/Tags';
 
 const tag = RemoveBackupTAG;
 

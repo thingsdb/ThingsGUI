@@ -10,7 +10,7 @@ import Switch from '@material-ui/core/Switch';
 
 import { ErrorMsg, SimpleModal, TimePicker } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
-import {AddTokenTAG} from '../../../constants';
+import {AddTokenTAG} from '../../../Constants/Tags';
 
 
 const initialState = {

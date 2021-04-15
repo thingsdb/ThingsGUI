@@ -7,7 +7,7 @@ import { makeStyles} from '@material-ui/core/styles';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
-import {RemoveCollectionTAG} from '../../../constants';
+import {RemoveCollectionTAG} from '../../../Constants/Tags';
 
 
 const useStyles = makeStyles(theme => ({

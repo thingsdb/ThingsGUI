@@ -3,7 +3,7 @@ import React from 'react';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
-import {RemoveUserTAG} from '../../../constants';
+import {RemoveUserTAG} from '../../../Constants/Tags';
 
 
 const tag = RemoveUserTAG;

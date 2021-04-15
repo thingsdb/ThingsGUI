@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
-import {LoglevelTAG} from '../../../constants';
+import {LoglevelTAG} from '../../../Constants/Tags';
 
 
 const loglevels = [

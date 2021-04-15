@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { Copy, DownloadTextFile, ErrorMsg, SimpleModal } from '../../Util';
 import {CollectionActions} from '../../../Stores';
-import {ExportCollectionTAG} from '../../../constants';
+import {ExportCollectionTAG} from '../../../Constants/Tags';
 
 
 const useStyles = makeStyles(theme => ({

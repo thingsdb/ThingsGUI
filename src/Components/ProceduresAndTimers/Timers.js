@@ -4,7 +4,7 @@ import React from 'react';
 
 import {TimerDialogs} from '.';
 import {TimerActions, TimerStore} from '../../Stores';
-import {TimersTAG} from '../../constants';
+import {TimersTAG} from '../../Constants/Tags';
 import {Card} from'./Utils';
 import {nextRunFn} from '../Util';
 import {HarmonicCardHeader} from '../Util';

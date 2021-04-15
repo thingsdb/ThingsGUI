@@ -3,7 +3,7 @@ import React from 'react';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ProcedureActions, TimerActions} from '../../../Stores';
-import {RemoveProcedureTAG} from '../../../constants';
+import {RemoveProcedureTAG} from '../../../Constants/Tags';
 
 
 const tag = RemoveProcedureTAG;

@@ -48,6 +48,7 @@ class CollectionStore extends BaseStore {
     }
 
     onIncCounter(thingId) {
+        console.log('inc', thingId)
         this.setState(prevState => {
             let counter = (prevState.thingCounters[thingId] || 0) + 1;
             return {thingCounters: {...prevState.thingCounters, [thingId]: counter}};
@@ -55,6 +56,7 @@ class CollectionStore extends BaseStore {
     }
 
     onDecCounter(thingId) {
+        console.log('dec', thingId)
         this.setState(prevState => {
             let update = {...prevState.thingCounters};
             let counter = update[thingId];
@@ -106,7 +108,7 @@ class CollectionStore extends BaseStore {
         if(thingId) {
             const {thingCounters, things} = this.state;
             console.log(thingCounters, things);
-            if (thingCounters[thingId] < 2) {
+            if(thingCounters[thingId] < 2) {
                 this.setState(prevState => {
                     let update = {...prevState.things};
                     delete update[thingId];
@@ -120,8 +122,8 @@ class CollectionStore extends BaseStore {
     onCleanupThings(collectionId) {
         const {things} = this.state;
         this.setState({
-            things: {[collectionId]: things[collectionId]},
-            thingCounters: {[collectionId]: 1}
+            things: {[collectionId]: things[collectionId]}, // To ensure that the collection data is shown on opening. Clicking the container (open->close->open) to fast will not trigger the onGetThings() and no data is shown otherwise.
+            thingCounters: {} // Will be inc at onGetThings()
         });
     }
 

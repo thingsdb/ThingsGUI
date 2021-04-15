@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import {ApplicationActions} from './ApplicationStore';
 import {ErrorActions} from './ErrorStore';
-import {LoginTAG, WatcherTAG} from '../constants';
+import {LoginTAG, WatcherTAG} from '../Constants/Tags';
 
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {

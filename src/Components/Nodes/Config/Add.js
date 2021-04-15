@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
-import {AddNodeTAG} from '../../../constants';
+import {AddNodeTAG} from '../../../Constants/Tags';
 
 
 const initialState = {

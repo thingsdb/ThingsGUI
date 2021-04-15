@@ -9,7 +9,7 @@ import Auth from './Auth';
 import Login from './Login';
 import InitStores from './InitStores';
 import {ApplicationActions, ApplicationStore} from '../../Stores';
-import {AuthTAG, LoginTAG} from '../../constants';
+import {AuthTAG, LoginTAG} from '../../Constants/Tags';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme

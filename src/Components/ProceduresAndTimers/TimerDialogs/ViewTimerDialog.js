@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {nextRunFn, SimpleModal} from '../../Util';
-import {ViewTimerDialogTAG} from '../../../constants';
+import {ViewTimerDialogTAG} from '../../../Constants/Tags';
 import {TimerActions} from '../../../Stores';
 
 const useStyles = makeStyles(() => ({

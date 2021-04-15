@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import {InputField, useEdit} from '../../Collections/CollectionsUtils';
 import {ProcedureActions} from '../../../Stores';
 import {addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
-import {RunProcedureDialogTAG} from '../../../constants';
+import {RunProcedureDialogTAG} from '../../../Constants/Tags';
 
 const useStyles = makeStyles(() => ({
     warnColor: {

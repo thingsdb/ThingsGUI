@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, EditName, ErrorMsg, SimpleModal} from '../../Util';
-import {EditProcedureDialogTAG} from '../../../constants';
+import {EditProcedureDialogTAG} from '../../../Constants/Tags';
 
 const useStyles = makeStyles(() => ({
     warnColor: {

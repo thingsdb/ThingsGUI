@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {ErrorMsg, SimpleModal, TwoLabelSwitch} from '../../Util';
 import {ApplicationActions, NodesActions} from '../../../Stores';
-import {RestoreNodeTAG} from '../../../constants';
+import {RestoreNodeTAG} from '../../../Constants/Tags';
 
 
 const initialState = {

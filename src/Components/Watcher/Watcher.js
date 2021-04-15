@@ -18,7 +18,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {EventActions, EventStore, ThingsdbStore, TypeActions, TypeStore} from '../../Stores';
 import {ErrorMsg, HarmonicTree} from '../Util';
-import {WatcherTAG} from '../../constants';
+import {WatcherTAG} from '../../Constants/Tags';
 
 const withStores = withVlow([{
     store: EventStore,

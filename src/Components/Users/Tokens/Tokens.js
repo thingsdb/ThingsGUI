@@ -19,7 +19,7 @@ import RemoveExpired from './RemoveExpired';
 import Remove from './Remove';
 import RefWrap from './RefWrap';
 import {ErrorMsg, HarmonicCard} from '../../Util';
-import {TokensTAG} from '../../../constants';
+import {TokensTAG} from '../../../Constants/Tags';
 
 const useStyles = makeStyles(theme => ({
     box: {

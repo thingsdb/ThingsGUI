@@ -7,7 +7,7 @@ import { makeStyles} from '@material-ui/core/styles';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
-import {ShutdownTAG} from '../../../constants';
+import {ShutdownTAG} from '../../../Constants/Tags';
 
 const useStyles = makeStyles(theme => ({
     warning: {

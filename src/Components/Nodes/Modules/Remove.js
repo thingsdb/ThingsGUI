@@ -5,7 +5,7 @@ import React from 'react';
 
 import {NodesActions} from '../../../Stores';
 import {ErrorMsg, SimpleModal} from '../../Util';
-import {RemoveModuleTAG} from '../../../constants';
+import {RemoveModuleTAG} from '../../../Constants/Tags';
 
 const tag = RemoveModuleTAG;
 

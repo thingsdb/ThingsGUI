@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {TimerActions} from '../../../Stores';
 import {ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
-import {RunTimerDialogTAG} from '../../../constants';
+import {RunTimerDialogTAG} from '../../../Constants/Tags';
 
 const useStyles = makeStyles(() => ({
     warnColor: {
