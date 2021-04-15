@@ -48,7 +48,6 @@ class CollectionStore extends BaseStore {
     }
 
     onIncCounter(thingId) {
-        console.log('inc', thingId)
         this.setState(prevState => {
             let counter = (prevState.thingCounters[thingId] || 0) + 1;
             return {thingCounters: {...prevState.thingCounters, [thingId]: counter}};
@@ -56,7 +55,6 @@ class CollectionStore extends BaseStore {
     }
 
     onDecCounter(thingId) {
-        console.log('dec', thingId)
         this.setState(prevState => {
             let update = {...prevState.thingCounters};
             let counter = update[thingId];
@@ -107,7 +105,6 @@ class CollectionStore extends BaseStore {
     onRemoveThing(thingId) {
         if(thingId) {
             const {thingCounters, things} = this.state;
-            console.log(thingCounters, things);
             if(thingCounters[thingId] < 2) {
                 this.setState(prevState => {
                     let update = {...prevState.things};

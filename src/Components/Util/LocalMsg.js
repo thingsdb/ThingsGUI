@@ -43,7 +43,8 @@ const LocalMsg = ({icon, title, body, onClose}) => {
                         primary={title}
                         secondary={body}
                         primaryTypographyProps={{
-                            variant: 'caption'
+                            variant: 'caption',
+                            color: 'primary'
                         }}
                     />
                     {onClose && (

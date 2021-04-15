@@ -14,6 +14,7 @@ import DrawerLayout from './DrawerLayout';
 import EditName from './EditName';
 import ErrorMsg from './ErrorMsg';
 import ErrorToast from './ErrorToast';
+import ErrorToastCard from './ErrorToastCard';
 import FixedList from './FixedList';
 import HarmonicCard from './HarmonicCard';
 import HarmonicCardContent from './HarmonicCardContent';
@@ -50,6 +51,7 @@ import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
 import TwoLabelSwitch from './TwoLabelSwitch';
 import useStateCallback from './useStateCallback';
+import useThingsError from './useThingsError';
 import VariablesArray from './VariablesArray';
 import WarnPopover from './WarnPopover';
 
@@ -225,6 +227,7 @@ export {
     EditName,
     ErrorMsg,
     ErrorToast,
+    ErrorToastCard,
     fancyName,
     findItem,
     FixedList,
@@ -271,6 +274,7 @@ export {
     TreeIcon,
     TwoLabelSwitch,
     useStateCallback,
+    useThingsError,
     VariablesArray,
     WarnPopover,
 };
