@@ -28,8 +28,8 @@ const header = [
     {ky: 'title1', title: 'QUERIES', labels: [
         {ky: 'queries_success', label: 'Successful queries'},
         {ky: 'queries_with_error', label: 'Queries with error'},
-        {ky: 'average_query_duration', label: 'Average query duration', fn: (d) => d.toFixed(3) + ' s'},
-        {ky: 'longest_query_duration', label: 'Longest query duration', fn: (d) => d.toFixed(3) + ' s'},
+        {ky: 'average_query_duration', label: 'Average query duration', fn: (d) => d && d.toFixed(3) + ' s'},
+        {ky: 'longest_query_duration', label: 'Longest query duration', fn: (d) => d && d.toFixed(3) + ' s'},
         {ky: 'largest_result_size', label: 'Largest result size', fn: scaleToBinBytes},
         {ky: 'queries_from_cache', label: 'Queries from cache'},
         {ky: 'wasted_cache', label: 'Wasted cache'},
@@ -48,8 +48,8 @@ const header = [
         {ky: 'events_committed', label: 'Events committed'},
         {ky: 'events_quorum_lost', label: 'Events quorum lost'},
         {ky: 'events_unaligned', label: 'Events unaligned'},
-        {ky: 'longest_event_duration', label: 'Longest event duration', fn: (d) => d.toFixed(3) + ' s'},
-        {ky: 'average_event_duration', label: 'Average event duration', fn: (d) => d.toFixed(3) + ' s'},
+        {ky: 'longest_event_duration', label: 'Longest event duration', fn: (d) => d && d.toFixed(3) + ' s'},
+        {ky: 'average_event_duration', label: 'Average event duration', fn: (d) => d && d.toFixed(3) + ' s'},
     ]}
 ];
 
