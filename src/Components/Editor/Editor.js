@@ -61,9 +61,9 @@ const Editor = ({match}) => {
         setExpandOutput(exp);
     };
 
-    const handleInput = (value) => {
+    const handleInput = React.useCallback((value) => {
         setInput(value);
-    };
+    }, []);
 
     return (
         <TitlePage2

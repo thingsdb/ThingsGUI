@@ -16,7 +16,7 @@ import {CollectionActions, ErrorActions} from '../../../../Stores';
 import {EditDialogTAG} from '../../../../constants';
 import {EditName, ErrorMsg, SimpleModal, WarnPopover} from '../../../Util';
 import {EditProvider} from '../Context';
-import {PropertyCallback, PropertyInitVal, PropertyMethod, PropertyName, PropertyType, PropertyVal, Wpo} from './AddEditProperty';
+import {PropertyCallback, PropertyInitVal, PropertyMethod, PropertyName, PropertyRelation, PropertyType, PropertyVal, Wpo} from './AddEditProperty';
 import Overview from './Overview';
 
 const tag = EditDialogTAG;
@@ -31,6 +31,11 @@ const initState = {
         propertyVal: null,
         callback: '',
         wpo: false,
+        relation: {
+            property: '',
+            propertyToo: ''
+        },
+        propertyRelation: null,
     },
     queryString: '',
 };
@@ -53,19 +58,40 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     const [show, setShow] = React.useState(initShow);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [warnDescription, setWarnDescription] = React.useState('');
+    const [isType, setIsType] = React.useState(category === 'type');
 
+    const overview = action=='';
+    const add = action=='addField'||action=='addMethod';
+    const mod = action=='mod';
+    const met = action=='met';
+    const def = action=='def';
+    const del = action=='del';
+    const ren = action=='ren';
+    const rel = action=='rel';
+    const wpo = action=='wpo';
+
+    const showOverview = overview||del;
+    const showSubmitBack = !showOverview;
+    const showTextFields = add || mod || met || ren;
+    const showDefault = def;
+    const showWpo = isType&&overview;
+    const showWpoWarning = wpo;
+    const showRelation = rel;
+    const showQuery = Boolean(queryString);
+
+
+    React.useEffect(() => {
+        setIsType(category === 'type');
+    }, [category]);
 
     React.useEffect(() => {
         setAction('');
-    },
-    [open],
-    );
+    }, [open]);
 
     React.useEffect(() => {
         handleWpo();
-    },
-    [handleWpo],
-    );
+    }, [handleWpo]);
 
     const handleWpo = React.useCallback(() => {
         setState({...initState, property: {...initState.property, wpo: item.wrap_only}});
@@ -89,9 +115,10 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     const handleQueryRen = (p, n=null) => {
         const name = n===null ? oldname : n;
         setState(prev=>{
+            const update = {oldname: name, newname: p.propertyName};
             return({
                 property: {...prev.property, ...p},
-                queryString: queries.ren[category](item.name, name, p.propertyName)
+                queryString: queries.ren[category](item.name, update)
             });
         });
     };
@@ -101,15 +128,22 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         handleQuery(p, 'wpo');
     };
 
+    const handleDelRel = (p) => (e) => {
+        handleQuery(p, 'delRel');
+        setAnchorEl(e.currentTarget);
+        setWarnDescription(`Are you sure you want to remove the relation of '${p.propertyName?p.propertyName:''}'`);
+        setAction('del');
+    };
+
     const handleAdd = (kys) => {
         kys.forEach((i) => {
             switch(i.ky){
             case 'propertyObject':
                 setShow({...initShow,
                     name: true,
-                    type: category=='type',
-                    valInit: category=='type',
-                    val: category=='enum',
+                    type: isType,
+                    valInit: isType,
+                    val: !isType,
                 });
                 setAction('addField');
                 break;
@@ -136,9 +170,9 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
             setAction('mod');
             handleQuery(p, 'mod');
             setShow({...initShow,
-                type: category=='type',
-                val: category=='enum',
-                callback: category=='type',
+                type: isType,
+                val: !isType,
+                callback: isType,
             });
             break;
         case 'definition':
@@ -153,13 +187,18 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
             setAction('def');
             handleQuery(p, 'def');
             break;
+        case 'propertyRelation':
+            setAction('rel');
+            handleQuery(p, 'rel');
+            break;
         }
     };
 
 
     const handleDel = (p) => (e) => {
-        setState({...state, property: p, queryString:  queries.del[category](item.name, p)});
+        handleQuery(p, 'del');
         setAnchorEl(e.currentTarget);
+        setWarnDescription(`Are you sure you want to remove '${p.propertyName?p.propertyName:''}'`);
         setAction('del');
     };
 
@@ -215,40 +254,28 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         ErrorActions.removeMsgError(tag);
     };
 
-    const overview = action=='';
-    const add = action=='addField'||action=='addMethod';
-    const mod = action=='mod';
-    const met = action=='met';
-    const def = action=='def';
-    const del = action=='del';
-    const ren = action=='ren';
-    const wpo = action=='wpo';
-
-    const showOverview = overview||del;
-    const showSubmitBack = !showOverview;
-    const showTextFields = add || mod || met || ren;
-    const showDefault = def;
-    const showQuery = Boolean(queryString);
-
-    const showWpo = category=='type'&&overview;
-    const showWpoWarning = wpo;
-
-
     const buttons = (row) => (
         <React.Fragment>
             <Button color="primary" onClick={handleDel(row)} >
                 <DeleteIcon color="primary" />
             </Button>
-            <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} onOk={handleClickOk} description={`Are you sure you want to remove '${property.propertyName?property.propertyName:''}'`} />
+            <WarnPopover anchorEl={anchorEl} onClose={handleCloseDelete} onOk={handleClickOk} description={warnDescription} />
         </React.Fragment>
     );
 
     const badgeButton = (h, row) => (
-        !(row.default!=null && h.ky=='default') ? (
-            <ButtonBase onClick={handleMod(h.ky, row)}>
-                <EditIcon color="primary" style={{fontSize: 20}} />
-            </ButtonBase>
-        ):null
+        <React.Fragment>
+            {!(row.default !== null && h.ky === 'default') ? (
+                <ButtonBase onClick={handleMod(h.ky, row)}>
+                    <EditIcon color="primary" style={{fontSize: 20}} />
+                </ButtonBase>
+            ):null}
+            {(h.ky === 'propertyRelation' && item.relations[row.propertyName]) ? (
+                <ButtonBase onClick={handleDelRel(row)}>
+                    <DeleteIcon color="primary" style={{fontSize: 20}} />
+                </ButtonBase>
+            ) : null}
+        </React.Fragment>
     );
 
     const handleRename = (oldName, newName) => {
@@ -357,6 +384,11 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                             </ListItem>
                             <ListItem>
                                 <Wpo onChange={handleQueryWpo} input={property.wpo} />
+                            </ListItem>
+                        </Collapse>
+                        <Collapse in={showRelation} timeout="auto" unmountOnExit>
+                            <ListItem>
+                                <PropertyRelation onChange={handleQuery} input={property.relation} dropdownItems={(item.fields || []).map(f => f[0])} />
                             </ListItem>
                         </Collapse>
                         <Collapse in={showWpoWarning} timeout="auto" unmountOnExit>
