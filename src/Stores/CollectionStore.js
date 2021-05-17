@@ -104,7 +104,7 @@ class CollectionStore extends BaseStore {
 
     onRemoveThing(thingId) {
         if(thingId) {
-            const {thingCounters, things} = this.state;
+            const {thingCounters} = this.state;
             if(thingCounters[thingId] < 2) {
                 this.setState(prevState => {
                     let update = {...prevState.things};
