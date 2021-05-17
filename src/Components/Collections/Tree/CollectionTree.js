@@ -23,15 +23,23 @@ const Transition = React.forwardRef((props, ref) => {
 
 const CollectionTree = ({collection}) => {
     const [open, setOpen] = React.useState(false);
+
+    React.useEffect(() => {
+        return CollectionActions.cleanupThings();
+    }, [collection.collection_id]);
+
     const handleOpen = () => {
         setOpen(!open);
     };
+
     const handleRefresh = () => {
         CollectionActions.refreshThings(collection.name);
     };
+
     const handleCleanup = () => {
         CollectionActions.cleanupThings(collection.collection_id);
     };
+
     return(
         <React.Fragment>
             <HarmonicCard

@@ -116,10 +116,10 @@ class CollectionStore extends BaseStore {
         }
     }
 
-    onCleanupThings(collectionId) {
+    onCleanupThings(collectionId=null) {
         const {things} = this.state;
         this.setState({
-            things: {[collectionId]: things[collectionId]}, // To ensure that the collection data is shown on opening. Clicking the container (open->close->open) to fast will not trigger the onGetThings() and no data is shown otherwise.
+            things: collectionId ? {[collectionId]: things[collectionId]} : {}, // To ensure that the collection data is shown on opening. Clicking the container (open->close->open) to fast will not trigger the onGetThings() and no data is shown otherwise.
             thingCounters: {} // Will be inc at onGetThings()
         });
     }
