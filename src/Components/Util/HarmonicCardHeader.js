@@ -26,12 +26,6 @@ const HarmonicCardHeader = ({actionButtons, children, expand, onCleanup, onExpan
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(expand);
 
-    // React.useEffect(() => {
-    //     if(!expanded) {
-    //         onCleanup();
-    //     }
-    // }, [expanded]);
-
     React.useEffect(() => {
         setExpanded(expand);
     }, [expand]);

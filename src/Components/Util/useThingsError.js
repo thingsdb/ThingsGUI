@@ -13,8 +13,8 @@ const parseErrorMsg = (errMsg) => {
         errLeftover: ''
     };
 
-    let reErrCode = /\(([-][0-9]*)\)/gi;
-    let reLink = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/gi;
+    const reErrCode = /\(([-][0-9]*)\)/gi;
+    const reLink = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/gi;
 
     // Get error code
     let res1;

@@ -71,12 +71,12 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
     };
 
     const handleOpenClose = (open) => {
-        if(open) {
-            if(thing && thing['#']) {
+        if(thing && thing['#']) {
+            if(open) {
                 CollectionActions.getThings(collection.collection_id, collection.name, thing['#']);
+            } else {
+                CollectionActions.removeThing(thing['#']);
             }
-        } else {
-            CollectionActions.removeThing(thing['#']);
         }
     };
 

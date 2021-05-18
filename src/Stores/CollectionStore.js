@@ -103,17 +103,15 @@ class CollectionStore extends BaseStore {
     }
 
     onRemoveThing(thingId) {
-        if(thingId) {
-            const {thingCounters} = this.state;
-            if(thingCounters[thingId] < 2) {
-                this.setState(prevState => {
-                    let update = {...prevState.things};
-                    delete update[thingId];
-                    return {things: update};
-                });
-            }
-            this.onDecCounter(thingId);
+        const {thingCounters} = this.state;
+        if(thingCounters[thingId] < 2) {
+            this.setState(prevState => {
+                let update = {...prevState.things};
+                delete update[thingId];
+                return {things: update};
+            });
         }
+        this.onDecCounter(thingId);
     }
 
     onCleanupThings(collectionId=null) {
