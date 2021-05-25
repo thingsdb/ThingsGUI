@@ -5,7 +5,7 @@ import {withVlow} from 'vlow';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
-import {RenameUserTAG} from '../../../constants';
+import {RenameUserTAG} from '../../../Constants/Tags';
 
 const withStores = withVlow([{
     store: ThingsdbStore,

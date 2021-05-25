@@ -6,7 +6,7 @@ import React from 'react';
 import {EnumActions, TypeActions, EnumStore, TypeStore} from '../../../Stores';
 import {HarmonicCardHeader, WarnPopover} from '../../Util';
 import {EnumTypeChips} from '../../Collections/CollectionsUtils/TypesEnumsUtils';
-import {EnumsTAG, TypesTAG} from '../../../constants';
+import {EnumsTAG, TypesTAG} from '../../../Constants/Tags';
 
 const withStores = withVlow([{
     store: EnumStore,

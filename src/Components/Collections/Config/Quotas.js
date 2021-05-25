@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
-import {QuotasTAG} from '../../../constants';
+import {QuotasTAG} from '../../../Constants/Tags';
 
 const quotaTypes = [
     'things',

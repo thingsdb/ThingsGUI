@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {EnumsTAG, TypesTAG} from '../../../constants';
+import {EnumsTAG, TypesTAG} from '../../../Constants/Tags';
 import {EnumActions, EnumStore, TypeActions, TypeStore} from '../../../Stores';
 import {EnumTypeChips} from '../CollectionsUtils/TypesEnumsUtils';
 import {HarmonicCardHeader} from '../../Util';

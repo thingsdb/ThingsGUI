@@ -12,7 +12,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
-import {PasswordTAG} from '../../../constants';
+import {PasswordTAG} from '../../../Constants/Tags';
 
 
 const initialState = {

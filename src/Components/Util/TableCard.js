@@ -11,7 +11,7 @@ import RemoveIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import Switch from '@material-ui/core/Switch';
 
-import {ChipsCardTAG} from '../../constants';
+import {ChipsCardTAG} from '../../Constants/Tags';
 import {ErrorMsg, HarmonicCardContent, orderByName, SimpleModal, TableWithButtons} from '../Util';
 
 

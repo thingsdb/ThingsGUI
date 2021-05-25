@@ -42,6 +42,7 @@ export default {
             'first':'Returns the first item in the list. A lookup_err() is raised when this function is used on an empty list unless a default value is given, in which case the given value will be returned.',
             'has':'Return true if a given value is found in the list, or false if not found.',
             'index_of': 'Returns the first index at which a given value can be found in the list or tuple, or nil if it is not present. The index of an array starts at 0, so the first item has index 0 the second 1 and so on.',
+            'is_unique': 'This function determines whether each item in a list is unique or not.',
             'join': 'This function returns a new string by concatenating all items in a list or tuple. All items in the list or tuple must be of type str, otherwise a type_err() is raised.',
             'last':'Returns the last item in the list. A lookup_err() is raised when this function is used on an empty list unless a default value is given, in which case the given value will be returned.',
             'len': 'Returns the length of a list or tuple.',
@@ -55,7 +56,15 @@ export default {
             'some': 'This function tests whether at least one element in the array passes a given test. It returns a boolean value.',
             'sort': 'When this method is used on an list or tuple, a new sorted list is returned.',
             'splice': 'The splice() method changes the contents of an list by removing or replacing existing elements and/or adding new elements in place.',
+            'unique': 'This function returns a new list where each item in the list is unique. If duplicated items are found, the first item will be retained.',
             'unshift': 'Add new items to the start of a list and returns the new length.',
+        },
+        mpdata: {
+            'len': 'Returns the length of mpdata in bytes.',
+            'load': 'Load mpdata into ThingsDB.'
+        },
+        regex: {
+            'test': 'Test if a string matches a given regular expression and return true or false.',
         },
         set: {
             'add': 'Adds new thing to the set and returns the number of things which are actually added to the set. For example my_set.add(#42); will return 0 if my_set already contains thing #42.',
@@ -144,6 +153,7 @@ export default {
         'is_err': 'This function determines whether the value passed to this function is a error or not.',
         'is_float': 'This function determines whether the value passed to this function is a floating point value or not.',
         'is_future': 'This function determines whether the provided value is a future value or not.',
+        'is_mpdata': 'This function determines whether the provided value is raw MessagePack data or not.',
         'is_inf': 'This function determines whether the provided value is a positive or negative infinity.',
         'is_int': 'This function determines whether the value passed to this function is an integer or not.',
         'is_list': 'This function determines whether the value passed to this function is a mutable array or not.',

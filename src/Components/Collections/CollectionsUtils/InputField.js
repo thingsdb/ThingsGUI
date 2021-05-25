@@ -6,7 +6,7 @@ import React from 'react';
 
 import {EditProvider, useEdit} from './Context';
 
-import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddEnum, AddError, AddFloat, AddInt, AddCode, AddRegex, AddStr, AddThing, AddVariable} from './InputUtils';
+import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddEnum, AddError, AddFloat, AddInt, AddCode, AddRegex, AddNil, AddStr, AddThing, AddVariable} from './InputUtils';
 
 
 const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identifier, init, variables,...props}) => {
@@ -26,7 +26,7 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identi
     case 'bytes': return <AddBlob identifier={identifier} init={init} {...props} />;
     case 'datetime': return <AddCode identifier={identifier} init={init} label="Fill in a datetime" link="https://docs.thingsdb.net/v0/data-types/datetime/" numLines="1" />;
     case 'timeval': return <AddCode identifier={identifier} init={init} label="Fill in a timeval" link="https://docs.thingsdb.net/v0/data-types/timeval/" numLines="1" />;
-    case 'nil': return null;
+    case 'nil': return <AddNil identifier={identifier} />;
     case 'thing': return(
         <EditProvider key={dataType}>
             <AddThing identifier={identifier} customTypes={customTypes} enums={enums} dataTypes={dataTypes} parentDispatch={dispatch} />

@@ -7,7 +7,7 @@ import React from 'react';
 
 import {ApplicationStore, ErrorActions, NodesActions} from '../../Stores';
 import {DragdownCard, ErrorMsg, HarmonicCard, TitlePage2, QueryOutput} from '../Util';
-import {EditorTAG} from '../../constants';
+import {EditorTAG} from '../../Constants/Tags';
 import EditorInput from './EditorInput';
 import EditorSideContent from './EditorSideContent';
 import SelectScope from './SelectScope';

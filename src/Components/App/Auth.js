@@ -17,7 +17,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import {ErrorMsg} from '../Util';
 import {ApplicationStore, ApplicationActions} from '../../Stores';
-import {AuthTAG} from '../../constants';
+import {AuthTAG} from '../../Constants/Tags';
 
 const withStores = withVlow([{
     store: ApplicationStore,

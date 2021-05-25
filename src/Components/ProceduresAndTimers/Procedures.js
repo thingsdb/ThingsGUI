@@ -4,7 +4,7 @@ import React from 'react';
 
 import {ProcedureDialogs} from '.';
 import {ProcedureActions, ProcedureStore} from '../../Stores';
-import {ProceduresTAG} from '../../constants';
+import {ProceduresTAG} from '../../Constants/Tags';
 import {Card} from'./Utils';
 import {HarmonicCardHeader} from '../Util';
 

@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 
 import {ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker} from '../../Util';
 import {NodesActions} from '../../../Stores';
-import {AddBackupTAG} from '../../../constants';
+import {AddBackupTAG} from '../../../Constants/Tags';
 
 const initialState = {
     show: false,
@@ -104,7 +104,7 @@ const Add = ({nodeId}) => {
                         primary="For more information, see:"
                         secondary={
                             <Link target="_blank" href="https://docs.thingsdb.net/v0/node-api/new_backup/">
-                                {'https://docs.thingsdb.net/v0/node-api/new_backup/'}
+                                {'ThingsDocs'}
                             </Link>
                         }
                     />

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import {ApplicationStore, CollectionActions, EditorActions, EditorStore, ErrorActions} from '../../Stores';
 import {QueryInput} from '../Util';
-import {EditorTAG} from '../../constants';
+import {EditorTAG} from '../../Constants/Tags';
 
 
 const withStores = withVlow([{

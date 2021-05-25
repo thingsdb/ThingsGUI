@@ -53,7 +53,7 @@ const ThingRoot = ({things, collection, watchIds}) => {
     const fetched = things.hasOwnProperty(collection.collection_id);
 
     React.useEffect(() => {
-        CollectionActions.queryWithReturnDepth(collection.collection_id, collection.name);
+        CollectionActions.getThings(collection.collection_id, collection.name);
     }, [collection.collection_id, collection.name]);
 
     const isWatching = Boolean(watchIds[collection.collection_id]);

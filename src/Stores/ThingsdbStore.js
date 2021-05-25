@@ -5,7 +5,7 @@ import Vlow from 'vlow';
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 import {ApplicationActions} from './ApplicationStore';
-import {LoginTAG} from '../constants';
+import {LoginTAG} from '../Constants/Tags';
 
 const scope='@thingsdb';
 

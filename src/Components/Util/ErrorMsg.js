@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Link from '@material-ui/core/Link';
 import {withVlow} from 'vlow';
 
 import LocalErrorMsg from './LocalErrorMsg';
-import { ErrorActions, ErrorStore } from '../../Stores';
+import {ErrorActions, ErrorStore} from '../../Stores';
+import {useThingsError} from '../Util';
 
 
 const withStores = withVlow([{
@@ -13,6 +13,7 @@ const withStores = withVlow([{
 }]);
 
 const ErrorMsg = ({tag, msgError}) => {
+    const [title, body] = useThingsError(msgError[tag]);
 
     React.useEffect(()=>{
         return () => {
@@ -24,34 +25,8 @@ const ErrorMsg = ({tag, msgError}) => {
         ErrorActions.removeMsgError(tag);
     }, [tag]);
 
-    const link = (msgErr) => {
-        const startIndex = msgErr.search(/https/);
-        const length = msgErr.slice(startIndex).search(/;/);
-        if (length!=-1&&length!=0) {
-            return(
-                <React.Fragment>
-                    {msgErr.slice(0, startIndex)}
-                    <Link target="_blank" href={msgErr.slice(startIndex, startIndex+length)}>
-                        {msgErr.slice(startIndex, startIndex+length)}
-                    </Link>
-                    {msgErr.includes('https', startIndex+length) ? link(msgErr.slice(startIndex+length)):msgErr.slice(startIndex+length)}
-                </React.Fragment>
-            );
-        } else {
-            return(
-                <React.Fragment>
-                    {msgErr.slice(0, startIndex)}
-                    <Link target="_blank" href={msgErr.slice(startIndex)}>
-                        {msgErr.slice(startIndex)}
-                    </Link>
-                </React.Fragment>
-            );
-        }
-    };
-
-
     return (
-        <LocalErrorMsg msgError={msgError[tag] && msgError[tag].includes('https') ? link(msgError[tag]): msgError[tag]} onClose={handleCloseError} />
+        <LocalErrorMsg title={title} body={body} onClose={handleCloseError} />
     );
 };
 

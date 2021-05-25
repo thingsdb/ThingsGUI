@@ -19,7 +19,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {ApplicationStore, ApplicationActions} from '../../../Stores';
 import {isObjectEmpty, orderByName} from '../../Util';
-import {LoginTAG} from '../../../constants';
+import {LoginTAG} from '../../../Constants/Tags';
 import Memo from './Memo';
 
 const withStores = withVlow([{

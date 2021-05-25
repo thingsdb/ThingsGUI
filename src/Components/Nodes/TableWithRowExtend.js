@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => {
+const Tabel = ({buttons, canExtend, header, rows, rowExtend, connectedNode, onRefresh}) => {
     const classes = useStyles();
     const [selected, setSelected] = React.useState(null);
 
@@ -83,7 +83,7 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                                 </TableCell>
                                 {header.map((h, i) => (
                                     <TableCell size="small" key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
-                                        <Typography variant="inherit" color={row[h.ky] == 'OFFLINE' ? 'error' : 'inherit'}>
+                                        <Typography variant="inherit" color={h.color(row[h.ky])}>
                                             {row[h.ky]}
                                         </Typography>
                                     </TableCell>
@@ -96,9 +96,11 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
                                     ))
                                 ) : null}
                                 <TableCell size="small" align="right" style={{borderBottom: isopen?'none':null}}>
-                                    <Button color="primary" onClick={handleClickRow(ri)}>
-                                        {isopen ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
-                                    </Button>
+                                    {canExtend(row) &&
+                                        <Button color="primary" onClick={handleClickRow(ri)}>
+                                            {isopen ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
+                                        </Button>
+                                    }
                                 </TableCell>
                             </TableRow>
                             {isopen ? (
@@ -121,11 +123,13 @@ const Tabel = ({buttons, header, rows, rowExtend, connectedNode, onRefresh}) => 
 
 Tabel.defaultProps = {
     buttons: null,
+    canExtend: () => true,
     onRefresh: null,
 };
 
 Tabel.propTypes = {
     buttons: PropTypes.func,
+    canExtend: PropTypes.func,
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     rowExtend: PropTypes.func.isRequired,

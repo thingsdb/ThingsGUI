@@ -10,7 +10,7 @@ import React from 'react';
 
 import { ErrorMsg, isObjectEmpty, SimpleModal } from '../../Util';
 import {ApplicationStore, ApplicationActions} from '../../../Stores';
-import {LoginTAG} from '../../../constants';
+import {LoginTAG} from '../../../Constants/Tags';
 import Edit from './Edit';
 import ListConnections from './ListConnections';
 

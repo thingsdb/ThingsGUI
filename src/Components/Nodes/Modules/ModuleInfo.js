@@ -19,7 +19,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {SimpleModal, ErrorMsg, LocalMsg} from '../../Util';
 import {NodesActions, NodesStore} from '../../../Stores';
-import {ModuleInfoTAG} from '../../../constants';
+import {ModuleInfoTAG} from '../../../Constants/Tags';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -166,7 +166,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
             <Grid container spacing={1}>
                 <Grid item xs={12}>
                     <ErrorMsg tag={tag} />
-                    <LocalMsg icon={<InfoIcon className={classes.color} />} msg={msg} onClose={handleCloseMsg} />
+                    <LocalMsg icon={<InfoIcon className={classes.color} />} body={msg} onClose={handleCloseMsg} />
                 </Grid>
                 {header.map(h => (
                     <Grid key={h.ky} container item xs={12}>
@@ -193,7 +193,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                             fullWidth
                                             helperText={
                                                 <Link target="_blank" href={h.helperText}>
-                                                    {h.helperText}
+                                                    {'ThingsDocs'}
                                                 </Link>
                                             }
                                         />

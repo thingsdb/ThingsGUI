@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 
 import {ErrorMsg, SimpleModal, SwitchOpen} from '../../Util';
 import {NodesActions} from '../../../Stores';
-import {AddModuleTAG} from '../../../constants';
+import {AddModuleTAG} from '../../../Constants/Tags';
 
 const initialState = {
     show: false,
@@ -94,7 +94,7 @@ const Add = ({nodeId}) => {
                         primary="For more information, see:"
                         secondary={
                             <Link target="_blank" href="https://docs.thingsdb.net/v0/thingsdb-api/new_module/">
-                                {'https://docs.thingsdb.net/v0/thingsdb-api/new_module/'}
+                                {'ThingsDocs'}
                             </Link>
                         }
                     />

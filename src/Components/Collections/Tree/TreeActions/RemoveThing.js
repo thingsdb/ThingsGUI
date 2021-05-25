@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { ErrorMsg, SimpleModal } from '../../../Util';
 import {CollectionActions, ThingsdbActions} from '../../../../Stores';
-import {RemoveThingTAG} from '../../../../constants';
+import {RemoveThingTAG} from '../../../../Constants/Tags';
 
 
 const tag = RemoveThingTAG;

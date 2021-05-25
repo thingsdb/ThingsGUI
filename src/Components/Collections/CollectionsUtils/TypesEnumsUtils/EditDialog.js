@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ErrorActions} from '../../../../Stores';
-import {EditDialogTAG} from '../../../../constants';
+import {EditDialogTAG} from '../../../../Constants/Tags';
 import {EditName, ErrorMsg, SimpleModal, WarnPopover} from '../../../Util';
 import {EditProvider} from '../Context';
 import {PropertyCallback, PropertyInitVal, PropertyMethod, PropertyName, PropertyRelation, PropertyType, PropertyVal, Wpo} from './AddEditProperty';

@@ -23,7 +23,7 @@ const Overview = ({badgeButton, buttons, headers, item, link, onAdd, onChangeIte
                     primary="Current properties:"
                     secondary={
                         <Link target="_blank" href={link}>
-                            {link}
+                            {'ThingsDocs'}
                         </Link>
                     }
                 />

@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal} from '../../Util';
-import {AddProcedureDialogTAG} from '../../../constants';
+import {AddProcedureDialogTAG} from '../../../Constants/Tags';
 
 
 const tag = AddProcedureDialogTAG;
@@ -91,7 +91,7 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
                                     primary="For more information, see:"
                                     secondary={
                                         <Link target="_blank" href="https://docs.thingsdb.net/v0/procedures-api/new_procedure/">
-                                            {'https://docs.thingsdb.net/v0/procedures-api/new_procedure/'}
+                                            {'ThingsDocs'}
                                         </Link>
                                     }
                                 />

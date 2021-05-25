@@ -14,21 +14,23 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const LocalErrorMsg = ({msgError, onClose}) => {
+const LocalErrorMsg = ({body, onClose, title}) => {
     const classes = useStyles();
     return (
-        <LocalMsg icon={<WarningIcon className={classes.warning} />} msg={msgError} onClose={onClose} />
+        <LocalMsg icon={<WarningIcon className={classes.warning} />} title={title} body={body} onClose={onClose} />
     );
 };
 
 LocalErrorMsg.defaultProps = {
-    msgError: '',
+    body: '',
     onClose: null,
+    title: '',
 };
 
 LocalErrorMsg.propTypes = {
-    msgError: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     onClose: PropTypes.func,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 export default LocalErrorMsg;

@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {CollectionActions, TimerActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker, VariablesArray} from '../../Util';
-import {AddTimerDialogTAG} from '../../../constants';
+import {AddTimerDialogTAG} from '../../../Constants/Tags';
 
 
 const tag = AddTimerDialogTAG;
@@ -104,7 +104,7 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
                                 primary="For more information, see:"
                                 secondary={
                                     <Link target="_blank" href="https://docs.thingsdb.net/v0/timers-api/new_timer/">
-                                        {'https://docs.thingsdb.net/v0/timers-api/new_timer/'}
+                                        {'ThingsDocs'}
                                     </Link>
                                 }
                             />

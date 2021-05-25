@@ -7,7 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import { SimpleModal } from '../../Util';
 import {ApplicationActions} from '../../../Stores';
-import {LoginTAG} from '../../../constants';
+import {LoginTAG} from '../../../Constants/Tags';
 
 const tag = LoginTAG;
 

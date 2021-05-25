@@ -32,7 +32,7 @@ const DownloadBlob = ({val, isImg}) => {
     }, []);
 
     return (
-        <Button target="_blank" href={link} download="blob" type="application/octet-stream" color="textPrimary">
+        <Button target="_blank" href={link} download="blob" type="application/octet-stream" color="primary">
             {isImg ? (
                 <img
                     src={link}

@@ -39,7 +39,7 @@ const AddCode = ({identifier, init, label, link, numLines}) => {
             margin="dense"
             helperText={
                 <Link target="_blank" href={link}>
-                    {link}
+                    {'ThingsDocs'}
                 </Link>
             }
         />
@@ -53,7 +53,8 @@ AddCode.defaultProps = {
 
 AddCode.propTypes = {
     identifier: PropTypes.string,
-    init: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    /* eslint-disable react/forbid-prop-types */
+    init: PropTypes.any,
     label: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
     numLines: PropTypes.string.isRequired,
