@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
+import {AddBackupTAG} from '../../../Constants/Tags';
 import {ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker} from '../../Util';
 import {NodesActions} from '../../../Stores';
-import {AddBackupTAG} from '../../../Constants/Tags';
+import {THINGS_DOC_NEW_BACKUP} from '../../../Constants/Links';
 
 const initialState = {
     show: false,
@@ -103,7 +104,7 @@ const Add = ({nodeId}) => {
                     <ListItemText
                         primary="For more information, see:"
                         secondary={
-                            <Link target="_blank" href="https://docs.thingsdb.net/v0/node-api/new_backup/">
+                            <Link target="_blank" href={THINGS_DOC_NEW_BACKUP}>
                                 {'ThingsDocs'}
                             </Link>
                         }

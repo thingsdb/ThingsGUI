@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
+import {AddModuleTAG} from '../../../Constants/Tags';
 import {ErrorMsg, SimpleModal, SwitchOpen} from '../../Util';
 import {NodesActions} from '../../../Stores';
-import {AddModuleTAG} from '../../../Constants/Tags';
+import {THINGS_DOC_NEW_MODULE} from '../../../Constants/Links';
 
 const initialState = {
     show: false,
@@ -93,7 +94,7 @@ const Add = ({nodeId}) => {
                     <ListItemText
                         primary="For more information, see:"
                         secondary={
-                            <Link target="_blank" href="https://docs.thingsdb.net/v0/thingsdb-api/new_module/">
+                            <Link target="_blank" href={THINGS_DOC_NEW_MODULE}>
                                 {'ThingsDocs'}
                             </Link>
                         }

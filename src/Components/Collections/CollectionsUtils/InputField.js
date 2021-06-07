@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {EditProvider, useEdit} from './Context';
-
+import {THINGS_DOC_COLLECTION, THINGS_DOC_DATETIME, THINGS_DOC_TIMEVAL} from '../../../Constants/Links';
 import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddEnum, AddError, AddFloat, AddInt, AddCode, AddRegex, AddNil, AddStr, AddThing, AddVariable} from './InputUtils';
 
 
@@ -15,7 +15,7 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identi
 
     // EditProvider needs a key to distinguish the instance
     switch(dataType){
-    case 'code': return <AddCode identifier={identifier} init={init} label="Fill in .ti code" link="https://docs.thingsdb.net/v0/collection-api/" numLines="4" />;
+    case 'code': return <AddCode identifier={identifier} init={init} label="Fill in .ti code" link={THINGS_DOC_COLLECTION} numLines="4" />;
     case 'str': return <AddStr identifier={identifier} init={init} {...props} />;
     case 'int': return <AddInt identifier={identifier} init={init} {...props} />;
     case 'float': return <AddFloat identifier={identifier} init={init} {...props} />;
@@ -24,8 +24,8 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identi
     case 'regex': return <AddRegex identifier={identifier} init={init} {...props} />;
     case 'error': return <AddError identifier={identifier} init={init} {...props} />;
     case 'bytes': return <AddBlob identifier={identifier} init={init} {...props} />;
-    case 'datetime': return <AddCode identifier={identifier} init={init} label="Fill in a datetime" link="https://docs.thingsdb.net/v0/data-types/datetime/" numLines="1" />;
-    case 'timeval': return <AddCode identifier={identifier} init={init} label="Fill in a timeval" link="https://docs.thingsdb.net/v0/data-types/timeval/" numLines="1" />;
+    case 'datetime': return <AddCode identifier={identifier} init={init} label="Fill in a datetime" link={THINGS_DOC_DATETIME} numLines="1" />;
+    case 'timeval': return <AddCode identifier={identifier} init={init} label="Fill in a timeval" link={THINGS_DOC_TIMEVAL} numLines="1" />;
     case 'nil': return <AddNil identifier={identifier} />;
     case 'thing': return(
         <EditProvider key={dataType}>

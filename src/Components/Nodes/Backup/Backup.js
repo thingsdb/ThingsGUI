@@ -16,6 +16,7 @@ import {NodesActions, NodesStore} from '../../../Stores';
 import Add from './Add';
 import BackupInfo from './BackupInfo';
 import Remove from './Remove';
+import {THINGS_DOC_BACKUP_INFO} from '../../../Constants/Links';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -55,7 +56,7 @@ const headerTable = [
     {ky: 'file_template', label: 'File template'},
 ];
 
-const link = 'https://docs.thingsdb.net/v0/node-api/backup_info/';
+const link = THINGS_DOC_BACKUP_INFO;
 
 const Backup = ({nodeId, offline, backups}) => {
     const classes = useStyles();

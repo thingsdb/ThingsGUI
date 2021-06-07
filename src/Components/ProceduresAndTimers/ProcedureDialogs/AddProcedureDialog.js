@@ -9,9 +9,10 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {CollectionActions, ProcedureActions} from '../../../Stores';
-import {Closure, ErrorMsg, SimpleModal} from '../../Util';
 import {AddProcedureDialogTAG} from '../../../Constants/Tags';
+import {Closure, ErrorMsg, SimpleModal} from '../../Util';
+import {CollectionActions, ProcedureActions} from '../../../Stores';
+import {THINGS_DOC_NEW_PROCEDURE} from '../../../Constants/Links';
 
 
 const tag = AddProcedureDialogTAG;
@@ -90,7 +91,7 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
                                 <ListItemText
                                     primary="For more information, see:"
                                     secondary={
-                                        <Link target="_blank" href="https://docs.thingsdb.net/v0/procedures-api/new_procedure/">
+                                        <Link target="_blank" href={THINGS_DOC_NEW_PROCEDURE}>
                                             {'ThingsDocs'}
                                         </Link>
                                     }

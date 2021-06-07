@@ -6,9 +6,10 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { Buttons } from '../Utils';
-import { Info, scaleToBinBytes } from '../../Util';
+import {Buttons} from '../Utils';
+import {Info, scaleToBinBytes} from '../../Util';
 import {NodesActions, NodesStore} from '../../../Stores';
+import {THINGS_DOC_COUNTERS} from '../../../Constants/Links';
 import CountersReset from './CountersReset';
 
 const withStores = withVlow([{
@@ -53,7 +54,7 @@ const header = [
     ]}
 ];
 
-const link = 'https://docs.thingsdb.net/v0/node-api/counters/';
+const link = THINGS_DOC_COUNTERS;
 
 const Counters = ({nodeId, offline, counters}) => {
     const classes = useStyles();
