@@ -1,0 +1,1 @@
+export const THINGS_DOC = 'https://docs.thingsdb.net/v0/';
