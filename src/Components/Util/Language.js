@@ -36,6 +36,7 @@ export default {
             'each': 'Iterate over all the items in an list or tuple. Use this functions instead of map when you are not interested in the return value.',
             'every': 'This function tests whether all elements in the array pass a given test. It returns a boolean value.',
             'extend': 'Adds a list or tuple with items to the end of a list, and returns the new length.',
+            'extend_unique': 'Adds a list or tuple with items to the end of a list, and returns the new length. Only items which do not have a duplicate in the list will be added.',
             'filter': 'When this method is used on an list or tuple, a new list is returned with elements that pass the test.',
             'find': 'This function returns the value of the first element in the list or tuple that satisfies the callback function. Otherwise nil is returned unless an alternative return value is specified.',
             'find_index': 'This function returns the index of the first element in a list or tuple that satisfies the callback function. Otherwise nil is returned.',
