@@ -63,10 +63,11 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
         let end = start+visibleNumber;
         const t = type=='set'?thing['$']:thing;
         const isArray = Array.isArray(t);
+
         return isArray ?
             t.slice(start, end).map((t, i) => renderThing([child ? `${child.name}` : `${i}`, t, start+i], start+i))
             :
-            Object.entries((t && tree && tree[t['#']]) || t || {}).slice(start, end).map(([k, v], i) => renderThing([k, v], start+i));
+            Object.entries(t || {}).slice(start, end).map(([k, v], i) => renderThing([k, v], start+i));
     };
 
     const handleOpenClose = (open) => {
