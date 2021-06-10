@@ -1,4 +1,4 @@
-package handlers
+package main
 
 import (
 	"bytes"
@@ -10,7 +10,6 @@ import (
 	"strings"
 	"time"
 
-	util "../util"
 	things "github.com/thingsdb/go-thingsdb"
 )
 
@@ -20,7 +19,7 @@ type Client struct {
 	Closed     chan bool
 	LogCh      chan string
 	EventCh    chan *things.Event
-	TmpFiles   *util.TmpFiles
+	TmpFiles   *TmpFiles
 	Ssl        *tls.Config
 	HomePath   string
 	User       string
@@ -111,7 +110,7 @@ func connect(client *Client, data LoginData) LoginResp {
 }
 
 // Connected returns if a connection with ThingsDB is established
-func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
+func Connected(conn *things.Conn) (int, LoginResp, Message) {
 	var resp LoginResp
 	resp.Loaded = true
 	switch {
@@ -122,14 +121,14 @@ func Connected(conn *things.Conn) (int, LoginResp, util.Message) {
 	default:
 		resp.Connected = false
 	}
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 	return message.Status, resp, message
 }
 
 // ConnectToNew connects to a new ThingsDB connnection
-func ConnectToNew(client *Client, data LoginData) (int, LoginResp, util.Message) {
+func ConnectToNew(client *Client, data LoginData) (int, LoginResp, Message) {
 	var resp LoginResp
-	var message util.Message
+	var message Message
 	resp = connect(
 		client,
 		data,
@@ -137,24 +136,24 @@ func ConnectToNew(client *Client, data LoginData) (int, LoginResp, util.Message)
 
 	if resp.Connected {
 		client.Connection.EnableKeepAlive()
-		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
+		message = Message{Text: "", Status: http.StatusOK, Log: ""}
 	} else {
-		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
+		message = Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
 	}
 	return message.Status, resp, message
 }
 
 // ConnectViaCache connects via cached auth data to ThingsDB
-func ConnectViaCache(client *Client, data LoginData) (int, interface{}, util.Message) {
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+func ConnectViaCache(client *Client, data LoginData) (int, interface{}, Message) {
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 
-	fileNotExist := util.FileNotExist(client.HomePath)
+	fileNotExist := FileNotExist(client.HomePath)
 	if fileNotExist {
 		return internalError(fmt.Errorf("File does not exist"))
 	}
 
 	var mapping = make(map[string]LoginData)
-	err := util.ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
+	err := ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
@@ -166,15 +165,15 @@ func ConnectViaCache(client *Client, data LoginData) (int, interface{}, util.Mes
 
 	if resp.Connected {
 		client.Connection.EnableKeepAlive()
-		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
+		message = Message{Text: "", Status: http.StatusOK, Log: ""}
 	} else {
-		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
+		message = Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
 	}
 	return message.Status, resp, message
 }
 
 // AuthKey connects to ThingsDB via a key and API request to get the access token
-func AuthKey(client *Client, data map[string]string, address string, ssl bool, aic bool, tokenAPI string) (int, interface{}, util.Message) {
+func AuthKey(client *Client, data map[string]string, address string, ssl bool, aic bool, tokenAPI string) (int, interface{}, Message) {
 	jsonData := map[string]string{"key": data["key"]} // url.Query().Get("key")}
 	jsonValue, _ := json.Marshal(jsonData)
 	response, err := http.Post(tokenAPI, "application/json", bytes.NewBuffer(jsonValue))
@@ -199,8 +198,8 @@ func AuthKey(client *Client, data map[string]string, address string, ssl bool, a
 }
 
 // AuthOnly checks if the address and auth method are provided in the .env file; in that case only auth can be supplied by the user
-func AuthOnly(address string, authMethod string) (int, AuthResp, util.Message) {
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+func AuthOnly(address string, authMethod string) (int, AuthResp, Message) {
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 	var auth AuthResp
 	if address != "" {
 		auth.AuthOnly = true
@@ -210,8 +209,8 @@ func AuthOnly(address string, authMethod string) (int, AuthResp, util.Message) {
 }
 
 // AuthToken connects to ThingsDB using the token and env variables
-func AuthToken(client *Client, data map[string]string, address string, ssl bool, aic bool) (int, interface{}, util.Message) {
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+func AuthToken(client *Client, data map[string]string, address string, ssl bool, aic bool) (int, interface{}, Message) {
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 
 	var mapping LoginData
 	mapping.Address = address
@@ -227,16 +226,16 @@ func AuthToken(client *Client, data map[string]string, address string, ssl bool,
 
 	if resp.Connected {
 		client.Connection.EnableKeepAlive()
-		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
+		message = Message{Text: "", Status: http.StatusOK, Log: ""}
 	} else {
-		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
+		message = Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
 	}
 	return message.Status, resp, message
 }
 
 // AuthPass connects to ThingsDB using a user+pass and env variables
-func AuthPass(client *Client, data map[string]string, address string, ssl bool, aic bool) (int, interface{}, util.Message) {
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+func AuthPass(client *Client, data map[string]string, address string, ssl bool, aic bool) (int, interface{}, Message) {
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 
 	var mapping LoginData
 	mapping.Address = address
@@ -253,9 +252,9 @@ func AuthPass(client *Client, data map[string]string, address string, ssl bool, 
 
 	if resp.Connected {
 		client.Connection.EnableKeepAlive()
-		message = util.Message{Text: "", Status: http.StatusOK, Log: ""}
+		message = Message{Text: "", Status: http.StatusOK, Log: ""}
 	} else {
-		message = util.Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
+		message = Message{Text: resp.ConnErr.Error(), Status: http.StatusInternalServerError, Log: resp.ConnErr.Error()}
 	}
 	return message.Status, resp, message
 }
@@ -287,9 +286,9 @@ func reconnect(client *Client) bool {
 }
 
 // Reconnect to ThingsDB when a connection is lost.
-func Reconnect(client *Client) (int, LoginResp, util.Message) {
+func Reconnect(client *Client) (int, LoginResp, Message) {
 	resp := LoginResp{Connected: true}
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 
 	maxInterval := 60
 	interval := 1
@@ -316,9 +315,9 @@ func Reconnect(client *Client) (int, LoginResp, util.Message) {
 }
 
 // Disconnect closes a connection to ThingsDB
-func Disconnect(client *Client) (int, LoginResp, util.Message) {
+func Disconnect(client *Client) (int, LoginResp, Message) {
 	CloseSingleConn(client)
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 	return message.Status, LoginResp{Loaded: true, Connected: false}, message
 }
 
@@ -331,11 +330,11 @@ func CloseSingleConn(client *Client) {
 }
 
 // GetCachedConnection gets all the cached connections
-func GetCachedConnection(client *Client) (int, interface{}, util.Message) {
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+func GetCachedConnection(client *Client) (int, interface{}, Message) {
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 
 	var mapping = make(map[string]LoginData)
-	err := util.ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
+	err := ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
 	if err != nil {
 		client.LogCh <- err.Error()
 		return message.Status, nil, message
@@ -353,7 +352,7 @@ func GetCachedConnection(client *Client) (int, interface{}, util.Message) {
 }
 
 // NewCachedConnection saves a new connection locally
-func NewCachedConnection(client *Client, data map[string]interface{}) (int, interface{}, util.Message) {
+func NewCachedConnection(client *Client, data map[string]interface{}) (int, interface{}, Message) {
 	fn := func(mapping map[string]map[string]interface{}) {
 		name := data["name"].(string)
 		mapping[name] = data
@@ -362,7 +361,7 @@ func NewCachedConnection(client *Client, data map[string]interface{}) (int, inte
 }
 
 // EditCachedConnection edits a connection locally
-func EditCachedConnection(client *Client, data map[string]interface{}) (int, interface{}, util.Message) {
+func EditCachedConnection(client *Client, data map[string]interface{}) (int, interface{}, Message) {
 	fn := func(mapping map[string]map[string]interface{}) {
 		name := data["name"].(string)
 		for k, v := range data {
@@ -373,7 +372,7 @@ func EditCachedConnection(client *Client, data map[string]interface{}) (int, int
 }
 
 // RenameCachedConnection renames a connection locally
-func RenameCachedConnection(client *Client, data map[string]interface{}) (int, interface{}, util.Message) {
+func RenameCachedConnection(client *Client, data map[string]interface{}) (int, interface{}, Message) {
 	fn := func(mapping map[string]map[string]interface{}) {
 		newName := data["newName"].(string)
 		oldName := data["oldName"].(string)
@@ -385,22 +384,22 @@ func RenameCachedConnection(client *Client, data map[string]interface{}) (int, i
 }
 
 // DelCachedConnection deletes a saved connection
-func DelCachedConnection(client *Client, data LoginData) (int, interface{}, util.Message) {
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+func DelCachedConnection(client *Client, data LoginData) (int, interface{}, Message) {
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 
-	fileNotExist := util.FileNotExist(client.HomePath)
+	fileNotExist := FileNotExist(client.HomePath)
 	if fileNotExist {
 		return internalError(fmt.Errorf("File does not exist"))
 	}
 
 	var mapping = make(map[string]LoginData)
-	err := util.ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
+	err := ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
 
 	delete(mapping, data.Name)
-	err = util.WriteEncryptedFile(client.HomePath, mapping, client.LogCh)
+	err = WriteEncryptedFile(client.HomePath, mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
@@ -409,17 +408,17 @@ func DelCachedConnection(client *Client, data LoginData) (int, interface{}, util
 }
 
 // newEditConnection saves a new connection or edits locally
-func newEditConnection(client *Client, data map[string]interface{}, fn func(map[string]map[string]interface{})) (int, interface{}, util.Message) {
-	message := util.Message{Text: "", Status: http.StatusOK, Log: ""}
+func newEditConnection(client *Client, data map[string]interface{}, fn func(map[string]map[string]interface{})) (int, interface{}, Message) {
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 	var mapping = make(map[string]map[string]interface{})
 
-	newFile, err := util.CreateFile(client.HomePath, client.LogCh)
+	newFile, err := CreateFile(client.HomePath, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
 
 	if !newFile {
-		err = util.ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
+		err = ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
 		if err != nil {
 			return internalError(err)
 		}
@@ -427,7 +426,7 @@ func newEditConnection(client *Client, data map[string]interface{}, fn func(map[
 
 	fn(mapping)
 
-	err = util.WriteEncryptedFile(client.HomePath, mapping, client.LogCh)
+	err = WriteEncryptedFile(client.HomePath, mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
@@ -435,7 +434,7 @@ func newEditConnection(client *Client, data map[string]interface{}, fn func(map[
 	return message.Status, nil, message
 }
 
-func internalError(err error) (int, interface{}, util.Message) {
-	message := util.Message{Text: err.Error(), Status: http.StatusInternalServerError, Log: err.Error()}
+func internalError(err error) (int, interface{}, Message) {
+	message := Message{Text: err.Error(), Status: http.StatusInternalServerError, Log: err.Error()}
 	return message.Status, nil, message
 }

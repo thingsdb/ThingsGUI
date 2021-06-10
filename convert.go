@@ -1,4 +1,4 @@
-package util
+package main
 
 // Convert float value to integer if possible.
 func Convert(arg interface{}) interface{} {
