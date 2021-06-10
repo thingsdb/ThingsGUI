@@ -1,17 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import {makeStyles} from '@material-ui/core/styles';
+import {withVlow} from 'vlow';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import AppBar from '@material-ui/core/AppBar';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import HelpIcon from '@material-ui/icons/HelpOutline';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
-import {withVlow} from 'vlow';
-import {makeStyles} from '@material-ui/core/styles';
 
+import {THINGS_DOC} from '../../Constants/Links';
 import {TopBarMenu} from '../Util';
 import {ApplicationActions, ThingsdbStore} from '../../Stores';
 // import packageJson from '../../'; TODO does not find package.json
@@ -30,6 +33,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.secondary.main,
         flexGrow: 1,
         marginBottom: theme.spacing(1),
+    },
+    color: {
+        color: theme.palette.text.primary
     },
     flex: {
         display: 'flex',
@@ -70,7 +76,12 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
                         {title}
                     </div>
                 }
-                <div >
+                <div>
+                    <IconButton target="_blank" href={THINGS_DOC} edge="start" className={classes.color} aria-label="close">
+                        <HelpIcon />
+                    </IconButton>
+                </div>
+                <div>
                     <TopBarMenu menuIcon={<AccountCircle />} menuTooltip="Logout">
                         <List>
                             <ListItem>

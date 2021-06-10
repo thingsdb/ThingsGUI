@@ -17,9 +17,10 @@ import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {SimpleModal, ErrorMsg, LocalMsg} from '../../Util';
-import {NodesActions, NodesStore} from '../../../Stores';
 import {ModuleInfoTAG} from '../../../Constants/Tags';
+import {NodesActions, NodesStore} from '../../../Stores';
+import {SimpleModal, ErrorMsg, LocalMsg} from '../../Util';
+import {THINGS_DOC_RENAME_MODULE, THINGS_DOC_SET_MODULE_CONFIG, THINGS_DOC_SET_MODULE_SCOPE} from '../../../Constants/Links';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -49,7 +50,7 @@ const header = [
         label: 'Name',
         canEdit: true,
         editMethod: NodesActions.renameModule,
-        helperText: 'https://docs.thingsdb.net/v0/thingsdb-api/rename_module/',
+        helperText: THINGS_DOC_RENAME_MODULE,
     },
     {
         ky: 'file',
@@ -62,7 +63,7 @@ const header = [
         fn: (s) => s ? s : 'All scopes',
         canEdit: true,
         editMethod: NodesActions.setModuleScope,
-        helperText: 'https://docs.thingsdb.net/v0/thingsdb-api/set_module_scope/',
+        helperText: THINGS_DOC_SET_MODULE_SCOPE,
     },
     {
         ky: 'status',
@@ -82,7 +83,7 @@ const header = [
         },
         canEdit: true,
         editMethod: NodesActions.setModuleConf,
-        helperText: 'https://docs.thingsdb.net/v0/thingsdb-api/set_module_conf/',
+        helperText: THINGS_DOC_SET_MODULE_CONFIG,
     },
     {
         ky: 'restarts',

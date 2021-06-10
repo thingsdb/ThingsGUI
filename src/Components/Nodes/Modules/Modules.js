@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { Buttons } from '../Utils';
+import {Buttons} from '../Utils';
 import {NodesActions, NodesStore} from '../../../Stores';
 import {TableWithButtons} from '../../Util';
+import {THINGS_DOC_MODULE_INFO} from '../../../Constants/Links';
 import Add from './Add';
 import ModuleInfo from './ModuleInfo';
 import Remove from './Remove';
@@ -36,7 +37,7 @@ const header = [
     {ky: 'status', label: 'Status', fn: (s) => <StatusIcon status={s} />},
 ];
 
-const link = 'https://docs.thingsdb.net/v0/thingsdb-api/module_info/';
+const link = THINGS_DOC_MODULE_INFO;
 
 const Modules = ({nodeId, offline, modules}) => {
     const classes = useStyles();

@@ -6,8 +6,9 @@ import React from 'react';
 import RunIcon from '@material-ui/icons/DirectionsRun';
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import {ChipsCard, DownloadBlob} from '../../../Util';
 import {AddDialog, AddLink, EditDialog, Relation, ViewDialog} from '.';
+import {ChipsCard, DownloadBlob} from '../../../Util';
+import {THINGS_DOC_DATATYPES} from '../../../../Constants/Links';
 
 
 const useStyles = makeStyles(theme => ({
@@ -210,7 +211,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
                     dataTypes={datatypes}
                     category={categoryInit}
                     getInfo={handleCallback}
-                    link={`https://docs.thingsdb.net/v0/data-types/${categoryInit}/`}
+                    link={`${THINGS_DOC_DATATYPES}${categoryInit}/`}
                     onClose={handleCloseAdd}
                     open={view.add}
                     scope={scope}
@@ -224,7 +225,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
                     getInfo={handleCallback}
                     headers={headers[categoryInit]}
                     item={item}
-                    link={`https://docs.thingsdb.net/v0/data-types/${categoryInit}/`}
+                    link={`${THINGS_DOC_DATATYPES}${categoryInit}/`}
                     onChangeItem={onChange('edit')}
                     onClose={handleCloseEdit}
                     open={view.edit}
@@ -239,7 +240,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
                     category={categoryInit}
                     headers={headers[categoryInit]}
                     item={item}
-                    link={`https://docs.thingsdb.net/v0/data-types/${categoryInit}/`}
+                    link={`${THINGS_DOC_DATATYPES}${categoryInit}/`}
                     onChangeItem={onChange('view')}
                     onClose={handleCloseView}
                     open={view.view}

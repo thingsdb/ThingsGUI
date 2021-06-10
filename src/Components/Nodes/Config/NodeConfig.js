@@ -5,11 +5,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment';
 
-import { Info, scaleToBinBytes } from '../../Util';
+import {Buttons} from '../Utils';
+import {Info, scaleToBinBytes} from '../../Util';
+import {NodesActions, NodesStore} from '../../../Stores';
+import {THINGS_DOC_NODE_INFO} from '../../../Constants/Links';
 import Loglevel from './Loglevel';
 import Shutdown from './Shutdown';
-import {NodesActions, NodesStore} from '../../../Stores';
-import { Buttons } from '../Utils';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -77,7 +78,7 @@ const header = [
 
 ];
 
-const link = 'https://docs.thingsdb.net/v0/node-api/node_info/';
+const link = THINGS_DOC_NODE_INFO;
 
 const NodeConfig = ({nodeId, offline, node}) => {
     const classes = useStyles();
