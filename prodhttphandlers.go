@@ -4,8 +4,6 @@ package main
 
 import (
 	"net/http"
-
-	util "./util"
 )
 
 func handlerMainJsBundle(w http.ResponseWriter, r *http.Request) {
@@ -75,7 +73,7 @@ func handlerFaviconIco(w http.ResponseWriter, r *http.Request) {
 
 func handlerMain(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		util.HandlerNotFound(w, r)
+		HandlerNotFound(w, r)
 	} else {
 		w.Header().Set("Content-Type", "text/html")
 		w.Write(FileAppHTML)

@@ -11,8 +11,6 @@ import (
 	"runtime"
 	"time"
 
-	handlers "./sockethandlers"
-	util "./util"
 	engineio "github.com/googollee/go-engine.io"
 	socketio "github.com/googollee/go-socket.io"
 	"github.com/joho/godotenv"
@@ -35,7 +33,7 @@ var (
 
 // App type
 type App struct {
-	client             map[string]*handlers.Client
+	client             map[string]*Client
 	disableOpenBrowser bool
 	envPath            string
 	host               string
@@ -65,71 +63,71 @@ func (app *App) SocketRouter() {
 	app.server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
 
-		app.client[s.ID()] = &handlers.Client{
+		app.client[s.ID()] = &Client{
 			Closed:   make(chan bool),
 			LogCh:    make(chan string, 1),
 			EventCh:  make(chan *things.Event),
-			TmpFiles: util.NewTmpFiles(),
-			HomePath: util.GetHomePath(connFile),
+			TmpFiles: NewTmpFiles(),
+			HomePath: GetHomePath(connFile),
 		}
 		app.client[s.ID()].LogCh <- fmt.Sprintf("connected: %s", s.ID())
 		return nil
 	})
 
-	app.server.OnEvent("/", "authKey", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
-		return handlers.AuthKey(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic, thingsguiTokenApi)
+	app.server.OnEvent("/", "authKey", func(s socketio.Conn, data map[string]string) (int, interface{}, Message) {
+		return AuthKey(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic, thingsguiTokenApi)
 	})
 
-	app.server.OnEvent("/", "authOnly", func(s socketio.Conn) (int, handlers.AuthResp, util.Message) {
-		return handlers.AuthOnly(thingsguiAddress, thingsguiAuthMethod)
+	app.server.OnEvent("/", "authOnly", func(s socketio.Conn) (int, AuthResp, Message) {
+		return AuthOnly(thingsguiAddress, thingsguiAuthMethod)
 	})
 
-	app.server.OnEvent("/", "authToken", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
-		return handlers.AuthToken(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
+	app.server.OnEvent("/", "authToken", func(s socketio.Conn, data map[string]string) (int, interface{}, Message) {
+		return AuthToken(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
 	})
 
-	app.server.OnEvent("/", "authPass", func(s socketio.Conn, data map[string]string) (int, interface{}, util.Message) {
-		return handlers.AuthPass(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
+	app.server.OnEvent("/", "authPass", func(s socketio.Conn, data map[string]string) (int, interface{}, Message) {
+		return AuthPass(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
 	})
 
-	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
-		return handlers.Connected(app.client[s.ID()].Connection)
+	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, LoginResp, Message) {
+		return Connected(app.client[s.ID()].Connection)
 	})
 
-	app.server.OnEvent("/", "connToNew", func(s socketio.Conn, data handlers.LoginData) (int, handlers.LoginResp, util.Message) {
-		return handlers.ConnectToNew(app.client[s.ID()], data)
+	app.server.OnEvent("/", "connToNew", func(s socketio.Conn, data LoginData) (int, LoginResp, Message) {
+		return ConnectToNew(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "connViaCache", func(s socketio.Conn, data handlers.LoginData) (int, interface{}, util.Message) {
-		return handlers.ConnectViaCache(app.client[s.ID()], data)
+	app.server.OnEvent("/", "connViaCache", func(s socketio.Conn, data LoginData) (int, interface{}, Message) {
+		return ConnectViaCache(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "reconn", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
-		return handlers.Reconnect(app.client[s.ID()])
+	app.server.OnEvent("/", "reconn", func(s socketio.Conn) (int, LoginResp, Message) {
+		return Reconnect(app.client[s.ID()])
 	})
 
-	app.server.OnEvent("/", "disconn", func(s socketio.Conn) (int, handlers.LoginResp, util.Message) {
-		return handlers.Disconnect(app.client[s.ID()])
+	app.server.OnEvent("/", "disconn", func(s socketio.Conn) (int, LoginResp, Message) {
+		return Disconnect(app.client[s.ID()])
 	})
 
-	app.server.OnEvent("/", "getCachedConn", func(s socketio.Conn) (int, interface{}, util.Message) {
-		return handlers.GetCachedConnection(app.client[s.ID()])
+	app.server.OnEvent("/", "getCachedConn", func(s socketio.Conn) (int, interface{}, Message) {
+		return GetCachedConnection(app.client[s.ID()])
 	})
 
-	app.server.OnEvent("/", "newCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
-		return handlers.NewCachedConnection(app.client[s.ID()], data)
+	app.server.OnEvent("/", "newCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, Message) {
+		return NewCachedConnection(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "editCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
-		return handlers.EditCachedConnection(app.client[s.ID()], data)
+	app.server.OnEvent("/", "editCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, Message) {
+		return EditCachedConnection(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "renameCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, util.Message) {
-		return handlers.RenameCachedConnection(app.client[s.ID()], data)
+	app.server.OnEvent("/", "renameCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, Message) {
+		return RenameCachedConnection(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "delCachedConn", func(s socketio.Conn, data handlers.LoginData) (int, interface{}, util.Message) {
-		return handlers.DelCachedConnection(app.client[s.ID()], data)
+	app.server.OnEvent("/", "delCachedConn", func(s socketio.Conn, data LoginData) (int, interface{}, Message) {
+		return DelCachedConnection(app.client[s.ID()], data)
 	})
 
 	app.server.OnEvent("/", "log", func(s socketio.Conn) {
@@ -141,28 +139,28 @@ func (app *App) SocketRouter() {
 		}()
 	})
 
-	app.server.OnEvent("/", "query", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.Query(app.client[s.ID()], data, app.timeout)
+	app.server.OnEvent("/", "query", func(s socketio.Conn, data Data) (int, interface{}, Message) {
+		return Query(app.client[s.ID()], data, app.timeout)
 	})
 
-	app.server.OnEvent("/", "queryBlob", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.QueryBlob(app.client[s.ID()], data, app.timeout)
+	app.server.OnEvent("/", "queryBlob", func(s socketio.Conn, data Data) (int, interface{}, Message) {
+		return QueryBlob(app.client[s.ID()], data, app.timeout)
 	})
 
-	app.server.OnEvent("/", "cleanupTmp", func(s socketio.Conn) (int, bool, util.Message) {
-		return handlers.CleanupTmp(app.client[s.ID()].TmpFiles)
+	app.server.OnEvent("/", "cleanupTmp", func(s socketio.Conn) (int, bool, Message) {
+		return CleanupTmp(app.client[s.ID()].TmpFiles)
 	})
 
-	app.server.OnEvent("/", "watch", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.Watch(app.client[s.ID()], data, app.timeout)
+	app.server.OnEvent("/", "watch", func(s socketio.Conn, data Data) (int, interface{}, Message) {
+		return Watch(app.client[s.ID()], data, app.timeout)
 	})
 
-	app.server.OnEvent("/", "unwatch", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.Unwatch(app.client[s.ID()], data, app.timeout)
+	app.server.OnEvent("/", "unwatch", func(s socketio.Conn, data Data) (int, interface{}, Message) {
+		return Unwatch(app.client[s.ID()], data, app.timeout)
 	})
 
-	app.server.OnEvent("/", "run", func(s socketio.Conn, data handlers.Data) (int, interface{}, util.Message) {
-		return handlers.Run(app.client[s.ID()], data, app.timeout)
+	app.server.OnEvent("/", "run", func(s socketio.Conn, data Data) (int, interface{}, Message) {
+		return Run(app.client[s.ID()], data, app.timeout)
 	})
 
 	app.server.OnEvent("/", "getEvent", func(s socketio.Conn) {
@@ -187,7 +185,7 @@ func (app *App) SocketRouter() {
 		app.client[s.ID()].LogCh <- fmt.Sprintf("closed: %s", msg)
 		app.client[s.ID()].TmpFiles.CleanupTmp()
 
-		handlers.CloseSingleConn(app.client[s.ID()])
+		CloseSingleConn(app.client[s.ID()])
 		delete(app.client, s.ID())
 	})
 }
@@ -259,7 +257,7 @@ func (app *App) Start() {
 	http.HandleFunc("/img/TTLogo.png", handlerTTLogo)
 	http.HandleFunc("/img/view-edit.png", handlerViewEditLogo)
 	http.HandleFunc("/favicon.ico", handlerFaviconIco)
-	http.HandleFunc("/download", util.HandlerDownload)
+	http.HandleFunc("/download", HandlerDownload)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
@@ -285,7 +283,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	app.client = make(map[string]*handlers.Client)
+	app.client = make(map[string]*Client)
 
 	options := &engineio.Options{
 		PingTimeout: time.Duration(app.timeout+120) * time.Second,
