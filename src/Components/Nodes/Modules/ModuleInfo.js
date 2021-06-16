@@ -113,6 +113,9 @@ const ModuleInfo = ({item, nodeId, _module}) => {
 
     const handleClickClose = () => {
         setShow(false);
+        setEdit({});
+        setForm({});
+        setMsg('');
     };
 
     const handleEdit = (h) => () => {
