@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import {ApplicationActions} from './ApplicationStore';
 import {ErrorActions} from './ErrorStore';
-import {CLOSURE_KEY} from '../Constants/CharacterKeys';
+import {CLOSURE_KEY, SET_KEY, THING_KEY} from '../Constants/CharacterKeys';
 import {COLLECTION_SCOPE} from '../Constants/Scopes';
 import {LoginTAG, WatcherTAG} from '../Constants/Tags';
 import {CLOSURE} from '../Constants/ThingTypes';
@@ -219,13 +219,13 @@ class EventStore extends BaseStore {
                 this.watchUpdate(data.Data);
                 break;
             case ProtoMap.ProtoOnWatchDel:
-                this.unwatch(data.Data['#']);
+                this.unwatch(data.Data[THING_KEY]);
                 break;
             case ProtoMap.ProtoOnNodeStatus:
                 this.nodeStatus(data.Data);
                 break;
             case ProtoMap.ProtoOnWatchStop:
-                this.unwatch(data.Data['#']);
+                this.unwatch(data.Data[THING_KEY]);
                 break;
             case ProtoMap.ProtoOnWarn:
                 ErrorActions.setMsgError(WatcherTAG, data.Data.warn_msg);
@@ -314,8 +314,8 @@ class EventStore extends BaseStore {
     watchInit(data) {
         let scope = `${COLLECTION_SCOPE}:${data.collection}`;
         this.setState(prevState => {
-            const watchIds = {...prevState.watchIds, [data.thing['#']]: scope};
-            const watchThings = {...prevState.watchThings, [scope]: {...prevState.watchThings[scope], [data.thing['#']]: data.thing}};
+            const watchIds = {...prevState.watchIds, [data.thing[THING_KEY]]: scope};
+            const watchThings = {...prevState.watchThings, [scope]: {...prevState.watchThings[scope], [data.thing[THING_KEY]]: data.thing}};
             let res = {watchThings: watchThings, watchIds: watchIds};
 
             if (data.procedures) {
@@ -323,9 +323,9 @@ class EventStore extends BaseStore {
                 let typ = data.types.reduce((res, item) => { res[item.name] = item; return res;}, {});
                 let enu = data.enums.reduce((res, item) => { res[item.name] = item; return res;}, {});
 
-                const watchProcedures = {...prevState.watchProcedures, [scope]: {...prevState.watchProcedures[scope], [data.thing['#']]: proc}};
-                const watchTypes = {...prevState.watchTypes, [scope]: {...prevState.watchTypes[scope], [data.thing['#']]: typ}};
-                const watchEnums = {...prevState.watchEnums, [scope]: {...prevState.watchEnums[scope], [data.thing['#']]: enu}};
+                const watchProcedures = {...prevState.watchProcedures, [scope]: {...prevState.watchProcedures[scope], [data.thing[THING_KEY]]: proc}};
+                const watchTypes = {...prevState.watchTypes, [scope]: {...prevState.watchTypes[scope], [data.thing[THING_KEY]]: typ}};
+                const watchEnums = {...prevState.watchEnums, [scope]: {...prevState.watchEnums[scope], [data.thing[THING_KEY]]: enu}};
 
                 res['watchProcedures'] = watchProcedures;
                 res['watchTypes'] = watchTypes;
@@ -339,7 +339,7 @@ class EventStore extends BaseStore {
     watchUpdate(data) {
         for (let i = 0; i<data.jobs.length; i++) {
             const key = Object.keys(data.jobs[i])[0];
-            this[key]&&this[key](data['#'], data.jobs[i][key]);
+            this[key]&&this[key](data[THING_KEY], data.jobs[i][key]);
         }
     }
 
@@ -549,10 +549,10 @@ class EventStore extends BaseStore {
         let obj;
         if (Array.isArray(set)){
             obj = set.map(s=>this._set(s));
-        } else if (set.hasOwnProperty('$')){
-            obj = {'$': set['$'].map(s =>s.hasOwnProperty('#') ? {'#': s['#']} : s)};
+        } else if (set.hasOwnProperty(SET_KEY)){
+            obj = {SET_KEY: set[SET_KEY].map(s =>s.hasOwnProperty(THING_KEY) ? {THING_KEY: s[THING_KEY]} : s)};
         } else {
-            obj = set.hasOwnProperty('#') ? {'#': set['#']} : set;
+            obj = set.hasOwnProperty(THING_KEY) ? {THING_KEY: set[THING_KEY]} : set;
         }
 
         return obj;
@@ -598,11 +598,11 @@ class EventStore extends BaseStore {
         const prop = Object.keys(add)[0];
         this.setState(prevState => {
             const prev = prevState.watchThings;
-            const copySet = new Set([...prev[scope][id][prop]['$']]);
+            const copySet = new Set([...prev[scope][id][prop][SET_KEY]]);
             for (let i = 0; i<add[prop].length; i++ ) {
-                copySet.add({'#': add[prop][i]['#']});
+                copySet.add({THING_KEY: add[prop][i][THING_KEY]});
             }
-            const newSet = {'$': [...copySet]};
+            const newSet = {SET_KEY: [...copySet]};
             const watchThings = {...prev, [scope]: {...prev[scope], [id]: {...prev[scope][id], [prop]: newSet}}};
             return {watchThings};
         });
@@ -613,15 +613,15 @@ class EventStore extends BaseStore {
         const prop = Object.keys(remove)[0];
         this.setState(prevState => {
             const prev = prevState.watchThings;
-            const copySet = new Set([...prevState.watchThings[scope][id][prop]['$']]);
+            const copySet = new Set([...prevState.watchThings[scope][id][prop][SET_KEY]]);
             for (let i = 0; i<remove[prop].length; i++ ) {
                 copySet.forEach(function(t){
-                    if (t['#'] == remove[prop][i]) {
+                    if (t[THING_KEY] == remove[prop][i]) {
                         copySet.delete(t);
                     }
                 });
             }
-            const newSet = {'$': [...copySet]};
+            const newSet = {SET_KEY: [...copySet]};
             const watchThings = {...prev, [scope]: {...prev[scope], [id]: {...prev[scope][id], [prop]: newSet}}};
             return {watchThings};
         });
