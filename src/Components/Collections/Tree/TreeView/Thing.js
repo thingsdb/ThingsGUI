@@ -8,6 +8,7 @@ import ThingRestrict from './ThingRestrict';
 import {ThingActionsDialog} from '../TreeActions';
 import {CollectionActions} from '../../../../Stores/CollectionStore';
 import {checkType, fancyName, thingValue, TreeBranch} from '../../../Util';
+import {THING_KEY} from '../../../../Constants/CharacterKeys';
 import {ARRAY, CLOSURE, ERROR, REGEX, THING} from '../../../../Constants/ThingTypes';
 import {COLLECTION_SCOPE} from '../../../../Constants/Scopes';
 
@@ -27,12 +28,12 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
     // type and value
     const type = checkType(thing);
     const val = thingValue(type, thing);
-    const currThing = thing && things[thing['#']] || thing;
+    const currThing = thing && things[thing[THING_KEY]] || thing;
     const canToggle =  type === THING || type === CLOSURE || type === REGEX || type === ERROR || (type === ARRAY && thing.length>0) ;
 
     const isTuple = type === ARRAY && parent.type === ARRAY;
-    const thingId = thing && thing['#'] || parent.id;
-    const isWatching = type === THING && thing && watchIds[thing['#']];
+    const thingId = thing && thing[THING_KEY] || parent.id;
+    const isWatching = type === THING && thing && watchIds[thing[THING_KEY]];
 
     const hasDialog = !(parent.type === CLOSURE || parent.type === REGEX || parent.type === ERROR);
 
@@ -72,11 +73,11 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
     };
 
     const handleOpenClose = (open) => {
-        if(thing && thing['#']) {
+        if(thing && thing[THING_KEY]) {
             if(open) {
-                CollectionActions.getThings(collection.collection_id, collection.name, thing['#']);
+                CollectionActions.getThings(collection.collection_id, collection.name, thing[THING_KEY]);
             } else {
-                CollectionActions.removeThing(thing['#']);
+                CollectionActions.removeThing(thing[THING_KEY]);
             }
         }
     };
@@ -94,7 +95,7 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
                         open
                         onClose={handleCloseDialog}
                         child={{
-                            id: thing ? thing['#'] : null,
+                            id: thing ? thing[THING_KEY] : null,
                             index: child.index,
                             name: child.name,
                             type: type,

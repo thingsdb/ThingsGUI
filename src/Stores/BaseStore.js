@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import {ApplicationActions} from './ApplicationStore';
 import {ErrorActions} from './ErrorStore';
+import {CLOSURE_KEY} from '../Constants/CharacterKeys';
 import {COLLECTION_SCOPE} from '../Constants/Scopes';
 import {LoginTAG, WatcherTAG} from '../Constants/Tags';
 import {CLOSURE} from '../Constants/ThingTypes';
@@ -383,7 +384,7 @@ class EventStore extends BaseStore {
 
 
     new_procedure(id, newProcedure) {
-        this.editState('watchProcedures', this.getScope(id), id, newProcedure.name, newProcedure[CLOSURE]['/']);
+        this.editState('watchProcedures', this.getScope(id), id, newProcedure.name, newProcedure[CLOSURE][CLOSURE_KEY]);
     }
 
     del_procedure(id, del) {

@@ -9,6 +9,7 @@ import BuildQueryString from './BuildQueryString';
 import PropInit from './PropInit';
 import TypeInit from './TypeInit';
 import {CLOSURE, DATETIME,ERROR, LIST, NIL, REGEX, SET, THING, TIMEVAL} from '../../../../Constants/ThingTypes';
+import {CLOSURE_KEY, REGEX_KEY} from '../../../../Constants/CharacterKeys';
 
 const useStyles = makeStyles(theme => ({
     listItem: {
@@ -41,8 +42,8 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
     const canChangeType = child.type == THING || child.type == LIST || child.type == SET || child.type == NIL;
 
     const t = (child.type == THING || child.type == LIST || child.type == SET) ? ''
-        : child.type == CLOSURE ? thing['/']
-            : child.type == REGEX ? thing['*']
+        : child.type == CLOSURE ? thing[CLOSURE_KEY]
+            : child.type == REGEX ? thing[REGEX_KEY]
                 : child.type == ERROR ? `err(${thing.error_code}, '${thing.error_msg}')`
                     : child.type == DATETIME ? `datetime("${thing}")`
                         :child.type == TIMEVAL ? `timeval(${thing})`

@@ -5,6 +5,7 @@ import Vlow from 'vlow';
 
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
+import {THING_KEY} from '../Constants/CharacterKeys';
 import {COLLECTION_SCOPE} from '../Constants/Scopes';
 // importing any method from Util creates a webpack error.
 // import {depthOf} from '../Components/Util';
@@ -98,7 +99,7 @@ class CollectionStore extends BaseStore {
                 query,
                 scope
             }).done((data) => {
-                this.setState({things: data.reduce((res, d) => {res[d['#']] = d ;return res;}, {})});
+                this.setState({things: data.reduce((res, d) => {res[d[THING_KEY]] = d ;return res;}, {})});
             }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
         }
     }

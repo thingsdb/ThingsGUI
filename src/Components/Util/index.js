@@ -55,6 +55,7 @@ import useThingsError from './useThingsError';
 import VariablesArray from './VariablesArray';
 import WarnPopover from './WarnPopover';
 
+import {CLOSURE_KEY, ERROR_KEY, REGEX_KEY, SET_KEY, THING_KEY, WRAP_KEY} from '../../Constants/CharacterKeys';
 import {ARRAY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NUMBER, REGEX,
     SET, STR, THING, TIMEVAL, WRAP} from '../../Constants/ThingTypes';
 import {THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE} from '../../Constants/Scopes';
@@ -73,12 +74,12 @@ const checkType = (t) => {
         type = Array.isArray(t) ? ARRAY : 'object';
         if (type === 'object') {
             const kindOfObject = Object.keys(t)[0];
-            type = kindOfObject === '#' ? THING
-                : kindOfObject === '/' ? CLOSURE
-                    : kindOfObject === '*' ? REGEX
-                        : kindOfObject === '!' ? ERROR
-                            : kindOfObject === '$' ? SET
-                                : kindOfObject === '&' ? WRAP
+            type = kindOfObject === THING_KEY ? THING
+                : kindOfObject === CLOSURE_KEY ? CLOSURE
+                    : kindOfObject === REGEX_KEY ? REGEX
+                        : kindOfObject === ERROR_KEY ? ERROR
+                            : kindOfObject === SET_KEY ? SET
+                                : kindOfObject === WRAP_KEY ? WRAP
                                     : 'object' ;
         }
     }
@@ -91,13 +92,13 @@ const checkType = (t) => {
 
 const thingValue = (type, thing, customTypes=[]) => {
     return type === ARRAY ? `[${thing.length}]`
-        : type === THING ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
+        : type === THING ? Object.keys(thing)[0] == THING_KEY ? `{${Object.keys(thing)[0]}${thing[THING_KEY]}}` : '{}'
             : type === 'object' ? `[${Object.keys(thing).length}]`
                 : type === STR || type === NUMBER || type === BOOL || type === BYTES ? `${thing}`
                     : type === CLOSURE || type === REGEX || type === ERROR ? `{${Object.keys(thing)[0]}}`
                         : type === null || type === NIL ? NIL
-                            : type === WRAP ? `<${customTypes.length?customTypes.find(t=> t.type_id==thing['&'][0]).name:thing['&'][0]}, #${thing['&'][1]['#']}>`
-                                : type === SET ? `[${thing['$'].length}]`
+                            : type === WRAP ? `<${customTypes.length?customTypes.find(t=> t.type_id==thing[WRAP_KEY][0]).name:thing[WRAP_KEY][0]}, ${THING_KEY}${thing[WRAP_KEY][1][THING_KEY]}>`
+                                : type === SET ? `[${thing[SET_KEY].length}]`
                                     : '';
 };
 
