@@ -42,7 +42,7 @@ const header = [
     {
         ky: 'created_at',
         label: 'Created at',
-        fn: (t) => moment(t*1000).format('YYYY-MM-DD HH:mm:ss'),
+        fnView: (t) => moment(t*1000).format('YYYY-MM-DD HH:mm:ss'),
         canEdit: false
     },
     {
@@ -60,7 +60,7 @@ const header = [
     {
         ky: 'scope',
         label: 'Scope',
-        fn: (s) => s ? s : 'All scopes',
+        fnView: (s) => s ? s : 'All scopes',
         canEdit: true,
         editMethod: NodesActions.setModuleScope,
         helperText: THINGS_DOC_SET_MODULE_SCOPE,
@@ -73,13 +73,21 @@ const header = [
     {
         ky: 'conf',
         label: 'Configuration',
-        fn: (c) => {
+        fnView: (c) => {
             if(c){
                 const json = JSON.stringify(c);
-                const unquoted = json.replace(/"([^"]+)":/g, '$1:');
+                let unquoted = json.replace(/"([^"]+)":/g, '$1:');
                 return unquoted;
             }
             return 'No configuration';
+        },
+        fnEdit: (c) => {
+            if(c){
+                const json = JSON.stringify(c);
+                let unquoted = json.replace(/"([^"]+)":/g, '$1:');
+                return unquoted;
+            }
+            return c;
         },
         canEdit: true,
         editMethod: NodesActions.setModuleConf,
@@ -120,7 +128,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
 
     const handleEdit = (h) => () => {
         setEdit({...edit, [h.ky]: true});
-        setForm({...form, [h.ky]: _module[h.ky]||''});
+        setForm({...form, [h.ky]: _module[h.ky] ? (h.fnEdit ? h.fnEdit(_module[h.ky]) : _module[h.ky]) : ''});
     };
 
     const handleChange = (ky) => ({target}) => {
@@ -150,7 +158,6 @@ const ModuleInfo = ({item, nodeId, _module}) => {
         setMsg('');
     };
 
-
     return (
         <SimpleModal
             button={
@@ -158,9 +165,10 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                     <MoreIcon color="primary" />
                 </Button>
             }
+            fullWidth={false}
             open={show}
             onClose={handleClickClose}
-            maxWidth="md"
+            maxWidth="lg"
             title="Module info"
             actionButtons={
                 <Button color="primary" onClick={handleRestart}>
@@ -221,7 +229,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                         }
                                     >
                                         <Box className={classes.box} component="div" fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
-                                            {h.fn ? h.fn(_module[h.ky]) : _module[h.ky]}
+                                            {h.fnView ? h.fnView(_module[h.ky]) : _module[h.ky]}
                                         </Box>
                                     </Badge>
                                 </Typography>

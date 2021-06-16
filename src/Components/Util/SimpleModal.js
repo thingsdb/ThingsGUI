@@ -14,6 +14,7 @@ const SimpleModal = ({
     button,
     children,
     disableOk,
+    fullWidth,
     maxWidth,
     onClose,
     onKeyPress,
@@ -39,7 +40,7 @@ const SimpleModal = ({
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
-                fullWidth
+                fullWidth={fullWidth}
                 maxWidth={maxWidth?maxWidth:'xs'}
                 onKeyDown={onKeyPress}
                 {...props}
@@ -77,7 +78,8 @@ const SimpleModal = ({
 SimpleModal.defaultProps = {
     actionButtons: null,
     button: null,
-    disableOk: null,
+    disableOk: false,
+    fullWidth: true,
     maxWidth: null,
     onClose: null,
     onKeyPress: ()=>null,
@@ -91,6 +93,7 @@ SimpleModal.propTypes = {
     button: PropTypes.object,
     children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.object]).isRequired,
     disableOk: PropTypes.bool,
+    fullWidth: PropTypes.bool,
     maxWidth: PropTypes.string,
     onClose: PropTypes.func,
     onKeyPress: PropTypes.func,
