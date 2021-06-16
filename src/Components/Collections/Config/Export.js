@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { Copy, DownloadTextFile, ErrorMsg, SimpleModal } from '../../Util';
 import {CollectionActions} from '../../../Stores';
+import {COLLECTION_SCOPE} from '../../../Constants/Scopes';
 import {ExportCollectionTAG} from '../../../Constants/Tags';
 
 
@@ -53,7 +54,7 @@ const Export = ({collection}) => {
 
     const handleClickOpen = () => {
         CollectionActions.rawQuery(
-            `@collection:${collection.name}`, 'export();', tag, setScript
+            `${COLLECTION_SCOPE}:${collection.name}`, 'export();', tag, setScript
         );
         setShow(true);
     };

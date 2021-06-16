@@ -1,0 +1,1 @@
+export const THINGDB_CACHE = '/download/tmp/thingsdb-cache';

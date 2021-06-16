@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { ErrorMsg, SimpleModal } from '../../../Util';
 import {CollectionActions, ThingsdbActions} from '../../../../Stores';
 import {RemoveThingTAG} from '../../../../Constants/Tags';
+import {SET, THING} from '../../../../Constants/ThingTypes';
 
 
 const tag = RemoveThingTAG;
@@ -18,8 +19,8 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
     const [query, setQuery] = React.useState('');
 
     React.useEffect(() => {
-        const q = parent.type === 'thing' ? `#${parent.id}.del('${child.name}');`
-            : parent.type === 'set' ? `#${parent.id}.${parent.name}.remove(#${child.id});`
+        const q = parent.type === THING ? `#${parent.id}.del('${child.name}');`
+            : parent.type === SET ? `#${parent.id}.${parent.name}.remove(#${child.id});`
                 : `#${parent.id}.${parent.name}.splice(${child.index}, 1);`;
         setQuery(q);
     }, [child.index, child.id, child.name, parent.id, parent.name, parent.type]);

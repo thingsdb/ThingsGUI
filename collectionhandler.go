@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -23,8 +22,8 @@ type Data struct {
 
 func query(client *Client, data Data, blob map[string]interface{}, timeout uint16) (int, interface{}, Message) {
 	resp, err := client.Connection.Query(
-		fmt.Sprintf("%s", data.Scope),
-		fmt.Sprintf("%s", data.Query),
+		data.Scope,
+		data.Query,
 		blob,
 		timeout)
 

@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import InputField from '../InputField';
 import {ListHeader} from '../../../Util';
 import {EditActions, useEdit} from '../Context';
+import {NIL, STR} from '../../../../Constants/ThingTypes';
 
 
 const useStyles = makeStyles(theme => ({
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier, parentDispatch}) => {
     const classes = useStyles();
-    const [dataType, setDataType] = React.useState(childTypes[0]||dataTypes[0]||'str');
+    const [dataType, setDataType] = React.useState(childTypes[0]||dataTypes[0]||STR);
 
     const [editState, dispatch] = useEdit();
     const {array, val, blob} = editState;
@@ -39,8 +40,8 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
     };
 
     const typeControls = (type, input) => {
-        return type === 'nil' ? 'nil'
-            : type === 'str' ? (input[0]=='\''? `${input}`:`'${input}'`)
+        return type === NIL ? NIL
+            : type === STR ? (input[0]=='\''? `${input}`:`'${input}'`)
                 : `${input}`;
     };
 

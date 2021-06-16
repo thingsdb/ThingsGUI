@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import {EditActions, useEdit} from '../Context';
 import {DownloadBlob} from '../../../Util';
+import {THINGDB_CACHE} from '../../../../Constants/Files';
 
 
 const AddEnum = ({enumName, enums, identifier, init}) => {
@@ -14,7 +15,7 @@ const AddEnum = ({enumName, enums, identifier, init}) => {
     const dispatch = useEdit()[1];
 
     const _enum = (enums || []).find(e => e.name === enumName);
-    const isBlob = init.constructor === String && init.includes('/download/tmp/thingsdb-cache');
+    const isBlob = init.constructor === String && init.includes(THINGDB_CACHE);
 
     React.useEffect(()=>{
         if (_enum) {

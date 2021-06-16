@@ -3,6 +3,7 @@ import React from 'react';
 
 import {ApplicationStore, TimerActions, TimerStore} from '../../Stores';
 import {Page} from './Utils';
+import {THINGSDB_SCOPE} from '../../Constants/Scopes';
 
 const withStores = withVlow([{
     store: ApplicationStore,
@@ -13,7 +14,7 @@ const withStores = withVlow([{
 }]);
 
 
-const scope = '@thingsdb';
+const scope = THINGSDB_SCOPE;
 const Timer = ({match, timers}) => {
 
     React.useEffect(() => {

@@ -8,7 +8,8 @@ import ThingRestrict from './ThingRestrict';
 import {ThingActionsDialog} from '../TreeActions';
 import {CollectionActions} from '../../../../Stores/CollectionStore';
 import {checkType, fancyName, thingValue, TreeBranch} from '../../../Util';
-
+import {ARRAY, CLOSURE, ERROR, REGEX, THING} from '../../../../Constants/ThingTypes';
+import {COLLECTION_SCOPE} from '../../../../Constants/Scopes';
 
 const useStyles = makeStyles(theme => ({
     green: {
@@ -27,13 +28,13 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
     const type = checkType(thing);
     const val = thingValue(type, thing);
     const currThing = thing && things[thing['#']] || thing;
-    const canToggle =  type === 'thing' || type === 'closure' || type === 'regex' || type === 'error' || (type === 'array' && thing.length>0) ;
+    const canToggle =  type === THING || type === CLOSURE || type === REGEX || type === ERROR || (type === ARRAY && thing.length>0) ;
 
-    const isTuple = type === 'array' && parent.type === 'array';
+    const isTuple = type === ARRAY && parent.type === ARRAY;
     const thingId = thing && thing['#'] || parent.id;
-    const isWatching = type === 'thing' && thing && watchIds[thing['#']];
+    const isWatching = type === THING && thing && watchIds[thing['#']];
 
-    const hasDialog = !(parent.type === 'closure' || parent.type === 'regex' || parent.type === 'error');
+    const hasDialog = !(parent.type === CLOSURE || parent.type === REGEX || parent.type === ERROR);
 
     const handleOpenDialog = () => {
         setShow(true);
@@ -100,7 +101,7 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
                         }}
                         parent={parent}
                         thing={currThing}
-                        scope={`@collection:${collection.name}`}
+                        scope={`${COLLECTION_SCOPE}:${collection.name}`}
                     />
                 </EditProvider>
             ) : null}

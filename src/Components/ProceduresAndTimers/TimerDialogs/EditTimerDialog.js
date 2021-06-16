@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import {CollectionActions, TimerActions} from '../../../Stores';
 import {ErrorMsg, SimpleModal, VariablesArray} from '../../Util';
 import {EditTimerDialogTAG} from '../../../Constants/Tags';
+import {NIL} from '../../../Constants/ThingTypes';
 
 const useStyles = makeStyles(() => ({
     warnColor: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const replaceNull = (items) => items.map(item => item === null ? 'nil' : item);
+const replaceNull = (items) => items.map(item => item === null ? NIL : item);
 
 const tag = EditTimerDialogTAG;
 

@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {EditActions, useEdit} from '../Context';
+import {NIL} from '../../../../Constants/ThingTypes';
 
 const AddNil = ({identifier}) => {
     const dispatch = useEdit()[1];
 
     React.useEffect(()=>{
-        EditActions.updateVal(dispatch, 'nil', identifier);
+        EditActions.updateVal(dispatch, NIL, identifier);
     }, []);
 
     return  null;

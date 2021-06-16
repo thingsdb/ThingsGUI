@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import InputField from '../InputField';
 import {ListHeader} from '../../../Util';
 import {EditActions, useEdit} from '../Context';
+import {NIL, STR} from '../../../../Constants/ThingTypes';
 
 
 const useStyles = makeStyles(theme => ({
@@ -19,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) => {
     const classes = useStyles();
     const [state, setState] = React.useState({
-        dataType: 'str',
+        dataType: STR,
         property: '',
     });
     const {dataType, property} = state;
@@ -47,7 +48,7 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
     };
 
     const typeControls = (type, input) => {
-        return type === 'nil' ? `${input} nil`
+        return type === NIL ? `${input} ${NIL}`
             : `${input}`;
     };
 

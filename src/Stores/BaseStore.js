@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 
 import {ApplicationActions} from './ApplicationStore';
 import {ErrorActions} from './ErrorStore';
+import {COLLECTION_SCOPE} from '../Constants/Scopes';
 import {LoginTAG, WatcherTAG} from '../Constants/Tags';
+import {CLOSURE} from '../Constants/ThingTypes';
 
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
@@ -309,7 +311,7 @@ class EventStore extends BaseStore {
     }
 
     watchInit(data) {
-        let scope = `@collection:${data.collection}`;
+        let scope = `${COLLECTION_SCOPE}:${data.collection}`;
         this.setState(prevState => {
             const watchIds = {...prevState.watchIds, [data.thing['#']]: scope};
             const watchThings = {...prevState.watchThings, [scope]: {...prevState.watchThings[scope], [data.thing['#']]: data.thing}};
@@ -381,7 +383,7 @@ class EventStore extends BaseStore {
 
 
     new_procedure(id, newProcedure) {
-        this.editState('watchProcedures', this.getScope(id), id, newProcedure.name, newProcedure['closure']['/']);
+        this.editState('watchProcedures', this.getScope(id), id, newProcedure.name, newProcedure[CLOSURE]['/']);
     }
 
     del_procedure(id, del) {

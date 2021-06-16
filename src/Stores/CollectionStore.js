@@ -5,6 +5,7 @@ import Vlow from 'vlow';
 
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
+import {COLLECTION_SCOPE} from '../Constants/Scopes';
 // importing any method from Util creates a webpack error.
 // import {depthOf} from '../Components/Util';
 
@@ -70,7 +71,7 @@ class CollectionStore extends BaseStore {
 
     onGetThings(collectionId, collectionName, thingId=null) {
         const query = thingId ? `#${thingId}` : 'thing(.id())';
-        const scope = `@collection:${collectionName}`;
+        const scope = `${COLLECTION_SCOPE}:${collectionName}`;
         this.emit('query', {
             query,
             scope
@@ -92,7 +93,7 @@ class CollectionStore extends BaseStore {
 
         if(keys.length) {
             const query = `[${keys.map(k => `#${k}`)}]`;
-            const scope = `@collection:${collectionName}`;
+            const scope = `${COLLECTION_SCOPE}:${collectionName}`;
             this.emit('query', {
                 query,
                 scope

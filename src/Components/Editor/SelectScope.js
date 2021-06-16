@@ -8,6 +8,7 @@ import React from 'react';
 
 import {NodesStore, ThingsdbStore} from '../../Stores';
 import {getScopes2} from '../Util';
+import {COLLECTION_SCOPE, THINGSDB_SCOPE} from '../../Constants/Scopes';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
@@ -29,11 +30,11 @@ const useStyles = makeStyles(theme => ({
 
 const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
     const classes = useStyles();
-    const [name, setName] = React.useState(scope|| collections[0] ? `@collection:${collections[0].name}` : '@thingsdb');
+    const [name, setName] = React.useState(scope|| collections[0] ? `${COLLECTION_SCOPE}:${collections[0].name}` : THINGSDB_SCOPE);
     const scopes = getScopes2(collections, nodes);
 
     React.useEffect(()=> {
-        let name = scope|| collections[0] ? `@collection:${collections[0].name}` : '@thingsdb';
+        let name = scope|| collections[0] ? `${COLLECTION_SCOPE}:${collections[0].name}` : THINGSDB_SCOPE;
         onChangeScope(scopes.find(i=>i===name)||'');
     }, []);
 

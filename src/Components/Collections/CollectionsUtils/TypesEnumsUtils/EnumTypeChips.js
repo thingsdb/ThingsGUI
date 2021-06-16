@@ -9,6 +9,7 @@ import ViewIcon from '@material-ui/icons/Visibility';
 import {AddDialog, AddLink, EditDialog, Relation, ViewDialog} from '.';
 import {ChipsCard, DownloadBlob} from '../../../Util';
 import {THINGS_DOC_DATATYPES} from '../../../../Constants/Links';
+import {THINGDB_CACHE} from '../../../../Constants/Files';
 
 
 const useStyles = makeStyles(theme => ({
@@ -82,7 +83,7 @@ const queries = {
 };
 
 const fmrows = (callback, fields, isType, item, scope, view ) => item[fields] ? item[fields].map(([n,v])=> {
-    const isBlob = v.constructor === String && v.includes('/download/tmp/thingsdb-cache');
+    const isBlob = v.constructor === String && v.includes(THINGDB_CACHE);
     let obj;
     if(isBlob) {
         obj = <DownloadBlob val={v} />;

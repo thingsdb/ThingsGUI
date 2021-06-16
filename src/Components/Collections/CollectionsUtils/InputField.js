@@ -7,7 +7,8 @@ import React from 'react';
 import {EditProvider, useEdit} from './Context';
 import {THINGS_DOC_COLLECTION, THINGS_DOC_DATETIME, THINGS_DOC_TIMEVAL} from '../../../Constants/Links';
 import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddEnum, AddError, AddFloat, AddInt, AddCode, AddRegex, AddNil, AddStr, AddThing, AddVariable} from './InputUtils';
-
+import {BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, REGEX,
+    SET, STR, THING, TIMEVAL, VARIABLE} from '../../../Constants/ThingTypes';
 
 const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identifier, init, variables,...props}) => {
 
@@ -15,34 +16,34 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identi
 
     // EditProvider needs a key to distinguish the instance
     switch(dataType){
-    case 'code': return <AddCode identifier={identifier} init={init} label="Fill in .ti code" link={THINGS_DOC_COLLECTION} numLines="4" />;
-    case 'str': return <AddStr identifier={identifier} init={init} {...props} />;
-    case 'int': return <AddInt identifier={identifier} init={init} {...props} />;
-    case 'float': return <AddFloat identifier={identifier} init={init} {...props} />;
-    case 'bool': return <AddBool identifier={identifier} init={init} {...props} />;
-    case 'closure': return <AddClosure identifier={identifier} init={init} {...props} />;
-    case 'regex': return <AddRegex identifier={identifier} init={init} {...props} />;
-    case 'error': return <AddError identifier={identifier} init={init} {...props} />;
-    case 'bytes': return <AddBlob identifier={identifier} init={init} {...props} />;
-    case 'datetime': return <AddCode identifier={identifier} init={init} label="Fill in a datetime" link={THINGS_DOC_DATETIME} numLines="1" />;
-    case 'timeval': return <AddCode identifier={identifier} init={init} label="Fill in a timeval" link={THINGS_DOC_TIMEVAL} numLines="1" />;
-    case 'nil': return <AddNil identifier={identifier} />;
-    case 'thing': return(
+    case CODE: return <AddCode identifier={identifier} init={init} label="Fill in .ti code" link={THINGS_DOC_COLLECTION} numLines="4" />;
+    case STR: return <AddStr identifier={identifier} init={init} {...props} />;
+    case INT: return <AddInt identifier={identifier} init={init} {...props} />;
+    case FLOAT: return <AddFloat identifier={identifier} init={init} {...props} />;
+    case BOOL: return <AddBool identifier={identifier} init={init} {...props} />;
+    case CLOSURE: return <AddClosure identifier={identifier} init={init} {...props} />;
+    case REGEX: return <AddRegex identifier={identifier} init={init} {...props} />;
+    case ERROR: return <AddError identifier={identifier} init={init} {...props} />;
+    case BYTES: return <AddBlob identifier={identifier} init={init} {...props} />;
+    case DATETIME: return <AddCode identifier={identifier} init={init} label="Fill in a datetime" link={THINGS_DOC_DATETIME} numLines="1" />;
+    case TIMEVAL: return <AddCode identifier={identifier} init={init} label="Fill in a timeval" link={THINGS_DOC_TIMEVAL} numLines="1" />;
+    case NIL: return <AddNil identifier={identifier} />;
+    case THING: return(
         <EditProvider key={dataType}>
             <AddThing identifier={identifier} customTypes={customTypes} enums={enums} dataTypes={dataTypes} parentDispatch={dispatch} />
         </EditProvider>
     );
-    case 'set': return(
+    case SET: return(
         <EditProvider key={dataType}>
-            <AddArray identifier={identifier} customTypes={customTypes} enums={enums} childTypes={childTypes||['thing', ...customTypes.map(c=>c.name)]||[]} dataTypes={dataTypes} parentDispatch={dispatch} isSet />
+            <AddArray identifier={identifier} customTypes={customTypes} enums={enums} childTypes={childTypes||[THING, ...customTypes.map(c=>c.name)]||[]} dataTypes={dataTypes} parentDispatch={dispatch} isSet />
         </EditProvider>
     );
-    case 'list': return(
+    case LIST: return(
         <EditProvider key={dataType}>
             <AddArray identifier={identifier} customTypes={customTypes} enums={enums} childTypes={childTypes||[]} dataTypes={dataTypes} parentDispatch={dispatch} {...props} />
         </EditProvider>
     );
-    case 'variable': return(
+    case VARIABLE: return(
         <EditProvider key={dataType}>
             <AddVariable identifier={identifier} customTypes={customTypes} enums={enums} childTypes={childTypes||[]} dataTypes={dataTypes} variables={variables} parentDispatch={dispatch} />
         </EditProvider>

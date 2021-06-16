@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
 import {QuotasTAG} from '../../../Constants/Tags';
+import {NIL} from '../../../Constants/ThingTypes';
 
 const quotaTypes = [
     'things',
@@ -63,7 +64,7 @@ const Quotas = ({collection}) => {
         ThingsdbActions.setQuota(
             collection.name,
             form.quotaType,
-            'nil',
+            NIL,
             tag,
             () => setState({...state, show: false})
         );

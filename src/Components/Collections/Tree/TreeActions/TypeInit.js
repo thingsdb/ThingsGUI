@@ -3,6 +3,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
 import {EditActions, useEdit} from '../../CollectionsUtils';
+import {SET, THING} from '../../../../Constants/ThingTypes';
 
 const TypeInit = ({type, customTypes, dataTypes, onChange, input}) => {
     const dispatch = useEdit()[1];
@@ -32,7 +33,7 @@ const TypeInit = ({type, customTypes, dataTypes, onChange, input}) => {
             SelectProps={{native: true}}
         >
             {dataTypes.map((d, i) => (
-                <option key={i} value={d} disabled={type=='set'&&!(d=='thing'||Boolean(customTypes.find(c=>c.name==d)))} >
+                <option key={i} value={d} disabled={type==SET&&!(d==THING||Boolean(customTypes.find(c=>c.name==d)))} >
                     {d}
                 </option>
             ))}

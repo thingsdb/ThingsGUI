@@ -12,7 +12,8 @@ import {withVlow} from 'vlow';
 
 import {ThingActions} from '../TreeActions';
 import {EventStore, CollectionStore, CollectionActions} from '../../../../Stores';
-
+import {THING} from '../../../../Constants/ThingTypes';
+import {COLLECTION_SCOPE} from '../../../../Constants/Scopes';
 import ThingRestrict from './ThingRestrict';
 import Thing from './Thing';
 
@@ -79,7 +80,7 @@ const ThingRoot = ({things, collection, watchIds}) => {
                             parent={{
                                 id: collection.collection_id,
                                 name: 'root',
-                                type: 'thing',
+                                type: THING,
                                 isTuple: false,
                             }}
                             child={{
@@ -103,7 +104,7 @@ const ThingRoot = ({things, collection, watchIds}) => {
                                 id: collection.collection_id,
                                 index: null,
                                 name: 'root',
-                                type: 'thing',
+                                type: THING,
                             }}
                             parent={{
                                 id: null,
@@ -112,7 +113,7 @@ const ThingRoot = ({things, collection, watchIds}) => {
                                 type: '',
                                 isTuple: false,
                             }}
-                            scope={`@collection:${collection.name}`}
+                            scope={`${COLLECTION_SCOPE}:${collection.name}`}
                             thing={things[collection.collection_id]}
                             isRoot
                         />

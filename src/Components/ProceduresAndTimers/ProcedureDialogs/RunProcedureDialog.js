@@ -13,6 +13,7 @@ import {InputField, useEdit} from '../../Collections/CollectionsUtils';
 import {ProcedureActions} from '../../../Stores';
 import {addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
 import {RunProcedureDialogTAG} from '../../../Constants/Tags';
+import {BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE} from '../../../Constants/ThingTypes';
 
 const useStyles = makeStyles(() => ({
     warnColor: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const tag = RunProcedureDialogTAG;
-const dataTypes = ['bool', 'code', 'datetime', 'float', 'int', 'list', 'nil', 'str', 'thing', 'timeval']; // Supported types
+const dataTypes = [BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL]; // Supported types
 
 const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const classes = useStyles();
@@ -96,7 +97,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                                         <ListItemText primary="Arguments:" primaryTypographyProps={{variant: 'body1'}} />
                                     </ListItem>
                                     <ListItem>
-                                        <InputField dataType="variable" dataTypes={dataTypes} variables={procedure.arguments} />
+                                        <InputField dataType={VARIABLE} dataTypes={dataTypes} variables={procedure.arguments} />
                                     </ListItem>
                                 </React.Fragment>
                             )}

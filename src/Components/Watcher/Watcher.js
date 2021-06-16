@@ -18,7 +18,10 @@ import Typography from '@material-ui/core/Typography';
 
 import {EventActions, EventStore, ThingsdbStore, TypeActions, TypeStore} from '../../Stores';
 import {ErrorMsg, HarmonicTree} from '../Util';
+import {THINGDB_CACHE} from '../../Constants/Files';
+import {COLLECTION_SCOPE} from '../../Constants/Scopes';
 import {WatcherTAG} from '../../Constants/Tags';
+import {THING} from '../../Constants/ThingTypes';
 
 const withStores = withVlow([{
     store: EventStore,
@@ -72,7 +75,7 @@ const Watcher = ({collections, customTypes, watchEvents, watchEnums, watchIds, w
     });
     const {scope, thingId} = state;
 
-    const scopes = React.useMemo(() => collections.map(c=>`@collection:${c.name}`), [collections]);
+    const scopes = React.useMemo(() => collections.map(c=>`${COLLECTION_SCOPE}:${c.name}`), [collections]);
 
     React.useEffect(() => {
         setState((state) => ({...state, scope: scopes[0]}));
@@ -113,7 +116,7 @@ const Watcher = ({collections, customTypes, watchEvents, watchEnums, watchIds, w
         const id = v.slice(2, -1);
         let onWatch=Boolean(watchIds[id]);
 
-        return(t=='thing'&& (onWatch ? (
+        return(t == THING && (onWatch ? (
             <Tooltip disableFocusListener disableTouchListener title="Turn watching off">
                 <Button color="primary" onClick={handleUnwatch(id)} size="small" >
                     <RemoveIcon size="small" className={classes.red} />
@@ -126,7 +129,7 @@ const Watcher = ({collections, customTypes, watchEvents, watchEnums, watchIds, w
         )));
     };
 
-    const replacer = (key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
+    const replacer = (key, value) => typeof value === 'string' && value.includes(`${THINGDB_CACHE}-`) ? '<blob data>' : value;
 
     return (
         <Grid container spacing={2}>
