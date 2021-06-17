@@ -54,7 +54,7 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
     }, [open, handleRefresh]);
 
     const handleClickOk = () => {
-        CollectionActions.rawQuery(
+        CollectionActions.query(
             scope,
             queryString,
             tag,

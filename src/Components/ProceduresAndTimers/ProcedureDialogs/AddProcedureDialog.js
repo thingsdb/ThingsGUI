@@ -49,7 +49,7 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
 
 
     const handleClickOk = () => {
-        CollectionActions.rawQuery(
+        CollectionActions.query(
             scope,
             queryString,
             tag,

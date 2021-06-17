@@ -65,7 +65,7 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
     };
 
     const handleClickOk = () => {
-        CollectionActions.rawQuery(
+        CollectionActions.query(
             scope,
             queryString,
             tag,

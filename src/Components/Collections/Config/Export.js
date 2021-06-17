@@ -53,7 +53,7 @@ const Export = ({collection}) => {
     const [script, setScript] = React.useState('');
 
     const handleClickOpen = () => {
-        CollectionActions.rawQuery(
+        CollectionActions.query(
             `${COLLECTION_SCOPE}:${collection.name}`, 'export();', tag, setScript
         );
         setShow(true);
