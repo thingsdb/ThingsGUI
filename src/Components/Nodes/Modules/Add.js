@@ -136,7 +136,7 @@ const Add = ({nodeId}) => {
                             spellCheck={false}
                             onChange={handleOnChange}
                             multiline
-                            rows="2"
+                            rows="1"
                             rowsMax="10"
                             fullWidth
                         />
