@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import LandingContent from './LandingContent';
 import {TopBar} from '../Navigation';
 
-const version='version: 0.4.2';
+const version='version: 0.4.3';
 
 const useStyles = makeStyles(theme => ({
     avatar: {

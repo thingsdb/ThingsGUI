@@ -400,7 +400,7 @@ class NodesStore extends BaseStore {
     }
 
     onSetModuleConf(nodeId, name, configuration, tag, cb) {
-        const query = `set_module_conf('${name}', ${configuration ? `'${configuration}'` : NIL});`;
+        const query = `set_module_conf('${name}', ${configuration ? `${configuration}` : NIL});`;
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query
