@@ -218,36 +218,25 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
     const handleClickOk = () => {
         handleCloseError();
-        const b = Object.keys(blob || {}).reduce((res, k) => {
+        const keys = Object.keys(blob || {});
+        const b = keys ? keys.reduce((res, k) => {
             if(queryString.includes(k)){
                 res[k]=blob[k];
             }
             return res;
-        },{});
+        },{}) : null;
 
-        if (Object.keys(b).length) {
-            CollectionActions.blob(
-                scope,
-                queryString,
-                null,
-                b,
-                tag,
-                () => {
-                    getInfo(scope, tag);
-                    handleBack();
-                }
-            );
-        } else {
-            CollectionActions.rawQuery(
-                scope,
-                queryString,
-                tag,
-                () => {
-                    getInfo(scope, tag);
-                    handleBack();
-                }
-            );
-        }
+        CollectionActions.query(
+            scope,
+            queryString,
+            tag,
+            () => {
+                getInfo(scope, tag);
+                handleBack();
+            },
+            null,
+            b,
+        );
     };
 
     const handleCloseError = () => {

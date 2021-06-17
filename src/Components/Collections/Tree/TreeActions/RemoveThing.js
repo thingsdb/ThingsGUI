@@ -34,14 +34,14 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
     };
 
     const handleClickOk = () => {
-        CollectionActions.queryWithReturn(
+        CollectionActions.query(
             scope,
             query,
-            parent.id,
             tag,
             () => {
                 ThingsdbActions.getCollections();
-            }
+            },
+            parent.id,
         );
         onClose();
     };

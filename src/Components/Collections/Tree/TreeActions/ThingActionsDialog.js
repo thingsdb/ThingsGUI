@@ -54,34 +54,28 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
     };
 
     const handleClickOk = (blob, query) => {
-        const b = Object.keys(blob || {}).reduce((res, k) => {if(query.includes(k)){res[k]=blob[k];} return res;},{});
+        const keys = Object.keys(blob || {});
+        const b = keys ? keys.reduce((res, k) => {
+            if(query.includes(k)){
+                res[k]=blob[k];
+            }
+            return res;
+        },{}) : null;
         const isChildEnum = Boolean(enums.find(c=>c.name==realChildType));
         const useParent = isChildEnum&&child.id;
         const tid = useParent?parent.id:child.id||parent.id;
-        if (Object.keys(b).length) {
-            CollectionActions.blob(
-                scope,
-                query,
-                tid,
-                b,
-                tag,
-                () => {
-                    ThingsdbActions.getCollections();
-                    onClose();
-                },
-            );
-        } else {
-            CollectionActions.queryWithReturn(
-                scope,
-                query,
-                tid,
-                tag,
-                () => {
-                    ThingsdbActions.getCollections();
-                    onClose();
-                }
-            );
-        }
+
+        CollectionActions.query(
+            scope,
+            query,
+            tag,
+            () => {
+                ThingsdbActions.getCollections();
+                onClose();
+            },
+            tid,
+            b,
+        );
     };
 
     // buttons visible

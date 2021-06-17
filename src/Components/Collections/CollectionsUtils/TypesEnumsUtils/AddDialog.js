@@ -92,36 +92,25 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
 
 
     const handleClickOk = () => {
-        const b = Object.keys(blob || {}).reduce((res, k) => {
+        const keys = Object.keys(blob || {});
+        const b = keys ? keys.reduce((res, k) => {
             if(queryString.includes(k)){
                 res[k]=blob[k];
             }
             return res;
-        },{});
+        },{}) : null;
 
-        if (Object.keys(b).length) {
-            CollectionActions.blob(
-                scope,
-                queryString,
-                null,
-                b,
-                tag,
-                () => {
-                    getInfo(scope, tag);
-                    onClose();
-                }
-            );
-        } else {
-            CollectionActions.rawQuery(
-                scope,
-                queryString,
-                tag,
-                () => {
-                    getInfo(scope, tag);
-                    onClose();
-                }
-            );
-        }
+        CollectionActions.query(
+            scope,
+            queryString,
+            tag,
+            () => {
+                getInfo(scope, tag);
+                onClose();
+            },
+            null,
+            b,
+        );
     };
 
     return (
