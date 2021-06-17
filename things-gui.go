@@ -11,14 +11,14 @@ import (
 	"runtime"
 	"time"
 
-	engineio "github.com/googollee/go-engine.io"
 	socketio "github.com/googollee/go-socket.io"
+	"github.com/googollee/go-socket.io/engineio"
 	"github.com/joho/godotenv"
 	things "github.com/thingsdb/go-thingsdb"
 )
 
 // AppVersion exposes version information
-const AppVersion = "0.4.2"
+const AppVersion = "0.4.3"
 
 var connFile = ".things-gui_config"
 
@@ -177,7 +177,7 @@ func (app *App) SocketRouter() {
 		}()
 	})
 
-	app.server.OnError("/", func(e error) {
+	app.server.OnError("/", func(s socketio.Conn, e error) {
 		fmt.Printf("meet error: %s\n", e.Error())
 	})
 
@@ -288,10 +288,7 @@ func main() {
 	options := &engineio.Options{
 		PingTimeout: time.Duration(app.timeout+120) * time.Second,
 	}
-	app.server, err = socketio.NewServer(options)
-	if err != nil {
-		fmt.Println(err)
-	}
+	app.server = socketio.NewServer(options)
 
 	// on interrup clean up
 	c := make(chan os.Signal, 1)

@@ -238,6 +238,7 @@ export default {
         'del_node': 'Delete a node from ThingsDB.',
         'del_token': 'Delete a token.',
         'del_user': 'Delete a user. It is not possible to delete your own user account and a BAD_REQUEST will be raised in case you try to. Any tokens associated with the user will also be deleted.',
+        'deploy_module': 'Deploy a module on all nodes. The module must be configured first, using the new_module() function. This function is used to write the module data (or plain python code) to the module. After deploying the code, the module will be restarted on every node.',
         'grant': 'Grant collection or general privileges to a user. Access to a user is provided by setting a bit mask to either the .node scope, .thingsdb scope or a collection. Privileges to ThingsDB gives a user the ability to view counters, add, view remove users etc.',
         'has_collection': 'Determines if a collection exists in ThingsDB.',
         'has_module': 'Determines if a module exists in ThingsDB. The scope restriction of the module has no impact on the result of this function.',
