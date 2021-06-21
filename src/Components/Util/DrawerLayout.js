@@ -1,4 +1,5 @@
 import {makeStyles} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -6,7 +7,7 @@ import clsx from 'clsx';
 import Divider from '@material-ui/core/Divider';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
@@ -24,8 +25,6 @@ const useStyles = makeStyles((theme) => ({
         height: 'calc(100% - 121px)', // footerHeight (60) + footerMarginTop (5) + topBarHeight (48) + appBarMarginBottom (8) = 121
     },
     footer: {
-        boxShadow: '0 -2px 4px 0 rgba(31,30,30,1)',
-        borderRadius: 20,
         marginTop: 5,
         height: 60,
         bottom: 0
@@ -202,12 +201,9 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
 
                     }}
                 >
-                    <div className={classes.body}>
+                    <Grid container className={classes.body}>
                         {mainContent}
-                    </div>
-                    <div className={classes.footer}>
-                        {bottomBar}
-                    </div>
+                    </Grid>
                 </div>
                 <Card
                     className={clsx(classes.drawerClose, {
@@ -235,6 +231,9 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     </div>
                 </Card>
                 {toast}
+            </div>
+            <div className={classes.footer}>
+                {bottomBar}
             </div>
         </div>
     );

@@ -60,7 +60,7 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                         {`${name}`}
                     </Typography>
                 )}
-                <Typography variant="h3" className={classes.sidepadding} color="primary">
+                <Typography variant="h5" className={classes.sidepadding} color="primary">
                     {groupSigning[groupSign][0]}
                 </Typography>
                 <Grid item className={classes.inset}>
@@ -73,7 +73,7 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                 </Collapse>
             </Grid>
             <Grid item xs={4} container justify="flex-start" alignItems="center">
-                <Typography variant="h3" className={classes.sidepadding} color="primary">
+                <Typography variant="h5" className={classes.sidepadding} color="primary">
                     {groupSigning[groupSign][1]}
                 </Typography>
                 <Button color="primary" onClick={onAdd}>
