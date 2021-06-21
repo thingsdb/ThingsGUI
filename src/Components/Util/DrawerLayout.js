@@ -7,7 +7,6 @@ import clsx from 'clsx';
 import Divider from '@material-ui/core/Divider';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 import Drawer from '@material-ui/core/Drawer';
-import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
@@ -21,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
     },
     body: {
+        flexGrow: 1,
         overflowY: 'auto',
         height: 'calc(100% - 121px)', // footerHeight (60) + footerMarginTop (5) + topBarHeight (48) + appBarMarginBottom (8) = 121
     },
@@ -187,7 +187,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                         ))}
                     </List>
                 </Drawer>
-                <div
+                <main
                     className={clsx(classes.full, {
                         [classes.shrink]: open || menuOpen,
                     })}
@@ -201,10 +201,10 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
 
                     }}
                 >
-                    <Grid container className={classes.body}>
+                    <div className={classes.body}>
                         {mainContent}
-                    </Grid>
-                </div>
+                    </div>
+                </main>
                 <Card
                     className={clsx(classes.drawerClose, {
                         [classes.drawerOpen]: open,
