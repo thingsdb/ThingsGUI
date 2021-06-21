@@ -1,4 +1,3 @@
-/*eslint-disable react/no-multi-comp*/
 /*eslint-disable react/jsx-props-no-spreading*/
 
 import PropTypes from 'prop-types';
