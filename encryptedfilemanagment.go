@@ -1,21 +1,10 @@
 package main
 
 import (
-	"crypto/rand"
 	"encoding/json"
 )
 
-var key []byte
-
-func generateKey() error {
-	if key == nil {
-		key = make([]byte, 32) //generate a random 32 byte key for AES-256
-		if _, err := rand.Read(key); err != nil {
-			return err
-		}
-	}
-	return nil
-}
+var key = []byte("jdyw3ts4dkflp8orftr7vd6372jqzpta")
 
 // ReadEncryptedFile decrypts and parses an encrypted file and stores the result in the interface called mapping
 func ReadEncryptedFile(path string, mapping interface{}, logCh chan string) error {
@@ -39,11 +28,6 @@ func ReadEncryptedFile(path string, mapping interface{}, logCh chan string) erro
 
 // WriteEncryptedFile encrypts and writes a data object called mapping to a file
 func WriteEncryptedFile(path string, mapping interface{}, logCh chan string) error {
-	err := generateKey()
-	if err != nil {
-		return err
-	}
-
 	jsonString, err := json.Marshal(mapping)
 	if err != nil {
 		return err

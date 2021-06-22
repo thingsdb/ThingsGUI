@@ -15,18 +15,19 @@ import (
 
 // Client type
 type Client struct {
-	Connection *things.Conn
-	Closed     chan bool
-	LogCh      chan string
-	EventCh    chan *things.Event
-	TmpFiles   *TmpFiles
-	Ssl        *tls.Config
-	HomePath   string
-	User       string
-	Pass       string
-	Token      string
-	Host       string
-	Port       uint16
+	Closed          chan bool
+	Connection      *things.Conn
+	ConnectionsPath string
+	EventCh         chan *things.Event
+	Host            string
+	LogCh           chan string
+	Pass            string
+	Port            uint16
+	SessionPath     string
+	Ssl             *tls.Config
+	TmpFiles        *TmpFiles
+	Token           string
+	User            string
 }
 
 // AuthResp type
@@ -147,13 +148,13 @@ func ConnectToNew(client *Client, data LoginData) (int, LoginResp, Message) {
 func ConnectViaCache(client *Client, data LoginData) (int, interface{}, Message) {
 	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 
-	fileNotExist := FileNotExist(client.HomePath)
+	fileNotExist := FileNotExist(client.ConnectionsPath)
 	if fileNotExist {
 		return internalError(fmt.Errorf("File does not exist"))
 	}
 
 	var mapping = make(map[string]LoginData)
-	err := ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
+	err := ReadEncryptedFile(client.ConnectionsPath, &mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
@@ -334,10 +335,39 @@ func GetCachedConnection(client *Client) (int, interface{}, Message) {
 	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 
 	var mapping = make(map[string]LoginData)
-	err := ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
+	err := ReadEncryptedFile(client.ConnectionsPath, &mapping, client.LogCh)
 	if err != nil {
 		client.LogCh <- err.Error()
-		return message.Status, nil, message
+
+		// For backwards compatability
+		oldPath := GetHomePath(oldConnFile)
+		if notExist := FileNotExist(oldPath); !notExist {
+			err = ReadEncryptedFile(oldPath, &mapping, client.LogCh)
+			if err != nil {
+				client.LogCh <- err.Error()
+				return message.Status, nil, message
+			}
+
+			_, err := CreateFile(client.ConnectionsPath, client.LogCh)
+			if err != nil {
+				client.LogCh <- err.Error()
+				return message.Status, nil, message
+			}
+
+			err = WriteEncryptedFile(client.ConnectionsPath, mapping, client.LogCh)
+			if err != nil {
+				client.LogCh <- err.Error()
+				return message.Status, nil, message
+			}
+
+			err = DeleteFile(GetHomePath(oldConnFile), client.LogCh)
+			if err != nil {
+				client.LogCh <- err.Error()
+				return message.Status, nil, message
+			}
+		} else {
+			return message.Status, nil, message
+		}
 	}
 
 	var resp = make(map[string]LoginData)
@@ -357,7 +387,7 @@ func NewCachedConnection(client *Client, data map[string]interface{}) (int, inte
 		name := data["name"].(string)
 		mapping[name] = data
 	}
-	return newEditConnection(client, data, fn)
+	return newEditConnection(client, fn)
 }
 
 // EditCachedConnection edits a connection locally
@@ -368,7 +398,7 @@ func EditCachedConnection(client *Client, data map[string]interface{}) (int, int
 			mapping[name][k] = v
 		}
 	}
-	return newEditConnection(client, data, fn)
+	return newEditConnection(client, fn)
 }
 
 // RenameCachedConnection renames a connection locally
@@ -380,26 +410,26 @@ func RenameCachedConnection(client *Client, data map[string]interface{}) (int, i
 		mapping[newName]["name"] = newName
 		delete(mapping, oldName)
 	}
-	return newEditConnection(client, data, fn)
+	return newEditConnection(client, fn)
 }
 
 // DelCachedConnection deletes a saved connection
 func DelCachedConnection(client *Client, data LoginData) (int, interface{}, Message) {
 	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 
-	fileNotExist := FileNotExist(client.HomePath)
+	fileNotExist := FileNotExist(client.ConnectionsPath)
 	if fileNotExist {
 		return internalError(fmt.Errorf("File does not exist"))
 	}
 
 	var mapping = make(map[string]LoginData)
-	err := ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
+	err := ReadEncryptedFile(client.ConnectionsPath, &mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
 
 	delete(mapping, data.Name)
-	err = WriteEncryptedFile(client.HomePath, mapping, client.LogCh)
+	err = WriteEncryptedFile(client.ConnectionsPath, mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
@@ -408,24 +438,24 @@ func DelCachedConnection(client *Client, data LoginData) (int, interface{}, Mess
 }
 
 // newEditConnection saves a new connection or edits locally
-func newEditConnection(client *Client, data map[string]interface{}, fn func(map[string]map[string]interface{})) (int, interface{}, Message) {
+func newEditConnection(client *Client, fn func(map[string]map[string]interface{})) (int, interface{}, Message) {
 	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 	var mapping = make(map[string]map[string]interface{})
 
-	newFile, err := CreateFile(client.HomePath, client.LogCh)
+	newFile, err := CreateFile(client.ConnectionsPath, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}
 
 	if !newFile {
-		err = ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
+		err = ReadEncryptedFile(client.ConnectionsPath, &mapping, client.LogCh)
 		if err != nil {
-			err = DeleteFile(client.HomePath, client.LogCh)
+			err = DeleteFile(client.ConnectionsPath, client.LogCh)
 			if err != nil {
 				return internalError(err)
 			}
 
-			_, err := CreateFile(client.HomePath, client.LogCh)
+			_, err := CreateFile(client.ConnectionsPath, client.LogCh)
 			if err != nil {
 				return internalError(err)
 			}
@@ -434,7 +464,7 @@ func newEditConnection(client *Client, data map[string]interface{}, fn func(map[
 
 	fn(mapping)
 
-	err = WriteEncryptedFile(client.HomePath, mapping, client.LogCh)
+	err = WriteEncryptedFile(client.ConnectionsPath, mapping, client.LogCh)
 	if err != nil {
 		return internalError(err)
 	}

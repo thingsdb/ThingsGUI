@@ -20,7 +20,11 @@ import (
 // AppVersion exposes version information
 const AppVersion = "0.4.3"
 
-var connFile = ".things-gui_config"
+// For backwards compatability
+var oldConnFile = ".things-gui_config"
+
+var connFile = ".config/ThingsGUI/thingsgui.connections"
+var sessionFile = ".config/ThingsGUI/thingsgui.session"
 
 var (
 	// env variables
@@ -64,11 +68,12 @@ func (app *App) SocketRouter() {
 		s.SetContext("")
 
 		app.client[s.ID()] = &Client{
-			Closed:   make(chan bool),
-			LogCh:    make(chan string, 1),
-			EventCh:  make(chan *things.Event),
-			TmpFiles: NewTmpFiles(),
-			HomePath: GetHomePath(connFile),
+			Closed:          make(chan bool),
+			LogCh:           make(chan string, 1),
+			EventCh:         make(chan *things.Event),
+			TmpFiles:        NewTmpFiles(),
+			ConnectionsPath: GetHomePath(connFile),
+			SessionPath:     GetHomePath(sessionFile),
 		}
 		app.client[s.ID()].LogCh <- fmt.Sprintf("connected: %s", s.ID())
 		return nil
