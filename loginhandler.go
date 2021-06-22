@@ -420,7 +420,15 @@ func newEditConnection(client *Client, data map[string]interface{}, fn func(map[
 	if !newFile {
 		err = ReadEncryptedFile(client.HomePath, &mapping, client.LogCh)
 		if err != nil {
-			return internalError(err)
+			err = DeleteFile(client.HomePath, client.LogCh)
+			if err != nil {
+				return internalError(err)
+			}
+
+			_, err := CreateFile(client.HomePath, client.LogCh)
+			if err != nil {
+				return internalError(err)
+			}
 		}
 	}
 
