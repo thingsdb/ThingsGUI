@@ -123,7 +123,7 @@ func ReadFile(path string, logCh chan string) ([]byte, error) {
 		}
 	}
 
-	logCh <- fmt.Sprintln("Reading from file.")
+	logCh <- fmt.Sprintf("Reading from file: %s.", path)
 	return b.data, nil
 }
 

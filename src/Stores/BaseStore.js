@@ -125,23 +125,6 @@ class _BlobRequest {
     }
 }
 
-class _PushNotification {
-
-    constructor() {
-
-        socket.emit('log');
-        socket.on('logging', (msg) => {
-            window.console.log(msg);
-            if (msg.includes('connection lost')) {
-                ErrorActions.setMsgError(LoginTAG, msg);
-            }
-        });
-        socket.on('disconnect', () => {
-            location.reload();
-        });
-    }
-}
-
 class BaseStore extends Vlow.Store {
 
     emit(name, data) {
@@ -151,10 +134,6 @@ class BaseStore extends Vlow.Store {
     post(url, data) {
         return new _BlobRequest('POST', url, data);
     }
-
-    push() {
-        return new _PushNotification();
-    }
 }
 
 const EventActions = Vlow.createActions([
@@ -162,7 +141,6 @@ const EventActions = Vlow.createActions([
     'unwatch',
     'reWatch',
     'resetWatch',
-    'openEvCh',
 ]);
 
 const ProtoMap = {
@@ -204,12 +182,18 @@ class EventStore extends BaseStore {
     constructor() {
         super(EventActions);
         this.state = EventStore.defaults;
-    }
 
-    // STOREACTIONS
+        socket.on('logging', (msg) => {
+            window.console.log(msg);
+            if (msg.includes('connection lost')) {
+                ErrorActions.setMsgError(LoginTAG, msg);
+            }
+        });
 
-    onOpenEvCh() {
-        socket.emit('getEvent');
+        socket.on('disconnect', () => {
+            location.reload();
+        });
+
         socket.on('event', (data) => {
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
@@ -235,6 +219,8 @@ class EventStore extends BaseStore {
             }
         });
     }
+
+    // STOREACTIONS
 
     onWatch(scope, id='', tag=null) {
         const idString = `${id}`;

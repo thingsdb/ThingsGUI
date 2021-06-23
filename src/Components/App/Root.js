@@ -75,16 +75,13 @@ const withStores = withVlow([{
 
 const Root = ({authOnly, loaded, connected, seekConnection}) => {
     React.useEffect(() => {
-        ApplicationActions.pushNotifications();
         const key = (new URL(window.location)).searchParams.get('key');
         ApplicationActions.isAuthOnly();
         ApplicationActions.getCachedConn(LoginTAG); // errmsg shown at Login dialog
         if(key){
             ApplicationActions.authKey(key, AuthTAG);
         }
-    },
-    [],
-    );
+    }, []);
 
     return(
         <MuiThemeProvider theme={theme}>

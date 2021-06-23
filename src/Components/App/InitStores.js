@@ -1,7 +1,6 @@
-import React from 'react';
 import {withVlow} from 'vlow';
 
-import {CollectionStore, EnumStore, ErrorStore, EventActions, EventStore, NodesStore, ThingsdbStore, TypeStore, ProcedureStore} from '../../Stores';
+import {CollectionStore, EnumStore, ErrorStore, EventStore, NodesStore, ThingsdbStore, TypeStore, ProcedureStore} from '../../Stores';
 
 // separate function to prevent unnecessary rendering of <Root /> and children.
 const withStores = withVlow([{
@@ -23,10 +22,6 @@ const withStores = withVlow([{
 }]);
 
 const InitStores = () => {
-    React.useEffect(() => {
-        EventActions.openEvCh();
-    },[]);
-
     return null;
 };
 

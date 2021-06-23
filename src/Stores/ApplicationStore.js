@@ -24,7 +24,6 @@ const ApplicationActions = Vlow.createActions([
     'navigate',
     'newCachedConn',
     'openEditor',
-    'pushNotifications',
     'reconnect',
     'renameCachedConn',
 ]);
@@ -89,10 +88,6 @@ class ApplicationStore extends BaseStore {
             this.setState({loaded: true, seekConnection: true});
         });
 
-    }
-
-    onPushNotifications() {
-        this.push();
     }
 
     onConnected() {
