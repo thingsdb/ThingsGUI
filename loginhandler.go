@@ -56,6 +56,9 @@ type LoginData struct {
 	IsToken            bool   `json:"isToken"`
 }
 
+type LMapping map[string]map[string]interface{}
+type LData map[string]interface{}
+
 func connect(client *Client, data LoginData) LoginResp {
 	hp := strings.Split(data.Address, ":")
 	if len(hp) != 2 {
@@ -107,6 +110,13 @@ func connect(client *Client, data LoginData) LoginResp {
 		client.User = data.User
 		client.Pass = data.Password
 	}
+
+	// If connection successfull, save this in the session file.
+	err = saveLastUsedConnection(client, data)
+	if err != nil {
+		client.LogCh <- fmt.Sprintf("Last used connection could not be saved: %s.", err)
+	}
+
 	return LoginResp{Connected: true}
 }
 
@@ -330,8 +340,8 @@ func CloseSingleConn(client *Client) {
 	}
 }
 
-// GetCachedConnection gets all the cached connections
-func GetCachedConnection(client *Client) (int, interface{}, Message) {
+// GetCachedConnections gets all the cached connections
+func GetCachedConnections(client *Client) (int, interface{}, Message) {
 	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 
 	var mapping = make(map[string]LoginData)
@@ -382,35 +392,73 @@ func GetCachedConnection(client *Client) (int, interface{}, Message) {
 }
 
 // NewCachedConnection saves a new connection locally
-func NewCachedConnection(client *Client, data map[string]interface{}) (int, interface{}, Message) {
-	fn := func(mapping map[string]map[string]interface{}) {
+func NewCachedConnection(client *Client, data LData) (int, interface{}, Message) {
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	fn := func(mapping LMapping) error {
 		name := data["name"].(string)
+		if _, ok := mapping[name]; ok {
+			return fmt.Errorf("\"%s\" does already exist.", name)
+		}
+
 		mapping[name] = data
+		return nil
 	}
-	return newEditConnection(client, fn)
+
+	var mapping = make(LMapping)
+	err := changeFile(client.ConnectionsPath, client.LogCh, mapping, fn)
+	if err != nil {
+		return internalError(err)
+	}
+
+	return message.Status, nil, message
 }
 
 // EditCachedConnection edits a connection locally
-func EditCachedConnection(client *Client, data map[string]interface{}) (int, interface{}, Message) {
-	fn := func(mapping map[string]map[string]interface{}) {
+func EditCachedConnection(client *Client, data LData) (int, interface{}, Message) {
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	fn := func(mapping LMapping) error {
 		name := data["name"].(string)
 		for k, v := range data {
 			mapping[name][k] = v
 		}
+
+		return nil
 	}
-	return newEditConnection(client, fn)
+
+	var mapping = make(LMapping)
+	err := changeFile(client.ConnectionsPath, client.LogCh, mapping, fn)
+	if err != nil {
+		return internalError(err)
+	}
+
+	return message.Status, nil, message
 }
 
 // RenameCachedConnection renames a connection locally
-func RenameCachedConnection(client *Client, data map[string]interface{}) (int, interface{}, Message) {
-	fn := func(mapping map[string]map[string]interface{}) {
+func RenameCachedConnection(client *Client, data LData) (int, interface{}, Message) {
+	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	fn := func(mapping LMapping) error {
 		newName := data["newName"].(string)
 		oldName := data["oldName"].(string)
+
+		if _, ok := mapping[newName]; ok {
+			return fmt.Errorf("\"%s\" does already exist.", newName)
+		}
+
 		mapping[newName] = mapping[oldName]
 		mapping[newName]["name"] = newName
 		delete(mapping, oldName)
+
+		return nil
 	}
-	return newEditConnection(client, fn)
+
+	var mapping = make(LMapping)
+	err := changeFile(client.ConnectionsPath, client.LogCh, mapping, fn)
+	if err != nil {
+		return internalError(err)
+	}
+
+	return message.Status, nil, message
 }
 
 // DelCachedConnection deletes a saved connection
@@ -437,39 +485,56 @@ func DelCachedConnection(client *Client, data LoginData) (int, interface{}, Mess
 	return message.Status, nil, message
 }
 
-// newEditConnection saves a new connection or edits locally
-func newEditConnection(client *Client, fn func(map[string]map[string]interface{})) (int, interface{}, Message) {
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
-	var mapping = make(map[string]map[string]interface{})
+// saveLastUsedConnection saved the last used successfull connection.
+func saveLastUsedConnection(client *Client, data LoginData) error {
+	// Convert LoginData to LData
+	ldata := make(LData)
+	lbytes, _ := json.Marshal(data)
+	json.Unmarshal(lbytes, &ldata)
 
-	newFile, err := CreateFile(client.ConnectionsPath, client.LogCh)
+	fn := func(mapping LMapping) error {
+		fmt.Println(mapping)
+		mapping["lastUsed"] = ldata
+		fmt.Println(mapping)
+		return nil
+	}
+	var mapping = make(LMapping)
+	return changeFile(client.SessionPath, client.LogCh, mapping, fn)
+}
+
+// changeFile creates or makes change to an existing file.
+func changeFile(path string, logCh chan string, mapping LMapping, fn func(LMapping) error) error {
+	newFile, err := CreateFile(path, logCh)
 	if err != nil {
-		return internalError(err)
+		return err
 	}
 
 	if !newFile {
-		err = ReadEncryptedFile(client.ConnectionsPath, &mapping, client.LogCh)
+		err = ReadEncryptedFile(path, &mapping, logCh)
 		if err != nil {
-			err = DeleteFile(client.ConnectionsPath, client.LogCh)
+			err = DeleteFile(path, logCh)
 			if err != nil {
-				return internalError(err)
+				return err
 			}
 
-			_, err := CreateFile(client.ConnectionsPath, client.LogCh)
+			_, err := CreateFile(path, logCh)
 			if err != nil {
-				return internalError(err)
+				return err
 			}
 		}
 	}
 
-	fn(mapping)
-
-	err = WriteEncryptedFile(client.ConnectionsPath, mapping, client.LogCh)
+	err = fn(mapping)
 	if err != nil {
-		return internalError(err)
+		return err
 	}
 
-	return message.Status, nil, message
+	err = WriteEncryptedFile(path, mapping, logCh)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func internalError(err error) (int, interface{}, Message) {

@@ -116,18 +116,18 @@ func (app *App) SocketRouter() {
 	})
 
 	app.server.OnEvent("/", "getCachedConn", func(s socketio.Conn) (int, interface{}, Message) {
-		return GetCachedConnection(app.client[s.ID()])
+		return GetCachedConnections(app.client[s.ID()])
 	})
 
-	app.server.OnEvent("/", "newCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, Message) {
+	app.server.OnEvent("/", "newCachedConn", func(s socketio.Conn, data LData) (int, interface{}, Message) {
 		return NewCachedConnection(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "editCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, Message) {
+	app.server.OnEvent("/", "editCachedConn", func(s socketio.Conn, data LData) (int, interface{}, Message) {
 		return EditCachedConnection(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "renameCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, Message) {
+	app.server.OnEvent("/", "renameCachedConn", func(s socketio.Conn, data LData) (int, interface{}, Message) {
 		return RenameCachedConnection(app.client[s.ID()], data)
 	})
 
@@ -208,7 +208,6 @@ func open(url string) error { //https://stackoverflow.com/questions/39320371/how
 	return exec.Command(cmd, args...).Run()
 }
 
-// newEditConnection saves a new connection or edits locally
 func (app *App) getEnvVariables() error {
 	godotenv.Load(app.envPath)
 	thingsguiAddress = os.Getenv("THINGSGUI_ADDRESS")
