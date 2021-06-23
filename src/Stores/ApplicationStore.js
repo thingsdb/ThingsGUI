@@ -78,9 +78,7 @@ class ApplicationStore extends BaseStore {
                         loaded: true,
                         seekConnection:true,
                     });
-                    EventActions.watch(
-                        '@n',
-                    );
+                    EventActions.watch('@n');
                 },
                 ()=>this.setState({loaded: true, seekConnection: false}));
         }).fail((event, status, message) => {
@@ -92,14 +90,24 @@ class ApplicationStore extends BaseStore {
 
     onConnected() {
         this.emit('connected').done((data) => {
-            this.setState({
-                connected: data.Connected,
-            });
-            setTimeout(() => {
-                this.setState({
-                    loaded: data.Loaded,
-                });
-            }, 2000);
+            // this.setState({
+            //     connected: data.Connected,
+            // });
+            // setTimeout(() => {
+            //     this.setState({
+            //         loaded: data.Loaded,
+            //     });
+            // }, 2000);
+            ThingsdbActions.getUser(
+                ()=>{
+                    this.setState({
+                        connected: data.Connected,
+                        loaded: true,
+                        seekConnection:true,
+                    });
+                    EventActions.watch('@n');
+                },
+                ()=>this.setState({loaded: true, seekConnection: false}));
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
