@@ -143,10 +143,6 @@ func (app *App) SocketRouter() {
 		return Query(app.client[s.ID()], data, app.timeout)
 	})
 
-	app.server.OnEvent("/", "queryBlob", func(s socketio.Conn, data Data) (int, interface{}, Message) {
-		return QueryBlob(app.client[s.ID()], data, app.timeout)
-	})
-
 	app.server.OnEvent("/", "cleanupTmp", func(s socketio.Conn) (int, bool, Message) {
 		return CleanupTmp(app.client[s.ID()].TmpFiles)
 	})

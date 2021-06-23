@@ -8,6 +8,7 @@ import React from 'react';
 import {AddTimerDialog} from '../ProceduresAndTimers';
 import {Menu, orderByName} from '../Util';
 import {ApplicationActions, TimerActions, TimerStore} from '../../Stores';
+import {THINGSDB_SCOPE} from '../../Constants/Scopes';
 
 const withStores = withVlow([{
     store: TimerStore,
@@ -36,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const scope = '@thingsdb';
+const scope = THINGSDB_SCOPE;
 const TimersMenu = ({timers}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);

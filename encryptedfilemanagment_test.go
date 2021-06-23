@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-type LoginData struct {
+type loginData struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
 }
@@ -20,13 +20,13 @@ func TestEncryptedfilemanagment(t *testing.T) {
 		}
 	}()
 
-	mapping_in := map[string]LoginData{
-		"John": LoginData{User: "John", Password: "pass1"},
-		"Jane": LoginData{User: "Jane", Password: "pass2"},
-		"Mary": LoginData{User: "Mary", Password: "pass3"},
+	mapping_in := map[string]loginData{
+		"John": loginData{User: "John", Password: "pass1"},
+		"Jane": loginData{User: "Jane", Password: "pass2"},
+		"Mary": loginData{User: "Mary", Password: "pass3"},
 	}
 
-	mapping_out := make(map[string]LoginData)
+	mapping_out := make(map[string]loginData)
 
 	_, err := CreateFile(path, logCh)
 	if err != nil {

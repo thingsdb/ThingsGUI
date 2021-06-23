@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import InputField from '../InputField';
 import {ListHeader} from '../../../Util';
 import {EditActions, useEdit} from '../Context';
+import {ANY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NINT, NUMBER, PINT, RAW,
+    REGEX, SET, STR, THING, TIMEVAL, UINT, UTF8} from '../../../../Constants/ThingTypes';
 
 const useStyles = makeStyles(theme => ({
     nested: {
@@ -18,34 +20,34 @@ const useStyles = makeStyles(theme => ({
 
 
 const typeConv = {
-    'bool': ['bool', 'code', 'code'],
-    'bytes': ['bytes', 'code'],
-    'code': ['code'],
-    'closure': ['closure', 'code'],
-    'datetime': ['datetime'],
-    'error': ['error', 'code'],
-    'float': ['float', 'code'],
-    'int': ['int', 'code'],
-    'list': ['list', 'code'],
-    'nil': ['nil', 'code'],
-    'regex': ['regex', 'code'],
-    'set': ['set', 'code'],
-    'str': ['str', 'code'],
-    'thing': ['thing', 'code'],
-    'timeval': ['timeval'],
-    'utf8': ['str', 'code'],
-    'raw': ['str', 'bytes', 'code'],
-    'uint': ['int', 'code'],
-    'pint': ['int', 'code'],
-    'nint': ['int', 'code'],
-    'number': ['int', 'float', 'code'],
+    [BOOL]: [BOOL, CODE, CODE],
+    [BYTES]: [BYTES, CODE],
+    [CODE]: [CODE],
+    [CLOSURE]: [CLOSURE, CODE],
+    [DATETIME]: [DATETIME],
+    [ERROR]: [ERROR, CODE],
+    [FLOAT]: [FLOAT, CODE],
+    [INT]: [INT, CODE],
+    [LIST]: [LIST, CODE],
+    [NIL]: [NIL, CODE],
+    [REGEX]: [REGEX, CODE],
+    [SET]: [SET, CODE],
+    [STR]: [STR, CODE],
+    [THING]: [THING, CODE],
+    [TIMEVAL]: [TIMEVAL],
+    [UTF8]: [STR, CODE],
+    [RAW]: [STR, BYTES, CODE],
+    [UINT]: [INT, CODE],
+    [PINT]: [INT, CODE],
+    [NINT]: [INT, CODE],
+    [NUMBER]: [INT, FLOAT, CODE],
 };
 
 const optional = (t) => {
     let ftype = [];
     if (t.slice(-1)=='?') {
         t = t.slice(0, -1);
-        ftype = ['nil'];
+        ftype = [NIL];
     }
     return([t, ftype]);
 };
@@ -54,7 +56,7 @@ const fntype = (t, ftype, dataTypes) => {
     if(t.slice(-1) == '>'){
         t = t.split('<')[0];
     }
-    return(t == 'any' ? dataTypes
+    return(t == ANY ? dataTypes
         : typeConv[t] ? [...ftype, ...typeConv[t]]
             : [...ftype, t]);
 };
@@ -78,9 +80,9 @@ const typing = ([fprop, type], dataTypes) =>  {
     [t, ftype] = optional(t);
 
     if (t[0]=='[') {
-        [ftype, fchldtype] = array(t, ftype, 'list', 'any', dataTypes);
+        [ftype, fchldtype] = array(t, ftype, LIST, ANY, dataTypes);
     } else if (t[0]=='{') {
-        [ftype, fchldtype] = array(t, ftype, 'set', 'thing', dataTypes);
+        [ftype, fchldtype] = array(t, ftype, SET, THING, dataTypes);
     } else {
         ftype = fntype(t, ftype, dataTypes);
     }

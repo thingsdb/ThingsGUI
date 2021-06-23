@@ -2,12 +2,15 @@
 import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
+
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
 import {ApplicationActions} from './ApplicationStore';
 import {LoginTAG} from '../Constants/Tags';
+import {THINGSDB_SCOPE} from '../Constants/Scopes';
+import {NIL} from '../Constants/ThingTypes';
 
-const scope='@thingsdb';
+const scope = THINGSDB_SCOPE;
 
 const ThingsdbActions = Vlow.createActions([
     'resetThingsStore',
@@ -141,8 +144,8 @@ class ThingsdbStore extends BaseStore {
 
     checkBeforeCollectionUpdate(q, tag, cb=()=>null) {
         const {user} = this.state;
-        if (user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
-        user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT') ) {
+        if (user.access.find(a => a.scope===scope).privileges.includes('FULL') ||
+        user.access.find(a => a.scope===scope).privileges.includes('GRANT') ) {
             const query=`${q}; {collections: collections_info(), users: users_info()};`;
             this.returnCollectionsUsers(scope, query, tag, cb);
         } else {
@@ -190,8 +193,8 @@ class ThingsdbStore extends BaseStore {
 
     onGetUsers(){
         const {user, users} = this.state;
-        if (user.access&&(user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
-        user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT')) ) {
+        if (user.access&&(user.access.find(a => a.scope===scope).privileges.includes('FULL') ||
+        user.access.find(a => a.scope===scope).privileges.includes('GRANT')) ) {
             const query = 'users_info();';
             this.emit('query', {
                 scope,
@@ -280,8 +283,8 @@ class ThingsdbStore extends BaseStore {
     // No need for GRANT rights hereafter.
     checkBeforeUserUpdate(q, tag, cb=()=>null) {
         const {user} = this.state;
-        const ky = user.access.find(a => a.scope==='@thingsdb').privileges.includes('FULL') ||
-                        user.access.find(a => a.scope==='@thingsdb').privileges.includes('GRANT') ? 'users' : 'user';
+        const ky = user.access.find(a => a.scope===scope).privileges.includes('FULL') ||
+                        user.access.find(a => a.scope===scope).privileges.includes('GRANT') ? 'users' : 'user';
 
         const query=`${q}; ${ky}_info();`;
         this.emit('query', {
@@ -313,12 +316,12 @@ class ThingsdbStore extends BaseStore {
     }
 
     onResetPassword(name, tag, cb) {
-        this.checkBeforeUserUpdate(`set_password('${name}', nil)`, tag, cb);
+        this.checkBeforeUserUpdate(`set_password('${name}', ${NIL})`, tag, cb);
     }
 
 
     onNewToken(config, tag, cb){ // name [, expirationTime] [, description]
-        this.checkBeforeUserUpdate(`new_token('${config.name}', expiration_time=${config.expirationTime||'nil'}, description='${config.description||''}')`, tag, cb);
+        this.checkBeforeUserUpdate(`new_token('${config.name}', expiration_time=${config.expirationTime||NIL}, description='${config.description||''}')`, tag, cb);
 
     }
 

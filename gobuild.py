@@ -15,7 +15,7 @@ var {variable}, _ = base64.StdEncoding.DecodeString("{base64str}")
 
 
 goosarchs = [
-    ('darwin', '386'),
+    # ('darwin', '386'),  // not supported
     ('darwin', 'amd64'),
     # # ('darwin', 'arm'),  // not compiling
     # # ('darwin', 'arm64'),  // not compiling

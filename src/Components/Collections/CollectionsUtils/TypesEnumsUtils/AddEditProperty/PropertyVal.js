@@ -9,6 +9,7 @@ import {useEdit} from '../../Context';
 import {EnumStore, TypeStore} from '../../../../../Stores';
 import InputField from '../../InputField';
 import TypeInit from '../../../Tree/TreeActions/TypeInit';
+import {STR, INT, FLOAT, THING, BYTES, CODE} from '../../../../../Constants/ThingTypes';
 
 const withStores = withVlow([{
     store: EnumStore,
@@ -22,10 +23,10 @@ const withStores = withVlow([{
 const PropertyVal = ({category, onChange, customTypes, enums, onBlob, scope}) => {
     const editState = useEdit()[0];
     const {val, blob} = editState;
-    const [dataType, setDataType] = React.useState('str');
+    const [dataType, setDataType] = React.useState(STR);
 
     const allTypes = allDataTypes([...customTypes[scope]||[], ...enums[scope]||[]]);
-    const dataTypes = category=='type'?allTypes: ['str', 'int', 'float', 'thing', 'bytes', 'code'];
+    const dataTypes = category=='type'?allTypes: [STR, INT, FLOAT, THING, BYTES, CODE];
 
     React.useEffect(()=>{
         onChange({propertyVal:val});

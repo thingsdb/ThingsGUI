@@ -3,29 +3,45 @@ package main
 import (
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
 )
 
-// Data struct that received
-type Data struct {
-	Query       string            `json:"query"`
-	Scope       string            `json:"scope"`
-	Blob        map[string]string `json:"blob"`
-	Ids         []string          `json:"ids"`
-	Args        string            `json:"args"`
-	Procedure   string            `json:"procedure"`
-	ConvertArgs bool              `json:"convertArgs"`
-	EnableInts  bool              `json:"enableInts"`
+type Procedure struct {
+	Name      string `json:"name"`
+	Arguments string `json:"arguments"`
 }
 
-func query(client *Client, data Data, blob map[string]interface{}, timeout uint16) (int, interface{}, Message) {
+// Data struct that received
+type Data struct {
+	Query     string                 `json:"query"`
+	Scope     string                 `json:"scope"`
+	Blob      map[string]string      `json:"blob"`
+	Ids       []string               `json:"ids"`
+	Arguments map[string]interface{} `json:"arguments"`
+	Procedure Procedure              `json:"procedure"`
+}
+
+// Query sends a query to ThingsDB and receives a result
+func Query(client *Client, data Data, timeout uint16) (int, interface{}, Message) {
+	for k, v := range data.Blob {
+		decodedBlob, err := base64.StdEncoding.DecodeString(v)
+		if err != nil {
+			message := Message{Text: "Query error", Status: http.StatusInternalServerError, Log: err.Error()}
+			return message.Status, "", message
+		}
+
+		if data.Arguments == nil {
+			data.Arguments = make(map[string]interface{})
+		}
+		data.Arguments[k] = decodedBlob
+	}
+
 	resp, err := client.Connection.Query(
-		fmt.Sprintf("%s", data.Scope),
-		fmt.Sprintf("%s", data.Query),
-		blob,
+		data.Scope,
+		data.Query,
+		data.Arguments,
 		timeout)
 
 	if err != nil {
@@ -40,25 +56,6 @@ func query(client *Client, data Data, blob map[string]interface{}, timeout uint1
 		resp = r
 	}
 	return message.Status, resp, message
-}
-
-// Query sends a query to ThingsDB and receives a result
-func Query(client *Client, data Data, timeout uint16) (int, interface{}, Message) {
-	return query(client, data, nil, timeout)
-}
-
-// QueryBlob sends a query with binary data
-func QueryBlob(client *Client, data Data, timeout uint16) (int, interface{}, Message) {
-	blob := make(map[string]interface{})
-	for k, v := range data.Blob {
-		decodedBlob, err := base64.StdEncoding.DecodeString(v)
-		if err != nil {
-			message := Message{Text: "Query error", Status: http.StatusInternalServerError, Log: err.Error()}
-			return message.Status, "", message
-		}
-		blob[k] = decodedBlob
-	}
-	return query(client, data, blob, timeout)
 }
 
 // CleanupTmp removes downloaded blob objects from the local tmp folder
@@ -112,8 +109,8 @@ func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, Messa
 func Run(client *Client, data Data, timeout uint16) (int, interface{}, Message) {
 	var args interface{}
 	message := Message{Text: "", Status: http.StatusOK, Log: ""}
-	if data.Args != "" {
-		decoder := json.NewDecoder(strings.NewReader(data.Args))
+	if data.Procedure.Name != "" {
+		decoder := json.NewDecoder(strings.NewReader(data.Procedure.Arguments))
 		if err := decoder.Decode(&args); err != nil {
 			message = Msg(err, http.StatusInternalServerError)
 			return message.Status, "", message
@@ -121,7 +118,7 @@ func Run(client *Client, data Data, timeout uint16) (int, interface{}, Message) 
 		args = Convert(args)
 	}
 
-	resp, err := client.Connection.Run(data.Procedure, args, data.Scope, timeout)
+	resp, err := client.Connection.Run(data.Procedure.Name, args, data.Scope, timeout)
 	if err != nil {
 		message = CreateThingsDBError(err)
 	}

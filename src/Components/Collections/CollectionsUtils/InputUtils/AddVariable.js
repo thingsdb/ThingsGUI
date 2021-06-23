@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import InputField from '../InputField';
 import {ListHeader} from '../../../Util';
 import {EditActions, useEdit} from '../Context';
+import {NIL, STR} from '../../../../Constants/ThingTypes';
 
 const useStyles = makeStyles(theme => ({
     nested: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, parentDispatch}) => {
     const classes = useStyles();
-    const [dataType, setDataType] = React.useState('str');
+    const [dataType, setDataType] = React.useState(STR);
 
     const [editState, dispatch] = useEdit();
     const {array, val, blob} = editState;
@@ -26,8 +27,8 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
     const handleChangeType = (v) => ({target}) => {
         const {value} = target;
         setDataType({...dataType, [v]: value});
-        if (value == 'nil') {
-            EditActions.updateVal(dispatch, 'nil', v);
+        if (value == NIL) {
+            EditActions.updateVal(dispatch, NIL, v);
         }
     };
 

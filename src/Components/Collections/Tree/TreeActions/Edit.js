@@ -8,6 +8,8 @@ import {InputField} from '../../CollectionsUtils';
 import BuildQueryString from './BuildQueryString';
 import PropInit from './PropInit';
 import TypeInit from './TypeInit';
+import {CLOSURE, DATETIME,ERROR, LIST, NIL, REGEX, SET, THING, TIMEVAL} from '../../../../Constants/ThingTypes';
+import {CLOSURE_KEY, REGEX_KEY} from '../../../../Constants/CharacterKeys';
 
 const useStyles = makeStyles(theme => ({
     listItem: {
@@ -26,7 +28,7 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
     const classes = useStyles();
 
     const [newProperty, setNewProperty] = React.useState('');
-    const [dataType, setDataType] = React.useState(child.type=='list'||child.type=='thing' ? dataTypes[0]: child.type=='set' ? 'thing' : child.type);
+    const [dataType, setDataType] = React.useState(child.type==LIST||child.type==THING ? dataTypes[0]: child.type==SET ? THING : child.type);
 
     const handleOnChangeName = (p) => {
         setNewProperty(p);
@@ -36,15 +38,15 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
         setDataType(t);
     };
 
-    const addNewProperty = child.type == 'thing';//Boolean(child.id) && !(child.type.trim()[0] == '<')
-    const canChangeType = child.type == 'thing' || child.type == 'list' || child.type == 'set' || child.type == 'nil';
+    const addNewProperty = child.type == THING;//Boolean(child.id) && !(child.type.trim()[0] == '<')
+    const canChangeType = child.type == THING || child.type == LIST || child.type == SET || child.type == NIL;
 
-    const t = (child.type == 'thing' || child.type == 'list' || child.type == 'set') ? ''
-        : child.type == 'closure' ? thing['/']
-            : child.type == 'regex' ? thing['*']
-                : child.type == 'error' ? `err(${thing.error_code}, '${thing.error_msg}')`
-                    : child.type == 'datetime' ? `datetime("${thing}")`
-                        :child.type == 'timeval' ? `timeval(${thing})`
+    const t = (child.type == THING || child.type == LIST || child.type == SET) ? ''
+        : child.type == CLOSURE ? thing[CLOSURE_KEY]
+            : child.type == REGEX ? thing[REGEX_KEY]
+                : child.type == ERROR ? `err(${thing.error_code}, '${thing.error_msg}')`
+                    : child.type == DATETIME ? `datetime("${thing}")`
+                        :child.type == TIMEVAL ? `timeval(${thing})`
                             : thing;
 
     return(
@@ -54,15 +56,15 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
                     child={{
                         id: null,
                         index: child.index,
-                        name: child.type == 'thing'?newProperty:child.name,
+                        name: child.type == THING?newProperty:child.name,
                         type: dataType,
                     }}
                     customTypes={customTypes}
                     enums={enums}
                     parent={{
-                        id: child.type == 'thing'? child.id:parent.id,
-                        name: child.type == 'thing'|| child.type == 'list' || child.type == 'set' ?child.name:parent.name,
-                        type: child.type == 'thing'|| child.type == 'list'|| child.type == 'set'?child.type:parent.type,
+                        id: child.type == THING? child.id:parent.id,
+                        name: child.type == THING|| child.type == LIST || child.type == SET ?child.name:parent.name,
+                        type: child.type == THING|| child.type == LIST|| child.type == SET?child.type:parent.type,
                     }}
                 />
             </ListItem>

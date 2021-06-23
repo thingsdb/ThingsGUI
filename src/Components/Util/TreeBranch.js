@@ -13,6 +13,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import {DownloadBlob, StringDialog, TreeIcon} from '../Util';
+import {BYTES, STR} from '../../Constants/ThingTypes';
 
 
 const useStyles = makeStyles(() => ({
@@ -58,7 +59,7 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                                     {`${name}   `}
                                 </Typography>
                             ) : null}
-                            {type === 'bytes' ?  '   :   Blob' : `   :  ${val}`}
+                            {type === BYTES ?  '   :   Blob' : `   :  ${val}`}
                         </React.Fragment>
                     }
                     primaryTypographyProps={{
@@ -75,9 +76,9 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                         </Button>
                     )}
                     {!button ? (
-                        type === 'bytes' ? (
+                        type === BYTES ? (
                             <DownloadBlob val={val} />
-                        ) : type === 'str' ? (
+                        ) : type === STR ? (
                             <StringDialog name={name} text={val} />
                         ) : null
                     ):null}

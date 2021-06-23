@@ -42,7 +42,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     };
 
     const handleClickOk = () => {
-        CollectionActions.rawQuery(
+        CollectionActions.query(
             scope,
             closure,
             tag,
@@ -54,7 +54,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
 
 
     const handleSubmit = () => {
-        CollectionActions.rawQuery(
+        CollectionActions.query(
             scope,
             queryString,
             tag,

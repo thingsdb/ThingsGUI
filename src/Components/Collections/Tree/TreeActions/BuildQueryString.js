@@ -3,6 +3,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
 import {EditActions, useEdit} from '../../CollectionsUtils/Context';
+import {LIST, NIL, SET, STR, THING} from '../../../../Constants/ThingTypes';
 
 const BuildQueryString = ({child, customTypes, enums, parent}) => {
     const [editState, dispatch] = useEdit();
@@ -16,9 +17,9 @@ const BuildQueryString = ({child, customTypes, enums, parent}) => {
         let v;
         let q = '';
         v = input(val, childType);
-        q = parentType==='list' ? (childIndex===null ? `#${parentId}.${parentName}.push(${v});` : `#${parentId}.${parentName}[${childIndex}] = ${v};`)
-            : parentType==='thing' ? `#${parentId}.${childName} = ${v};`
-                : parentType==='set' ? `#${parentId}.${parentName}.add(${v});`
+        q = parentType===LIST ? (childIndex===null ? `#${parentId}.${parentName}.push(${v});` : `#${parentId}.${parentName}[${childIndex}] = ${v};`)
+            : parentType===THING ? `#${parentId}.${childName} = ${v};`
+                : parentType===SET ? `#${parentId}.${parentName}.add(${v});`
                     : [...customTypes.map(c=>c.name), ...enums.map(e=>e.name)].includes(parentType) ? `#${parentId}.${childName} = ${v};`
                         : '';
 
@@ -29,8 +30,8 @@ const BuildQueryString = ({child, customTypes, enums, parent}) => {
     }, [customTypes, enums, dispatch, val]);
 
     const input = (childVal, childType) => {
-        return childType == 'str' ? (childVal[0]=='\''? `${childVal}`:`'${childVal}'`)
-            : childType == 'nil' ? 'nil'
+        return childType == STR ? (childVal[0]=='\''? `${childVal}`:`'${childVal}'`)
+            : childType == NIL ? NIL
                 : `${childVal}`;
     };
 

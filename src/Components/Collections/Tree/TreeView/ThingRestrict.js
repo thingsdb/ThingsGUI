@@ -5,6 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import {THING_KEY} from '../../../../Constants/CharacterKeys';
 import ThingsBounds from './ThingsBounds';
 
 const useStyles = makeStyles(() => ({
@@ -51,7 +52,7 @@ const ThingRestrict = ({thing, onChildren}) => {
     const renderChildren = (start=0) => {
         let end = start+visibleNumber;
         return (
-            isArray ? thing.slice(from, till).slice(start, end).map((t, i) => renderThing([`${i}`, t, from+start+i], start+i)) : Object.keys(thing || {}).reduce((res, k) => {k!=='#'&&res.push([k, thing[k]]); return res;},[]).slice(from, till).slice(start, end).map(([k, v], i) => renderThing([k, v], start+i))
+            isArray ? thing.slice(from, till).slice(start, end).map((t, i) => renderThing([`${i}`, t, from+start+i], start+i)) : Object.keys(thing || {}).reduce((res, k) => {k !== THING_KEY && res.push([k, thing[k]]); return res;},[]).slice(from, till).slice(start, end).map(([k, v], i) => renderThing([k, v], start+i))
         );
     };
 

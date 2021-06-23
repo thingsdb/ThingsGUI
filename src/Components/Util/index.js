@@ -55,44 +55,50 @@ import useThingsError from './useThingsError';
 import VariablesArray from './VariablesArray';
 import WarnPopover from './WarnPopover';
 
+import {CLOSURE_KEY, ERROR_KEY, REGEX_KEY, SET_KEY, THING_KEY, WRAP_KEY} from '../../Constants/CharacterKeys';
+import {ARRAY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NUMBER, REGEX,
+    SET, STR, THING, TIMEVAL, WRAP} from '../../Constants/ThingTypes';
+import {THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE} from '../../Constants/Scopes';
+import {THINGDB_CACHE} from '../../Constants/Files';
+
 const checkType = (t) => {
     if (t === null) {
-        return('nil');
+        return(NIL);
     }
     let type = typeof(t);
     if (type === 'string') {
-        type = 'str';
+        type = STR;
     } else if (type === 'boolean') {
-        type = 'bool';
+        type = BOOL;
     } else if (type === 'object') {
-        type = Array.isArray(t) ? 'array' : 'object';
+        type = Array.isArray(t) ? ARRAY : 'object';
         if (type === 'object') {
             const kindOfObject = Object.keys(t)[0];
-            type = kindOfObject === '#' ? 'thing'
-                : kindOfObject === '/' ? 'closure'
-                    : kindOfObject === '*' ? 'regex'
-                        : kindOfObject === '!' ? 'error'
-                            : kindOfObject === '$' ? 'set'
-                                : kindOfObject === '&' ? 'wrap'
+            type = kindOfObject === THING_KEY ? THING
+                : kindOfObject === CLOSURE_KEY ? CLOSURE
+                    : kindOfObject === REGEX_KEY ? REGEX
+                        : kindOfObject === ERROR_KEY ? ERROR
+                            : kindOfObject === SET_KEY ? SET
+                                : kindOfObject === WRAP_KEY ? WRAP
                                     : 'object' ;
         }
     }
 
-    if (type == 'str' && t.includes('/download/tmp/thingsdb-cache')) {
-        type = 'bytes';
+    if (type == STR && t.includes(THINGDB_CACHE)) {
+        type = BYTES;
     }
     return(type);
 };
 
 const thingValue = (type, thing, customTypes=[]) => {
-    return type === 'array' ? `[${thing.length}]`
-        : type === 'thing' ? Object.keys(thing)[0] == '#' ? `{${Object.keys(thing)[0]}${thing['#']}}` : '{}'
+    return type === ARRAY ? `[${thing.length}]`
+        : type === THING ? Object.keys(thing)[0] == THING_KEY ? `{${Object.keys(thing)[0]}${thing[THING_KEY]}}` : '{}'
             : type === 'object' ? `[${Object.keys(thing).length}]`
-                : type === 'str' || type === 'number' || type === 'bool' || type === 'bytes' ? `${thing}`
-                    : type === 'closure' || type === 'regex' || type === 'error' ? `{${Object.keys(thing)[0]}}`
-                        : type === null || type === 'nil' ? 'nil'
-                            : type === 'wrap' ? `<${customTypes.length?customTypes.find(t=> t.type_id==thing['&'][0]).name:thing['&'][0]}, #${thing['&'][1]['#']}>`
-                                : type === 'set' ? `[${thing['$'].length}]`
+                : type === STR || type === NUMBER || type === BOOL || type === BYTES ? `${thing}`
+                    : type === CLOSURE || type === REGEX || type === ERROR ? `{${Object.keys(thing)[0]}}`
+                        : type === null || type === NIL ? NIL
+                            : type === WRAP ? `<${customTypes.length?customTypes.find(t=> t.type_id==thing[WRAP_KEY][0]).name:thing[WRAP_KEY][0]}, ${THING_KEY}${thing[WRAP_KEY][1][THING_KEY]}>`
+                                : type === SET ? `[${thing[SET_KEY].length}]`
                                     : '';
 };
 
@@ -122,38 +128,38 @@ const orderByName = (arr, key='name') => arr.sort((a, b) => {
 
 const getScopes = (collections) => [
     [
-        {name: 'ThingsDB', value: '@thingsdb', collectionId: null},
-        {name: 'Node', value: '@node', collectionId: null},
-        ...collections.map(c => ({name: c.name, value: `@collection:${c.name}`, collectionId: c.collection_id}))
+        {name: 'ThingsDB', value: THINGSDB_SCOPE, collectionId: null},
+        {name: 'Node', value: NODE_SCOPE, collectionId: null},
+        ...collections.map(c => ({name: c.name, value: `${COLLECTION_SCOPE}:${c.name}`, collectionId: c.collection_id}))
     ],
     [
-        '@thingsdb', '@node', ...collections.map(c => `@collection:${c.name}`)
+        THINGSDB_SCOPE, NODE_SCOPE, ...collections.map(c => `${COLLECTION_SCOPE}:${c.name}`)
     ]
 ];
 
 const getScopes2 = (collections, nodes) => [
-    '@thingsdb', ...nodes.map((n) => (`@node:${n.node_id}`)), ...collections.map(c => `@collection:${c.name}`)
+    THINGSDB_SCOPE, ...nodes.map((n) => (`${NODE_SCOPE}:${n.node_id}`)), ...collections.map(c => `${COLLECTION_SCOPE}:${c.name}`)
 ];
 
 const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
 
 const allDataTypes = (types) => {
     const dataTypes = [
-        'bool',
-        'bytes',
-        'closure',
-        'code',
-        'datetime',
-        'error',
-        'float',
-        'int',
-        'list',
-        'nil',
-        'regex',
-        'set',
-        'str',
-        'thing',
-        'timeval',
+        BOOL,
+        BYTES,
+        CLOSURE,
+        CODE,
+        DATETIME,
+        ERROR,
+        FLOAT,
+        INT,
+        LIST,
+        NIL,
+        REGEX,
+        SET,
+        STR,
+        THING,
+        TIMEVAL,
         ...types.map(c=>c.name)
     ].sort();
 

@@ -1,4 +1,5 @@
 import {makeStyles} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -6,7 +7,6 @@ import clsx from 'clsx';
 import Divider from '@material-ui/core/Divider';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
@@ -20,12 +20,11 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
     },
     body: {
+        flexGrow: 1,
         overflowY: 'auto',
         height: 'calc(100% - 121px)', // footerHeight (60) + footerMarginTop (5) + topBarHeight (48) + appBarMarginBottom (8) = 121
     },
     footer: {
-        boxShadow: '0 -2px 4px 0 rgba(31,30,30,1)',
-        borderRadius: 20,
         marginTop: 5,
         height: 60,
         bottom: 0
@@ -188,7 +187,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                         ))}
                     </List>
                 </Drawer>
-                <div
+                <main
                     className={clsx(classes.full, {
                         [classes.shrink]: open || menuOpen,
                     })}
@@ -205,10 +204,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     <div className={classes.body}>
                         {mainContent}
                     </div>
-                    <div className={classes.footer}>
-                        {bottomBar}
-                    </div>
-                </div>
+                </main>
                 <Card
                     className={clsx(classes.drawerClose, {
                         [classes.drawerOpen]: open,
@@ -235,6 +231,9 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     </div>
                 </Card>
                 {toast}
+            </div>
+            <div className={classes.footer}>
+                {bottomBar}
             </div>
         </div>
     );

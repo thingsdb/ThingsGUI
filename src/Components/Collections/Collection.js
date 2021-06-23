@@ -7,6 +7,7 @@ import {ApplicationStore, ThingsdbStore} from '../../Stores';
 import {CollectionConfig} from './Config';
 import {findItem, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Util';
 import {Procedures, Timers} from '../ProceduresAndTimers';
+import {COLLECTION_SCOPE} from '../../Constants/Scopes';
 import CollectionTree from './Tree';
 import CollectionEnumsTypes from './EnumsTypes';
 
@@ -51,17 +52,17 @@ const Collection = ({match, collections}) => {
                                 <Procedures
                                     buttonsView={{add: true, edit: true, run: true, view: true}}
                                     dialogsView={{add: true, edit: true, run: true, view: true}}
-                                    scope={`@collection:${selectedCollection.name}`}
+                                    scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}
                                 />
                             </Grid>
                             <Grid className={classes.spacing} item xs={12}>
                                 <Timers
                                     buttonsView={{add: true, edit: true, run: true, view: true}}
                                     dialogsView={{add: true, edit: true, run: true, view: true}}
-                                    scope={`@collection:${selectedCollection.name}`}
+                                    scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}
                                 />
                             </Grid>
-                            <CollectionEnumsTypes scope={`@collection:${selectedCollection.name}`} />
+                            <CollectionEnumsTypes scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`} />
                         </Grid>
                     </React.Fragment>
                 }

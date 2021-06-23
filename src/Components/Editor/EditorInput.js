@@ -65,7 +65,7 @@ const Editor = ({height, history, input, match, onExpand, onOutput, scope}) => {
         onExpand(false);
         setTimeout(()=> { // can result in -> Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function. in Editor (created by WithVlow()(Editor)) in WithVlow()(Editor) (created by App)
             onOutput(null);
-            CollectionActions.rawQuery(scope, query, tag, handleOutput);
+            CollectionActions.query(scope, query, tag, handleOutput);
         }, 100);
 
         EditorActions.setHistory(query);

@@ -4,6 +4,9 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 
+import {CLOSURE_KEY, ERROR_KEY, REGEX_KEY, SET_KEY, THING_KEY, WRAP_KEY} from '../../Constants/CharacterKeys';
+import {ARRAY, BOOL, BYTES, CLOSURE, ERROR, NIL, NUMBER, REGEX,
+    SET, STR, THING, WRAP} from '../../Constants/ThingTypes';
 
 const useStyles = makeStyles(theme => ({
     red: {
@@ -47,19 +50,19 @@ const TreeIcon = ({type}) => {
     const classes = useStyles();
 
     const treeIcon = (type) => {
-        return type === 'array' ? ['[ ]', 'green']
-            : type == 'thing' ? ['{ }', 'blue']
-                : type == 'str' ? ['S', 'orange']
-                    : type == 'number' ? ['123', 'yellow']
-                        : type == 'bool' ? ['1/0', 'pink']
-                            : type == 'nil' ? ['NIL', 'red']
-                                : type == 'bytes' ? ['BIN', 'purple']
-                                    : type == 'closure' ? ['/', 'cyan']
-                                        : type == 'regex' ? ['*', 'cyan']
-                                            : type == 'error' ? ['!', 'cyan']
-                                                : type == 'wrap' ? ['< >', 'lightPink']
-                                                    : type == 'set' ? ['[ ]', 'green']
-                                                        : type == 'object' ? ['•', 'white']
+        return type === ARRAY ? ['[ ]', 'green']
+            : type == THING ? [THING_KEY, 'blue']
+                : type == STR ? ['S', 'orange']
+                    : type == NUMBER ? ['123', 'yellow']
+                        : type == BOOL ? ['1/0', 'pink']
+                            : type == NIL ? ['NIL', 'red']
+                                : type == BYTES ? ['BIN', 'purple']
+                                    : type == CLOSURE ? [CLOSURE_KEY, 'cyan']
+                                        : type == REGEX ? [REGEX_KEY, 'cyan']
+                                            : type == ERROR ? [ERROR_KEY, 'cyan']
+                                                : type == WRAP ? [WRAP_KEY, 'lightPink']
+                                                    : type == SET ? [SET_KEY, 'green']
+                                                        : type == 'object' ? ['{ }', 'white']
                                                             : '';
     };
     const [icon, color] = treeIcon(type);

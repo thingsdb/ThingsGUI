@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 import Language from './Language.js';
 import * as monaco from 'monaco-editor';
+import {NIL} from '../../Constants/ThingTypes';
 
 monaco.languages.register({ id: 'mySpecialLanguage' });
 
@@ -15,7 +16,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
     // tokenPostfix: '',
 
     keywords: [
-        'nil', 'true', 'false',
+        NIL, 'true', 'false',
         ...Object.keys(Language.collection),
         ...Object.keys(Language.errors),
         ...Object.keys(Language.node),

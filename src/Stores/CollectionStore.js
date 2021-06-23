@@ -5,20 +5,20 @@ import Vlow from 'vlow';
 
 import {BaseStore} from './BaseStore';
 import {ErrorActions} from './ErrorStore';
+import {THING_KEY} from '../Constants/CharacterKeys';
+import {COLLECTION_SCOPE} from '../Constants/Scopes';
 // importing any method from Util creates a webpack error.
 // import {depthOf} from '../Components/Util';
 
 
 const CollectionActions = Vlow.createActions([
-    'blob',
     'cleanupThings',
     'cleanupTmp',
     'decCounter',
     'download',
     'getThings',
     'incCounter',
-    'queryWithReturn',
-    'rawQuery',
+    'query',
     'refreshThings',
     'removeThing',
     'resetCollectionStore',
@@ -70,7 +70,7 @@ class CollectionStore extends BaseStore {
 
     onGetThings(collectionId, collectionName, thingId=null) {
         const query = thingId ? `#${thingId}` : 'thing(.id())';
-        const scope = `@collection:${collectionName}`;
+        const scope = `${COLLECTION_SCOPE}:${collectionName}`;
         this.emit('query', {
             query,
             scope
@@ -92,12 +92,12 @@ class CollectionStore extends BaseStore {
 
         if(keys.length) {
             const query = `[${keys.map(k => `#${k}`)}]`;
-            const scope = `@collection:${collectionName}`;
+            const scope = `${COLLECTION_SCOPE}:${collectionName}`;
             this.emit('query', {
                 query,
                 scope
             }).done((data) => {
-                this.setState({things: data.reduce((res, d) => {res[d['#']] = d ;return res;}, {})});
+                this.setState({things: data.reduce((res, d) => {res[d[THING_KEY]] = d ;return res;}, {})});
             }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
         }
     }
@@ -122,39 +122,14 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQueryWithReturn(scope, q, thingId, tag, cb) {
-        const query = `${q} #${thingId}`;
+    onQuery(scope, query, tag, cb, thingId=null, blob=null) {
+        if(thingId){
+            query = `${query} #${thingId}`;
+        }
         this.emit('query', {
-            query,
-            scope
-        }).done((data) => {
-            this.setState(prevState => {
-                const things = Object.assign({}, prevState.things, {[thingId]: data});
-                return {things};
-            });
-            cb();
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
-    onRawQuery(scope, query, tag, cb) {
-        this.emit('query', {
-            query,
-            scope
-        }).done((data) => {
-            cb(data);
-        }).fail((event, status, message) => {
-            ErrorActions.setMsgError(tag, message.Log);
-        });
-    }
-
-    onBlob(scope, q, thingId, blob, tag, cb) {
-        const query = thingId?`${q} #${thingId}`:`${q}`;
-        this.emit('queryBlob', {
             query,
             scope,
-            blob,
+            blob
         }).done((data) => {
             if(thingId){
                 this.setState(prevState => {
@@ -162,7 +137,7 @@ class CollectionStore extends BaseStore {
                     return {things};
                 });
             }
-            cb();
+            cb(data);
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });

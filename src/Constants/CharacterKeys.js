@@ -1,0 +1,10 @@
+export const CLOSURE_KEY = '/';
+export const DATETIME_KEY = '\'';
+export const ENUM_KEY = '%';
+export const ERROR_KEY = '!';
+export const REGEX_KEY = '*';
+export const SET_KEY = '$';
+export const THING_KEY = '#';
+export const TIMEVAL_KEY = '"';
+export const TYPE_KEY = '.';
+export const WRAP_KEY = '&';

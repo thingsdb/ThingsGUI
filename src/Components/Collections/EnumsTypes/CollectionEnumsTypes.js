@@ -8,6 +8,8 @@ import {EnumsTAG, TypesTAG} from '../../../Constants/Tags';
 import {EnumActions, EnumStore, TypeActions, TypeStore} from '../../../Stores';
 import {EnumTypeChips} from '../CollectionsUtils/TypesEnumsUtils';
 import {HarmonicCardHeader} from '../../Util';
+import {ANY, BOOL, BYTES, CODE, DATETIME, FLOAT, INT, NINT, NUMBER, PINT, RAW,
+    STR, THING, TIMEVAL, UINT, UTF8} from '../../../Constants/ThingTypes';
 
 
 const withStores = withVlow([{
@@ -30,22 +32,22 @@ const typesTag = EnumsTAG;
 const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
     const classes = useStyles();
     const types = [
-        'any',
-        'bool',
-        'bytes',
-        'code',
-        'datetime',
-        'float',
-        'int',
-        'nint',
-        'number',
-        'pint',
-        'raw',
-        'str',
-        'thing',
-        'timeval',
-        'uint',
-        'utf8',
+        ANY,
+        BOOL,
+        BYTES,
+        CODE,
+        DATETIME,
+        FLOAT,
+        INT,
+        NINT,
+        NUMBER,
+        PINT,
+        RAW,
+        STR,
+        THING,
+        TIMEVAL,
+        UINT,
+        UTF8,
         ...(customTypes[scope]||[]).map(c=>c.name),
         ...(enums[scope]||[]).map(c=>c.name)
     ];
@@ -67,8 +69,8 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
 
     const set = [
         '{}',
-        '{any}',
-        '{thing}',
+        `{${ANY}}`,
+        `{${THING}}`,
         ...(customTypes[scope]||[]).map(c=>`{${c.name}}`),
     ];
 

@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {checkType, fancyName, thingValue, TreeBranch} from '../Util';
+import {SET_KEY, THING_KEY} from '../../Constants/CharacterKeys';
+import {ARRAY, CLOSURE, ERROR, REGEX, SET, THING} from '../../Constants/ThingTypes';
 
 
 const useStyles = makeStyles(theme => ({
@@ -31,7 +33,7 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
     };
 
     const renderThing = ([k, v, i=null], count) => {
-        return k === '#' ? null : (
+        return k === THING_KEY ? null : (
             <React.Fragment key={i ? i : k}>
                 <div className={classes.nested}>
                     <ThingsTree
@@ -61,7 +63,7 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
 
     const renderChildren = (start=0) => {
         let end = start+visibleNumber;
-        const t = type=='set'?thing['$']:thing;
+        const t = type == SET ? thing[SET_KEY] : thing;
         const isArray = Array.isArray(t);
 
         return isArray ?
@@ -79,7 +81,7 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
     const val = thingValue(type, thing, customTypes);
 
     // buttons
-    const canToggle = type === 'object' || type === 'closure' || type === 'regex'|| type === 'error' || (type === 'thing' && Object.keys(thing).length>1) || (type === 'array' && thing.length>0) || (type === 'set' && thing['$'].length>0);
+    const canToggle = type === 'object' || type === CLOSURE || type === REGEX|| type === ERROR || (type === THING && Object.keys(thing).length>1) || (type === ARRAY && thing.length>0) || (type === SET && thing[SET_KEY].length>0);
 
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onOpen={handleOpenClose} onRenderChildren={renderChildren} onAction={onAction} />

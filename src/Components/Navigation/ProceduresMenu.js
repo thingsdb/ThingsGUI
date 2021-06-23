@@ -8,6 +8,7 @@ import React from 'react';
 import {AddProcedureDialog} from '../ProceduresAndTimers';
 import {Menu, orderByName} from '../Util';
 import {ApplicationActions, ProcedureActions, ProcedureStore} from '../../Stores';
+import {THINGSDB_SCOPE} from '../../Constants/Scopes';
 
 const withStores = withVlow([{
     store: ProcedureStore,
@@ -36,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const scope = '@thingsdb';
+const scope = THINGSDB_SCOPE;
 const ProceduresMenu = ({procedures}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);

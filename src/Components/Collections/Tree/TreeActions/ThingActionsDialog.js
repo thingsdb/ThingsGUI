@@ -10,6 +10,7 @@ import SubmitButton from './SubmitButton';
 import {CollectionActions, EnumActions, ThingsdbActions, TypeActions} from '../../../../Stores';
 import {allDataTypes, ErrorMsg, SimpleModal} from '../../../Util';
 import {ThingActionsDialogTAG} from '../../../../Constants/Tags';
+import {THING, TUPLE} from '../../../../Constants/ThingTypes';
 
 const tag = ThingActionsDialogTAG;
 
@@ -36,9 +37,9 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         let query='';
         if (parent.id==null) {
             query = `{childType: type(#${child.id}), parentType: '', customTypes: types_info()}`; // check if custom type
-        } else if (parent.type == 'thing') {
+        } else if (parent.type == THING) {
             query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}), customTypes: types_info()}`; // check if custom type
-        } else if (child.type == 'thing') {
+        } else if (child.type == THING) {
             query = `{childType: type(#${child.id}), parentType: type(#${parent.id}.${parent.name}), customTypes: types_info()}`; // in case parent is set than indexing is not supported. Therefore we need to check child type by id.
         } else {
             query = `{childType: type(#${parent.id}.${child.name}), parentType: type(#${parent.id}.${parent.name}), customTypes: types_info()}`; // check if custom type
@@ -53,39 +54,33 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
     };
 
     const handleClickOk = (blob, query) => {
-        const b = Object.keys(blob || {}).reduce((res, k) => {if(query.includes(k)){res[k]=blob[k];} return res;},{});
+        const keys = Object.keys(blob || {});
+        const b = keys ? keys.reduce((res, k) => {
+            if(query.includes(k)){
+                res[k]=blob[k];
+            }
+            return res;
+        },{}) : null;
         const isChildEnum = Boolean(enums.find(c=>c.name==realChildType));
         const useParent = isChildEnum&&child.id;
         const tid = useParent?parent.id:child.id||parent.id;
-        if (Object.keys(b).length) {
-            CollectionActions.blob(
-                scope,
-                query,
-                tid,
-                b,
-                tag,
-                () => {
-                    ThingsdbActions.getCollections();
-                    onClose();
-                },
-            );
-        } else {
-            CollectionActions.queryWithReturn(
-                scope,
-                query,
-                tid,
-                tag,
-                () => {
-                    ThingsdbActions.getCollections();
-                    onClose();
-                }
-            );
-        }
+
+        CollectionActions.query(
+            scope,
+            query,
+            tag,
+            () => {
+                ThingsdbActions.getCollections();
+                onClose();
+            },
+            tid,
+            b,
+        );
     };
 
     // buttons visible
     const isChildCustom = Boolean(customTypes.find(c=>c.name==realChildType));
-    const canEdit = !(isChildCustom || realChildType=='tuple' || realChildType[0]=='<' || parent.isTuple && child.type !== 'thing');
+    const canEdit = !(isChildCustom || realChildType==TUPLE || realChildType[0]=='<' || parent.isTuple && child.type !== THING);
 
     const content = (
         <Grid container spacing={1}>

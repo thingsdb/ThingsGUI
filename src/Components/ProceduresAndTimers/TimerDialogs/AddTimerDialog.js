@@ -13,6 +13,7 @@ import {CollectionActions, TimerActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker, VariablesArray} from '../../Util';
 import {AddTimerDialogTAG} from '../../../Constants/Tags';
 import {THINGS_DOC_NEW_TIMER} from '../../../Constants/Links';
+import {NIL} from '../../../Constants/ThingTypes';
 
 
 const tag = AddTimerDialogTAG;
@@ -22,7 +23,7 @@ const initState = {
     closure: '',
     error: '',
     queryString: 'new_timer()',
-    repeat: 'nil',
+    repeat: NIL,
     start: null,
 };
 
@@ -53,7 +54,7 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
 
     const handleSwitchRepeat = (open) => {
         if(!open) {
-            handleChangeRepeat('nil');
+            handleChangeRepeat(NIL);
         }
     };
 
@@ -64,7 +65,7 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
     };
 
     const handleClickOk = () => {
-        CollectionActions.rawQuery(
+        CollectionActions.query(
             scope,
             queryString,
             tag,

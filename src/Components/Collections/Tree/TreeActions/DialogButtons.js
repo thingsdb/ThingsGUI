@@ -7,20 +7,20 @@ import Grid from '@material-ui/core/Grid';
 import RemoveThing from './RemoveThing';
 import WatchThings from './WatchThings';
 import {ApplicationActions} from '../../../../Stores';
+import {THING} from '../../../../Constants/ThingTypes';
+import {CLOSURE_KEY, THING_KEY} from '../../../../Constants/CharacterKeys';
 
 
 const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, tag, thing, isRoot}) => {
 
     const handleClickOpenEditor = () => {
-        ApplicationActions.navigate({path: 'query', index: 0, item: child.type==='thing' ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
+        ApplicationActions.navigate({path: 'query', index: 0, item: child.type===THING ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
     };
 
     // buttons visible
     const isParentCustom = Boolean(customTypes.find(c=>c.name==realParentType));
-    const canRemove = Boolean(!(isRoot || isParentCustom || parent.isTuple || child.name === '/' ));
-    const canWatch = Boolean(thing && thing.hasOwnProperty('#'));
-    // const canDownload = child.type === 'bytes';
-
+    const canRemove = Boolean(!(isRoot || isParentCustom || parent.isTuple || child.name === CLOSURE_KEY));
+    const canWatch = Boolean(thing && thing.hasOwnProperty(THING_KEY));
 
     return (
         <React.Fragment>
@@ -30,7 +30,7 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
                         onClose={onClose}
                         scope={scope}
                         child={{
-                            id: thing ? thing['#']:null,
+                            id: thing ? thing[THING_KEY]:null,
                             index: child.hasOwnProperty('index') ? child.index : null,
                             name: child.name,
                             type: realChildType,
