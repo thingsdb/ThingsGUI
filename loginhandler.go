@@ -493,9 +493,7 @@ func saveLastUsedConnection(client *Client, data LoginData) error {
 	json.Unmarshal(lbytes, &ldata)
 
 	fn := func(mapping LMapping) error {
-		fmt.Println(mapping)
 		mapping["lastUsed"] = ldata
-		fmt.Println(mapping)
 		return nil
 	}
 	var mapping = make(LMapping)
