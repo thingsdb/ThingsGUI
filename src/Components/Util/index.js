@@ -102,7 +102,7 @@ const thingValue = (type, thing, customTypes=[]) => {
                                     : '';
 };
 
-const isObjectEmpty = (obj) => obj.constructor === Object && Object.entries(obj).length === 0;
+const isObjectEmpty = (obj) => !(typeof obj === 'object' && Object.entries(obj).length > 0);
 const findItem = (index, target) => target.length ? (index+1 > target.length ? {}: target[index]) : {}; //findItem(index-1, target) : target[index]) : {};
 const orderByName = (arr, key='name') => arr.sort((a, b) => {
     let nameA,
@@ -211,6 +211,66 @@ const scaleToBinBytes = (bytes) => {
 
 const nextRunFn = (t) => (t === 'pending' ? t : moment(t).format('YYYY-MM-DD HH:mm'));
 
+const getIdFromPath = (pathname, name) => {
+    const splitPath = pathname.split('/');
+    const index = splitPath.indexOf(name);
+    if (index !== -1) {
+        const id = splitPath[index + 1];
+        return id || '';
+    } else {
+        return '';
+    }
+};
+
+const historyNavigate = (history, pathname, queryParams) => {
+    let params = {};
+
+    if (pathname) {
+        params.pathname = pathname;
+    }
+
+    if (queryParams) {
+        let search = '';
+        Object.entries(queryParams).forEach(([key, value], index) => {
+            let queryParam = '';
+            if (index === 0) {
+                queryParam = `?${key}=${value}`;
+            }
+            else {
+                queryParam = `&${key}=${value}`;
+            }
+            search = search.concat(queryParam);
+        });
+        params.search = search;
+    }
+
+    else if (queryParams === undefined) {
+        params.search = history.location.search;
+    }
+
+    history.push(params);
+};
+
+const historySetQueryParam = (history, name, value) => {
+    let params = new URLSearchParams(history.location.search);
+    params.set(name, value);
+    const string = params.toString();
+    history.push({ search: string });
+};
+
+const historyDeleteQueryParam = (history, name) => {
+    let params = new URLSearchParams(history.location.search);
+    params.delete(name);
+    const string = params.toString();
+    history.push({ search: string });
+};
+
+const historyGetQueryParam = (history, name) => {
+    const params = new URLSearchParams(history.location.search);
+    const result = params.get(name);
+    return result;
+};
+
 export {
     addDoubleQuotesAroundKeys,
     allDataTypes,
@@ -237,12 +297,17 @@ export {
     fancyName,
     findItem,
     FixedList,
+    getIdFromPath,
     getScopes,
     getScopes2,
     HarmonicCard,
     HarmonicCardContent,
     HarmonicCardHeader,
     HarmonicTree,
+    historyDeleteQueryParam,
+    historyGetQueryParam,
+    historyNavigate,
+    historySetQueryParam,
     Info,
     isObjectEmpty,
     ListHeader,

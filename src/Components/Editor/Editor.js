@@ -1,22 +1,16 @@
 import {makeStyles} from '@material-ui/core/styles';
-import {withVlow} from 'vlow';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
-import {ApplicationStore, ErrorActions, NodesActions} from '../../Stores';
+import {ErrorActions, NodesActions} from '../../Stores';
 import {DragdownCard, ErrorMsg, HarmonicCard, TitlePage2, QueryOutput} from '../Util';
 import {EditorTAG} from '../../Constants/Tags';
 import EditorInput from './EditorInput';
 import EditorSideContent from './EditorSideContent';
 import SelectScope from './SelectScope';
 
-
-const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}]);
 
 const useStyles = makeStyles(theme => ({
     cardAction: {
@@ -32,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 
 const tag = EditorTAG;
 
-const Editor = ({match}) => {
+const Editor = () => {
     const classes = useStyles();
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState('');
@@ -68,7 +62,7 @@ const Editor = ({match}) => {
     return (
         <TitlePage2
             preTitle='SCOPE:'
-            title={<SelectScope scope={match.scope} onChangeScope={handleOnChangeScope} />}
+            title={<SelectScope onChangeScope={handleOnChangeScope} />}
             content={
                 <React.Fragment>
                     <Grid item xs={12}>
@@ -100,10 +94,4 @@ const Editor = ({match}) => {
     );
 };
 
-Editor.propTypes = {
-
-    /* Application properties */
-    match: ApplicationStore.types.match.isRequired,
-};
-
-export default withStores(Editor);
+export default Editor;

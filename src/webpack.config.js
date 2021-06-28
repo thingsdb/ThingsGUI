@@ -85,6 +85,11 @@ const config = {
         hints: process.env.NODE_ENV === 'production' ? 'warning' : false,
         maxEntrypointSize: 1600000,
         maxAssetSize: 700000
+    },
+    resolve: {
+        fallback: {
+            'path': require.resolve('path-browserify')
+        }
     }
 };
 

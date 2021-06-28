@@ -1,12 +1,13 @@
-import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import {Link as RouterLink} from 'react-router-dom';
 import CodeIcon from '@material-ui/icons/Code';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 
-import {ApplicationActions} from '../../Stores';
+import {EDITOR_ROUTE} from '../../Constants/Routes';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -17,13 +18,10 @@ const useStyles = makeStyles(theme => ({
 
 const QueryEditorMenu = () => {
     const classes = useStyles();
-    const handleClickCollection = () => {
-        ApplicationActions.navigate({path: 'query', index: 0, item: '', scope:''});
-    };
 
     return (
         <List className={classes.root} dense disablePadding>
-            <ListItem button onClick={handleClickCollection}>
+            <ListItem button component={RouterLink} to={`/${EDITOR_ROUTE}`} >
                 <ListItemIcon>
                     <CodeIcon color="primary" />
                 </ListItemIcon>

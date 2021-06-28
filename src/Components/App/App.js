@@ -1,4 +1,4 @@
-import {withVlow} from 'vlow';
+import {Route, Switch, useLocation} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -14,8 +14,9 @@ import VisibleIcon from '@material-ui/icons/Visibility';
 
 import {ApplicationStore} from '../../Stores';
 import {BottomBar, CollectionsMenu, ProceduresMenu, TimersMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
-import {DrawerLayout, ErrorToast, TopBarMenu} from '../Util';
+import {DrawerLayout, ErrorToast, getIdFromPath, TopBarMenu} from '../Util';
 import {Procedure, Timer} from '../ProceduresAndTimers';
+import {COLLECTION_ROUTE, EDITOR_ROUTE, PROCEDURE_ROUTE, TIMER_ROUTE, USER_ROUTE} from '../../Constants/Routes';
 import Collection from '../Collections';
 import Editor from '../Editor';
 import HeaderTitle from './HeaderTitle';
@@ -25,23 +26,17 @@ import User from '../Users';
 import Watcher from '../Watcher';
 
 
-const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}]);
+const App = () => {
+    let location = useLocation();
 
-const App = ({match}) => {
     const [open, setOpen] = React.useState(false);
     const [menuOpen, setMenuOpen] = React.useState(true);
     const [drawerContent, setDrawerContent] = React.useState(0);
 
-    const pages = {
-        collection: <Collection />,
-        user: <User />,
-        procedure: <Procedure />,
-        timer: <Timer />,
-        query: <Editor />,
-    };
+    const collectionName = getIdFromPath(location.pathname, COLLECTION_ROUTE);
+    const userName = getIdFromPath(location.pathname, USER_ROUTE);
+    const procedureName = getIdFromPath(location.pathname, PROCEDURE_ROUTE);
+    const timerId = getIdFromPath(location.pathname, TIMER_ROUTE);
 
     const handleDrawerOpen = (index) => () => {
         setDrawerContent(index);
@@ -97,7 +92,14 @@ const App = ({match}) => {
                 mainContent={
                     <Grid container alignItems="flex-start">
                         <Grid container item xs={12} style={{paddingRight:8, paddingLeft:8, paddingBottom:8}}>
-                            {pages[match.path]}
+                            <Switch>
+                                <Route exact path="/" />
+                                <Route exact path={`/${COLLECTION_ROUTE}/${collectionName}`} component={Collection} />
+                                <Route exact path={`/${USER_ROUTE}/${userName}`} component={User} />
+                                <Route exact path={`/${PROCEDURE_ROUTE}/${procedureName}`} component={Procedure} />
+                                <Route exact path={`/${TIMER_ROUTE}/${timerId}`} component={Timer} />
+                                <Route path={`/${EDITOR_ROUTE}`} component={Editor} />
+                            </Switch>
                         </Grid>
                     </Grid>
                 }
@@ -112,10 +114,4 @@ const App = ({match}) => {
     );
 };
 
-App.propTypes = {
-
-    /* Application properties */
-    match: ApplicationStore.types.match.isRequired,
-};
-
-export default withStores(App);
+export default App;

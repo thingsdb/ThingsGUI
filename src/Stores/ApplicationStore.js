@@ -21,7 +21,6 @@ const ApplicationActions = Vlow.createActions([
     'disconnect',
     'editCachedConn',
     'getCachedConn',
-    'navigate',
     'newCachedConn',
     'openEditor',
     'reconnect',
@@ -37,7 +36,6 @@ class ApplicationStore extends BaseStore {
         loaded: PropTypes.bool,
         connected: PropTypes.bool,
         seekConnection: PropTypes.bool,
-        match: PropTypes.shape({path: PropTypes.string, index: PropTypes.number, item: PropTypes.string, scope: PropTypes.string}),
         openEditor: PropTypes.bool,
         input: PropTypes.string,
         cachedConnections: PropTypes.object
@@ -49,12 +47,6 @@ class ApplicationStore extends BaseStore {
         loaded: false,
         connected: false,
         seekConnection: true,
-        match: {
-            path: '',
-            index: 0,
-            item: '',
-            scope: '',
-        },
         openEditor: false,
         input: '',
         cachedConnections: {}
@@ -227,10 +219,6 @@ class ApplicationStore extends BaseStore {
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });
-    }
-
-    onNavigate(match) {
-        this.setState({match});
     }
 
     onOpenEditor(input='') {

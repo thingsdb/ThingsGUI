@@ -1,7 +1,8 @@
-import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {HashRouter as Router} from 'react-router-dom';
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import React from 'react';
 
 import App from './App';
 import AppLoader from './AppLoader';
@@ -87,10 +88,12 @@ const Root = ({authOnly, loaded, connected, seekConnection}) => {
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
             <InitStores />
-            {loaded ? (
-                connected ? <App />
-                    : authOnly ? <Auth /> : <Login />
-            ) : <AppLoader connect={seekConnection} />}
+            <Router>
+                {loaded ? (
+                    connected ? <App />
+                        : authOnly ? <Auth /> : <Login />
+                ) : <AppLoader connect={seekConnection} />}
+            </Router>
         </MuiThemeProvider>
     );
 };

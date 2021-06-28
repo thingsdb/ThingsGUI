@@ -1,20 +1,23 @@
+import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 import CodeIcon from '@material-ui/icons/Code';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 
+import {CLOSURE_KEY, THING_KEY} from '../../../../Constants/CharacterKeys';
+import {EDITOR_ROUTE} from '../../../../Constants/Routes';
+import {historyNavigate} from '../../../Util';
+import {THING} from '../../../../Constants/ThingTypes';
 import RemoveThing from './RemoveThing';
 import WatchThings from './WatchThings';
-import {ApplicationActions} from '../../../../Stores';
-import {THING} from '../../../../Constants/ThingTypes';
-import {CLOSURE_KEY, THING_KEY} from '../../../../Constants/CharacterKeys';
 
 
 const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, tag, thing, isRoot}) => {
+    let history = useHistory();
 
     const handleClickOpenEditor = () => {
-        ApplicationActions.navigate({path: 'query', index: 0, item: child.type===THING ? `#${child.id}` : `#${parent.id}.${child.name}`, scope: scope});
+        historyNavigate(history, `/${EDITOR_ROUTE}`, {scope: scope, query: child.type===THING ? `#${child.id}` : `#${parent.id}.${child.name}`});
     };
 
     // buttons visible
