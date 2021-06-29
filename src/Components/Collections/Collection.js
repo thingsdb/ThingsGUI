@@ -4,7 +4,7 @@ import {withVlow} from 'vlow';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
-import {ThingsdbStore} from '../../Stores';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores';
 import {CollectionConfig} from './Config';
 import {getIdFromPath, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Util';
 import {Procedures, Timers} from '../ProceduresAndTimers';
@@ -28,6 +28,11 @@ const useStyles = makeStyles(theme => ({
 const Collection = ({collections}) => {
     let location = useLocation();
     const classes = useStyles();
+
+    React.useEffect(() => {
+        ThingsdbActions.getCollections();
+    }, []);
+
     const collectionName = getIdFromPath(location.pathname, COLLECTION_ROUTE);
     const selectedCollection = collections.find(c => c['name'] === collectionName);
 
@@ -42,7 +47,7 @@ const Collection = ({collections}) => {
                             <Grid className={classes.spacing} item xs={12}>
                                 <HarmonicCardHeader title="INFO" unmountOnExit>
                                     <CollectionConfig collection={selectedCollection} />
-                                </HarmonicCardHeader >
+                                </HarmonicCardHeader>
                             </Grid>
                             <Grid item xs={12}>
                                 <CollectionTree collection={selectedCollection} />

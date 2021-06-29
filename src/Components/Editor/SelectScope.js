@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 const SelectScope = ({onChangeScope, collections, nodes}) => {
     let history = useHistory();
     const classes = useStyles();
-    const scopes = getScopes2(collections, nodes);
+
     const [name, setName] = React.useState(() => {
         let scopeParam = historyGetQueryParam(history, 'scope');
         if (scopeParam) {
@@ -41,18 +41,17 @@ const SelectScope = ({onChangeScope, collections, nodes}) => {
         return collections[0] ? `${COLLECTION_SCOPE}:${collections[0].name}` : THINGSDB_SCOPE;
     });
 
+    const scopes = React.useMemo(() => getScopes2(collections, nodes), [collections, nodes]);
+
     React.useEffect(()=> {
-        onChangeScope(scopes.find(n => n === name) || '');
-    }, [name]);
+        let sName = scopes.includes(name) ? name : THINGSDB_SCOPE;
+        historySetQueryParam(history, 'scope', sName);
+        onChangeScope(sName);
+
+    }, [name, scopes]);
 
     const handleOnChangeScope = ({target}) => {
         const {value} = target;
-        if (value !== '') {
-            historySetQueryParam(history, 'scope', value);
-        }
-        else {
-            historyDeleteQueryParam(history, 'scope');
-        }
         setName(value);
     };
 
@@ -68,7 +67,7 @@ const SelectScope = ({onChangeScope, collections, nodes}) => {
                 style: {
                     color:'#3a6394',
                     fontSize: '1.5rem',
-                }
+                },
             }}
             onChange={handleOnChangeScope}
             style={{lineHeight: '2rem'}}

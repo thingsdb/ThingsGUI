@@ -5,7 +5,7 @@ import React from 'react';
 
 import {UserAccess} from './Config';
 import Tokens from './Tokens';
-import {ThingsdbStore} from '../../Stores';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores';
 import {getIdFromPath, isObjectEmpty, TitlePage} from '../Util';
 import {USER_ROUTE} from '../../Constants/Routes';
 
@@ -16,6 +16,11 @@ const withStores = withVlow([{
 
 const User = ({user, users, collections}) => {
     let location = useLocation();
+
+    React.useEffect(() => {
+        ThingsdbActions.getUsers();
+    }, []);
+
     const users2 =
         users.length ? users
             : isObjectEmpty(user) ? []

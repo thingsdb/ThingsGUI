@@ -41,6 +41,11 @@ func handlerThingsdbLogo(w http.ResponseWriter, r *http.Request) {
 	w.Write(FileThingsdbLogo)
 }
 
+func handlerBackgroundImg(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "image/svg+xml")
+	w.Write(FileBackgroundImg)
+}
+
 func handlerGithubLogo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "image/svg+xml")
 	w.Write(FileGithubLogo)

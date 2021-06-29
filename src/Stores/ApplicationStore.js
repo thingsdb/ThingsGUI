@@ -82,21 +82,17 @@ class ApplicationStore extends BaseStore {
 
     onConnected() {
         this.emit('connected').done((data) => {
-            // this.setState({
-            //     connected: data.Connected,
-            // });
-            // setTimeout(() => {
-            //     this.setState({
-            //         loaded: data.Loaded,
-            //     });
-            // }, 2000);
             ThingsdbActions.getUser(
                 ()=>{
                     this.setState({
                         connected: data.Connected,
-                        loaded: true,
                         seekConnection:true,
                     });
+                    setTimeout(() => {
+                        this.setState({
+                            loaded: true,
+                        });
+                    }, 2000);
                     EventActions.watch('@n');
                 },
                 ()=>this.setState({loaded: true, seekConnection: false}));

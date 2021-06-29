@@ -4,7 +4,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
-import {ErrorActions, NodesActions} from '../../Stores';
+import {ErrorActions, NodesActions, ThingsdbActions} from '../../Stores';
 import {DragdownCard, ErrorMsg, HarmonicCard, TitlePage2, QueryOutput} from '../Util';
 import {EditorTAG} from '../../Constants/Tags';
 import EditorInput from './EditorInput';
@@ -36,6 +36,7 @@ const Editor = () => {
 
     React.useEffect(() => {
         NodesActions.getNodes();
+        ThingsdbActions.getCollections();
     },[]);
 
     const handleOnChangeScope = (s) => {

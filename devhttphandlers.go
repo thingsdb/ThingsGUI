@@ -35,6 +35,10 @@ func handlerThingsdbLogo(w http.ResponseWriter, r *http.Request) {
 	HandleFileRequest(w, "./static/img/thingsdb-logo.png", "image/png")
 }
 
+func handlerBackgroundImg(w http.ResponseWriter, r *http.Request) {
+	HandleFileRequest(w, "./static/img/backgroundImg.svg", "image/svg+xml")
+}
+
 func handlerGithubLogo(w http.ResponseWriter, r *http.Request) {
 	HandleFileRequest(w, "./static/img/githubLogo.svg", "image/svg+xml")
 }

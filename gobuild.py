@@ -71,6 +71,7 @@ binfiles = [
     ("./static/img/thingsdb.gif", "FileThingsdbGIF"),
     ("./static/img/thingsgui-logo.png", "FileThingsguiLogo"),
     ("./static/img/thingsdb-logo.png", "FileThingsdbLogo"),
+    ("./static/img/backgroundImg.svg", "FileBackgroundImg"),
     ("./static/img/githubLogo.svg", "FileGithubLogo"),
     ("./static/img/facebookLogo.png", "FileFacebookLogo"),
     ("./static/img/linkedinLogo.png", "FileLinkedinLogo"),

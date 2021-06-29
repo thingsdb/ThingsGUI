@@ -35,7 +35,6 @@ const useStyles = makeStyles(theme => ({
 
 
 const Menu = ({addItem, homeRoute, icon, itemKey, items, onRefresh, title}) => {
-    // let history = useHistory();
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 

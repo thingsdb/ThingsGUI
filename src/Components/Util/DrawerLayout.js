@@ -23,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         overflowY: 'auto',
         height: 'calc(100% - 121px)', // footerHeight (60) + footerMarginTop (5) + topBarHeight (48) + appBarMarginBottom (8) = 121
+        backgroundImage: `url(${'/img/backgroundImg.svg'})`,
+        backgroundRepeat:'no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: '400px',
     },
     footer: {
         marginTop: 5,
