@@ -23,10 +23,6 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         overflowY: 'auto',
         height: 'calc(100% - 121px)', // footerHeight (60) + footerMarginTop (5) + topBarHeight (48) + appBarMarginBottom (8) = 121
-        backgroundImage: `url(${'/img/backgroundImg.svg'})`,
-        backgroundRepeat:'no-repeat',
-        backgroundPosition: 'center',
-        backgroundSize: '400px',
     },
     footer: {
         marginTop: 5,
@@ -54,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
         }),
     },
     drawerOpen: {
-        boxShadow: '-2px 0 5px 0 rgba(31,30,30,1)',
+        // boxShadow: '-2px 0 5px 0 rgba(31,30,30,1)',
         display: 'flex',
         flex: '1 0 auto',
         flexDirection: 'column',
@@ -112,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
         flexShrink: 0,
     },
     menuDrawerPaper: {
-        boxShadow: '2px 0 5px 0 rgba(31,30,30,1)',
+        // boxShadow: '2px 0 5px 0 rgba(31,30,30,1)',
         borderColor: theme.palette.background.paper,
         width: drawerWidth,
         top: 'unset',
@@ -179,6 +175,9 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     variant="persistent"
                     anchor="left"
                     open={menuOpen}
+                    PaperProps={{
+                        square: false
+                    }}
                     classes={{
                         paper: classes.menuDrawerPaper,
                     }}

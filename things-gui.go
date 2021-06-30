@@ -247,7 +247,6 @@ func (app *App) Start() {
 	http.HandleFunc("/img/thingsdb.gif", handlerThingsdbGIF)
 	http.HandleFunc("/img/thingsgui-logo.png", handlerThingsguiLogo)
 	http.HandleFunc("/img/thingsdb-logo.png", handlerThingsdbLogo)
-	http.HandleFunc("/img/backgroundImg.svg", handlerBackgroundImg)
 	http.HandleFunc("/img/githubLogo.svg", handlerGithubLogo)
 	http.HandleFunc("/img/facebookLogo.png", handlerFacebookLogo)
 	http.HandleFunc("/img/linkedinLogo.png", handlerLinkedinLogo)

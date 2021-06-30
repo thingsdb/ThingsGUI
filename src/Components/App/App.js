@@ -24,6 +24,7 @@ import LandingPage from '../LandingPage';
 import Nodes from '../Nodes';
 import User from '../Users';
 import Watcher from '../Watcher';
+import Welcome from '../Welcome';
 
 const useStyles = makeStyles(() => ({
     mainGrid: {
@@ -113,7 +114,7 @@ const App = () => {
                     <Grid container alignItems="flex-start">
                         <Grid className={classes.mainGrid} container item xs={12}>
                             <Switch>
-                                <Route exact path="/" />
+                                <Route exact path="/" component={Welcome} />
                                 <Route exact path={`/${COLLECTION_ROUTE}/${collectionName}`} component={Collection} />
                                 <Route exact path={`/${USER_ROUTE}/${userName}`} component={User} />
                                 <Route exact path={`/${PROCEDURE_ROUTE}/${procedureName}`} component={Procedure} />

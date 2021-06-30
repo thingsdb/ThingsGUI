@@ -19,9 +19,11 @@ const Buttons = ({extraButtons, link, onRefresh}) => (
         </Grid>
         <Grid container item xs={6} justify="flex-end" spacing={1}>
             <Grid item>
-                <Button color="primary" target="_blank" href={link}>
-                    <HelpIcon />
-                </Button>
+                <Tooltip disableFocusListener disableTouchListener title="Go to ThingsDocs">
+                    <Button color="primary" target="_blank" href={link}>
+                        <HelpIcon />
+                    </Button>
+                </Tooltip>
             </Grid>
             <Grid item>
                 <Tooltip disableFocusListener disableTouchListener title="Refresh counters">
