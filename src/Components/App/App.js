@@ -25,6 +25,7 @@ import Nodes from '../Nodes';
 import User from '../Users';
 import Watcher from '../Watcher';
 import Welcome from '../Welcome';
+import CookieBanner from '../CookieBanner';
 
 const useStyles = makeStyles(() => ({
     mainGrid: {
@@ -126,7 +127,12 @@ const App = () => {
                 }
                 menuOpen={menuOpen}
                 menus={[<CollectionsMenu key="collections_menu" />, <UsersMenu key="users_menu" />, <ProceduresMenu key="procedures_menu" />, <TimersMenu key="timers_menu" />, <QueryEditorMenu key="editor_menu" />]}
-                bottomBar={<BottomBar />}
+                bottomBar={
+                    <React.Fragment>
+                        <BottomBar />
+                        <CookieBanner />
+                    </React.Fragment>
+                }
                 drawerTitle={showNodes ? 'NODES' : 'WATCHER'}
                 drawerContent={showNodes ? <Nodes /> : <Watcher />}
                 toast={<ErrorToast />}

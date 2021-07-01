@@ -128,7 +128,6 @@ func Connected(client *Client) (int, LoginResp, Message) {
 	switch {
 	case conn == nil:
 		resp = connectViaCache(client, client.SessionPath, lastUsedKey)
-		// resp.Connected = false
 	case conn.IsConnected():
 		resp.Connected = true
 	default:

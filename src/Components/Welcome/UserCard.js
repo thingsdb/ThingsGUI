@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import {COLLECTION_ROUTE} from '../../Constants/Routes';
+import {USER_ROUTE} from '../../Constants/Routes';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -36,12 +36,12 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const CollectionCard = ({collection, size}) => {
+const UserCard = ({user, size}) => {
     const classes = useStyles({size});
 
     return (
         <Card className={classes.root}>
-            <CardActionArea className={classes.action} component={RouterLink} to={`/${COLLECTION_ROUTE}/${collection.name}`}>
+            <CardActionArea className={classes.action} component={RouterLink} to={`/${USER_ROUTE}/${user.name}`}>
                 <CardMedia
                     className={classes.media}
                     image="/img/thingsdb-logo.png"
@@ -49,22 +49,14 @@ const CollectionCard = ({collection, size}) => {
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {collection.name}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" gutterBottom component='div' className={classes.flex}>
-                        <Box >
-                            {'Number of things: '}
-                        </Box>
-                        <Box fontWeight="fontWeightBold" className={classes.marginLeft}>
-                            {collection.things}
-                        </Box>
+                        {user.name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" gutterBottom component='div' className={classes.flex}>
                         <Box >
                             {'Created: '}
                         </Box>
                         <Box fontWeight="fontWeightBold" className={classes.marginLeft}>
-                            {moment.unix(collection.created_at).fromNow()}
+                            {moment.unix(user.created_at).fromNow()}
                         </Box>
                     </Typography>
                 </CardContent>
@@ -73,13 +65,13 @@ const CollectionCard = ({collection, size}) => {
     );
 };
 
-CollectionCard.defaultProps = {
+UserCard.defaultProps = {
     size: 'default',
 };
 
-CollectionCard.propTypes = {
-    collection: PropTypes.object.isRequired,
+UserCard.propTypes = {
+    user: PropTypes.object.isRequired,
     size: PropTypes.string
 };
 
-export default CollectionCard;
+export default UserCard;

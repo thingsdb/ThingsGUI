@@ -25,6 +25,7 @@ const ApplicationActions = Vlow.createActions([
     'openEditor',
     'reconnect',
     'renameCachedConn',
+    'storeSession'
 ]);
 
 
@@ -97,6 +98,12 @@ class ApplicationStore extends BaseStore {
                 },
                 ()=>this.setState({loaded: true, seekConnection: false}));
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+    }
+
+    onStoreSession() {
+        this.post('/session').fail((error, message) => {
+            ErrorActions.setToastError(`${error.statusText}: ${message}`);
+        });
     }
 
     onConnectToNew(config, tag) {

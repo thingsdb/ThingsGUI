@@ -115,6 +115,7 @@ func (app *App) SocketRouter() {
 	})
 
 	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, LoginResp, Message) {
+		fmt.Println(s.RemoteHeader().Get("Cookie"))
 		return Connected(app.client[s.ID()])
 	})
 
@@ -254,6 +255,7 @@ func (app *App) Start() {
 	http.HandleFunc("/img/view-edit.png", handlerViewEditLogo)
 	http.HandleFunc("/favicon.ico", handlerFaviconIco)
 	http.HandleFunc("/download", HandlerDownload)
+	http.HandleFunc("/session", HandlerSession)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 

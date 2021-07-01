@@ -67,3 +67,16 @@ func HandlerDownload(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Transfer-Encoding", "binary")
 	HandleFileRequest(w, fmt.Sprintf("%s", res[1]), "application/octet-stream")
 }
+
+// HandlerSession set a cookie
+func HandlerSession(w http.ResponseWriter, r *http.Request) {
+	cookie := &http.Cookie{
+		Name:   "uid",
+		Value:  "abcd",
+		MaxAge: 300,
+	}
+	http.SetCookie(w, cookie)
+	w.WriteHeader(200)
+	w.Write([]byte("Doc Get Successful"))
+	return
+}
