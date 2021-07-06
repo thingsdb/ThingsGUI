@@ -4,13 +4,14 @@ import {withVlow} from 'vlow';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import React from 'react';
 
+import {ApplicationActions, ApplicationStore} from '../../Stores';
+import {AuthTAG, LoginTAG} from '../../Constants/Tags';
 import App from './App';
 import AppLoader from './AppLoader';
 import Auth from './Auth';
-import Login from './Login';
+import CookieBanner from '../CookieBanner';
 import InitStores from './InitStores';
-import {ApplicationActions, ApplicationStore} from '../../Stores';
-import {AuthTAG, LoginTAG} from '../../Constants/Tags';
+import Login from './Login';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -94,6 +95,7 @@ const Root = ({authOnly, loaded, connected, seekConnection}) => {
                         : authOnly ? <Auth /> : <Login />
                 ) : <AppLoader connect={seekConnection} />}
             </Router>
+            <CookieBanner />
         </MuiThemeProvider>
     );
 };

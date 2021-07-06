@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -70,12 +72,28 @@ func HandlerDownload(w http.ResponseWriter, r *http.Request) {
 
 // HandlerSession set a cookie
 func HandlerSession(w http.ResponseWriter, r *http.Request) {
-	cookie := &http.Cookie{
-		Name:   "uid",
-		Value:  "abcd",
-		MaxAge: 300,
+	for _, cookie := range r.Cookies() {
+		if cookie.Name == cookieName {
+			w.WriteHeader(200)
+			w.Write([]byte("Doc Get Successful"))
+			return
+		}
 	}
+	bytes := make([]byte, 32) //generate a random 32 byte key for AES-256
+	if _, err := rand.Read(bytes); err != nil {
+		panic(err.Error())
+	}
+
+	key := hex.EncodeToString(bytes) //encode key in bytes to string and keep as secret, put in a vault
+	cookie := &http.Cookie{
+		Name:   cookieName,
+		Value:  key,
+		MaxAge: cookieMaxAge,
+	}
+	fmt.Println("NEW COOKIE", cookie.MaxAge)
+
 	http.SetCookie(w, cookie)
+
 	w.WriteHeader(200)
 	w.Write([]byte("Doc Get Successful"))
 	return

@@ -36,7 +36,6 @@ function CookieBanner() {
 
     React.useEffect(() => {
         if (cookiesAccepted) {
-            console.log('hoi')
             ApplicationActions.storeSession();
         }
     }, [cookiesAccepted]);

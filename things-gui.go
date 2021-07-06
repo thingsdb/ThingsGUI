@@ -26,6 +26,8 @@ var oldConnFile = ".things-gui_config"
 var connFile = ".config/ThingsGUI/thingsgui.connections"
 var sessionFile = ".config/ThingsGUI/thingsgui.session"
 var lastUsedKey = "lastUsedKey"
+var cookieName = "uid"
+var cookieMaxAge = 180 // (seconds) 10 weeks 6048000
 
 var (
 	// env variables
@@ -114,8 +116,17 @@ func (app *App) SocketRouter() {
 		return AuthPass(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
 	})
 
+	app.server.OnEvent("/", "cookie", func(s socketio.Conn, cookies string) {
+		header := s.RemoteHeader()
+		header.Set("Cookie", cookies)
+		req := http.Request{Header: header}
+		cookie, _ := req.Cookie(cookieName)
+
+		client := app.client[s.ID()]
+		client.Cookie = cookie
+	})
+
 	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, LoginResp, Message) {
-		fmt.Println(s.RemoteHeader().Get("Cookie"))
 		return Connected(app.client[s.ID()])
 	})
 
@@ -282,6 +293,7 @@ func main() {
 	}
 
 	app.client = make(map[string]*Client)
+	newSessions()
 
 	options := &engineio.Options{
 		PingTimeout: time.Duration(app.timeout+120) * time.Second,

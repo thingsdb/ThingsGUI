@@ -28,6 +28,7 @@ type Client struct {
 	TmpFiles        *TmpFiles
 	Token           string
 	User            string
+	Cookie          *http.Cookie
 }
 
 // AuthResp type
@@ -101,7 +102,13 @@ func connect(client *Client, data LoginData) LoginResp {
 		if err != nil {
 			return LoginResp{Connected: false, ConnErr: err.Error()}
 		}
+
 		client.Token = data.Token
+		fmt.Println("PRE ADD", client.Cookie)
+		if client.Cookie != nil {
+			fmt.Println("ADD", client.Cookie)
+			addSession(*client.Cookie, data)
+		}
 	} else {
 		err := client.Connection.AuthPassword(data.User, data.Password)
 		if err != nil {
@@ -124,10 +131,16 @@ func connect(client *Client, data LoginData) LoginResp {
 func Connected(client *Client) (int, LoginResp, Message) {
 	var resp LoginResp
 	conn := client.Connection
-
 	switch {
 	case conn == nil:
-		resp = connectViaCache(client, client.SessionPath, lastUsedKey)
+		// resp = connectViaCache(client, client.SessionPath, lastUsedKey)
+		fmt.Println("GetSession", client.Cookie)
+		if !resp.Connected && client.Cookie != nil {
+			if data := getSession(client.Cookie.Value); data != nil {
+				resp = connect(client, *data)
+			}
+		}
+
 	case conn.IsConnected():
 		resp.Connected = true
 	default:
@@ -233,13 +246,13 @@ func AuthOnly(address string, authMethod string) (int, AuthResp, Message) {
 // AuthToken connects to ThingsDB using the token and env variables
 func AuthToken(client *Client, data map[string]string, address string, ssl bool, aic bool) (int, interface{}, Message) {
 	message := Message{Text: "", Status: http.StatusOK, Log: ""}
-
-	var mapping LoginData
-	mapping.Address = address
-	mapping.IsToken = true
-	mapping.Token = data["token"]
-	mapping.SecureConnection = ssl
-	mapping.InsecureSkipVerify = aic
+	mapping := LoginData{
+		Address:            address,
+		IsToken:            true,
+		Token:              data["token"],
+		SecureConnection:   ssl,
+		InsecureSkipVerify: aic,
+	}
 
 	resp := connect(
 		client,
@@ -258,14 +271,14 @@ func AuthToken(client *Client, data map[string]string, address string, ssl bool,
 // AuthPass connects to ThingsDB using a user+pass and env variables
 func AuthPass(client *Client, data map[string]string, address string, ssl bool, aic bool) (int, interface{}, Message) {
 	message := Message{Text: "", Status: http.StatusOK, Log: ""}
-
-	var mapping LoginData
-	mapping.Address = address
-	mapping.IsToken = false
-	mapping.User = data["user"]
-	mapping.Password = data["pass"]
-	mapping.SecureConnection = ssl
-	mapping.InsecureSkipVerify = aic
+	mapping := LoginData{
+		Address:            address,
+		IsToken:            false,
+		User:               data["user"],
+		Password:           data["pass"],
+		SecureConnection:   ssl,
+		InsecureSkipVerify: aic,
+	}
 
 	resp := connect(
 		client,

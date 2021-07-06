@@ -13,10 +13,11 @@ import React from 'react';
 import StorageIcon from '@material-ui/icons/Storage';
 import VisibleIcon from '@material-ui/icons/Visibility';
 
+import {ApplicationActions} from '../../Stores';
 import {BottomBar, CollectionsMenu, ProceduresMenu, TimersMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
+import {COLLECTION_ROUTE, EDITOR_ROUTE, PROCEDURE_ROUTE, TIMER_ROUTE, USER_ROUTE} from '../../Constants/Routes';
 import {DrawerLayout, ErrorToast, getIdFromPath, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam, TopBarMenu} from '../Util';
 import {Procedure, Timer} from '../ProceduresAndTimers';
-import {COLLECTION_ROUTE, EDITOR_ROUTE, PROCEDURE_ROUTE, TIMER_ROUTE, USER_ROUTE} from '../../Constants/Routes';
 import Collection from '../Collections';
 import Editor from '../Editor';
 import HeaderTitle from './HeaderTitle';
@@ -25,7 +26,6 @@ import Nodes from '../Nodes';
 import User from '../Users';
 import Watcher from '../Watcher';
 import Welcome from '../Welcome';
-import CookieBanner from '../CookieBanner';
 
 const useStyles = makeStyles(() => ({
     mainGrid: {
@@ -51,6 +51,10 @@ const App = () => {
         }
         return null;
     });
+
+    React.useEffect(() => {
+        ApplicationActions.sendCookie();
+    }, []);
 
     const collectionName = getIdFromPath(location.pathname, COLLECTION_ROUTE);
     const userName = getIdFromPath(location.pathname, USER_ROUTE);
@@ -127,12 +131,7 @@ const App = () => {
                 }
                 menuOpen={menuOpen}
                 menus={[<CollectionsMenu key="collections_menu" />, <UsersMenu key="users_menu" />, <ProceduresMenu key="procedures_menu" />, <TimersMenu key="timers_menu" />, <QueryEditorMenu key="editor_menu" />]}
-                bottomBar={
-                    <React.Fragment>
-                        <BottomBar />
-                        <CookieBanner />
-                    </React.Fragment>
-                }
+                bottomBar={<BottomBar />}
                 drawerTitle={showNodes ? 'NODES' : 'WATCHER'}
                 drawerContent={showNodes ? <Nodes /> : <Watcher />}
                 toast={<ErrorToast />}

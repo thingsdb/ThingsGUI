@@ -25,6 +25,7 @@ const ApplicationActions = Vlow.createActions([
     'openEditor',
     'reconnect',
     'renameCachedConn',
+    'sendCookie',
     'storeSession'
 ]);
 
@@ -83,21 +84,29 @@ class ApplicationStore extends BaseStore {
 
     onConnected() {
         this.emit('connected').done((data) => {
-            ThingsdbActions.getUser(
-                ()=>{
-                    this.setState({
-                        connected: data.Connected,
-                        seekConnection:true,
-                    });
-                    setTimeout(() => {
-                        this.setState({
-                            loaded: true,
-                        });
-                    }, 2000);
-                    EventActions.watch('@n');
-                },
-                ()=>this.setState({loaded: true, seekConnection: false}));
-        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+            this.setState({
+                connected: data.Connected,
+                seekConnection: true,
+            });
+            setTimeout(() => {
+                this.setState({
+                    loaded: true,
+                });
+            }, 2000);
+            if (data.Connected) {
+                ThingsdbActions.getUser();
+            }
+            console.log(data)
+        }).fail((event, status, message) => {
+            console.log(message)
+            ErrorActions.setToastError(message.Log);
+            this.setState({connected: false, loaded: true, seekConnection: false});
+        });
+    }
+
+    onSendCookie() {
+        let cookies = document.cookie;
+        this.emit('cookie', cookies);
     }
 
     onStoreSession() {
