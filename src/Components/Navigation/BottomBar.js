@@ -1,6 +1,5 @@
 import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import Toolbar from '@material-ui/core/Toolbar';
 
 
 const bottomInfo = [

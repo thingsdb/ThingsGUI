@@ -4,7 +4,6 @@ import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -14,26 +13,18 @@ import {USER_ROUTE} from '../../Constants/Routes';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        // width: props => props.size !== 'big' ? 310 : 690,
-        // height: 310,
         backgroundColor: theme.palette.background.default,
     },
     action: {
-        // width: props => props.size !== 'big' ? 310 : 690,
-        // height: 310,
         paddingTop: 10,
-    },
-    media: {
-        height: 150,
-        width: 200,
-        margin: 10,
-    },
-    flex: {
-        display: 'flex'
     },
     marginLeft: {
         marginLeft: theme.spacing(1)
-    }
+    },
+    pos: {
+        marginBottom: 12,
+        display: 'flex'
+    },
 }));
 
 const UserCard = ({user, size}) => {
@@ -42,16 +33,11 @@ const UserCard = ({user, size}) => {
     return (
         <Card className={classes.root}>
             <CardActionArea className={classes.action} component={RouterLink} to={`/${USER_ROUTE}/${user.name}`}>
-                <CardMedia
-                    className={classes.media}
-                    image="/img/thingsdb-logo.png"
-                    title="ThingsDB"
-                />
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography variant="h5" component="h2">
                         {user.name}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" gutterBottom component='div' className={classes.flex}>
+                    <Typography variant="body2" gutterBottom component='div' className={classes.pos} color="textSecondary">
                         <Box >
                             {'Created: '}
                         </Box>

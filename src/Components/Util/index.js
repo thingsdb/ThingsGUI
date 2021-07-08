@@ -46,6 +46,7 @@ import TimePeriodPicker from './TimePeriodPicker';
 import TimePicker from './TimePicker';
 import TitlePage from './TitlePage';
 import TitlePage2 from './TitlePage2';
+import TitlePage3 from './TitlePage3';
 import TopBarMenu from './TopBarMenu';
 import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
@@ -389,6 +390,7 @@ export {
     TimePicker,
     TitlePage,
     TitlePage2,
+    TitlePage3,
     TopBarMenu,
     TreeBranch,
     TreeIcon,

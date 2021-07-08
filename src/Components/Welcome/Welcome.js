@@ -7,7 +7,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import {ThingsdbStore} from '../../Stores';
-import {getGreetingTime, getSorting, stableSort, TitlePage} from '../Util';
+import {getGreetingTime, getSorting, stableSort, TitlePage3} from '../Util';
 import CollectionCard from './CollectionCard';
 import UserCard from './UserCard';
 
@@ -34,36 +34,30 @@ const Welcome = ({collections, user, users}) => {
     let sortedCollections = stableSort(collections, getSorting('desc', 'things'));
 
     return (
-        <TitlePage
+        <TitlePage3
             preTitle={humanizedGreeting}
             title={user.name}
             content={
                 <Paper className={classes.root}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} key={'collections_intro'}>
-                            <Typography gutterBottom variant="h6" component="h2" color="textSecondary">
+                            <Typography gutterBottom variant="h5" component="h2" color="textSecondary">
                                 {'Your collections:'}
                             </Typography>
                         </Grid>
                         {sortedCollections.map((collection, index) => (
                             <Grid item key={index}>
-                                <CollectionCard
-                                    collection={collection}
-                                    // size={index === 0 ? 'big' : 'default'}
-                                />
+                                <CollectionCard collection={collection} />
                             </Grid>
                         ))}
                         <Grid item xs={12} key={'users_intro'}>
-                            <Typography gutterBottom variant="h6" component="h2" color="textSecondary">
+                            <Typography gutterBottom variant="h5" component="h2" color="textSecondary">
                                 {'Users:'}
                             </Typography>
                         </Grid>
                         {users.map((user, index) => (
                             <Grid item key={index}>
-                                <UserCard
-                                    user={user}
-                                    // size={index === 0 ? 'big' : 'default'}
-                                />
+                                <UserCard user={user} />
                             </Grid>
                         ))}
                     </Grid>

@@ -14,7 +14,7 @@ const parseErrorMsg = (errMsg) => {
     };
 
     const reErrCode = /\(([-][0-9]*)\)/gi;
-    const reLink = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/gi;
+    const reLink = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/gi; // eslint-disable-line
 
     // Get error code
     let res1;
