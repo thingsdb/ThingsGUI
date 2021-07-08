@@ -52,10 +52,6 @@ const App = () => {
         return null;
     });
 
-    React.useEffect(() => {
-        ApplicationActions.sendCookie();
-    }, []);
-
     const collectionName = getIdFromPath(location.pathname, COLLECTION_ROUTE);
     const userName = getIdFromPath(location.pathname, USER_ROUTE);
     const procedureName = getIdFromPath(location.pathname, PROCEDURE_ROUTE);

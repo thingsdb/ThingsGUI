@@ -75,7 +75,6 @@ func HandlerSession(w http.ResponseWriter, r *http.Request) {
 	for _, cookie := range r.Cookies() {
 		if cookie.Name == cookieName {
 			w.WriteHeader(200)
-			w.Write([]byte("Doc Get Successful"))
 			return
 		}
 	}
@@ -90,11 +89,9 @@ func HandlerSession(w http.ResponseWriter, r *http.Request) {
 		Value:  key,
 		MaxAge: cookieMaxAge,
 	}
-	fmt.Println("NEW COOKIE", cookie.MaxAge)
 
 	http.SetCookie(w, cookie)
 
 	w.WriteHeader(200)
-	w.Write([]byte("Doc Get Successful"))
 	return
 }

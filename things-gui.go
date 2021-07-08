@@ -27,7 +27,7 @@ var connFile = ".config/ThingsGUI/thingsgui.connections"
 var sessionFile = ".config/ThingsGUI/thingsgui.session"
 var lastUsedKey = "lastUsedKey"
 var cookieName = "uid"
-var cookieMaxAge = 180 // (seconds) 10 weeks 6048000
+var cookieMaxAge = 6048000 // (seconds) 10 weeks
 
 var (
 	// env variables
@@ -117,17 +117,24 @@ func (app *App) SocketRouter() {
 	})
 
 	app.server.OnEvent("/", "cookie", func(s socketio.Conn, cookies string) {
-		header := s.RemoteHeader()
-		header.Set("Cookie", cookies)
-		req := http.Request{Header: header}
-		cookie, _ := req.Cookie(cookieName)
-
 		client := app.client[s.ID()]
-		client.Cookie = cookie
+		if client.Cookie == nil {
+			header := s.RemoteHeader()
+			header.Set("Cookie", cookies)
+			req := http.Request{Header: header}
+			cookie, _ := req.Cookie(cookieName)
+			client.Cookie = cookie
+		}
 	})
 
 	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, LoginResp, Message) {
-		return Connected(app.client[s.ID()])
+		client := app.client[s.ID()]
+		if client.Cookie == nil {
+			req := http.Request{Header: s.RemoteHeader()}
+			cookie, _ := req.Cookie(cookieName)
+			client.Cookie = cookie
+		}
+		return Connected(client)
 	})
 
 	app.server.OnEvent("/", "connToNew", func(s socketio.Conn, data LoginData) (int, LoginResp, Message) {

@@ -1,6 +1,7 @@
 /* global require, __dirname, process, module */
 
 const webpack = require('webpack');
+const dotenv = require('dotenv');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -10,6 +11,15 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const VERSION = require(path.resolve(__dirname, './package.json')).version;
 const BUILD_DIR = path.resolve(__dirname, '../static/js');
 const APP_DIR = path.resolve(__dirname, '');
+
+// call dotenv and it will return an Object with a parsed key
+const env = dotenv.config().parsed;
+
+// reduce it to a nice object, the same as before
+const envKeys = Object.keys(env).reduce((prev, next) => {
+    prev[`env.${next}`] = JSON.stringify(env[next]);
+    return prev;
+}, {});
 
 const config = {
     mode: process.env.NODE_ENV === 'production' ? 'production': 'development',
@@ -60,6 +70,7 @@ const config = {
         }),
         // To strip all locales except “en”
         new MomentLocalesPlugin(),
+        new webpack.DefinePlugin({process: envKeys}),
     ],
     optimization: {
         splitChunks: {

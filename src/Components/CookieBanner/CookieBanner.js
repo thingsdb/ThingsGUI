@@ -56,7 +56,7 @@ function CookieBanner() {
                 </Grid>
                 <Grid item xs={12} sm={2} className={classes.button}>
                     <Button
-                        color="secondary"
+                        color="primary"
                         variant="outlined"
                         onClick={AcceptCookies}
                     >

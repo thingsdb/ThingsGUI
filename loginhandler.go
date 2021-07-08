@@ -104,9 +104,9 @@ func connect(client *Client, data LoginData) LoginResp {
 		}
 
 		client.Token = data.Token
-		fmt.Println("PRE ADD", client.Cookie)
+
+		// Add session if cookie is set
 		if client.Cookie != nil {
-			fmt.Println("ADD", client.Cookie)
 			addSession(*client.Cookie, data)
 		}
 	} else {
@@ -133,8 +133,7 @@ func Connected(client *Client) (int, LoginResp, Message) {
 	conn := client.Connection
 	switch {
 	case conn == nil:
-		// resp = connectViaCache(client, client.SessionPath, lastUsedKey)
-		fmt.Println("GetSession", client.Cookie)
+		resp = connectViaCache(client, client.SessionPath, lastUsedKey)
 		if !resp.Connected && client.Cookie != nil {
 			if data := getSession(client.Cookie.Value); data != nil {
 				resp = connect(client, *data)
@@ -351,6 +350,9 @@ func Reconnect(client *Client) (int, LoginResp, Message) {
 
 // Disconnect closes a connection to ThingsDB
 func Disconnect(client *Client) (int, LoginResp, Message) {
+	if client.Cookie != nil {
+		resetSession(client.Cookie.Value)
+	}
 	CloseSingleConn(client)
 	message := Message{Text: "", Status: http.StatusOK, Log: ""}
 	return message.Status, LoginResp{Loaded: true, Connected: false}, message

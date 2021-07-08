@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -31,7 +30,6 @@ func newSessions() {
 			globalSessions.mu.Lock()
 			for key, session := range globalSessions.sessionData {
 				if now.UTC().After(session.maxLifetime) {
-					fmt.Println("DELETE", session.maxLifetime, now.UTC())
 					delete(globalSessions.sessionData, key)
 				}
 			}
@@ -53,16 +51,10 @@ func addSession(cookie http.Cookie, data LoginData) {
 }
 
 func getSession(key string) *LoginData {
-	fmt.Println("KEY:\n", key, "\n", "SESSIONS KEYS:\n")
 	globalSessions.mu.Lock()
 	defer globalSessions.mu.Unlock()
 
-	for k, _ := range globalSessions.sessionData {
-		fmt.Println(k, "\n")
-	}
-
 	if session, ok := globalSessions.sessionData[key]; ok {
-		fmt.Println("GET")
 		return &session.data
 	}
 
@@ -73,5 +65,7 @@ func resetSession(key string) {
 	globalSessions.mu.Lock()
 	defer globalSessions.mu.Unlock()
 
-	// reset
+	if _, ok := globalSessions.sessionData[key]; ok {
+		delete(globalSessions.sessionData, key)
+	}
 }
