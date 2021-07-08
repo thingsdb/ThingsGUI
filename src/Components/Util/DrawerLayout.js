@@ -189,6 +189,9 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                             </ListItem>
                         ))}
                     </List>
+                    <div className={classes.footer}>
+                        {bottomBar}
+                    </div>
                 </Drawer>
                 <main
                     className={clsx(classes.full, {
@@ -234,9 +237,6 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     </div>
                 </Card>
                 {toast}
-            </div>
-            <div className={classes.footer}>
-                {bottomBar}
             </div>
         </div>
     );

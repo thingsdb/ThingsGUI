@@ -58,7 +58,7 @@ const parseError = (errMsg) => {
                 {errObj.errLinks.map(({link, preLink}) => (
                     <React.Fragment key={`err_${link}$`}>
                         {`${preLink} `}
-                        <Link target="_blank" href={link}>
+                        <Link color="inherit" target="_blank" href={link}>
                             {`ThingsDocs ${link.split('/').slice(-1)}`}
                         </Link>
                     </React.Fragment>
