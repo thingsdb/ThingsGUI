@@ -29,8 +29,8 @@ const TitlePage = ({preTitle, title, content}) => {
 };
 
 TitlePage.propTypes = {
-    preTitle: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    preTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     content: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]).isRequired,
 };
 

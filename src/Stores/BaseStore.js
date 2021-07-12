@@ -41,6 +41,8 @@ class _SocketRequest {
             this._alwaysCb(status, data);
             if (status === 200) {
                 this._doneCb(data);
+            } else if (status === 204) {
+                this._doneCb({ result: 'success (204)' });
             } else {
                 this._failCb(event, status, message);
             }
@@ -149,11 +151,9 @@ class _JsonRequest {
             if (xhr.status === 200) {
                 data = JSON.parse(xhr.responseText);
                 this.doneCb(data);
-            }
-            else if (xhr.status === 204) {
+            } else if (xhr.status === 204) {
                 this.doneCb({ result: 'success (204)' });
-            }
-            else {
+            } else {
                 try {
                     data = JSON.parse(xhr.responseText);
                 } catch (e) {
@@ -255,7 +255,7 @@ class EventStore extends BaseStore {
         });
 
         socket.on('disconnect', () => {
-            // location.reload();
+            location.reload();
         });
 
         socket.on('event', (data) => {

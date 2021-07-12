@@ -116,7 +116,7 @@ func (app *App) SocketRouter() {
 		return AuthPass(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
 	})
 
-	app.server.OnEvent("/", "cookie", func(s socketio.Conn, cookies string) {
+	app.server.OnEvent("/", "cookie", func(s socketio.Conn, cookies string) int {
 		client := app.client[s.ID()]
 		if client.Cookie == nil {
 			header := s.RemoteHeader()
@@ -125,6 +125,7 @@ func (app *App) SocketRouter() {
 			cookie, _ := req.Cookie(cookieName)
 			client.Cookie = cookie
 		}
+		return http.StatusNoContent
 	})
 
 	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, LoginResp, Message) {
