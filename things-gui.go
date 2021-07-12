@@ -241,18 +241,10 @@ func (app *App) getEnvVariables() error {
 
 	if os.Getenv("USE_COOKIE_SESSION") == "true" {
 		useCookieSession = true
-		if os.Getenv("USE_COOKIE_SESSION") == "true" {
-			useCookieSession = true
-		}
-
 	}
 
 	if os.Getenv("USE_LOCAL_SESSION") == "true" {
 		useLocalSession = true
-		if os.Getenv("USE_LOCAL_SESSION") == "true" {
-			useLocalSession = true
-		}
-
 	}
 
 	return nil

@@ -21,18 +21,14 @@ const useStyles = makeStyles(theme => ({
         },
         zIndex: 3000
     },
-    button: {
-        // display: 'flex',
-        // justifyContent: 'center',
-        // [theme.breakpoints.up('sm')]: {
-        //     justifyContent: 'right',
-        // }
-    }
 }));
 
 function CookieBanner() {
     const classes = useStyles();
-    const [cookiesAccepted, setCookiesAccepted] = useState(localStorage.getItem('thingsgui.cookiesAllowed'));
+    const [cookiesAccepted, setCookiesAccepted] = useState(
+        localStorage.getItem('thingsgui.cookiesAllowed') === 'true' ? true
+            : localStorage.getItem('thingsgui.cookiesAllowed') === 'false' ? false
+                : localStorage.getItem('thingsgui.cookiesAllowed'));
 
     React.useEffect(() => {
         if (cookiesAccepted) {
