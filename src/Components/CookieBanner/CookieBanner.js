@@ -22,11 +22,11 @@ const useStyles = makeStyles(theme => ({
         zIndex: 3000
     },
     button: {
-        display: 'flex',
-        justifyContent: 'center',
-        [theme.breakpoints.up('sm')]: {
-            justifyContent: 'right',
-        }
+        // display: 'flex',
+        // justifyContent: 'center',
+        // [theme.breakpoints.up('sm')]: {
+        //     justifyContent: 'right',
+        // }
     }
 }));
 
@@ -46,21 +46,36 @@ function CookieBanner() {
         setCookiesAccepted(true);
     };
 
-    if (!cookiesAccepted) {
+    const DeclineCookies = () => {
+        // Store Cookies consent
+        localStorage.setItem('thingsgui.cookiesAllowed', false);
+        setCookiesAccepted(false);
+    };
+
+    if (cookiesAccepted == null) {
         return (
             <Grid container alignItems="center" justify="center" className={classes.root} spacing={2}>
-                <Grid item xs={12} sm={10}>
+                <Grid item>
                     <Typography>
-                        {'This site uses only necessary cookies which are required for access restrictions. By using our site, you consent to our use of cookies.'}
+                        {'This site uses only necessary cookies to remember the last login. Do you consent to the use of these cookies?'}
                     </Typography>
                 </Grid>
-                <Grid item xs={12} sm={2} className={classes.button}>
+                <Grid item>
                     <Button
                         color="primary"
                         variant="outlined"
                         onClick={AcceptCookies}
                     >
                         {'Accept Cookies'}
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button
+                        color="default"
+                        variant="text"
+                        onClick={DeclineCookies}
+                    >
+                        {'Decline Cookies'}
                     </Button>
                 </Grid>
             </Grid>

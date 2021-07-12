@@ -88,7 +88,7 @@ const Root = ({authOnly, loaded, connected, seekConnection}) => {
         }
     }, []);
 
-    const useCookies = !isObjectEmpty(process) && yesList.includes(process.env.USE_COOKIES.toLowerCase()); // eslint-disable-line
+    const useCookies = !isObjectEmpty(process) && yesList.includes(process.env.USE_COOKIE_SESSION.toLowerCase()); // eslint-disable-line
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />

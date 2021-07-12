@@ -52,6 +52,7 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
         ProcedureActions.getProcedures();
         TimerActions.getTimers();
         ThingsdbActions.getUsers();
+        ThingsdbActions.getUser();
     }, []);
 
     let humanizedGreeting = 'Good ' + getGreetingTime(moment()) + ', ';

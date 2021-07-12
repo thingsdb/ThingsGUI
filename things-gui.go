@@ -36,6 +36,8 @@ var (
 	thingsguiSsl        bool
 	thingsguiAic        bool
 	thingsguiTokenApi   string
+	useLocalSession     bool
+	useCookieSession    bool
 )
 
 // App type
@@ -118,7 +120,7 @@ func (app *App) SocketRouter() {
 
 	app.server.OnEvent("/", "cookie", func(s socketio.Conn, cookies string) int {
 		client := app.client[s.ID()]
-		if client.Cookie == nil {
+		if useCookieSession && client.Cookie == nil {
 			header := s.RemoteHeader()
 			header.Set("Cookie", cookies)
 			req := http.Request{Header: header}
@@ -236,6 +238,22 @@ func (app *App) getEnvVariables() error {
 
 	}
 	thingsguiTokenApi = os.Getenv("THINGSGUI_TOKEN_API")
+
+	if os.Getenv("USE_COOKIE_SESSION") == "true" {
+		useCookieSession = true
+		if os.Getenv("USE_COOKIE_SESSION") == "true" {
+			useCookieSession = true
+		}
+
+	}
+
+	if os.Getenv("USE_LOCAL_SESSION") == "true" {
+		useLocalSession = true
+		if os.Getenv("USE_LOCAL_SESSION") == "true" {
+			useLocalSession = true
+		}
+
+	}
 
 	return nil
 }

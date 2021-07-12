@@ -17,9 +17,7 @@ const TitlePage3 = ({preTitle, title, content}) => {
                             {preTitle}
                         </Typography>
                         <Typography variant="h3">
-                            <Box fontWeight="fontWeightBold">
-                                {title}
-                            </Box>
+                            {title}
                         </Typography>
                     </CardContent>
                 </Card>

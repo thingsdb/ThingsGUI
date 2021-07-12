@@ -106,7 +106,7 @@ func connect(client *Client, data LoginData) LoginResp {
 		client.Token = data.Token
 
 		// Add session if cookie is set
-		if client.Cookie != nil {
+		if useCookieSession && client.Cookie != nil {
 			addSession(*client.Cookie, data)
 		}
 	} else {
@@ -119,9 +119,11 @@ func connect(client *Client, data LoginData) LoginResp {
 	}
 
 	// If connection successfull, save this in the session file.
-	err = saveLastUsedConnection(client, data)
-	if err != nil {
-		client.LogCh <- fmt.Sprintf("Last used connection could not be saved: %s.", err)
+	if useLocalSession {
+		err = saveLastUsedConnection(client, data)
+		if err != nil {
+			client.LogCh <- fmt.Sprintf("Last used connection could not be saved: %s.", err)
+		}
 	}
 
 	return LoginResp{Connected: true}
@@ -133,8 +135,11 @@ func Connected(client *Client) (int, LoginResp, Message) {
 	conn := client.Connection
 	switch {
 	case conn == nil:
-		resp = connectViaCache(client, client.SessionPath, lastUsedKey)
-		if !resp.Connected && client.Cookie != nil {
+		if useLocalSession {
+			resp = connectViaCache(client, client.SessionPath, lastUsedKey)
+		}
+
+		if !resp.Connected && useCookieSession && client.Cookie != nil {
 			if data := getSession(client.Cookie.Value); data != nil {
 				resp = connect(client, *data)
 			}
@@ -350,7 +355,7 @@ func Reconnect(client *Client) (int, LoginResp, Message) {
 
 // Disconnect closes a connection to ThingsDB
 func Disconnect(client *Client) (int, LoginResp, Message) {
-	if client.Cookie != nil {
+	if useCookieSession && client.Cookie != nil {
 		resetSession(client.Cookie.Value)
 	}
 	CloseSingleConn(client)
