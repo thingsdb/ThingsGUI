@@ -18,7 +18,7 @@ import (
 )
 
 // AppVersion exposes version information
-const AppVersion = "0.4.3"
+const AppVersion = "0.5.0"
 
 // For backwards compatability
 var oldConnFile = ".things-gui_config"
