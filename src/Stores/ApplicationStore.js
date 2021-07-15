@@ -39,7 +39,8 @@ class ApplicationStore extends BaseStore {
         seekConnection: PropTypes.bool,
         openEditor: PropTypes.bool,
         input: PropTypes.string,
-        cachedConnections: PropTypes.object
+        cachedConnections: PropTypes.object,
+        useCookies: PropTypes.bool
     }
 
     static defaults = {
@@ -50,7 +51,8 @@ class ApplicationStore extends BaseStore {
         seekConnection: true,
         openEditor: false,
         input: '',
-        cachedConnections: {}
+        cachedConnections: {},
+        useCookies: false
     }
 
     constructor() {
@@ -63,18 +65,22 @@ class ApplicationStore extends BaseStore {
             loaded: false,
             seekConnection: false,
         });
+        console.log("connect")
         this.emit(api, config).done((data) => {
+            console.log(data)
             ThingsdbActions.getUser(
                 ()=>{
                     this.setState({
                         connected: data.Connected,
+                        useCookies: data.UseCookies,
                         loaded: true,
                         seekConnection:true,
                     });
                     EventActions.watch('@n');
                 },
-                ()=>this.setState({loaded: true, seekConnection: false}));
+                ()=>this.setState({loaded: true, useCookies: data.UseCookies, seekConnection: false}));
         }).fail((event, status, message) => {
+            console.log(message.Log)
             ErrorActions.setMsgError(tag, message.Log);
             this.setState({loaded: true, seekConnection: true});
         });
@@ -85,6 +91,7 @@ class ApplicationStore extends BaseStore {
         this.emit('connected').done((data) => {
             this.setState({
                 connected: data.Connected,
+                useCookies: data.UseCookies,
                 seekConnection: true,
             });
             setTimeout(() => {

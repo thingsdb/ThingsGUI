@@ -12,7 +12,6 @@ import Auth from './Auth';
 import CookieBanner from '../CookieBanner';
 import InitStores from './InitStores';
 import Login from './Login';
-import {isObjectEmpty} from '../Util';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -73,12 +72,10 @@ const theme = createMuiTheme({
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['authOnly', 'loaded', 'connected', 'seekConnection']
+    keys: ['authOnly', 'loaded', 'connected', 'seekConnection', 'useCookies']
 }]);
 
-const yesList = ['yes', 'y', 'true', '1'];
-
-const Root = ({authOnly, loaded, connected, seekConnection}) => {
+const Root = ({authOnly, loaded, connected, seekConnection, useCookies}) => {
     React.useEffect(() => {
         const key = (new URL(window.location)).searchParams.get('key');
         ApplicationActions.isAuthOnly();
@@ -88,7 +85,6 @@ const Root = ({authOnly, loaded, connected, seekConnection}) => {
         }
     }, []);
 
-    const useCookies = !isObjectEmpty(process) && yesList.includes(process.env.USE_COOKIE_SESSION.toLowerCase()); // eslint-disable-line
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
@@ -109,6 +105,7 @@ Root.propTypes = {
     loaded: ApplicationStore.types.loaded.isRequired,
     connected: ApplicationStore.types.connected.isRequired,
     seekConnection: ApplicationStore.types.seekConnection.isRequired,
+    useCookies: ApplicationStore.types.useCookies.isRequired,
 };
 
 export default withStores(Root);
