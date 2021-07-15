@@ -65,9 +65,7 @@ class ApplicationStore extends BaseStore {
             loaded: false,
             seekConnection: false,
         });
-        console.log("connect")
         this.emit(api, config).done((data) => {
-            console.log(data)
             ThingsdbActions.getUser(
                 ()=>{
                     this.setState({
@@ -80,7 +78,6 @@ class ApplicationStore extends BaseStore {
                 },
                 ()=>this.setState({loaded: true, useCookies: data.UseCookies, seekConnection: false}));
         }).fail((event, status, message) => {
-            console.log(message.Log)
             ErrorActions.setMsgError(tag, message.Log);
             this.setState({loaded: true, seekConnection: true});
         });

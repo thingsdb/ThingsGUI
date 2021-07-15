@@ -115,13 +115,8 @@ func connect(client *Client, data LoginData) (*LoginResp, error) {
 		if err != nil {
 			return disconnectedResp(), err
 		}
-
 		client.Token = data.Token
 
-		// Add session if cookie is set
-		if useCookieSession && client.Cookie != nil {
-			addSession(*client.Cookie, data)
-		}
 	} else {
 		err := client.Connection.AuthPassword(data.User, data.Password)
 		if err != nil {
@@ -131,12 +126,17 @@ func connect(client *Client, data LoginData) (*LoginResp, error) {
 		client.Pass = data.Password
 	}
 
-	// If connection successfull, save this in the session file.
+	// Store session in local file (~/.config/ThingsGUI/thingsgui.session).
 	if useLocalSession {
 		err = saveLastUsedConnection(client, data)
 		if err != nil {
 			client.LogCh <- fmt.Sprintf("Last used connection could not be saved: %s.", err)
 		}
+	}
+
+	// Store session in memory
+	if useCookieSession && client.Cookie != nil {
+		addSession(*client.Cookie, data)
 	}
 
 	return connectedResp(), nil
@@ -362,6 +362,9 @@ func Reconnect(client *Client) (int, *LoginResp, Message) {
 
 // Disconnect closes a connection to ThingsDB
 func Disconnect(client *Client) (int, *LoginResp, Message) {
+	if useLocalSession {
+		saveLastUsedConnection(client, LoginData{})
+	}
 	if useCookieSession && client.Cookie != nil {
 		resetSession(client.Cookie.Value)
 	}

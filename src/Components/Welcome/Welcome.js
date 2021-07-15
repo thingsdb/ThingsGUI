@@ -61,7 +61,7 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
     return (
         <TitlePage3
             preTitle={humanizedGreeting}
-            title={user.name}
+            title={user.name || ''}
             content={
                 <React.Fragment>
                     {sortedCollections.length > 0 &&
