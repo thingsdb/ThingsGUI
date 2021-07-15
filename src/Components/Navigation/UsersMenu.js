@@ -4,7 +4,8 @@ import {withVlow} from 'vlow';
 
 import {Add} from '../Users/Config';
 import {Menu, orderByName} from '../Util';
-import {ApplicationActions, ThingsdbActions, ThingsdbStore} from '../../Stores';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores';
+import {USER_ROUTE} from '../../Constants/Routes';
 import {isObjectEmpty} from '../Util';
 
 const withStores = withVlow([{
@@ -20,10 +21,6 @@ const UsersMenu = ({user, users}) => {
         ThingsdbActions.getUsers();
     };
 
-    const handleClickUser = (user) => {
-        ApplicationActions.navigate({path: 'user', index: user, item: '', scope: ''});
-    };
-
     const users2 =
     users.length ? users
         : isObjectEmpty(user) ? []
@@ -34,12 +31,13 @@ const UsersMenu = ({user, users}) => {
 
     return (
         <Menu
-            title="users"
-            icon={<PersonIcon color="primary" />}
-            items={orderedUsers}
             addItem={<Add />}
-            onClickItem={handleClickUser}
+            homeRoute={USER_ROUTE}
+            icon={<PersonIcon color="primary" />}
+            itemKey="name"
+            items={orderedUsers}
             onRefresh={handleRefresh}
+            title="users"
         />
     );
 };

@@ -110,6 +110,7 @@ static/js/*.html
 static/js/*-bundle-*.js
 static/js/*-bundle-*.min.js
 static/js/*-bundle-*.min.js.LICENSE.txt
+static/js/*.worker.js
 
 # NPM
 src/npm-debug.log

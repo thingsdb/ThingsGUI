@@ -10,7 +10,7 @@ import React from 'react';
 
 import { ErrorMsg, isObjectEmpty, SimpleModal } from '../../Util';
 import {ApplicationStore, ApplicationActions} from '../../../Stores';
-import {LoginTAG} from '../../../Constants/Tags';
+import {LoginTAG, LoginEditTAG} from '../../../Constants/Tags';
 import Edit from './Edit';
 import ListConnections from './ListConnections';
 
@@ -71,17 +71,17 @@ const Login = ({cachedConnections}) => {
     const handleClickSave = () => {
         switch(editField){
         case 'name':
-            oldName ? ApplicationActions.renameCachedConn({...form, ...credentials, ...security}, oldName, tag, handleClickCloseSaveConn)
-                : ApplicationActions.newCachedConn({...form, ...credentials, ...security}, tag, handleClickCloseSaveConn);
+            oldName ? ApplicationActions.renameCachedConn({...form, ...credentials, ...security}, oldName, LoginEditTAG, handleClickCloseSaveConn)
+                : ApplicationActions.newCachedConn({...form, ...credentials, ...security}, LoginEditTAG, handleClickCloseSaveConn);
             break;
         case 'credentials':
-            ApplicationActions.editCachedConn({name: form.name, ...credentials}, tag, handleClickCloseSaveConn);
+            ApplicationActions.editCachedConn({name: form.name, ...credentials}, LoginEditTAG, handleClickCloseSaveConn);
             break;
         case 'security':
-            ApplicationActions.editCachedConn({name: form.name, ...security}, tag, handleClickCloseSaveConn);
+            ApplicationActions.editCachedConn({name: form.name, ...security}, LoginEditTAG, handleClickCloseSaveConn);
             break;
         case 'address':
-            ApplicationActions.editCachedConn(form, tag, handleClickCloseSaveConn);
+            ApplicationActions.editCachedConn(form, LoginEditTAG, handleClickCloseSaveConn);
             break;
         }
     };
@@ -97,8 +97,8 @@ const Login = ({cachedConnections}) => {
     const handleEditConn = (ky, val) => {
         setState(prevState => {
             const updatedCred = {
-                password: val.password,
-                token: val.token,
+                password: '',
+                token: '',
                 user: val.user,
                 isToken: val.isToken,
             };
@@ -123,6 +123,7 @@ const Login = ({cachedConnections}) => {
                 open={openSaveConn}
                 onClose={handleClickCloseSaveConn}
             >
+                <ErrorMsg tag={LoginEditTAG} />
                 <Edit form={form} credentials={credentials} security={security} onChange={handleOnChange} editField={editField} />
             </SimpleModal>
             <Dialog

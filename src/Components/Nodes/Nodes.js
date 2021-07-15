@@ -15,10 +15,13 @@ const withStores = withVlow([{
 
 const Nodes = ({nodes, connectedNode}) => {
 
-    const handleRefresh = () => {
+    const handleRefresh = React.useCallback(() => {
         NodesActions.getNodes();
-    };
+    }, []);
 
+    React.useEffect(() => {
+        handleRefresh();
+    }, [handleRefresh]);
 
     const rows = nodes;
     const header = [{

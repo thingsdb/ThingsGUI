@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 // buffer is used to read data from a connection.
@@ -17,6 +18,18 @@ func newBuffer() *buffer {
 		data: make([]byte, 0),
 		len:  0,
 	}
+}
+
+// CreateFile creates a file and returns a boolean if successfull and an error message when something goes wrong
+func CreateDir(path string, logCh chan string) error {
+	err := os.MkdirAll(path, 0700)
+	if err != nil {
+		return err
+	}
+
+	logCh <- fmt.Sprintln("Dir Created Successfully", path)
+
+	return nil
 }
 
 // FileNotExist returns a boolean indicating if a file does not exists
@@ -37,6 +50,12 @@ func FileNotExist(path string) bool {
 func CreateFile(path string, logCh chan string) (bool, error) {
 	create := FileNotExist(path)
 	if create {
+		dir := filepath.Dir(path)
+		err := CreateDir(dir, logCh)
+		if err != nil {
+			return false, err
+		}
+
 		file, err := os.Create(path)
 		if err != nil {
 			return false, err
@@ -79,7 +98,7 @@ func WriteFile(path string, logCh chan string, data []byte) error {
 // ReadFile reads a file and returns a byte array and may return an error when something goes wrong
 func ReadFile(path string, logCh chan string) ([]byte, error) {
 	// Open file for reading.
-	file, err := os.OpenFile(path, os.O_RDWR, 0600)
+	file, err := os.OpenFile(path, os.O_RDONLY, 0600)
 	if err != nil {
 		return nil, err
 	}
@@ -98,13 +117,13 @@ func ReadFile(path string, logCh chan string) ([]byte, error) {
 			break
 		}
 
-		// Break if error occured
+		// Break if error occurred
 		if err != nil && err != io.EOF {
 			return nil, err
 		}
 	}
 
-	logCh <- fmt.Sprintln("Reading from file.")
+	logCh <- fmt.Sprintf("Reading from file: %s.", path)
 	return b.data, nil
 }
 
@@ -121,9 +140,9 @@ func DeleteFile(path string, logCh chan string) error {
 }
 
 // GetHomePath returns the path of the local home folder
-func GetHomePath(fileName string) string {
+func GetHomePath(filepath string) string {
 	var dir string
 	dir, _ = os.UserHomeDir()
-	path := fmt.Sprintf("%s/%s", dir, fileName)
+	path := fmt.Sprintf("%s/%s", dir, filepath)
 	return path
 }

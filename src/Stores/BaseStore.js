@@ -41,6 +41,8 @@ class _SocketRequest {
             this._alwaysCb(status, data);
             if (status === 200) {
                 this._doneCb(data);
+            } else if (status === 204) {
+                this._doneCb({ result: 'success (204)' });
             } else {
                 this._failCb(event, status, message);
             }
@@ -125,22 +127,63 @@ class _BlobRequest {
     }
 }
 
-class _PushNotification {
+class _JsonRequest {
 
-    constructor() {
+    constructor(type, url, data, isStringified) {
 
-        socket.emit('log');
-        socket.on('logging', (msg) => {
-            window.console.log(msg);
-            if (msg.includes('connection lost')) {
-                ErrorActions.setMsgError(LoginTAG, msg);
+        this.doneCb = function (data) { };         // eslint-disable-line
+        this.failCb = function (error, msg) {
+            console.error(error, msg || 'Unknown error occurred');
+        };
+        this.alwaysCb = function (xhr, data) { };  // eslint-disable-line
+
+        let xhr = new XMLHttpRequest();
+        xhr.open(type, url, true);
+        xhr.setRequestHeader('Content-type', 'application/json');
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== XMLHttpRequest.DONE) {
+                return;
             }
-        });
-        socket.on('disconnect', () => {
-            location.reload();
-        });
+
+            let data;
+
+            if (xhr.status === 200) {
+                data = JSON.parse(xhr.responseText);
+                this.doneCb(data);
+            } else if (xhr.status === 204) {
+                this.doneCb({ result: 'success (204)' });
+            } else {
+                try {
+                    data = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    data = xhr.responseText;
+                }
+                this.failCb(xhr, data);
+            }
+            this.alwaysCb(xhr, data);
+        };
+
+        xhr.send((data === undefined || isStringified) ?
+            data : JSON.stringify(data));
+    }
+
+    done(doneCb) {
+        this.doneCb = doneCb;
+        return this;
+    }
+
+    fail(failCb) {
+        this.failCb = failCb;
+        return this;
+    }
+
+    always(alwaysCb) {
+        this.alwaysCb = alwaysCb;
+        return this;
     }
 }
+
 
 class BaseStore extends Vlow.Store {
 
@@ -152,8 +195,8 @@ class BaseStore extends Vlow.Store {
         return new _BlobRequest('POST', url, data);
     }
 
-    push() {
-        return new _PushNotification();
+    get(url) {
+        return new _JsonRequest('GET', url);
     }
 }
 
@@ -162,7 +205,6 @@ const EventActions = Vlow.createActions([
     'unwatch',
     'reWatch',
     'resetWatch',
-    'openEvCh',
 ]);
 
 const ProtoMap = {
@@ -204,12 +246,18 @@ class EventStore extends BaseStore {
     constructor() {
         super(EventActions);
         this.state = EventStore.defaults;
-    }
 
-    // STOREACTIONS
+        socket.on('logging', (msg) => {
+            window.console.log(msg);
+            if (msg.includes('connection lost')) {
+                ErrorActions.setMsgError(LoginTAG, msg);
+            }
+        });
 
-    onOpenEvCh() {
-        socket.emit('getEvent');
+        socket.on('disconnect', () => {
+            location.reload();
+        });
+
         socket.on('event', (data) => {
             switch(data.Proto){
             case ProtoMap.ProtoOnWatchIni:
@@ -235,6 +283,8 @@ class EventStore extends BaseStore {
             }
         });
     }
+
+    // STOREACTIONS
 
     onWatch(scope, id='', tag=null) {
         const idString = `${id}`;

@@ -3,24 +3,23 @@ package main
 import (
 	"encoding/base64"
 	"encoding/json"
-	"net/http"
 	"strconv"
 	"strings"
 )
 
 type Procedure struct {
-	Name      string `json:"name"`
 	Arguments string `json:"arguments"`
+	Name      string `json:"name"`
 }
 
 // Data struct that received
 type Data struct {
-	Query     string                 `json:"query"`
-	Scope     string                 `json:"scope"`
+	Arguments map[string]interface{} `json:"arguments"`
 	Blob      map[string]string      `json:"blob"`
 	Ids       []string               `json:"ids"`
-	Arguments map[string]interface{} `json:"arguments"`
 	Procedure Procedure              `json:"procedure"`
+	Query     string                 `json:"query"`
+	Scope     string                 `json:"scope"`
 }
 
 // Query sends a query to ThingsDB and receives a result
@@ -28,7 +27,7 @@ func Query(client *Client, data Data, timeout uint16) (int, interface{}, Message
 	for k, v := range data.Blob {
 		decodedBlob, err := base64.StdEncoding.DecodeString(v)
 		if err != nil {
-			message := Message{Text: "Query error", Status: http.StatusInternalServerError, Log: err.Error()}
+			message := FailedMsg(err)
 			return message.Status, "", message
 		}
 
@@ -51,7 +50,7 @@ func Query(client *Client, data Data, timeout uint16) (int, interface{}, Message
 
 	var r interface{}
 	r, err = client.TmpFiles.ReplaceBinStrWithLink(resp)
-	message := Msg(err, http.StatusInternalServerError)
+	message := Msg(err)
 	if r != nil {
 		resp = r
 	}
@@ -62,7 +61,7 @@ func Query(client *Client, data Data, timeout uint16) (int, interface{}, Message
 func CleanupTmp(tmp *TmpFiles) (int, bool, Message) {
 	resp := true
 	err := tmp.CleanupTmp()
-	message := Msg(err, http.StatusInternalServerError)
+	message := Msg(err)
 	if err != nil {
 		resp = false
 	}
@@ -83,7 +82,7 @@ func Watch(client *Client, data Data, timeout uint16) (int, interface{}, Message
 	}
 
 	resp, err := client.Connection.Watch(scope, idsInt, timeout)
-	message := Msg(err, http.StatusInternalServerError)
+	message := Msg(err)
 	return message.Status, resp, message
 }
 
@@ -101,18 +100,18 @@ func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, Messa
 	}
 
 	resp, err := client.Connection.Unwatch(scope, idsInt, timeout)
-	message := Msg(err, http.StatusInternalServerError)
+	message := Msg(err)
 	return message.Status, resp, message
 }
 
 // Run the procedure that is provided
 func Run(client *Client, data Data, timeout uint16) (int, interface{}, Message) {
 	var args interface{}
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := SuccessMsg()
 	if data.Procedure.Name != "" {
 		decoder := json.NewDecoder(strings.NewReader(data.Procedure.Arguments))
 		if err := decoder.Decode(&args); err != nil {
-			message = Msg(err, http.StatusInternalServerError)
+			message = Msg(err)
 			return message.Status, "", message
 		}
 		args = Convert(args)

@@ -18,9 +18,16 @@ import (
 )
 
 // AppVersion exposes version information
-const AppVersion = "0.4.3"
+const AppVersion = "0.5.0"
 
-var connFile = ".things-gui_config"
+// For backwards compatability
+var oldConnFile = ".things-gui_config"
+
+var connFile = ".config/ThingsGUI/thingsgui.connections"
+var sessionFile = ".config/ThingsGUI/thingsgui.session"
+var lastUsedKey = "lastUsedKey"
+var cookieName = "uid"
+var cookieMaxAge = 6048000 // (seconds) 10 weeks
 
 var (
 	// env variables
@@ -29,6 +36,8 @@ var (
 	thingsguiSsl        bool
 	thingsguiAic        bool
 	thingsguiTokenApi   string
+	useLocalSession     bool
+	useCookieSession    bool
 )
 
 // App type
@@ -62,15 +71,34 @@ func (app *App) Init() {
 func (app *App) SocketRouter() {
 	app.server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
-
 		app.client[s.ID()] = &Client{
-			Closed:   make(chan bool),
-			LogCh:    make(chan string, 1),
-			EventCh:  make(chan *things.Event),
-			TmpFiles: NewTmpFiles(),
-			HomePath: GetHomePath(connFile),
+			Closed:          make(chan bool),
+			LogCh:           make(chan string),
+			EventCh:         make(chan *things.Event),
+			TmpFiles:        NewTmpFiles(),
+			ConnectionsPath: GetHomePath(connFile),
+			SessionPath:     GetHomePath(sessionFile),
 		}
-		app.client[s.ID()].LogCh <- fmt.Sprintf("connected: %s", s.ID())
+
+		lCh := app.client[s.ID()].LogCh
+		go func() {
+			for p := range lCh {
+				s.Emit("logging", p)
+			}
+		}()
+
+		eCh := app.client[s.ID()].EventCh
+		go func() {
+			for p := range eCh {
+				_, err := app.client[s.ID()].TmpFiles.ReplaceBinStrWithLink(p.Data)
+				if err != nil {
+					lCh <- err.Error()
+				}
+				s.Emit("event", p)
+			}
+		}()
+
+		lCh <- fmt.Sprintf("connected: %s", s.ID())
 		return nil
 	})
 
@@ -90,15 +118,33 @@ func (app *App) SocketRouter() {
 		return AuthPass(app.client[s.ID()], data, thingsguiAddress, thingsguiSsl, thingsguiAic)
 	})
 
+	app.server.OnEvent("/", "cookie", func(s socketio.Conn, cookies string) int {
+		client := app.client[s.ID()]
+		if useCookieSession && client.Cookie == nil {
+			header := s.RemoteHeader()
+			header.Set("Cookie", cookies)
+			req := http.Request{Header: header}
+			cookie, _ := req.Cookie(cookieName)
+			client.Cookie = cookie
+		}
+		return http.StatusNoContent
+	})
+
 	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, LoginResp, Message) {
-		return Connected(app.client[s.ID()].Connection)
+		client := app.client[s.ID()]
+		if client.Cookie == nil {
+			req := http.Request{Header: s.RemoteHeader()}
+			cookie, _ := req.Cookie(cookieName)
+			client.Cookie = cookie
+		}
+		return Connected(client)
 	})
 
 	app.server.OnEvent("/", "connToNew", func(s socketio.Conn, data LoginData) (int, LoginResp, Message) {
 		return ConnectToNew(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "connViaCache", func(s socketio.Conn, data LoginData) (int, interface{}, Message) {
+	app.server.OnEvent("/", "connViaCache", func(s socketio.Conn, data LoginData) (int, LoginResp, Message) {
 		return ConnectViaCache(app.client[s.ID()], data)
 	})
 
@@ -111,32 +157,23 @@ func (app *App) SocketRouter() {
 	})
 
 	app.server.OnEvent("/", "getCachedConn", func(s socketio.Conn) (int, interface{}, Message) {
-		return GetCachedConnection(app.client[s.ID()])
+		return GetCachedConnections(app.client[s.ID()])
 	})
 
-	app.server.OnEvent("/", "newCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, Message) {
+	app.server.OnEvent("/", "newCachedConn", func(s socketio.Conn, data LData) (int, interface{}, Message) {
 		return NewCachedConnection(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "editCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, Message) {
+	app.server.OnEvent("/", "editCachedConn", func(s socketio.Conn, data LData) (int, interface{}, Message) {
 		return EditCachedConnection(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "renameCachedConn", func(s socketio.Conn, data map[string]interface{}) (int, interface{}, Message) {
+	app.server.OnEvent("/", "renameCachedConn", func(s socketio.Conn, data LData) (int, interface{}, Message) {
 		return RenameCachedConnection(app.client[s.ID()], data)
 	})
 
 	app.server.OnEvent("/", "delCachedConn", func(s socketio.Conn, data LoginData) (int, interface{}, Message) {
 		return DelCachedConnection(app.client[s.ID()], data)
-	})
-
-	app.server.OnEvent("/", "log", func(s socketio.Conn) {
-		ch := app.client[s.ID()].LogCh
-		go func() {
-			for p := range ch {
-				s.Emit("logging", p)
-			}
-		}()
 	})
 
 	app.server.OnEvent("/", "query", func(s socketio.Conn, data Data) (int, interface{}, Message) {
@@ -157,20 +194,6 @@ func (app *App) SocketRouter() {
 
 	app.server.OnEvent("/", "run", func(s socketio.Conn, data Data) (int, interface{}, Message) {
 		return Run(app.client[s.ID()], data, app.timeout)
-	})
-
-	app.server.OnEvent("/", "getEvent", func(s socketio.Conn) {
-		eCh := app.client[s.ID()].EventCh
-		lCh := app.client[s.ID()].LogCh
-		go func() {
-			for p := range eCh {
-				_, err := app.client[s.ID()].TmpFiles.ReplaceBinStrWithLink(p.Data)
-				if err != nil {
-					lCh <- err.Error()
-				}
-				s.Emit("event", p)
-			}
-		}()
 	})
 
 	app.server.OnError("/", func(s socketio.Conn, e error) {
@@ -203,19 +226,26 @@ func open(url string) error { //https://stackoverflow.com/questions/39320371/how
 	return exec.Command(cmd, args...).Run()
 }
 
-// newEditConnection saves a new connection or edits locally
 func (app *App) getEnvVariables() error {
 	godotenv.Load(app.envPath)
 	thingsguiAddress = os.Getenv("THINGSGUI_ADDRESS")
 	thingsguiAuthMethod = os.Getenv("THINGSGUI_AUTH_METHOD")
-	if os.Getenv("THINGSGUI_SSL") == "true" {
+	if IsTrue(os.Getenv("THINGSGUI_SSL")) {
 		thingsguiSsl = true
-		if os.Getenv("THINGSGUI_AIC") == "true" {
+		if IsTrue(os.Getenv("THINGSGUI_AIC")) {
 			thingsguiAic = true
 		}
 
 	}
 	thingsguiTokenApi = os.Getenv("THINGSGUI_TOKEN_API")
+	// const yesList = ['yes', 'y', 'true', '1'];
+	if IsTrue(os.Getenv("USE_COOKIE_SESSION")) {
+		useCookieSession = true
+	}
+
+	if IsTrue(os.Getenv("USE_LOCAL_SESSION")) {
+		useLocalSession = true
+	}
 
 	return nil
 }
@@ -254,6 +284,7 @@ func (app *App) Start() {
 	http.HandleFunc("/img/view-edit.png", handlerViewEditLogo)
 	http.HandleFunc("/favicon.ico", handlerFaviconIco)
 	http.HandleFunc("/download", HandlerDownload)
+	http.HandleFunc("/session", HandlerSession)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
@@ -280,6 +311,7 @@ func main() {
 	}
 
 	app.client = make(map[string]*Client)
+	newSessions()
 
 	options := &engineio.Options{
 		PingTimeout: time.Duration(app.timeout+120) * time.Second,

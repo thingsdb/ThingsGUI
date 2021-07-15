@@ -3,8 +3,9 @@ import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import {withVlow} from 'vlow';
 
 import {Add} from '../Collections/Config';
+import {COLLECTION_ROUTE} from '../../Constants/Routes';
 import {Menu, orderByName} from '../Util';
-import {ApplicationActions, ThingsdbActions, ThingsdbStore} from '../../Stores';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores';
 
 
 const withStores = withVlow([{
@@ -18,20 +19,17 @@ const CollectionsMenu = ({collections}) => {
         ThingsdbActions.getCollections();
     };
 
-    const handleClickCollection = (collection) => {
-        ApplicationActions.navigate({path: 'collection', index: collection, item: '', scope:''});
-    };
-
     const orderedCollections = orderByName(collections||[]);
 
     return (
         <Menu
             title="collections"
             icon={<LibraryBooksIcon color="primary" />}
+            itemKey="name"
             items={orderedCollections}
             addItem={<Add />}
-            onClickItem={handleClickCollection}
             onRefresh={handleRefresh}
+            homeRoute={COLLECTION_ROUTE}
         />
     );
 };

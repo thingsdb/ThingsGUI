@@ -1,19 +1,17 @@
-import {withVlow} from 'vlow';
 import {makeStyles} from '@material-ui/core/styles';
+import {useHistory} from 'react-router-dom';
+import {withVlow} from 'vlow';
 import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
-import {ApplicationStore, CollectionActions, EditorActions, EditorStore, ErrorActions} from '../../Stores';
-import {QueryInput} from '../Util';
+import {CollectionActions, EditorActions, EditorStore, ErrorActions} from '../../Stores';
+import {historyGetQueryParam, QueryInput} from '../Util';
 import {EditorTAG} from '../../Constants/Tags';
 
 
 const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}, {
     store: EditorStore,
     keys: ['history']
 }]);
@@ -29,17 +27,20 @@ const useStyles = makeStyles(theme => ({
 
 
 const tag = EditorTAG;
-const Editor = ({height, history, input, match, onExpand, onOutput, scope}) => {
+const Editor = ({height, history, input, onExpand, onOutput, scope}) => {
+    let routerHistory = useHistory();
     const classes = useStyles();
-    const [query, setQuery] = React.useState('');
-    const [queryInput, setQueryInput] = React.useState('');
-    const [suggestion, setSuggestion] = React.useState(0);
 
-    React.useEffect(() => {
-        if(match.item){
-            setQueryInput(match.item);
+    const [query, setQuery] = React.useState('');
+    const [queryInput, setQueryInput] = React.useState(() => {
+        let query = historyGetQueryParam(routerHistory, 'query');
+        if (query) {
+            return query;
+        } else {
+            return '';
         }
-    }, [match.item]);
+    });
+    const [suggestion, setSuggestion] = React.useState(0);
 
     React.useEffect(() => {
         if(input){
@@ -139,9 +140,6 @@ Editor.propTypes = {
     onExpand: PropTypes.func.isRequired,
     onOutput: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
-
-    /* Application properties */
-    match: ApplicationStore.types.match.isRequired,
 
     /* Editor properties */
     history: EditorStore.types.history.isRequired,

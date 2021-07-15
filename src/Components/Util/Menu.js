@@ -1,4 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles';
+import {Link as RouterLink} from 'react-router-dom';
+import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -14,6 +15,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import Tooltip from '@material-ui/core/Tooltip';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -32,16 +34,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Menu = ({title, icon, itemKey, items, addItem, onClickItem, onRefresh}) => {
+const Menu = ({addItem, homeRoute, icon, itemKey, items, onRefresh, title}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(!open);
         onRefresh&&!open&&onRefresh();
-    };
-    const handleClickItem = (i) => () => {
-        onClickItem(i);
     };
 
     return (
@@ -71,7 +70,13 @@ const Menu = ({title, icon, itemKey, items, addItem, onClickItem, onRefresh}) =>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     {items.length ? items.map((item, i) => (
-                        <ListItem key={i} button className={classes.nested} onClick={handleClickItem(i)}>
+                        <ListItem
+                            key={i}
+                            button
+                            className={classes.nested}
+                            component={RouterLink}
+                            to={location => ({...location, pathname: `/${homeRoute}/${item[itemKey]}`})}
+                        >
                             <ListItemIcon>
                                 {icon}
                             </ListItemIcon>
@@ -101,19 +106,17 @@ const Menu = ({title, icon, itemKey, items, addItem, onClickItem, onRefresh}) =>
 };
 
 Menu.defaultProps = {
-    itemKey: 'name',
     onRefresh: null,
 };
 
 Menu.propTypes = {
-    title: PropTypes.string.isRequired,
-    itemKey: PropTypes.string,
-    items: PropTypes.arrayOf(PropTypes.object).isRequired,
-    icon: PropTypes.element.isRequired,
     addItem: PropTypes.object.isRequired,
-    onClickItem: PropTypes.func.isRequired,
+    homeRoute: PropTypes.string.isRequired,
+    icon: PropTypes.element.isRequired,
+    itemKey: PropTypes.string.isRequired,
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
     onRefresh: PropTypes.func,
-
+    title: PropTypes.string.isRequired,
 };
 
 export default Menu;

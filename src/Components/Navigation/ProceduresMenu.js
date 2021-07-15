@@ -7,7 +7,8 @@ import React from 'react';
 
 import {AddProcedureDialog} from '../ProceduresAndTimers';
 import {Menu, orderByName} from '../Util';
-import {ApplicationActions, ProcedureActions, ProcedureStore} from '../../Stores';
+import {PROCEDURE_ROUTE} from '../../Constants/Routes';
+import {ProcedureActions, ProcedureStore} from '../../Stores';
 import {THINGSDB_SCOPE} from '../../Constants/Scopes';
 
 const withStores = withVlow([{
@@ -50,10 +51,6 @@ const ProceduresMenu = ({procedures}) => {
         ProcedureActions.getProcedures(scope);
     };
 
-    const handleClickProcedure = (i) => {
-        ApplicationActions.navigate({path: 'procedure', index: i, item: '', scope: ''});
-    };
-
     const handleClickAdd = () => {
         setOpen(true);
     };
@@ -67,15 +64,16 @@ const ProceduresMenu = ({procedures}) => {
     return (
         <React.Fragment>
             <Menu
-                title="procedures"
-                icon={<PlayArrowIcon color="primary" />}
-                items={orderedProcedures}
                 addItem={
                     <Button color="primary" className={classes.buttonBase} onClick={handleClickAdd} >
                         <AddBoxIcon className={classes.icon} />
                     </Button>}
-                onClickItem={handleClickProcedure}
+                homeRoute={PROCEDURE_ROUTE}
+                icon={<PlayArrowIcon color="primary" />}
+                itemKey="name"
+                items={orderedProcedures}
                 onRefresh={handleRefresh}
+                title="procedures"
             />
             <AddProcedureDialog open={open} onClose={handleClose} scope={scope} />
         </React.Fragment>

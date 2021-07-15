@@ -110,6 +110,7 @@ export default {
             'len': 'Returns the number of items in a thing.',
             'map': 'Iterate over all properties on a thing.',
             'set': 'Creates a new property on a thing. If the property already existed then the old property will be overwritten. This function is equal to an assignment except that it can be used when the name of the property is dynamic.',
+            'to_type': 'Converts a thing into an instance of a given Type.',
             'unwatch': 'Stop watching for mutations on a thing. This method returns nil and triggers a stop event, only when the thing was being watched.',
             'values': 'Returns an list with all the property values of a thing. The same could be returned using map so the following statement is true: (.values() == .map(|_, v| v))',
             'watch': 'Subscribe for watching mutations on a stored thing. If this function is called on a thing which is not stored, and therefore has no #ID, then a value_err() is raised. This method returns nil but always triggers an init event, even when an earlier call to this function has been made.',

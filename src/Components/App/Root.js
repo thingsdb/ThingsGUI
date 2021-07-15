@@ -1,15 +1,17 @@
-import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {HashRouter as Router} from 'react-router-dom';
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import React from 'react';
 
+import {ApplicationActions, ApplicationStore} from '../../Stores';
+import {AuthTAG, LoginTAG} from '../../Constants/Tags';
 import App from './App';
 import AppLoader from './AppLoader';
 import Auth from './Auth';
-import Login from './Login';
+import CookieBanner from '../CookieBanner';
 import InitStores from './InitStores';
-import {ApplicationActions, ApplicationStore} from '../../Stores';
-import {AuthTAG, LoginTAG} from '../../Constants/Tags';
+import Login from './Login';
 
 const theme = createMuiTheme({
     // in case we want to overwrite the default theme
@@ -70,30 +72,30 @@ const theme = createMuiTheme({
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['authOnly', 'loaded', 'connected', 'seekConnection']
+    keys: ['authOnly', 'loaded', 'connected', 'seekConnection', 'useCookies']
 }]);
 
-const Root = ({authOnly, loaded, connected, seekConnection}) => {
+const Root = ({authOnly, loaded, connected, seekConnection, useCookies}) => {
     React.useEffect(() => {
-        ApplicationActions.pushNotifications();
         const key = (new URL(window.location)).searchParams.get('key');
         ApplicationActions.isAuthOnly();
         ApplicationActions.getCachedConn(LoginTAG); // errmsg shown at Login dialog
         if(key){
             ApplicationActions.authKey(key, AuthTAG);
         }
-    },
-    [],
-    );
+    }, []);
 
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />
             <InitStores />
-            {loaded ? (
-                connected ? <App />
-                    : authOnly ? <Auth /> : <Login />
-            ) : <AppLoader connect={seekConnection} />}
+            <Router>
+                {loaded ? (
+                    connected ? <App />
+                        : authOnly ? <Auth /> : <Login />
+                ) : <AppLoader connect={seekConnection} />}
+            </Router>
+            {useCookies && <CookieBanner />}
         </MuiThemeProvider>
     );
 };
@@ -103,6 +105,7 @@ Root.propTypes = {
     loaded: ApplicationStore.types.loaded.isRequired,
     connected: ApplicationStore.types.connected.isRequired,
     seekConnection: ApplicationStore.types.seekConnection.isRequired,
+    useCookies: ApplicationStore.types.useCookies.isRequired,
 };
 
 export default withStores(Root);

@@ -1,6 +1,6 @@
 {
   "name": "things-gui",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "description": "ThingsGUI",
   "main": "index.js",
   "repository": {
@@ -39,12 +39,14 @@
     "monaco-editor": "0.21.3",
     "monaco-editor-webpack-plugin": "2.1.0",
     "npm": "^6.14.11",
+    "path-browserify": "^1.0.1",
     "prop-types": "15.7.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-draggable": "4.4.3",
     "react-dropzone": "11.2.4",
     "react-helmet": "^6.1.0",
+    "react-router-dom": "^5.2.0",
     "socket.io": "2.4.1",
     "socket.io-client": "2.4.0",
     "style-loader": "2.0.0",

@@ -153,11 +153,27 @@ You can save the connection configuration locally if you like to speed up the pr
 
 #### Fixed address mode
 When you configure an `.env` file containing `THINGSGUI_ADDRESS` then the GUI has a fixed address and the login only displays the [Authentication](#authentication). The `.env` variables that can be configured are:
+
 * `THINGSGUI_ADDRESS`: ThingsDB socket address
 * `THINGSGUI_AUTH_METHOD`: method of authentication; either a token, user+pass or both.
 * `THINGSGUI_SSL`: Needs a secure connection or not
 * `THINGSGUI_AIC`: Allow insecure certificates or not
 
+#### Save session
+Additional `.env` variables can be set to remember the last login:
+
+* `USE_COOKIE_SESSION`: Set it true/false.
+* `USE_LOCAL_SESSION`: Set it true/false.
+
+When you enable `USE_COOKIE_SESSION` the last session can be saved using cookies. Though the user needs to accept these cookies first.
+
+When you enable `USE_LOCAL_SESSION` the last session is saved in the user's home directory as `.config/ThingsGUI/thingsgui.session`.
+
+---
+
+Note: that `USE_LOCAL_SESSION` should only be enabled if the app is used locally by one user.
+
+---
 
 ## ThingsGUI tour
 

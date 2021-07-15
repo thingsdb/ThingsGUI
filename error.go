@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 
 	thingsdb "github.com/thingsdb/go-thingsdb"
 )
@@ -17,8 +16,8 @@ type ErrorType interface {
 func CreateThingsDBError(err error) Message {
 	errT, ok := err.(ErrorType)
 	if !ok {
-		message := Message{Text: "Query error", Status: http.StatusInternalServerError, Log: "Expected Error type"}
+		message := FailedMsg(fmt.Errorf("Wrong Error type"))
 		return message
 	}
-	return Message{Text: "Query error", Status: http.StatusInternalServerError, Log: fmt.Sprintf("(%d) %s", errT.Code(), errT.Error())}
+	return FailedMsg(fmt.Errorf("(%d) %s", errT.Code(), errT.Error()))
 }

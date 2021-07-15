@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
         }),
     },
     drawerOpen: {
-        boxShadow: '-2px 0 5px 0 rgba(31,30,30,1)',
+        // boxShadow: '-2px 0 5px 0 rgba(31,30,30,1)',
         display: 'flex',
         flex: '1 0 auto',
         flexDirection: 'column',
@@ -108,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
         flexShrink: 0,
     },
     menuDrawerPaper: {
-        boxShadow: '2px 0 5px 0 rgba(31,30,30,1)',
+        // boxShadow: '2px 0 5px 0 rgba(31,30,30,1)',
         borderColor: theme.palette.background.paper,
         width: drawerWidth,
         top: 'unset',
@@ -175,6 +175,9 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     variant="persistent"
                     anchor="left"
                     open={menuOpen}
+                    PaperProps={{
+                        square: false
+                    }}
                     classes={{
                         paper: classes.menuDrawerPaper,
                     }}
@@ -186,6 +189,9 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                             </ListItem>
                         ))}
                     </List>
+                    <div className={classes.footer}>
+                        {bottomBar}
+                    </div>
                 </Drawer>
                 <main
                     className={clsx(classes.full, {
@@ -231,9 +237,6 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     </div>
                 </Card>
                 {toast}
-            </div>
-            <div className={classes.footer}>
-                {bottomBar}
             </div>
         </div>
     );

@@ -1,14 +1,16 @@
+import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
+import {CardButton, ErrorMsg, historyNavigate, SimpleModal} from '../../Util';
 import {ProcedureActions, TimerActions} from '../../../Stores';
 import {RemoveProcedureTAG} from '../../../Constants/Tags';
 
 
 const tag = RemoveProcedureTAG;
 
-const Remove = ({item, scope, close, type}) => {
+const Remove = ({item, scope, type}) => {
+    let history = useHistory();
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState('');
 
@@ -28,7 +30,7 @@ const Remove = ({item, scope, close, type}) => {
 
     const handleClickOk = () => {
         let fn = type === 'procedure' ? ProcedureActions.deleteProcedure : TimerActions.deleteTimer;
-        fn(scope, identifier, tag, close ? handleClickClose : () => null);
+        fn(scope, identifier, tag, () => historyNavigate(history, '/'));
     };
 
     return(
@@ -46,14 +48,9 @@ const Remove = ({item, scope, close, type}) => {
     );
 };
 
-Remove.defaultProps = {
-    close: false,
-};
-
 Remove.propTypes = {
     item: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,
-    close: PropTypes.bool,
     type: PropTypes.string.isRequired,
 };
 

@@ -5,17 +5,17 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-const TitlePage = ({preTitle, title, content}) => {
+const TitlePage3 = ({preTitle, title, content}) => {
 
     return (
         <Grid container spacing={1}>
             <Grid item xs={12}>
                 <Card>
                     <CardContent>
-                        <Typography variant="body1" >
+                        <Typography variant="h6" >
                             {preTitle}
                         </Typography>
-                        <Typography variant="h4">
+                        <Typography variant="h3">
                             {title}
                         </Typography>
                     </CardContent>
@@ -28,11 +28,11 @@ const TitlePage = ({preTitle, title, content}) => {
     );
 };
 
-TitlePage.propTypes = {
-    preTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+TitlePage3.propTypes = {
+    preTitle: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     content: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]).isRequired,
 };
 
 
-export default TitlePage;
+export default TitlePage3;
