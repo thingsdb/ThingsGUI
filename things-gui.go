@@ -130,7 +130,7 @@ func (app *App) SocketRouter() {
 		return http.StatusNoContent
 	})
 
-	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, *LoginResp, Message) {
+	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, LoginResp, Message) {
 		client := app.client[s.ID()]
 		if client.Cookie == nil {
 			req := http.Request{Header: s.RemoteHeader()}
@@ -140,19 +140,19 @@ func (app *App) SocketRouter() {
 		return Connected(client)
 	})
 
-	app.server.OnEvent("/", "connToNew", func(s socketio.Conn, data LoginData) (int, *LoginResp, Message) {
+	app.server.OnEvent("/", "connToNew", func(s socketio.Conn, data LoginData) (int, LoginResp, Message) {
 		return ConnectToNew(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "connViaCache", func(s socketio.Conn, data LoginData) (int, *LoginResp, Message) {
+	app.server.OnEvent("/", "connViaCache", func(s socketio.Conn, data LoginData) (int, LoginResp, Message) {
 		return ConnectViaCache(app.client[s.ID()], data)
 	})
 
-	app.server.OnEvent("/", "reconn", func(s socketio.Conn) (int, *LoginResp, Message) {
+	app.server.OnEvent("/", "reconn", func(s socketio.Conn) (int, LoginResp, Message) {
 		return Reconnect(app.client[s.ID()])
 	})
 
-	app.server.OnEvent("/", "disconn", func(s socketio.Conn) (int, *LoginResp, Message) {
+	app.server.OnEvent("/", "disconn", func(s socketio.Conn) (int, LoginResp, Message) {
 		return Disconnect(app.client[s.ID()])
 	})
 

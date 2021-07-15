@@ -59,21 +59,21 @@ type LoginData struct {
 type LMapping map[string]map[string]interface{}
 type LData map[string]interface{}
 
-func connectedResp() *LoginResp {
-	return &LoginResp{
+func connectedResp() LoginResp {
+	return LoginResp{
 		Connected:  true,
 		UseCookies: useCookieSession,
 	}
 }
 
-func disconnectedResp() *LoginResp {
-	return &LoginResp{
+func disconnectedResp() LoginResp {
+	return LoginResp{
 		Connected:  false,
 		UseCookies: useCookieSession,
 	}
 }
 
-func connect(client *Client, data LoginData) (*LoginResp, error) {
+func connect(client *Client, data LoginData) (LoginResp, error) {
 	hp := strings.Split(data.Address, ":")
 	if len(hp) != 2 {
 		return disconnectedResp(), fmt.Errorf("invalid node name/address")
@@ -143,7 +143,7 @@ func connect(client *Client, data LoginData) (*LoginResp, error) {
 }
 
 // Connected returns if a connection with ThingsDB is established
-func Connected(client *Client) (int, *LoginResp, Message) {
+func Connected(client *Client) (int, LoginResp, Message) {
 	resp := disconnectedResp()
 	conn := client.Connection
 	switch {
@@ -169,7 +169,7 @@ func Connected(client *Client) (int, *LoginResp, Message) {
 }
 
 // ConnectToNew connects to a new ThingsDB connnection
-func ConnectToNew(client *Client, data LoginData) (int, *LoginResp, Message) {
+func ConnectToNew(client *Client, data LoginData) (int, LoginResp, Message) {
 	var message Message
 	resp, err := connect(
 		client,
@@ -186,7 +186,7 @@ func ConnectToNew(client *Client, data LoginData) (int, *LoginResp, Message) {
 }
 
 // ConnectViaCache connects via cached auth data to ThingsDB
-func ConnectViaCache(client *Client, data LoginData) (int, *LoginResp, Message) {
+func ConnectViaCache(client *Client, data LoginData) (int, LoginResp, Message) {
 	message := SuccessMsg()
 	resp, err := connectViaCache(client, client.ConnectionsPath, data.Name)
 
@@ -197,7 +197,7 @@ func ConnectViaCache(client *Client, data LoginData) (int, *LoginResp, Message) 
 }
 
 // connectViaCache connects via cached auth data to ThingsDB
-func connectViaCache(client *Client, path string, name string) (*LoginResp, error) {
+func connectViaCache(client *Client, path string, name string) (LoginResp, error) {
 	fileNotExist := FileNotExist(path)
 	if fileNotExist {
 		return disconnectedResp(), fmt.Errorf("File does not exist")
@@ -332,7 +332,7 @@ func reconnect(client *Client) bool {
 }
 
 // Reconnect to ThingsDB when a connection is lost.
-func Reconnect(client *Client) (int, *LoginResp, Message) {
+func Reconnect(client *Client) (int, LoginResp, Message) {
 	maxInterval := 60
 	interval := 1
 	timeoutCh := make(chan bool, 1)
@@ -361,7 +361,7 @@ func Reconnect(client *Client) (int, *LoginResp, Message) {
 }
 
 // Disconnect closes a connection to ThingsDB
-func Disconnect(client *Client) (int, *LoginResp, Message) {
+func Disconnect(client *Client) (int, LoginResp, Message) {
 	if useLocalSession {
 		saveLastUsedConnection(client, LoginData{})
 	}
