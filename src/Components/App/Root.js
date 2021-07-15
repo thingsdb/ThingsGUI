@@ -85,8 +85,6 @@ const Root = ({authOnly, loaded, connected, seekConnection, useCookies}) => {
         }
     }, []);
 
-    console.log(useCookies)
-
     return(
         <MuiThemeProvider theme={theme}>
             <CssBaseline />

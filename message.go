@@ -11,7 +11,7 @@ type Message struct {
 
 // Msg returns an error message if error is not nil
 func Msg(err error) Message {
-	if err != nil {
+	if err == nil {
 		return SuccessMsg()
 	} else {
 		return FailedMsg(err)
