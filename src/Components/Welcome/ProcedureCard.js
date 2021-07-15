@@ -35,7 +35,11 @@ const ProcedureCard = ({procedure, size}) => {
 
     return (
         <Card className={classes.root}>
-            <CardActionArea className={classes.action} component={RouterLink} to={`/${PROCEDURE_ROUTE}/${procedure.name}`}>
+            <CardActionArea
+                className={classes.action}
+                component={RouterLink}
+                to={location => ({...location, pathname: `/${PROCEDURE_ROUTE}/${procedure.name}`})}
+            >
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                         {procedure.doc}

@@ -21,7 +21,11 @@ const QueryEditorMenu = () => {
 
     return (
         <List className={classes.root} dense disablePadding>
-            <ListItem button component={RouterLink} to={`/${EDITOR_ROUTE}`} >
+            <ListItem
+                button
+                component={RouterLink}
+                to={location => ({...location, pathname: `/${EDITOR_ROUTE}`})}
+            >
                 <ListItemIcon>
                     <CodeIcon color="primary" />
                 </ListItemIcon>

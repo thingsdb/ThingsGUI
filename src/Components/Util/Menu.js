@@ -75,7 +75,7 @@ const Menu = ({addItem, homeRoute, icon, itemKey, items, onRefresh, title}) => {
                             button
                             className={classes.nested}
                             component={RouterLink}
-                            to={`/${homeRoute}/${item[itemKey]}`}
+                            to={location => ({...location, pathname: `/${homeRoute}/${item[itemKey]}`})}
                         >
                             <ListItemIcon>
                                 {icon}

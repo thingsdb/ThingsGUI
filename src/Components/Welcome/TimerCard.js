@@ -37,7 +37,11 @@ const TimerCard = ({timer, size}) => {
 
     return (
         <Card className={classes.root}>
-            <CardActionArea className={classes.action} component={RouterLink} to={`/${TIMER_ROUTE}/${timer.id}`}>
+            <CardActionArea
+                className={classes.action}
+                component={RouterLink}
+                to={location => ({...location, pathname: `/${TIMER_ROUTE}/${timer.id}`})}
+            >
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                         {timer.doc}

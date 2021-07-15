@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {NodesStore, ThingsdbStore} from '../../Stores';
-import {getScopes2, historyGetQueryParam, historySetQueryParam} from '../Util';
+import {getScopes2, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Util';
 import {COLLECTION_SCOPE, THINGSDB_SCOPE} from '../../Constants/Scopes';
 
 const withStores = withVlow([{
@@ -47,8 +47,11 @@ const SelectScope = ({onChangeScope, collections, nodes}) => {
         let sName = scopes.includes(name) ? name : THINGSDB_SCOPE;
         historySetQueryParam(history, 'scope', sName);
         onChangeScope(sName);
-
     }, [name, scopes]);
+
+    React.useEffect(() => {
+        return () => historyDeleteQueryParam(history, 'scope');
+    }, [history]);
 
     const handleOnChangeScope = ({target}) => {
         const {value} = target;

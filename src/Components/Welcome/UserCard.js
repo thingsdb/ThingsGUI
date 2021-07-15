@@ -32,7 +32,11 @@ const UserCard = ({user, size}) => {
 
     return (
         <Card className={classes.root}>
-            <CardActionArea className={classes.action} component={RouterLink} to={`/${USER_ROUTE}/${user.name}`}>
+            <CardActionArea
+                className={classes.action}
+                component={RouterLink}
+                to={location => ({...location, pathname: `/${USER_ROUTE}/${user.name}`})}
+            >
                 <CardContent>
                     <Typography variant="h5" component="h2">
                         {user.name}

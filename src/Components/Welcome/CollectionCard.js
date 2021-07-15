@@ -41,7 +41,11 @@ const CollectionCard = ({collection, size}) => {
 
     return (
         <Card className={classes.root}>
-            <CardActionArea className={classes.action} component={RouterLink} to={`/${COLLECTION_ROUTE}/${collection.name}`}>
+            <CardActionArea
+                className={classes.action}
+                component={RouterLink}
+                to={location => ({...location, pathname: `/${COLLECTION_ROUTE}/${collection.name}`})}
+            >
                 <CardMedia
                     className={classes.media}
                     image="/img/thingsdb-logo.png"
