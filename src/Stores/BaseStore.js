@@ -255,7 +255,7 @@ class EventStore extends BaseStore {
         });
 
         socket.on('disconnect', () => {
-            location.reload();
+            // location.reload();
         });
 
         socket.on('event', (data) => {

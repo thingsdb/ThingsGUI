@@ -10,12 +10,28 @@ type Message struct {
 }
 
 // Msg returns an error message if error is not nil
-func Msg(err error, status int) Message {
-	var message Message
+func Msg(err error) Message {
 	if err != nil {
-		message = Message{Text: "Query error", Status: status, Log: err.Error()}
+		return SuccessMsg()
 	} else {
-		message = Message{Text: "", Status: http.StatusOK, Log: ""}
+		return FailedMsg(err)
 	}
-	return message
+}
+
+// Msg returns an error message if error is not nil
+func SuccessMsg() Message {
+	return Message{
+		Text:   "",
+		Status: http.StatusOK,
+		Log:    "",
+	}
+}
+
+// Msg returns an error message if error is not nil
+func FailedMsg(err error) Message {
+	return Message{
+		Text:   "Query error",
+		Status: http.StatusInternalServerError,
+		Log:    err.Error(),
+	}
 }

@@ -18,6 +18,7 @@ type Client struct {
 	Closed          chan bool
 	Connection      *things.Conn
 	ConnectionsPath string
+	Cookie          *http.Cookie
 	EventCh         chan *things.Event
 	Host            string
 	LogCh           chan string
@@ -28,46 +29,58 @@ type Client struct {
 	TmpFiles        *TmpFiles
 	Token           string
 	User            string
-	Cookie          *http.Cookie
 }
 
 // AuthResp type
 type AuthResp struct {
-	AuthOnly   bool
 	AuthMethod string
+	AuthOnly   bool
 }
 
 // LoginResp type
 type LoginResp struct {
-	Loaded    bool
-	Connected bool
-	ConnErr   string
+	Connected  bool
+	UseCookies bool
 }
 
 // LoginData type
 type LoginData struct {
-	Name               string `json:"name"`
 	Address            string `json:"address"`
-	User               string `json:"user"`
-	Password           string `json:"password"`
-	Token              string `json:"token"`
-	SecureConnection   bool   `json:"secureConnection"`
 	InsecureSkipVerify bool   `json:"insecureSkipVerify"`
-	Memo               string `json:"memo"`
 	IsToken            bool   `json:"isToken"`
+	Memo               string `json:"memo"`
+	Name               string `json:"name"`
+	Password           string `json:"password"`
+	SecureConnection   bool   `json:"secureConnection"`
+	Token              string `json:"token"`
+	User               string `json:"user"`
 }
 
 type LMapping map[string]map[string]interface{}
 type LData map[string]interface{}
 
-func connect(client *Client, data LoginData) LoginResp {
+func connectedResp() *LoginResp {
+	return &LoginResp{
+		Connected:  true,
+		UseCookies: useCookieSession,
+	}
+}
+
+func disconnectedResp() *LoginResp {
+	return &LoginResp{
+		Connected:  false,
+		UseCookies: useCookieSession,
+	}
+}
+
+func connect(client *Client, data LoginData) (*LoginResp, error) {
 	hp := strings.Split(data.Address, ":")
 	if len(hp) != 2 {
-		return LoginResp{Connected: false, ConnErr: "invalid node name/address"}
+		return disconnectedResp(), fmt.Errorf("invalid node name/address")
 	}
 	port, err := strconv.ParseUint(hp[1], 10, 16)
 	if err != nil {
-		return LoginResp{Connected: false, ConnErr: err.Error()}
+		return disconnectedResp(), err
 	}
 	host := hp[0]
 
@@ -94,13 +107,13 @@ func connect(client *Client, data LoginData) LoginResp {
 	if !client.Connection.IsConnected() {
 		err := client.Connection.Connect()
 		if err != nil {
-			return LoginResp{Connected: false, ConnErr: err.Error()}
+			return disconnectedResp(), err
 		}
 	}
 	if data.IsToken {
 		err := client.Connection.AuthToken(data.Token)
 		if err != nil {
-			return LoginResp{Connected: false, ConnErr: err.Error()}
+			return disconnectedResp(), err
 		}
 
 		client.Token = data.Token
@@ -112,7 +125,7 @@ func connect(client *Client, data LoginData) LoginResp {
 	} else {
 		err := client.Connection.AuthPassword(data.User, data.Password)
 		if err != nil {
-			return LoginResp{Connected: false, ConnErr: err.Error()}
+			return disconnectedResp(), err
 		}
 		client.User = data.User
 		client.Pass = data.Password
@@ -126,22 +139,22 @@ func connect(client *Client, data LoginData) LoginResp {
 		}
 	}
 
-	return LoginResp{Connected: true}
+	return connectedResp(), nil
 }
 
 // Connected returns if a connection with ThingsDB is established
-func Connected(client *Client) (int, LoginResp, Message) {
-	var resp LoginResp
+func Connected(client *Client) (int, *LoginResp, Message) {
+	resp := disconnectedResp()
 	conn := client.Connection
 	switch {
 	case conn == nil:
 		if useLocalSession {
-			resp = connectViaCache(client, client.SessionPath, lastUsedKey)
+			resp, _ = connectViaCache(client, client.SessionPath, lastUsedKey)
 		}
 
 		if !resp.Connected && useCookieSession && client.Cookie != nil {
 			if data := getSession(client.Cookie.Value); data != nil {
-				resp = connect(client, *data)
+				resp, _ = connect(client, *data)
 			}
 		}
 
@@ -151,56 +164,52 @@ func Connected(client *Client) (int, LoginResp, Message) {
 		resp.Connected = false
 	}
 
-	resp.Loaded = true
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := SuccessMsg()
 	return message.Status, resp, message
 }
 
 // ConnectToNew connects to a new ThingsDB connnection
-func ConnectToNew(client *Client, data LoginData) (int, LoginResp, Message) {
-	var resp LoginResp
+func ConnectToNew(client *Client, data LoginData) (int, *LoginResp, Message) {
 	var message Message
-	resp = connect(
+	resp, err := connect(
 		client,
 		data,
 	)
 
 	if resp.Connected {
 		client.Connection.EnableKeepAlive()
-		message = Message{Text: "", Status: http.StatusOK, Log: ""}
+		message = SuccessMsg()
 	} else {
-		message = Message{Text: resp.ConnErr, Status: http.StatusInternalServerError, Log: resp.ConnErr}
+		message = FailedMsg(err)
 	}
 	return message.Status, resp, message
 }
 
 // ConnectViaCache connects via cached auth data to ThingsDB
-func ConnectViaCache(client *Client, data LoginData) (int, LoginResp, Message) {
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
-	resp := connectViaCache(client, client.ConnectionsPath, data.Name)
+func ConnectViaCache(client *Client, data LoginData) (int, *LoginResp, Message) {
+	message := SuccessMsg()
+	resp, err := connectViaCache(client, client.ConnectionsPath, data.Name)
 
-	if resp.Connected {
-		message = Message{Text: "", Status: http.StatusOK, Log: ""}
-	} else {
-		message = Message{Text: resp.ConnErr, Status: http.StatusInternalServerError, Log: resp.ConnErr}
+	if !resp.Connected {
+		message = FailedMsg(err)
 	}
 	return message.Status, resp, message
 }
 
 // connectViaCache connects via cached auth data to ThingsDB
-func connectViaCache(client *Client, path string, name string) LoginResp {
+func connectViaCache(client *Client, path string, name string) (*LoginResp, error) {
 	fileNotExist := FileNotExist(path)
 	if fileNotExist {
-		return LoginResp{Connected: false, ConnErr: "File does not exist"}
+		return disconnectedResp(), fmt.Errorf("File does not exist")
 	}
 
 	var mapping = make(map[string]LoginData)
 	err := ReadEncryptedFile(path, &mapping, client.LogCh)
 	if err != nil {
-		return LoginResp{Connected: false, ConnErr: err.Error()}
+		return disconnectedResp(), err
 	}
 
-	resp := connect(
+	resp, err := connect(
 		client,
 		mapping[name],
 	)
@@ -208,7 +217,7 @@ func connectViaCache(client *Client, path string, name string) LoginResp {
 	if resp.Connected {
 		client.Connection.EnableKeepAlive()
 	}
-	return resp
+	return resp, err
 }
 
 // AuthKey connects to ThingsDB via a key and API request to get the access token
@@ -238,7 +247,7 @@ func AuthKey(client *Client, data map[string]string, address string, ssl bool, a
 
 // AuthOnly checks if the address and auth method are provided in the .env file; in that case only auth can be supplied by the user
 func AuthOnly(address string, authMethod string) (int, AuthResp, Message) {
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := SuccessMsg()
 	var auth AuthResp
 	if address != "" {
 		auth.AuthOnly = true
@@ -249,7 +258,7 @@ func AuthOnly(address string, authMethod string) (int, AuthResp, Message) {
 
 // AuthToken connects to ThingsDB using the token and env variables
 func AuthToken(client *Client, data map[string]string, address string, ssl bool, aic bool) (int, interface{}, Message) {
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := SuccessMsg()
 	mapping := LoginData{
 		Address:            address,
 		IsToken:            true,
@@ -258,23 +267,22 @@ func AuthToken(client *Client, data map[string]string, address string, ssl bool,
 		InsecureSkipVerify: aic,
 	}
 
-	resp := connect(
+	resp, err := connect(
 		client,
 		mapping,
 	)
 
 	if resp.Connected {
 		client.Connection.EnableKeepAlive()
-		message = Message{Text: "", Status: http.StatusOK, Log: ""}
 	} else {
-		message = Message{Text: resp.ConnErr, Status: http.StatusInternalServerError, Log: resp.ConnErr}
+		message = FailedMsg(err)
 	}
 	return message.Status, resp, message
 }
 
 // AuthPass connects to ThingsDB using a user+pass and env variables
 func AuthPass(client *Client, data map[string]string, address string, ssl bool, aic bool) (int, interface{}, Message) {
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := SuccessMsg()
 	mapping := LoginData{
 		Address:            address,
 		IsToken:            false,
@@ -284,16 +292,15 @@ func AuthPass(client *Client, data map[string]string, address string, ssl bool, 
 		InsecureSkipVerify: aic,
 	}
 
-	resp := connect(
+	resp, err := connect(
 		client,
 		mapping,
 	)
 
 	if resp.Connected {
 		client.Connection.EnableKeepAlive()
-		message = Message{Text: "", Status: http.StatusOK, Log: ""}
 	} else {
-		message = Message{Text: resp.ConnErr, Status: http.StatusInternalServerError, Log: resp.ConnErr}
+		message = FailedMsg(err)
 	}
 	return message.Status, resp, message
 }
@@ -325,16 +332,17 @@ func reconnect(client *Client) bool {
 }
 
 // Reconnect to ThingsDB when a connection is lost.
-func Reconnect(client *Client) (int, LoginResp, Message) {
-	resp := LoginResp{Connected: true}
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
-
+func Reconnect(client *Client) (int, *LoginResp, Message) {
 	maxInterval := 60
 	interval := 1
 	timeoutCh := make(chan bool, 1)
+
 	for interval < maxInterval {
 		if success := reconnect(client); success {
 			client.Connection.EnableKeepAlive()
+
+			resp := connectedResp()
+			message := SuccessMsg()
 			return message.Status, resp, message
 		} else {
 			interval *= 2
@@ -347,20 +355,19 @@ func Reconnect(client *Client) (int, LoginResp, Message) {
 		}
 	}
 
-	message.Text = "Reconnecting has stopped. Timeout reached."
-	message.Status = http.StatusInternalServerError
-	message.Log = "Reconnecting has stopped. Timeout reached."
+	resp := disconnectedResp()
+	message := FailedMsg(fmt.Errorf("Reconnecting has stopped. Timeout reached."))
 	return message.Status, resp, message
 }
 
 // Disconnect closes a connection to ThingsDB
-func Disconnect(client *Client) (int, LoginResp, Message) {
+func Disconnect(client *Client) (int, *LoginResp, Message) {
 	if useCookieSession && client.Cookie != nil {
 		resetSession(client.Cookie.Value)
 	}
 	CloseSingleConn(client)
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
-	return message.Status, LoginResp{Loaded: true, Connected: false}, message
+	message := SuccessMsg()
+	return message.Status, disconnectedResp(), message
 }
 
 // CloseSingleConn closes a connection to ThingsDB
@@ -373,7 +380,7 @@ func CloseSingleConn(client *Client) {
 
 // GetCachedConnections gets all the cached connections
 func GetCachedConnections(client *Client) (int, interface{}, Message) {
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := SuccessMsg()
 
 	var mapping = make(map[string]LoginData)
 	err := ReadEncryptedFile(client.ConnectionsPath, &mapping, client.LogCh)
@@ -424,7 +431,7 @@ func GetCachedConnections(client *Client) (int, interface{}, Message) {
 
 // NewCachedConnection saves a new connection locally
 func NewCachedConnection(client *Client, data LData) (int, interface{}, Message) {
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := SuccessMsg()
 	fn := func(mapping LMapping) error {
 		name := data["name"].(string)
 		if _, ok := mapping[name]; ok {
@@ -446,7 +453,7 @@ func NewCachedConnection(client *Client, data LData) (int, interface{}, Message)
 
 // EditCachedConnection edits a connection locally
 func EditCachedConnection(client *Client, data LData) (int, interface{}, Message) {
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := SuccessMsg()
 	fn := func(mapping LMapping) error {
 		name := data["name"].(string)
 		for k, v := range data {
@@ -467,7 +474,7 @@ func EditCachedConnection(client *Client, data LData) (int, interface{}, Message
 
 // RenameCachedConnection renames a connection locally
 func RenameCachedConnection(client *Client, data LData) (int, interface{}, Message) {
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := SuccessMsg()
 	fn := func(mapping LMapping) error {
 		newName := data["newName"].(string)
 		oldName := data["oldName"].(string)
@@ -494,7 +501,7 @@ func RenameCachedConnection(client *Client, data LData) (int, interface{}, Messa
 
 // DelCachedConnection deletes a saved connection
 func DelCachedConnection(client *Client, data LoginData) (int, interface{}, Message) {
-	message := Message{Text: "", Status: http.StatusOK, Log: ""}
+	message := SuccessMsg()
 
 	fileNotExist := FileNotExist(client.ConnectionsPath)
 	if fileNotExist {
@@ -567,6 +574,6 @@ func changeFile(path string, logCh chan string, mapping LMapping, fn func(LMappi
 }
 
 func internalError(err error) (int, interface{}, Message) {
-	message := Message{Text: err.Error(), Status: http.StatusInternalServerError, Log: err.Error()}
+	message := FailedMsg(err)
 	return message.Status, nil, message
 }
