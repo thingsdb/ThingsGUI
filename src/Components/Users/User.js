@@ -19,6 +19,7 @@ const User = ({user, users, collections}) => {
 
     React.useEffect(() => {
         ThingsdbActions.getUsers();
+        ThingsdbActions.getCollections();
     }, []);
 
     const users2 =
