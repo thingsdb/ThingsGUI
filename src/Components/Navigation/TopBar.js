@@ -13,6 +13,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import {THINGS_DOC} from '../../Constants/Links';
 import {TopBarMenu} from '../Util';
@@ -77,9 +78,11 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
                     </div>
                 }
                 <div>
-                    <IconButton target="_blank" href={THINGS_DOC} edge="start" className={classes.color} aria-label="close">
-                        <HelpIcon />
-                    </IconButton>
+                    <Tooltip disableFocusListener disableTouchListener title="Go to ThingsDocs">
+                        <IconButton target="_blank" href={THINGS_DOC} edge="start" className={classes.color} aria-label="close">
+                            <HelpIcon />
+                        </IconButton>
+                    </Tooltip>
                 </div>
                 <div>
                     <TopBarMenu menuIcon={<AccountCircle />} menuTooltip="Logout">

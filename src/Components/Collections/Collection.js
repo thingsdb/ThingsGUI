@@ -1,21 +1,20 @@
 import { makeStyles} from '@material-ui/core/styles';
+import {useLocation} from 'react-router-dom';
 import {withVlow} from 'vlow';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
-import {ApplicationStore, ThingsdbStore} from '../../Stores';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores';
 import {CollectionConfig} from './Config';
-import {findItem, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Util';
+import {getIdFromPath, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Util';
 import {Procedures, Timers} from '../ProceduresAndTimers';
 import {COLLECTION_SCOPE} from '../../Constants/Scopes';
+import {COLLECTION_ROUTE} from '../../Constants/Routes';
 import CollectionTree from './Tree';
 import CollectionEnumsTypes from './EnumsTypes';
 
 
 const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}, {
     store: ThingsdbStore,
     keys: ['collections']
 }]);
@@ -26,9 +25,16 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Collection = ({match, collections}) => {
+const Collection = ({collections}) => {
+    let location = useLocation();
     const classes = useStyles();
-    const selectedCollection = findItem(match.index, collections);
+
+    React.useEffect(() => {
+        ThingsdbActions.getCollections();
+    }, []);
+
+    const collectionName = getIdFromPath(location.pathname, COLLECTION_ROUTE);
+    const selectedCollection = collections.find(c => c['name'] === collectionName);
 
     return (
         isObjectEmpty(selectedCollection) ? null : (
@@ -40,8 +46,8 @@ const Collection = ({match, collections}) => {
                         <Grid container item md={7} xs={12}>
                             <Grid className={classes.spacing} item xs={12}>
                                 <HarmonicCardHeader title="INFO" unmountOnExit>
-                                    <CollectionConfig collection={selectedCollection} close={(collections.length-1)!=match.index} />
-                                </HarmonicCardHeader >
+                                    <CollectionConfig collection={selectedCollection} />
+                                </HarmonicCardHeader>
                             </Grid>
                             <Grid item xs={12}>
                                 <CollectionTree collection={selectedCollection} />
@@ -72,8 +78,6 @@ const Collection = ({match, collections}) => {
 };
 
 Collection.propTypes = {
-    /* Application properties */
-    match: ApplicationStore.types.match.isRequired,
 
     /* Collections properties */
     collections: ThingsdbStore.types.collections.isRequired,

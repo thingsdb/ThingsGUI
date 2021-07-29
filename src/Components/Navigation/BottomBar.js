@@ -1,6 +1,5 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
 
 
 const bottomInfo = [
@@ -30,21 +29,17 @@ const bottomInfo = [
 
 const BottomBar = () => {
     return (
-        <div style={{position:'fixed', left:'50%', transform: 'translate(-50%, -2%)', bottom: 0, zIndex: 2}}>
-            <Toolbar>
-                {bottomInfo.map((v, i) => (
-                    <Button color="primary" key={i} href={v.url} variant='text'>
-                        <img
-                            alt={v.name}
-                            src={v.icon}
-                            draggable='false'
-                            width='40em'
-                            style={{opacity:'0.6'}}
-                        />
-                    </Button>
-                ))}
-            </Toolbar>
-        </div>
+        bottomInfo.map((v, i) => (
+            <IconButton color="primary" key={i} href={v.url} size="medium" target="_blank">
+                <img
+                    alt={v.name}
+                    src={v.icon}
+                    draggable='false'
+                    width='35em'
+                    style={{opacity:'0.6'}}
+                />
+            </IconButton>
+        ))
     );
 };
 

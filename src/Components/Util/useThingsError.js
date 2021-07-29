@@ -14,7 +14,7 @@ const parseErrorMsg = (errMsg) => {
     };
 
     const reErrCode = /\(([-][0-9]*)\)/gi;
-    const reLink = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/gi;
+    const reLink = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/gi; // eslint-disable-line
 
     // Get error code
     let res1;
@@ -58,7 +58,7 @@ const parseError = (errMsg) => {
                 {errObj.errLinks.map(({link, preLink}) => (
                     <React.Fragment key={`err_${link}$`}>
                         {`${preLink} `}
-                        <Link target="_blank" href={link}>
+                        <Link color="inherit" target="_blank" href={link}>
                             {`ThingsDocs ${link.split('/').slice(-1)}`}
                         </Link>
                     </React.Fragment>

@@ -11,6 +11,7 @@ const VERSION = require(path.resolve(__dirname, './package.json')).version;
 const BUILD_DIR = path.resolve(__dirname, '../static/js');
 const APP_DIR = path.resolve(__dirname, '');
 
+
 const config = {
     mode: process.env.NODE_ENV === 'production' ? 'production': 'development',
     entry: APP_DIR + '/Components/index.js',
@@ -85,6 +86,11 @@ const config = {
         hints: process.env.NODE_ENV === 'production' ? 'warning' : false,
         maxEntrypointSize: 1600000,
         maxAssetSize: 700000
+    },
+    resolve: {
+        fallback: {
+            'path': require.resolve('path-browserify'),
+        }
     }
 };
 

@@ -1,34 +1,39 @@
+import {useLocation} from 'react-router-dom';
 import {withVlow} from 'vlow';
 import React from 'react';
 
-import {ApplicationStore, ProcedureActions, ProcedureStore} from '../../Stores';
+import {getIdFromPath, isObjectEmpty} from '../Util';
 import {Page} from './Utils';
+import {PROCEDURE_ROUTE} from '../../Constants/Routes';
+import {ProcedureActions, ProcedureStore} from '../../Stores';
 import {THINGSDB_SCOPE} from '../../Constants/Scopes';
 
 const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}, {
     store: ProcedureStore,
     keys: ['procedures']
 }]);
 
 
 const scope = THINGSDB_SCOPE;
-const Procedure = ({match, procedures}) => {
+const itemKey = 'name';
+
+const Procedure = ({procedures}) => {
+    let location = useLocation();
+    const procedureName = getIdFromPath(location.pathname, PROCEDURE_ROUTE);
+    const selectedProcedure = (procedures[scope] || []).find(c => c[itemKey] === procedureName);
 
     React.useEffect(() => {
         ProcedureActions.getProcedures(scope);
     }, []);
 
     return (
-        <Page match={match} data={procedures} scope={scope} type="procedure" itemKey="name" />
+        isObjectEmpty(selectedProcedure) ? null : (
+            <Page item={selectedProcedure} itemKey={itemKey} scope={scope} type="procedure" />
+        )
     );
 };
 
 Procedure.propTypes = {
-    /* Application properties */
-    match: ApplicationStore.types.match.isRequired,
     /* procedures properties */
     procedures: ProcedureStore.types.procedures.isRequired,
 };

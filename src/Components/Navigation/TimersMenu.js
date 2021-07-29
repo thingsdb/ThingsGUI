@@ -7,8 +7,9 @@ import React from 'react';
 
 import {AddTimerDialog} from '../ProceduresAndTimers';
 import {Menu, orderByName} from '../Util';
-import {ApplicationActions, TimerActions, TimerStore} from '../../Stores';
 import {THINGSDB_SCOPE} from '../../Constants/Scopes';
+import {TIMER_ROUTE} from '../../Constants/Routes';
+import {TimerActions, TimerStore} from '../../Stores';
 
 const withStores = withVlow([{
     store: TimerStore,
@@ -50,10 +51,6 @@ const TimersMenu = ({timers}) => {
         TimerActions.getTimers(scope);
     };
 
-    const handleClickTimer = (i) => {
-        ApplicationActions.navigate({path: 'timer', index: i, item: '', scope: ''});
-    };
-
     const handleClickAdd = () => {
         setOpen(true);
     };
@@ -67,16 +64,16 @@ const TimersMenu = ({timers}) => {
     return (
         <React.Fragment>
             <Menu
-                title="timers"
-                icon={<TimerIcon color="primary" />}
-                itemKey="id"
-                items={orderedTimers}
                 addItem={
                     <Button color="primary" className={classes.buttonBase} onClick={handleClickAdd} >
                         <AddBoxIcon className={classes.icon} />
                     </Button>}
-                onClickItem={handleClickTimer}
+                homeRoute={TIMER_ROUTE}
+                icon={<TimerIcon color="primary" />}
+                itemKey="id"
+                items={orderedTimers}
                 onRefresh={handleRefresh}
+                title="timers"
             />
             <AddTimerDialog open={open} onClose={handleClose} scope={scope} />
         </React.Fragment>

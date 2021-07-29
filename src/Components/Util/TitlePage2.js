@@ -7,6 +7,9 @@ import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 
 const useStyles = makeStyles(theme => ({
+    bottom: {
+        marginBottom: theme.spacing(6)
+    },
     padding: {
         paddingTop: theme.spacing(1.25),
         paddingBottom: theme.spacing(1),
@@ -18,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 const TitlePage2 = ({preTitle, title, sideContent, content}) => {
     const classes = useStyles();
     return (
-        <Grid direction="row" container spacing={1} alignItems="flex-start">
+        <Grid className={classes.bottom} direction="row" container spacing={1} alignItems="flex-start">
             <Grid container spacing={1} item lg={8} md={12}>
                 <Hidden lgUp>
                     <Grid item xs={12}>

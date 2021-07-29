@@ -46,6 +46,7 @@ import TimePeriodPicker from './TimePeriodPicker';
 import TimePicker from './TimePicker';
 import TitlePage from './TitlePage';
 import TitlePage2 from './TitlePage2';
+import TitlePage3 from './TitlePage3';
 import TopBarMenu from './TopBarMenu';
 import TreeBranch from './TreeBranch';
 import TreeIcon from './TreeIcon';
@@ -102,7 +103,7 @@ const thingValue = (type, thing, customTypes=[]) => {
                                     : '';
 };
 
-const isObjectEmpty = (obj) => obj.constructor === Object && Object.entries(obj).length === 0;
+const isObjectEmpty = (obj) => !(typeof obj === 'object' && Object.entries(obj).length > 0);
 const findItem = (index, target) => target.length ? (index+1 > target.length ? {}: target[index]) : {}; //findItem(index-1, target) : target[index]) : {};
 const orderByName = (arr, key='name') => arr.sort((a, b) => {
     let nameA,
@@ -211,6 +212,112 @@ const scaleToBinBytes = (bytes) => {
 
 const nextRunFn = (t) => (t === 'pending' ? t : moment(t).format('YYYY-MM-DD HH:mm'));
 
+const getIdFromPath = (pathname, name) => {
+    const splitPath = pathname.split('/');
+    const index = splitPath.indexOf(name);
+    if (index !== -1) {
+        const id = splitPath[index + 1];
+        return id || '';
+    } else {
+        return '';
+    }
+};
+
+const historyNavigate = (history, pathname, queryParams) => {
+    let params = {};
+
+    if (pathname) {
+        params.pathname = pathname;
+    }
+
+    if (queryParams) {
+        let search = '';
+        Object.entries(queryParams).forEach(([key, value], index) => {
+            let queryParam = '';
+            if (index === 0) {
+                queryParam = `?${key}=${value}`;
+            }
+            else {
+                queryParam = `&${key}=${value}`;
+            }
+            search = search.concat(queryParam);
+        });
+        params.search = search;
+    }
+
+    else if (queryParams === undefined) {
+        params.search = history.location.search;
+    }
+
+    history.push(params);
+};
+
+const historySetQueryParam = (history, name, value) => {
+    let params = new URLSearchParams(history.location.search);
+    params.set(name, value);
+    const string = params.toString();
+    history.push({ search: string });
+};
+
+const historyDeleteQueryParam = (history, name) => {
+    let params = new URLSearchParams(history.location.search);
+    params.delete(name);
+    const string = params.toString();
+    history.push({ search: string });
+};
+
+const historyGetQueryParam = (history, name) => {
+    const params = new URLSearchParams(history.location.search);
+    const result = params.get(name);
+    return result;
+};
+
+const getGreetingTime = (m) => {
+    let g = null; //return g
+
+    if(!m || !m.isValid()) {
+        return;
+    } //if we can't find a valid or filled moment, we return.
+
+    let split_afternoon = 12;  //24hr time to split the afternoon
+    let split_evening = 17;  //24hr time to split the evening
+    let currentHour = parseFloat(m.format('HH'));
+
+    if(currentHour >= split_afternoon && currentHour <= split_evening) {
+        g = 'afternoon';
+    } else if(currentHour >= split_evening) {
+        g = 'evening';
+    } else {
+        g = 'morning';
+    }
+
+    return g;
+};
+
+const desc = (a, b, orderBy) => {
+    if (b[orderBy] < a[orderBy] || (b[orderBy] !== a[orderBy] && b[orderBy] === null)) {
+        return -1;
+    }
+    if (b[orderBy] > a[orderBy] || (b[orderBy] !== a[orderBy] && a[orderBy] === null)) {
+        return 1;
+    }
+    return 0;
+};
+
+const stableSort = (array, cmp) => {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+        const order = cmp(a[0], b[0]);
+        if (order !== 0) return order;
+        return a[1] - b[1];
+    });
+    return stabilizedThis.map(el => el[0]);
+};
+
+const getSorting = (order, orderBy) => {
+    return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
+};
+
 export {
     addDoubleQuotesAroundKeys,
     allDataTypes,
@@ -237,44 +344,53 @@ export {
     fancyName,
     findItem,
     FixedList,
+    getGreetingTime,
+    getIdFromPath,
     getScopes,
     getScopes2,
+    getSorting,
     HarmonicCard,
     HarmonicCardContent,
     HarmonicCardHeader,
     HarmonicTree,
+    historyDeleteQueryParam,
+    historyGetQueryParam,
+    historyNavigate,
+    historySetQueryParam,
     Info,
     isObjectEmpty,
     ListHeader,
-    LocalMsg,
     LocalErrorMsg,
+    LocalMsg,
     Menu,
     nextRunFn,
     orderByName,
-    RefreshContainer,
     QueryInput,
     QueryOutput,
+    RefreshContainer,
     revealCustomType,
     scaleToBinBytes,
     ServerError,
     SimpleModal,
+    stableSort,
     StartStopPolling,
     StickyHeadTable,
     StringDialog,
     swap,
     Switching,
     SwitchOpen,
-    Tabs,
     TableCard,
     TableExtra,
     TableWithBadges,
     TableWithButtons,
+    Tabs,
     ThingsTree,
     thingValue,
     TimePeriodPicker,
     TimePicker,
     TitlePage,
     TitlePage2,
+    TitlePage3,
     TopBarMenu,
     TreeBranch,
     TreeIcon,

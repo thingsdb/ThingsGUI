@@ -1,14 +1,16 @@
+import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
+import {CardButton, ErrorMsg, historyNavigate, SimpleModal} from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
 import {RemoveUserTAG} from '../../../Constants/Tags';
 
 
 const tag = RemoveUserTAG;
 
-const Remove = ({user, close}) => {
+const Remove = ({user}) => {
+    let history = useHistory();
     const [show, setShow] = React.useState(false);
     const [name, setName] = React.useState('');
 
@@ -28,7 +30,7 @@ const Remove = ({user, close}) => {
         ThingsdbActions.removeUser(
             user.name,
             tag,
-            close?handleClickClose:()=>null,
+            () => historyNavigate(history, '/'),
         );
     };
 
@@ -56,13 +58,8 @@ const Remove = ({user, close}) => {
     );
 };
 
-Remove.defaultProps = {
-    close: false,
-};
-
 Remove.propTypes = {
     user: PropTypes.object.isRequired,
-    close: PropTypes.bool,
 };
 
 export default Remove;

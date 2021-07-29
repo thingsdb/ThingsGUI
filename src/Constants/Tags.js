@@ -1,5 +1,6 @@
 export const AuthTAG = 'AuthTAG';
 export const LoginTAG = 'LoginTAG';
+export const LoginEditTAG = 'LoginEditTAG';
 export const AddCollectionTAG = 'AddCollectionTAG';
 export const QuotasTAG = 'QuotasTAG';
 export const RemoveCollectionTAG = 'RemoveCollectionTAG';

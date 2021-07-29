@@ -12,17 +12,17 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TitlePage = ({preTitle, title, content}) => {
+const TitlePage3 = ({preTitle, title, content}) => {
     const classes = useStyles();
     return (
-        <Grid className={classes.bottom} container spacing={1}>
+        <Grid container spacing={1} className={classes.bottom}>
             <Grid item xs={12}>
                 <Card>
                     <CardContent>
-                        <Typography variant="body1" >
+                        <Typography variant="h6" >
                             {preTitle}
                         </Typography>
-                        <Typography variant="h4">
+                        <Typography variant="h3">
                             {title}
                         </Typography>
                     </CardContent>
@@ -35,11 +35,11 @@ const TitlePage = ({preTitle, title, content}) => {
     );
 };
 
-TitlePage.propTypes = {
-    preTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+TitlePage3.propTypes = {
+    preTitle: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     content: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]).isRequired,
 };
 
 
-export default TitlePage;
+export default TitlePage3;

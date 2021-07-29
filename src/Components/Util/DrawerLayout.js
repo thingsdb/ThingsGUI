@@ -25,9 +25,10 @@ const useStyles = makeStyles((theme) => ({
         height: 'calc(100% - 121px)', // footerHeight (60) + footerMarginTop (5) + topBarHeight (48) + appBarMarginBottom (8) = 121
     },
     footer: {
-        marginTop: 5,
-        height: 60,
-        bottom: 0
+        position:'fixed',
+        left: 0,
+        bottom: 5,
+        zIndex: 2
     },
     full: {
         display: 'flex',
@@ -50,12 +51,12 @@ const useStyles = makeStyles((theme) => ({
         }),
     },
     drawerOpen: {
-        boxShadow: '-2px 0 5px 0 rgba(31,30,30,1)',
         display: 'flex',
         flex: '1 0 auto',
         flexDirection: 'column',
         height: '100%',
         overflowY: 'auto',
+        paddingBottom: '120px',
         position: 'fixed',
         right: 0,
         zIndex: 1200,
@@ -106,23 +107,20 @@ const useStyles = makeStyles((theme) => ({
     menuDrawer: {
         width: drawerWidth,
         flexShrink: 0,
+
     },
     menuDrawerPaper: {
-        boxShadow: '2px 0 5px 0 rgba(31,30,30,1)',
+        overflowY: 'auto',
         borderColor: theme.palette.background.paper,
         width: drawerWidth,
         top: 'unset',
-    },
-    menuDrawerHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
-        justifyContent: 'flex-end',
+        paddingBottom: '120px'
     },
     menuDrawerClose: {
         width: 0,
+    },
+    drawerContainer: {
+        overflow: 'auto',
     },
 }));
 
@@ -175,17 +173,25 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     variant="persistent"
                     anchor="left"
                     open={menuOpen}
+                    PaperProps={{
+                        square: false
+                    }}
                     classes={{
                         paper: classes.menuDrawerPaper,
                     }}
                 >
-                    <List>
-                        {menus.map((item, index) => (
-                            <ListItem key={`menu_item_${index}`}>
-                                {item}
-                            </ListItem>
-                        ))}
-                    </List>
+                    <div className={classes.drawerContainer}>
+                        <List>
+                            {menus.map((item, index) => (
+                                <ListItem key={`menu_item_${index}`}>
+                                    {item}
+                                </ListItem>
+                            ))}
+                        </List>
+                        <div className={classes.footer}>
+                            {bottomBar}
+                        </div>
+                    </div>
                 </Drawer>
                 <main
                     className={clsx(classes.full, {
@@ -231,9 +237,6 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     </div>
                 </Card>
                 {toast}
-            </div>
-            <div className={classes.footer}>
-                {bottomBar}
             </div>
         </div>
     );

@@ -1,28 +1,34 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
+import {useLocation} from 'react-router-dom';
 import {withVlow} from 'vlow';
-
+import Grid from '@material-ui/core/Grid';
+import React from 'react';
 
 import {UserAccess} from './Config';
 import Tokens from './Tokens';
-import {ApplicationStore, ThingsdbStore} from '../../Stores';
-import {findItem, isObjectEmpty, TitlePage} from '../Util';
+import {ThingsdbActions, ThingsdbStore} from '../../Stores';
+import {getIdFromPath, isObjectEmpty, TitlePage} from '../Util';
+import {USER_ROUTE} from '../../Constants/Routes';
 
 const withStores = withVlow([{
-    store: ApplicationStore,
-    keys: ['match']
-}, {
     store: ThingsdbStore,
     keys: ['collections', 'user', 'users']
 }]);
 
-const User = ({match, user, users, collections}) => {
+const User = ({user, users, collections}) => {
+    let location = useLocation();
+
+    React.useEffect(() => {
+        ThingsdbActions.getUsers();
+        ThingsdbActions.getCollections();
+    }, []);
+
     const users2 =
         users.length ? users
             : isObjectEmpty(user) ? []
                 : [user];
 
-    const selectedUser = findItem(match.index, users2);
+    const userName = getIdFromPath(location.pathname, USER_ROUTE);
+    const selectedUser = users2.find(u => u['name'] === userName);
 
     return (
         isObjectEmpty(selectedUser) ? null
@@ -33,7 +39,7 @@ const User = ({match, user, users, collections}) => {
                     content={
                         <React.Fragment>
                             <Grid item md={12} xs={12}>
-                                <UserAccess user={selectedUser} collections={collections} close={(users2.length-1)!=match.index} />
+                                <UserAccess user={selectedUser} collections={collections} />
                             </Grid>
                             <Grid item md={12} xs={12}>
                                 <Tokens user={selectedUser} />
@@ -46,8 +52,6 @@ const User = ({match, user, users, collections}) => {
 };
 
 User.propTypes = {
-    /* Application properties */
-    match: ApplicationStore.types.match.isRequired,
 
     /* Collections properties */
     collections: ThingsdbStore.types.collections.isRequired,

@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {makeStyles} from '@material-ui/core/styles';
+import {useHistory} from 'react-router-dom';
 import {withVlow} from 'vlow';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import NativeSelect from '@material-ui/core/NativeSelect';
@@ -7,7 +8,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {NodesStore, ThingsdbStore} from '../../Stores';
-import {getScopes2} from '../Util';
+import {getScopes2, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Util';
 import {COLLECTION_SCOPE, THINGSDB_SCOPE} from '../../Constants/Scopes';
 
 const withStores = withVlow([{
@@ -28,20 +29,33 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
+const SelectScope = ({onChangeScope, collections, nodes}) => {
+    let history = useHistory();
     const classes = useStyles();
-    const [name, setName] = React.useState(scope|| collections[0] ? `${COLLECTION_SCOPE}:${collections[0].name}` : THINGSDB_SCOPE);
-    const scopes = getScopes2(collections, nodes);
+
+    const [name, setName] = React.useState(() => {
+        let scopeParam = historyGetQueryParam(history, 'scope');
+        if (scopeParam) {
+            return scopeParam;
+        }
+        return collections[0] ? `${COLLECTION_SCOPE}:${collections[0].name}` : THINGSDB_SCOPE;
+    });
+
+    const scopes = React.useMemo(() => getScopes2(collections, nodes), [collections, nodes]);
 
     React.useEffect(()=> {
-        let name = scope|| collections[0] ? `${COLLECTION_SCOPE}:${collections[0].name}` : THINGSDB_SCOPE;
-        onChangeScope(scopes.find(i=>i===name)||'');
-    }, []);
+        let sName = scopes.includes(name) ? name : THINGSDB_SCOPE;
+        historySetQueryParam(history, 'scope', sName);
+        onChangeScope(sName);
+    }, [name, scopes]);
+
+    React.useEffect(() => {
+        return () => historyDeleteQueryParam(history, 'scope');
+    }, [history]);
 
     const handleOnChangeScope = ({target}) => {
         const {value} = target;
         setName(value);
-        onChangeScope(scopes.find(i=>i===value)||'');
     };
 
     return (
@@ -56,7 +70,7 @@ const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
                 style: {
                     color:'#3a6394',
                     fontSize: '1.5rem',
-                }
+                },
             }}
             onChange={handleOnChangeScope}
             style={{lineHeight: '2rem'}}
@@ -74,7 +88,6 @@ const SelectScope = ({onChangeScope, scope, collections, nodes}) => {
 
 SelectScope.propTypes = {
     onChangeScope: PropTypes.func.isRequired,
-    scope: PropTypes.string.isRequired,
 
     /* Collections properties */
     collections: ThingsdbStore.types.collections.isRequired,

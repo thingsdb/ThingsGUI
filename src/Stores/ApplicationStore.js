@@ -21,12 +21,11 @@ const ApplicationActions = Vlow.createActions([
     'disconnect',
     'editCachedConn',
     'getCachedConn',
-    'navigate',
     'newCachedConn',
     'openEditor',
-    'pushNotifications',
     'reconnect',
     'renameCachedConn',
+    'storeSession'
 ]);
 
 
@@ -38,10 +37,10 @@ class ApplicationStore extends BaseStore {
         loaded: PropTypes.bool,
         connected: PropTypes.bool,
         seekConnection: PropTypes.bool,
-        match: PropTypes.shape({path: PropTypes.string, index: PropTypes.number, item: PropTypes.string, scope: PropTypes.string}),
         openEditor: PropTypes.bool,
         input: PropTypes.string,
-        cachedConnections: PropTypes.object
+        cachedConnections: PropTypes.object,
+        useCookies: PropTypes.bool
     }
 
     static defaults = {
@@ -50,15 +49,10 @@ class ApplicationStore extends BaseStore {
         loaded: false,
         connected: false,
         seekConnection: true,
-        match: {
-            path: '',
-            index: 0,
-            item: '',
-            scope: '',
-        },
         openEditor: false,
         input: '',
-        cachedConnections: {}
+        cachedConnections: {},
+        useCookies: false
     }
 
     constructor() {
@@ -76,14 +70,13 @@ class ApplicationStore extends BaseStore {
                 ()=>{
                     this.setState({
                         connected: data.Connected,
+                        useCookies: data.UseCookies,
                         loaded: true,
                         seekConnection:true,
                     });
-                    EventActions.watch(
-                        '@n',
-                    );
+                    EventActions.watch('@n');
                 },
-                ()=>this.setState({loaded: true, seekConnection: false}));
+                ()=>this.setState({loaded: true, useCookies: data.UseCookies, seekConnection: false}));
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             this.setState({loaded: true, seekConnection: true});
@@ -91,21 +84,33 @@ class ApplicationStore extends BaseStore {
 
     }
 
-    onPushNotifications() {
-        this.push();
-    }
-
     onConnected() {
         this.emit('connected').done((data) => {
             this.setState({
                 connected: data.Connected,
+                useCookies: data.UseCookies,
+                seekConnection: true,
             });
             setTimeout(() => {
                 this.setState({
-                    loaded: data.Loaded,
+                    loaded: true,
                 });
             }, 2000);
-        }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
+            if (data.Connected) {
+                ThingsdbActions.getUser();
+            }
+        }).fail((event, status, message) => {
+            ErrorActions.setToastError(message.Log);
+            this.setState({connected: false, loaded: true, seekConnection: false});
+        });
+    }
+
+    onStoreSession() {
+        this.post('/session').done(() => {
+            this.emit('cookie', document.cookie);
+        }).fail((error, message) => {
+            ErrorActions.setToastError(`${error.statusText}: ${message}`);
+        });
     }
 
     onConnectToNew(config, tag) {
@@ -224,10 +229,6 @@ class ApplicationStore extends BaseStore {
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
         });
-    }
-
-    onNavigate(match) {
-        this.setState({match});
     }
 
     onOpenEditor(input='') {
