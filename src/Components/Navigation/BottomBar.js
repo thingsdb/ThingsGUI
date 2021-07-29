@@ -29,19 +29,17 @@ const bottomInfo = [
 
 const BottomBar = () => {
     return (
-        <div style={{position:'fixed', left: 0, bottom: 5, zIndex: 2}}>
-            {bottomInfo.map((v, i) => (
-                <IconButton color="primary" key={i} href={v.url} size="medium" target="_blank">
-                    <img
-                        alt={v.name}
-                        src={v.icon}
-                        draggable='false'
-                        width='35em'
-                        style={{opacity:'0.6'}}
-                    />
-                </IconButton>
-            ))}
-        </div>
+        bottomInfo.map((v, i) => (
+            <IconButton color="primary" key={i} href={v.url} size="medium" target="_blank">
+                <img
+                    alt={v.name}
+                    src={v.icon}
+                    draggable='false'
+                    width='35em'
+                    style={{opacity:'0.6'}}
+                />
+            </IconButton>
+        ))
     );
 };
 

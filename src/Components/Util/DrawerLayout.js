@@ -25,10 +25,10 @@ const useStyles = makeStyles((theme) => ({
         height: 'calc(100% - 121px)', // footerHeight (60) + footerMarginTop (5) + topBarHeight (48) + appBarMarginBottom (8) = 121
     },
     footer: {
-        // position:'relative',
-        // marginTop: 5,
-        // height: 60,
-        // bottom: 0
+        position:'fixed',
+        left: 0,
+        bottom: 5,
+        zIndex: 2
     },
     full: {
         display: 'flex',
