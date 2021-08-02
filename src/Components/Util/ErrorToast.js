@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
         bottom: '1%',
         right: '1%',
         width: '400px',
-        zIndex: '3',
+        zIndex: 3000,
     },
 }));
 

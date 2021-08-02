@@ -271,7 +271,6 @@ class EventStore extends BaseStore {
     // EVENTS
 
     nodeStatus(data) {
-        console.log(data)
         let status = data.status;
         if (status=='SHUTTING_DOWN') {
             ApplicationActions.reconnect();
