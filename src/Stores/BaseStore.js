@@ -245,16 +245,12 @@ class EventStore extends BaseStore {
                 ErrorActions.setToastError(data.Data.warn_msg);
                 break;
             case ProtoMap.ProtoOnRoomJoin:
-
                 break;
             case ProtoMap.ProtoOnRoomLeave:
-
                 break;
             case ProtoMap.ProtoOnRoomEvent:
-
                 break;
             case ProtoMap.ProtoOnRoomDelete:
-
                 break;
             default:
 

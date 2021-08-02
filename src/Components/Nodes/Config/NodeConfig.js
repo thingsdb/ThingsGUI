@@ -37,6 +37,7 @@ const header = [
         {ky: 'zone', label: 'Zone'},
         {ky: 'scheduled_backups', label: 'Scheduled backups'},
         {ky: 'connected_clients', label: 'Connected clients'},
+        {ky: 'python_interpreter', label: 'Python interpreter'},
     ]},
     {ky: 'title2', title: 'PORTS', labels: [
         {ky: 'client_port', label: 'Client port'},
@@ -49,15 +50,15 @@ const header = [
         {ky: 'archived_in_memory', label: 'Archived in memory'},
         {ky: 'cached_names', label: 'Cached names'},
     ]},
-    {ky: 'title4', title: 'EVENTS & IDs', labels: [
-        {ky: 'events_in_queue', label: 'Events in queue'},
-        {ky: 'global_committed_event_id', label: 'Global committed event ID'},
-        {ky: 'global_stored_event_id', label: 'Global stored event ID'},
-        {ky: 'db_stored_event_id', label: 'Stored event ID'},
-        {ky: 'local_committed_event_id', label: 'Local committed event ID'},
-        {ky: 'local_stored_event_id', label: 'Local stored event ID'},
-        {ky: 'next_event_id', label: 'Next event ID'},
-        {ky: 'next_thing_id', label: 'Next thing ID'},
+    {ky: 'title4', title: 'CHANGES & IDs', labels: [
+        {ky: 'changes_in_queue', label: 'Changes in queue'},
+        {ky: 'global_committed_change_id', label: 'Global committed change ID'},
+        {ky: 'global_stored_change_id', label: 'Global stored change ID'},
+        {ky: 'db_stored_change_id', label: 'Stored change ID'},
+        {ky: 'local_committed_change_id', label: 'Local committed change ID'},
+        {ky: 'local_stored_change_id', label: 'Local stored change ID'},
+        {ky: 'next_change_id', label: 'Next change ID'},
+        {ky: 'next_free_id', label: 'Next free ID'},
 
     ]},
     {ky: 'title5', title: 'VERSIONS', labels: [
