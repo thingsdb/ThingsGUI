@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 
-	thingsdb "github.com/thingsdb/go-thingsdb"
+	things "github.com/thingsdb/go-thingsdb"
 )
 
 // ErrorType used for type assertion
 type ErrorType interface {
 	Error() string
-	Code() thingsdb.ErrorCode
+	Code() things.ErrorCode
 }
 
 // CreateThingsDBError asserts default error to custom error and return a Message type

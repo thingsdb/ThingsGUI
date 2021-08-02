@@ -100,7 +100,6 @@ export default {
             'del': 'Delete a property from a thing.',
             'dup': 'Duplicate a thing while preserving the Type.',
             'each': 'Iterate over all properties on a thing.',
-            'emit': 'Emit an event to all watchers of a thing. The event is a string value which you are free to choose. It is possible, but not required, to send extra arguments with the event.',
             'equals': 'Determines if a thing is equal to another thing.',
             'filter': 'When this method is used on a thing, then a new thing will be returned with only the properties that pass the test.',
             'get': 'Return the value of a property on a thing by a given property name. If the property is not found then the return value will be nil, unless an alternative return value is given.',
@@ -111,9 +110,7 @@ export default {
             'map': 'Iterate over all properties on a thing.',
             'set': 'Creates a new property on a thing. If the property already existed then the old property will be overwritten. This function is equal to an assignment except that it can be used when the name of the property is dynamic.',
             'to_type': 'Converts a thing into an instance of a given Type.',
-            'unwatch': 'Stop watching for mutations on a thing. This method returns nil and triggers a stop event, only when the thing was being watched.',
             'values': 'Returns an list with all the property values of a thing. The same could be returned using map so the following statement is true: (.values() == .map(|_, v| v))',
-            'watch': 'Subscribe for watching mutations on a stored thing. If this function is called on a thing which is not stored, and therefore has no #ID, then a value_err() is raised. This method returns nil but always triggers an init event, even when an earlier call to this function has been made.',
             'wrap': 'Wrap a thing with a Type.',
         },
         type: {

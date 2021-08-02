@@ -1,5 +1,4 @@
 import Divider from '@material-ui/core/Divider';
-import ExploreIcon from '@material-ui/icons/Explore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -11,7 +10,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 
 import {ThingActions} from '../TreeActions';
-import {EventStore, CollectionStore, CollectionActions} from '../../../../Stores';
+import {CollectionStore, CollectionActions} from '../../../../Stores';
 import {THING} from '../../../../Constants/ThingTypes';
 import {COLLECTION_SCOPE} from '../../../../Constants/Scopes';
 import ThingRestrict from './ThingRestrict';
@@ -20,9 +19,6 @@ import Thing from './Thing';
 const withStores = withVlow([{
     store: CollectionStore,
     keys: ['things']
-}, {
-    store: EventStore,
-    keys: ['watchIds']
 }]);
 
 
@@ -49,15 +45,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ThingRoot = ({things, collection, watchIds}) => {
+const ThingRoot = ({things, collection}) => {
     const classes = useStyles();
     const fetched = things.hasOwnProperty(collection.collection_id);
 
     React.useEffect(() => {
         CollectionActions.getThings(collection.collection_id, collection.name);
     }, [collection.collection_id, collection.name]);
-
-    const isWatching = Boolean(watchIds[collection.collection_id]);
 
     return (
         fetched ? (
@@ -87,17 +81,11 @@ const ThingRoot = ({things, collection, watchIds}) => {
                                 name: k,
                                 index: null,
                             }}
-                            watchIds={watchIds}
                         />
                     )}
                 />
                 <Divider className={classes.divider} />
                 <ListItem className={classes.listItem}>
-                    {isWatching ? (
-                        <ListItemIcon className={classes.icon}>
-                            <ExploreIcon className={classes.green} />
-                        </ListItemIcon>
-                    ) : null}
                     <ListItemIcon className={classes.icon}>
                         <ThingActions
                             child={{
@@ -137,8 +125,6 @@ ThingRoot.propTypes = {
     /* collection properties */
     things: CollectionStore.types.things.isRequired,
 
-    // Event properties
-    watchIds: EventStore.types.watchIds.isRequired,
 };
 
 

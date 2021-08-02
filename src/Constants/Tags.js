@@ -32,7 +32,6 @@ export const UserAccessTAG = 'UserAccessTAG';
 export const AddTokenTAG = 'AddTokenTAG';
 export const TokensTAG = 'TokensTAG';
 export const ChipsCardTAG = 'ChipsCardTAG';
-export const WatcherTAG = 'WatcherTAG';
 export const RemoveBackupTAG = 'RemoveBackupTAG';
 export const RestoreNodeTAG = 'RestoreNodeTAG';
 export const ExportCollectionTAG = 'ExportCollectionTAG';

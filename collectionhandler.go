@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/base64"
 	"encoding/json"
-	"strconv"
 	"strings"
 )
 
@@ -69,40 +68,40 @@ func CleanupTmp(tmp *TmpFiles) (int, bool, Message) {
 }
 
 // Watch things that correspond to the provided IDs
-func Watch(client *Client, data Data, timeout uint16) (int, interface{}, Message) {
-	scope := data.Scope
-	ids := data.Ids
-	idsInt := make([]uint64, 0)
+// func Watch(client *Client, data Data, timeout uint16) (int, interface{}, Message) {
+// 	scope := data.Scope
+// 	ids := data.Ids
+// 	idsInt := make([]uint64, 0)
 
-	if len(ids) > 0 {
-		for _, v := range ids {
-			id, _ := strconv.ParseUint(v, 10, 64)
-			idsInt = append(idsInt, id)
-		}
-	}
+// 	if len(ids) > 0 {
+// 		for _, v := range ids {
+// 			id, _ := strconv.ParseUint(v, 10, 64)
+// 			idsInt = append(idsInt, id)
+// 		}
+// 	}
 
-	resp, err := client.Connection.Watch(scope, idsInt, timeout)
-	message := Msg(err)
-	return message.Status, resp, message
-}
+// 	resp, err := client.Connection.Watch(scope, idsInt, timeout)
+// 	message := Msg(err)
+// 	return message.Status, resp, message
+// }
 
 // Unwatch things that correspond to the provided IDs
-func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, Message) {
-	scope := data.Scope
-	ids := data.Ids
-	idsInt := make([]uint64, 0)
+// func Unwatch(client *Client, data Data, timeout uint16) (int, interface{}, Message) {
+// 	scope := data.Scope
+// 	ids := data.Ids
+// 	idsInt := make([]uint64, 0)
 
-	if len(ids) > 0 {
-		for _, v := range ids {
-			id, _ := strconv.ParseUint(v, 10, 64)
-			idsInt = append(idsInt, id)
-		}
-	}
+// 	if len(ids) > 0 {
+// 		for _, v := range ids {
+// 			id, _ := strconv.ParseUint(v, 10, 64)
+// 			idsInt = append(idsInt, id)
+// 		}
+// 	}
 
-	resp, err := client.Connection.Unwatch(scope, idsInt, timeout)
-	message := Msg(err)
-	return message.Status, resp, message
-}
+// 	resp, err := client.Connection.Unwatch(scope, idsInt, timeout)
+// 	message := Msg(err)
+// 	return message.Status, resp, message
+// }
 
 // Run the procedure that is provided
 func Run(client *Client, data Data, timeout uint16) (int, interface{}, Message) {

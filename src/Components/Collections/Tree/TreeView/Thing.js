@@ -1,5 +1,3 @@
-import {makeStyles} from '@material-ui/core/styles';
-import ExploreIcon from '@material-ui/icons/Explore';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -12,15 +10,8 @@ import {THING_KEY} from '../../../../Constants/CharacterKeys';
 import {ARRAY, CLOSURE, ERROR, REGEX, THING} from '../../../../Constants/ThingTypes';
 import {COLLECTION_SCOPE} from '../../../../Constants/Scopes';
 
-const useStyles = makeStyles(theme => ({
-    green: {
-        color: theme.palette.primary.green,
-        paddingRight: theme.spacing(1),
-    },
-}));
 
-const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
-    const classes = useStyles();
+const Thing = ({child, collection, parent, thing, things, inset}) => {
     const [show, setShow] = React.useState(false);
 
     // thing info
@@ -33,7 +24,6 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
 
     const isTuple = type === ARRAY && parent.type === ARRAY;
     const thingId = thing && thing[THING_KEY] || parent.id;
-    const isWatching = type === THING && thing && watchIds[thing[THING_KEY]];
 
     const hasDialog = !(parent.type === CLOSURE || parent.type === REGEX || parent.type === ERROR);
 
@@ -65,7 +55,6 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
                             name: fancyName(isArray?child.name:k, i),
                             index: i,
                         }}
-                        watchIds={watchIds}
                     />
                 )}
             />
@@ -84,11 +73,7 @@ const Thing = ({child, collection, parent, thing, things, watchIds, inset}) => {
 
     return (
         <React.Fragment>
-            <TreeBranch inset={inset} name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpenClose} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null}>
-                {isWatching ? (
-                    <ExploreIcon className={classes.green} />
-                ) : null}
-            </TreeBranch>
+            <TreeBranch inset={inset} name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpenClose} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null} />
             {show ? (
                 <EditProvider>
                     <ThingActionsDialog
@@ -130,7 +115,6 @@ Thing.propTypes = {
         index: PropTypes.number,
     }).isRequired,
     things: PropTypes.object.isRequired,
-    watchIds: PropTypes.object.isRequired,
     inset: PropTypes.bool,
 };
 

@@ -2,16 +2,11 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Route, Switch, useHistory, useLocation} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import React from 'react';
-import StorageIcon from '@material-ui/icons/Storage';
-import VisibleIcon from '@material-ui/icons/Visibility';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import {BottomBar, CollectionsMenu, ProceduresMenu, TimersMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
 import {COLLECTION_ROUTE, EDITOR_ROUTE, PROCEDURE_ROUTE, TIMER_ROUTE, USER_ROUTE} from '../../Constants/Routes';
@@ -23,7 +18,6 @@ import HeaderTitle from './HeaderTitle';
 import LandingPage from '../LandingPage';
 import Nodes from '../Nodes';
 import User from '../Users';
-import Watcher from '../Watcher';
 import Welcome from '../Welcome';
 
 const useStyles = makeStyles(() => ({
@@ -34,7 +28,6 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const watcher = 'watcher';
 const nodes = 'nodes';
 
 const App = () => {
@@ -56,11 +49,9 @@ const App = () => {
     const procedureName = getIdFromPath(location.pathname, PROCEDURE_ROUTE);
     const timerId = getIdFromPath(location.pathname, TIMER_ROUTE);
 
-    const showNodes = drawerContent === nodes;
-
-    const handleDrawerOpen = (name) => () => {
-        historySetQueryParam(history, 'drawer', name);
-        setDrawerContent(name);
+    const handleDrawerOpen = () => {
+        historySetQueryParam(history, 'drawer', nodes);
+        setDrawerContent(nodes);
     };
 
     const handleDrawerClose = () => {
@@ -85,25 +76,14 @@ const App = () => {
                 topbar={
                     <TopBar
                         additionals={
-                            <TopBarMenu menuIcon={<MoreVertIcon />} menuTooltip="Nodes & Watcher">
-                                <List>
-                                    <ListItem button onClick={handleDrawerOpen(watcher)} >
-                                        <ListItemIcon>
-                                            <VisibleIcon color="primary" />
-                                        </ListItemIcon>
-                                        <ListItemText primary="WATCHER" />
-                                    </ListItem>
-                                    <ListItem button onClick={handleDrawerOpen(nodes)} >
-                                        <ListItemIcon>
-                                            <StorageIcon color="primary" />
-                                        </ListItemIcon>
-                                        <ListItemText primary="NODES" />
-                                    </ListItem>
-                                </List>
-                            </TopBarMenu>
+                            <Tooltip disableFocusListener disableTouchListener title={drawerContent ? 'Close nodes' : 'View nodes'} >
+                                <IconButton edge="end" onClick={drawerContent ? handleDrawerClose : handleDrawerOpen} aria-label={menuOpen ? 'close' : 'open'}>
+                                    <MoreVertIcon />
+                                </IconButton>
+                            </Tooltip>
                         }
                         menuIcon={
-                            <IconButton edge="start" onClick={menuOpen ? handleMenuClose : handleMenuOpen} aria-label="close">
+                            <IconButton edge="start" onClick={menuOpen ? handleMenuClose : handleMenuOpen} aria-label={menuOpen ? 'close' : 'open'}>
                                 { menuOpen ? <MenuOpenIcon /> : <MenuIcon />}
                             </IconButton>
                         }
@@ -127,8 +107,8 @@ const App = () => {
                 menuOpen={menuOpen}
                 menus={[<CollectionsMenu key="collections_menu" />, <UsersMenu key="users_menu" />, <ProceduresMenu key="procedures_menu" />, <TimersMenu key="timers_menu" />, <QueryEditorMenu key="editor_menu" />]}
                 bottomBar={<BottomBar />}
-                drawerTitle={showNodes ? 'NODES' : 'WATCHER'}
-                drawerContent={showNodes ? <Nodes /> : <Watcher />}
+                drawerTitle={'NODES'}
+                drawerContent={<Nodes />}
                 toast={<ErrorToast />}
             />
         </React.Fragment>

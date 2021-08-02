@@ -74,7 +74,6 @@ class ApplicationStore extends BaseStore {
                         loaded: true,
                         seekConnection:true,
                     });
-                    EventActions.watch('@n');
                 },
                 ()=>this.setState({loaded: true, useCookies: data.UseCookies, seekConnection: false}));
         }).fail((event, status, message) => {
@@ -147,7 +146,6 @@ class ApplicationStore extends BaseStore {
             this.setState({
                 connected: data.Connected,
             });
-            EventActions.reWatch();
             ErrorActions.resetToastError();
         }).fail((event, status, message) => {
             ErrorActions.setToastError(message.Log); //Tag of login screen
@@ -156,7 +154,7 @@ class ApplicationStore extends BaseStore {
     }
 
     onDisconnect() {
-        EventActions.resetWatch();
+        EventActions.reset();
         this.emit('disconn').done((data) => {
             CollectionActions.resetCollectionStore();
             ErrorActions.resetToastError();

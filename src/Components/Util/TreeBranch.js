@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpen, onRenderChildren, type, val, inset}) => {
+const TreeBranch = ({button, canToggle, name, onAction, onClick, onOpen, onRenderChildren, type, val, inset}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
 
@@ -67,7 +67,6 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
                         noWrap: true,
                     }}
                 />
-                {children}
                 <ListItemSecondaryAction>
                     {onAction&&onAction(name, type, val)}
                     {canToggle&& (
@@ -96,7 +95,6 @@ const TreeBranch = ({button, canToggle, children, name, onAction, onClick, onOpe
 
 TreeBranch.defaultProps = {
     button: false,
-    children: null,
     name: null,
     onAction: null,
     onClick: () => null,
@@ -107,7 +105,6 @@ TreeBranch.defaultProps = {
 TreeBranch.propTypes = {
     button: PropTypes.bool,
     canToggle: PropTypes.bool.isRequired,
-    children: PropTypes.object,
     name: PropTypes.string,
     onAction: PropTypes.func,
     onClick: PropTypes.func,

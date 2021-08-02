@@ -97,7 +97,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
                     </Typography>
                 </Grid>
                 <Grid container spacing={1} item xs={4} justify="flex-end">
-                    <DialogButtons child={child} customTypes={customTypes} onClose={onClose} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} thing={thing} tag={tag} isRoot={isRoot} />
+                    <DialogButtons child={child} customTypes={customTypes} onClose={onClose} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} thing={thing} isRoot={isRoot} />
                 </Grid>
             </Grid>
             {canEdit ? (

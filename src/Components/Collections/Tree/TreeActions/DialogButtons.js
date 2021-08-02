@@ -10,10 +10,9 @@ import {EDITOR_ROUTE} from '../../../../Constants/Routes';
 import {historyNavigate} from '../../../Util';
 import {THING} from '../../../../Constants/ThingTypes';
 import RemoveThing from './RemoveThing';
-import WatchThings from './WatchThings';
 
 
-const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, tag, thing, isRoot}) => {
+const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, thing, isRoot}) => {
     let history = useHistory();
 
     const handleClickOpenEditor = () => {
@@ -23,7 +22,6 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
     // buttons visible
     const isParentCustom = Boolean(customTypes.find(c=>c.name==realParentType));
     const canRemove = Boolean(!(isRoot || isParentCustom || parent.isTuple || child.name === CLOSURE_KEY));
-    const canWatch = Boolean(thing && thing.hasOwnProperty(THING_KEY));
 
     return (
         <React.Fragment>
@@ -52,16 +50,6 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
                     <CodeIcon fontSize="large" />
                 </Fab>
             </Grid>
-            {canWatch &&
-                <Grid item>
-                    <WatchThings
-                        buttonIsFab
-                        scope={scope}
-                        thingId={child.id||parent.id}
-                        tag={tag}
-                    />
-                </Grid>
-            }
         </React.Fragment>
     );
 };
@@ -91,7 +79,6 @@ DialogButtons.propTypes = {
     realChildType: PropTypes.string.isRequired,
     realParentType: PropTypes.string.isRequired,
     scope: PropTypes.string.isRequired,
-    tag: PropTypes.string.isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     isRoot: PropTypes.bool,
 };
