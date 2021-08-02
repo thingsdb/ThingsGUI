@@ -20,16 +20,16 @@ const privileges = [
         label: 'QUERY',
     },
     {
-        ky: 'event',
-        label: 'EVENT',
+        ky: 'change',
+        label: 'CHANGE',
     },
     {
         ky: 'grant',
         label: 'GRANT',
     },
     {
-        ky: 'watch',
-        label: 'WATCH',
+        ky: 'join',
+        label: 'JOIN',
     },
     {
         ky: 'run',
@@ -46,24 +46,24 @@ const UserAccess = ({user, collections}) => {
         let s = {
             full: false,
             query: false,
-            event: false,
+            change: false,
             grant: false,
-            watch: false,
+            join: false,
             run: false,
         };
 
         s.full = privileges.includes('FULL');
         if (s.full) {
             s.query = true;
-            s.event = true;
+            s.change = true;
             s.grant = true;
-            s.watch = true;
+            s.join = true;
             s.run = true;
         } else {
             s.query = privileges.includes('QUERY');
-            s.event = privileges.includes('EVENT');
+            s.change = privileges.includes('CHANGE');
             s.grant = privileges.includes('GRANT');
-            s.watch = privileges.includes('WATCH');
+            s.join = privileges.includes('JOIN');
             s.run = privileges.includes('RUN');
         }
 
