@@ -29,7 +29,7 @@ const header = [
     {ky: 'title1', title: 'GENERAL', labels: [
         {ky: 'started_at', label: 'Started counted at'},
     ]},
-    {ky: 'title1', title: 'QUERIES', labels: [
+    {ky: 'title2', title: 'QUERIES', labels: [
         {ky: 'queries_success', label: 'Successful queries'},
         {ky: 'queries_with_error', label: 'Queries with error'},
         {ky: 'average_query_duration', label: 'Average query duration', fn: (d) => d && d.toFixed(3) + ' s'},
@@ -38,13 +38,13 @@ const header = [
         {ky: 'queries_from_cache', label: 'Queries from cache'},
         {ky: 'wasted_cache', label: 'Wasted cache'},
     ]},
-    {ky: 'title2', title: 'WATCHER', labels: [
+    {ky: 'title3', title: 'WATCHER', labels: [
         {ky: 'watcher_failed', label: 'Watcher failed'}, // TODO
     ]},
-    {ky: 'title3', title: 'GARBAGE', labels: [
+    {ky: 'title4', title: 'GARBAGE', labels: [
         {ky: 'garbage_collected', label: 'Garbage collected'},
     ]},
-    {ky: 'title4', title: 'CHANGES', labels: [
+    {ky: 'title5', title: 'CHANGES', labels: [
         {ky: 'changes_with_gap', label: 'Changes with gap'},
         {ky: 'changes_skipped', label: 'Changes skipped'},
         {ky: 'changes_failed', label: 'Changes failed'},
@@ -55,7 +55,7 @@ const header = [
         {ky: 'longest_change_duration', label: 'Longest change duration', fn: (d) => d && d.toFixed(3) + ' s'},
         {ky: 'average_change_duration', label: 'Average change duration', fn: (d) => d && d.toFixed(3) + ' s'},
     ]},
-    {ky: 'title4', title: 'TIMERS', labels: [
+    {ky: 'title6', title: 'TIMERS', labels: [
         {ky: 'timers_success', label: 'Successful timers'},
         {ky: 'timers_with_error', label: 'Timers with error'},
     ]}
