@@ -8,8 +8,7 @@ import {InputField} from '../../CollectionsUtils';
 import BuildQueryString from './BuildQueryString';
 import PropInit from './PropInit';
 import TypeInit from './TypeInit';
-import {CLOSURE, DATETIME,ERROR, LIST, NIL, REGEX, SET, THING, TIMEVAL} from '../../../../Constants/ThingTypes';
-import {CLOSURE_KEY, REGEX_KEY} from '../../../../Constants/CharacterKeys';
+import {DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL} from '../../../../Constants/ThingTypes';
 
 const useStyles = makeStyles(theme => ({
     listItem: {
@@ -24,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
+const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
     const classes = useStyles();
 
     const [newProperty, setNewProperty] = React.useState('');
@@ -38,16 +37,14 @@ const Edit = ({child, customTypes, enums, parent, thing, dataTypes}) => {
         setDataType(t);
     };
 
-    const addNewProperty = child.type == THING;//Boolean(child.id) && !(child.type.trim()[0] == '<')
+    const addNewProperty = child.type == THING;
     const canChangeType = child.type == THING || child.type == LIST || child.type == SET || child.type == NIL;
 
     const t = (child.type == THING || child.type == LIST || child.type == SET) ? ''
-        : child.type == CLOSURE ? thing[CLOSURE_KEY]
-            : child.type == REGEX ? thing[REGEX_KEY]
-                : child.type == ERROR ? `err(${thing.error_code}, '${thing.error_msg}')`
-                    : child.type == DATETIME ? `datetime("${thing}")`
-                        :child.type == TIMEVAL ? `timeval(${thing})`
-                            : thing;
+        : child.type == ERROR ? {propName: child.name, parentId: parent.id, scope: scope}
+            : child.type == DATETIME ? `datetime("${thing}")`
+                :child.type == TIMEVAL ? `timeval(${thing})`
+                    : thing;
 
     return(
         <List disablePadding dense className={classes.list}>
@@ -111,8 +108,9 @@ Edit.propTypes = {
         name: PropTypes.string,
         type: PropTypes.string,
     }).isRequired,
-    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    scope: PropTypes.string.isRequired,
+    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
 };
 
 export default Edit;

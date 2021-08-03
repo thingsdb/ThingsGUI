@@ -7,7 +7,7 @@ import React from 'react';
 
 import {checkType, fancyName, thingValue, TreeBranch} from '../Util';
 import {SET_KEY, THING_KEY} from '../../Constants/CharacterKeys';
-import {ARRAY, CLOSURE, ERROR, REGEX, SET, THING} from '../../Constants/ThingTypes';
+import {ARRAY, SET, THING} from '../../Constants/ThingTypes';
 
 
 const useStyles = makeStyles(theme => ({
@@ -81,7 +81,7 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
     const val = thingValue(type, thing, customTypes);
 
     // buttons
-    const canToggle = type === 'object' || type === CLOSURE || type === REGEX|| type === ERROR || (type === THING && Object.keys(thing).length>1) || (type === ARRAY && thing.length>0) || (type === SET && thing[SET_KEY].length>0);
+    const canToggle = type === 'object' || (type === THING && Object.keys(thing).length>1) || (type === ARRAY && thing.length>0) || (type === SET && thing[SET_KEY].length>0);
 
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onOpen={handleOpenClose} onRenderChildren={renderChildren} onAction={onAction} />

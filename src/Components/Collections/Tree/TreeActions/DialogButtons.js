@@ -5,7 +5,7 @@ import CodeIcon from '@material-ui/icons/Code';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 
-import {CLOSURE_KEY, THING_KEY} from '../../../../Constants/CharacterKeys';
+import {THING_KEY} from '../../../../Constants/CharacterKeys';
 import {EDITOR_ROUTE} from '../../../../Constants/Routes';
 import {historyNavigate} from '../../../Util';
 import {THING} from '../../../../Constants/ThingTypes';
@@ -20,8 +20,8 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
     };
 
     // buttons visible
-    const isParentCustom = Boolean(customTypes.find(c=>c.name==realParentType));
-    const canRemove = Boolean(!(isRoot || isParentCustom || parent.isTuple || child.name === CLOSURE_KEY));
+    const isParentCustom = Boolean(customTypes.find(c => c.name == realParentType));
+    const canRemove = Boolean(!(isRoot || isParentCustom || parent.isTuple));
 
     return (
         <React.Fragment>

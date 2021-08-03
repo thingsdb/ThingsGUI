@@ -113,6 +113,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
                             thing={thing}
                             child={{...child, type: realChildType}}
                             parent={{...parent, type: realParentType||parent.type}}
+                            scope={scope}
                         />
                     </Grid>
                 </React.Fragment>

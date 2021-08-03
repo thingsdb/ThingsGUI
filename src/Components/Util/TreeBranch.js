@@ -1,8 +1,9 @@
 import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import BuildIcon from '@material-ui/icons/Build';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -12,7 +13,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import {DownloadBlob, StringDialog, TreeIcon} from '../Util';
+import {DownloadBlob, StringDialog} from '../Util';
 import {BYTES, STR} from '../../Constants/ThingTypes';
 
 
@@ -27,9 +28,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const TreeBranch = ({button, canToggle, name, onAction, onClick, onOpen, onRenderChildren, type, val, inset}) => {
+const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildren, type, val, inset}) => {
     const classes = useStyles();
     const [show, setShow] = React.useState(false);
+    const [focus, setFocus] = React.useState(false);
 
     const renderChildren = () => {
         return onRenderChildren();
@@ -40,11 +42,20 @@ const TreeBranch = ({button, canToggle, name, onAction, onClick, onOpen, onRende
         onOpen(!show);
     };
 
+    const handleOnMouseEnter = () => {
+        setFocus(true);
+    };
+
+    const handleOnMouseLeave = () => {
+        setFocus(false);
+    };
+
+
     return (
         <React.Fragment>
-            <ListItem style={{margin: 0, paddingTop:0, paddingBottom:0, paddingRight: 0, paddingLeft: inset?32:0}} button={button?true:false} onClick={onClick}>
+            <ListItem style={{margin: 0, paddingTop:0, paddingBottom:0, paddingRight: 0, paddingLeft: inset?32:0}} button ContainerProps={{onMouseEnter: handleOnMouseEnter, onMouseLeave: handleOnMouseLeave}} onClick={handleClick}>
                 <ListItemIcon>
-                    <TreeIcon type={type} />
+                    {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
                 </ListItemIcon>
                 <ListItemText
                     classes={{ root: classes.listItem, primary: classes.text }}
@@ -67,20 +78,23 @@ const TreeBranch = ({button, canToggle, name, onAction, onClick, onOpen, onRende
                         noWrap: true,
                     }}
                 />
+
                 <ListItemSecondaryAction>
-                    {onAction&&onAction(name, type, val)}
-                    {canToggle&& (
-                        <Button color="primary" onClick={handleClick} >
-                            {show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
-                        </Button>
-                    )}
-                    {!button ? (
-                        type === BYTES ? (
-                            <DownloadBlob val={val} />
-                        ) : type === STR ? (
-                            <StringDialog name={name} text={val} />
-                        ) : null
-                    ):null}
+                    <Collapse component="span" in={focus} timeout={1}>
+                        {onClick && (
+                            <IconButton color="primary" size="small" onClick={onClick} >
+                                <BuildIcon color="primary" />
+                            </IconButton>
+                        )}
+                        {onAction && onAction(name, type, val)}
+                        {!onClick ? (
+                            type === BYTES ? (
+                                <DownloadBlob val={val} />
+                            ) : type === STR ? (
+                                <StringDialog name={name} text={val} />
+                            ) : null
+                        ):null}
+                    </Collapse>
                 </ListItemSecondaryAction>
             </ListItem>
             {canToggle &&
@@ -94,16 +108,14 @@ const TreeBranch = ({button, canToggle, name, onAction, onClick, onOpen, onRende
 };
 
 TreeBranch.defaultProps = {
-    button: false,
     name: null,
     onAction: null,
-    onClick: () => null,
+    onClick: null,
     onOpen: () => null,
     inset: false,
 };
 
 TreeBranch.propTypes = {
-    button: PropTypes.bool,
     canToggle: PropTypes.bool.isRequired,
     name: PropTypes.string,
     onAction: PropTypes.func,

@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 import {EditActions, useEdit} from '../Context';
+import {CollectionActions} from '../../../../Stores';
+import {ThingActionsDialogTAG} from '../../../../Constants/Tags';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -25,31 +27,29 @@ const AddError = ({identifier, init}) => {
     const {errCode, errMsg} = state;
 
     React.useEffect(()=>{
-        EditActions.updateVal(dispatch, init, identifier);
-        let commaIndex = init.indexOf(',', 0);
-        let code = init.slice(4, commaIndex);
-        let secondAppIndex = init.indexOf('\'', commaIndex);
-        let msg = init.slice(secondAppIndex+1, -2);
-
-        setState({
-            errCode:code,
-            errMsg:msg,
-        });
+        if(init) {
+            CollectionActions.query(init.scope, `{code: #${init.parentId}.${init.propName}.code(), msg: #${init.parentId}.${init.propName}.msg()}`, ThingActionsDialogTAG, handleErr);
+        }
     }, []);
+
+    const handleErr = (data) => {
+        saveErr(data.code, data.msg);
+    };
 
     const handleOnChangeCode = ({target}) => {
         const {value} = target;
-        setState({...state, errCode: value});
-        const c = `err(${value}, '${errMsg}')`;
-        EditActions.updateVal(dispatch, c, identifier);
-
+        saveErr(value, errMsg);
     };
 
     const handleOnChangeMsg = ({target}) => {
         const {value} = target;
-        setState({...state, errMsg: value});
-        const c = `err(${errCode}, '${value}')`;
+        saveErr(errCode, value);
+    };
+
+    const saveErr = (code, msg) => {
+        const c = `err(${code}, '${msg}')`;
         EditActions.updateVal(dispatch, c, identifier);
+        setState({errCode: code, errMsg: msg});
     };
 
     return(
@@ -105,7 +105,7 @@ AddError.defaultProps = {
 
 AddError.propTypes = {
     identifier: PropTypes.string,
-    init: PropTypes.string,
+    init: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 export default AddError;

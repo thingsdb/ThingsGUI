@@ -7,7 +7,7 @@ import {ThingActionsDialog} from '../TreeActions';
 import {CollectionActions} from '../../../../Stores/CollectionStore';
 import {checkType, fancyName, thingValue, TreeBranch} from '../../../Util';
 import {THING_KEY} from '../../../../Constants/CharacterKeys';
-import {ARRAY, CLOSURE, ERROR, REGEX, THING} from '../../../../Constants/ThingTypes';
+import {ARRAY, THING} from '../../../../Constants/ThingTypes';
 import {COLLECTION_SCOPE} from '../../../../Constants/Scopes';
 
 
@@ -20,12 +20,10 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
     const type = checkType(thing);
     const val = thingValue(type, thing);
     const currThing = thing && things[thing[THING_KEY]] || thing;
-    const canToggle =  type === THING || type === CLOSURE || type === REGEX || type === ERROR || (type === ARRAY && thing.length>0) ;
+    const canToggle =  type === THING || (type === ARRAY && thing.length>0) ;
 
     const isTuple = type === ARRAY && parent.type === ARRAY;
     const thingId = thing && thing[THING_KEY] || parent.id;
-
-    const hasDialog = !(parent.type === CLOSURE || parent.type === REGEX || parent.type === ERROR);
 
     const handleOpenDialog = () => {
         setShow(true);
@@ -73,7 +71,7 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
 
     return (
         <React.Fragment>
-            <TreeBranch inset={inset} name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpenClose} button={hasDialog} onClick={hasDialog ? handleOpenDialog : ()=>null} />
+            <TreeBranch inset={inset} name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpenClose} onClick={handleOpenDialog} />
             {show ? (
                 <EditProvider>
                     <ThingActionsDialog
