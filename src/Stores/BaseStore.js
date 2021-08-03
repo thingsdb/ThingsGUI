@@ -198,6 +198,9 @@ class BaseStore extends Vlow.Store {
 }
 
 const EventActions = Vlow.createActions([
+    'join',
+    'leave',
+    'rejoin',
     'reset',
 ]);
 
@@ -215,10 +218,12 @@ class EventStore extends BaseStore {
 
     static types = {
         events: PropTypes.object,
+        ids: PropTypes.object,
     }
 
     static defaults = {
         events: {},
+        ids: {},
     }
 
     constructor() {
@@ -245,12 +250,20 @@ class EventStore extends BaseStore {
                 ErrorActions.setToastError(data.Data.warn_msg);
                 break;
             case ProtoMap.ProtoOnRoomJoin:
+                console.log('ProtoOnRoomJoin', data);
+                this.join(data.Data);
                 break;
             case ProtoMap.ProtoOnRoomLeave:
+                console.log('ProtoOnRoomLeave', data);
+                this.leave(data.Data);
                 break;
             case ProtoMap.ProtoOnRoomEvent:
+                console.log('ProtoOnRoomEvent', data);
+                this.event(data.Data);
                 break;
             case ProtoMap.ProtoOnRoomDelete:
+                console.log('ProtoOnRoomDelete', data);
+                this.delete(data.Data);
                 break;
             default:
 
@@ -258,9 +271,37 @@ class EventStore extends BaseStore {
         });
     }
 
+    // STOREACTIONS
+
+    onJoin(scope, id='', tag=null) {
+        this.emit('join', {
+            scope,
+            ids: [id]
+        }).done(() => null).fail((event, status, message) => {
+            tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
+        });
+    }
+
+    onLeave(scope, id, tag=null) {
+        this.emit('leave', {
+            scope,
+            ids: [id]
+        }).done(() => null).fail((event, status, message) => {
+            tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
+        });
+    }
+
+    onRejoin() {
+        const {ids} = this.state;
+        Object.entries(ids).forEach(([id, scope]) => {
+            this.onJoin(scope, id);
+        });
+    }
+
     onReset() {
         this.setState({
             events: {},
+            ids: {},
         });
     }
 
@@ -272,6 +313,37 @@ class EventStore extends BaseStore {
             ApplicationActions.reconnect();
             ErrorActions.setToastError('Lost connection with ThingsDB. Trying to reconnect.');
         }
+    }
+
+    join(data) {
+        this.setState(prevState => {
+            let res = {...prevState.ids, [data.id]: true};
+            return {ids: res};
+        });
+    }
+
+    leave(data) {
+        this.setState(prevState => {
+            let res = prevState.ids;
+            delete res[data.id];
+            return {ids: res};
+        });
+    }
+
+    event(data) {
+        console.log(
+            data.id, // room id
+            data.args, // array with arguments
+            data.event // string name of event
+        );
+    }
+
+    delete(data) {
+        this.setState(prevState => {
+            let res = prevState.ids;
+            delete res[data.id];
+            return {ids: res};
+        });
     }
 }
 

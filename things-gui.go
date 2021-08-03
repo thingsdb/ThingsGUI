@@ -184,13 +184,13 @@ func (app *App) SocketRouter() {
 		return CleanupTmp(app.client[s.ID()].TmpFiles)
 	})
 
-	// app.server.OnEvent("/", "watch", func(s socketio.Conn, data Data) (int, interface{}, Message) {
-	// 	return Watch(app.client[s.ID()], data, app.timeout)
-	// })
+	app.server.OnEvent("/", "join", func(s socketio.Conn, data Data) (int, interface{}, Message) {
+		return Join(app.client[s.ID()], data, app.timeout)
+	})
 
-	// app.server.OnEvent("/", "unwatch", func(s socketio.Conn, data Data) (int, interface{}, Message) {
-	// 	return Unwatch(app.client[s.ID()], data, app.timeout)
-	// })
+	app.server.OnEvent("/", "leave", func(s socketio.Conn, data Data) (int, interface{}, Message) {
+		return Leave(app.client[s.ID()], data, app.timeout)
+	})
 
 	app.server.OnEvent("/", "run", func(s socketio.Conn, data Data) (int, interface{}, Message) {
 		return Run(app.client[s.ID()], data, app.timeout)

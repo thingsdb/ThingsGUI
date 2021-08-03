@@ -70,7 +70,7 @@ const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildre
                                     {`${name}   `}
                                 </Typography>
                             ) : null}
-                            {type === BYTES ?  '   :   Blob' : `   :  ${val}`}
+                            {type === BYTES ?  '      Blob' : `     ${val}`}
                         </React.Fragment>
                     }
                     primaryTypographyProps={{

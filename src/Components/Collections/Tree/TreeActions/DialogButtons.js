@@ -5,14 +5,15 @@ import CodeIcon from '@material-ui/icons/Code';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 
-import {THING_KEY} from '../../../../Constants/CharacterKeys';
 import {EDITOR_ROUTE} from '../../../../Constants/Routes';
 import {historyNavigate} from '../../../Util';
-import {THING} from '../../../../Constants/ThingTypes';
+import {ROOM, THING} from '../../../../Constants/ThingTypes';
+import {THING_KEY} from '../../../../Constants/CharacterKeys';
+import JoinRoom from './JoinRoom';
 import RemoveThing from './RemoveThing';
 
 
-const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, thing, isRoot}) => {
+const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, tag, thing, isRoot}) => {
     let history = useHistory();
 
     const handleClickOpenEditor = () => {
@@ -20,8 +21,9 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
     };
 
     // buttons visible
-    const isParentCustom = Boolean(customTypes.find(c => c.name == realParentType));
+    const isParentCustom = Boolean(customTypes.find(c => c.name === realParentType));
     const canRemove = Boolean(!(isRoot || isParentCustom || parent.isTuple));
+    const isRoom = realChildType === ROOM;
 
     return (
         <React.Fragment>
@@ -50,6 +52,15 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
                     <CodeIcon fontSize="large" />
                 </Fab>
             </Grid>
+            {isRoom &&
+                <Grid item>
+                    <JoinRoom
+                        scope={scope}
+                        room={child.val}
+                        tag={tag}
+                    />
+                </Grid>
+            }
         </React.Fragment>
     );
 };
@@ -66,6 +77,7 @@ DialogButtons.propTypes = {
         index: PropTypes.number,
         name: PropTypes.string,
         type: PropTypes.string,
+        val: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     }).isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     onClose: PropTypes.func.isRequired,
@@ -79,6 +91,7 @@ DialogButtons.propTypes = {
     realChildType: PropTypes.string.isRequired,
     realParentType: PropTypes.string.isRequired,
     scope: PropTypes.string.isRequired,
+    tag: PropTypes.string.isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     isRoot: PropTypes.bool,
 };

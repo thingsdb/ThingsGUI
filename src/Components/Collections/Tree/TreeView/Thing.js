@@ -82,6 +82,7 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
                             index: child.index,
                             name: child.name,
                             type: type,
+                            val: val
                         }}
                         parent={parent}
                         thing={currThing}

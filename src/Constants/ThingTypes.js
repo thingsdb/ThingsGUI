@@ -15,6 +15,7 @@ export const NUMBER = 'number';
 export const PINT = 'pint';
 export const RAW = 'raw';
 export const REGEX = 'regex';
+export const ROOM = 'room';
 export const SET = 'set';
 export const STR = 'str';
 export const THING = 'thing';
