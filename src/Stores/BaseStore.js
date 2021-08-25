@@ -336,8 +336,9 @@ class EventStore extends BaseStore {
         console.log(data);
         this.setState(prevState => {
             let events = prevState.events;
-            let time = moment();
-            return {events: {...events, [data.id]: {...data, receivedAt: time}}}; // {id: 123, args: ["arg1"], event: "name event"}
+            let time = moment().format('YYYY-MM-DD HH:mm');
+            let updatedEvent = events[data.id] ? [...events[data.id], {...data, receivedAt: time}] : [{...data, receivedAt: time}];
+            return {events: {...events, [data.id]: updatedEvent}}; // {id: 123, args: ["arg1"], event: "name event"}
         });
     }
 

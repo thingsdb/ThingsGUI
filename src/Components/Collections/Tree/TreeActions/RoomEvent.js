@@ -1,12 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
-import FastfoodIcon from '@material-ui/icons/Fastfood';
-import HotelIcon from '@material-ui/icons/Hotel';
-import LaptopMacIcon from '@material-ui/icons/LaptopMac';
-import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RepeatIcon from '@material-ui/icons/Repeat';
 import Timeline from '@material-ui/lab/Timeline';
 import TimelineConnector from '@material-ui/lab/TimelineConnector';
 import TimelineContent from '@material-ui/lab/TimelineContent';
@@ -23,21 +17,14 @@ const withStores = withVlow([{
     keys: ['events']
 }]);
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        padding: '6px 16px',
-    },
-    secondaryTail: {
-        backgroundColor: theme.palette.secondary.main,
-    },
-}));
-
 const RoomEvent = ({room, events}) => {
-    const classes = useStyles();
 
     // stringify thingId
     const roomId = room.includes('room:') ? room.split(':')[1] : null;
-    const roomEvents = Boolean(roomId !== null && events[roomId]);
+    const roomEvents = roomId !== null && events[roomId] || [];
+    console.log({events, roomEvents, room, roomId})
+
+    const lastIndex = roomEvents.length -1;
 
     return (
         <Timeline align="alternate">
@@ -49,22 +36,18 @@ const RoomEvent = ({room, events}) => {
                         </Typography>
                     </TimelineOppositeContent>
                     <TimelineSeparator>
-                        <TimelineDot>
-                            <LaptopMacIcon />
-                        </TimelineDot>
-                        <TimelineConnector />
+                        <TimelineDot variant="outlined" color="primary" />
+                        {lastIndex !== index && <TimelineConnector />}
                     </TimelineSeparator>
                     <TimelineContent>
-                        <Paper elevation={3} className={classes.paper}>
-                            <Typography variant="h6" component="h1">
-                                {e.event}
+                        <Typography variant="subtitle2">
+                            {e.event}
+                        </Typography>
+                        {e.args.map((a, index) => (
+                            <Typography key={`argument_${index}`} variant="body2">
+                                {a}
                             </Typography>
-                            {e.args.map((a, index) => (
-                                <Typography key={`argument_${index}`}>
-                                    {a}
-                                </Typography>
-                            ))}
-                        </Paper>
+                        ))}
                     </TimelineContent>
                 </TimelineItem>
             ))}
