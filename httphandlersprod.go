@@ -73,7 +73,7 @@ func handlerFaviconIco(w http.ResponseWriter, r *http.Request) {
 
 func handlerMain(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		HandlerNotFound(w, r)
+		handlerNotFound(w, r)
 	} else {
 		w.Header().Set("Content-Type", "text/html")
 		w.Write(FileAppHTML)

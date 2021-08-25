@@ -9,12 +9,12 @@ import (
 
 func TestEncryptDecrypt(t *testing.T) {
 	fmt.Println("TEST 6: encrypting and decrypting data")
-	encrypted, err := Encrypt([]byte("testing_this_string"), key)
+	encrypted, err := encrypt([]byte("testing_this_string"), key)
 	if err != nil {
 		t.Errorf("Encrypting FAILED: %s\n", err)
 	}
 
-	plaintext, err := Decrypt(encrypted, key)
+	plaintext, err := decrypt(encrypted, key)
 	if err != nil {
 		t.Errorf("Decrypting FAILED: %s\n", err)
 	}

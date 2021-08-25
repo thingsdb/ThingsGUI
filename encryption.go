@@ -8,8 +8,8 @@ import (
 	"io"
 )
 
-// Encrypt encrypts a byte code array.
-func Encrypt(plaintext []byte, key []byte) ([]byte, error) {
+// encrypt encrypts a byte code array.
+func encrypt(plaintext []byte, key []byte) ([]byte, error) {
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -28,8 +28,8 @@ func Encrypt(plaintext []byte, key []byte) ([]byte, error) {
 	return gcm.Seal(nonce, nonce, plaintext, nil), nil
 }
 
-// Decrypt decrypts a ciphertext to a byte code array.
-func Decrypt(ciphertext []byte, key []byte) ([]byte, error) {
+// decrypt decrypts a ciphertext to a byte code array.
+func decrypt(ciphertext []byte, key []byte) ([]byte, error) {
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err

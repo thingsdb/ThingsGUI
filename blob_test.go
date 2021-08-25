@@ -6,7 +6,7 @@ import (
 )
 
 func TestBinString(t *testing.T) {
-	tmp := NewTmpFiles()
+	tmp := newTmpFiles()
 
 	//TEST 1
 	fmt.Println("Test 1: Creating new binary files and return link")
@@ -30,8 +30,8 @@ func TestBinString(t *testing.T) {
 	testThing2 := []byte("I am bin data")
 
 	fmt.Println("TEST 2: Replacing binary data with link...")
-	_, err1 := tmp.ReplaceBinStrWithLink(testThing)
-	resp, err2 := tmp.ReplaceBinStrWithLink(testThing2)
+	_, err1 := tmp.replaceBinStrWithLink(testThing)
+	resp, err2 := tmp.replaceBinStrWithLink(testThing2)
 
 	if err1 != nil {
 		t.Errorf("Test 2: FAILED. Something went wrong: %s\n", err1)
@@ -53,11 +53,11 @@ func TestBinString(t *testing.T) {
 
 	//TEST 3
 	fmt.Println("TEST 3: Cleaning temp folder...")
-	tmp.CleanupTmp()
+	tmp.cleanupTmp()
 
 	success := true
 	for k := range targetMap {
-		if FileNotExist(fmt.Sprintf("/tmp/%s", k)) {
+		if fileNotExist(fmt.Sprintf("/tmp/%s", k)) {
 			fmt.Printf("* %s has been removed\n", k)
 		} else {
 			success = false

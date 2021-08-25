@@ -2,34 +2,34 @@ package main
 
 import "net/http"
 
-// Message type
-type Message struct {
+// message type
+type message struct {
 	Text   string
 	Status int
 	Log    string
 }
 
-// Msg returns an error message if error is not nil
-func Msg(err error) Message {
+// msg returns an error message if error is not nil
+func msg(err error) message {
 	if err == nil {
-		return SuccessMsg()
+		return successMsg()
 	} else {
-		return FailedMsg(err)
+		return failedMsg(err)
 	}
 }
 
-// Msg returns an error message if error is not nil
-func SuccessMsg() Message {
-	return Message{
+// successMsg returns OK
+func successMsg() message {
+	return message{
 		Text:   "",
 		Status: http.StatusOK,
 		Log:    "",
 	}
 }
 
-// Msg returns an error message if error is not nil
-func FailedMsg(err error) Message {
-	return Message{
+// failedMsg returns InternalError
+func failedMsg(err error) message {
+	return message{
 		Text:   "Query error",
 		Status: http.StatusInternalServerError,
 		Log:    err.Error(),

@@ -7,19 +7,19 @@ import (
 	"strings"
 )
 
-// TmpFiles keeps track of generates files
-type TmpFiles struct {
+// TmpFiles keeps track of generated files
+type tmpFiles struct {
 	generated map[string]bool
 }
 
 // NewTmpFiles create a new tmp struct
-func NewTmpFiles() *TmpFiles {
-	return &TmpFiles{
+func newTmpFiles() *tmpFiles {
+	return &tmpFiles{
 		generated: make(map[string]bool),
 	}
 }
 
-func (tmp *TmpFiles) createBinFileLink(content []byte) (string, error) {
+func (tmp *tmpFiles) createBinFileLink(content []byte) (string, error) {
 	var err error
 	var hostname string
 
@@ -46,7 +46,7 @@ func (tmp *TmpFiles) createBinFileLink(content []byte) (string, error) {
 }
 
 // ReplaceBinStrWithLink replace a binary string with a symlink
-func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) (interface{}, error) {
+func (tmp *tmpFiles) replaceBinStrWithLink(thing interface{}) (interface{}, error) {
 	var err error
 	switch v := thing.(type) {
 	case []interface{}:
@@ -57,7 +57,7 @@ func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) (interface{}, erro
 					return nil, err
 				}
 			} else {
-				_, err = tmp.ReplaceBinStrWithLink(v[i])
+				_, err = tmp.replaceBinStrWithLink(v[i])
 				if err != nil {
 					return nil, err
 				}
@@ -71,7 +71,7 @@ func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) (interface{}, erro
 					return nil, err
 				}
 			} else {
-				_, err = tmp.ReplaceBinStrWithLink(v[k])
+				_, err = tmp.replaceBinStrWithLink(v[k])
 				if err != nil {
 					return nil, err
 				}
@@ -93,7 +93,7 @@ func (tmp *TmpFiles) ReplaceBinStrWithLink(thing interface{}) (interface{}, erro
 }
 
 // CleanupTmp removes downloaded blob files from local tmp folder
-func (tmp *TmpFiles) CleanupTmp() error { // cleanup at end of session
+func (tmp *tmpFiles) cleanupTmp() error { // cleanup at end of session
 	var err error
 	for k := range tmp.generated {
 		err = os.Remove(k)

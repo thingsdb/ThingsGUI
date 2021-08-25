@@ -10,8 +10,8 @@ import (
 	"strings"
 )
 
-// HandlerNotFound sends a 404-not-found  error
-func HandlerNotFound(w http.ResponseWriter, r *http.Request) {
+// handlerNotFound sends a 404-not-found  error
+func handlerNotFound(w http.ResponseWriter, r *http.Request) {
 	sendError(w, "404 not found", http.StatusNotFound)
 }
 
@@ -42,8 +42,8 @@ func readBody(w http.ResponseWriter, r *http.Request, v interface{}) error {
 	}
 }
 
-// HandleFileRequest handles a file request
-func HandleFileRequest(w http.ResponseWriter, fn, ct string) {
+// handleFileRequest handles a file request
+func handleFileRequest(w http.ResponseWriter, fn, ct string) {
 	b, err := ioutil.ReadFile(fn)
 	if err == nil {
 		w.Header().Set("Content-Type", ct)
@@ -56,8 +56,8 @@ func HandleFileRequest(w http.ResponseWriter, fn, ct string) {
 	}
 }
 
-// HandlerDownload sends a binary data object
-func HandlerDownload(w http.ResponseWriter, r *http.Request) {
+// handlerDownload sends a binary data object
+func handlerDownload(w http.ResponseWriter, r *http.Request) {
 	var link string
 	if err := readBody(w, r, &link); err != nil {
 		sendError(w, err.Error(), http.StatusInternalServerError)
@@ -67,11 +67,11 @@ func HandlerDownload(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Header().Set("Content-Disposition", "attachment; filename="+fmt.Sprintf("%s", res[1]))
 	w.Header().Set("Content-Transfer-Encoding", "binary")
-	HandleFileRequest(w, fmt.Sprintf("%s", res[1]), "application/octet-stream")
+	handleFileRequest(w, fmt.Sprintf("%s", res[1]), "application/octet-stream")
 }
 
-// HandlerSession set a cookie
-func HandlerSession(w http.ResponseWriter, r *http.Request) {
+// handlerSession set a cookie
+func handlerSession(w http.ResponseWriter, r *http.Request) {
 	for _, cookie := range r.Cookies() {
 		if cookie.Name == cookieName {
 			w.WriteHeader(200)
