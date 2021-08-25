@@ -9,7 +9,7 @@ import InputField from '../InputField';
 import {ListHeader} from '../../../Util';
 import {EditActions, useEdit} from '../Context';
 import {ANY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NINT, NUMBER, PINT, RAW,
-    REGEX, SET, STR, THING, TIMEVAL, UINT, UTF8} from '../../../../Constants/ThingTypes';
+    REGEX, ROOM, SET, STR, THING, TIMEVAL, UINT, UTF8} from '../../../../Constants/ThingTypes';
 
 const useStyles = makeStyles(theme => ({
     nested: {
@@ -31,6 +31,7 @@ const typeConv = {
     [LIST]: [LIST, CODE],
     [NIL]: [NIL, CODE],
     [REGEX]: [REGEX, CODE],
+    [ROOM]: [ROOM, CODE],
     [SET]: [SET, CODE],
     [STR]: [STR, CODE],
     [THING]: [THING, CODE],

@@ -10,6 +10,7 @@ import AddFloat from './AddFloat';
 import AddInt from './AddInt';
 import AddNil from './AddNil';
 import AddRegex from './AddRegex';
+import AddRoom from './AddRoom';
 import AddStr from './AddStr';
 import AddThing from './AddThing';
 import AddVariable from './AddVariable';
@@ -27,6 +28,7 @@ export {
     AddInt,
     AddNil,
     AddRegex,
+    AddRoom,
     AddStr,
     AddThing,
     AddVariable

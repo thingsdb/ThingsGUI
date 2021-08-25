@@ -1,6 +1,7 @@
-import Vlow from 'vlow';
 import io from 'socket.io-client';
+import moment from 'moment';
 import PropTypes from 'prop-types';
+import Vlow from 'vlow';
 
 import {ApplicationActions} from './ApplicationStore';
 import {ErrorActions} from './ErrorStore';
@@ -242,6 +243,7 @@ class EventStore extends BaseStore {
         });
 
         socket.on('event', (data) => {
+            console.log(data)
             switch(data.Proto){
             case ProtoMap.ProtoOnNodeStatus:
                 this.nodeStatus(data.Data);
@@ -317,32 +319,35 @@ class EventStore extends BaseStore {
 
     join(data) {
         this.setState(prevState => {
-            let res = {...prevState.ids, [data.id]: true};
-            return {ids: res};
+            let ids = {...prevState.ids, [data.id]: true};
+            return {ids: ids};
         });
     }
 
     leave(data) {
         this.setState(prevState => {
-            let res = prevState.ids;
-            delete res[data.id];
-            return {ids: res};
+            let ids = prevState.ids;
+            delete ids[data.id];
+            return {ids: ids};
         });
     }
 
     event(data) {
-        console.log(
-            data.id, // room id
-            data.args, // array with arguments
-            data.event // string name of event
-        );
+        console.log(data);
+        this.setState(prevState => {
+            let events = prevState.events;
+            let time = moment();
+            return {events: {...events, [data.id]: {...data, receivedAt: time}}}; // {id: 123, args: ["arg1"], event: "name event"}
+        });
     }
 
     delete(data) {
         this.setState(prevState => {
-            let res = prevState.ids;
-            delete res[data.id];
-            return {ids: res};
+            let ids = prevState.ids;
+            let events = prevState.events;
+            delete ids[data.id];
+            delete events[data.id];
+            return {ids: ids, events: events};
         });
     }
 }

@@ -8,7 +8,7 @@ import {EnumsTAG, TypesTAG} from '../../../Constants/Tags';
 import {EnumActions, EnumStore, TypeActions, TypeStore} from '../../../Stores';
 import {EnumTypeChips} from '../CollectionsUtils/TypesEnumsUtils';
 import {HarmonicCardHeader} from '../../Util';
-import {ANY, BOOL, BYTES, CODE, DATETIME, FLOAT, INT, NINT, NUMBER, PINT, RAW,
+import {ANY, BOOL, BYTES, CODE, CLOSURE, DATETIME, ERROR, FLOAT, INT, NINT, NUMBER, PINT, RAW, REGEX, ROOM,
     STR, THING, TIMEVAL, UINT, UTF8} from '../../../Constants/ThingTypes';
 
 
@@ -36,13 +36,17 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
         BOOL,
         BYTES,
         CODE,
+        CLOSURE,
         DATETIME,
+        ERROR,
         FLOAT,
         INT,
         NINT,
         NUMBER,
         PINT,
         RAW,
+        REGEX,
+        ROOM,
         STR,
         THING,
         TIMEVAL,

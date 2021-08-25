@@ -5,8 +5,8 @@ import React from 'react';
 
 import {EditProvider, useEdit} from './Context';
 import {THINGS_DOC_COLLECTION, THINGS_DOC_DATETIME, THINGS_DOC_TIMEVAL} from '../../../Constants/Links';
-import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddEnum, AddError, AddFloat, AddInt, AddCode, AddRegex, AddNil, AddStr, AddThing, AddVariable} from './InputUtils';
-import {BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, REGEX,
+import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddEnum, AddError, AddFloat, AddInt, AddCode, AddRegex, AddRoom, AddNil, AddStr, AddThing, AddVariable} from './InputUtils';
+import {BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, REGEX, ROOM,
     SET, STR, THING, TIMEVAL, VARIABLE} from '../../../Constants/ThingTypes';
 
 const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identifier, init, variables,...props}) => {
@@ -22,6 +22,7 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identi
     case BOOL: return <AddBool identifier={identifier} init={init} {...props} />;
     case CLOSURE: return <AddClosure identifier={identifier} init={init} {...props} />;
     case REGEX: return <AddRegex identifier={identifier} init={init} {...props} />;
+    case ROOM: return <AddRoom dentifier={identifier} init={init} {...props} />;
     case ERROR: return <AddError identifier={identifier} init={init} {...props} />;
     case BYTES: return <AddBlob identifier={identifier} init={init} {...props} />;
     case DATETIME: return <AddCode identifier={identifier} init={init} label="Fill in a datetime" link={THINGS_DOC_DATETIME} numLines="1" />;

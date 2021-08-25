@@ -9,7 +9,7 @@ import {EDITOR_ROUTE} from '../../../../Constants/Routes';
 import {historyNavigate} from '../../../Util';
 import {ROOM, THING} from '../../../../Constants/ThingTypes';
 import {THING_KEY} from '../../../../Constants/CharacterKeys';
-import JoinRoom from './JoinRoom';
+import RoomJoin from './RoomJoin';
 import RemoveThing from './RemoveThing';
 
 
@@ -54,7 +54,7 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
             </Grid>
             {isRoom &&
                 <Grid item>
-                    <JoinRoom
+                    <RoomJoin
                         scope={scope}
                         room={child.val}
                         tag={tag}

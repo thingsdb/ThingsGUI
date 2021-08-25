@@ -11,7 +11,7 @@ const withStores = withVlow([{
     keys: ['ids']
 }]);
 
-const JoinRoom = ({scope, tag, room, ids}) => {
+const RoomJoin = ({scope, tag, room, ids}) => {
 
     // stringify thingId
     const roomId = room.includes('room:') ? room.split(':')[1] : null;
@@ -42,7 +42,7 @@ const JoinRoom = ({scope, tag, room, ids}) => {
     );
 };
 
-JoinRoom.propTypes = {
+RoomJoin.propTypes = {
     scope: PropTypes.string.isRequired,
     tag: PropTypes.string.isRequired,
     room: PropTypes.string.isRequired,
@@ -51,4 +51,4 @@ JoinRoom.propTypes = {
     ids: EventStore.types.ids.isRequired,
 };
 
-export default withStores(JoinRoom);
+export default withStores(RoomJoin);
