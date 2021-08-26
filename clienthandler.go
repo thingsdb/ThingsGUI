@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	socketio "github.com/googollee/go-socket.io"
 	things "github.com/thingsdb/go-thingsdb"
 )
 
@@ -34,65 +35,71 @@ type client struct {
 	user            string
 }
 
-// authResp type
-type authResp struct {
-	authMethod string
-	authOnly   bool
-}
-
-// loginResp type
-type loginResp struct {
-	connected  bool
-	useCookies bool
+// connResp type
+type connResp struct {
+	Connected  bool
+	UseCookies bool
 }
 
 // loginData type
 type loginData struct {
-	address            string `json:"address"`
-	insecureSkipVerify bool   `json:"insecureSkipVerify"`
-	isToken            bool   `json:"isToken"`
-	memo               string `json:"memo"`
-	name               string `json:"name"`
-	password           string `json:"password"`
-	secureConnection   bool   `json:"secureConnection"`
-	token              string `json:"token"`
-	user               string `json:"user"`
+	Address            string `json:"address"`
+	InsecureSkipVerify bool   `json:"insecureSkipVerify"`
+	IsToken            bool   `json:"isToken"`
+	Memo               string `json:"memo"`
+	Name               string `json:"name"`
+	Password           string `json:"password"`
+	SecureConnection   bool   `json:"secureConnection"`
+	Token              string `json:"token"`
+	User               string `json:"user"`
+}
+
+// loginResp type
+type loginResp struct {
+	Address            string `json:"address"`
+	InsecureSkipVerify bool   `json:"insecureSkipVerify"`
+	IsToken            bool   `json:"isToken"`
+	Memo               string `json:"memo"`
+	Name               string `json:"name"`
+	SecureConnection   bool   `json:"secureConnection"`
+	User               string `json:"user"`
 }
 
 type lMapping map[string]map[string]interface{}
 type lData map[string]interface{}
 
 type procedure struct {
-	arguments string `json:"arguments"`
-	name      string `json:"name"`
+	Arguments string `json:"arguments"`
+	Name      string `json:"name"`
 }
 
 // Data struct that received
-type data struct {
-	arguments map[string]interface{} `json:"arguments"`
-	blob      map[string]string      `json:"blob"`
-	ids       []string               `json:"ids"`
-	procedure procedure              `json:"procedure"`
-	query     string                 `json:"query"`
-	scope     string                 `json:"scope"`
+type dataReq struct {
+	Arguments map[string]interface{} `json:"arguments"`
+	Blob      map[string]string      `json:"blob"`
+	Id        string                 `json:"id"`
+	Procedure procedure              `json:"procedure"`
+	Query     string                 `json:"query"`
+	Scope     string                 `json:"scope"`
+	Wait      int                    `json:"wait"`
 }
 
-func connectedResp() loginResp {
-	return loginResp{
-		connected:  true,
-		useCookies: useCookieSession,
+func connectedResp() connResp {
+	return connResp{
+		Connected:  true,
+		UseCookies: useCookieSession,
 	}
 }
 
-func disconnectedResp() loginResp {
-	return loginResp{
-		connected:  false,
-		useCookies: useCookieSession,
+func disconnectedResp() connResp {
+	return connResp{
+		Connected:  false,
+		UseCookies: useCookieSession,
 	}
 }
 
-func (client *client) connect(data loginData) (loginResp, error) {
-	hp := strings.Split(data.address, ":")
+func (client *client) connect(data loginData) (connResp, error) {
+	hp := strings.Split(data.Address, ":")
 	if len(hp) != 2 {
 		return disconnectedResp(), fmt.Errorf("invalid node name/address")
 	}
@@ -103,9 +110,9 @@ func (client *client) connect(data loginData) (loginResp, error) {
 	host := hp[0]
 
 	client.ssl = nil // if ssl not supported, this will reset the ssl prop
-	if data.secureConnection {
+	if data.SecureConnection {
 		client.ssl = &tls.Config{}
-		client.ssl.InsecureSkipVerify = data.insecureSkipVerify
+		client.ssl.InsecureSkipVerify = data.InsecureSkipVerify
 	}
 	client.host = host
 	client.port = uint16(port)
@@ -122,20 +129,20 @@ func (client *client) connect(data loginData) (loginResp, error) {
 			return disconnectedResp(), err
 		}
 	}
-	if data.isToken {
-		err := client.connection.AuthToken(data.token)
+	if data.IsToken {
+		err := client.connection.AuthToken(data.Token)
 		if err != nil {
 			return disconnectedResp(), err
 		}
-		client.token = data.token
+		client.token = data.Token
 
 	} else {
-		err := client.connection.AuthPassword(data.user, data.password)
+		err := client.connection.AuthPassword(data.User, data.Password)
 		if err != nil {
 			return disconnectedResp(), err
 		}
-		client.user = data.user
-		client.pass = data.password
+		client.user = data.User
+		client.pass = data.Password
 	}
 
 	// Store session in local file (~/.config/ThingsGUI/thingsgui.session).
@@ -155,7 +162,7 @@ func (client *client) connect(data loginData) (loginResp, error) {
 }
 
 // connected returns if a connection with ThingsDB is established
-func (client *client) connected() (int, loginResp, message) {
+func (client *client) connected() (int, connResp, message) {
 	resp := disconnectedResp()
 	conn := client.connection
 	switch {
@@ -164,16 +171,16 @@ func (client *client) connected() (int, loginResp, message) {
 			resp, _ = client.connectViaCache(client.sessionPath, lastUsedKey)
 		}
 
-		if !resp.connected && useCookieSession && client.cookie != nil {
+		if !resp.Connected && useCookieSession && client.cookie != nil {
 			if data := getSession(client.cookie.Value); data != nil {
 				resp, _ = client.connect(*data)
 			}
 		}
 
 	case conn.IsConnected():
-		resp.connected = true
+		resp.Connected = true
 	default:
-		resp.connected = false
+		resp.Connected = false
 	}
 
 	message := successMsg()
@@ -181,11 +188,11 @@ func (client *client) connected() (int, loginResp, message) {
 }
 
 // connectToNew connects to a new ThingsDB connnection
-func (client *client) connectToNew(data loginData) (int, loginResp, message) {
+func (client *client) connectToNew(data loginData) (int, connResp, message) {
 	var message message
 	resp, err := client.connect(data)
 
-	if resp.connected {
+	if resp.Connected {
 		message = successMsg()
 	} else {
 		message = failedMsg(err)
@@ -194,18 +201,18 @@ func (client *client) connectToNew(data loginData) (int, loginResp, message) {
 }
 
 // handlerConnectViaCache connects via cached auth data to ThingsDB
-func (client *client) handlerConnectViaCache(data loginData) (int, loginResp, message) {
+func (client *client) handlerConnectViaCache(data loginData) (int, connResp, message) {
 	message := successMsg()
-	resp, err := client.connectViaCache(client.connectionsPath, data.name)
+	resp, err := client.connectViaCache(client.connectionsPath, data.Name)
 
-	if !resp.connected {
+	if !resp.Connected {
 		message = failedMsg(err)
 	}
 	return message.Status, resp, message
 }
 
 // connectViaCache connects via cached auth data to ThingsDB
-func (client *client) connectViaCache(path string, name string) (loginResp, error) {
+func (client *client) connectViaCache(path string, name string) (connResp, error) {
 	fileNotExist := fileNotExist(path)
 	if fileNotExist {
 		return disconnectedResp(), fmt.Errorf("File does not exist")
@@ -218,7 +225,6 @@ func (client *client) connectViaCache(path string, name string) (loginResp, erro
 	}
 
 	resp, err := client.connect(mapping[name])
-
 	return resp, err
 }
 
@@ -251,16 +257,16 @@ func (client *client) authKey(data map[string]string) (int, interface{}, message
 func (client *client) authToken(data map[string]string) (int, interface{}, message) {
 	message := successMsg()
 	mapping := loginData{
-		address:            thingsguiAddress,
-		isToken:            true,
-		token:              data["token"],
-		secureConnection:   thingsguiSsl,
-		insecureSkipVerify: thingsguiAic,
+		Address:            thingsguiAddress,
+		InsecureSkipVerify: thingsguiAic,
+		IsToken:            true,
+		SecureConnection:   thingsguiSsl,
+		Token:              data["token"],
 	}
 
 	resp, err := client.connect(mapping)
 
-	if !resp.connected {
+	if !resp.Connected {
 		message = failedMsg(err)
 	}
 	return message.Status, resp, message
@@ -270,17 +276,17 @@ func (client *client) authToken(data map[string]string) (int, interface{}, messa
 func (client *client) authPass(data map[string]string) (int, interface{}, message) {
 	message := successMsg()
 	mapping := loginData{
-		address:            thingsguiAddress,
-		isToken:            false,
-		user:               data["user"],
-		password:           data["pass"],
-		secureConnection:   thingsguiSsl,
-		insecureSkipVerify: thingsguiAic,
+		Address:            thingsguiAddress,
+		InsecureSkipVerify: thingsguiAic,
+		IsToken:            false,
+		Password:           data["pass"],
+		SecureConnection:   thingsguiSsl,
+		User:               data["user"],
 	}
 
 	resp, err := client.connect(mapping)
 
-	if !resp.connected {
+	if !resp.Connected {
 		message = failedMsg(err)
 	}
 	return message.Status, resp, message
@@ -313,7 +319,7 @@ func (client *client) seekConnection() bool {
 }
 
 // reconnect to ThingsDB when a connection is lost.
-func (client *client) reconnect() (int, loginResp, message) {
+func (client *client) reconnect() (int, connResp, message) {
 	maxInterval := 60
 	interval := 1
 	timeoutCh := make(chan bool, 1)
@@ -340,7 +346,7 @@ func (client *client) reconnect() (int, loginResp, message) {
 }
 
 // disconnect closes a connection to ThingsDB
-func (client *client) disconnect() (int, loginResp, message) {
+func (client *client) disconnect() (int, connResp, message) {
 	if useLocalSession {
 		client.saveLastUsedConnection(loginData{})
 	}
@@ -363,8 +369,9 @@ func (client *client) closeSingleConn() {
 func (client *client) getCachedConnections() (int, interface{}, message) {
 	message := successMsg()
 
-	var mapping = make(map[string]loginData)
+	var mapping = make(map[string]loginResp)
 	err := readEncryptedFile(client.connectionsPath, &mapping, client.logCh)
+
 	if err != nil {
 		client.logCh <- err.Error()
 
@@ -399,15 +406,7 @@ func (client *client) getCachedConnections() (int, interface{}, message) {
 		}
 	}
 
-	var resp = make(map[string]loginData)
-	for k, v := range mapping {
-		v.password = ""
-		v.token = ""
-
-		resp[k] = v
-	}
-
-	return message.Status, resp, message
+	return message.Status, mapping, message
 }
 
 // newCachedConnection saves a new connection locally
@@ -495,7 +494,7 @@ func (client *client) delCachedConnection(data loginData) (int, interface{}, mes
 		return internalError(err)
 	}
 
-	delete(mapping, data.name)
+	delete(mapping, data.Name)
 	err = writeEncryptedFile(client.connectionsPath, mapping, client.logCh)
 	if err != nil {
 		return internalError(err)
@@ -520,24 +519,24 @@ func (client *client) saveLastUsedConnection(data loginData) error {
 }
 
 // query sends a query to ThingsDB and receives a result
-func (client *client) query(data data) (int, interface{}, message) {
-	for k, v := range data.blob {
+func (client *client) query(data dataReq) (int, interface{}, message) {
+	for k, v := range data.Blob {
 		decodedBlob, err := base64.StdEncoding.DecodeString(v)
 		if err != nil {
 			message := failedMsg(err)
 			return message.Status, "", message
 		}
 
-		if data.arguments == nil {
-			data.arguments = make(map[string]interface{})
+		if data.Arguments == nil {
+			data.Arguments = make(map[string]interface{})
 		}
-		data.arguments[k] = decodedBlob
+		data.Arguments[k] = decodedBlob
 	}
 
 	resp, err := client.connection.Query(
-		data.scope,
-		data.query,
-		data.arguments)
+		data.Scope,
+		data.Query,
+		data.Arguments)
 
 	if err != nil {
 		message := createThingsDBError(err)
@@ -553,48 +552,57 @@ func (client *client) query(data data) (int, interface{}, message) {
 	return message.Status, resp, message
 }
 
-// join a room
-func (client *client) join(data data) (int, interface{}, message) {
-	scope := data.scope
-	ids := data.ids
-	idsInt := make([]*uint64, 0)
+// Join a room
+func (client *client) join(socket socketio.Conn, data dataReq) (int, interface{}, message) {
+	scope := data.Scope
+	id := data.Id
+	wait := time.Duration(data.Wait) * time.Second
+	idInt, _ := strconv.ParseUint(id, 10, 64)
 
-	if len(ids) > 0 {
-		for _, v := range ids {
-			id, _ := strconv.ParseUint(v, 10, 64)
-			idsInt = append(idsInt, &id)
-		}
+	room := things.NewRoomFromId(scope, idInt)
+
+	room.OnInit = func(room *things.Room) {
+		socket.Emit("onInit", room.Id())
 	}
 
-	err := client.connection.Join(scope, idsInt)
+	room.OnJoin = func(room *things.Room) {
+		socket.Emit("onJoin", room.Id())
+	}
+	room.OnLeave = func(room *things.Room) {
+		socket.Emit("onLeave", room.Id())
+	}
+	room.OnDelete = func(room *things.Room) {
+		socket.Emit("onDelete", room.Id())
+	}
+	room.OnEvent = func(room *things.Room, id uint64, event string, args []interface{}) {
+		socket.Emit("onEvent", room.Id(), id, event, args)
+	}
+
+	err := room.Join(client.connection, wait)
 	message := msg(err)
 	return message.Status, nil, message
 }
 
-// leave a room
-func (client *client) leave(data data) (int, interface{}, message) {
-	scope := data.scope
-	ids := data.ids
-	idsInt := make([]*uint64, 0)
+// Leave a room
+func (client *client) leave(data dataReq) (int, interface{}, message) {
+	id := data.Id
+	roomId, _ := strconv.ParseUint(id, 10, 64)
 
-	if len(ids) > 0 {
-		for _, v := range ids {
-			id, _ := strconv.ParseUint(v, 10, 64)
-			idsInt = append(idsInt, &id)
-		}
+	room, err := client.connection.GetRoomFromId(roomId)
+	if err == nil {
+		err = room.Leave()
 	}
 
-	err := client.connection.Leave(scope, idsInt)
 	message := msg(err)
 	return message.Status, nil, message
 }
 
 // run the procedure that is provided
-func (client *client) run(data data) (int, interface{}, message) {
+func (client *client) run(data dataReq) (int, interface{}, message) {
 	var args interface{}
 	message := successMsg()
-	if data.procedure.name != "" {
-		decoder := json.NewDecoder(strings.NewReader(data.procedure.arguments))
+	if data.Procedure.Name != "" {
+		decoder := json.NewDecoder(strings.NewReader(data.Procedure.Arguments))
 		if err := decoder.Decode(&args); err != nil {
 			message = msg(err)
 			return message.Status, "", message
@@ -602,7 +610,7 @@ func (client *client) run(data data) (int, interface{}, message) {
 		args = convertFloatToInt(args)
 	}
 
-	resp, err := client.connection.Run(data.scope, data.procedure.name, args)
+	resp, err := client.connection.Run(data.Scope, data.Procedure.Name, args)
 	if err != nil {
 		message = createThingsDBError(err)
 	}

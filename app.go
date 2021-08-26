@@ -17,6 +17,12 @@ type app struct {
 	server  *socketio.Server
 }
 
+// authResp type
+type authResp struct {
+	AuthMethod string
+	AuthOnly   bool
+}
+
 // SocketRouter socketio
 func (app *app) socketRouter() {
 	app.server.OnConnect("/", func(s socketio.Conn) error {
@@ -31,20 +37,9 @@ func (app *app) socketRouter() {
 		lCh := app.clients[s.ID()].logCh
 		go func() {
 			for p := range lCh {
-				s.Emit("logging", p)
+				s.Emit("onLogging", p)
 			}
 		}()
-
-		// eCh := app.clients[s.ID()].eventCh
-		// go func() {
-		// 	for p := range eCh {
-		// 		_, err := app.clients[s.ID()].tmpFiles.replaceBinStrWithLink(p.Data)
-		// 		if err != nil {
-		// 			lCh <- err.Error()
-		// 		}
-		// 		s.Emit("event", p)
-		// 	}
-		// }()
 
 		lCh <- fmt.Sprintf("connected: %s", s.ID())
 		return nil
@@ -58,8 +53,8 @@ func (app *app) socketRouter() {
 		message := successMsg()
 		var auth authResp
 		if thingsguiAddress != "" {
-			auth.authOnly = true
-			auth.authMethod = thingsguiAuthMethod
+			auth.AuthOnly = true
+			auth.AuthMethod = thingsguiAuthMethod
 		}
 		return message.Status, auth, message
 	})
@@ -84,7 +79,7 @@ func (app *app) socketRouter() {
 		return http.StatusNoContent
 	})
 
-	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, loginResp, message) {
+	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, connResp, message) {
 		client := app.clients[s.ID()]
 		if client.cookie == nil {
 			req := http.Request{Header: s.RemoteHeader()}
@@ -94,19 +89,19 @@ func (app *app) socketRouter() {
 		return client.connected()
 	})
 
-	app.server.OnEvent("/", "connToNew", func(s socketio.Conn, data loginData) (int, loginResp, message) {
+	app.server.OnEvent("/", "connToNew", func(s socketio.Conn, data loginData) (int, connResp, message) {
 		return app.clients[s.ID()].connectToNew(data)
 	})
 
-	app.server.OnEvent("/", "connViaCache", func(s socketio.Conn, data loginData) (int, loginResp, message) {
+	app.server.OnEvent("/", "connViaCache", func(s socketio.Conn, data loginData) (int, connResp, message) {
 		return app.clients[s.ID()].handlerConnectViaCache(data)
 	})
 
-	app.server.OnEvent("/", "reconn", func(s socketio.Conn) (int, loginResp, message) {
+	app.server.OnEvent("/", "reconn", func(s socketio.Conn) (int, connResp, message) {
 		return app.clients[s.ID()].reconnect()
 	})
 
-	app.server.OnEvent("/", "disconn", func(s socketio.Conn) (int, loginResp, message) {
+	app.server.OnEvent("/", "disconn", func(s socketio.Conn) (int, connResp, message) {
 		return app.clients[s.ID()].disconnect()
 	})
 
@@ -130,7 +125,7 @@ func (app *app) socketRouter() {
 		return app.clients[s.ID()].delCachedConnection(data)
 	})
 
-	app.server.OnEvent("/", "query", func(s socketio.Conn, data data) (int, interface{}, message) {
+	app.server.OnEvent("/", "query", func(s socketio.Conn, data dataReq) (int, interface{}, message) {
 		return app.clients[s.ID()].query(data)
 	})
 
@@ -144,15 +139,15 @@ func (app *app) socketRouter() {
 		return message.Status, resp, message
 	})
 
-	app.server.OnEvent("/", "join", func(s socketio.Conn, data data) (int, interface{}, message) {
-		return app.clients[s.ID()].join(data)
+	app.server.OnEvent("/", "join", func(s socketio.Conn, data dataReq) (int, interface{}, message) {
+		return app.clients[s.ID()].join(s, data)
 	})
 
-	app.server.OnEvent("/", "leave", func(s socketio.Conn, data data) (int, interface{}, message) {
+	app.server.OnEvent("/", "leave", func(s socketio.Conn, data dataReq) (int, interface{}, message) {
 		return app.clients[s.ID()].leave(data)
 	})
 
-	app.server.OnEvent("/", "run", func(s socketio.Conn, data data) (int, interface{}, message) {
+	app.server.OnEvent("/", "run", func(s socketio.Conn, data dataReq) (int, interface{}, message) {
 		return app.clients[s.ID()].run(data)
 	})
 

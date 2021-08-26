@@ -22,8 +22,6 @@ const RoomEvent = ({room, events}) => {
     // stringify thingId
     const roomId = room.includes('room:') ? room.split(':')[1] : null;
     const roomEvents = roomId !== null && events[roomId] || [];
-    console.log({events, roomEvents, room, roomId})
-
     const lastIndex = roomEvents.length -1;
 
     return (

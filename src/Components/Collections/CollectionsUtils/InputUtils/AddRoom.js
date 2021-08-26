@@ -21,9 +21,11 @@ const AddRoom = ({identifier, init}) => {
     const [roomId, setRoomId] = React.useState('');
 
     React.useEffect(()=>{
+        let roomId = '';
         if(init && init.includes('room:')) {
-            saveRoom(init.split(':')[1]);
+            roomId = init.split(':')[1];
         }
+        saveRoom(roomId);
     }, []);
 
     const handleOnChangeRoomId = ({target}) => {

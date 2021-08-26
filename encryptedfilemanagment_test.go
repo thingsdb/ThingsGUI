@@ -21,9 +21,9 @@ func TestEncryptedfilemanagment(t *testing.T) {
 	}()
 
 	mapping_in := map[string]loginData{
-		"John": loginData{user: "John", password: "pass1"},
-		"Jane": loginData{user: "Jane", password: "pass2"},
-		"Mary": loginData{user: "Mary", password: "pass3"},
+		"John": loginData{User: "John", Password: "pass1"},
+		"Jane": loginData{User: "Jane", Password: "pass2"},
+		"Mary": loginData{User: "Mary", Password: "pass3"},
 	}
 
 	mapping_out := make(map[string]loginData)
@@ -43,7 +43,7 @@ func TestEncryptedfilemanagment(t *testing.T) {
 		t.Errorf("Reading encrypted file FAILED: %s\n", err)
 	}
 
-	if mapping_in["John"].password == mapping_out["John"].password {
+	if mapping_in["John"].Password == mapping_out["John"].Password {
 		fmt.Println("TEST 4: SUCCESSFULL. Encrypting file management.")
 	} else {
 		t.Errorf("TEST 4: FAILED. Encrypting file management.\n")

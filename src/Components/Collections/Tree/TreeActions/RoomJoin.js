@@ -26,7 +26,6 @@ const RoomJoin = ({scope, tag, room, ids}) => {
             );
         } else {
             EventActions.leave(
-                scope,
                 roomId,
                 tag
             );

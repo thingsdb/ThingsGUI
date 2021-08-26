@@ -205,16 +205,6 @@ const EventActions = Vlow.createActions([
     'reset',
 ]);
 
-const ProtoMap = {
-    ProtoOnNodeStatus: 0,
-    ProtoOnWarn: 5,
-    ProtoOnRoomJoin: 6,
-    ProtoOnRoomLeave: 7,
-    ProtoOnRoomEvent: 8,
-    ProtoOnRoomDelete: 9
-};
-
-
 class EventStore extends BaseStore {
 
     static types = {
@@ -231,10 +221,13 @@ class EventStore extends BaseStore {
         super(EventActions);
         this.state = EventStore.defaults;
 
-        socket.on('logging', (msg) => {
+        socket.on('onLogging', (msg) => {
             window.console.log(msg);
-            if (msg.includes('connection lost')) {
+
+            if(msg.includes('connection lost')) {
                 ErrorActions.setMsgError(LoginTAG, msg);
+            } else if(msg.includes('[W]') || msg.includes('[E]')) {
+                ErrorActions.setToastError(msg);
             }
         });
 
@@ -242,52 +235,62 @@ class EventStore extends BaseStore {
             location.reload();
         });
 
-        socket.on('event', (data) => {
-            console.log(data)
-            switch(data.Proto){
-            case ProtoMap.ProtoOnNodeStatus:
-                this.nodeStatus(data.Data);
-                break;
-            case ProtoMap.ProtoOnWarn:
-                ErrorActions.setToastError(data.Data.warn_msg);
-                break;
-            case ProtoMap.ProtoOnRoomJoin:
-                console.log('ProtoOnRoomJoin', data);
-                this.join(data.Data);
-                break;
-            case ProtoMap.ProtoOnRoomLeave:
-                console.log('ProtoOnRoomLeave', data);
-                this.leave(data.Data);
-                break;
-            case ProtoMap.ProtoOnRoomEvent:
-                console.log('ProtoOnRoomEvent', data);
-                this.event(data.Data);
-                break;
-            case ProtoMap.ProtoOnRoomDelete:
-                console.log('ProtoOnRoomDelete', data);
-                this.delete(data.Data);
-                break;
-            default:
 
-            }
+        // Room events
+
+        socket.on('onInit', (data) => {
+            console.log('onInit', data);
+        });
+
+        socket.on('onJoin', (roomId) => {
+            this.setState(prevState => {
+                let ids = {...prevState.ids, [roomId]: true};
+                return {ids: ids};
+            });
+        });
+
+        socket.on('onLeave', (roomId) => {
+            this.setState(prevState => {
+                let ids = prevState.ids;
+                delete ids[roomId];
+                return {ids: ids};
+            });
+        });
+
+        socket.on('onDelete', (roomId) => {
+            this.setState(prevState => {
+                let ids = prevState.ids;
+                let events = prevState.events;
+                delete ids[roomId];
+                delete events[roomId];
+                return {ids: ids, events: events};
+            });
+        });
+
+        socket.on('onEvent', (roomId, eventId, event, args) => {
+            this.setState(prevState => {
+                let events = prevState.events;
+                let time = moment().format('YYYY-MM-DD HH:mm');
+                let evt = {eventId, event, args, receivedAt: time};
+                let updatedEvent = events[roomId] ? [...events[roomId], evt] : [evt];
+                return {events: {...events, [roomId]: updatedEvent}};
+            });
         });
     }
-
-    // STOREACTIONS
 
     onJoin(scope, id='', tag=null) {
         this.emit('join', {
             scope,
-            ids: [id]
+            id: id,
+            wait: 0
         }).done(() => null).fail((event, status, message) => {
             tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
         });
     }
 
-    onLeave(scope, id, tag=null) {
+    onLeave(id, tag=null) {
         this.emit('leave', {
-            scope,
-            ids: [id]
+            id: id
         }).done(() => null).fail((event, status, message) => {
             tag?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
         });
@@ -304,51 +307,6 @@ class EventStore extends BaseStore {
         this.setState({
             events: {},
             ids: {},
-        });
-    }
-
-    // EVENTS
-
-    nodeStatus(data) {
-        let status = data.status;
-        if (status=='SHUTTING_DOWN') {
-            ApplicationActions.reconnect();
-            ErrorActions.setToastError('Lost connection with ThingsDB. Trying to reconnect.');
-        }
-    }
-
-    join(data) {
-        this.setState(prevState => {
-            let ids = {...prevState.ids, [data.id]: true};
-            return {ids: ids};
-        });
-    }
-
-    leave(data) {
-        this.setState(prevState => {
-            let ids = prevState.ids;
-            delete ids[data.id];
-            return {ids: ids};
-        });
-    }
-
-    event(data) {
-        console.log(data);
-        this.setState(prevState => {
-            let events = prevState.events;
-            let time = moment().format('YYYY-MM-DD HH:mm');
-            let updatedEvent = events[data.id] ? [...events[data.id], {...data, receivedAt: time}] : [{...data, receivedAt: time}];
-            return {events: {...events, [data.id]: updatedEvent}}; // {id: 123, args: ["arg1"], event: "name event"}
-        });
-    }
-
-    delete(data) {
-        this.setState(prevState => {
-            let ids = prevState.ids;
-            let events = prevState.events;
-            delete ids[data.id];
-            delete events[data.id];
-            return {ids: ids, events: events};
         });
     }
 }

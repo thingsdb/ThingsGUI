@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import DialogButtons from './DialogButtons';
@@ -18,14 +20,14 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 
     const initialState = {
         customTypes: [],
-        show: false,
+        loaded: false,
         setOrList: '',
         realChildType: '',
         realParentType: '',
     };
 
     const [state, setState] = React.useState(initialState);
-    const {show, realChildType, realParentType, customTypes} = state;
+    const {loaded, realChildType, realParentType, customTypes} = state;
     const [enums, setEnums] = React.useState([]);
     const dataTypes = allDataTypes([...customTypes, ...enums]);
 
@@ -50,7 +52,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
     }, []);
 
     const setType = (t) => {
-        setState({...state, realChildType: t.childType, realParentType: t.parentType, show: true, customTypes: t.customTypes});
+        setState({...state, realChildType: t.childType, realParentType: t.parentType, loaded: true, customTypes: t.customTypes});
     };
 
     const handleClickOk = (blob, query) => {
@@ -122,16 +124,34 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
     );
 
     return (
-        show ? (
-            <SimpleModal
-                open
-                onClose={onClose}
-                maxWidth="md"
-                actionButtons={canEdit ? <SubmitButton onClickSubmit={handleClickOk} />:null}
-            >
-                {content}
-            </SimpleModal>
-        ) : null
+        <SimpleModal
+            open
+            onClose={onClose}
+            maxWidth="md"
+            actionButtons={canEdit ? <SubmitButton onClickSubmit={handleClickOk} />:null}
+        >
+            {loaded ? content : (
+                <div style={{height: 120}}>
+                    <Box position="relative">
+                        <CircularProgress size={100} thickness={3} />
+                        <Box
+                            top={0}
+                            left={0}
+                            bottom={0}
+                            right={0}
+                            position="absolute"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                        >
+                            <Typography variant="h6" component="div" color="textSecondary">
+                                {'Loading...'}
+                            </Typography>
+                        </Box>
+                    </Box>
+                </div>
+            )}
+        </SimpleModal>
     );
 };
 
