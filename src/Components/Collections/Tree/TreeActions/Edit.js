@@ -1,16 +1,14 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import {makeStyles} from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import {InputField} from '../../CollectionsUtils';
 import BuildQueryString from './BuildQueryString';
 import PropInit from './PropInit';
 import TypeInit from './TypeInit';
-import RoomEvent from './RoomEvent';
-import {DATETIME, ERROR, LIST, NIL, ROOM, SET, THING, TIMEVAL} from '../../../../Constants/ThingTypes';
+import {DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL} from '../../../../Constants/ThingTypes';
 
 const useStyles = makeStyles(theme => ({
     listItem: {
@@ -41,7 +39,6 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
 
     const addNewProperty = child.type == THING;
     const canChangeType = child.type == THING || child.type == LIST || child.type == SET || child.type == NIL;
-    const showRoomEvents = child.type == ROOM;
 
     const t = (child.type == THING || child.type == LIST || child.type == SET) ? ''
         : child.type == ERROR ? {propName: child.name, parentId: parent.id, scope: scope}
@@ -51,10 +48,6 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
 
     return(
         <List disablePadding dense className={classes.list}>
-            {showRoomEvents &&
-                <ListItem className={classes.listItem}>
-                    <RoomEvent room={thing} />
-                </ListItem>}
             <ListItem className={classes.listItem}>
                 <BuildQueryString
                     child={{

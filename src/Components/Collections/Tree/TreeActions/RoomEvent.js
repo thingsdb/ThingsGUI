@@ -22,11 +22,11 @@ const RoomEvent = ({room, events}) => {
     // stringify thingId
     const roomId = room.includes('room:') ? room.split(':')[1] : null;
     const roomEvents = roomId !== null && events[roomId] || [];
-    const lastIndex = roomEvents.length -1;
+    const lastIndex = roomEvents.length - 1;
 
     return (
         <Timeline align="alternate">
-            {roomEvents.map((e, index) => (
+            {lastIndex !== -1 ? roomEvents.map((e, index) => (
                 <TimelineItem key={`room_event_${index}`}>
                     <TimelineOppositeContent>
                         <Typography variant="body2" color="textSecondary">
@@ -48,7 +48,15 @@ const RoomEvent = ({room, events}) => {
                         ))}
                     </TimelineContent>
                 </TimelineItem>
-            ))}
+            )) : (
+                <TimelineItem key="room_event_default">
+                    <TimelineContent>
+                        <Typography variant="subtitle2">
+                            {'No recent events'}
+                        </Typography>
+                    </TimelineContent>
+                </TimelineItem>
+            )}
         </Timeline>
     );
 };

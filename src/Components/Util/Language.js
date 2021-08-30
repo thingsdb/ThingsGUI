@@ -5,7 +5,6 @@ export default {
         },
         closure: {
             'call': 'Call a closure.',
-            'def': 'Returns the closure definition using spaces, line-breaks and indentation (4 spaces).',
             'doc': 'Returns a doc string from a closure. An empty string ("") is returned if the closure has no doc string.'
         },
         datetime: {
@@ -28,11 +27,12 @@ export default {
             'msg': 'Returns the error message of an error type.',
         },
         future: {
-            'then': 'Function then accepts a closure as argument which will be executed only when the future is successful. The code inside the closure will only generate an event then the closure code is executed. The return value of the closure will be used as the new future value. The closure will be called with the same arguments as given to the future, except for the first argument, which can be the result of a module.',
-            'else': 'Function else accepts a closure as argument which will be executed only when the future is using a module which has failed with some error. The code inside the closure will only generate an event then the closure code is executed. The return value of the closure will be used as the new future value. The closure will be called with the same arguments as given to the future, except for the first argument, which is the error from the module.',
+            'then': 'Function then accepts a closure as argument which will be executed only when the future is successful. The code inside the closure will only generate a change then the closure code is executed. The return value of the closure will be used as the new future value.',
+            'else': 'Function else accepts a closure as argument which will be executed only when the future is using a module which has failed with some error. The code inside the closure will only generate a change when the closure code is executed. The return value of the closure will be used as the new future value.',
         },
         list: {
             'choice': 'This function returns a pseudo-random item from the list. The list must contain at least one item, otherwise a lookup_err() is raised.',
+            'clear': 'Removes all items from a list.',
             'each': 'Iterate over all the items in an list or tuple. Use this functions instead of map when you are not interested in the return value.',
             'every': 'This function tests whether all elements in the array pass a given test. It returns a boolean value.',
             'extend': 'Adds a list or tuple with items to the end of a list, and returns the new length.',
@@ -64,11 +64,16 @@ export default {
             'len': 'Returns the length of mpdata in bytes.',
             'load': 'Load mpdata into ThingsDB.'
         },
+        room: {
+            'emit': 'Emit an event to all clients which have joined this room. The event is a string value which you are free to choose. It is possible, but not required, to send extra arguments with the event.',
+            'id': 'Returns the id of a room or nil if the room is not stored.'
+        },
         regex: {
             'test': 'Test if a string matches a given regular expression and return true or false.',
         },
         set: {
             'add': 'Adds new thing to the set and returns the number of things which are actually added to the set. For example my_set.add(#42); will return 0 if my_set already contains thing #42.',
+            'clear': 'Removes all things from a set.',
             'each': 'Iterate over items in an set.',
             'every': 'This function checks if all things in the set pass a given test. It returns a boolean value.',
             'filter': 'When this method is used on a set, then the return value will be a new set.',
@@ -96,6 +101,7 @@ export default {
         },
         thing: {
             'assign': 'Copies properties from a given thing. Existing properties will be overwritten and new properties will be added. If this function is used on an instance of a custom Type, all properties of the source must be valid according the type specification, otherwise an exception will be raised and no properties will be copied.',
+            'clear': 'Removes all properties from a thing.',
             'copy': 'Copy a thing to a new thing. A Type is not preserved.',
             'del': 'Delete a property from a thing.',
             'dup': 'Duplicate a thing while preserving the Type.',
@@ -134,8 +140,8 @@ export default {
         'enum_info': 'Return info about the enumerator type.',
         'enums_info': 'Return info about all the enumerator types in the current scope',
         'err': 'Returns an error.',
-        'event_id': 'Returns the current event ID for the running query. The return value will be nil if the query does not require an event.',
-        'export': 'Returns the enums, types and procedures as a setup script. \n\n(!) Note this is an experimental function and may change in the future.',
+        'change_id': 'Returns the current change Id for the running query. The return value will be nil if the query does not require a change.',
+        // 'export': 'Returns the enums, types and procedures as a setup script. \n\n(!) Note this is an experimental function and may change in the future.',
         'float': 'Returns a float from a specified value. If no value is given, the default float 0.0 is returned. If the specified value is of type raw, then the initial characters of the string are converted until a non-digit character is found. Initial white space is ignored and the number may start with an optional + or - sign. Type bool values are converted to 1.0 for true and 0.0 for false.',
         'future': 'Returns a future. It is not possible to assign a future to a collection or add the future to a list. If you do, then nil will be assigned instead.',
         'has_enum': 'Determine if the current scope has a given enumerator type',
@@ -160,6 +166,7 @@ export default {
         'is_nil': 'This function determines whether the value passed to this function is nil.',
         'is_raw': 'This function determines whether the value passed to this function is of type raw.',
         'is_regex': 'This function determines whether the provided value is of type regex or not.',
+        'is_room': 'This function determines whether the provided value is a room or not.',
         'is_set': 'This function determines whether the value passed to this function is a set or not.',
         'is_str': 'This function determines whether the value passed to this function is of type raw and contains valid utf8. Alias for is_utf8.',
         'is_thing': 'This function determines whether the value passed to this function is a thing or not.',
@@ -182,6 +189,7 @@ export default {
         'rename_enum': 'Rename an enum type.',
         'rename_type': 'Rename a type.',
         'return': 'The return function moves the argument to the output of the current query/closure call. If no return is specified, then the last value will be the value which is returned. A second argument can be given to the return function which can be used to specify how deep the result should be returned. The default deep value is set to 1, but any value between 0 and 127 is possible. A query can run different procedures and/or closures which might have change the deep value. In case you need to know the current deep value, the function deep() can be used. When no arguments are used the return value will be nil.',
+        'room': 'Returns a room from a specified value, that may be dynamic. If no value is given, a new room is returned.',
         'set': 'Returns a new empty set. If an array is given, then all elements in the given array must be or type thing and a new set is returned based on the given things. Instead of an array, it is also possible to provide things comma separated.',
         'set_enum': 'Create a new enumerator type',
         'set_type': 'Defines the properties of a Type. Function set_type works only on a new type. Use mod_type() if you want to change an existing type, see mod_type.',
@@ -194,7 +202,7 @@ export default {
         'type_count': 'Returns the number of instances of a given Type within a collection.',
         'type_info': 'Returns information about a given Type.',
         'types_info': 'Returns Type information about all the types within a collection.',
-        'wse': 'Stored closures which can potentially make changes to ThingsDB are called closures with side effects and must be wrapped with the wse(..) function. This allows ThingsDB before running the query to make an event. You should not wrap wse around all closures since this would unnecessary create events when they may not be required.',
+        'wse': 'Stored closures which can potentially make changes to ThingsDB are called closures with side effects and must be wrapped with the wse(..) function. This allows ThingsDB before running the query to make a change.',
     },
     errors: {
         'assert_err': 'Returns an error when an assertion has failed.',
@@ -216,7 +224,7 @@ export default {
     node: {
         'backup_info': 'Returns information about a specific scheduled backup.',
         'backups_info': 'Returns backup schedule information for all backup schedules in the selected node scope.',
-        'counters': 'Returns counters for the ThingsDB node you are connected too. Counters start all at zero when ThingsDB is started, or when the counters are reset by using reset_counters()’. Counters give information about things, queries and events. If you suspect failed queries, then counters might provide you with more information.',
+        'counters': 'Returns counters for the ThingsDB node you are connected too. Counters start all at zero when ThingsDB is started, or when the counters are reset by using reset_counters()’. Counters give information about things, queries and changes. If you suspect failed queries, then counters might provide you with more information.',
         'del_backup': 'Delete a scheduled backup. If the schedule was pending, the backup job will be cancelled.',
         'has_backup': 'Determines if a backup exists in ThingsDB.',
         'new_backup': 'Schedule a new backup. Backups are created using tar and gzip. Once a backup is made, the .tar.gz backup file can be used to recover ThingsDB, or can be used to load the ThingsDB into another node. The result value is a backup ID. This ID can be used by backup_info(..) for details about the backup schedule job, or can be used to delete the backup schedule.',

@@ -175,7 +175,6 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            console.log(data)
             if (!deepEqual(data, user)){
                 this.setState({
                     user: data,
@@ -183,7 +182,6 @@ class ThingsdbStore extends BaseStore {
             }
             success();
         }).fail((event, status, message) => {
-            console.log(message)
             this.setState({
                 user: {},
             });

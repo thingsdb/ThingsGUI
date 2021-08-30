@@ -4,15 +4,18 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 
+import {allDataTypes, ErrorMsg, SimpleModal, TabView} from '../../../Util';
+import {CollectionActions, EnumActions, ThingsdbActions, TypeActions} from '../../../../Stores';
+import {ROOM, THING, TUPLE} from '../../../../Constants/ThingTypes';
+import {ThingActionsDialogTAG} from '../../../../Constants/Tags';
 import DialogButtons from './DialogButtons';
 import Edit from './Edit';
+import RoomEvent from './RoomEvent';
 import SubmitButton from './SubmitButton';
-import {CollectionActions, EnumActions, ThingsdbActions, TypeActions} from '../../../../Stores';
-import {allDataTypes, ErrorMsg, SimpleModal} from '../../../Util';
-import {ThingActionsDialogTAG} from '../../../../Constants/Tags';
-import {THING, TUPLE} from '../../../../Constants/ThingTypes';
 
 const tag = ThingActionsDialogTAG;
 
@@ -30,6 +33,11 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
     const {loaded, realChildType, realParentType, customTypes} = state;
     const [enums, setEnums] = React.useState([]);
     const dataTypes = allDataTypes([...customTypes, ...enums]);
+
+    const [tabIndex, setTabIndex] = React.useState(0);
+    const handleChangeTab = (_event, newValue) => {
+        setTabIndex(newValue);
+    };
 
     React.useEffect(() => {
         // Checks for the real type. From here on array is redefined to list or set. And thing is redefined to its potential custom type.
@@ -83,6 +91,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
     // buttons visible
     const isChildCustom = Boolean(customTypes.find(c=>c.name==realChildType));
     const canEdit = !(isChildCustom || realChildType==TUPLE || realChildType[0]=='<' || parent.isTuple && child.type !== THING);
+    const showRoomEvents = realChildType === ROOM;
 
     const content = (
         <Grid container spacing={1}>
@@ -102,7 +111,13 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
                     <DialogButtons child={child} customTypes={customTypes} onClose={onClose} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} tag={tag} thing={thing} isRoot={isRoot} />
                 </Grid>
             </Grid>
-            {canEdit ? (
+            {!isRoot && showRoomEvents && (
+                <Tabs value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example">
+                    {canEdit && <Tab label="Edit" />}
+                    {showRoomEvents && <Tab label="Room events" />}
+                </Tabs>
+            )}
+            {tabIndex === 0 && canEdit && (
                 <React.Fragment>
                     <Grid item xs={12}>
                         <ErrorMsg tag={tag} />
@@ -119,7 +134,11 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
                         />
                     </Grid>
                 </React.Fragment>
-            ): null}
+            )}
+            {tabIndex === 1 && showRoomEvents &&
+                <Grid item xs={12}>
+                    <RoomEvent room={thing} />
+                </Grid>}
         </Grid>
     );
 
@@ -128,28 +147,24 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
             open
             onClose={onClose}
             maxWidth="md"
-            actionButtons={canEdit ? <SubmitButton onClickSubmit={handleClickOk} />:null}
+            actionButtons={tabIndex === 0 && canEdit ? <SubmitButton onClickSubmit={handleClickOk} />: null}
         >
             {loaded ? content : (
-                <div style={{height: 120}}>
-                    <Box position="relative">
-                        <CircularProgress size={100} thickness={3} />
-                        <Box
-                            top={0}
-                            left={0}
-                            bottom={0}
-                            right={0}
-                            position="absolute"
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                        >
-                            <Typography variant="h6" component="div" color="textSecondary">
-                                {'Loading...'}
-                            </Typography>
-                        </Box>
-                    </Box>
-                </div>
+                <Box
+                    top={10}
+                    left={0}
+                    bottom={10}
+                    right={0}
+                    position="absolute"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                    <CircularProgress size={50} />
+                    <Typography align="right" variant="h6" component="div" color="textSecondary">
+                        {'Loading...'}
+                    </Typography>
+                </Box>
             )}
         </SimpleModal>
     );
