@@ -156,7 +156,7 @@ func (client *client) connect(data loginData) (connResp, error) {
 
 	// Store session in memory
 	if useCookieSession && client.cookie != nil {
-		addSession(*client.cookie, data)
+		addSession(*client.cookie, data, cookieMaxAge)
 	}
 
 	return connectedResp(), nil

@@ -38,14 +38,14 @@ func newSessions() {
 	}()
 }
 
-func addSession(cookie http.Cookie, data loginData) {
+func addSession(cookie http.Cookie, data loginData, maxAge int) {
 	globalSessions.mu.Lock()
 	defer globalSessions.mu.Unlock()
 
 	globalSessions.sessionData[cookie.Value] = session{
 		cookie:      cookie,
 		data:        data,
-		maxLifetime: time.Now().UTC().Add(time.Duration(cookieMaxAge) * time.Second),
+		maxLifetime: time.Now().UTC().Add(time.Duration(maxAge) * time.Second),
 	}
 
 }

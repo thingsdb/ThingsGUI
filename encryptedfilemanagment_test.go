@@ -5,13 +5,12 @@ import (
 	"testing"
 )
 
-type userData struct {
-	user     string `json:"user"`
-	password string `json:"password"`
+type loginTest struct {
+	User     string `json:"user"`
+	Password string `json:"password"`
 }
 
 func TestEncryptedfilemanagment(t *testing.T) {
-	fmt.Println("TEST 4: encrypting file management")
 	path := getHomePath("things-gui_test")
 	logCh := make(chan string, 1)
 	go func() {
@@ -20,13 +19,13 @@ func TestEncryptedfilemanagment(t *testing.T) {
 		}
 	}()
 
-	mapping_in := map[string]loginData{
-		"John": loginData{User: "John", Password: "pass1"},
-		"Jane": loginData{User: "Jane", Password: "pass2"},
-		"Mary": loginData{User: "Mary", Password: "pass3"},
+	mapping_in := map[string]loginTest{
+		"John": loginTest{User: "John", Password: "pass1"},
+		"Jane": loginTest{User: "Jane", Password: "pass2"},
+		"Mary": loginTest{User: "Mary", Password: "pass3"},
 	}
 
-	mapping_out := make(map[string]loginData)
+	mapping_out := make(map[string]loginTest)
 
 	_, err := createFile(path, logCh)
 	if err != nil {
@@ -43,9 +42,7 @@ func TestEncryptedfilemanagment(t *testing.T) {
 		t.Errorf("Reading encrypted file FAILED: %s\n", err)
 	}
 
-	if mapping_in["John"].Password == mapping_out["John"].Password {
-		fmt.Println("TEST 4: SUCCESSFULL. Encrypting file management.")
-	} else {
+	if mapping_in["John"].Password != mapping_out["John"].Password {
 		t.Errorf("TEST 4: FAILED. Encrypting file management.\n")
 	}
 
@@ -55,9 +52,7 @@ func TestEncryptedfilemanagment(t *testing.T) {
 		t.Errorf("Deleting encrypted file FAILED: %s\n", err)
 	}
 
-	if fileNotExist(path) {
-		fmt.Printf("TEST 5: SUCCESSFULL. %s has been removed\n", path)
-	} else {
+	if !fileNotExist(path) {
 		t.Errorf("TEST 5: Deleting encrypted file FAILED\n")
 	}
 }
