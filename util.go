@@ -18,12 +18,13 @@ func isTrue(str string) bool {
 }
 
 // changeFile creates a file or makes changes to an existing file.
-func changeFile(path string, logCh chan string, mapping lMapping, fn func(lMapping) error) error {
+func changeFile(path string, logCh chan string, fn func(lMapping) error) error {
 	newFile, err := createFile(path, logCh)
 	if err != nil {
 		return err
 	}
 
+	mapping := make(lMapping)
 	if !newFile {
 		err = readEncryptedFile(path, &mapping, logCh)
 		if err != nil {
@@ -52,12 +53,12 @@ func changeFile(path string, logCh chan string, mapping lMapping, fn func(lMappi
 	return nil
 }
 
-// convertFloatToInt converts float value to integer if possible.
+// convertFloatToInt converts float value to integer if possible (only interfaces will be converted).
 func convertFloatToInt(arg interface{}) interface{} {
 	switch v := arg.(type) {
 	case []interface{}:
 		arr := make([]interface{}, 0)
-		for i := 0; i < len(v); i++ {
+		for i := range v {
 			r := convertFloatToInt(v[i])
 			arr = append(arr, r)
 		}

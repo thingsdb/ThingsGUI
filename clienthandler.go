@@ -423,8 +423,7 @@ func (client *client) newCachedConnection(data lData) (int, interface{}, message
 		return nil
 	}
 
-	var mapping = make(lMapping)
-	err := changeFile(client.connectionsPath, client.logCh, mapping, fn)
+	err := changeFile(client.connectionsPath, client.logCh, fn)
 	if err != nil {
 		return internalError(err)
 	}
@@ -444,8 +443,7 @@ func (client *client) editCachedConnection(data lData) (int, interface{}, messag
 		return nil
 	}
 
-	var mapping = make(lMapping)
-	err := changeFile(client.connectionsPath, client.logCh, mapping, fn)
+	err := changeFile(client.connectionsPath, client.logCh, fn)
 	if err != nil {
 		return internalError(err)
 	}
@@ -471,8 +469,7 @@ func (client *client) renameCachedConnection(data lData) (int, interface{}, mess
 		return nil
 	}
 
-	var mapping = make(lMapping)
-	err := changeFile(client.connectionsPath, client.logCh, mapping, fn)
+	err := changeFile(client.connectionsPath, client.logCh, fn)
 	if err != nil {
 		return internalError(err)
 	}
@@ -515,8 +512,8 @@ func (client *client) saveLastUsedConnection(data loginData) error {
 		mapping[lastUsedKey] = ldata
 		return nil
 	}
-	var mapping = make(lMapping)
-	return changeFile(client.sessionPath, client.logCh, mapping, fn)
+
+	return changeFile(client.sessionPath, client.logCh, fn)
 }
 
 // query sends a query to ThingsDB and receives a result
