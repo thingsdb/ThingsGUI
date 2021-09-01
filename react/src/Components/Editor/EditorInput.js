@@ -31,7 +31,14 @@ const Editor = ({height, history, input, onExpand, onOutput, scope}) => {
     let routerHistory = useHistory();
     const classes = useStyles();
 
-    const [query, setQuery] = React.useState('');
+    const [query, setQuery] = React.useState(() => {
+        let query = historyGetQueryParam(routerHistory, 'query');
+        if (query) {
+            return query;
+        } else {
+            return '';
+        }
+    });
     const [queryInput, setQueryInput] = React.useState(() => {
         let query = historyGetQueryParam(routerHistory, 'query');
         if (query) {

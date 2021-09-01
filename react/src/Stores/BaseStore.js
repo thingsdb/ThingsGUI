@@ -226,7 +226,7 @@ class EventStore extends BaseStore {
             if(msg.includes('connection lost')) {
                 ErrorActions.setMsgError(LoginTAG, msg);
             } else if(msg.includes('[W]') || msg.includes('[E]')) {
-                ErrorActions.setToastError(msg);
+                ErrorActions.setToastError(msg.slice(4));
             }
         });
 
@@ -270,7 +270,10 @@ class EventStore extends BaseStore {
             this.setState(prevState => {
                 let events = prevState.events;
                 let time = moment().format('YYYY-MM-DD HH:mm');
-                let evt = {eventId, event, args, receivedAt: time};
+
+                let json = JSON.stringify(args);
+                let unquoted = json.replace(/"([^"]+)":/g, '$1:');
+                let evt = {eventId, event, args, stringArgs: unquoted, receivedAt: time};
                 let updatedEvent = events[roomId] ? [...events[roomId], evt] : [evt];
                 return {events: {...events, [roomId]: updatedEvent}};
             });

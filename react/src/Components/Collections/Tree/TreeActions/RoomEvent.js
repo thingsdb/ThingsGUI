@@ -1,6 +1,7 @@
 import {withVlow} from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
 import Timeline from '@material-ui/lab/Timeline';
 import TimelineConnector from '@material-ui/lab/TimelineConnector';
 import TimelineContent from '@material-ui/lab/TimelineContent';
@@ -11,6 +12,7 @@ import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
 import Typography from '@material-ui/core/Typography';
 
 import {EventStore} from '../../../../Stores';
+import {ThingsTree} from '../../../Util';
 
 const withStores = withVlow([{
     store: EventStore,
@@ -25,7 +27,7 @@ const RoomEvent = ({room, events}) => {
     const lastIndex = roomEvents.length - 1;
 
     return (
-        <Timeline align="alternate">
+        <Timeline align="left">
             {lastIndex !== -1 ? roomEvents.map((e, index) => (
                 <TimelineItem key={`room_event_${index}`}>
                     <TimelineOppositeContent>
@@ -41,11 +43,14 @@ const RoomEvent = ({room, events}) => {
                         <Typography variant="subtitle2">
                             {e.event}
                         </Typography>
-                        {e.args.map((a, index) => (
-                            <Typography key={`argument_${index}`} variant="body2">
-                                {a}
-                            </Typography>
-                        ))}
+                        <ThingsTree
+                            tree={e.args}
+                            child={{
+                                name:'Args',
+                                index:null,
+                            }}
+                            root
+                        />
                     </TimelineContent>
                 </TimelineItem>
             )) : (
