@@ -4,7 +4,7 @@ import {withVlow} from 'vlow';
 
 import LocalErrorMsg from './LocalErrorMsg';
 import {ErrorActions, ErrorStore} from '../../Stores';
-import {useThingsError} from '../Util';
+import {useThingsError} from '.';
 
 
 const withStores = withVlow([{

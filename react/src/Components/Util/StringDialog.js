@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-import {Copy, DownloadTextFile, SimpleModal} from '../Util';
+import {Copy, DownloadTextFile, SimpleModal} from '.';
 
 
 const useStyles = makeStyles(theme => ({

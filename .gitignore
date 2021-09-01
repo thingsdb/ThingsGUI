@@ -105,7 +105,7 @@ venv.bak/
 
 # Compiled React
 ../node_modules/
-src/node_modules/
+react/node_modules/
 static/js/*.html
 static/js/*-bundle-*.js
 static/js/*-bundle-*.min.js
@@ -113,8 +113,8 @@ static/js/*-bundle-*.min.js.LICENSE.txt
 static/js/*.worker.js
 
 # NPM
-src/npm-debug.log
-src/package-lock.json
+react/npm-debug.log
+react/package-lock.json
 
 # BIN files
 /bin/

@@ -14,7 +14,7 @@ const APP_DIR = path.resolve(__dirname, '');
 
 const config = {
     mode: process.env.NODE_ENV === 'production' ? 'production': 'development',
-    entry: APP_DIR + '/Components/index.js',
+    entry: APP_DIR + '/src/index.js',
     output: {
         path: BUILD_DIR,
         publicPath: '/js/',

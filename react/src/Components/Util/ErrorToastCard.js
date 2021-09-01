@@ -15,7 +15,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import PropTypes from 'prop-types';
 
 import { ErrorActions} from '../../Stores';
-import {useThingsError} from '../Util';
+import {useThingsError} from '.';
 
 const useStyles = makeStyles(theme => ({
     card: {

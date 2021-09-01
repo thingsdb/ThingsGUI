@@ -5,7 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {checkType, fancyName, thingValue, TreeBranch} from '../Util';
+import {checkType, fancyName, thingValue, TreeBranch} from '.';
 import {SET_KEY, THING_KEY} from '../../Constants/CharacterKeys';
 import {ARRAY, SET, THING} from '../../Constants/ThingTypes';
 

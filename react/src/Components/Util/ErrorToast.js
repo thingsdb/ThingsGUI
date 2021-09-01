@@ -3,7 +3,7 @@ import {withVlow} from 'vlow';
 import React from 'react';
 
 import { ErrorStore } from '../../Stores';
-import {ErrorToastCard} from '../Util';
+import {ErrorToastCard} from '.';
 
 const useStyles = makeStyles(() => ({
     portal: {

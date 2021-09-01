@@ -4,7 +4,7 @@ import CardContent from '@material-ui/core/CardContent';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {HarmonicCardHeader} from '../Util';
+import {HarmonicCardHeader} from '.';
 
 const useStyles = makeStyles(theme => ({
     noPadding: {
