@@ -1,7 +1,14 @@
+import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
+import Box from '@material-ui/core/Box';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Collapse from '@material-ui/core/Collapse';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
+import Switch from '@material-ui/core/Switch';
 import Timeline from '@material-ui/lab/Timeline';
 import TimelineConnector from '@material-ui/lab/TimelineConnector';
 import TimelineContent from '@material-ui/lab/TimelineContent';
@@ -12,14 +19,35 @@ import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
 import Typography from '@material-ui/core/Typography';
 
 import {EventStore} from '../../../../Stores';
-import {ThingsTree} from '../../../Util';
 
 const withStores = withVlow([{
     store: EventStore,
     keys: ['events']
 }]);
 
+const useStyles = makeStyles(theme => ({
+    flex: {
+        display: 'flex'
+    },
+    marginLeft: {
+        marginLeft: theme.spacing(1)
+    }
+}));
+
 const RoomEvent = ({room, events}) => {
+    const classes = useStyles();
+    const [checked, setChecked] = React.useState({});
+
+    const handleChange = (index) => () => {
+        setChecked((prev) => {
+            if(prev[index] === undefined) {
+                prev[index] = true;
+            } else {
+                prev[index] = !prev[index];
+            }
+            return {...prev};
+        });
+    };
 
     // stringify thingId
     const roomId = room.includes('room:') ? room.split(':')[1] : null;
@@ -40,17 +68,38 @@ const RoomEvent = ({room, events}) => {
                         {lastIndex !== index && <TimelineConnector />}
                     </TimelineSeparator>
                     <TimelineContent>
-                        <Typography variant="subtitle2">
-                            {e.event}
-                        </Typography>
-                        <ThingsTree
-                            tree={e.args}
-                            child={{
-                                name:'Args',
-                                index:null,
-                            }}
-                            root
-                        />
+                        <Card variant="outlined">
+                            <CardHeader
+                                title={
+                                    <Box fontWeight="fontWeightBold">
+                                        {e.event}
+                                    </Box>
+                                }
+                                titleTypographyProps={{
+                                    variant: 'body2',
+                                    component: 'div',
+                                    className: classes.flex
+                                }}
+                                subheader="Arguments: "
+                                subheaderTypographyProps={{
+                                    className: classes.warnColor,
+                                    variant: 'caption'
+                                }}
+                                action={
+                                    <FormControlLabel
+                                        control={<Switch checked={Boolean(checked[index])} onChange={handleChange(index)} />}
+                                        label="Show"
+                                    />
+                                }
+                            />
+                            <CardContent>
+                                <Collapse in={Boolean(checked[index])} unmountOnExit>
+                                    <pre>
+                                        {e.stringArgs}
+                                    </pre>
+                                </Collapse>
+                            </CardContent>
+                        </Card>
                     </TimelineContent>
                 </TimelineItem>
             )) : (

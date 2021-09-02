@@ -271,7 +271,7 @@ class EventStore extends BaseStore {
                 let events = prevState.events;
                 let time = moment().format('YYYY-MM-DD HH:mm');
 
-                let json = JSON.stringify(args);
+                let json = JSON.stringify(args, null, 4);
                 let unquoted = json.replace(/"([^"]+)":/g, '$1:');
                 let evt = {eventId, event, args, stringArgs: unquoted, receivedAt: time};
                 let updatedEvent = events[roomId] ? [...events[roomId], evt] : [evt];
