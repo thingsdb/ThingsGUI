@@ -68,12 +68,20 @@ func readEnvVariables() error {
 		}
 	}
 
-	if isTrue(os.Getenv("USE_COOKIE_SESSION")) {
+	if isTrue(os.Getenv("THINGSGUI_USE_COOKIE_SESSION")) {
 		useCookieSession = true
 	}
 
-	if isTrue(os.Getenv("USE_LOCAL_SESSION")) {
+	if isTrue(os.Getenv("THINGSGUI_USE_LOCAL_SESSION")) {
 		useLocalSession = true
+	}
+
+	if isTrue(os.Getenv("USE_COOKIE_SESSION")) {
+		err = fmt.Errorf("Environmental variable USE_COOKIE_SESSION is obsolete and renamed to THINGSGUI_USE_COOKIE_SESSION")
+	}
+
+	if isTrue(os.Getenv("USE_LOCAL_SESSION")) {
+		err = fmt.Errorf("Environmental variable USE_LOCAL_SESSION is obsolete and renamed to THINGSGUI_USE_LOCAL_SESSION")
 	}
 
 	return nil

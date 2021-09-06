@@ -162,16 +162,16 @@ By setting the environmental variable `THINGSGUI_ADDRESS` the GUI has a fixed ad
 #### Save session
 Additional `.env` variables can be set to remember the last login:
 
-* `USE_COOKIE_SESSION`: Set it true/false.
-* `USE_LOCAL_SESSION`: Set it true/false.
+* `THINGSGUI_USE_COOKIE_SESSION`: Set it true/false.
+* `THINGSGUI_USE_LOCAL_SESSION`: Set it true/false.
 
-When you enable `USE_COOKIE_SESSION` the last session can be saved using cookies. Though the user needs to accept these cookies first.
+When you enable `THINGSGUI_USE_COOKIE_SESSION` the last session can be saved using cookies. Though the user needs to accept these cookies first.
 
-When you enable `USE_LOCAL_SESSION` the last session is saved in the user's home directory as `.config/ThingsGUI/thingsgui.session`.
+When you enable `THINGSGUI_USE_LOCAL_SESSION` the last session is saved in the user's home directory as `.config/ThingsGUI/thingsgui.session`.
 
 ---
 
-Note: `USE_LOCAL_SESSION` should only be enabled if the app is used locally by one user.
+Note: `THINGSGUI_USE_LOCAL_SESSION` should only be enabled if the app is used locally by one user.
 
 ---
 
