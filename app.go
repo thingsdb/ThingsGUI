@@ -28,10 +28,12 @@ func (app *app) socketRouter() {
 	app.server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
 		app.clients[s.ID()] = &client{
-			logCh:           make(chan string),
-			tmpFiles:        newTmpFiles(),
 			connectionsPath: getHomePath(connFile),
+			logCh:           make(chan string),
+			roomStore:       newRoomStore(),
 			sessionPath:     getHomePath(sessionFile),
+			socketConn:      &s,
+			tmpFiles:        newTmpFiles(),
 		}
 
 		lCh := app.clients[s.ID()].logCh

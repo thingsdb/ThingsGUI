@@ -28,7 +28,9 @@ type client struct {
 	logCh           chan string
 	pass            string
 	port            uint16
+	roomStore       *roomStore
 	sessionPath     string
+	socketConn      *socketio.Conn
 	ssl             *tls.Config
 	tmpFiles        *tmpFiles
 	token           string
@@ -120,6 +122,14 @@ func (client *client) connect(data loginData) (connResp, error) {
 	client.connection.LogCh = client.logCh
 	client.connection.DefaultTimeout = time.Duration(timeout) * time.Second
 	client.connection.LogLevel = things.LogDebug
+
+	s := *client.socketConn
+	client.connection.OnNodeStatus = func(ns *things.NodeStatus) {
+		s.Emit("OnNodeStatus", *ns)
+	}
+	client.connection.OnWarning = func(we *things.WarnEvent) {
+		s.Emit("OnWarning", *we)
+	}
 
 	client.user = ""
 	client.pass = ""
@@ -552,12 +562,16 @@ func (client *client) query(data dataReq) (int, interface{}, message) {
 
 // Join a room
 func (client *client) join(socket socketio.Conn, data dataReq) (int, interface{}, message) {
+	client.roomStore.mux.Lock()
+	defer client.roomStore.mux.Unlock()
+
 	scope := data.Scope
 	id := data.Id
 	wait := time.Duration(data.Wait) * time.Second
 	idInt, _ := strconv.ParseUint(id, 10, 64)
 
 	room := things.NewRoomFromId(scope, idInt)
+	client.roomStore.store[room.Id()] = room
 
 	room.OnInit = func(room *things.Room) {
 		socket.Emit("onInit", room.Id())
@@ -568,12 +582,14 @@ func (client *client) join(socket socketio.Conn, data dataReq) (int, interface{}
 	}
 	room.OnLeave = func(room *things.Room) {
 		socket.Emit("onLeave", room.Id())
+		delete(client.roomStore.store, room.Id())
 	}
 	room.OnDelete = func(room *things.Room) {
 		socket.Emit("onDelete", room.Id())
+		delete(client.roomStore.store, room.Id())
 	}
-	room.OnEvent = func(room *things.Room, id uint64, event string, args []interface{}) {
-		socket.Emit("onEvent", room.Id(), id, event, args)
+	room.OnEmit = func(room *things.Room, event string, args []interface{}) {
+		socket.Emit("onEmit", room.Id(), id, event, args)
 	}
 
 	err := room.Join(client.connection, wait)
@@ -586,8 +602,8 @@ func (client *client) leave(data dataReq) (int, interface{}, message) {
 	id := data.Id
 	roomId, _ := strconv.ParseUint(id, 10, 64)
 
-	room, err := client.connection.GetRoomFromId(roomId)
-	if err == nil {
+	var err error
+	if room, ok := client.roomStore.getRoom(roomId); ok {
 		err = room.Leave()
 	}
 

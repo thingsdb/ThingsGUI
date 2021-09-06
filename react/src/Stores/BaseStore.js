@@ -222,11 +222,8 @@ class EventStore extends BaseStore {
 
         socket.on('onLogging', (msg) => {
             window.console.log(msg);
-
             if(msg.includes('connection lost')) {
                 ErrorActions.setMsgError(LoginTAG, msg);
-            } else if(msg.includes('[W]') || msg.includes('[E]')) {
-                ErrorActions.setToastError(msg.slice(4));
             }
         });
 
@@ -236,10 +233,6 @@ class EventStore extends BaseStore {
 
 
         // Room events
-
-        socket.on('onInit', (data) => {
-            console.log('onInit', data);
-        });
 
         socket.on('onJoin', (roomId) => {
             this.setState(prevState => {
@@ -266,7 +259,7 @@ class EventStore extends BaseStore {
             });
         });
 
-        socket.on('onEvent', (roomId, eventId, event, args) => {
+        socket.on('onEmit', (roomId, eventId, event, args) => {
             this.setState(prevState => {
                 let events = prevState.events;
                 let time = moment().format('YYYY-MM-DD HH:mm');
@@ -277,6 +270,16 @@ class EventStore extends BaseStore {
                 let updatedEvent = events[roomId] ? [...events[roomId], evt] : [evt];
                 return {events: {...events, [roomId]: updatedEvent}};
             });
+        });
+
+        socket.on('OnNodeStatus', (data) => {
+            if(data.Status == 'SHUTTING_DOWN') {
+                ErrorActions.setToastError('Lost connection with ThingsDB. Trying to reconnect.');
+            }
+        });
+
+        socket.on('OnWarning', (data) => {
+            ErrorActions.setToastError(data.Msg);
         });
     }
 
