@@ -155,7 +155,7 @@ It is possible to save the connection configuration locally. To do this you need
 By setting the environmental variable `THINGSGUI_ADDRESS` the GUI has a fixed address and the login only displays the [Authentication](#authentication) part. The following `.env` variables can be configured:
 
 * `THINGSGUI_ADDRESS`: ThingsDB socket address
-* `THINGSGUI_AUTH_METHOD`: method of authentication; either a token, user+pass or both.
+* `THINGSGUI_AUTH_METHOD`: method of authentication; either a token, pass or both.
 * `THINGSGUI_SSL`: Needs a secure connection or not
 * `THINGSGUI_AIC`: Allow insecure certificates or not
 
