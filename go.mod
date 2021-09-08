@@ -8,3 +8,5 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/thingsdb/go-thingsdb v0.2.3
 )
+
+replace github.com/thingsdb/go-thingsdb => ../go-thingsdb

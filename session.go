@@ -8,7 +8,7 @@ import (
 
 type session struct {
 	cookie      http.Cookie
-	data        LoginData
+	data        loginData
 	maxLifetime time.Time
 }
 
@@ -38,19 +38,19 @@ func newSessions() {
 	}()
 }
 
-func addSession(cookie http.Cookie, data LoginData) {
+func addSession(cookie http.Cookie, data loginData, maxAge int) {
 	globalSessions.mu.Lock()
 	defer globalSessions.mu.Unlock()
 
 	globalSessions.sessionData[cookie.Value] = session{
 		cookie:      cookie,
 		data:        data,
-		maxLifetime: time.Now().UTC().Add(time.Duration(cookieMaxAge) * time.Second),
+		maxLifetime: time.Now().UTC().Add(time.Duration(maxAge) * time.Second),
 	}
 
 }
 
-func getSession(key string) *LoginData {
+func getSession(key string) *loginData {
 	globalSessions.mu.Lock()
 	defer globalSessions.mu.Unlock()
 

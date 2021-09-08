@@ -20,8 +20,8 @@ func newBuffer() *buffer {
 	}
 }
 
-// CreateFile creates a file and returns a boolean if successfull and an error message when something goes wrong
-func CreateDir(path string, logCh chan string) error {
+// createFile creates a file and returns a boolean if successfull and an error message when something goes wrong
+func createDir(path string, logCh chan string) error {
 	err := os.MkdirAll(path, 0700)
 	if err != nil {
 		return err
@@ -32,8 +32,8 @@ func CreateDir(path string, logCh chan string) error {
 	return nil
 }
 
-// FileNotExist returns a boolean indicating if a file does not exists
-func FileNotExist(path string) bool {
+// fileNotExist returns a boolean indicating if a file does not exists
+func fileNotExist(path string) bool {
 	// check if file exists
 	fileNotExist := false
 	var _, err = os.Stat(path)
@@ -47,11 +47,11 @@ func FileNotExist(path string) bool {
 }
 
 // CreateFile creates a file and returns a boolean if successfull and an error message when something goes wrong
-func CreateFile(path string, logCh chan string) (bool, error) {
-	create := FileNotExist(path)
+func createFile(path string, logCh chan string) (bool, error) {
+	create := fileNotExist(path)
 	if create {
 		dir := filepath.Dir(path)
-		err := CreateDir(dir, logCh)
+		err := createDir(dir, logCh)
 		if err != nil {
 			return false, err
 		}
@@ -71,8 +71,8 @@ func CreateFile(path string, logCh chan string) (bool, error) {
 	return create, nil
 }
 
-// WriteFile writes data to a file and may return an error if something goes wrong
-func WriteFile(path string, logCh chan string, data []byte) error {
+// writeFile writes data to a file and may return an error if something goes wrong
+func writeFile(path string, logCh chan string, data []byte) error {
 	// Open file using READ & WRITE permission.
 	var file, err = os.OpenFile(path, os.O_RDWR|os.O_TRUNC, 0600)
 	if err != nil {
@@ -95,8 +95,8 @@ func WriteFile(path string, logCh chan string, data []byte) error {
 	return nil
 }
 
-// ReadFile reads a file and returns a byte array and may return an error when something goes wrong
-func ReadFile(path string, logCh chan string) ([]byte, error) {
+// readFile reads a file and returns a byte array and may return an error when something goes wrong
+func readFile(path string, logCh chan string) ([]byte, error) {
 	// Open file for reading.
 	file, err := os.OpenFile(path, os.O_RDONLY, 0600)
 	if err != nil {
@@ -127,8 +127,8 @@ func ReadFile(path string, logCh chan string) ([]byte, error) {
 	return b.data, nil
 }
 
-// DeleteFile deletes a file and may retun an error if somthing goes wrong
-func DeleteFile(path string, logCh chan string) error {
+// deleteFile deletes a file and may retun an error if somthing goes wrong
+func deleteFile(path string, logCh chan string) error {
 	// delete file
 	var err = os.Remove(path)
 	if err != nil {
@@ -139,8 +139,8 @@ func DeleteFile(path string, logCh chan string) error {
 	return nil
 }
 
-// GetHomePath returns the path of the local home folder
-func GetHomePath(filepath string) string {
+// getHomePath returns the path of the local home folder
+func getHomePath(filepath string) string {
 	var dir string
 	dir, _ = os.UserHomeDir()
 	path := fmt.Sprintf("%s/%s", dir, filepath)

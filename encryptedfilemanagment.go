@@ -6,14 +6,14 @@ import (
 
 var key = []byte("jdyw3ts4dkflp8orftr7vd6372jqzpta")
 
-// ReadEncryptedFile decrypts and parses an encrypted file and stores the result in the interface called mapping
-func ReadEncryptedFile(path string, mapping interface{}, logCh chan string) error {
-	ciphertext, err := ReadFile(path, logCh)
+// readEncryptedFile decrypts and parses an encrypted file and stores the result in the interface called mapping
+func readEncryptedFile(path string, mapping interface{}, logCh chan string) error {
+	ciphertext, err := readFile(path, logCh)
 	if err != nil {
 		return err
 	}
 
-	plaintext, err := Decrypt(ciphertext, key)
+	plaintext, err := decrypt(ciphertext, key)
 	if err != nil {
 		return err
 	}
@@ -26,19 +26,19 @@ func ReadEncryptedFile(path string, mapping interface{}, logCh chan string) erro
 	return nil
 }
 
-// WriteEncryptedFile encrypts and writes a data object called mapping to a file
-func WriteEncryptedFile(path string, mapping interface{}, logCh chan string) error {
+// writeEncryptedFile encrypts and writes a data object called mapping to a file
+func writeEncryptedFile(path string, mapping interface{}, logCh chan string) error {
 	jsonString, err := json.Marshal(mapping)
 	if err != nil {
 		return err
 	}
 
-	encrypted, err := Encrypt(jsonString, key)
+	encrypted, err := encrypt(jsonString, key)
 	if err != nil {
 		return err
 	}
 
-	err = WriteFile(path, logCh, encrypted)
+	err = writeFile(path, logCh, encrypted)
 	if err != nil {
 		return err
 	}
