@@ -51,10 +51,10 @@ func parseFlags() {
 	timeout = uint16(t)
 }
 
-func readEnvVariables() error {
+func readEnvVariables() {
 	err := godotenv.Load(envPath)
 	if err != nil {
-		return err
+		fmt.Println(err)
 	}
 
 	thingsguiAddress = os.Getenv("THINGSGUI_ADDRESS")
@@ -77,29 +77,20 @@ func readEnvVariables() error {
 	}
 
 	if isTrue(os.Getenv("USE_COOKIE_SESSION")) {
-		return fmt.Errorf("Environmental variable \"USE_COOKIE_SESSION\" is obsolete and renamed to \"THINGSGUI_USE_COOKIE_SESSION\"")
+		fmt.Println("Environmental variable \"USE_COOKIE_SESSION\" is obsolete and renamed to \"THINGSGUI_USE_COOKIE_SESSION\"")
 	}
 
 	if isTrue(os.Getenv("USE_LOCAL_SESSION")) {
-		return fmt.Errorf("Environmental variable \"USE_LOCAL_SESSION\" is obsolete and renamed to \"THINGSGUI_USE_LOCAL_SESSION\"")
+		fmt.Println("Environmental variable \"USE_LOCAL_SESSION\" is obsolete and renamed to \"THINGSGUI_USE_LOCAL_SESSION\"")
 	}
-
-	return nil
 }
 
 func main() {
-	var err error
 	app := app{}
-
-	parseFlags()
-
-	err = readEnvVariables()
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	app.clients = make(map[string]*client)
 
+	parseFlags()
+	readEnvVariables()
 	newSessions()
 
 	options := &engineio.Options{
