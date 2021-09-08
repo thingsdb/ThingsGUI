@@ -16,8 +16,7 @@ type errorType interface {
 func createThingsDBError(err error) message {
 	errT, ok := err.(errorType)
 	if !ok {
-		message := failedMsg(fmt.Errorf("Wrong Error type"))
-		return message
+		return failedMsg(err)
 	}
 	return failedMsg(fmt.Errorf("(%d) %s", errT.Code(), errT.Error()))
 }
