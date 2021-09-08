@@ -80,7 +80,7 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                         <ListItem>
                             <ListItemText
                                 primary="Documentation"
-                                secondary={timer.doc}
+                                secondary={timer.doc || '-'}
                             />
                         </ListItem>
                         {timer.user &&
@@ -117,7 +117,7 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                         <ListItem>
                             <ListItemText
                                 primary="Definition"
-                                secondary={
+                                secondary={timer.definition ?
                                     <TextField
                                         name="timer"
                                         type="text"
@@ -138,7 +138,7 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                                             shrink: true,
                                         }}
                                     />
-                                }
+                                    : '-'}
                                 secondaryTypographyProps={{
                                     component: 'div'
                                 }}
