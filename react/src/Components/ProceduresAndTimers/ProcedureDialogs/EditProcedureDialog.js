@@ -144,8 +144,10 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                 ) : (
                     <Grid container spacing={1} item xs={12}>
                         <Grid item>
-                            <Typography variant="subtitle1" >
-                                {'Procedure cannot be edited.'}
+                            <Typography>
+                                <Box fontSize={16} fontStyle="italic" m={1} color="text.secondary">
+                                    {'Procedure cannot be edited.'}
+                                </Box>
                             </Typography>
                         </Grid>
                     </Grid>

@@ -10,7 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import {BottomBar, CollectionsMenu, ProceduresMenu, TimersMenu, TopBar, UsersMenu, QueryEditorMenu} from '../Navigation';
 import {COLLECTION_ROUTE, EDITOR_ROUTE, PROCEDURE_ROUTE, TIMER_ROUTE, USER_ROUTE} from '../../Constants/Routes';
-import {DrawerLayout, ErrorToast, getIdFromPath, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam, TopBarMenu} from '../Util';
+import {DrawerLayout, ErrorToast, getIdFromPath, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Util';
 import {Procedure, Timer} from '../ProceduresAndTimers';
 import Collection from '../Collections';
 import Editor from '../Editor';

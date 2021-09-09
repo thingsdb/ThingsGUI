@@ -15,7 +15,7 @@ import {historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} fro
 import {TopBar} from '../Navigation';
 import LandingContent from './LandingContent';
 
-const version='version: 1.0.0';
+const version='version: 1.0.1';
 
 const useStyles = makeStyles(theme => ({
     avatar: {

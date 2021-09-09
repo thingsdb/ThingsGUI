@@ -1,5 +1,6 @@
 import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -167,8 +168,10 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                 ) : (
                     <Grid container spacing={1} item xs={12}>
                         <Grid item>
-                            <Typography variant="subtitle1" >
-                                {'Timer cannot be edited.'}
+                            <Typography>
+                                <Box fontSize={16} fontStyle="italic" m={1} color="text.secondary">
+                                    {'Timer cannot be edited.'}
+                                </Box>
                             </Typography>
                         </Grid>
                     </Grid>
