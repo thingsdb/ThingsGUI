@@ -1,5 +1,6 @@
 import { amber } from '@material-ui/core/colors';
 import { makeStyles} from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -94,18 +95,47 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                 <Grid item xs={12}>
                     <ErrorMsg tag={tag} />
                 </Grid>
-                <Grid item xs={12}>
-                    <List disablePadding dense>
-                        <Collapse in={Boolean(queryString)} timeout="auto">
+                {timer.definition ? (
+                    <Grid item xs={12}>
+                        <List disablePadding dense>
+                            <Collapse in={Boolean(queryString)} timeout="auto">
+                                <ListItem>
+                                    <TextField
+                                        name="queryString"
+                                        label="Query"
+                                        type="text"
+                                        value={queryString}
+                                        fullWidth
+                                        multiline
+                                        rowsMax="10"
+                                        InputProps={{
+                                            readOnly: true,
+                                            disableUnderline: true,
+                                        }}
+                                        inputProps={{
+                                            style: {
+                                                fontFamily: 'monospace',
+                                            },
+                                        }}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </ListItem>
+                            </Collapse>
+                            <ListItem>
+                                <Typography variant="body1" >
+                                    {'Edit timer:'}
+                                </Typography>
+                            </ListItem>
                             <ListItem>
                                 <TextField
-                                    name="queryString"
-                                    label="Query"
+                                    name="timer"
                                     type="text"
-                                    value={queryString}
+                                    variant="standard"
+                                    value={timer.definition}
                                     fullWidth
                                     multiline
-                                    rowsMax="10"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,
@@ -120,49 +150,32 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                                     }}
                                 />
                             </ListItem>
-                        </Collapse>
-                        <ListItem>
-                            <Typography variant="body1" >
-                                {'Edit timer:'}
+                            <ListItem>
+                                <ListItemText
+                                    primary="Set arguments"
+                                />
+                                <ListItemSecondaryAction>
+                                    <IconButton edge="end" aria-label="refresh" onClick={handleRefresh}>
+                                        <RefreshIcon color="primary" />
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            <ListItem>
+                                <VariablesArray input={replaceNull(args)} onChange={handleChangeArgs} />
+                            </ListItem>
+                        </List>
+                    </Grid>
+                ) : (
+                    <Grid container spacing={1} item xs={12}>
+                        <Grid item>
+                            <Typography>
+                                <Box fontSize={16} fontStyle="italic" m={1} color="text.secondary">
+                                    {'Timer cannot be edited.'}
+                                </Box>
                             </Typography>
-                        </ListItem>
-                        <ListItem>
-                            <TextField
-                                name="timer"
-                                type="text"
-                                variant="standard"
-                                value={timer.definition}
-                                fullWidth
-                                multiline
-                                InputProps={{
-                                    readOnly: true,
-                                    disableUnderline: true,
-                                }}
-                                inputProps={{
-                                    style: {
-                                        fontFamily: 'monospace',
-                                    },
-                                }}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemText
-                                primary="Set arguments"
-                            />
-                            <ListItemSecondaryAction>
-                                <IconButton edge="end" aria-label="refresh" onClick={handleRefresh}>
-                                    <RefreshIcon color="primary" />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                        <ListItem>
-                            <VariablesArray input={replaceNull(args)} onChange={handleChangeArgs} />
-                        </ListItem>
-                    </List>
-                </Grid>
+                        </Grid>
+                    </Grid>
+                )}
             </Grid>
         </SimpleModal>
     );

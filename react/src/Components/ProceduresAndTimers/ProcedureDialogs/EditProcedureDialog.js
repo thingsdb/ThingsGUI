@@ -96,50 +96,62 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                 <Grid item xs={12}>
                     <ErrorMsg tag={tag} />
                 </Grid>
-                <Grid item xs={12}>
-                    <List disablePadding dense>
-                        <Collapse in={Boolean(queryString)} timeout="auto">
+                {procedure.definition ? (
+                    <Grid item xs={12}>
+                        <List disablePadding dense>
+                            <Collapse in={Boolean(queryString)} timeout="auto">
+                                <ListItem>
+                                    <TextField
+                                        name="queryString"
+                                        label="Query"
+                                        type="text"
+                                        value={queryString}
+                                        fullWidth
+                                        multiline
+                                        rowsMax="10"
+                                        InputProps={{
+                                            readOnly: true,
+                                            disableUnderline: true,
+                                        }}
+                                        inputProps={{
+                                            style: {
+                                                fontFamily: 'monospace',
+                                            },
+                                        }}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </ListItem>
+                            </Collapse>
                             <ListItem>
-                                <TextField
-                                    name="queryString"
-                                    label="Query"
-                                    type="text"
-                                    value={queryString}
-                                    fullWidth
-                                    multiline
-                                    rowsMax="10"
-                                    InputProps={{
-                                        readOnly: true,
-                                        disableUnderline: true,
-                                    }}
-                                    inputProps={{
-                                        style: {
-                                            fontFamily: 'monospace',
-                                        },
-                                    }}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
+                                <Typography variant="body1" >
+                                    {'Edit procedure:'}
+                                </Typography>
                             </ListItem>
-                        </Collapse>
-                        <ListItem>
-                            <Typography variant="body1" >
-                                {'Edit procedure:'}
-                            </Typography>
-                        </ListItem>
-                        <ListItem>
-                            <Closure input={closure} onChange={handleClosure} />
-                        </ListItem>
-                        <ListItem>
-                            <Grid container item xs={11} justify="flex-end">
-                                <Box fontSize={10} fontStyle="italic" m={1}>
-                                    {`Created on: ${moment(procedure.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                            <ListItem>
+                                <Closure input={closure} onChange={handleClosure} />
+                            </ListItem>
+                            <ListItem>
+                                <Grid container item xs={11} justify="flex-end">
+                                    <Box fontSize={10} fontStyle="italic" m={1}>
+                                        {`Created on: ${moment(procedure.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                                    </Box>
+                                </Grid>
+                            </ListItem>
+                        </List>
+                    </Grid>
+                ) : (
+                    <Grid container spacing={1} item xs={12}>
+                        <Grid item>
+                            <Typography>
+                                <Box fontSize={16} fontStyle="italic" m={1} color="text.secondary">
+                                    {'Procedure cannot be edited.'}
                                 </Box>
-                            </Grid>
-                        </ListItem>
-                    </List>
-                </Grid>
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                )}
             </Grid>
         </SimpleModal>
     );

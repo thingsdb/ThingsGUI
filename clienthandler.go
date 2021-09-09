@@ -615,7 +615,8 @@ func (client *client) leave(data dataReq) (int, interface{}, message) {
 func (client *client) run(data dataReq) (int, interface{}, message) {
 	var args interface{}
 	message := successMsg()
-	if data.Procedure.Name != "" {
+
+	if data.Procedure.Name != "" && data.Procedure.Arguments != "" {
 		decoder := json.NewDecoder(strings.NewReader(data.Procedure.Arguments))
 		if err := decoder.Decode(&args); err != nil {
 			message = msg(err)

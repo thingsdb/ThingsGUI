@@ -3,6 +3,8 @@ import { makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -46,24 +48,50 @@ const ViewProcedureDialog = ({button, open, onClose, procedure}) => {
                 <Grid item xs={12}>
                     <List disablePadding dense>
                         <ListItem>
-                            <TextField
-                                name="procedure"
-                                type="text"
-                                variant="standard"
-                                value={procedure.definition}
-                                fullWidth
-                                multiline
-                                InputProps={{
-                                    readOnly: true,
-                                    disableUnderline: true,
-                                }}
-                                inputProps={{
-                                    style: {
-                                        fontFamily: 'monospace',
-                                    },
-                                }}
-                                InputLabelProps={{
-                                    shrink: true,
+                            <ListItemText
+                                primary="Created at"
+                                secondary={moment(procedure.created_at * 1000).format('YYYY-MM-DD HH:mm')}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemText
+                                primary="Documentation"
+                                secondary={procedure.doc || '-'}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemText
+                                primary="Procedure arguments"
+                                secondary={`[${procedure.arguments}]`}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemText
+                                primary="Definition"
+                                secondary={procedure.definition ?
+                                    <TextField
+                                        name="procedure"
+                                        type="text"
+                                        variant="standard"
+                                        value={procedure.definition || '-'}
+                                        fullWidth
+                                        multiline
+                                        InputProps={{
+                                            readOnly: true,
+                                            disableUnderline: true,
+                                        }}
+                                        inputProps={{
+                                            style: {
+                                                fontFamily: 'monospace',
+                                            },
+                                        }}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                    : '-'}
+                                secondaryTypographyProps={{
+                                    component: 'div'
                                 }}
                             />
                         </ListItem>
