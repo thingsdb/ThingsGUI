@@ -1,15 +1,15 @@
-import { amber } from '@material-ui/core/colors';
-import { makeStyles} from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import { amber } from '@mui/material/colors';
+import makeStyles from '@mui/styles/makeStyles';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import {Closure, EditName, ErrorMsg, SimpleModal} from '../../Util';
 import {CollectionActions, ProcedureActions} from '../../../Stores';

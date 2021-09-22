@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Fab from '@material-ui/core/Fab';
-import Tooltip from '@material-ui/core/Tooltip';
+import Fab from '@mui/material/Fab';
+import Tooltip from '@mui/material/Tooltip';
 import {withVlow} from 'vlow';
 
 import {EventStore, EventActions} from '../../../../Stores';

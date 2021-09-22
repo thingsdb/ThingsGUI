@@ -2,9 +2,9 @@
 import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Chip from '@material-ui/core/Chip';
-import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
+import Chip from '@mui/material/Chip';
+import TextField from '@mui/material/TextField';
+import makeStyles from '@mui/styles/makeStyles';
 
 import useStateCallback from './useStateCallback';
 

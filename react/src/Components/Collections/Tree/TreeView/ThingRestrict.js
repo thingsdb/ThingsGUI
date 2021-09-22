@@ -1,7 +1,7 @@
-import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ListItem from '@material-ui/core/ListItem';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 

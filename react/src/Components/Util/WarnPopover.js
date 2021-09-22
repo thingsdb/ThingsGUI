@@ -1,9 +1,9 @@
-import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Popover from '@material-ui/core/Popover';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Popover from '@mui/material/Popover';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 
 const useStyles = makeStyles(theme => ({

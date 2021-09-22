@@ -1,10 +1,10 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 import PropTypes from 'prop-types';
 import React from 'react';
-import Collapse from '@material-ui/core/Collapse';
+import Collapse from '@mui/material/Collapse';
 import Dropzone from 'react-dropzone';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 import {EditActions, useEdit} from '../Context';
 import {DownloadBlob} from '../../../Util';

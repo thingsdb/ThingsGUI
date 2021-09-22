@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import WarningIcon from '@material-ui/icons/Warning';
-import { amber } from '@material-ui/core/colors';
-import { makeStyles} from '@material-ui/core/styles';
+import WarningIcon from '@mui/icons-material/Warning';
+import { amber } from '@mui/material/colors';
+import makeStyles from '@mui/styles/makeStyles';
 
 import LocalMsg from './LocalMsg';
 

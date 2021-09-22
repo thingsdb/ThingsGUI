@@ -1,12 +1,12 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 
-import { amber } from '@material-ui/core/colors';
-import { makeStyles} from '@material-ui/core/styles';
+import { amber } from '@mui/material/colors';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 
 const useStyles = makeStyles(theme => ({

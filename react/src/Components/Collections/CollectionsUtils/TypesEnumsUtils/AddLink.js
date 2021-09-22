@@ -1,5 +1,5 @@
 import {withVlow} from 'vlow';
-import Link from '@material-ui/core/Link';
+import Link from '@mui/material/Link';
 import PropTypes from 'prop-types';
 import React from 'react';
 

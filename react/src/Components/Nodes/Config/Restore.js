@@ -1,11 +1,11 @@
-import { amber } from '@material-ui/core/colors';
-import Button from '@material-ui/core/Button';
-import FormLabel from '@material-ui/core/FormLabel';
-import Grid from '@material-ui/core/Grid';
+import { amber } from '@mui/material/colors';
+import Button from '@mui/material/Button';
+import FormLabel from '@mui/material/FormLabel';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import {ErrorMsg, SimpleModal, TwoLabelSwitch} from '../../Util';
 import {ApplicationActions, NodesActions} from '../../../Stores';

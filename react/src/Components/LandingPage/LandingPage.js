@@ -1,14 +1,14 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 /*eslint-disable react/no-multi-comp*/
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import IconButton from '@mui/material/IconButton';
 import React from 'react';
-import Slide from '@material-ui/core/Slide';
-import Typography from '@material-ui/core/Typography';
+import Slide from '@mui/material/Slide';
+import Typography from '@mui/material/Typography';
 // import {version} from '../../package.json';
 
 import {historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Util';

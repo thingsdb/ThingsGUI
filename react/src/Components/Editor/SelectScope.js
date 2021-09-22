@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router-dom';
 import {withVlow} from 'vlow';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import NativeSelect from '@mui/material/NativeSelect';
 import PropTypes from 'prop-types';
 import React from 'react';
 

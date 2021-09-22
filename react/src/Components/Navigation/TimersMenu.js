@@ -1,8 +1,8 @@
-import { makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {withVlow} from 'vlow';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import Button from '@material-ui/core/Button';
-import TimerIcon from '@material-ui/icons/Timer';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import Button from '@mui/material/Button';
+import TimerIcon from '@mui/icons-material/Timer';
 import React from 'react';
 
 import {AddTimerDialog} from '../ProceduresAndTimers';

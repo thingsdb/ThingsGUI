@@ -1,9 +1,9 @@
 import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
-import CodeIcon from '@material-ui/icons/Code';
-import Fab from '@material-ui/core/Fab';
-import Grid from '@material-ui/core/Grid';
+import CodeIcon from '@mui/icons-material/Code';
+import Fab from '@mui/material/Fab';
+import Grid from '@mui/material/Grid';
 
 import {EDITOR_ROUTE} from '../../../../Constants/Routes';
 import {historyNavigate} from '../../../Util';

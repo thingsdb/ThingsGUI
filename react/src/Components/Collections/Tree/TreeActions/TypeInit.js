@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import {EditActions, useEdit} from '../../CollectionsUtils';
 import {SET, THING} from '../../../../Constants/ThingTypes';

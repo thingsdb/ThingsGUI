@@ -1,7 +1,7 @@
 import {HashRouter as Router} from 'react-router-dom';
-import {MuiThemeProvider, createTheme} from '@material-ui/core/styles';
+import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
 import {withVlow} from 'vlow';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
 import React from 'react';
 
 import {ApplicationActions, ApplicationStore} from '../../Stores';
@@ -50,19 +50,21 @@ const theme = createTheme({
             secondary: '#aaa'
         }
     },
-    overrides: {
+    components: {
         MuiCssBaseline: {
-            '@global': {
-                '*::-webkit-scrollbar': {
-                    width: '0.7em',
-                    height: '0.6em'
-                },
-                '*::-webkit-scrollbar-track': {
-                    '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
-                },
-                '*::-webkit-scrollbar-thumb': {
-                    backgroundColor: 'rgba(85, 161, 255, 0.51)',
-                    outline: '1px solid slategrey'
+            styleOverrides: {
+                '@global': {
+                    '*::-webkit-scrollbar': {
+                        width: '0.7em',
+                        height: '0.6em'
+                    },
+                    '*::-webkit-scrollbar-track': {
+                        '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+                    },
+                    '*::-webkit-scrollbar-thumb': {
+                        backgroundColor: 'rgba(85, 161, 255, 0.51)',
+                        outline: '1px solid slategrey'
+                    }
                 }
             }
         }
@@ -86,17 +88,19 @@ const Root = ({authOnly, loaded, connected, seekConnection, useCookies}) => {
     }, []);
 
     return(
-        <MuiThemeProvider theme={theme}>
-            <CssBaseline />
-            <InitStores />
-            <Router>
-                {loaded ? (
-                    connected ? <App />
-                        : authOnly ? <Auth /> : <Login />
-                ) : <AppLoader connect={seekConnection} />}
-            </Router>
-            {useCookies && <CookieBanner />}
-        </MuiThemeProvider>
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <InitStores />
+                <Router>
+                    {loaded ? (
+                        connected ? <App />
+                            : authOnly ? <Auth /> : <Login />
+                    ) : <AppLoader connect={seekConnection} />}
+                </Router>
+                {useCookies && <CookieBanner />}
+            </ThemeProvider>
+        </StyledEngineProvider>
     );
 };
 

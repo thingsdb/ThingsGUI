@@ -1,10 +1,10 @@
-import { amber } from '@material-ui/core/colors';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import { amber } from '@mui/material/colors';
+import withStyles from '@mui/styles/withStyles';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
 
 
 const WarnSwitch = withStyles({

@@ -1,9 +1,9 @@
 import React from 'react';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import {withVlow} from 'vlow';
-import { makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
 import { ErrorMsg, SimpleModal } from '../../Util';

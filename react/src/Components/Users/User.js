@@ -1,6 +1,6 @@
 import {useLocation} from 'react-router-dom';
 import {withVlow} from 'vlow';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import {UserAccess} from './Config';

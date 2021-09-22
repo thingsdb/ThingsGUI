@@ -1,11 +1,11 @@
 /* eslint-disable react/no-multi-comp */
-import {makeStyles} from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import {withVlow} from 'vlow';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import {Buttons} from '../Utils';
 import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';

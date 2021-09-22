@@ -1,10 +1,10 @@
-import { makeStyles} from '@material-ui/core/styles';
-import CheckIcon from '@material-ui/icons/Check';
-import Grid from '@material-ui/core/Grid';
+import makeStyles from '@mui/styles/makeStyles';
+import CheckIcon from '@mui/icons-material/Check';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RunIcon from '@material-ui/icons/DirectionsRun';
-import ViewIcon from '@material-ui/icons/Visibility';
+import RunIcon from '@mui/icons-material/DirectionsRun';
+import ViewIcon from '@mui/icons-material/Visibility';
 
 import {AddDialog, AddLink, EditDialog, Relation, ViewDialog} from '.';
 import {ChipsCard, DownloadBlob} from '../../../Util';

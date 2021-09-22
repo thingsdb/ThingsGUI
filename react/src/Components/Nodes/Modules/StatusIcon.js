@@ -1,9 +1,9 @@
-import {makeStyles} from '@material-ui/core';
-import FailedIcon from '@material-ui/icons/Clear';
+import makeStyles from '@mui/styles/makeStyles';
+import FailedIcon from '@mui/icons-material/Clear';
 import PropTypes from 'prop-types';
 import React from 'react';
-import SuccessIcon from '@material-ui/icons/Check';
-import Tooltip from '@material-ui/core/Tooltip';
+import SuccessIcon from '@mui/icons-material/Check';
+import Tooltip from '@mui/material/Tooltip';
 
 
 const useStyles = makeStyles(theme => ({

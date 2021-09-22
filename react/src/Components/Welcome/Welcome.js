@@ -1,10 +1,10 @@
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {withVlow} from 'vlow';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import moment from 'moment';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import {getGreetingTime, getSorting, stableSort, TitlePage3} from '../Util';
 import {ProcedureActions, ProcedureStore, ThingsdbActions, ThingsdbStore, TimerActions, TimerStore} from '../../Stores';

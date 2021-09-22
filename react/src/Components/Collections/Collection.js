@@ -1,7 +1,7 @@
-import { makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {useLocation} from 'react-router-dom';
 import {withVlow} from 'vlow';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import {ThingsdbActions, ThingsdbStore} from '../../Stores';

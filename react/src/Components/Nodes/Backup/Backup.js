@@ -1,14 +1,14 @@
-import {makeStyles} from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import {withVlow} from 'vlow';
-import FailedIcon from '@material-ui/icons/Clear';
-import Grid from '@material-ui/core/Grid';
+import FailedIcon from '@mui/icons-material/Clear';
+import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import ScheduleIcon from '@material-ui/icons/Schedule';
-import SuccessIcon from '@material-ui/icons/Check';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import SuccessIcon from '@mui/icons-material/Check';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
 import { Buttons } from '../Utils';
 import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';

@@ -1,16 +1,16 @@
-import { amber } from '@material-ui/core/colors';
-import { makeStyles} from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
+import { amber } from '@mui/material/colors';
+import makeStyles from '@mui/styles/makeStyles';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import {nextRunFn, SimpleModal} from '../../Util';
 import {ViewTimerDialogTAG} from '../../../Constants/Tags';

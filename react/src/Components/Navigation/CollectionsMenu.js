@@ -1,5 +1,5 @@
 import React from 'react';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import {withVlow} from 'vlow';
 
 import {Add} from '../Collections/Config';

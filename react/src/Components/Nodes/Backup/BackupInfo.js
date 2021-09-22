@@ -1,5 +1,5 @@
-import Button from '@material-ui/core/Button';
-import MoreIcon from '@material-ui/icons/MoreHoriz';
+import Button from '@mui/material/Button';
+import MoreIcon from '@mui/icons-material/MoreHoriz';
 import PropTypes from 'prop-types';
 import React from 'react';
 

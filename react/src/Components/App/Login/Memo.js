@@ -1,9 +1,9 @@
-import Button from '@material-ui/core/Button';
-import MessageIcon from '@material-ui/icons/Message';
+import Button from '@mui/material/Button';
+import MessageIcon from '@mui/icons-material/Message';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 
 import { SimpleModal } from '../../Util';
 import {ApplicationActions} from '../../../Stores';

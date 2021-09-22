@@ -1,9 +1,9 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 /* eslint-disable react-hooks/exhaustive-deps */
-import Link from '@material-ui/core/Link';
+import Link from '@mui/material/Link';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import {EditActions, useEdit} from '../Context';
 

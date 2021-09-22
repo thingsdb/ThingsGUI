@@ -1,15 +1,15 @@
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/AddCircle';
-import Chip from '@material-ui/core/Chip';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import makeStyles from '@mui/styles/makeStyles';
+import AddIcon from '@mui/icons-material/AddCircle';
+import Chip from '@mui/material/Chip';
+import Collapse from '@mui/material/Collapse';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
-import RemoveIcon from '@material-ui/icons/RemoveCircle';
+import RemoveIcon from '@mui/icons-material/RemoveCircle';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 const useStyles = makeStyles(theme => ({
     chip: {

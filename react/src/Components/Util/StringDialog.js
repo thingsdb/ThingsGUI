@@ -1,10 +1,10 @@
-import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import OpenIcon from '@material-ui/icons/OpenInNew';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import OpenIcon from '@mui/icons-material/OpenInNew';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import {Copy, DownloadTextFile, SimpleModal} from '.';
 

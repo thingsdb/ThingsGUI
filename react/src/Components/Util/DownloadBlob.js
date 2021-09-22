@@ -1,8 +1,10 @@
-import {alpha, makeStyles} from '@material-ui/core/styles';
-import DownloadIcon from '@material-ui/icons/SaveAlt';
-import Button from '@material-ui/core/Button';
+import { alpha } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import DownloadIcon from '@mui/icons-material/SaveAlt';
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
+
 
 import {CollectionActions} from '../../Stores/CollectionStore';
 

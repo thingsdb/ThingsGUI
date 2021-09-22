@@ -1,9 +1,9 @@
-import Button from '@material-ui/core/Button';
-import ScheduleIcon from '@material-ui/icons/Schedule';
+import Button from '@mui/material/Button';
+import ScheduleIcon from '@mui/icons-material/Schedule';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
-import { withStyles} from '@material-ui/core/styles';
+import Tooltip from '@mui/material/Tooltip';
+import withStyles from '@mui/styles/withStyles';
 
 const styles = theme => ({
     green: {

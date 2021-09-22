@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 
 const TimePicker = ({onChange}) => {
     const [date, setDate] = React.useState(new Date().toISOString().slice(0, 10));

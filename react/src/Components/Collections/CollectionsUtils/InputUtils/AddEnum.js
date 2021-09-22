@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import {EditActions, useEdit} from '../Context';
 import {DownloadBlob} from '../../../Util';

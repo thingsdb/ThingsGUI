@@ -1,6 +1,6 @@
-import {makeStyles} from '@material-ui/core/styles';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
+import makeStyles from '@mui/styles/makeStyles';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 import PropTypes from 'prop-types';
 import React from 'react';
 

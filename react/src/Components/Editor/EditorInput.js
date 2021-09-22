@@ -1,8 +1,8 @@
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router-dom';
 import {withVlow} from 'vlow';
-import Button from '@material-ui/core/Button';
-import CardActions from '@material-ui/core/CardActions';
+import Button from '@mui/material/Button';
+import CardActions from '@mui/material/CardActions';
 import PropTypes from 'prop-types';
 import React from 'react';
 

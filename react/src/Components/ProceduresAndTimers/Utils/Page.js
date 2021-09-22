@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import {TitlePage} from '../../Util';

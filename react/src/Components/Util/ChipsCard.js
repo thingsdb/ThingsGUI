@@ -1,15 +1,16 @@
-import { alpha, makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import InputBase from '@material-ui/core/InputBase';
+import { alpha } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import InputBase from '@mui/material/InputBase';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RemoveIcon from '@material-ui/icons/Delete';
-import SearchIcon from '@material-ui/icons/Search';
-import Switch from '@material-ui/core/Switch';
+import RemoveIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
+import Switch from '@mui/material/Switch';
 
 import {ChipsCardTAG} from '../../Constants/Tags';
 import {ErrorMsg, HarmonicCardContent, orderByName, SimpleModal, CardMultiButton} from '.';

@@ -1,5 +1,5 @@
 import React from 'react';
-import PersonIcon from '@material-ui/icons/Person';
+import PersonIcon from '@mui/icons-material/Person';
 import {withVlow} from 'vlow';
 
 import {Add} from '../Users/Config';
