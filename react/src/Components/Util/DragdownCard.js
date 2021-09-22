@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(() => ({
     cardAction: {
-        // display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'center',
         padding: 0

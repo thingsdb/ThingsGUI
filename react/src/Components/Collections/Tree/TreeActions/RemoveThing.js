@@ -63,7 +63,7 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
                     value={query}
                     fullWidth
                     multiline
-                    rowsMax={4}
+                    maxRows={4}
                     InputProps={{
                         readOnly: true,
                         disableUnderline: true,

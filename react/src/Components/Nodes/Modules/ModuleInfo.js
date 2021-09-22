@@ -200,8 +200,8 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                             spellCheck={false}
                                             onChange={handleChange(h.ky)}
                                             multiline
-                                            rows="1"
-                                            rowsMax="10"
+                                            minRows="1"
+                                            maxRows="10"
                                             fullWidth
                                             helperText={
                                                 <Link target="_blank" href={h.helperText}>
@@ -210,7 +210,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                             }
                                         />
                                     </Grid>
-                                    <Grid container spacing={2} item xs={2} justify="flex-start" alignContent="center">
+                                    <Grid container spacing={2} item xs={2} justifyContent="flex-start" alignContent="center">
                                         <ButtonBase onClick={handleSave(h)}>
                                             <SaveIcon color="primary" />
                                         </ButtonBase>

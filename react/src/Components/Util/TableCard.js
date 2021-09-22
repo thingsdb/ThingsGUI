@@ -1,4 +1,4 @@
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { alpha, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -25,9 +25,9 @@ const useStyles = makeStyles(theme => ({
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
+        backgroundColor: alpha(theme.palette.common.white, 0.15),
         '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
+            backgroundColor: alpha(theme.palette.common.white, 0.25),
         },
         marginLeft: 0,
         [theme.breakpoints.up('sm')]: {
@@ -149,7 +149,7 @@ const TableCard = ({buttons, header, itemKey, items, moreButtons, onAdd, onDelet
                             />
                         </Grid>
                         {searchList && (searchList.length > maxAmount) &&
-                            <Grid container justify="center" alignItems="center" item xs={12}>
+                            <Grid container justifyContent="center" alignItems="center" item xs={12}>
                                 <Grid item>
                                     <Button color="primary" onClick={handleClickLoadMore}>
                                         {'Load more'}

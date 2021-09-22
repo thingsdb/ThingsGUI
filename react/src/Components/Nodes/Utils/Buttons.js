@@ -17,7 +17,7 @@ const Buttons = ({extraButtons, link, onRefresh}) => (
                 </Grid>
             ))}
         </Grid>
-        <Grid container item xs={6} justify="flex-end" spacing={1}>
+        <Grid container item xs={6} justifyContent="flex-end" spacing={1}>
             <Grid item>
                 <Tooltip disableFocusListener disableTouchListener title="Go to ThingsDocs">
                     <Button color="primary" target="_blank" href={link}>

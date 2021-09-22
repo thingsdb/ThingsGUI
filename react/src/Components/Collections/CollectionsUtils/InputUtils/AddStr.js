@@ -29,7 +29,7 @@ const AddStr = ({identifier, init, ...props}) => {
             spellCheck={false}
             onChange={handleOnChange}
             multiline
-            rowsMax={10}
+            maxRows={10}
             {...props}
         />
     );

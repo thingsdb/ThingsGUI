@@ -41,12 +41,12 @@ const AddRoom = ({identifier, init}) => {
 
     return(
         <Grid className={classes.container} container item xs={12} spacing={2}>
-            <Grid item xs={2} container justify="center">
+            <Grid item xs={2} container justifyContent="center">
                 <Typography variant="h3" color="primary">
                     {'room('}
                 </Typography>
             </Grid>
-            <Grid item xs={4} container justify="center">
+            <Grid item xs={4} container justifyContent="center">
                 <TextField
                     name="roomId"
                     label="Room ID"
@@ -59,7 +59,7 @@ const AddRoom = ({identifier, init}) => {
                     helperText="Enter room ID or leave empty the create a new room"
                 />
             </Grid>
-            <Grid item xs={1} container justify="center">
+            <Grid item xs={1} container justifyContent="center">
                 <Typography variant="h3" color="primary">
                     {')'}
                 </Typography>

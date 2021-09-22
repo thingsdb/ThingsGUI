@@ -170,7 +170,7 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
                 {piecharts.map((p,i)=>(
                     <Grid key={i} item sm={12} md={4}>
                         <Card className={classes.card}>
-                            <Grid container justify="center">
+                            <Grid container justifyContent="center">
                                 {p.data&&p.data.length ? (
                                     <PieChart data={p.data} radius={radius} stroke="#2E3336" showPercent title={p.title} />
                                 ) : (
@@ -187,7 +187,7 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
                 {tables.map((p,i)=>(
                     <Grid key={i} item sm={12} md={4}>
                         <Card className={classes.card}>
-                            <Grid container justify="center">
+                            <Grid container justifyContent="center">
                                 <StickyHeadTable columns={p.columns} rows={p.rows} size="small" />
                             </Grid>
                         </Card>

@@ -76,7 +76,7 @@ const StringDialog = ({name, text}) => {
                     }}
                     inputRef={reference}
                     multiline
-                    rowsMax="40"
+                    maxRows="40"
                     fullWidth
                 />
             </Grid>

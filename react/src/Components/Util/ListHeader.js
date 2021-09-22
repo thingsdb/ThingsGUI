@@ -54,7 +54,7 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
 
     return(
         <Grid className={classes.top} container item xs={12}>
-            <Grid item xs={7} container justify="flex-start" alignItems="center">
+            <Grid item xs={7} container justifyContent="flex-start" alignItems="center">
                 {name&&(
                     <Typography variant="h5" color="primary" >
                         {`${name}`}
@@ -67,12 +67,12 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                     {items.map((listitem, index) => <Chip key={index} id={listitem} className={classes.chip} label={listitem} color="primary" onDelete={onDelete(index, listitem)} />)}
                 </Grid>
             </Grid>
-            <Grid item xs={open?12:1} container justify="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>
+            <Grid item xs={open?12:1} container justifyContent="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>
                 <Collapse className={classes.fullWidth} in={open} timeout="auto" unmountOnExit={unmountOnExit}>
                     {children}
                 </Collapse>
             </Grid>
-            <Grid item xs={4} container justify="flex-start" alignItems="center">
+            <Grid item xs={4} container justifyContent="flex-start" alignItems="center">
                 <Typography variant="h5" className={classes.sidepadding} color="primary">
                     {groupSigning[groupSign][1]}
                 </Typography>

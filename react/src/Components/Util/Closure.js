@@ -91,7 +91,7 @@ const Closure = ({input, onChange}) => {
                 </Typography>
                 <VariablesArray onChange={handleVarArray} input={variables} />
             </Grid>
-            <Grid item xs={12} container justify="center">
+            <Grid item xs={12} container justifyContent="center">
                 <TextField
                     className={classes.someMargin}
                     name="body"
@@ -102,8 +102,8 @@ const Closure = ({input, onChange}) => {
                     onChange={handleBody}
                     fullWidth
                     multiline
-                    rows="4"
-                    rowsMax="10"
+                    minRows="4"
+                    maxRows="10"
                     variant="outlined"
                 />
             </Grid>

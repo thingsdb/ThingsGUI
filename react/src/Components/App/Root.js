@@ -1,5 +1,5 @@
 import {HashRouter as Router} from 'react-router-dom';
-import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
+import {MuiThemeProvider, createTheme} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import React from 'react';
@@ -13,7 +13,7 @@ import CookieBanner from '../CookieBanner';
 import InitStores from './InitStores';
 import Login from './Login';
 
-const theme = createMuiTheme({
+const theme = createTheme({
     // in case we want to overwrite the default theme
     palette: {
         type: 'dark',

@@ -108,7 +108,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                                         value={queryString}
                                         fullWidth
                                         multiline
-                                        rowsMax="10"
+                                        maxRows="10"
                                         InputProps={{
                                             readOnly: true,
                                             disableUnderline: true,
@@ -133,7 +133,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                                 <Closure input={closure} onChange={handleClosure} />
                             </ListItem>
                             <ListItem>
-                                <Grid container item xs={11} justify="flex-end">
+                                <Grid container item xs={11} justifyContent="flex-end">
                                     <Box fontSize={10} fontStyle="italic" m={1}>
                                         {`Created on: ${moment(procedure.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
                                     </Box>

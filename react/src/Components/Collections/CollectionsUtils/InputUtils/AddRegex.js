@@ -34,7 +34,7 @@ const AddRegex = ({identifier, init}) => {
     return(
         <Grid className={classes.container} container spacing={2}>
             <Grid container item xs={12}>
-                <Grid item xs={1} container justify="flex-start">
+                <Grid item xs={1} container justifyContent="flex-start">
                     <Typography variant="h3" color="primary">
                         {'/'}
                     </Typography>
@@ -48,12 +48,12 @@ const AddRegex = ({identifier, init}) => {
                         spellCheck={false}
                         onChange={handleOnChange}
                         fullWidth
-                        rowsMax={10}
+                        maxRows={10}
                         multiline
                         variant="outlined"
                     />
                 </Grid>
-                <Grid item xs={1} container justify="flex-end">
+                <Grid item xs={1} container justifyContent="flex-end">
                     <Typography variant="h3" color="primary">
                         {'/'}
                     </Typography>

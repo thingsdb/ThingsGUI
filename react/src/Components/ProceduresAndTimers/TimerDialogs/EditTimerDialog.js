@@ -107,7 +107,7 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                                         value={queryString}
                                         fullWidth
                                         multiline
-                                        rowsMax="10"
+                                        maxRows="10"
                                         InputProps={{
                                             readOnly: true,
                                             disableUnderline: true,
