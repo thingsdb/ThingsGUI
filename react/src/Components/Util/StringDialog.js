@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
 
 const StringDialog = ({name, text}) => {
     const classes = useStyles();
-    const reference = React.useRef(null);
     const [open, setOpen] = React.useState(false);
 
     const handleOpen= () => {
@@ -50,7 +49,7 @@ const StringDialog = ({name, text}) => {
             maxWidth="md"
             actionButtons={
                 <React.Fragment>
-                    <Copy reference={reference} />
+                    <Copy text={text} />
                     <DownloadTextFile name={name} text={text} />
                 </React.Fragment>
             }
@@ -74,7 +73,6 @@ const StringDialog = ({name, text}) => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    inputRef={reference}
                     multiline
                     maxRows="40"
                     fullWidth

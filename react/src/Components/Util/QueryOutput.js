@@ -1,12 +1,15 @@
-import Paper from '@material-ui/core/Paper';
-import React from 'react';
-import PropTypes from 'prop-types';
+import { makeStyles} from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
+import Paper from '@material-ui/core/Paper';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import { makeStyles} from '@material-ui/core/styles';
 
 import {ThingsTree} from '.';
+import Copy from './Copy';
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -55,9 +58,18 @@ const QueryOutput = ({output}) => {
                 </List>
             }
             {tabIndex === 1 &&
-                <pre>
-                    {jsonOutput}
-                </pre>
+                <Grid container>
+                    <Grid container item xs={12} justifyContent="flex-end">
+                        <Copy text={jsonOutput || ''} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box overflow="auto">
+                            <pre>
+                                {jsonOutput}
+                            </pre>
+                        </Box>
+                    </Grid>
+                </Grid>
             }
         </Paper>
     );

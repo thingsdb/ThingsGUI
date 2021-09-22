@@ -1,7 +1,5 @@
 import { amber } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Table from '@material-ui/core/Table';
@@ -9,16 +7,13 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 
 import Add from './Add';
 import RemoveExpired from './RemoveExpired';
 import Remove from './Remove';
-import RefWrap from './RefWrap';
-import {ErrorMsg, HarmonicCard} from '../../Util';
+import {Copy, ErrorMsg, HarmonicCard} from '../../Util';
 import {TokensTAG} from '../../../Constants/Tags';
 
 const useStyles = makeStyles(theme => ({
@@ -29,8 +24,8 @@ const useStyles = makeStyles(theme => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
     },
-    textfield: {
-        // marginLeft: theme.spacing(1),
+    key: {
+        marginLeft: 0,
         marginRight: theme.spacing(1),
         width: 175,
     },
@@ -61,12 +56,6 @@ const Tokens = ({user}) => {
         label: 'Status',
     }];
 
-    const handleRef = (r) => () => {
-        r.current.focus();
-        r.current.select();
-        document.execCommand('copy');
-    };
-
     return (
         <HarmonicCard
             title="TOKENS"
@@ -92,43 +81,10 @@ const Tokens = ({user}) => {
                                     {header.map((h) => (
                                         <TableCell key={h.ky} align={'left'}>
                                             <Typography component="div">
-                                                {h.ky=='key' ? (
-                                                    <RefWrap>
-                                                        {(reference) => (
-                                                            <React.Fragment>
-                                                                <TextField
-                                                                    className={classes.textfield}
-                                                                    name="queryString"
-                                                                    type="text"
-                                                                    value={row[h.ky]}
-                                                                    InputProps={{
-                                                                        readOnly: true,
-                                                                        disableUnderline: true,
-                                                                    }}
-                                                                    inputProps={{
-                                                                        style: {
-                                                                            fontFamily: 'monospace',
-                                                                            fontSize: 'body1.fontSize'
-                                                                        },
-                                                                    }}
-                                                                    InputLabelProps={{
-                                                                        shrink: true,
-                                                                    }}
-                                                                    inputRef={reference}
-                                                                />
-                                                                <Tooltip className={classes.copyButton} disableFocusListener disableTouchListener title="Copy to Clipboard">
-                                                                    <Button color="primary" onClick={handleRef(reference)}>
-                                                                        <FileCopyIcon color="primary" />
-                                                                    </Button>
-                                                                </Tooltip>
-                                                            </React.Fragment>
-                                                        )}
-                                                    </RefWrap>
-                                                ) : (
-                                                    <Box className={classes.box} fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
-                                                        {row[h.ky]}
-                                                    </Box>
-                                                )}
+                                                <Box component="span" className={h.ky === 'key' ? classes.key : classes.box} fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                                    {row[h.ky]}
+                                                </Box>
+                                                {h.ky === 'key' && <Copy text={row[h.ky]} />}
                                             </Typography>
                                         </TableCell>
                                     ))}

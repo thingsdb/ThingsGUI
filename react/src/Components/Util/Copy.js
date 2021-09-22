@@ -14,18 +14,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Copy = ({reference}) => {
+const Copy = ({text}) => {
     const classes = useStyles();
 
-    const handleRef = () => {
-        reference.current.focus();
-        reference.current.select();
-        document.execCommand('copy');
+    const setClipboard = () => {
+        navigator.clipboard.writeText(text);
     };
 
     return(
         <Tooltip className={classes.tooltip} disableFocusListener disableTouchListener title="Copy to Clipboard">
-            <Button color="primary" onClick={handleRef}>
+            <Button color="primary" onClick={setClipboard}>
                 <FileCopyIcon color="primary" />
             </Button>
         </Tooltip>
@@ -33,7 +31,7 @@ const Copy = ({reference}) => {
 };
 
 Copy.propTypes = {
-    reference: PropTypes.object.isRequired,
+    text: PropTypes.string.isRequired,
 };
 
 export default Copy;

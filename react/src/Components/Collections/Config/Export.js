@@ -47,7 +47,6 @@ const tag = ExportCollectionTAG;
 
 const Export = ({collection}) => {
     const classes = useStyles();
-    const reference = React.useRef(null);
     const name = React.useState(collection.name)[0]; //to prevent update of name to undefined, after it is deleted.
     const [show, setShow] = React.useState(false);
     const [script, setScript] = React.useState('');
@@ -76,7 +75,7 @@ const Export = ({collection}) => {
             maxWidth="md"
             actionButtons={
                 <React.Fragment>
-                    <Copy reference={reference} />
+                    <Copy text={script} />
                     <DownloadTextFile name={name} text={script} />
                 </React.Fragment>
             }
@@ -117,7 +116,6 @@ const Export = ({collection}) => {
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        inputRef={reference}
                         multiline
                         maxRows="40"
                         fullWidth
