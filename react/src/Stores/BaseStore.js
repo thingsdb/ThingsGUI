@@ -274,8 +274,14 @@ class EventStore extends BaseStore {
         });
 
         socket.on('OnNodeStatus', (data) => {
+            const msg = 'Lost connection with ThingsDB. Trying to reconnect.';
+
             if(data.Status == 'SHUTTING_DOWN') {
-                ErrorActions.setToastError('Lost connection with ThingsDB. Trying to reconnect.');
+                ErrorActions.setToastError(msg);
+            }
+
+            if(data.Status == 'READY') {
+                ErrorActions.removeToastErrorMsg(msg);
             }
         });
 
