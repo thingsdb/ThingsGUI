@@ -27,7 +27,7 @@ const TableExtra = ({badgeButton, buttons, createdAt, header, modifiedAt, onAdd,
                     </Button>
                 </Grid>
             )}
-            <Grid container item xs={onAdd?10:12} justify="flex-end">
+            <Grid container item xs={onAdd?10:12} justifyContent="flex-end">
                 <Box fontSize={10} fontStyle="italic" m={1}>
                     {createdAt&&`Created on: ${moment(createdAt*1000).format('YYYY-MM-DD HH:mm:ss')}${modifiedAt?`, last modified on: ${moment(modifiedAt*1000).format('YYYY-MM-DD HH:mm:ss')}`:''}`}
                 </Box>

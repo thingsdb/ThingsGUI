@@ -32,8 +32,8 @@ const AddCode = ({identifier, init, label, link, numLines}) => {
             onChange={handleOnChange}
             fullWidth
             multiline
-            rows={numLines}
-            rowsMax="10"
+            minRows={numLines}
+            maxRows="10"
             variant="standard"
             label={label}
             margin="dense"

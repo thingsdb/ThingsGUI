@@ -46,14 +46,14 @@ const AppLoader = ({connect}) => {
             container
             direction="row"
             spacing={3}
-            justify="center"
+            justifyContent="center"
         >
             <Grid
                 alignItems="center"
                 container
                 direction="column"
                 spacing={3}
-                justify="center"
+                justifyContent="center"
             >
                 <Grid
                     className={classes.wrapper}

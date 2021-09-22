@@ -50,7 +50,7 @@ function CookieBanner() {
 
     if (cookiesAccepted == null) {
         return (
-            <Grid container alignItems="center" justify="center" className={classes.root} spacing={2}>
+            <Grid container alignItems="center" justifyContent="center" className={classes.root} spacing={2}>
                 <Grid item>
                     <Typography>
                         {'This site uses only necessary cookies to remember the last login. Do you consent to the use of these cookies?'}

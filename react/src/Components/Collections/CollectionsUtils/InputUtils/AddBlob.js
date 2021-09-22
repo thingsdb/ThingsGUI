@@ -68,12 +68,12 @@ const AddBlob = ({identifier, init}) => {
                     </Collapse>
                 </Grid>
             </Grid>
-            {init&&
-                <Grid container item xs={4} spacing={1} justify="flex-end">
-                    <Grid container item xs={12} justify="flex-end">
+            {init &&
+                <Grid container item xs={4} spacing={1} justifyContent="flex-end">
+                    <Grid container item xs={12} justifyContent="flex-end">
                         <DownloadBlob val={init} isImg />
                     </Grid>
-                    <Grid container item xs={12} justify="flex-end">
+                    <Grid container item xs={12} justifyContent="flex-end">
                         <Typography variant="caption">
                             {'Download blob that is currently stored.'}
                         </Typography>

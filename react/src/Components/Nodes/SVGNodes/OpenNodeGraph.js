@@ -82,7 +82,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             onClose={handleClickClose}
             maxWidth="md"
         >
-            <Grid className={classes.graph} container justify="center" alignItems="center">
+            <Grid className={classes.graph} container justifyContent="center" alignItems="center">
                 <Grid item>
                     {loading ? <CircularProgress />
                         : (

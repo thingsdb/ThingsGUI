@@ -119,7 +119,7 @@ const Export = ({collection}) => {
                         }}
                         inputRef={reference}
                         multiline
-                        rowsMax="40"
+                        maxRows="40"
                         fullWidth
                     />
                 </Grid>

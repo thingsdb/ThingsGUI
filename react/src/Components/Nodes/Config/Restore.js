@@ -138,7 +138,7 @@ const Restore = ({nodes}) => {
                             {'ThingsDB has been successfully restored. You need to login again. After you clicked "OK" you are redirected to the login screen.'}
                         </Typography>
                     </Grid>
-                    <Grid container justify="center" item xs={12}>
+                    <Grid container justifyContent="center" item xs={12}>
                         <Button variant="outlined" color="primary" onClick={handleClickRedirect}>
                             {'OK'}
                         </Button>

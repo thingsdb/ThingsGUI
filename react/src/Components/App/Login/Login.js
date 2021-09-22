@@ -148,7 +148,7 @@ const Login = ({cachedConnections}) => {
                 <Collapse in={showNewConn} timeout="auto" unmountOnExit>
                     <DialogActions>
                         <Grid container>
-                            <Grid item xs={6} container justify="flex-start" >
+                            <Grid item xs={6} container justifyContent="flex-start" >
                                 <Collapse in={Boolean(cachedConnections&&Object.keys(cachedConnections).length)} timeout="auto" unmountOnExit>
                                     <Grid item xs={3}>
                                         <Button onClick={handleClickBack} color="primary">
@@ -162,7 +162,7 @@ const Login = ({cachedConnections}) => {
                                     </Button>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={6} container justify="flex-end">
+                            <Grid item xs={6} container justifyContent="flex-end">
                                 <Button onClick={handleClickOk} color="primary">
                                     {'Connect'}
                                 </Button>

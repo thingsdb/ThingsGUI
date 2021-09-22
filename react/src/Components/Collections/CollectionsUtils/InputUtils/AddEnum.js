@@ -56,10 +56,10 @@ const AddEnum = ({enumName, enums, identifier, init}) => {
             </Grid>
             {isBlob&&
                 <Grid container item xs={9}>
-                    <Grid container item xs={12} justify="flex-end">
+                    <Grid container item xs={12} justifyContent="flex-end">
                         <DownloadBlob val={init} isImg />
                     </Grid>
-                    <Grid container item xs={12} justify="flex-end">
+                    <Grid container item xs={12} justifyContent="flex-end">
                         <Typography variant="caption">
                             {'Click to download the blob that is currently stored.'}
                         </Typography>

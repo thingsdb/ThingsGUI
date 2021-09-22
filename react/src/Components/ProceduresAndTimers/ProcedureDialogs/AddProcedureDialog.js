@@ -105,7 +105,7 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
                                     value={queryString}
                                     fullWidth
                                     multiline
-                                    rowsMax="10"
+                                    maxRows="10"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,

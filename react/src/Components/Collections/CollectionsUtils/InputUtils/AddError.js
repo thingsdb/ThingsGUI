@@ -54,12 +54,12 @@ const AddError = ({identifier, init}) => {
 
     return(
         <Grid className={classes.container} container item xs={12} spacing={2}>
-            <Grid item xs={2} container justify="center">
+            <Grid item xs={2} container justifyContent="center">
                 <Typography variant="h3" color="primary">
                     {'err('}
                 </Typography>
             </Grid>
-            <Grid item xs={4} container justify="center">
+            <Grid item xs={4} container justifyContent="center">
                 <TextField
                     name="errCode"
                     label="Code"
@@ -72,12 +72,12 @@ const AddError = ({identifier, init}) => {
                     helperText="between -127 and -50"
                 />
             </Grid>
-            <Grid item xs={1} container justify="center">
+            <Grid item xs={1} container justifyContent="center">
                 <Typography variant="h3" color="primary">
                     {','}
                 </Typography>
             </Grid>
-            <Grid item xs={4} container justify="center">
+            <Grid item xs={4} container justifyContent="center">
                 <TextField
                     name="errMsg"
                     label="Message"
@@ -89,7 +89,7 @@ const AddError = ({identifier, init}) => {
                     variant="outlined"
                 />
             </Grid>
-            <Grid item xs={1} container justify="center">
+            <Grid item xs={1} container justifyContent="center">
                 <Typography variant="h3" color="primary">
                     {')'}
                 </Typography>

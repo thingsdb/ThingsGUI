@@ -34,7 +34,7 @@ const ArrayLayout = ({child, onAdd, onRemove, fullWidth}) => {
     return(
         <Grid container spacing={2}>
             {renderChildren()}
-            <Grid container item spacing={1} xs={fullWidth?3:6} justify="center" alignItems="center">
+            <Grid container item spacing={1} xs={fullWidth?3:6} justifyContent="center" alignItems="center">
                 <Grid item>
                     <Fab color="primary" onClick={handleAdd} size="small">
                         <AddIcon fontSize="small" />
