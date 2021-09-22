@@ -3,6 +3,8 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';
+
 
 const CollectionInfo = ({collection}) => {
     const header = [
@@ -14,7 +16,7 @@ const CollectionInfo = ({collection}) => {
         ]},
     ];
     const rows = JSON.parse(JSON.stringify(collection)); //copy
-    rows.created_at = moment(rows.created_at*1000).format('YYYY-MM-DD HH:mm:ss');
+    rows.created_at = moment(rows.created_at*1000).format(DATE_TIME_SEC_STR);
 
     return (
         <Info header={header} content={rows} />

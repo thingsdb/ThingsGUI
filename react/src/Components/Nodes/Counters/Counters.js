@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {Buttons} from '../Utils';
+import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';
 import {Info, scaleToBinBytes} from '../../Util';
 import {NodesActions, NodesStore} from '../../../Stores';
 import {THINGS_DOC_COUNTERS} from '../../../Constants/Links';
@@ -27,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 const header = [
     {ky: 'title1', title: 'GENERAL', labels: [
-        {ky: 'started_at', label: 'Started counted at'},
+        {ky: 'started_at', label: 'Counters started at', fn: (t) => moment(t*1000).format(DATE_TIME_SEC_STR)},
     ]},
     {ky: 'title2', title: 'QUERIES', labels: [
         {ky: 'queries_success', label: 'Successful queries'},
@@ -80,7 +81,7 @@ const Counters = ({nodeId, offline, counters}) => {
             </Grid>
             <Grid container item xs={12} justifyContent="flex-end">
                 <Box fontSize={10} fontStyle="italic" m={1}>
-                    {`Last reset at: ${moment(counters.started_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                    {`Last reset at: ${moment(counters.started_at*1000).format(DATE_TIME_SEC_STR)}`}
                 </Box>
             </Grid>
             {offline ? null : (

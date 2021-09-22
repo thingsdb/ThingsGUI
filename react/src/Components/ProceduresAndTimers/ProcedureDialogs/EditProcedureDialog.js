@@ -11,8 +11,9 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {Closure, EditName, ErrorMsg, SimpleModal} from '../../Util';
+import {CollectionActions, ProcedureActions} from '../../../Stores';
+import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';
 import {EditProcedureDialogTAG} from '../../../Constants/Tags';
 
 const useStyles = makeStyles(() => ({
@@ -135,7 +136,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                             <ListItem>
                                 <Grid container item xs={11} justifyContent="flex-end">
                                     <Box fontSize={10} fontStyle="italic" m={1}>
-                                        {`Created on: ${moment(procedure.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                                        {`Created on: ${moment(procedure.created_at*1000).format(DATE_TIME_SEC_STR)}`}
                                     </Box>
                                 </Grid>
                             </ListItem>

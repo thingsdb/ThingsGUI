@@ -8,6 +8,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import {Buttons} from '../Utils';
+import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';
 import {NodesActions, NodesStore} from '../../../Stores';
 import {TableWithButtons} from '../../Util';
 import {THINGS_DOC_MODULE_INFO} from '../../../Constants/Links';
@@ -31,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const header = [
-    {ky: 'created_at', label: 'Created at', fn: (t) => moment(t*1000).format('YYYY-MM-DD HH:mm:ss')},
+    {ky: 'created_at', label: 'Created at', fn: (t) => moment(t*1000).format(DATE_TIME_SEC_STR)},
     {ky: 'name', label: 'Name'},
     {ky: 'scope', label: 'Scope', fn: (s) => s ? s : 'All scopes'},
     {ky: 'status', label: 'Status', fn: (s) => <StatusIcon status={s} />},

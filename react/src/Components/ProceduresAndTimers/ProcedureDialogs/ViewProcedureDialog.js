@@ -10,6 +10,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import {DATE_TIME_MIN_STR} from '../../../Constants/DateStrings';
 import {SimpleModal} from '../../Util';
 
 const useStyles = makeStyles(() => ({
@@ -50,7 +51,7 @@ const ViewProcedureDialog = ({button, open, onClose, procedure}) => {
                         <ListItem>
                             <ListItemText
                                 primary="Created at"
-                                secondary={moment(procedure.created_at * 1000).format('YYYY-MM-DD HH:mm')}
+                                secondary={moment(procedure.created_at * 1000).format(DATE_TIME_MIN_STR)}
                             />
                         </ListItem>
                         <ListItem>

@@ -7,6 +7,7 @@ import React from 'react';
 import moment from 'moment';
 
 import TableWithBadges from './TableWithBadges';
+import {DATE_TIME_SEC_STR} from '../../Constants/DateStrings';
 
 
 const TableExtra = ({badgeButton, buttons, createdAt, header, modifiedAt, onAdd, rows}) => (
@@ -29,7 +30,7 @@ const TableExtra = ({badgeButton, buttons, createdAt, header, modifiedAt, onAdd,
             )}
             <Grid container item xs={onAdd?10:12} justifyContent="flex-end">
                 <Box fontSize={10} fontStyle="italic" m={1}>
-                    {createdAt&&`Created on: ${moment(createdAt*1000).format('YYYY-MM-DD HH:mm:ss')}${modifiedAt?`, last modified on: ${moment(modifiedAt*1000).format('YYYY-MM-DD HH:mm:ss')}`:''}`}
+                    {createdAt&&`Created on: ${moment(createdAt*1000).format(DATE_TIME_SEC_STR)}${modifiedAt?`, last modified on: ${moment(modifiedAt*1000).format(DATE_TIME_SEC_STR)}`:''}`}
                 </Box>
             </Grid>
         </Grid>

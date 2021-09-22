@@ -11,12 +11,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import { Buttons } from '../Utils';
+import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';
 import {FixedList, TableWithButtons} from '../../Util';
 import {NodesActions, NodesStore} from '../../../Stores';
+import {THINGS_DOC_BACKUP_INFO} from '../../../Constants/Links';
 import Add from './Add';
 import BackupInfo from './BackupInfo';
 import Remove from './Remove';
-import {THINGS_DOC_BACKUP_INFO} from '../../../Constants/Links';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -75,7 +76,7 @@ const Backup = ({nodeId, offline, backups}) => {
     const rows = JSON.parse(JSON.stringify(backups)); // copy
 
     rows.forEach(b=> {
-        b.created_at = moment(b.created_at*1000).format('YYYY-MM-DD HH:mm:ss');
+        b.created_at = moment(b.created_at*1000).format(DATE_TIME_SEC_STR);
         b.next_run = b.next_run == 'pending' ? (
             <Tooltip disableFocusListener disableTouchListener title='pending'>
                 <ScheduleIcon className={classes.yellow} />

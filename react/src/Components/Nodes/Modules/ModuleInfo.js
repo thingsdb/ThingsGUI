@@ -21,6 +21,7 @@ import {ModuleInfoTAG} from '../../../Constants/Tags';
 import {NodesActions, NodesStore} from '../../../Stores';
 import {SimpleModal, ErrorMsg, LocalMsg} from '../../Util';
 import {THINGS_DOC_RENAME_MODULE, THINGS_DOC_SET_MODULE_CONFIG, THINGS_DOC_SET_MODULE_SCOPE} from '../../../Constants/Links';
+import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -42,7 +43,7 @@ const header = [
     {
         ky: 'created_at',
         label: 'Created at',
-        fnView: (t) => moment(t*1000).format('YYYY-MM-DD HH:mm:ss'),
+        fnView: (t) => moment(t*1000).format(DATE_TIME_SEC_STR),
         canEdit: false
     },
     {

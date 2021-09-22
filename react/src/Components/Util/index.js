@@ -60,6 +60,7 @@ import {ARRAY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL
     SET, STR, THING, TIMEVAL, WRAP} from '../../Constants/ThingTypes';
 import {THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE} from '../../Constants/Scopes';
 import {THINGDB_CACHE} from '../../Constants/Files';
+import {DATE_TIME_MIN_STR} from '../../Constants/DateStrings';
 
 const checkType = (t) => {
     if (t === null) {
@@ -206,7 +207,7 @@ const scaleToBinBytes = (bytes) => {
     return `${rounded === number ? '' : '~'}${rounded} ${metricLabel[i]}`;
 };
 
-const nextRunFn = (t) => (t === 'pending' ? t : moment(t).format('YYYY-MM-DD HH:mm'));
+const nextRunFn = (t) => (t === 'pending' ? t : moment(t).format(DATE_TIME_MIN_STR));
 
 const getIdFromPath = (pathname, name) => {
     const splitPath = pathname.split('/');
