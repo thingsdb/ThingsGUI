@@ -61,15 +61,15 @@ const AddError = ({identifier, init}) => {
             </Grid>
             <Grid item xs={4} container justifyContent="center">
                 <TextField
-                    name="errCode"
+                    fullWidth
+                    helperText="between -127 and -50"
                     label="Code"
+                    name="errCode"
+                    onChange={handleOnChangeCode}
+                    spellCheck={false}
                     type="text"
                     value={errCode}
-                    spellCheck={false}
-                    onChange={handleOnChangeCode}
-                    fullWidth
                     variant="outlined"
-                    helperText="between -127 and -50"
                 />
             </Grid>
             <Grid item xs={1} container justifyContent="center">
@@ -79,13 +79,13 @@ const AddError = ({identifier, init}) => {
             </Grid>
             <Grid item xs={4} container justifyContent="center">
                 <TextField
-                    name="errMsg"
+                    fullWidth
                     label="Message"
+                    name="errMsg"
+                    onChange={handleOnChangeMsg}
+                    spellCheck={false}
                     type="text"
                     value={errMsg}
-                    spellCheck={false}
-                    onChange={handleOnChangeMsg}
-                    fullWidth
                     variant="outlined"
                 />
             </Grid>

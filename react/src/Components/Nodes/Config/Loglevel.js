@@ -64,14 +64,15 @@ const Loglevel = ({node}) => {
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                margin="dense"
+                fullWidth
                 id="log_level"
                 label="Loglevel"
-                value={form.log_level}
+                margin="dense"
                 onChange={handleOnChange}
-                fullWidth
                 select
                 SelectProps={{native: true}}
+                value={form.log_level}
+                variant="standard"
             >
                 {loglevels.map(p => (
                     <option key={p} value={p}>

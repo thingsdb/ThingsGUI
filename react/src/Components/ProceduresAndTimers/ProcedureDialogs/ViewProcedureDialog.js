@@ -71,12 +71,12 @@ const ViewProcedureDialog = ({button, open, onClose, procedure}) => {
                                 primary="Definition"
                                 secondary={procedure.definition ?
                                     <TextField
-                                        name="procedure"
-                                        type="text"
-                                        variant="standard"
-                                        value={procedure.definition || '-'}
                                         fullWidth
                                         multiline
+                                        name="procedure"
+                                        type="text"
+                                        value={procedure.definition || '-'}
+                                        variant="standard"
                                         InputProps={{
                                             readOnly: true,
                                             disableUnderline: true,

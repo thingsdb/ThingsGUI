@@ -119,12 +119,12 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                                 primary="Definition"
                                 secondary={timer.definition ?
                                     <TextField
-                                        name="timer"
-                                        type="text"
-                                        variant="standard"
-                                        value={timer.definition}
                                         fullWidth
                                         multiline
+                                        name="timer"
+                                        type="text"
+                                        value={timer.definition}
+                                        variant="standard"
                                         InputProps={{
                                             readOnly: true,
                                             disableUnderline: true,

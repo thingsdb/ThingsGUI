@@ -43,11 +43,7 @@ const ErrorToastCard = ({index, thingsError}) => {
         <Slide direction="up" in timeout={{enter: 500}}>
             <Card className={classes.card}>
                 <Accordion className={classes.panel}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                    >
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <WarningIcon />
                         <Typography className={classes.title}>
                             {'Warning: '}

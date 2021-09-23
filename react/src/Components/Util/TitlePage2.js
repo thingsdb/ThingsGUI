@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
-import Hidden from '@mui/material/Hidden';
 
 const useStyles = makeStyles(theme => ({
     bottom: {
@@ -23,43 +22,39 @@ const TitlePage2 = ({preTitle, title, sideContent, content}) => {
     return (
         <Grid className={classes.bottom} direction="row" container spacing={1} alignItems="flex-start">
             <Grid container spacing={1} item lg={8} md={12}>
-                <Hidden lgUp>
-                    <Grid item xs={12}>
-                        <Card>
-                            <CardHeader
-                                action={title}
-                                className={classes.padding}
-                                title={preTitle}
-                                titleTypographyProps={{
-                                    variant: 'body2',
-                                    display: 'inline',
-                                    noWrap: true,
-                                    component: 'span',
-                                }}
-                            />
-                        </Card>
-                    </Grid>
-                </Hidden>
+                <Grid item xs={12} sx={{display: { lg: 'none', xs: 'block'}}}>
+                    <Card>
+                        <CardHeader
+                            action={title}
+                            className={classes.padding}
+                            title={preTitle}
+                            titleTypographyProps={{
+                                variant: 'body2',
+                                display: 'inline',
+                                noWrap: true,
+                                component: 'span',
+                            }}
+                        />
+                    </Card>
+                </Grid>
                 {content}
             </Grid>
             <Grid container spacing={1} item lg={4} md={12}>
-                <Hidden mdDown>
-                    <Grid item xs={12}>
-                        <Card>
-                            <CardHeader
-                                action={title}
-                                className={classes.padding}
-                                title={preTitle}
-                                titleTypographyProps={{
-                                    variant: 'body2',
-                                    display: 'inline',
-                                    noWrap: true,
-                                    component: 'span',
-                                }}
-                            />
-                        </Card>
-                    </Grid>
-                </Hidden>
+                <Grid item xs={12} sx={{display: { xs: 'none', md: 'block' }}}>
+                    <Card>
+                        <CardHeader
+                            action={title}
+                            className={classes.padding}
+                            title={preTitle}
+                            titleTypographyProps={{
+                                variant: 'body2',
+                                display: 'inline',
+                                noWrap: true,
+                                component: 'span',
+                            }}
+                        />
+                    </Card>
+                </Grid>
                 {sideContent}
             </Grid>
         </Grid>

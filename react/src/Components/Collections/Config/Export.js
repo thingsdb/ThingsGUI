@@ -103,6 +103,7 @@ const Export = ({collection}) => {
                         name="script"
                         type="script"
                         value={script}
+                        variant="standard"
                         InputProps={{
                             readOnly: true,
                             disableUnderline: true,

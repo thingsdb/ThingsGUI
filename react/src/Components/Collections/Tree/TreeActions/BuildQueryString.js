@@ -37,13 +37,14 @@ const BuildQueryString = ({child, customTypes, enums, parent}) => {
 
     return(
         <TextField
-            name="queryString"
+            fullWidth
             label="Query"
+            maxRows={4}
+            multiline
+            name="queryString"
             type="text"
             value={query}
-            fullWidth
-            multiline
-            maxRows={4}
+            variant="standard"
             InputProps={{
                 readOnly: true,
                 disableUnderline: true,

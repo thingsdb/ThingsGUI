@@ -49,25 +49,27 @@ const TimePeriodPicker = ({onChange}) => {
             <Grid item>
                 <TextField
                     autoFocus
-                    margin="dense"
+                    fullWidth
                     id="number"
                     inputProps={{min: '1'}}
+                    margin="dense"
+                    onChange={handleOnChange}
+                    spellCheck={false}
                     type="number"
                     value={state.number}
-                    spellCheck={false}
-                    onChange={handleOnChange}
-                    fullWidth
+                    variant="standard"
                 />
             </Grid>
             <Grid item>
                 <TextField
-                    margin="dense"
-                    id="unit"
-                    value={state.unit}
-                    onChange={handleOnChange}
                     fullWidth
+                    id="unit"
+                    margin="dense"
+                    onChange={handleOnChange}
                     select
                     SelectProps={{native: true}}
+                    value={state.unit}
+                    variant="standard"
                 >
                     {timeUnit.map(({label, value}) => (
                         <option key={label} value={value}>

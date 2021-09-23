@@ -194,16 +194,17 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                     <Grid item xs={8}>
                                         <TextField
                                             autoFocus
-                                            margin="dense"
+                                            fullWidth
                                             id={h.ky}
+                                            margin="dense"
+                                            maxRows="10"
+                                            minRows="1"
+                                            multiline
+                                            onChange={handleChange(h.ky)}
+                                            spellCheck={false}
                                             type="text"
                                             value={form[h.ky]}
-                                            spellCheck={false}
-                                            onChange={handleChange(h.ky)}
-                                            multiline
-                                            minRows="1"
-                                            maxRows="10"
-                                            fullWidth
+                                            variant="standard"
                                             helperText={
                                                 <Link target="_blank" href={h.helperText}>
                                                     {'ThingsDocs'}

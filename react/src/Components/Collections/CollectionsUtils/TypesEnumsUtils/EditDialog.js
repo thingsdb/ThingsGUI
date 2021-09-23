@@ -300,12 +300,13 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                         <Collapse in={showQuery} timeout="auto">
                             <ListItem>
                                 <TextField
-                                    name="queryString"
+                                    fullWidth
                                     label="Query"
+                                    multiline
+                                    name="queryString"
                                     type="text"
                                     value={queryString}
-                                    fullWidth
-                                    multiline
+                                    variant="standard"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,

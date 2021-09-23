@@ -61,15 +61,15 @@ const VariablesArray = ({input, onChange}) => {
         <div>
             {myItems.map((listitem, index) => <Chip key={index} id={listitem} className={classes.chip} label={listitem} onDelete={handleClick(index)} color="primary" />)}
             <TextField
+                helperText={'Add + hit "Enter"'}
                 name="input"
+                onChange={handleChange}
+                onKeyDown={handleKeypress}
+                spellCheck={false}
+                style={{ width: 150 }}
                 type="text"
                 value={item}
-                spellCheck={false}
-                onChange={handleChange}
                 variant="outlined"
-                style={{ width: 150 }}
-                onKeyDown={handleKeypress}
-                helperText={'Add + hit "Enter"'}
             />
         </div>
     );

@@ -6,7 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
+import Popover from '@mui/material/Popover';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
@@ -114,17 +114,20 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
                     value={text}
                     variant="standard"
                 />
-
-                <Popper
-                    anchorEl={() => textRef.current}
-                    className={classes.popper}
+                <Popover
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }}
                     onClose={handleClose}
                     open={Boolean(anchorEl) && Boolean(list.length)}
-                    placement="bottom"
-                    style={width ? { width: width } : textRef.current ? { width: textRef.current.offsetWidth } : null}
-                    transition
                 >
-                    <Paper className={classes.paper} elevation={3}>
+                    <Paper style={width ? { width: width } : textRef.current ? { width: textRef.current.offsetWidth } : null} className={classes.paper} elevation={3}>
                         <MenuList onScroll={handleScroll} className={classes.list} id="menu-list-grow">
                             {list.slice(0, end).map( (item, index) => (
                                 <MenuItem
@@ -139,7 +142,7 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
                             ))}
                         </MenuList>
                     </Paper>
-                </Popper>
+                </Popover>
             </Grid>
         </ClickAwayListener>
     );

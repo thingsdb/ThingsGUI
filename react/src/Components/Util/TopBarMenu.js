@@ -10,10 +10,6 @@ const useStyles = makeStyles(theme => ({
     color: {
         color: theme.palette.text.primary
     },
-    menu: {
-        top: 40,
-        position: 'relative',
-    },
 }));
 
 
@@ -54,7 +50,6 @@ const TopBarMenu = ({ children, menuIcon, menuTooltip}) => {
             </Tooltip>
             <Popover
                 id="menu"
-                className={classes.menu}
                 anchorEl={anchorEl}
                 anchorOrigin={{
                     vertical: 'top',

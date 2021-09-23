@@ -103,13 +103,14 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                             <Collapse in={Boolean(queryString)} timeout="auto">
                                 <ListItem>
                                     <TextField
-                                        name="queryString"
+                                        fullWidth
                                         label="Query"
+                                        maxRows="10"
+                                        multiline
+                                        name="queryString"
                                         type="text"
                                         value={queryString}
-                                        fullWidth
-                                        multiline
-                                        maxRows="10"
+                                        variant="standard"
                                         InputProps={{
                                             readOnly: true,
                                             disableUnderline: true,

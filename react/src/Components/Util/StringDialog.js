@@ -60,6 +60,7 @@ const StringDialog = ({name, text}) => {
                     name="dialog_text"
                     type="text"
                     value={text}
+                    variant="standard"
                     InputProps={{
                         readOnly: true,
                         disableUnderline: true,

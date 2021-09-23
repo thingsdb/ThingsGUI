@@ -99,15 +99,15 @@ const Restore = ({nodes}) => {
             >
                 <ErrorMsg tag={tag} />
                 <TextField
-                    id="fileName"
-                    type="text"
-                    name="fileName"
-                    label="File name"
-                    onChange={handleFileName}
-                    value={fileName}
-                    variant="standard"
                     fullWidth
                     helperText="Note: file should exist on node server"
+                    id="fileName"
+                    label="File name"
+                    name="fileName"
+                    onChange={handleFileName}
+                    type="text"
+                    value={fileName}
+                    variant="standard"
                     FormHelperTextProps={{
                         style: {
                             marginBottom: '16px',

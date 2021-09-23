@@ -109,14 +109,15 @@ const Add = ({user}) => {
                     <ListItem>
                         <TextField
                             autoFocus
-                            margin="dense"
+                            fullWidth
                             id="description"
                             label="Description"
+                            margin="dense"
+                            onChange={handleOnChange}
+                            spellCheck={false}
                             type="text"
                             value={form.description}
-                            spellCheck={false}
-                            onChange={handleOnChange}
-                            fullWidth
+                            variant="standard"
                         />
                     </ListItem>
                 </Collapse>

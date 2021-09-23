@@ -99,13 +99,14 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
                             </ListItem>
                             <ListItem>
                                 <TextField
-                                    name="queryString"
+                                    fullWidth
                                     label="Query"
+                                    maxRows="10"
+                                    multiline
+                                    name="queryString"
                                     type="text"
                                     value={queryString}
-                                    fullWidth
-                                    multiline
-                                    maxRows="10"
+                                    variant="standard"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,
@@ -124,13 +125,14 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
                         <ListItem>
                             <TextField
                                 autoFocus
-                                name="procedureName"
+                                fullWidth
                                 label="Name"
+                                name="procedureName"
+                                onChange={handleChange}
+                                spellCheck={false}
                                 type="text"
                                 value={procedureName}
-                                spellCheck={false}
-                                onChange={handleChange}
-                                fullWidth
+                                variant="standard"
                             />
                         </ListItem>
                         <ListItem>

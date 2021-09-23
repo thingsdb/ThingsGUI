@@ -140,12 +140,13 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                         <Collapse in={Boolean(queryString)} timeout="auto">
                             <ListItem>
                                 <TextField
-                                    name="queryString"
+                                    fullWidth
                                     label="Query"
+                                    multiline
+                                    name="queryString"
                                     type="text"
                                     value={queryString}
-                                    fullWidth
-                                    multiline
+                                    variant="standard"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,
@@ -163,13 +164,14 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                         </Collapse>
                         <ListItem>
                             <TextField
-                                name="name"
+                                fullWidth
                                 label="Name"
+                                name="name"
+                                onChange={handleChange}
+                                spellCheck={false}
                                 type="text"
                                 value={name}
-                                spellCheck={false}
-                                onChange={handleChange}
-                                fullWidth
+                                variant="standard"
                             />
                         </ListItem>
                         <ListItem>

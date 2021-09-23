@@ -25,18 +25,18 @@ const AddCode = ({identifier, init, label, link, numLines}) => {
 
     return(
         <TextField
-            name="value"
-            type="text"
-            value={v}
-            spellCheck={false}
-            onChange={handleOnChange}
             fullWidth
-            multiline
-            minRows={numLines}
-            maxRows="10"
-            variant="standard"
             label={label}
             margin="dense"
+            maxRows="10"
+            minRows={numLines}
+            multiline
+            name="value"
+            onChange={handleOnChange}
+            spellCheck={false}
+            type="text"
+            value={v}
+            variant="standard"
             helperText={
                 <Link target="_blank" href={link}>
                     {'ThingsDocs'}

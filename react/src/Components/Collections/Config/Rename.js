@@ -82,16 +82,17 @@ const Rename = ({collection, collections}) => {
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                margin="dense"
+                error={Boolean(errors.name)}
+                fullWidth
+                helperText={errors.name}
                 id="name"
                 label="Name"
+                margin="dense"
+                onChange={handleOnChange}
+                spellCheck={false}
                 type="text"
                 value={form.name}
-                spellCheck={false}
-                onChange={handleOnChange}
-                fullWidth
-                error={Boolean(errors.name)}
-                helperText={errors.name}
+                variant="standard"
             />
         </React.Fragment>
     );

@@ -29,11 +29,12 @@ const TimePicker = ({onChange}) => {
         <Grid container item xs={12} spacing={1}>
             <Grid item>
                 <TextField
+                    defaultValue={date}
                     id="data"
                     label="Date"
-                    type="date"
-                    defaultValue={date}
                     onChange={handleChangeDate}
+                    type="date"
+                    variant="standard"
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -41,11 +42,12 @@ const TimePicker = ({onChange}) => {
             </Grid>
             <Grid item>
                 <TextField
+                    defaultValue={time}
                     id="time"
                     label="Time (UTC)"
-                    type="time"
-                    defaultValue={time}
                     onChange={handleChangeTime}
+                    type="time"
+                    variant="standard"
                     InputLabelProps={{
                         shrink: true,
                     }}

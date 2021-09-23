@@ -98,24 +98,26 @@ const Auth = ({authMethod}) => {
                 </Collapse>
                 <Collapse in={loginWith === 'pass'} timeout="auto" unmountOnExit>
                     <TextField
-                        margin="dense"
+                        fullWidth
                         id="user"
                         label="User"
+                        margin="dense"
+                        onChange={handleChangeForm}
+                        spellCheck={false}
                         type="text"
                         value={form.user}
-                        spellCheck={false}
-                        onChange={handleChangeForm}
-                        fullWidth
+                        variant="standard"
                     />
                     <TextField
-                        margin="dense"
+                        fullWidth
                         id="pass"
                         label="Password"
+                        margin="dense"
+                        onChange={handleChangeForm}
+                        spellCheck={false}
                         type={show?'text':'password'}
                         value={form.pass}
-                        spellCheck={false}
-                        onChange={handleChangeForm}
-                        fullWidth
+                        variant="standard"
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -129,14 +131,15 @@ const Auth = ({authMethod}) => {
                 </Collapse>
                 <Collapse in={loginWith === 'token'} timeout="auto" unmountOnExit>
                     <TextField
-                        margin="dense"
+                        fullWidth
                         id="token"
                         label="Token"
+                        margin="dense"
+                        onChange={handleChangeForm}
+                        spellCheck={false}
                         type={show?'text':'password'}
                         value={form.token}
-                        spellCheck={false}
-                        onChange={handleChangeForm}
-                        fullWidth
+                        variant="standard"
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">

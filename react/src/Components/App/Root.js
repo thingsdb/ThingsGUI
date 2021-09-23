@@ -55,19 +55,22 @@ const theme = createTheme({
             styleOverrides: {
                 html: {
                     '*::-webkit-scrollbar': {
-                        'width': '0.7em',
-                        'height': '0.6em'
+                        width: '0.7em',
+                        height: '0.6em'
                     },
                     '*::-webkit-scrollbar-track': {
-                        '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+                        webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
                     },
                     '*::-webkit-scrollbar-thumb': {
-                        'background-color': 'rgba(85, 161, 255, 0.51)',
-                        'outline': '1px solid rgba(85, 161, 255, 0.51)'
+                        backgroundColor: 'rgba(85, 161, 255, 0.51)',
+                        outline: '1px solid rgba(85, 161, 255, 0.51)'
                     }
                 }
             }
-        }
+        },
+        MuiPaper: {
+            styleOverrides: { root: { backgroundImage: 'unset' } },
+        },
     }
 });
 

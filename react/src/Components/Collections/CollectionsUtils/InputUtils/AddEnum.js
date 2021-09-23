@@ -37,15 +37,15 @@ const AddEnum = ({enumName, enums, identifier, init}) => {
         <Grid container>
             <Grid item xs={3}>
                 <TextField
-                    type="text"
-                    name="enum"
+                    fullWidth
                     label="Enum"
+                    name="enum"
                     onChange={handleChangeEnum}
-                    value={enumMem}
-                    variant="standard"
                     select
                     SelectProps={{native: true}}
-                    fullWidth
+                    type="text"
+                    value={enumMem}
+                    variant="standard"
                 >
                     { _enum.members.map((f, i) => (
                         <option key={i} value={f[0]}>

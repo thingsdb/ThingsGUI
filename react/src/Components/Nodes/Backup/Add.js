@@ -113,15 +113,16 @@ const Add = ({nodeId}) => {
                 <ListItem dense disableGutters>
                     <TextField
                         autoFocus
-                        margin="dense"
+                        fullWidth
                         id="file"
                         label="File"
-                        type="text"
-                        value={form.file}
-                        spellCheck={false}
+                        margin="dense"
                         onChange={handleOnChange}
                         placeholder="/tmp/example.tar.gz"
-                        fullWidth
+                        spellCheck={false}
+                        type="text"
+                        value={form.file}
+                        variant="standard"
                     />
                 </ListItem>
                 <ListItem dense disableGutters>
@@ -137,14 +138,15 @@ const Add = ({nodeId}) => {
                                 secondary={
                                     <TextField
                                         autoFocus
-                                        margin="dense"
+                                        fullWidth
                                         id="maxFiles"
                                         inputProps={{min: '1'}}
+                                        margin="dense"
+                                        onChange={handleOnChange}
+                                        spellCheck={false}
                                         type="number"
                                         value={form.maxFiles}
-                                        spellCheck={false}
-                                        onChange={handleOnChange}
-                                        fullWidth
+                                        variant="standard"
                                     />
                                 }
                                 secondaryTypographyProps={{

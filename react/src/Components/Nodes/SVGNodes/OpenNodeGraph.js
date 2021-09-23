@@ -86,9 +86,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
                 <Grid item>
                     {loading ? <CircularProgress />
                         : (
-                            <Fade>
-                                <NodeGraph data={nodes} streamInfo={streamInfo} />
-                            </Fade>
+                            <NodeGraph data={nodes} streamInfo={streamInfo} />
                         )}
                 </Grid>
             </Grid>

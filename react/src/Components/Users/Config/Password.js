@@ -122,16 +122,17 @@ const Password = ({user}) => {
             {form.set ? (
                 <TextField
                     autoFocus
-                    margin="dense"
+                    error={Boolean(errors.password)}
+                    fullWidth
+                    helperText={errors.password}
                     id="password"
                     label="Password"
+                    margin="dense"
+                    onChange={handleOnChange}
+                    spellCheck={false}
                     type={showPassword?'text':'password'}
                     value={form.password}
-                    spellCheck={false}
-                    onChange={handleOnChange}
-                    fullWidth
-                    error={Boolean(errors.password)}
-                    helperText={errors.password}
+                    variant="standard"
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">

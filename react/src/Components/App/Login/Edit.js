@@ -80,29 +80,31 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
             <Collapse in={showName} timeout="auto" unmountOnExit>
                 <TextField
                     autoFocus
-                    margin="dense"
+                    disabled={!showName}
+                    fullWidth
                     id="name"
                     label="Name"
+                    margin="dense"
+                    onChange={handleOnChangeName}
+                    spellCheck={false}
                     type="text"
                     value={form.name}
-                    spellCheck={false}
-                    onChange={handleOnChangeName}
-                    fullWidth
-                    disabled={!showName}
+                    variant="standard"
                 />
             </Collapse>
             <Collapse in={showAll||showAddress} timeout="auto" unmountOnExit>
                 <ClickAwayListener onClickAway={handleClickAwayCheck} touchEvent={clickAwayActive && 'onTouchEnd'} mouseEvent={clickAwayActive && 'onClick'}>
                     <TextField
                         autoFocus
-                        margin="dense"
+                        fullWidth
                         id="address"
                         label="Socket Address"
+                        margin="dense"
+                        onChange={handleOnChangeAddress}
+                        spellCheck={false}
                         type="text"
                         value={form.address}
-                        spellCheck={false}
-                        onChange={handleOnChangeAddress}
-                        fullWidth
+                        variant="standard"
                     />
                 </ClickAwayListener>
             </Collapse>
@@ -125,24 +127,26 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
                 </FormControl>
                 <Collapse in={showUserPass} timeout="auto" unmountOnExit>
                     <TextField
-                        margin="dense"
+                        fullWidth
                         id="user"
                         label="User"
+                        margin="dense"
+                        onChange={handleOnChangeCredentials}
+                        spellCheck={false}
                         type="text"
                         value={credentials.user}
-                        spellCheck={false}
-                        onChange={handleOnChangeCredentials}
-                        fullWidth
+                        variant="standard"
                     />
                     <TextField
-                        margin="dense"
+                        fullWidth
                         id="password"
                         label="Password"
+                        margin="dense"
+                        onChange={handleOnChangeCredentials}
+                        spellCheck={false}
                         type={show?'text':'password'}
                         value={credentials.password}
-                        spellCheck={false}
-                        onChange={handleOnChangeCredentials}
-                        fullWidth
+                        variant="standard"
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -156,14 +160,15 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
                 </Collapse>
                 <Collapse in={showToken} timeout="auto" unmountOnExit>
                     <TextField
-                        margin="dense"
+                        fullWidth
                         id="token"
                         label="Token"
+                        margin="dense"
+                        onChange={handleOnChangeCredentials}
+                        spellCheck={false}
                         type={show?'text':'password'}
                         value={credentials.token}
-                        spellCheck={false}
-                        onChange={handleOnChangeCredentials}
-                        fullWidth
+                        variant="standard"
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">

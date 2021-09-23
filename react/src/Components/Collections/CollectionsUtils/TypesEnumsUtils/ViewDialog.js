@@ -87,11 +87,11 @@ const ViewDialog = ({category, headers, item, link, onChangeItem, onClose, open,
                                 <List disablePadding dense>
                                     <ListItem>
                                         <TextField
-                                            type="text"
-                                            variant="standard"
-                                            value={viewItem.definition||''}
                                             fullWidth
                                             multiline
+                                            type="text"
+                                            value={viewItem.definition||''}
+                                            variant="standard"
                                             InputProps={{
                                                 readOnly: true,
                                                 disableUnderline: true,

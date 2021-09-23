@@ -43,12 +43,13 @@ const EditName = ({name, fn}) => {
             </Collapse>
             <Collapse in={show} timeout="auto" unmountOnExit>
                 <TextField
+                    color="secondary"
+                    multiline
                     name="newName"
+                    onChange={handleChange}
                     type="text"
                     value={newName}
-                    multiline
-                    onChange={handleChange}
-                    color="secondary"
+                    variant="standard"
                     inputProps={{
                         style: {
                             fontSize: '2.125rem',

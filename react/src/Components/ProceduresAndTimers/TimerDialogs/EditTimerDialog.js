@@ -101,13 +101,14 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                             <Collapse in={Boolean(queryString)} timeout="auto">
                                 <ListItem>
                                     <TextField
-                                        name="queryString"
+                                        fullWidth
                                         label="Query"
+                                        maxRows="10"
+                                        multiline
+                                        name="queryString"
                                         type="text"
                                         value={queryString}
-                                        fullWidth
-                                        multiline
-                                        maxRows="10"
+                                        variant="standard"
                                         InputProps={{
                                             readOnly: true,
                                             disableUnderline: true,
@@ -130,12 +131,12 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                             </ListItem>
                             <ListItem>
                                 <TextField
-                                    name="timer"
-                                    type="text"
-                                    variant="standard"
-                                    value={timer.definition}
                                     fullWidth
                                     multiline
+                                    name="timer"
+                                    type="text"
+                                    value={timer.definition}
+                                    variant="standard"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,

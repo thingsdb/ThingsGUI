@@ -43,16 +43,16 @@ const Memo = ({connection}) => {
             >
                 <TextField
                     autoFocus
-                    margin="dense"
+                    fullWidth
                     id="memo"
                     label="Message"
+                    margin="dense"
+                    multiline
+                    onChange={handleChange}
+                    spellCheck={false}
                     type="text"
                     value={memo}
-                    spellCheck={false}
-                    onChange={handleChange}
-                    fullWidth
-                    multiline
-
+                    variant="standard"
                 />
             </SimpleModal>
         </React.Fragment>

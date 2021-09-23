@@ -16,15 +16,16 @@ const PropInit = ({onChange, input, thing}) => {
 
     return(
         <TextField
+            error={Boolean(error)}
+            helperText={error}
+            label="New property"
             margin="dense"
             name="newProperty"
-            label="New property"
+            onChange={handleOnChangeName}
+            spellCheck={false}
             type="text"
             value={input}
-            spellCheck={false}
-            onChange={handleOnChangeName}
-            helperText={error}
-            error={Boolean(error)}
+            variant="standard"
         />
     );
 };

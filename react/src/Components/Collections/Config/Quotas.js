@@ -92,14 +92,15 @@ const Quotas = ({collection}) => {
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                margin="dense"
+                fullWidth
                 id="quotaType"
                 label="Type"
-                value={form.quotaType}
+                margin="dense"
                 onChange={handleOnChangeType}
-                fullWidth
                 select
                 SelectProps={{native: true}}
+                value={form.quotaType}
+                variant="standard"
             >
                 {quotaTypes.map(p => (
                     <option key={p} value={p}>
@@ -109,15 +110,16 @@ const Quotas = ({collection}) => {
             </TextField>
             <TextField
                 autoFocus
-                margin="dense"
+                fullWidth
                 id="quota"
                 inputProps={{min: '1'}}
                 label="Quota"
+                margin="dense"
+                onChange={handleOnChange}
+                spellCheck={false}
                 type="number"
                 value={form.quota}
-                spellCheck={false}
-                onChange={handleOnChange}
-                fullWidth
+                variant="standard"
             />
         </React.Fragment>
     );

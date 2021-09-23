@@ -28,7 +28,7 @@ const withStores = withVlow([{
 
 const useStyles = makeStyles(theme => ({
     paper: {
-        margin: theme.spacing(0.5),
+        // margin: theme.spacing(0.5),
         padding: theme.spacing(2),
         width: '100%'
     },
