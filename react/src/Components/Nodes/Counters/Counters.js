@@ -80,7 +80,7 @@ const Counters = ({nodeId, offline, counters}) => {
                 <Info header={header} content={counters} />
             </Grid>
             <Grid container item xs={12} justifyContent="flex-end">
-                <Box fontSize={10} fontStyle="italic" m={1}>
+                <Box sx={{fontSize: 10, fontStyle: 'italic', m: 1}}>
                     {`Last reset at: ${moment(counters.started_at*1000).format(DATE_TIME_SEC_STR)}`}
                 </Box>
             </Grid>

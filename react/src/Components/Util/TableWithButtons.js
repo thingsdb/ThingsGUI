@@ -28,7 +28,7 @@ const TableWithButtons = ({header, rows, buttons}) => (
                     {header.map((h, i) => (
                         <TableCell key={h.ky} align={i?'center':'left'}>
                             <Typography component="div" align={i?'center':'left'}>
-                                <Box fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                <Box sx={{fontSize: 'body1.fontSize', fontFamily: 'Monospace', m: 1}}>
                                     {h.fn ? h.fn(row[h.ky]) : row[h.ky]}
                                 </Box>
                             </Typography>

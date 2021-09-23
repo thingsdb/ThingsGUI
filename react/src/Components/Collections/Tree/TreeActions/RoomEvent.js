@@ -71,7 +71,7 @@ const RoomEvent = ({room, events}) => {
                         <Card variant="outlined">
                             <CardHeader
                                 title={
-                                    <Box fontWeight="fontWeightBold">
+                                    <Box sx={{ fontWeight: 'bold' }}>
                                         {e.event}
                                     </Box>
                                 }

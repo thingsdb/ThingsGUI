@@ -52,10 +52,10 @@ const TimerCard = ({timer, size}) => {
                         {timer.id}
                     </Typography>
                     <Typography variant="body2" gutterBottom component='div' className={classes.pos} color="textSecondary">
-                        <Box >
+                        <Box>
                             {'Next run: '}
                         </Box>
-                        <Box fontWeight="fontWeightBold" className={classes.marginLeft}>
+                        <Box className={classes.marginLeft} sx={{fontWeight: 'bold'}}>
                             {nextRunFn(timer.next_run)}
                         </Box>
                     </Typography>

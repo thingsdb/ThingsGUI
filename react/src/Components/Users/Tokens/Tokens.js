@@ -81,7 +81,11 @@ const Tokens = ({user}) => {
                                     {header.map((h) => (
                                         <TableCell key={h.ky} align={'left'}>
                                             <Typography component="div">
-                                                <Box component="span" className={h.ky === 'key' ? classes.key : classes.box} fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                                <Box
+                                                    component="span"
+                                                    className={h.ky === 'key' ? classes.key : classes.box}
+                                                    sx={{fontSize: 'body1.fontSize', fontFamily: 'Monospace', m: 1}}
+                                                >
                                                     {row[h.ky]}
                                                 </Box>
                                                 {h.ky === 'key' && <Copy text={row[h.ky]} />}

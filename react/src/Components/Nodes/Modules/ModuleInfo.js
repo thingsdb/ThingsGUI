@@ -229,7 +229,14 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                             </ButtonBase> : null
                                         }
                                     >
-                                        <Box className={classes.box} component="div" fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                        <Box
+                                            component="div"
+                                            sx={{
+                                                fontFamily: 'Monospace',
+                                                fontSize: 'body1.fontSize',
+                                                m: 1,
+                                            }}
+                                        >
                                             {h.fnView ? h.fnView(_module[h.ky]) : _module[h.ky]}
                                         </Box>
                                     </Badge>

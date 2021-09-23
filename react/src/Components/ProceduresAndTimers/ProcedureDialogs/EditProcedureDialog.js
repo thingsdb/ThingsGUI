@@ -135,7 +135,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                             </ListItem>
                             <ListItem>
                                 <Grid container item xs={11} justifyContent="flex-end">
-                                    <Box fontSize={10} fontStyle="italic" m={1}>
+                                    <Box sx={{fontSize: 10, fontStyle: 'italic', m: 1}}>
                                         {`Created on: ${moment(procedure.created_at*1000).format(DATE_TIME_SEC_STR)}`}
                                     </Box>
                                 </Grid>
@@ -146,7 +146,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                     <Grid container spacing={1} item xs={12}>
                         <Grid item>
                             <Typography>
-                                <Box fontSize={16} fontStyle="italic" m={1} color="text.secondary">
+                                <Box sx={{fontSize: 16, fontStyle: 'italic', m: 1, color: 'text.secondary'}}>
                                     {'Procedure cannot be edited.'}
                                 </Box>
                             </Typography>

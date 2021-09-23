@@ -169,7 +169,7 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                     <Grid container spacing={1} item xs={12}>
                         <Grid item>
                             <Typography>
-                                <Box fontSize={16} fontStyle="italic" m={1} color="text.secondary">
+                                <Box sx={{fontSize: 16, fontStyle: 'italic', m: 1, color: 'text.secondary'}}>
                                     {'Timer cannot be edited.'}
                                 </Box>
                             </Typography>

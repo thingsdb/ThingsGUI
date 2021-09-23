@@ -16,7 +16,7 @@ import Login from './Login';
 const theme = createTheme({
     // in case we want to overwrite the default theme
     palette: {
-        type: 'dark',
+        mode: 'dark',
         primary: {
             main: 'rgba(85, 161, 255, 0.51)',
             red: '#ff0831',
@@ -53,17 +53,17 @@ const theme = createTheme({
     components: {
         MuiCssBaseline: {
             styleOverrides: {
-                '@global': {
+                html: {
                     '*::-webkit-scrollbar': {
-                        width: '0.7em',
-                        height: '0.6em'
+                        'width': '0.7em',
+                        'height': '0.6em'
                     },
                     '*::-webkit-scrollbar-track': {
                         '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
                     },
                     '*::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'rgba(85, 161, 255, 0.51)',
-                        outline: '1px solid slategrey'
+                        'background-color': 'rgba(85, 161, 255, 0.51)',
+                        'outline': '1px solid rgba(85, 161, 255, 0.51)'
                     }
                 }
             }

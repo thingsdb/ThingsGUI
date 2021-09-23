@@ -90,7 +90,7 @@ const Menu = ({addItem, homeRoute, icon, itemKey, items, onRefresh, title}) => {
                         </ListItem>
                     )) : (
                         <ListItem button className={classes.nested}>
-                            <Box fontSize={12} fontStyle="italic" m={1}>
+                            <Box sx={{fontSize: 12, fontStyle: 'italic', m: 1}}>
                                 {`No ${title}`}
                             </Box>
                         </ListItem>

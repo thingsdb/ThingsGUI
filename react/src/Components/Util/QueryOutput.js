@@ -63,7 +63,7 @@ const QueryOutput = ({output}) => {
                         <Copy text={jsonOutput || ''} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Box overflow="auto">
+                        <Box sx={{overflow: 'auto'}}>
                             <pre>
                                 {jsonOutput}
                             </pre>

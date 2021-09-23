@@ -88,7 +88,7 @@ const Export = ({collection}) => {
                     </Typography>
                     <Typography variant="subtitle2" component="span" className={classes.warnColor}>
                         {'Note: '}
-                        <Box fontStyle="italic" component="span">
+                        <Box component="span" sx={{ fontStyle: 'italic' }}>
                             {'export() '}
                         </Box>
                         {'is an experimental function and may change in the future.'}

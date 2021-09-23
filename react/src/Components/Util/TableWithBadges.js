@@ -62,7 +62,15 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
                                             badgeButton&&index==ri?badgeButton(h, row, ri):null
                                         }
                                     >
-                                        <Box className={classes.box} component="div" fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                        <Box
+                                            className={classes.box}
+                                            component="div"
+                                            sx={{
+                                                fontSize: 'body1.fontSize',
+                                                fontFamily: 'Monospace',
+                                                m: 1
+                                            }}
+                                        >
                                             {row[h.ky]}
                                         </Box>
                                     </Badge>

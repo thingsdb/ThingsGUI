@@ -151,14 +151,16 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         >
             {loaded ? content : (
                 <Box
-                    top={10}
-                    left={0}
-                    bottom={10}
-                    right={0}
-                    position="absolute"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                    sx={{
+                        top: 10,
+                        left: 0,
+                        bottom: 10,
+                        right: 0,
+                        position: 'absolute',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
                 >
                     <CircularProgress size={50} />
                     <Typography align="right" variant="h6" component="div" color="textSecondary">

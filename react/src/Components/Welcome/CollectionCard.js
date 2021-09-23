@@ -56,10 +56,10 @@ const CollectionCard = ({collection, size}) => {
                         {collection.name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" gutterBottom component='div' className={classes.flex}>
-                        <Box >
+                        <Box>
                             {'Number of things: '}
                         </Box>
-                        <Box fontWeight="fontWeightBold" className={classes.marginLeft}>
+                        <Box className={classes.marginLeft} sx={{fontWeight: 'bold'}}>
                             {collection.things}
                         </Box>
                     </Typography>
@@ -67,7 +67,7 @@ const CollectionCard = ({collection, size}) => {
                         <Box >
                             {'Created: '}
                         </Box>
-                        <Box fontWeight="fontWeightBold" className={classes.marginLeft}>
+                        <Box className={classes.marginLeft} sx={{fontWeight: 'bold'}}>
                             {moment.unix(collection.created_at).fromNow()}
                         </Box>
                     </Typography>

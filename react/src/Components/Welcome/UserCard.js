@@ -42,10 +42,10 @@ const UserCard = ({user, size}) => {
                         {user.name}
                     </Typography>
                     <Typography variant="body2" gutterBottom component='div' className={classes.pos} color="textSecondary">
-                        <Box >
+                        <Box>
                             {'Created: '}
                         </Box>
-                        <Box fontWeight="fontWeightBold" className={classes.marginLeft}>
+                        <Box className={classes.marginLeft} sx={{fontWeight: 'bold'}}>
                             {moment.unix(user.created_at).fromNow()}
                         </Box>
                     </Typography>
