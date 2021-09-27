@@ -1,20 +1,16 @@
-import { alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import InputBase from '@mui/material/InputBase';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RemoveIcon from '@mui/icons-material/Delete';
-import SearchIcon from '@mui/icons-material/Search';
 import Switch from '@mui/material/Switch';
 
 import {ChipsCardTAG} from '../../Constants/Tags';
-import {ErrorMsg, HarmonicCardContent, orderByName, SimpleModal, TableWithButtons} from '.';
-
+import {ErrorMsg, HarmonicCardContent, orderByName, SearchInput, SimpleModal, TableWithButtons} from '.';
 
 const useStyles = makeStyles(theme => ({
     customWidth: {
@@ -22,43 +18,6 @@ const useStyles = makeStyles(theme => ({
     },
     warning: {
         color: theme.palette.primary.red
-    },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: alpha(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: alpha(theme.palette.common.white, 0.25),
-        },
-        marginLeft: 0,
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },
-    },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
     },
 }));
 
@@ -117,21 +76,7 @@ const TableCard = ({buttons, header, itemKey, items, moreButtons, onAdd, onDelet
                     <Grid container spacing={2}>
                         <Grid container item xs={12}>
                             <Grid item>
-                                <div className={classes.search}>
-                                    <div className={classes.searchIcon}>
-                                        <SearchIcon />
-                                    </div>
-                                    <InputBase
-                                        placeholder="Search…"
-                                        value={searchString}
-                                        onChange={handleSearchString}
-                                        classes={{
-                                            root: classes.inputRoot,
-                                            input: classes.inputInput,
-                                        }}
-                                        inputProps={{ 'aria-label': 'search' }}
-                                    />
-                                </div>
+                                <SearchInput onChange={handleSearchString} value={searchString} />
                             </Grid>
                             <ErrorMsg tag={tag} />
                         </Grid>

@@ -29,6 +29,7 @@ import moment from 'moment';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import RefreshContainer from './RefreshContainer';
+import SearchInput from './SearchInput';
 import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import StartStopPolling from './StartStopPolling';
@@ -367,6 +368,7 @@ export {
     RefreshContainer,
     revealCustomType,
     scaleToBinBytes,
+    SearchInput,
     ServerError,
     SimpleModal,
     stableSort,

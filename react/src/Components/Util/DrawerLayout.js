@@ -233,7 +233,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                             </Typography>
                         </div>
                         <Divider />
-                        {drawerContent}
+                        {open ? drawerContent : null}
                     </div>
                 </Card>
                 {toast}
