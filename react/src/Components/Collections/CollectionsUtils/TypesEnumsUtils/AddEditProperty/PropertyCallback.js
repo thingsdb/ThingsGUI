@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Collapse from '@mui/material/Collapse';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
@@ -10,14 +9,7 @@ import Typography from '@mui/material/Typography';
 import {Closure} from '../../../../Util';
 
 
-const useStyles = makeStyles(() => ({
-    fullWidth: {
-        width: '100%',
-    },
-}));
-
 const PropertyCallback = ({onChange}) => {
-    const classes = useStyles();
     const [switchIni, setSwitch] = React.useState(false);
 
     const handleSwitch = ({target}) => {
@@ -47,7 +39,7 @@ const PropertyCallback = ({onChange}) => {
                     label="Add a closure that will be called on each existing instance and can be used to set a new value"
                 />
             </Grid>
-            <Collapse className={classes.fullWidth} in={switchIni} timeout="auto" unmountOnExit>
+            <Collapse in={switchIni} timeout="auto" unmountOnExit sx={{width: '100%'}}>
                 <Typography variant="caption">
                     {'Callback'}
                 </Typography>

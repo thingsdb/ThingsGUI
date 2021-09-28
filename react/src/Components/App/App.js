@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import {Route, Switch, useHistory, useLocation} from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -20,20 +19,10 @@ import Nodes from '../Nodes';
 import User from '../Users';
 import Welcome from '../Welcome';
 
-const useStyles = makeStyles(() => ({
-    mainGrid: {
-        paddingRight: 8,
-        paddingLeft: 8,
-        paddingBottom: 8,
-    },
-}));
-
 const nodes = 'nodes';
-
 const App = () => {
     let history = useHistory();
     let location = useLocation();
-    const classes = useStyles();
 
     const [menuOpen, setMenuOpen] = React.useState(true);
     const [drawerContent, setDrawerContent] = React.useState(() => {
@@ -92,7 +81,7 @@ const App = () => {
                 }
                 mainContent={
                     <Grid container alignItems="flex-start">
-                        <Grid className={classes.mainGrid} container item xs={12}>
+                        <Grid container item xs={12} sx={{padding: '0px 8px 8px 8px'}}>
                             <Switch>
                                 <Route exact path="/" component={Welcome} />
                                 <Route exact path={`/${COLLECTION_ROUTE}/${collectionName}`} component={Collection} />

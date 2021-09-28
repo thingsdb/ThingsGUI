@@ -1,5 +1,5 @@
-import makeStyles from '@mui/styles/makeStyles';
-import {withVlow} from 'vlow';
+import { styled } from '@mui/material/styles';
+import { withVlow } from 'vlow';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import Collapse from '@mui/material/Collapse';
@@ -17,9 +17,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import {ApplicationStore, ApplicationActions} from '../../../Stores';
-import {isObjectEmpty, orderByName} from '../../Util';
-import {LoginTAG} from '../../../Constants/Tags';
+import { ApplicationStore, ApplicationActions } from '../../../Stores';
+import { isObjectEmpty, orderByName } from '../../Util';
+import { LoginTAG } from '../../../Constants/Tags';
 import Memo from './Memo';
 
 const withStores = withVlow([{
@@ -27,24 +27,18 @@ const withStores = withVlow([{
     keys: ['cachedConnections']
 }]);
 
-const useStyles = makeStyles((theme) => ({
-    card: {
-        backgroundColor: theme.palette.background.default,
-        margin: theme.spacing(0.5),
-    },
-    cardArea: {
-        padding: theme.spacing(2),
-    },
-    nested: {
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(4),
-    },
+const StyledCard = styled(Card)(({ theme }) => ({
+    backgroundColor: theme.palette.background.default,
+    margin: theme.spacing(0.5),
+}));
+
+const StyledCardActionArea = styled(CardActionArea)(({ theme }) => ({
+    padding: theme.spacing(2),
 }));
 
 const tag = LoginTAG;
 
 const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
-    const classes = useStyles();
     const [openDetail, setOpenDetail] = React.useState({});
 
     const handleOpenDetail = (k) => () => {
@@ -100,10 +94,9 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
                         <Grid container>
                             {rows.map((r,i)=>(
                                 <Grid key={i} item xs={6}>
-                                    <Card className={classes.card}>
-                                        <CardActionArea
+                                    <StyledCard>
+                                        <StyledCardActionArea
                                             focusRipple
-                                            className={classes.cardArea}
                                             onClick={handleClick(r.key, v)}
                                         >
                                             <Typography variant="caption">
@@ -112,8 +105,8 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
                                             <Typography variant="caption" component="div" color="primary" >
                                                 {`${v[r.keyList]||r.default}`}
                                             </Typography>
-                                        </CardActionArea>
-                                    </Card>
+                                        </StyledCardActionArea>
+                                    </StyledCard>
                                 </Grid>
                             ))}
                         </Grid>

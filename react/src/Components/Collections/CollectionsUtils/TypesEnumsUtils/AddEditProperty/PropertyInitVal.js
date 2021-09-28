@@ -50,7 +50,7 @@ const PropertyInitVal = ({category, onChange, onBlob, scope}) => {
                     label="Add initial value or closure"
                 />
             </Grid>
-            <Collapse className={classes.fullWidth} in={switchIni} timeout="auto" unmountOnExit>
+            <Collapse in={switchIni} timeout="auto" unmountOnExit sx={{width: '100%'}}>
                 <PropertyVal category={category} onChange={handleVal} onBlob={handleBlob} scope={scope} />
             </Collapse>
         </React.Fragment>

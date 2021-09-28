@@ -1,39 +1,32 @@
-import React from 'react';
+import { styled } from '@mui/material/styles';
+import { withVlow } from 'vlow';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import Button from '@mui/material/Button';
+import React from 'react';
 import TextField from '@mui/material/TextField';
-import {withVlow} from 'vlow';
-import makeStyles from '@mui/styles/makeStyles';
 
-import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
+import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
 import { ErrorMsg, SimpleModal } from '../../Util';
-import {AddCollectionTAG} from '../../../Constants/Tags';
+import { AddCollectionTAG } from '../../../Constants/Tags';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
     keys: ['collections']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    buttonBase: {
-        width: '100%',
-        height: '100%',
-        padding: 0,
-        justifyContent: 'left',
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(2),
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        '&:hover': {
-            backgroundColor: '#303030',
-        },
-        text: 'italic',
+const StyledButton = styled(Button)(({ theme }) => ({
+    width: '100%',
+    height: '100%',
+    padding: 0,
+    justifyContent: 'left',
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    '&:hover': {
+        backgroundColor: '#303030',
     },
-    icon: {
-        marginTop: theme.spacing(0.5),
-        marginBottom: theme.spacing(0.5),
-        color: theme.palette.primary.main,
-    },
+    text: 'italic',
 }));
 
 const initialState = {
@@ -57,7 +50,6 @@ const validation = {
 const tag = AddCollectionTAG;
 
 const Add = ({collections}) => {
-    const classes = useStyles();
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
@@ -127,9 +119,9 @@ const Add = ({collections}) => {
     return(
         <SimpleModal
             button={
-                <Button className={classes.buttonBase} color="primary" onClick={handleClickOpen} >
-                    <AddBoxIcon className={classes.icon} color="primary" />
-                </Button>
+                <StyledButton color="primary" onClick={handleClickOpen} >
+                    <AddBoxIcon color="primary" sx={{marginTop: '4px', marginBottom: '4px'}} />
+                </StyledButton>
             }
             title="New collection"
             open={show}

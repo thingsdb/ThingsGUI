@@ -1,24 +1,15 @@
-import makeStyles from '@mui/styles/makeStyles';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
 import InputField from '../InputField';
-import {ListHeader} from '../../../Util';
-import {EditActions, useEdit} from '../Context';
-import {NIL, STR} from '../../../../Constants/ThingTypes';
-
-
-const useStyles = makeStyles(theme => ({
-    nested: {
-        paddingLeft: theme.spacing(6),
-    },
-}));
+import { ListHeader } from '../../../Util';
+import { EditActions, useEdit } from '../Context';
+import { NIL, STR } from '../../../../Constants/ThingTypes';
 
 
 const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier, parentDispatch}) => {
-    const classes = useStyles();
     const [dataType, setDataType] = React.useState(childTypes[0]||dataTypes[0]||STR);
 
     const [editState, dispatch] = useEdit();
@@ -65,7 +56,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
     return (
         <Grid item xs={12}>
             <ListHeader canCollapse onAdd={handleAdd} onDelete={handleClick} onRefresh={handleRefresh} items={array} groupSign="[">
-                <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
+                <Grid container item xs={12} spacing={1} alignItems="center" sx={{paddingLeft: '48px'}}>
                     {childTypes.length == 1 ? null : (
                         <Grid item xs={4}>
                             <TextField
@@ -89,14 +80,17 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
                             </TextField>
                         </Grid>
                     )}
-                    <InputField
-                        customTypes={customTypes}
-                        dataType={dataType}
-                        dataTypes={dataTypes}
-                        enums={enums}
-                        variant="standard"
-                        label="Value"
-                    />
+                    <Grid item xs={12}>
+                        <InputField
+                            customTypes={customTypes}
+                            dataType={dataType}
+                            dataTypes={dataTypes}
+                            enums={enums}
+                            fullWidth
+                            label="Value"
+                            variant="standard"
+                        />
+                    </Grid>
                 </Grid>
             </ListHeader>
         </Grid>
