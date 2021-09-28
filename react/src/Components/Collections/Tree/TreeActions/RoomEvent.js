@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import {withVlow} from 'vlow';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -25,17 +24,8 @@ const withStores = withVlow([{
     keys: ['events']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    flex: {
-        display: 'flex'
-    },
-    marginLeft: {
-        marginLeft: theme.spacing(1)
-    }
-}));
 
 const RoomEvent = ({room, events}) => {
-    const classes = useStyles();
     const [checked, setChecked] = React.useState({});
 
     const handleChange = (index) => () => {
@@ -78,11 +68,10 @@ const RoomEvent = ({room, events}) => {
                                 titleTypographyProps={{
                                     variant: 'body2',
                                     component: 'div',
-                                    className: classes.flex
+                                    sx: {display: 'flex'}
                                 }}
                                 subheader="Arguments: "
                                 subheaderTypographyProps={{
-                                    className: classes.warnColor,
                                     variant: 'caption'
                                 }}
                                 action={

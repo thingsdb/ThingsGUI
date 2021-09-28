@@ -7,13 +7,11 @@ import clsx from 'clsx';
 import Divider from '@mui/material/Divider';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const useStyles = makeStyles((theme) => ({
     flex: {
@@ -181,13 +179,11 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     }}
                 >
                     <div className={classes.drawerContainer}>
-                        <List>
-                            {menus.map((item, index) => (
-                                <ListItem key={`menu_item_${index}`}>
-                                    {item}
-                                </ListItem>
-                            ))}
-                        </List>
+                        {menus.map((item, index) => (
+                            <React.Fragment key={`menu_item_${index}`}>
+                                {item}
+                            </React.Fragment>
+                        ))}
                         <div className={classes.footer}>
                             {bottomBar}
                         </div>

@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import Grid from '@mui/material/Grid';
@@ -12,22 +11,9 @@ import EditorSideContent from './EditorSideContent';
 import SelectScope from './SelectScope';
 
 
-const useStyles = makeStyles(theme => ({
-    cardAction: {
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-start',
-        paddingTop: 0,
-        paddingBottom: 0,
-        paddingLeft: theme.spacing(1),
-        paddingRight: 0
-    },
-}));
-
 const tag = EditorTAG;
 
 const Editor = () => {
-    const classes = useStyles();
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState('');
     const [input, setInput] = React.useState('');
@@ -68,7 +54,7 @@ const Editor = () => {
                 <React.Fragment>
                     <Grid item xs={12}>
                         <Card>
-                            <CardActions className={classes.cardAction} disableSpacing>
+                            <CardActions disableSpacing sx={{padding: 0}}>
                                 <ErrorMsg tag={tag} />
                             </CardActions>
                         </Card>

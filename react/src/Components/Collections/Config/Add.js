@@ -1,7 +1,5 @@
-import { styled } from '@mui/material/styles';
 import { withVlow } from 'vlow';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import Button from '@mui/material/Button';
+import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
@@ -14,23 +12,7 @@ const withStores = withVlow([{
     keys: ['collections']
 }]);
 
-const StyledButton = styled(Button)(({ theme }) => ({
-    width: '100%',
-    height: '100%',
-    padding: 0,
-    justifyContent: 'left',
-    paddingLeft: theme.spacing(4),
-    paddingRight: theme.spacing(2),
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    '&:hover': {
-        backgroundColor: '#303030',
-    },
-    text: 'italic',
-}));
-
 const initialState = {
-    show: false,
     errors: {},
     form: {},
 };
@@ -49,24 +31,13 @@ const validation = {
 
 const tag = AddCollectionTAG;
 
-const Add = ({collections}) => {
+const Add = ({open, onClose, collections}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {errors, form} = state;
 
-
-    const handleClickOpen = () => {
-        setState({
-            show: true,
-            errors: {},
-            form: {
-                name: '',
-            },
-        });
-    };
-
-    const handleClickClose = () => {
-        setState({...state, show: false});
-    };
+    React.useEffect(() => { // clean state
+        setState(initialState);
+    }, [open]);
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -95,9 +66,14 @@ const Add = ({collections}) => {
         }
     };
 
-
-    const Content = (
-        <React.Fragment>
+    return(
+        <SimpleModal
+            title="New collection"
+            open={open}
+            onOk={handleClickOk}
+            onClose={onClose}
+            onKeyPress={handleKeyPress}
+        >
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
@@ -113,28 +89,13 @@ const Add = ({collections}) => {
                 value={form.name}
                 variant="standard"
             />
-        </React.Fragment>
-    );
-
-    return(
-        <SimpleModal
-            button={
-                <StyledButton color="primary" onClick={handleClickOpen} >
-                    <AddBoxIcon color="primary" sx={{marginTop: '4px', marginBottom: '4px'}} />
-                </StyledButton>
-            }
-            title="New collection"
-            open={show}
-            onOk={handleClickOk}
-            onClose={handleClickClose}
-            onKeyPress={handleKeyPress}
-        >
-            {Content}
         </SimpleModal>
     );
 };
 
 Add.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
 
     /* collections properties */
     collections: ThingsdbStore.types.collections.isRequired,

@@ -6,7 +6,6 @@ import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
 import {withVlow} from 'vlow';
 
 import {ThingActions} from '../TreeActions';
@@ -22,31 +21,7 @@ const withStores = withVlow([{
 }]);
 
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        backgroundColor: theme.palette.background.paper,
-    },
-    icon: {
-        paddingTop: theme.spacing(2),
-    },
-    thing: {
-        paddingLeft: theme.spacing(6),
-    },
-    listItem: {
-        margin: 0,
-        padding: 0,
-    },
-    green: {
-        color: theme.palette.primary.green,
-    },
-    divider: {
-        marginTop: theme.spacing(2),
-    }
-}));
-
 const ThingRoot = ({things, collection}) => {
-    const classes = useStyles();
     const fetched = things.hasOwnProperty(collection.collection_id);
 
     React.useEffect(() => {
@@ -57,7 +32,6 @@ const ThingRoot = ({things, collection}) => {
         fetched ? (
             <List
                 component="nav"
-                className={classes.root}
                 dense
                 disablePadding
             >
@@ -66,7 +40,6 @@ const ThingRoot = ({things, collection}) => {
                     onChildren={(k, v) => (
                         <Thing
                             key={k}
-                            className={classes.thing}
                             id={collection.collection_id}
                             thing={v}
                             things={things}
@@ -84,9 +57,9 @@ const ThingRoot = ({things, collection}) => {
                         />
                     )}
                 />
-                <Divider className={classes.divider} />
-                <ListItem className={classes.listItem}>
-                    <ListItemIcon className={classes.icon}>
+                <Divider sx={{marginTop: '16px'}} />
+                <ListItem disableGutters>
+                    <ListItemIcon>
                         <ThingActions
                             child={{
                                 id: collection.collection_id,

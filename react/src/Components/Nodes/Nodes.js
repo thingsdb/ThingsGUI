@@ -1,11 +1,13 @@
+import { withVlow } from 'vlow';
+import Grid from '@mui/material/Grid';
 import React from 'react';
-import {withVlow} from 'vlow';
 
-import NodeButtons from '../Nodes/NodeButtons';
+import { NodesActions, NodesStore } from '../../Stores';
+import { Remove } from './Config';
+import { Add, Restore } from './Config';
 import Node from './Node';
-import {Remove} from './Config';
+import OpenNodeGraph from './SVGNodes/OpenNodeGraph';
 import TableWithRowExtend from './TableWithRowExtend';
-import {NodesActions, NodesStore} from '../../Stores';
 
 const withStores = withVlow([{
     store: NodesStore,
@@ -43,10 +45,24 @@ const Nodes = ({nodes, connectedNode}) => {
     ]);
     const handleCanExtend = (node) => node.status !== 'OFFLINE';
     return(
-        <React.Fragment>
-            <TableWithRowExtend buttons={handleButtons} canExtend={handleCanExtend} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode} onRefresh={handleRefresh} />
-            <NodeButtons nodes={nodes} />
-        </React.Fragment>
+        <Grid container spacing={1}>
+            <Grid item xs={12}>
+                <TableWithRowExtend buttons={handleButtons} canExtend={handleCanExtend} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode} onRefresh={handleRefresh} />
+            </Grid>
+            <Grid item xs={12}>
+                <Grid container spacing={1}>
+                    <Grid item>
+                        <Add />
+                    </Grid>
+                    <Grid item>
+                        <OpenNodeGraph nodes={nodes} />
+                    </Grid>
+                    <Grid item>
+                        <Restore nodes={nodes} />
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
     );
 };
 

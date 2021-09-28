@@ -1,4 +1,4 @@
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/material/styles';
 import {withVlow} from 'vlow';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -25,32 +25,13 @@ const withStores = withVlow([{
     keys: ['allNodeInfo', 'nodes']
 }]);
 
-const useStyles = makeStyles((theme) => ({
-    card: {
-        backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(0.5),
-        margin: theme.spacing(0.5),
-    },
-    title: {
-        marginLeft: theme.spacing(2),
-        flex: 1,
-    },
-    divider: {
-        border: '1px solid #89afe0',
-    },
-    icon: {
-        fontSize: '70px',
-        color: theme.palette.primary.main,
-    },
-    grid: {
-        marginBottom: theme.spacing(6),
-    },
+const StyledCard = styled(Card)(({ theme }) => ({
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing(0.5),
+    margin: theme.spacing(0.5),
 }));
 
-
 const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
-    const classes = useStyles();
-
     const handleRefresh = () => {
         NodesActions.getNodes(()=>NodesActions.getDashboardInfo());
         ThingsdbActions.getCollections();
@@ -73,15 +54,15 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
         }, {
             title: 'Total number of Collections',
             data: collections.length,
-            logo: <DashboardIcon className={classes.icon} />
+            logo: <DashboardIcon color="primary" sx={{ fontSize: '70px' }} />
         }, {
             title: 'Total number of Users',
             data: users.length,
-            logo: <PeopleIcon className={classes.icon} />
+            logo: <PeopleIcon color="primary" sx={{ fontSize: '70px' }} />
         }, {
             title: 'Total number of Nodes',
             data: nodes.length,
-            logo: <StorageIcon className={classes.icon} />
+            logo: <StorageIcon color="primary" sx={{ fontSize: '70px' }} />
         }
     ];
     const piecharts = [
@@ -124,10 +105,10 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
     const radius = 160;
 
     return(
-        <Grid container className={classes.grid} alignItems="center" >
+        <Grid container sx={{marginBottom: '48px'}} alignItems="center" >
             <Grid container item xs={12}>
                 <Grid item xs={12}>
-                    <Card className={classes.card} raised>
+                    <StyledCard>
                         <CardContent>
                             <Grid container>
                                 <Grid item xs={11}>
@@ -145,12 +126,12 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
                                 </Grid>
                             </Grid>
                         </CardContent>
-                    </Card>
+                    </StyledCard>
                 </Grid>
                 {numbers.map((n, i)=> (
                     <Grid key={i} item xs={6} sm={3}>
-                        <Card className={classes.card}>
-                            <Divider className={classes.divider} />
+                        <StyledCard>
+                            <Divider sx={{border: '1px solid #89afe0'}} />
                             <CardHeader
                                 action={n.logo}
                                 title={n.data}
@@ -162,14 +143,14 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
                                     variant:'h4'
                                 }}
                             />
-                        </Card>
+                        </StyledCard>
                     </Grid>
                 ))}
             </Grid>
             <Grid container item xs={12}>
                 {piecharts.map((p,i)=>(
                     <Grid key={i} item sm={12} md={4}>
-                        <Card className={classes.card}>
+                        <StyledCard>
                             <Grid container justifyContent="center">
                                 {p.data&&p.data.length ? (
                                     <PieChart data={p.data} radius={radius} stroke="#2E3336" showPercent title={p.title} />
@@ -179,18 +160,18 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
                                     </Typography>
                                 )}
                             </Grid>
-                        </Card>
+                        </StyledCard>
                     </Grid>
                 ))}
             </Grid>
             <Grid container item xs={12}>
                 {tables.map((p,i)=>(
                     <Grid key={i} item sm={12} md={4}>
-                        <Card className={classes.card}>
+                        <StyledCard>
                             <Grid container justifyContent="center">
                                 <StickyHeadTable columns={p.columns} rows={p.rows} size="small" />
                             </Grid>
-                        </Card>
+                        </StyledCard>
                     </Grid>
                 ))}
             </Grid>

@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router-dom';
 import {withVlow} from 'vlow';
 import Button from '@mui/material/Button';
@@ -16,20 +15,10 @@ const withStores = withVlow([{
     keys: ['history']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    cardAction: {
-        paddingTop: theme.spacing(1),
-        paddingBottom: 0,
-        paddingLeft: theme.spacing(2),
-        paddingRight: 0
-    },
-}));
-
 
 const tag = EditorTAG;
 const Editor = ({height, history, input, onExpand, onOutput, scope}) => {
     let routerHistory = useHistory();
-    const classes = useStyles();
 
     const [query, setQuery] = React.useState(() => {
         let query = historyGetQueryParam(routerHistory, 'query');
@@ -127,7 +116,7 @@ const Editor = ({height, history, input, onExpand, onOutput, scope}) => {
             <div onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
                 <QueryInput onChange={handleInput} input={queryInput} height={height-60} />
             </div>
-            <CardActions className={classes.cardAction} disableSpacing>
+            <CardActions disableSpacing sx={{padding: '8px 0px 0px 16px'}}>
                 <Button
                     onClick={handleSubmit}
                     variant="outlined"

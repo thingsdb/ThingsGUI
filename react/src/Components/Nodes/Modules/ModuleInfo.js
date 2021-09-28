@@ -179,7 +179,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
             <Grid container spacing={1}>
                 <Grid item xs={12}>
                     <ErrorMsg tag={tag} />
-                    <LocalMsg icon={<InfoIcon className={classes.color} />} body={msg} onClose={handleCloseMsg} />
+                    <LocalMsg icon={<InfoIcon sx={{color: 'text.primary'}} />} body={msg} onClose={handleCloseMsg} />
                 </Grid>
                 {header.map(h => (
                     <Grid key={h.ky} container item xs={12}>

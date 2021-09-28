@@ -14,23 +14,35 @@ const withStores = withVlow([{
 }]);
 
 const CollectionsMenu = ({collections}) => {
+    const [open, setOpen] = React.useState(false);
 
     const handleRefresh = () => {
         ThingsdbActions.getCollections();
     };
 
+    const handleClickAdd = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const orderedCollections = orderByName(collections||[]);
 
     return (
-        <Menu
-            title="collections"
-            icon={<LibraryBooksIcon color="primary" />}
-            itemKey="name"
-            items={orderedCollections}
-            addItem={<Add />}
-            onRefresh={handleRefresh}
-            homeRoute={COLLECTION_ROUTE}
-        />
+        <React.Fragment>
+            <Menu
+                homeRoute={COLLECTION_ROUTE}
+                icon={<LibraryBooksIcon color="primary" />}
+                itemKey="name"
+                items={orderedCollections}
+                onAdd={handleClickAdd}
+                onRefresh={handleRefresh}
+                title="collections"
+            />
+            <Add open={open} onClose={handleClose} />
+        </React.Fragment>
     );
 };
 

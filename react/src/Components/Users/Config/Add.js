@@ -1,43 +1,19 @@
+
+import { withVlow } from 'vlow';
+import PropTypes from 'prop-types';
 import React from 'react';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import {withVlow} from 'vlow';
-import makeStyles from '@mui/styles/makeStyles';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
-import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
-import {AddUserTAG} from '../../../Constants/Tags';
+import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
+import { AddUserTAG } from '../../../Constants/Tags';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
     keys: ['users']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    buttonBase: {
-        width: '100%',
-        height: '100%',
-        padding: 0,
-        justifyContent: 'left',
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(2),
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        '&:hover': {
-            backgroundColor: '#303030',
-        },
-        text: 'italic',
-    },
-    icon: {
-        marginTop: theme.spacing(0.5),
-        marginBottom: theme.spacing(0.5),
-        color: theme.palette.primary.main,
-    },
-}));
-
 const initialState = {
-    show: false,
     errors: {},
     form: {},
 };
@@ -56,24 +32,13 @@ const validation = {
 
 const tag = AddUserTAG;
 
-const Add = ({users}) => {
-    const classes = useStyles();
+const Add = ({open, onClose, users}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+    const {errors, form} = state;
 
-    const handleClickOpen = () => {
-        setState({
-            show: true,
-            errors: {},
-            form: {
-                name: '',
-            },
-        });
-    };
-
-    const handleClickClose = () => {
-        setState({...state, show: false});
-    };
+    React.useEffect(() => { // clean state
+        setState(initialState);
+    }, [open]);
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -98,9 +63,14 @@ const Add = ({users}) => {
         }
     };
 
-
-    const Content = (
-        <React.Fragment>
+    return(
+        <SimpleModal
+            title="New User"
+            open={open}
+            onOk={handleClickOk}
+            onClose={onClose}
+            onKeyPress={handleKeyPress}
+        >
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
@@ -116,28 +86,13 @@ const Add = ({users}) => {
                 value={form.name}
                 variant="standard"
             />
-        </React.Fragment>
-    );
-
-    return(
-        <SimpleModal
-            button={
-                <Button color="primary" className={classes.buttonBase} onClick={handleClickOpen} >
-                    <AddBoxIcon className={classes.icon} />
-                </Button>
-            }
-            title="New User"
-            open={show}
-            onOk={handleClickOk}
-            onClose={handleClickClose}
-            onKeyPress={handleKeyPress}
-        >
-            {Content}
         </SimpleModal>
     );
 };
 
 Add.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
 
     /* application properties */
     users: ThingsdbStore.types.users.isRequired,

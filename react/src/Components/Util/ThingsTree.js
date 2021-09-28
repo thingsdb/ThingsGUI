@@ -1,7 +1,7 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ListItem from '@mui/material/ListItem';
+import Grid from '@mui/material/Grid';
+import makeStyles from '@mui/styles/makeStyles';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -50,12 +50,14 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
                 </div>
                 {more[count] && renderChildren(count+1)}
                 {(count+1)%visibleNumber == 0 && !more[count] ? (
-                    <ListItem className={classes.justifyContent}>
-                        <Button color="primary" onClick={handleMore(count)}>
-                            {'LOAD MORE'}
-                            <ExpandMoreIcon color="primary" />
-                        </Button>
-                    </ListItem>
+                    <Grid container alignItems="center" justifyContent="center" item xs={12}>
+                        <Grid item>
+                            <Button color="primary" onClick={handleMore(count)}>
+                                {'LOAD MORE'}
+                                <ExpandMoreIcon color="primary" />
+                            </Button>
+                        </Grid>
+                    </Grid>
                 ):null}
             </React.Fragment>
         );

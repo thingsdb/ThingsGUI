@@ -1,24 +1,15 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ListItem from '@mui/material/ListItem';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import {THING_KEY} from '../../../../Constants/CharacterKeys';
 import ThingsBounds from './ThingsBounds';
 
-const useStyles = makeStyles(() => ({
-    justifyContent: {
-        justifyContent: 'center',
-    }
-}));
-
-const visibleNumber = 200;
+const visibleNumber = 100;
 
 const ThingRestrict = ({thing, onChildren}) => {
-    const classes = useStyles();
-
     const isArray = Array.isArray(thing);
     const [more, setMore] = React.useState({});
     const [bounds, setBounds] = React.useState({from:0, till:99});
@@ -38,12 +29,14 @@ const ThingRestrict = ({thing, onChildren}) => {
                 {onChildren(k, v, i, isArray)}
                 {more[count] && renderChildren(count+1)}
                 {!more[count] && (count+1)%visibleNumber == 0 ? (
-                    <ListItem className={classes.justifyContent}>
-                        <Button color="primary" onClick={handleMore(count)}>
-                            {'LOAD MORE'}
-                            <ExpandMoreIcon color="primary" />
-                        </Button>
-                    </ListItem>
+                    <Grid container alignItems="center" justifyContent="center" item xs={12}>
+                        <Grid item>
+                            <Button color="primary" onClick={handleMore(count)}>
+                                {'LOAD MORE'}
+                                <ExpandMoreIcon color="primary" />
+                            </Button>
+                        </Grid>
+                    </Grid>
                 ):null}
             </React.Fragment>
         );
