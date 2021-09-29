@@ -3,16 +3,7 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
-import withStyles from '@mui/styles/withStyles';
 
-const styles = theme => ({
-    green: {
-        color: theme.palette.primary.green,
-    },
-    disabled: {
-        color: 'rgba(255, 255, 255, 0.3)',
-    },
-});
 
 class StartStopPolling extends React.Component {
 
@@ -20,9 +11,6 @@ class StartStopPolling extends React.Component {
         onPoll: PropTypes.func.isRequired,
         title: PropTypes.string.isRequired,
         variant: PropTypes.string,
-
-        /* Styles properties */
-        classes: PropTypes.object.isRequired,
     }
 
     static defaultProps = {
@@ -72,16 +60,16 @@ class StartStopPolling extends React.Component {
 
 
     render() {
-        const {classes, title, variant} = this.props;
+        const {title, variant} = this.props;
         const {polling} = this.state;
         return (
             <Tooltip disableFocusListener disableTouchListener title={polling?`Stop polling ${title}`:`Start polling ${title}`}>
                 <Button color="primary" variant={variant} onClick={polling?this.handleStopPoll:this.handleStartPoll}>
-                    <ScheduleIcon className={polling?classes.green:classes.disabled} />
+                    <ScheduleIcon sx={polling ? {color: 'primary.green'}: {color: 'rgba(255, 255, 255, 0.3)'}} />
                 </Button>
             </Tooltip>
         );
     }
 }
 
-export default withStyles(styles)(StartStopPolling);
+export default StartStopPolling;

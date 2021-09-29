@@ -1,5 +1,4 @@
 import { amber } from '@mui/material/colors';
-import makeStyles from '@mui/styles/makeStyles';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -12,20 +11,14 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import {nextRunFn, SimpleModal} from '../../Util';
-import {ViewTimerDialogTAG} from '../../../Constants/Tags';
-import {TimerActions} from '../../../Stores';
+import { nextRunFn, SimpleModal } from '../../Util';
+import { ViewTimerDialogTAG } from '../../../Constants/Tags';
+import { TimerActions } from '../../../Stores';
 
-const useStyles = makeStyles(() => ({
-    warnColor: {
-        color: amber[700],
-    },
-}));
 
 const tag = ViewTimerDialogTAG;
 
 const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
-    const classes = useStyles();
     const [args, setArgs] = React.useState([]);
 
     const handleRefresh = React.useCallback(() => {
@@ -52,7 +45,7 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
             maxWidth="md"
             actionButtons={timer.with_side_effects?(
                 <ListItem>
-                    <Typography variant="caption" className={classes.warnColor}>
+                    <Typography variant="caption" sx={{color: amber[700]}}>
                         {'Note: this timer generates an event.'}
                     </Typography>
                 </ListItem>

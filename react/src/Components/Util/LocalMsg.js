@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Avatar from '@mui/material/Avatar';
 import CloseIcon from '@mui/icons-material/Close';
 import Collapse from '@mui/material/Collapse';
@@ -12,52 +11,34 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 
-const useStyles = makeStyles(() => ({
-    avatar: {
-        backgroundColor: 'transparent',
-    },
-    collapse: {
-        width: '100%'
-    },
-}));
-
-
-const LocalMsg = ({icon, title, body, onClose}) => {
-    const classes = useStyles();
-
-    const handleCloseError = () => {
-        onClose();
-    };
-
-    return (
-        <Collapse className={classes.collapse} in={Boolean(body)} timeout="auto" unmountOnExit>
-            <List>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar className={classes.avatar}>
-                            {icon}
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                        primary={title}
-                        secondary={body}
-                        primaryTypographyProps={{
-                            variant: 'caption',
-                            color: 'primary'
-                        }}
-                    />
-                    {onClose && (
-                        <ListItemSecondaryAction>
-                            <IconButton color="primary" onClick={handleCloseError}>
-                                <CloseIcon />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    )}
-                </ListItem>
-            </List>
-        </Collapse>
-    );
-};
+const LocalMsg = ({icon, title, body, onClose}) => (
+    <Collapse in={Boolean(body)} timeout="auto" unmountOnExit sx={{width: '100%'}}>
+        <List>
+            <ListItem>
+                <ListItemAvatar>
+                    <Avatar sx={{backgroundColor: 'transparent'}}>
+                        {icon}
+                    </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                    primary={title}
+                    secondary={body}
+                    primaryTypographyProps={{
+                        variant: 'caption',
+                        color: 'primary'
+                    }}
+                />
+                {onClose && (
+                    <ListItemSecondaryAction>
+                        <IconButton color="primary" onClick={onClose}>
+                            <CloseIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                )}
+            </ListItem>
+        </List>
+    </Collapse>
+);
 
 LocalMsg.defaultProps = {
     title: '',

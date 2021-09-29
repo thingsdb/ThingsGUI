@@ -1,5 +1,4 @@
 import { amber } from '@mui/material/colors';
-import makeStyles from '@mui/styles/makeStyles';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import Grid from '@mui/material/Grid';
@@ -14,23 +13,17 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import {CollectionActions, TimerActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal, VariablesArray} from '../../Util';
-import {EditTimerDialogTAG} from '../../../Constants/Tags';
-import {NIL} from '../../../Constants/ThingTypes';
+import { CollectionActions, TimerActions } from '../../../Stores';
+import { ErrorMsg, SimpleModal, VariablesArray } from '../../Util';
+import { EditTimerDialogTAG } from '../../../Constants/Tags';
+import { NIL } from '../../../Constants/ThingTypes';
 
-const useStyles = makeStyles(() => ({
-    warnColor: {
-        color: amber[700],
-    },
-}));
 
 const replaceNull = (items) => items.map(item => item === null ? NIL : item);
 
 const tag = EditTimerDialogTAG;
 
 const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
-    const classes = useStyles();
     const [queryString, setQueryString] = React.useState('set_timer_args()');
     const [args, setArgs] = React.useState([]);
 
@@ -75,7 +68,7 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
             maxWidth="md"
             actionButtons={timer.with_side_effects?(
                 <ListItem>
-                    <Typography variant="caption" className={classes.warnColor}>
+                    <Typography variant="caption" sx={{color: amber[700]}}>
                         {'Note: this timer generates an event.'}
                     </Typography>
                 </ListItem>

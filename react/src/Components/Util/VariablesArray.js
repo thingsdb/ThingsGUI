@@ -4,19 +4,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
-import makeStyles from '@mui/styles/makeStyles';
 
 import useStateCallback from './useStateCallback';
 
-const useStyles = makeStyles(theme => ({
-    chip: {
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
-    },
-}));
 
 const VariablesArray = ({input, onChange}) => {
-    const classes = useStyles();
     const [item, setItem] = React.useState('');
 
     const [myItems, setMyItems] = useStateCallback([]);
@@ -59,7 +51,7 @@ const VariablesArray = ({input, onChange}) => {
 
     return (
         <div>
-            {myItems.map((listitem, index) => <Chip key={index} id={listitem} className={classes.chip} label={listitem} onDelete={handleClick(index)} color="primary" />)}
+            {myItems.map((listitem, index) => <Chip key={index} id={listitem} label={listitem} onDelete={handleClick(index)} color="primary" sx={{margin: '8px', padding: '8px'}} />)}
             <TextField
                 helperText={'Add + hit "Enter"'}
                 name="input"

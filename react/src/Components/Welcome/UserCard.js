@@ -1,5 +1,4 @@
-import makeStyles from '@mui/styles/makeStyles';
-import {Link as RouterLink} from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -9,59 +8,35 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import {USER_ROUTE} from '../../Constants/Routes';
+import { USER_ROUTE } from '../../Constants/Routes';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        backgroundColor: theme.palette.background.default,
-    },
-    action: {
-        paddingTop: 10,
-    },
-    marginLeft: {
-        marginLeft: theme.spacing(1)
-    },
-    pos: {
-        marginBottom: 12,
-        display: 'flex'
-    },
-}));
 
-const UserCard = ({user, size}) => {
-    const classes = useStyles({size});
-
-    return (
-        <Card className={classes.root}>
-            <CardActionArea
-                className={classes.action}
-                component={RouterLink}
-                to={location => ({...location, pathname: `/${USER_ROUTE}/${user.name}`})}
-            >
-                <CardContent>
-                    <Typography variant="h5" component="h2">
-                        {user.name}
-                    </Typography>
-                    <Typography variant="body2" gutterBottom component='div' className={classes.pos} color="textSecondary">
-                        <Box>
-                            {'Created: '}
-                        </Box>
-                        <Box className={classes.marginLeft} sx={{fontWeight: 'bold'}}>
-                            {moment.unix(user.created_at).fromNow()}
-                        </Box>
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Card >
-    );
-};
-
-UserCard.defaultProps = {
-    size: 'default',
-};
+const UserCard = ({user}) => (
+    <Card sx={{backgroundColor: 'background.default'}}>
+        <CardActionArea
+            component={RouterLink}
+            to={location => ({...location, pathname: `/${USER_ROUTE}/${user.name}`})}
+            sx={{paddingTop: '10px'}}
+        >
+            <CardContent>
+                <Typography variant="h5" component="h2">
+                    {user.name}
+                </Typography>
+                <Typography variant="body2" gutterBottom component='div' color="textSecondary" sx={{marginBottom: '12px', display: 'flex'}}>
+                    <Box>
+                        {'Created: '}
+                    </Box>
+                    <Box sx={{fontWeight: 'bold', marginLeft: '8px'}}>
+                        {moment.unix(user.created_at).fromNow()}
+                    </Box>
+                </Typography>
+            </CardContent>
+        </CardActionArea>
+    </Card >
+);
 
 UserCard.propTypes = {
     user: PropTypes.object.isRequired,
-    size: PropTypes.string
 };
 
 export default UserCard;

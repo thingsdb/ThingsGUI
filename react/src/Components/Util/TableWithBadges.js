@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
@@ -11,23 +10,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
-const useStyles = makeStyles(() => ({
-    box: {
-        maxWidth: 300,
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-    },
-    container: {
-        maxHeight: 300,
-    },
-    emptyCell: {
-        width: 50
-    }
-}));
 
 const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
-    const classes = useStyles();
     const [index, setIndex] = React.useState(null);
 
     const mouseEnter = (i) => () => {
@@ -38,7 +22,7 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
     };
 
     return (
-        <TableContainer className={classes.container}>
+        <TableContainer sx={{maxHeight: '300px'}}>
             <Table padding="none">
                 <TableHead>
                     <TableRow>
@@ -63,12 +47,15 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
                                         }
                                     >
                                         <Box
-                                            className={classes.box}
                                             component="div"
                                             sx={{
                                                 fontSize: 'body1.fontSize',
                                                 fontFamily: 'Monospace',
-                                                m: 1
+                                                m: 1,
+                                                maxWidth: '300px',
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
                                             }}
                                         >
                                             {row[h.ky]}
@@ -80,7 +67,7 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
                                 <TableCell align='right'>
                                     {buttons(row)}
                                 </TableCell>
-                            ) : <TableCell className={classes.emptyCell} />}
+                            ) : <TableCell sx={{width: '50px'}} />}
                         </TableRow>
                     ))}
                 </TableBody>

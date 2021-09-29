@@ -1,25 +1,10 @@
 import { amber } from '@mui/material/colors';
-import withStyles from '@mui/styles/withStyles';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
-
-const WarnSwitch = withStyles({
-    switchBase: {
-        color: amber[700],
-        '&$checked': {
-            color: amber[700],
-        },
-        '&$checked + $track': {
-            backgroundColor: amber[700],
-        },
-    },
-    checked: {},
-    track: {},
-})(Switch);
 
 const Wpo = ({onChange, input, disabled}) => {
     const [switchIni, setSwitch] = React.useState(input);
@@ -43,9 +28,23 @@ const Wpo = ({onChange, input, disabled}) => {
                     {'Disabled'}
                 </Grid>
                 <Grid item>
-                    <WarnSwitch
+                    <Switch
                         checked={switchIni}
                         onChange={handleSetWpo}
+                        sx={{
+                            '& .MuiSwitch-switchBase': {
+                                color: amber[700],
+                                backgroundColor: amber[700],
+                                '&.Mui-checked': {
+                                    color: amber[700],
+                                    backgroundColor: amber[700],
+                                },
+                                '& + .MuiSwitch-track': {
+                                    color: amber[700],
+                                    backgroundColor: amber[700],
+                                },
+                            }
+                        }}
                     />
                 </Grid>
                 <Grid item>

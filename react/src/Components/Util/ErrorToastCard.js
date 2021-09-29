@@ -1,5 +1,4 @@
 import { amber } from '@mui/material/colors';
-import makeStyles from '@mui/styles/makeStyles';
 import Accordion from '@mui/material/Accordion';
 import AccordionActions from '@mui/material/AccordionActions';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -14,25 +13,11 @@ import Typography from '@mui/material/Typography';
 import WarningIcon from '@mui/icons-material/Warning';
 import PropTypes from 'prop-types';
 
-import { ErrorActions} from '../../Stores';
-import {useThingsError} from '.';
-
-const useStyles = makeStyles(theme => ({
-    card: {
-        backgroundColor: amber[700],
-        margin: theme.spacing(1),
-    },
-    panel: {
-        backgroundColor: amber[700],
-    },
-    title: {
-        marginLeft: theme.spacing(2)
-    },
-}));
+import { ErrorActions } from '../../Stores';
+import { useThingsError } from '.';
 
 
 const ErrorToastCard = ({index, thingsError}) => {
-    const classes = useStyles();
     const [title, body] = useThingsError(thingsError);
 
     const handleCloseError = () => {
@@ -41,11 +26,11 @@ const ErrorToastCard = ({index, thingsError}) => {
 
     return(
         <Slide direction="up" in timeout={{enter: 500}}>
-            <Card className={classes.card}>
-                <Accordion className={classes.panel}>
+            <Card sx={{backgroundColor: amber[700], margin: '8px'}}>
+                <Accordion sx={{backgroundColor: amber[700]}}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <WarningIcon />
-                        <Typography className={classes.title}>
+                        <Typography sx={{marginLeft: '16px'}}>
                             {'Warning: '}
                             {title}
                         </Typography>

@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Collapse from '@mui/material/Collapse';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
@@ -9,14 +8,7 @@ import Switch from '@mui/material/Switch';
 import PropertyVal from './PropertyVal';
 
 
-const useStyles = makeStyles(() => ({
-    fullWidth: {
-        width: '100%',
-    },
-}));
-
 const PropertyInitVal = ({category, onChange, onBlob, scope}) => {
-    const classes = useStyles();
     const [switchIni, setSwitch] = React.useState(false);
 
     const handleSwitch = ({target}) => {

@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Table from '@mui/material/Table';
@@ -10,11 +9,6 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 
-const useStyles = makeStyles({
-    container: {
-        maxHeight: 440,
-    },
-});
 
 const descendingComparator = (a, b, orderBy) => {
     if (b[orderBy] < a[orderBy]) {
@@ -43,7 +37,6 @@ const stableSort = (array, comparator) => {
 };
 
 const StickyHeadTable = ({columns, rows, size}) => {
-    const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(4);
     const [order, setOrder] = React.useState('asc');
@@ -67,7 +60,7 @@ const StickyHeadTable = ({columns, rows, size}) => {
 
     return (
         <React.Fragment>
-            <TableContainer className={classes.container}>
+            <TableContainer sx={{maxHeight: 440}}>
                 <Table stickyHeader aria-label="sticky table" size={size}>
                     <TableHead>
                         <TableRow>

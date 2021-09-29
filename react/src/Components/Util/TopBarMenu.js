@@ -3,18 +3,9 @@ import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
-import makeStyles from '@mui/styles/makeStyles';
-
-
-const useStyles = makeStyles(theme => ({
-    color: {
-        color: theme.palette.text.primary
-    },
-}));
 
 
 const TopBarMenu = ({ children, menuIcon, menuTooltip}) => {
-    const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     React.useEffect(() => {
@@ -42,7 +33,7 @@ const TopBarMenu = ({ children, menuIcon, menuTooltip}) => {
                         aria-owns={isOpen ? 'menu' : null}
                         edge="end"
                         onClick={handleMenuOpen}
-                        className={classes.color}
+                        sx={{color: 'text.primary'}}
                     >
                         {menuIcon}
                     </IconButton>

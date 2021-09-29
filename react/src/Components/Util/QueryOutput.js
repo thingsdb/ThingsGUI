@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
@@ -11,22 +10,8 @@ import Tabs from '@mui/material/Tabs';
 import {ThingsTree} from '.';
 import Copy from './Copy';
 
-const useStyles = makeStyles(theme => ({
-    card: {
-        backgroundColor: '#000',
-        padding: theme.spacing(1),
-        overflowX: 'auto',
-        width: '100%'
-
-    },
-    tabs: {
-        marginBottom: theme.spacing(2),
-    },
-}));
-
 
 const QueryOutput = ({output}) => {
-    const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
     const handleChangeTab = (_event, newValue) => {
         setTabIndex(newValue);
@@ -36,8 +21,8 @@ const QueryOutput = ({output}) => {
     const jsonOutput = JSON.stringify(output, replacer, 4); // output
 
     return (
-        <Paper className={classes.card} >
-            <Tabs className={classes.tabs} value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example">
+        <Paper sx={{backgroundColor: '#000', padding: '8px', overflowX: 'auto', width: '100%'}}>
+            <Tabs value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example" sx={{marginBottom: '16px'}}>
                 <Tab label="Tree view" />
                 <Tab label="JSON view" />
             </Tabs>

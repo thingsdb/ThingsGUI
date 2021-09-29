@@ -193,15 +193,17 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                                                 <PropertyName onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
                                             </Grid>
                                             {category === 'type' ? (
-                                                <Switching
-                                                    one={
-                                                        <PropertyType onChange={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
-                                                    }
-                                                    two={
-                                                        <PropertyMethod onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
-                                                    }
-                                                    onChange={handleSwitching(i)}
-                                                />
+                                                <Grid item xs={12}>
+                                                    <Switching
+                                                        one={
+                                                            <PropertyType onChange={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
+                                                        }
+                                                        two={
+                                                            <PropertyMethod onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
+                                                        }
+                                                        onChange={handleSwitching(i)}
+                                                    />
+                                                </Grid>
                                             ) : null}
                                             {category === 'enum' ? (
                                                 <Grid item xs={12}>

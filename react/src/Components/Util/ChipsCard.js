@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
@@ -9,23 +8,13 @@ import React from 'react';
 import RemoveIcon from '@mui/icons-material/Delete';
 import Switch from '@mui/material/Switch';
 
-import {ChipsCardTAG} from '../../Constants/Tags';
-import {ErrorMsg, HarmonicCardContent, orderByName, SearchInput, SimpleModal, CardMultiButton} from '.';
+import { ChipsCardTAG } from '../../Constants/Tags';
+import { ErrorMsg, HarmonicCardContent, orderByName, SearchInput, SimpleModal, CardMultiButton } from '.';
 
-
-const useStyles = makeStyles(theme => ({
-    customWidth: {
-        maxWidth: 500,
-    },
-    warning: {
-        color: theme.palette.primary.red
-    },
-}));
 
 const step = 20;
 
 const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, title, warnExpression}) => {
-    const classes = useStyles();
     const [deleteItem, setDeleteItem] = React.useState('');
     const [switchDel, setSwitchDel] = React.useState(false);
     const [searchString, setSearchString] = React.useState('');
@@ -113,7 +102,6 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
                     <React.Fragment>
                         <Chip
                             clickable
-                            className={classes.chip}
                             label="ADD"
                             onClick={handleClickAdd}
                             color="primary"
@@ -127,7 +115,7 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
                 open={Boolean(deleteItem)}
                 onClose={handleCloseDelete}
                 actionButtons={
-                    <Button color="primary" onClick={handleClickDelete} disabled={!switchDel} className={classes.warning}>
+                    <Button color="error" onClick={handleClickDelete} disabled={!switchDel}>
                         {'Submit'}
                     </Button>
                 }

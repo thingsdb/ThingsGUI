@@ -1,5 +1,4 @@
-import makeStyles from '@mui/styles/makeStyles';
-import {withVlow} from 'vlow';
+import { withVlow } from 'vlow';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -17,27 +16,16 @@ import SaveIcon from '@mui/icons-material/Save';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import {ModuleInfoTAG} from '../../../Constants/Tags';
-import {NodesActions, NodesStore} from '../../../Stores';
-import {SimpleModal, ErrorMsg, LocalMsg} from '../../Util';
-import {THINGS_DOC_RENAME_MODULE, THINGS_DOC_SET_MODULE_CONFIG, THINGS_DOC_SET_MODULE_SCOPE} from '../../../Constants/Links';
-import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';
+import { ModuleInfoTAG } from '../../../Constants/Tags';
+import { NodesActions, NodesStore } from '../../../Stores';
+import { SimpleModal, ErrorMsg, LocalMsg } from '../../Util';
+import { THINGS_DOC_RENAME_MODULE, THINGS_DOC_SET_MODULE_CONFIG, THINGS_DOC_SET_MODULE_SCOPE } from '../../../Constants/Links';
+import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
 
 const withStores = withVlow([{
     store: NodesStore,
     keys: ['_module']
 }]);
-
-const useStyles = makeStyles(theme => ({
-    box: {
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-    },
-    color: {
-        color: theme.palette.text.primary
-    }
-}));
 
 const header = [
     {
@@ -109,7 +97,6 @@ const header = [
 const tag = ModuleInfoTAG;
 
 const ModuleInfo = ({item, nodeId, _module}) => {
-    const classes = useStyles();
     const [show, setShow] = React.useState(false);
     const [edit, setEdit] = React.useState({});
     const [form, setForm] = React.useState({});
@@ -226,7 +213,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                     <Badge
                                         badgeContent={h.canEdit ?
                                             <ButtonBase onClick={handleEdit(h)}>
-                                                <EditIcon color="primary" style={{fontSize: 20}} />
+                                                <EditIcon color="primary" sx={{fontSize: '20px'}} />
                                             </ButtonBase> : null
                                         }
                                     >

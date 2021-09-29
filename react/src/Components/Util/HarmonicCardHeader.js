@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import makeStyles from '@mui/styles/makeStyles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import Collapse from '@mui/material/Collapse';
@@ -10,20 +9,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-const useStyles = makeStyles(theme => ({
-    padding: {
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-    },
-    action: {
-        marginTop: 0,
-    },
-}));
 
 const HarmonicCardHeader = ({actionButtons, children, expand, onCleanup, onExpand, onRefresh, title, unmountOnExit}) => {
-    const classes = useStyles();
     const [expanded, setExpanded] = React.useState(expand);
 
     React.useEffect(() => {
@@ -57,7 +44,6 @@ const HarmonicCardHeader = ({actionButtons, children, expand, onCleanup, onExpan
                         </Button>
                     </React.Fragment>
                 }
-                className={classes.padding}
                 title={title}
                 titleTypographyProps={{
                     variant: 'body2',
@@ -65,8 +51,14 @@ const HarmonicCardHeader = ({actionButtons, children, expand, onCleanup, onExpan
                     noWrap: true,
                     component: 'span',
                 }}
-                classes={{
-                    action: classes.action,
+                sx={{
+                    paddingTop: '8px',
+                    paddingBottom: '8px',
+                    paddingLeft: '16px',
+                    paddingRight: '16px',
+                    '& .MuiCardHeader-action': {
+                        marginTop: 0
+                    }
                 }}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit={unmountOnExit}>

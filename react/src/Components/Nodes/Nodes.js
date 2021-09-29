@@ -50,7 +50,7 @@ const Nodes = ({nodes, connectedNode}) => {
                 <TableWithRowExtend buttons={handleButtons} canExtend={handleCanExtend} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode} onRefresh={handleRefresh} />
             </Grid>
             <Grid item xs={12}>
-                <Grid container spacing={1}>
+                <Grid container spacing={1} sx={{marginLeft: '8px'}}>
                     <Grid item>
                         <Add />
                     </Grid>

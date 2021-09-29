@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -12,19 +11,10 @@ import Switch from '@mui/material/Switch';
 import {ChipsCardTAG} from '../../Constants/Tags';
 import {ErrorMsg, HarmonicCardContent, orderByName, SearchInput, SimpleModal, TableWithButtons} from '.';
 
-const useStyles = makeStyles(theme => ({
-    customWidth: {
-        maxWidth: 500,
-    },
-    warning: {
-        color: theme.palette.primary.red
-    },
-}));
 
 const step = 5;
 
 const TableCard = ({buttons, header, itemKey, items, moreButtons, onAdd, onDelete, tag}) => {
-    const classes = useStyles();
     const [deleteItem, setDeleteItem] = React.useState('');
     const [switchDel, setSwitchDel] = React.useState(false);
     const [searchString, setSearchString] = React.useState('');
@@ -109,7 +99,6 @@ const TableCard = ({buttons, header, itemKey, items, moreButtons, onAdd, onDelet
                     <React.Fragment>
                         <Chip
                             clickable
-                            className={classes.chip}
                             label="ADD"
                             onClick={handleClickAdd}
                             color="primary"
@@ -123,7 +112,7 @@ const TableCard = ({buttons, header, itemKey, items, moreButtons, onAdd, onDelet
                 open={Boolean(deleteItem)}
                 onClose={handleCloseDelete}
                 actionButtons={
-                    <Button color="primary" onClick={handleClickDelete} disabled={!switchDel} className={classes.warning}>
+                    <Button color="error" onClick={handleClickDelete} disabled={!switchDel}>
                         {'Submit'}
                     </Button>
                 }

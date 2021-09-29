@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import BuildIcon from '@mui/icons-material/Build';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Collapse from '@mui/material/Collapse';
@@ -13,23 +12,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import {DownloadBlob, StringDialog} from '.';
-import {BYTES, STR} from '../../Constants/ThingTypes';
-
-
-const useStyles = makeStyles(() => ({
-    listItem: {
-        margin: 0,
-        padding: 0,
-    },
-    text: {
-        width: '80%',
-    }
-}));
+import { DownloadBlob, StringDialog } from '.';
+import { BYTES, STR } from '../../Constants/ThingTypes';
 
 
 const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildren, type, val, inset}) => {
-    const classes = useStyles();
     const [show, setShow] = React.useState(false);
     const [focus, setFocus] = React.useState(false);
 
@@ -58,7 +45,6 @@ const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildre
                     {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
                 </ListItemIcon>
                 <ListItemText
-                    classes={{ root: classes.listItem, primary: classes.text }}
                     primary={
                         <React.Fragment>
                             {name ? (
@@ -76,6 +62,15 @@ const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildre
                     primaryTypographyProps={{
                         display: 'block',
                         noWrap: true,
+                    }}
+                    sx={{
+                        '& .MuiListItemText-root': {
+                            margin: 0,
+                            padding: 0,
+                        },
+                        '& .MuiListItemText-primary': {
+                            width: '80%',
+                        }
                     }}
                 />
 
