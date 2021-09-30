@@ -33,16 +33,14 @@ const Wpo = ({onChange, input, disabled}) => {
                         onChange={handleSetWpo}
                         sx={{
                             '& .MuiSwitch-switchBase': {
-                                color: amber[700],
-                                backgroundColor: amber[700],
                                 '&.Mui-checked': {
                                     color: amber[700],
-                                    backgroundColor: amber[700],
+                                    '& + .MuiSwitch-track': {
+                                        color: amber[700],
+                                        backgroundColor: amber[700],
+                                    },
                                 },
-                                '& + .MuiSwitch-track': {
-                                    color: amber[700],
-                                    backgroundColor: amber[700],
-                                },
+
                             }
                         }}
                     />
