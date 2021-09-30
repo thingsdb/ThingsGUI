@@ -19,13 +19,13 @@ const DownloadBlob = ({val, isImg}) => {
             {isImg ? (
                 <img
                     src={link}
-                    sx={{
+                    style={{
                         border: '1px solid #ddd',
                         borderRadius: '4px',
                         padding: '5px',
                         width: '250px',
                         '&:hover': {
-                            backgroundColor: alpha('common.black', 0.15),
+                            backgroundColor: alpha('#fff', 0.15),
                             boxShadow: '0 0 8px 1px rgba(0, 140, 186, 0.5)',
                         }
                     }}

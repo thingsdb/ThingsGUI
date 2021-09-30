@@ -1,3 +1,4 @@
+import { styled } from '@mui/material/styles';
 import BuildIcon from '@mui/icons-material/Build';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Collapse from '@mui/material/Collapse';
@@ -15,6 +16,28 @@ import Typography from '@mui/material/Typography';
 import { DownloadBlob, StringDialog } from '.';
 import { BYTES, STR } from '../../Constants/ThingTypes';
 
+const StyledListItem = styled(ListItem, {shouldForwardProp: (prop) => prop !== 'inset'})(
+    ({ inset }) => ({
+        margin: 0,
+        paddingTop:0,
+        paddingBottom:0,
+        paddingRight: 0,
+        paddingLeft: inset ? 32 : 0,
+        '& .MuiListItemText-root': {
+            margin: '0px',
+            padding: '0px',
+        },
+        '& .MuiListItemText-primary': {
+            width: '80%',
+        }
+    })
+);
+
+const StyledList = styled(List, {shouldForwardProp: (prop) => prop !== 'inset'})(
+    ({ inset }) => ({
+        paddingLeft: inset ? 32 : 0,
+    })
+);
 
 const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildren, type, val, inset}) => {
     const [show, setShow] = React.useState(false);
@@ -40,7 +63,7 @@ const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildre
 
     return (
         <React.Fragment>
-            <ListItem style={{margin: 0, paddingTop:0, paddingBottom:0, paddingRight: 0, paddingLeft: inset?32:0}} button ContainerProps={{onMouseEnter: handleOnMouseEnter, onMouseLeave: handleOnMouseLeave}} onClick={handleClick}>
+            <StyledListItem inset={inset} button ContainerProps={{onMouseEnter: handleOnMouseEnter, onMouseLeave: handleOnMouseLeave}} onClick={handleClick}>
                 <ListItemIcon>
                     {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
                 </ListItemIcon>
@@ -63,15 +86,6 @@ const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildre
                         display: 'block',
                         noWrap: true,
                     }}
-                    sx={{
-                        '& .MuiListItemText-root': {
-                            margin: 0,
-                            padding: 0,
-                        },
-                        '& .MuiListItemText-primary': {
-                            width: '80%',
-                        }
-                    }}
                 />
 
                 <ListItemSecondaryAction>
@@ -91,12 +105,12 @@ const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildre
                         ):null}
                     </Collapse>
                 </ListItemSecondaryAction>
-            </ListItem>
+            </StyledListItem>
             {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding dense style={{paddingLeft: inset?32:0}}>
+                <StyledList inset={inset} component="div" disablePadding dense>
                     {show&&renderChildren()}
-                </List>
+                </StyledList>
             </Collapse>}
         </React.Fragment>
     );
