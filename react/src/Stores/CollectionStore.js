@@ -42,9 +42,11 @@ class CollectionStore extends BaseStore {
         this.state = CollectionStore.defaults;
     }
 
-
     onResetCollectionStore() {
-        this.setState(CollectionStore.defaults);
+        this.setState({
+            things: {},
+            thingCounters: {},
+        });
     }
 
     onIncCounter(thingId) {
