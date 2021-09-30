@@ -102,6 +102,12 @@ const StyledDrawerHeader = styled('div')(({theme}) => ({
     justifyContent: 'flex-start',
 }));
 
+const StyledDrawerContainer = styled('div', {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({ open }) => ({
+        display: open ? 'block' : 'none'
+    }),
+);
+
 const MenuFooter = styled('div')(() => ({
     position:'fixed',
     left: 0,
@@ -200,7 +206,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                     <StyledDragger open={open} onMouseDown={handleMousedown}>
                         <DragHandleIcon sx={{transform: 'rotate(90deg)'}} />
                     </StyledDragger>
-                    <div sx={open ? {display: 'block'} : {display: 'none'}}>
+                    <StyledDrawerContainer open={open}>
                         <StyledDrawerHeader>
                             <Button color="primary" onClick={onClose}>
                                 {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
@@ -211,7 +217,7 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                         </StyledDrawerHeader>
                         <Divider />
                         {open ? drawerContent : null}
-                    </div>
+                    </StyledDrawerContainer>
                 </StyledDrawer>
                 {toast}
             </Flex>

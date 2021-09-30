@@ -51,7 +51,23 @@ const VariablesArray = ({input, onChange}) => {
 
     return (
         <div>
-            {myItems.map((listitem, index) => <Chip key={index} id={listitem} label={listitem} onDelete={handleClick(index)} color="primary" sx={{margin: '8px', padding: '8px'}} />)}
+            {myItems.map((listitem, index) => (
+                <Chip
+                    color="primary"
+                    id={listitem}
+                    key={index}
+                    label={listitem}
+                    onDelete={handleClick(index)}
+                    sx={{
+                        color: '#000',
+                        margin: '8px',
+                        padding: '8px',
+                        '& .MuiChip-deleteIcon': {
+                            color: '#000'
+                        }
+                    }}
+                />
+            ))}
             <TextField
                 helperText={'Add + hit "Enter"'}
                 name="input"

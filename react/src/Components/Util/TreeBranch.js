@@ -6,6 +6,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
@@ -23,6 +24,10 @@ const StyledListItem = styled(ListItem, {shouldForwardProp: (prop) => prop !== '
         paddingBottom:0,
         paddingRight: 0,
         paddingLeft: inset ? 32 : 0,
+        '& .MuiListItemButton-root': {
+            margin: '0px',
+            padding: '0px',
+        },
         '& .MuiListItemText-root': {
             margin: '0px',
             padding: '0px',
@@ -63,31 +68,32 @@ const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildre
 
     return (
         <React.Fragment>
-            <StyledListItem inset={inset} button ContainerProps={{onMouseEnter: handleOnMouseEnter, onMouseLeave: handleOnMouseLeave}} onClick={handleClick}>
-                <ListItemIcon>
-                    {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
-                </ListItemIcon>
-                <ListItemText
-                    primary={
-                        <React.Fragment>
-                            {name ? (
-                                <Typography
-                                    variant="body1"
-                                    color="primary"
-                                    component="span"
-                                >
-                                    {`${name}   `}
-                                </Typography>
-                            ) : null}
-                            {type === BYTES ?  '      Blob' : `     ${val}`}
-                        </React.Fragment>
-                    }
-                    primaryTypographyProps={{
-                        display: 'block',
-                        noWrap: true,
-                    }}
-                />
-
+            <StyledListItem inset={inset} ContainerProps={{onMouseEnter: handleOnMouseEnter, onMouseLeave: handleOnMouseLeave}}>
+                <ListItemButton onClick={handleClick}>
+                    <ListItemIcon>
+                        {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={
+                            <React.Fragment>
+                                {name ? (
+                                    <Typography
+                                        variant="body1"
+                                        color="primary"
+                                        component="span"
+                                    >
+                                        {`${name}   `}
+                                    </Typography>
+                                ) : null}
+                                {type === BYTES ?  '      Blob' : `     ${val}`}
+                            </React.Fragment>
+                        }
+                        primaryTypographyProps={{
+                            display: 'block',
+                            noWrap: true,
+                        }}
+                    />
+                </ListItemButton>
                 <ListItemSecondaryAction>
                     <Collapse component="span" in={focus} timeout={1}>
                         {onClick && (

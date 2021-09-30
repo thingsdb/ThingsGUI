@@ -4,11 +4,11 @@ import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {InputField} from '../../CollectionsUtils';
+import { DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL } from '../../../../Constants/ThingTypes';
+import { InputField } from '../../CollectionsUtils';
 import BuildQueryString from './BuildQueryString';
 import PropInit from './PropInit';
 import TypeInit from './TypeInit';
-import {DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL} from '../../../../Constants/ThingTypes';
 
 
 const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
@@ -53,17 +53,17 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
             </ListItem>
             <ListItem>
                 <Grid container item xs={12} spacing={1} alignItems="center">
-                    <Grid item xs={3}>
-                        {addNewProperty && (
+                    {addNewProperty && (
+                        <Grid item xs={3}>
                             <PropInit
                                 onChange={handleOnChangeName}
                                 input={newProperty}
                                 thing={thing}
                             />
-                        )}
-                    </Grid>
-                    <Grid item xs={3}>
-                        {canChangeType && (
+                        </Grid>
+                    )}
+                    {canChangeType && (
+                        <Grid item xs={3}>
                             <TypeInit
                                 onChange={handleOnChangeType}
                                 type={child.type}
@@ -71,8 +71,8 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
                                 dataTypes={dataTypes}
                                 input={dataType}
                             />
-                        )}
-                    </Grid>
+                        </Grid>
+                    )}
                 </Grid>
             </ListItem>
             <ListItem>

@@ -48,7 +48,7 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
                 </Grid>
             }
             <Grid item>
-                <Fab color="primary" onClick={handleClickOpenEditor} >
+                <Fab color="primary" onClick={handleClickOpenEditor} sx={{color: '#000'}}>
                     <CodeIcon fontSize="large" />
                 </Fab>
             </Grid>

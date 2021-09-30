@@ -1,3 +1,4 @@
+import { withVlow } from 'vlow';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -6,12 +7,11 @@ import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import {withVlow} from 'vlow';
 
-import {ThingActions} from '../TreeActions';
-import {CollectionStore, CollectionActions} from '../../../../Stores';
-import {THING} from '../../../../Constants/ThingTypes';
-import {COLLECTION_SCOPE} from '../../../../Constants/Scopes';
+import { ThingActions } from '../TreeActions';
+import { CollectionStore, CollectionActions } from '../../../../Stores';
+import { THING } from '../../../../Constants/ThingTypes';
+import { COLLECTION_SCOPE } from '../../../../Constants/Scopes';
 import ThingRestrict from './ThingRestrict';
 import Thing from './Thing';
 

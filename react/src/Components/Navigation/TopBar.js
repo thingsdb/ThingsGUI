@@ -7,6 +7,7 @@ import HelpIcon from '@mui/icons-material/HelpOutline';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
@@ -67,11 +68,13 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
                                 </ListItemIcon>
                                 <ListItemText primary={user.name} />
                             </ListItem>
-                            <ListItem button onClick={handleClickLogout}>
-                                <ListItemIcon>
-                                    <ExitToAppIcon color="primary" />
-                                </ListItemIcon>
-                                <ListItemText primary="Logout" />
+                            <ListItem>
+                                <ListItemButton dense disableGutters onClick={handleClickLogout}>
+                                    <ListItemIcon>
+                                        <ExitToAppIcon color="primary" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Logout" />
+                                </ListItemButton>
                             </ListItem>
                         </List>
                     </TopBarMenu>

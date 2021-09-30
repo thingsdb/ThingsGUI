@@ -95,7 +95,7 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
     return(
         <SimpleModal
             button={
-                <Fab color="primary" onClick={handleClickOpen} >
+                <Fab color="primary" onClick={handleClickOpen} sx={{color: '#000'}}>
                     <DeleteIcon fontSize="large" />
                 </Fab>
             }

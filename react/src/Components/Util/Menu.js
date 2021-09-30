@@ -1,4 +1,4 @@
-import {Link as RouterLink} from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -41,16 +41,16 @@ const Menu = ({onAdd, homeRoute, icon, itemKey, items, onRefresh, title}) => {
                             variant: 'button'
                         }}
                     />
-                    {onRefresh && open && (
-                        <ListItemSecondaryAction>
-                            <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title.toLowerCase()} info`}>
-                                <Button color="primary" onClick={onRefresh}>
-                                    <RefreshIcon color="primary" />
-                                </Button>
-                            </Tooltip>
-                        </ListItemSecondaryAction>
-                    )}
                 </ListItemButton>
+                {onRefresh && open && (
+                    <ListItemSecondaryAction>
+                        <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title.toLowerCase()} info`}>
+                            <Button color="primary" onClick={onRefresh}>
+                                <RefreshIcon color="primary" />
+                            </Button>
+                        </Tooltip>
+                    </ListItemSecondaryAction>
+                )}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List dense disablePadding>

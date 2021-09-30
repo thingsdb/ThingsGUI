@@ -38,7 +38,24 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                     {groupSigning[groupSign][0]}
                 </Typography>
                 <Grid item sx={{paddingLeft: '24px'}}>
-                    {items.map((listitem, index) => <Chip key={index} id={listitem} label={listitem} color="primary" onDelete={onDelete(index, listitem)} sx={{padding: '8px', margin: '8px', maxWidth: '300px'}} />)}
+                    {items.map((listitem, index) => (
+                        <Chip
+                            color="primary"
+                            id={listitem}
+                            key={index}
+                            label={listitem}
+                            onDelete={onDelete(index, listitem)}
+                            sx={{
+                                color: '#000',
+                                padding: '8px',
+                                margin: '8px',
+                                maxWidth: '300px',
+                                '& .MuiChip-deleteIcon': {
+                                    color: '#000'
+                                }
+                            }}
+                        />
+                    ))}
                 </Grid>
             </Grid>
             <Grid item xs={open?12:1} container justifyContent="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>

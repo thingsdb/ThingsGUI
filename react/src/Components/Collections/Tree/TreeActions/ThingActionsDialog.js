@@ -8,10 +8,10 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
-import {allDataTypes, ErrorMsg, SimpleModal} from '../../../Util';
-import {CollectionActions, EnumActions, ThingsdbActions, TypeActions} from '../../../../Stores';
-import {ROOM, THING, TUPLE} from '../../../../Constants/ThingTypes';
-import {ThingActionsDialogTAG} from '../../../../Constants/Tags';
+import { allDataTypes, ErrorMsg, SimpleModal } from '../../../Util';
+import { CollectionActions, EnumActions, ThingsdbActions, TypeActions } from '../../../../Stores';
+import { ROOM, THING, TUPLE } from '../../../../Constants/ThingTypes';
+import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
 import DialogButtons from './DialogButtons';
 import Edit from './Edit';
 import RoomEvent from './RoomEvent';

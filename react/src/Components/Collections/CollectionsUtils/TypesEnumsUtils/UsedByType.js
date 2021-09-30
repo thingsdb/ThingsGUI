@@ -32,7 +32,14 @@ const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
             </ListItem>
             <Grid>
                 {u.map((item, index)=>(
-                    <Chip color="primary" key={index} onClick={handleChange(item.name, 'type')} label={item.name} size="small" sx={{margin: '8px'}} />
+                    <Chip
+                        color="primary"
+                        key={index}
+                        label={item.name}
+                        onClick={handleChange(item.name, 'type')}
+                        size="small"
+                        sx={{margin: '8px', color: '#000'}}
+                    />
                 ))}
             </Grid>
         </React.Fragment>

@@ -8,28 +8,30 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 
-const SCard = styled('div')(({ theme }) => ({
-    alignItems: 'center',
-    backgroundColor: theme.palette.primary.main,
-    border: 'none',
-    borderRadius: '16px',
-    boxSizing: 'border-box',
-    color: 'rgba(0, 0, 0, 0.87)',
-    cursor: 'default',
-    display: 'inline-flex',
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    fontSize: '0.8125rem',
-    height: '32px',
-    justifyContent: 'center',
-    margin: theme.spacing(1),
-    outline: 0,
-    padding: 0,
-    textAlign: 'center',
-    textDecoration: 'none',
-    transition: 'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-    verticalAlign: 'middle',
-    whiteSpace: 'nowrap',
-}));
+const SCard = styled('div', {shouldForwardProp: (prop) => prop !== 'warn'})(
+    ({ theme, warn }) => ({
+        alignItems: 'center',
+        backgroundColor: warn ? amber[700] : theme.palette.primary.main,
+        border: 'none',
+        borderRadius: '16px',
+        boxSizing: 'border-box',
+        color: 'rgba(0, 0, 0, 0.87)',
+        cursor: 'default',
+        display: 'inline-flex',
+        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        fontSize: '0.8125rem',
+        height: '32px',
+        justifyContent: 'center',
+        margin: theme.spacing(1),
+        outline: 0,
+        padding: 0,
+        textAlign: 'center',
+        textDecoration: 'none',
+        transition: 'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+        verticalAlign: 'middle',
+        whiteSpace: 'nowrap',
+    })
+);
 
 const Text = styled('span')(() => ({
     overflow: 'hidden',
@@ -61,7 +63,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 const CardMultiButton = ({buttons, label, warn}) => {
     return(
-        <SCard sx={{backgroundColor: warn ? amber[700] : null}}>
+        <SCard warn={warn}>
             <Text>
                 <Typography variant="caption" component="span" color="inherit">
                     {label}

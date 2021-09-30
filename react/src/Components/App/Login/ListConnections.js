@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
@@ -70,16 +71,18 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
         <List>
             {sortedConns.map((v, i) => (
                 <React.Fragment key={i}>
-                    <ListItem button onClick={handleConnectToo(v.name)}>
-                        <ListItemIcon>
-                            <img
-                                alt="ThingsDB Logo"
-                                src="/img/thingsdb-logo.png"
-                                draggable='false'
-                                height="25px"
-                            />
-                        </ListItemIcon>
-                        <ListItemText primary={v.name} secondary={v.address} />
+                    <ListItem>
+                        <ListItemButton dense disableGutters onClick={handleConnectToo(v.name)}>
+                            <ListItemIcon>
+                                <img
+                                    alt="ThingsDB Logo"
+                                    src="/img/thingsdb-logo.png"
+                                    draggable='false'
+                                    height="25px"
+                                />
+                            </ListItemIcon>
+                            <ListItemText primary={v.name} secondary={v.address} />
+                        </ListItemButton>
                         <ListItemSecondaryAction>
                             <Memo connection={v} />
                             <Button color="primary" onClick={handleDeleteConn(v.name)}>
@@ -118,8 +121,10 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
                     <ListItemText secondary="No saved connections" secondaryTypographyProps={{variant: 'caption'}} />
                 </ListItem>
             }
-            <ListItem button onClick={onClickNewConn}>
-                <ListItemText primary="Use another connection" />
+            <ListItem>
+                <ListItemButton dense disableGutters onClick={onClickNewConn}>
+                    <ListItemText primary="Use another connection" />
+                </ListItemButton>
             </ListItem>
         </List>
     );
