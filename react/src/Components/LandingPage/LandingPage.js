@@ -14,7 +14,7 @@ import {historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} fro
 import {TopBar} from '../Navigation';
 import LandingContent from './LandingContent';
 
-const version='version: 1.0.1';
+const version='version: 1.0.2';
 
 const Transition = React.forwardRef((props, ref) => {
     return <Slide direction="down" ref={ref} {...props} mountOnEnter unmountOnExit />;
