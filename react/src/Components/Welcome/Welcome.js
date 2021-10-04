@@ -39,7 +39,7 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
     }, []);
 
     let humanizedGreeting = 'Good ' + getGreetingTime(moment()) + ', ';
-    let sortedCollections = stableSort(collections, getSorting('desc', 'things'));
+    let sortedCollections = stableSort(collections, getSorting('desc', 'collection_name'));
 
     return (
         <TitlePage3
