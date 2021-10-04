@@ -12,50 +12,40 @@ const withStores = withVlow([{
     keys: ['collections']
 }]);
 
-const initialState = {
-    errors: {},
-    form: {},
-};
-
-const validation = {
-    name: (f, collections) => {
-        if (f.name.length==0) {
-            return 'is required';
-        }
-        if (collections.some((c) => c.name===f.name)) {
-            return 'collection name is already in use';
-        }
-        return '';
-    },
+const validation =  (name, collections) => {
+    if (name.length === 0) {
+        return 'is required';
+    }
+    if (collections.some((c) => c.name === name)) {
+        return 'collection name is already in use';
+    }
+    return '';
 };
 
 const tag = AddCollectionTAG;
 
 const Add = ({open, onClose, collections}) => {
-    const [state, setState] = React.useState(initialState);
-    const {errors, form} = state;
+    const [name, setName] = React.useState('');
+    const [err, setErr] = React.useState('');
 
     React.useEffect(() => { // clean state
-        setState(initialState);
+        if(open) {
+            setName('');
+            setErr('');
+        }
     }, [open]);
 
     const handleOnChange = ({target}) => {
-        const {id, value} = target;
-        setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
-            return {...prevState, form: updatedForm, errors: {}};
-        });
+        const {value} = target;
+        setName(value);
+        setErr('');
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, collections);  return d; }, {});
-        setState({...state, errors: err});
-        if (!Object.values(err).some(d => Boolean(d))) {
-            ThingsdbActions.addCollection(
-                form.name,
-                tag,
-                () => setState({...state, show: false})
-            );
+        const e = validation(name, collections);
+        setErr(e);
+        if (!e) {
+            ThingsdbActions.addCollection(name, tag, onClose);
         }
     };
 
@@ -77,16 +67,16 @@ const Add = ({open, onClose, collections}) => {
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                error={Boolean(errors.name)}
+                error={Boolean(err)}
                 fullWidth
-                helperText={errors.name}
+                helperText={err}
                 id="name"
                 label="Name"
                 margin="dense"
                 onChange={handleOnChange}
                 spellCheck={false}
                 type="text"
-                value={form.name}
+                value={name}
                 variant="standard"
             />
         </SimpleModal>

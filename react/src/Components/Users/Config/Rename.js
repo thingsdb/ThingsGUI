@@ -36,8 +36,6 @@ const Rename = ({user, users}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
 
-
-
     const handleClickOpen = () => {
         setState({show: true, errors: {}, form: {...user}});
     };

@@ -13,46 +13,40 @@ const withStores = withVlow([{
     keys: ['users']
 }]);
 
-const initialState = {
-    errors: {},
-    form: {},
-};
-
-const validation = {
-    name: (f, users) => {
-        if (f.name.length==0) {
-            return 'is required';
-        }
-        if (users.some((u) => u.name===f.name)) {
-            return 'username is already in use';
-        }
-        return '';
-    },
+const validation = (name, users) => {
+    if (name.length === 0) {
+        return 'is required';
+    }
+    if (users.some((u) => u.name === name)) {
+        return 'username is already in use';
+    }
+    return '';
 };
 
 const tag = AddUserTAG;
 
 const Add = ({open, onClose, users}) => {
-    const [state, setState] = React.useState(initialState);
-    const {errors, form} = state;
+    const [name, setName] = React.useState('');
+    const [err, setErr] = React.useState('');
 
     React.useEffect(() => { // clean state
-        setState(initialState);
+        if(open) {
+            setName('');
+            setErr('');
+        }
     }, [open]);
 
     const handleOnChange = ({target}) => {
-        const {id, value} = target;
-        setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
-            return {...prevState, form: updatedForm, errors: {}};
-        });
+        const {value} = target;
+        setName(value);
+        setErr('');
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, users);  return d; }, {});
-        setState({...state, errors: err});
-        if (!Object.values(err).some(d => Boolean(d))) {
-            ThingsdbActions.addUser(form.name, tag, () => setState({...state, show: false}));
+        const e = validation(name, users);
+        setErr(e);
+        if (!e) {
+            ThingsdbActions.addUser(name, tag, onClose);
         }
     };
 
@@ -74,16 +68,16 @@ const Add = ({open, onClose, users}) => {
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                error={Boolean(errors.name)}
+                error={Boolean(err)}
                 fullWidth
-                helperText={errors.name}
+                helperText={err}
                 id="name"
                 label="Name"
                 margin="dense"
                 onChange={handleOnChange}
                 spellCheck={false}
                 type="text"
-                value={form.name}
+                value={name}
                 variant="standard"
             />
         </SimpleModal>
