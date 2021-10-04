@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import { getGreetingTime, getSorting, stableSort, TitlePage3 } from '../Util';
+import { getGreetingTime, TitlePage3 } from '../Util';
 import { ProcedureActions, ProcedureStore, ThingsdbActions, ThingsdbStore, TimerActions, TimerStore } from '../../Stores';
 import { THINGSDB_SCOPE } from '../../Constants/Scopes';
 import CollectionCard from './CollectionCard';
@@ -39,7 +39,6 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
     }, []);
 
     let humanizedGreeting = 'Good ' + getGreetingTime(moment()) + ', ';
-    let sortedCollections = stableSort(collections, getSorting('desc', 'collection_name'));
 
     return (
         <TitlePage3
@@ -47,7 +46,7 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
             title={user.name || ''}
             content={
                 <React.Fragment>
-                    {sortedCollections.length > 0 &&
+                    {collections.length > 0 &&
                         <Paper sx={{padding: '16px', width: '100%'}}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} key={'collections_intro'}>
@@ -55,7 +54,7 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
                                         {'Your collections:'}
                                     </Typography>
                                 </Grid>
-                                {sortedCollections.map((collection, index) => (
+                                {collections.map((collection, index) => (
                                     <Grid item key={index}>
                                         <CollectionCard collection={collection} />
                                     </Grid>

@@ -1,12 +1,12 @@
 import { styled } from '@mui/material/styles';
-import {withVlow} from 'vlow';
+import { withVlow } from 'vlow';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import PeopleIcon from '@mui/icons-material/People';
 import React from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -31,7 +31,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
     margin: theme.spacing(0.5),
 }));
 
-const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
+const DashboardContent = ({allNodeInfo, collections, users, nodes}) => {
     const handleRefresh = () => {
         NodesActions.getNodes(()=>NodesActions.getDashboardInfo());
         ThingsdbActions.getCollections();
@@ -54,7 +54,7 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
         }, {
             title: 'Total number of Collections',
             data: collections.length,
-            logo: <DashboardIcon color="primary" sx={{ fontSize: '70px' }} />
+            logo: <LibraryBooksIcon color="primary" sx={{ fontSize: '70px' }} />
         }, {
             title: 'Total number of Users',
             data: users.length,
@@ -113,7 +113,7 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
                             <Grid container>
                                 <Grid item xs={11}>
                                     <Typography variant="body1" >
-                                        {'Overview of'}
+                                        {'Dashboard of'}
                                     </Typography>
                                     <Typography variant="h4">
                                         {'ThingsDB'}
@@ -179,7 +179,7 @@ const LandingContent = ({allNodeInfo, collections, users, nodes}) => {
     );
 };
 
-LandingContent.propTypes = {
+DashboardContent.propTypes = {
 
     /* ThingsDB properties */
     collections: ThingsdbStore.types.collections.isRequired,
@@ -190,4 +190,4 @@ LandingContent.propTypes = {
     nodes: NodesStore.types.nodes.isRequired,
 };
 
-export default withStores(LandingContent);
+export default withStores(DashboardContent);

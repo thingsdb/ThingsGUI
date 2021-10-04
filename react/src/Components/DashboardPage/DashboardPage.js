@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 
 import {historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Util';
 import {TopBar} from '../Navigation';
-import LandingContent from './LandingContent';
+import DashboardContent from './DashboardContent';
 
 const version='version: 1.0.2';
 
@@ -20,11 +20,11 @@ const Transition = React.forwardRef((props, ref) => {
     return <Slide direction="down" ref={ref} {...props} mountOnEnter unmountOnExit />;
 });
 
-const LandingPage = () => {
+const DashboardPage = () => {
     let history = useHistory();
     const [open, setOpen] = React.useState(() => {
-        let landingParam = historyGetQueryParam(history, 'landing');
-        if (landingParam) {
+        let dashboardParam = historyGetQueryParam(history, 'dashboard');
+        if (dashboardParam) {
             return true;
         }
         return false;
@@ -37,12 +37,12 @@ const LandingPage = () => {
     }, [handleOpen, history]);
 
     const handleOpen = React.useCallback(() => {
-        historySetQueryParam(history, 'landing', true);
+        historySetQueryParam(history, 'dashboard', true);
         setOpen(true);
     }, [history]);
 
     const handleClose = () => {
-        historyDeleteQueryParam(history, 'landing');
+        historyDeleteQueryParam(history, 'dashboard');
         setOpen(false);
     };
 
@@ -57,7 +57,7 @@ const LandingPage = () => {
                 />
             </Button>
             <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
-                <LandingContent />
+                <DashboardContent />
                 <div style={{position:'fixed', width: '100%', bottom: -8, zIndex: 2}}>
                     <TopBar
                         title={
@@ -78,4 +78,4 @@ const LandingPage = () => {
     );
 };
 
-export default LandingPage;
+export default DashboardPage;

@@ -115,8 +115,9 @@ const MenuFooter = styled('div')(() => ({
     zIndex: 2
 }));
 
-const MenuContainer = styled('div')(() => ({
+const MenuContainer = styled('div')(({theme}) => ({
     overflow: 'auto',
+    paddingTop: theme.spacing(1),
 }));
 
 const Menu = styled(Drawer, {shouldForwardProp: (prop) => prop !== 'menuWidth'})(

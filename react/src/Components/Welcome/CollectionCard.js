@@ -17,7 +17,7 @@ const CollectionCard = ({collection}) => (
         <CardActionArea
             component={RouterLink}
             to={location => ({...location, pathname: `/${COLLECTION_ROUTE}/${collection.name}`})}
-            sx={{paddingTop: 10}}
+            sx={{padding: '10px'}}
         >
             <CardMedia
                 image="/img/thingsdb-logo.png"
@@ -25,7 +25,6 @@ const CollectionCard = ({collection}) => (
                 sx={{
                     height: '150px',
                     width: '200px',
-                    margin: '10px',
                 }}
             />
             <CardContent>
