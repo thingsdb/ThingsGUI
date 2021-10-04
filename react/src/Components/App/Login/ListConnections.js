@@ -7,12 +7,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -71,8 +70,21 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
         <List>
             {sortedConns.map((v, i) => (
                 <React.Fragment key={i}>
-                    <ListItem>
-                        <ListItemButton dense disableGutters onClick={handleConnectToo(v.name)}>
+                    <ListItem
+                        disablePadding
+                        secondaryAction={
+                            <React.Fragment>
+                                <Memo connection={v} />
+                                <IconButton color="primary" onClick={handleDeleteConn(v.name)}>
+                                    <DeleteIcon color="primary" />
+                                </IconButton>
+                                <IconButton color="primary" onClick={handleOpenDetail(v.name)}>
+                                    {openDetail[v.name] ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
+                                </IconButton>
+                            </React.Fragment>
+                        }
+                    >
+                        <ListItemButton disableGutters onClick={handleConnectToo(v.name)}>
                             <ListItemIcon>
                                 <img
                                     alt="ThingsDB Logo"
@@ -83,15 +95,6 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
                             </ListItemIcon>
                             <ListItemText primary={v.name} secondary={v.address} />
                         </ListItemButton>
-                        <ListItemSecondaryAction>
-                            <Memo connection={v} />
-                            <Button color="primary" onClick={handleDeleteConn(v.name)}>
-                                <DeleteIcon color="primary" />
-                            </Button>
-                            <Button color="primary" onClick={handleOpenDetail(v.name)}>
-                                {openDetail[v.name] ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-                            </Button>
-                        </ListItemSecondaryAction>
                     </ListItem>
                     <Collapse in={openDetail[v.name]} timeout="auto">
                         <Grid container>

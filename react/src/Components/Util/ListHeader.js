@@ -1,3 +1,4 @@
+import { alpha } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/AddCircle';
 import Chip from '@mui/material/Chip';
 import Collapse from '@mui/material/Collapse';
@@ -51,7 +52,10 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                                 margin: '8px',
                                 maxWidth: '300px',
                                 '& .MuiChip-deleteIcon': {
-                                    color: '#000'
+                                    color: '#000',
+                                    '&:hover': {
+                                        color: alpha('#000', 0.60),
+                                    },
                                 }
                             }}
                         />

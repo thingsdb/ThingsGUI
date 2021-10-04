@@ -5,7 +5,6 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -144,15 +143,16 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                                     }}
                                 />
                             </ListItem>
-                            <ListItem>
-                                <ListItemText
-                                    primary="Set arguments"
-                                />
-                                <ListItemSecondaryAction>
+                            <ListItem
+                                secondaryAction={
                                     <IconButton edge="end" aria-label="refresh" onClick={handleRefresh}>
                                         <RefreshIcon color="primary" />
                                     </IconButton>
-                                </ListItemSecondaryAction>
+                                }
+                            >
+                                <ListItemText
+                                    primary="Set arguments"
+                                />
                             </ListItem>
                             <ListItem>
                                 <VariablesArray input={replaceNull(args)} onChange={handleChangeArgs} />

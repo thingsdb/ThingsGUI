@@ -1,4 +1,4 @@
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import MessageIcon from '@mui/icons-material/Message';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -31,9 +31,9 @@ const Memo = ({connection}) => {
     return (
         <React.Fragment>
             <Tooltip disableFocusListener disableTouchListener title={connection.memo}>
-                <Button color="primary" onClick={handleOpen}>
+                <IconButton color="primary" onClick={handleOpen}>
                     <MessageIcon color="primary" />
-                </Button>
+                </IconButton>
             </Tooltip>
             <SimpleModal
                 title={`Description of ${connection.name}`}

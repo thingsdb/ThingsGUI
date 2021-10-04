@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -96,16 +95,17 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                                 secondary={timer.repeat + ' seconds'}
                             />
                         </ListItem>
-                        <ListItem>
+                        <ListItem
+                            secondaryAction={
+                                <IconButton edge="end" aria-label="refresh" onClick={handleRefresh}>
+                                    <RefreshIcon color="primary" />
+                                </IconButton>
+                            }
+                        >
                             <ListItemText
                                 primary="Timer arguments"
                                 secondary={`[${args}]`}
                             />
-                            <ListItemSecondaryAction>
-                                <IconButton edge="end" aria-label="refresh" onClick={handleRefresh}>
-                                    <RefreshIcon color="primary" />
-                                </IconButton>
-                            </ListItemSecondaryAction>
                         </ListItem>
                         <ListItem>
                             <ListItemText

@@ -27,6 +27,7 @@ const StyledListItem = styled(ListItem, {shouldForwardProp: (prop) => prop !== '
         '& .MuiListItemButton-root': {
             margin: '0px',
             padding: '0px',
+            width: '100%'
         },
         '& .MuiListItemText-root': {
             margin: '0px',

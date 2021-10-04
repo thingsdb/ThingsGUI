@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { alpha } from '@mui/material/styles';
 import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -63,7 +64,10 @@ const VariablesArray = ({input, onChange}) => {
                         margin: '8px',
                         padding: '8px',
                         '& .MuiChip-deleteIcon': {
-                            color: '#000'
+                            color: '#000',
+                            '&:hover': {
+                                color: alpha('#000', 0.60),
+                            },
                         }
                     }}
                 />
