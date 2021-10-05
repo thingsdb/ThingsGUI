@@ -1,10 +1,10 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 import PropTypes from 'prop-types';
 import React from 'react';
-import Collapse from '@material-ui/core/Collapse';
+import Collapse from '@mui/material/Collapse';
 import Dropzone from 'react-dropzone';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 import {EditActions, useEdit} from '../Context';
 import {DownloadBlob} from '../../../Util';
@@ -68,12 +68,12 @@ const AddBlob = ({identifier, init}) => {
                     </Collapse>
                 </Grid>
             </Grid>
-            {init&&
-                <Grid container item xs={4} spacing={1} justify="flex-end">
-                    <Grid container item xs={12} justify="flex-end">
+            {init &&
+                <Grid container item xs={4} spacing={1} justifyContent="flex-end">
+                    <Grid container item xs={12} justifyContent="flex-end">
                         <DownloadBlob val={init} isImg />
                     </Grid>
-                    <Grid container item xs={12} justify="flex-end">
+                    <Grid container item xs={12} justifyContent="flex-end">
                         <Typography variant="caption">
                             {'Download blob that is currently stored.'}
                         </Typography>

@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {EditProvider} from '../../CollectionsUtils';
+import { ARRAY, THING } from '../../../../Constants/ThingTypes';
+import { checkType, fancyName, thingValue, TreeBranch } from '../../../Util';
+import { COLLECTION_SCOPE } from '../../../../Constants/Scopes';
+import { CollectionActions } from '../../../../Stores/CollectionStore';
+import { EditProvider } from '../../CollectionsUtils';
+import { THING_KEY } from '../../../../Constants/CharacterKeys';
+import { ThingActionsDialog } from '../TreeActions';
 import ThingRestrict from './ThingRestrict';
-import {ThingActionsDialog} from '../TreeActions';
-import {CollectionActions} from '../../../../Stores/CollectionStore';
-import {checkType, fancyName, thingValue, TreeBranch} from '../../../Util';
-import {THING_KEY} from '../../../../Constants/CharacterKeys';
-import {ARRAY, THING} from '../../../../Constants/ThingTypes';
-import {COLLECTION_SCOPE} from '../../../../Constants/Scopes';
 
 
 const Thing = ({child, collection, parent, thing, things, inset}) => {
@@ -71,7 +71,16 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
 
     return (
         <React.Fragment>
-            <TreeBranch inset={inset} name={child.name} type={type} val={val} canToggle={canToggle} onRenderChildren={renderChildren} onOpen={handleOpenClose} onClick={handleOpenDialog} />
+            <TreeBranch
+                inset={inset}
+                name={child.name}
+                type={type}
+                val={val}
+                canToggle={canToggle}
+                onRenderChildren={renderChildren}
+                onOpen={handleOpenClose}
+                onClick={handleOpenDialog}
+            />
             {show ? (
                 <EditProvider>
                     <ThingActionsDialog

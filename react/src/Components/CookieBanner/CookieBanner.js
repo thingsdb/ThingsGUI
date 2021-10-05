@@ -1,30 +1,27 @@
+import { styled } from '@mui/material/styles';
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
+import Typography from '@mui/material/Typography';
 
-import {ApplicationActions} from '../../Stores';
+import { ApplicationActions } from '../../Stores';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        position: 'fixed',
-        left: 0,
-        bottom: 0,
-        backgroundColor: 'black',
-        color: 'white',
-        opacity: '85%',
-        padding: theme.spacing(2),
-        [theme.breakpoints.up('sm')]: {
-            padding: theme.spacing(2, 5, 2, 5)
-        },
-        zIndex: 3000
+const RootGrid = styled(Grid)(({ theme }) => ({
+    position: 'fixed',
+    left: 0,
+    bottom: 0,
+    backgroundColor: 'black',
+    color: 'white',
+    opacity: '85%',
+    padding: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(2, 5, 2, 5)
     },
+    zIndex: 3000
 }));
 
 function CookieBanner() {
-    const classes = useStyles();
     const [cookiesAccepted, setCookiesAccepted] = useState(
         localStorage.getItem('thingsgui.cookiesAllowed') === 'true' ? true
             : localStorage.getItem('thingsgui.cookiesAllowed') === 'false' ? false
@@ -50,7 +47,7 @@ function CookieBanner() {
 
     if (cookiesAccepted == null) {
         return (
-            <Grid container alignItems="center" justify="center" className={classes.root} spacing={2}>
+            <RootGrid container alignItems="center" justifyContent="center" spacing={2}>
                 <Grid item>
                     <Typography>
                         {'This site uses only necessary cookies to remember the last login. Do you consent to the use of these cookies?'}
@@ -74,7 +71,7 @@ function CookieBanner() {
                         {'Decline Cookies'}
                     </Button>
                 </Grid>
-            </Grid>
+            </RootGrid>
         );
     }
     else {

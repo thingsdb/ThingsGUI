@@ -1,7 +1,7 @@
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Switch from '@material-ui/core/Switch';
+import Switch from '@mui/material/Switch';
 
 
 const TwoLabelSwitch = ({input, labelOne, labelTwo, onChange}) => (

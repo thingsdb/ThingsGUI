@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import {EditActions, useEdit} from '../Context';
 
@@ -29,7 +29,7 @@ const AddStr = ({identifier, init, ...props}) => {
             spellCheck={false}
             onChange={handleOnChange}
             multiline
-            rowsMax={10}
+            maxRows={10}
             {...props}
         />
     );

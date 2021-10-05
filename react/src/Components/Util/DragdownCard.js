@@ -1,30 +1,11 @@
-import {makeStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import DragHandleIcon from '@material-ui/icons/DragHandle';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const useStyles = makeStyles(() => ({
-    cardAction: {
-        // display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        padding: 0
-    },
-    dragger: {
-        cursor: 'ns-resize',
-    },
-    background: {
-        backgroundColor: '#000',
-    },
-}));
-
-
 const DragdownCard = ({children}) => {
-    const classes = useStyles();
-
     const [isResizing, setIsResizing] = React.useState(false);
     const [newHeight, setNewHeight] = React.useState(500);
 
@@ -59,8 +40,8 @@ const DragdownCard = ({children}) => {
     return (
         <Card id='editor' style={{height: newHeight}}>
             {children(newHeight)}
-            <CardActions className={classes.cardAction}>
-                <DragHandleIcon className={classes.dragger} onMouseDown={handleMousedown} />
+            <CardActions sx={{alignItems:'flex-end', justifyContent: 'center', padding: 0}}>
+                <DragHandleIcon onMouseDown={handleMousedown} sx={{cursor: 'ns-resize'}} />
             </CardActions>
         </Card>
     );

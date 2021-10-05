@@ -1,12 +1,13 @@
-import AddIcon from '@material-ui/icons/Add';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
+import AddIcon from '@mui/icons-material/Add';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment';
 
 import TableWithBadges from './TableWithBadges';
+import {DATE_TIME_SEC_STR} from '../../Constants/DateStrings';
 
 
 const TableExtra = ({badgeButton, buttons, createdAt, header, modifiedAt, onAdd, rows}) => (
@@ -27,9 +28,9 @@ const TableExtra = ({badgeButton, buttons, createdAt, header, modifiedAt, onAdd,
                     </Button>
                 </Grid>
             )}
-            <Grid container item xs={onAdd?10:12} justify="flex-end">
-                <Box fontSize={10} fontStyle="italic" m={1}>
-                    {createdAt&&`Created on: ${moment(createdAt*1000).format('YYYY-MM-DD HH:mm:ss')}${modifiedAt?`, last modified on: ${moment(modifiedAt*1000).format('YYYY-MM-DD HH:mm:ss')}`:''}`}
+            <Grid container item xs={onAdd?10:12} justifyContent="flex-end">
+                <Box sx={{fontSize: 10, fontStyle: 'italic', m: 1}}>
+                    {createdAt&&`Created on: ${moment(createdAt*1000).format(DATE_TIME_SEC_STR)}${modifiedAt?`, last modified on: ${moment(modifiedAt*1000).format(DATE_TIME_SEC_STR)}`:''}`}
                 </Box>
             </Grid>
         </Grid>

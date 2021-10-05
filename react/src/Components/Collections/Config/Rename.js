@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import {withVlow} from 'vlow';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
@@ -82,16 +82,17 @@ const Rename = ({collection, collections}) => {
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                margin="dense"
+                error={Boolean(errors.name)}
+                fullWidth
+                helperText={errors.name}
                 id="name"
                 label="Name"
+                margin="dense"
+                onChange={handleOnChange}
+                spellCheck={false}
                 type="text"
                 value={form.name}
-                spellCheck={false}
-                onChange={handleOnChange}
-                fullWidth
-                error={Boolean(errors.name)}
-                helperText={errors.name}
+                variant="standard"
             />
         </React.Fragment>
     );

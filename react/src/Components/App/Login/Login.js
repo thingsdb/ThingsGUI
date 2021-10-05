@@ -1,11 +1,11 @@
 import {withVlow} from 'vlow';
-import Button from '@material-ui/core/Button';
-import Collapse from '@material-ui/core/Collapse';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Grid from '@material-ui/core/Grid';
+import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import { ErrorMsg, isObjectEmpty, SimpleModal } from '../../Util';
@@ -148,7 +148,7 @@ const Login = ({cachedConnections}) => {
                 <Collapse in={showNewConn} timeout="auto" unmountOnExit>
                     <DialogActions>
                         <Grid container>
-                            <Grid item xs={6} container justify="flex-start" >
+                            <Grid item xs={6} container justifyContent="flex-start" >
                                 <Collapse in={Boolean(cachedConnections&&Object.keys(cachedConnections).length)} timeout="auto" unmountOnExit>
                                     <Grid item xs={3}>
                                         <Button onClick={handleClickBack} color="primary">
@@ -162,7 +162,7 @@ const Login = ({cachedConnections}) => {
                                     </Button>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={6} container justify="flex-end">
+                            <Grid item xs={6} container justifyContent="flex-end">
                                 <Button onClick={handleClickOk} color="primary">
                                     {'Connect'}
                                 </Button>

@@ -4,6 +4,7 @@ import Vlow from 'vlow';
 const ErrorActions = Vlow.createActions([
     'setToastError',
     'removeToastError',
+    'removeToastErrorMsg',
     'resetToastError',
     'setMsgError',
     'removeMsgError',
@@ -38,6 +39,17 @@ class ErrorStore extends Vlow.Store {
         this.setState(prevState => {
             const newArray = [...prevState.toastErrors];
             newArray.splice(i, 1);
+            return {toastErrors: newArray};
+        });
+    }
+
+    onRemoveToastErrorMsg(msg) {
+        this.setState(prevState => {
+            const newArray = [...prevState.toastErrors];
+            let i = newArray.indexOf(msg);
+            if(i !== -1) {
+                newArray.splice(i, 1);
+            }
             return {toastErrors: newArray};
         });
     }

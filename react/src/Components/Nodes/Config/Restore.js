@@ -1,11 +1,11 @@
-import { amber } from '@material-ui/core/colors';
-import Button from '@material-ui/core/Button';
-import FormLabel from '@material-ui/core/FormLabel';
-import Grid from '@material-ui/core/Grid';
+import { amber } from '@mui/material/colors';
+import Button from '@mui/material/Button';
+import FormLabel from '@mui/material/FormLabel';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import {ErrorMsg, SimpleModal, TwoLabelSwitch} from '../../Util';
 import {ApplicationActions, NodesActions} from '../../../Stores';
@@ -99,15 +99,15 @@ const Restore = ({nodes}) => {
             >
                 <ErrorMsg tag={tag} />
                 <TextField
-                    id="fileName"
-                    type="text"
-                    name="fileName"
-                    label="File name"
-                    onChange={handleFileName}
-                    value={fileName}
-                    variant="standard"
                     fullWidth
                     helperText="Note: file should exist on node server"
+                    id="fileName"
+                    label="File name"
+                    name="fileName"
+                    onChange={handleFileName}
+                    type="text"
+                    value={fileName}
+                    variant="standard"
                     FormHelperTextProps={{
                         style: {
                             marginBottom: '16px',
@@ -138,7 +138,7 @@ const Restore = ({nodes}) => {
                             {'ThingsDB has been successfully restored. You need to login again. After you clicked "OK" you are redirected to the login screen.'}
                         </Typography>
                     </Grid>
-                    <Grid container justify="center" item xs={12}>
+                    <Grid container justifyContent="center" item xs={12}>
                         <Button variant="outlined" color="primary" onClick={handleClickRedirect}>
                             {'OK'}
                         </Button>

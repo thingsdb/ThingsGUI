@@ -1,22 +1,14 @@
-import { makeStyles } from '@material-ui/core/styles';
-import Collapse from '@material-ui/core/Collapse';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
+import Collapse from '@mui/material/Collapse';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Switch from '@material-ui/core/Switch';
+import Switch from '@mui/material/Switch';
 
 import PropertyVal from './PropertyVal';
 
 
-const useStyles = makeStyles(() => ({
-    fullWidth: {
-        width: '100%',
-    },
-}));
-
 const PropertyInitVal = ({category, onChange, onBlob, scope}) => {
-    const classes = useStyles();
     const [switchIni, setSwitch] = React.useState(false);
 
     const handleSwitch = ({target}) => {
@@ -50,7 +42,7 @@ const PropertyInitVal = ({category, onChange, onBlob, scope}) => {
                     label="Add initial value or closure"
                 />
             </Grid>
-            <Collapse className={classes.fullWidth} in={switchIni} timeout="auto" unmountOnExit>
+            <Collapse in={switchIni} timeout="auto" unmountOnExit sx={{width: '100%'}}>
                 <PropertyVal category={category} onChange={handleVal} onBlob={handleBlob} scope={scope} />
             </Collapse>
         </React.Fragment>

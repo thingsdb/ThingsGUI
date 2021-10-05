@@ -1,45 +1,23 @@
-import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Collapse from '@material-ui/core/Collapse';
-import ConnectedIcon from '@material-ui/icons/Power';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
+import ConnectedIcon from '@mui/icons-material/Power';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
 import {StartStopPolling} from '../Util';
 
 
-const useStyles = makeStyles(() => ({
-    row: {
-        backgroundColor: 'rgba(0, 0, 0, .03)',
-        borderBottom: '1px solid rgba(0, 0, 0, .125)',
-        marginBottom: -1,
-        minHeight: 56,
-    },
-    collapse: {
-        backgroundColor: '#191D1F',
-        border: '1px solid rgba(0, 0, 0, .125)',
-        boxShadow: 'none',
-        '&:not(:last-child)': {
-            borderBottom: 0,
-        },
-        '&:before': {
-            display: 'none',
-        },
-    },
-}));
-
 const Tabel = ({buttons, canExtend, header, rows, rowExtend, connectedNode, onRefresh}) => {
-    const classes = useStyles();
     const [selected, setSelected] = React.useState(null);
 
     const handleClickRow = (ri) => () => {
@@ -57,7 +35,7 @@ const Tabel = ({buttons, canExtend, header, rows, rowExtend, connectedNode, onRe
                         </TableCell>
                     ))}
                     <TableCell size="small" colSpan={buttons&&rows.length ? buttons(rows[0]).length : 1} align="right">
-                        {onRefresh&&(
+                        {onRefresh && (
                             <Tooltip disableFocusListener disableTouchListener title="Refresh nodes info">
                                 <Button color="primary" onClick={onRefresh}>
                                     <RefreshIcon color="primary" />
@@ -65,7 +43,7 @@ const Tabel = ({buttons, canExtend, header, rows, rowExtend, connectedNode, onRe
                             </Tooltip>
                         )}
                     </TableCell>
-                    {onRefresh&&(
+                    {onRefresh && (
                         <TableCell size="small" align="right">
                             <StartStopPolling onPoll={onRefresh} title="nodes info" />
                         </TableCell>
@@ -74,15 +52,15 @@ const Tabel = ({buttons, canExtend, header, rows, rowExtend, connectedNode, onRe
             </TableHead>
             <TableBody>
                 {rows.map((row, ri) => {
-                    const isopen = selected===ri;
+                    const isopen = selected === ri;
                     return (
                         <React.Fragment key={ri}>
-                            <TableRow className={classes.row} >
-                                <TableCell size="small" align='right' style={{borderBottom: isopen?'none':null}}>
+                            <TableRow selected={isopen}>
+                                <TableCell size="small" align='right'>
                                     {row.node_id == connectedNode.node_id && <ConnectedIcon />}
                                 </TableCell>
                                 {header.map((h, i) => (
-                                    <TableCell size="small" key={h.ky} align={i?'right':'left'} style={{borderBottom: isopen?'none':null}}>
+                                    <TableCell size="small" key={h.ky} align={i ? 'right' : 'left'}>
                                         <Typography variant="inherit" color={h.color(row[h.ky])}>
                                             {row[h.ky]}
                                         </Typography>
@@ -90,12 +68,12 @@ const Tabel = ({buttons, canExtend, header, rows, rowExtend, connectedNode, onRe
                                 ))}
                                 {buttons ? (
                                     buttons(row).map((r, i) => (
-                                        <TableCell size="small" key={i} align='right' style={{borderBottom: isopen?'none':null}}>
+                                        <TableCell size="small" key={i} align='right'>
                                             {r}
                                         </TableCell>
                                     ))
                                 ) : null}
-                                <TableCell size="small" align="right" style={{borderBottom: isopen?'none':null}}>
+                                <TableCell size="small" align="right">
                                     {canExtend(row) &&
                                         <Button color="primary" onClick={handleClickRow(ri)}>
                                             {isopen ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
@@ -104,7 +82,11 @@ const Tabel = ({buttons, canExtend, header, rows, rowExtend, connectedNode, onRe
                                 </TableCell>
                             </TableRow>
                             {isopen ? (
-                                <TableRow className={classes.collapse} style={{borderBottom: 'none'}}>
+                                <TableRow
+                                    sx={{
+                                        backgroundColor: 'rgba(0, 0, 0, .125)',
+                                    }}
+                                >
                                     <TableCell size="small" colSpan={12}>
                                         <Collapse in={isopen} timeout="auto" unmountOnExit>
                                             {rowExtend(row)}

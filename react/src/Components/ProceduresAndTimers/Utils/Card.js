@@ -1,8 +1,8 @@
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from '@mui/icons-material/Edit';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RunIcon from '@material-ui/icons/DirectionsRun';
-import ViewIcon from '@material-ui/icons/Visibility';
+import RunIcon from '@mui/icons-material/DirectionsRun';
+import ViewIcon from '@mui/icons-material/Visibility';
 
 import {ChipsCard, TableCard} from '../../Util';
 

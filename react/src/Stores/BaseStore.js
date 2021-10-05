@@ -5,6 +5,7 @@ import Vlow from 'vlow';
 
 import {ErrorActions} from './ErrorStore';
 import {LoginTAG} from '../Constants/Tags';
+import {DATE_TIME_MIN_STR} from '../Constants/DateStrings';
 
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
@@ -262,7 +263,7 @@ class EventStore extends BaseStore {
         socket.on('onEmit', (roomId, eventId, event, args) => {
             this.setState(prevState => {
                 let events = prevState.events;
-                let time = moment().format('YYYY-MM-DD HH:mm');
+                let time = moment().format(DATE_TIME_MIN_STR);
 
                 let json = JSON.stringify(args, null, 4);
                 let unquoted = json.replace(/"([^"]+)":/g, '$1:');
@@ -273,8 +274,14 @@ class EventStore extends BaseStore {
         });
 
         socket.on('OnNodeStatus', (data) => {
+            const msg = 'Lost connection with ThingsDB. Trying to reconnect.';
+
             if(data.Status == 'SHUTTING_DOWN') {
-                ErrorActions.setToastError('Lost connection with ThingsDB. Trying to reconnect.');
+                ErrorActions.setToastError(msg);
+            }
+
+            if(data.Status == 'READY') {
+                ErrorActions.removeToastErrorMsg(msg);
             }
         });
 

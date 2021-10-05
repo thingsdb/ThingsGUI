@@ -1,28 +1,22 @@
-import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ListItem from '@material-ui/core/ListItem';
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {checkType, fancyName, thingValue, TreeBranch} from '.';
-import {SET_KEY, THING_KEY} from '../../Constants/CharacterKeys';
-import {ARRAY, SET, THING} from '../../Constants/ThingTypes';
+import { checkType, fancyName, thingValue, TreeBranch } from '.';
+import { SET_KEY, THING_KEY } from '../../Constants/CharacterKeys';
+import { ARRAY, SET, THING } from '../../Constants/ThingTypes';
 
 
-const useStyles = makeStyles(theme => ({
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
-    justifyContent: {
-        justifyContent: 'center',
-    }
+const Nested = styled('div')(({theme}) => ({
+    paddingLeft: theme.spacing(4),
 }));
 
 const visibleNumber = 100;
 
 const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
-    const classes = useStyles();
     const [more, setMore] = React.useState({});
 
     // is root if item is still null
@@ -35,7 +29,7 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
     const renderThing = ([k, v, i=null], count) => {
         return k === THING_KEY ? null : (
             <React.Fragment key={i ? i : k}>
-                <div className={classes.nested}>
+                <Nested>
                     <ThingsTree
                         item={v}
                         tree={tree}
@@ -47,15 +41,17 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
                         customTypes={customTypes}
                         onAction={onAction}
                     />
-                </div>
+                </Nested>
                 {more[count] && renderChildren(count+1)}
                 {(count+1)%visibleNumber == 0 && !more[count] ? (
-                    <ListItem className={classes.justifyContent}>
-                        <Button color="primary" onClick={handleMore(count)}>
-                            {'LOAD MORE'}
-                            <ExpandMoreIcon color="primary" />
-                        </Button>
-                    </ListItem>
+                    <Grid container alignItems="center" justifyContent="center" item xs={12}>
+                        <Grid item>
+                            <Button color="primary" onClick={handleMore(count)}>
+                                {'LOAD MORE'}
+                                <ExpandMoreIcon color="primary" />
+                            </Button>
+                        </Grid>
+                    </Grid>
                 ):null}
             </React.Fragment>
         );

@@ -1,28 +1,19 @@
-import {makeStyles} from '@material-ui/core/styles';
-import {withVlow} from 'vlow';
-import Chip from '@material-ui/core/Chip';
-import Grid from '@material-ui/core/Grid';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import { withVlow } from 'vlow';
+import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {TypeStore} from '../../../../Stores';
+import { TypeStore } from '../../../../Stores';
 
 const withStores = withVlow([{
     store: TypeStore,
     keys: ['customTypes']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    chips: {
-        margin: theme.spacing(1),
-    },
-}));
-
 const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
-    const classes = useStyles();
-
     const pattern = '\\b' + name + '\\b';
     const re= new RegExp(pattern);
     const u = customTypes[scope]&&name?customTypes[scope].filter(i=>
@@ -41,7 +32,14 @@ const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
             </ListItem>
             <Grid>
                 {u.map((item, index)=>(
-                    <Chip color="primary" className={classes.chips} key={index} onClick={handleChange(item.name, 'type')} label={item.name} size="small" />
+                    <Chip
+                        color="primary"
+                        key={index}
+                        label={item.name}
+                        onClick={handleChange(item.name, 'type')}
+                        size="small"
+                        sx={{margin: '8px', color: '#000'}}
+                    />
                 ))}
             </Grid>
         </React.Fragment>

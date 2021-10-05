@@ -1,15 +1,15 @@
-import {makeStyles} from '@material-ui/core';
-import {withVlow} from 'vlow';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
+import { withVlow } from 'vlow';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {Buttons} from '../Utils';
-import {Info, scaleToBinBytes} from '../../Util';
-import {NodesActions, NodesStore} from '../../../Stores';
-import {THINGS_DOC_COUNTERS} from '../../../Constants/Links';
+import { Buttons } from '../Utils';
+import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
+import { Info, scaleToBinBytes } from '../../Util';
+import { NodesActions, NodesStore } from '../../../Stores';
+import { THINGS_DOC_COUNTERS } from '../../../Constants/Links';
 import CountersReset from './CountersReset';
 
 const withStores = withVlow([{
@@ -17,17 +17,10 @@ const withStores = withVlow([{
     keys: ['counters']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    overflow: {
-        marginTop: theme.spacing(2),
-        overflowY: 'auto',
-        maxHeight: '400px',
-    },
-}));
 
 const header = [
     {ky: 'title1', title: 'GENERAL', labels: [
-        {ky: 'started_at', label: 'Started counted at'},
+        {ky: 'started_at', label: 'Counters started at', fn: (t) => moment(t*1000).format(DATE_TIME_SEC_STR)},
     ]},
     {ky: 'title2', title: 'QUERIES', labels: [
         {ky: 'queries_success', label: 'Successful queries'},
@@ -64,7 +57,6 @@ const header = [
 const link = THINGS_DOC_COUNTERS;
 
 const Counters = ({nodeId, offline, counters}) => {
-    const classes = useStyles();
 
     const handleRefresh = () => {
         NodesActions.getCounters(nodeId); // update of the selected node; to get the latest info
@@ -75,12 +67,12 @@ const Counters = ({nodeId, offline, counters}) => {
             container
             spacing={3}
         >
-            <Grid item xs={12} className={classes.overflow}>
+            <Grid item xs={12} sx={{marginTop: '16px', overflowY: 'auto', maxHeight: '400px'}}>
                 <Info header={header} content={counters} />
             </Grid>
-            <Grid container item xs={12} justify="flex-end">
-                <Box fontSize={10} fontStyle="italic" m={1}>
-                    {`Last reset at: ${moment(counters.started_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+            <Grid container item xs={12} justifyContent="flex-end">
+                <Box sx={{fontSize: 10, fontStyle: 'italic', m: 1}}>
+                    {`Last reset at: ${moment(counters.started_at*1000).format(DATE_TIME_SEC_STR)}`}
                 </Box>
             </Grid>
             {offline ? null : (

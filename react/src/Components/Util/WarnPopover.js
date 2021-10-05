@@ -1,27 +1,15 @@
-import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Popover from '@material-ui/core/Popover';
+import Button from '@mui/material/Button';
+import Popover from '@mui/material/Popover';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
-
-const useStyles = makeStyles(theme => ({
-    popover: {
-        padding: theme.spacing(1),
-        backgroundColor: theme.palette.primary.warning,
-    },
-
-}));
 
 const WarnPopover = ({anchorEl, onClose, onOk, description}) => {
-    const classes = useStyles();
-
     const openPopOver = Boolean(anchorEl);
 
     return (
         <Popover
-            classes={{paper: classes.popover}}
             open={openPopOver}
             anchorEl={anchorEl}
             onClose={onClose}
@@ -32,6 +20,12 @@ const WarnPopover = ({anchorEl, onClose, onOk, description}) => {
             transformOrigin={{
                 vertical: 'center',
                 horizontal: 'left',
+            }}
+            sx={{
+                '& .MuiPopover-paper': {
+                    padding: '8px',
+                    backgroundColor: 'primary.warning',
+                }
             }}
         >
             <Typography variant="body2">

@@ -1,13 +1,13 @@
-import Collapse from '@material-ui/core/Collapse';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import {AddProcedureDialogTAG} from '../../../Constants/Tags';
 import {Closure, ErrorMsg, SimpleModal} from '../../Util';
@@ -17,7 +17,7 @@ import {THINGS_DOC_NEW_PROCEDURE} from '../../../Constants/Links';
 
 const tag = AddProcedureDialogTAG;
 
-const AddProcedureDialog = ({button, open, onClose, scope}) => {
+const AddProcedureDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState({
         queryString: 'new_procedure("", )',
         procedureName: '',
@@ -63,7 +63,6 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
 
     return (
         <SimpleModal
-            button={button}
             open={open}
             onClose={onClose}
             onOk={handleClickOk}
@@ -99,13 +98,14 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
                             </ListItem>
                             <ListItem>
                                 <TextField
-                                    name="queryString"
+                                    fullWidth
                                     label="Query"
+                                    maxRows="10"
+                                    multiline
+                                    name="queryString"
                                     type="text"
                                     value={queryString}
-                                    fullWidth
-                                    multiline
-                                    rowsMax="10"
+                                    variant="standard"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,
@@ -124,13 +124,14 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
                         <ListItem>
                             <TextField
                                 autoFocus
-                                name="procedureName"
+                                fullWidth
                                 label="Name"
+                                name="procedureName"
+                                onChange={handleChange}
+                                spellCheck={false}
                                 type="text"
                                 value={procedureName}
-                                spellCheck={false}
-                                onChange={handleChange}
-                                fullWidth
+                                variant="standard"
                             />
                         </ListItem>
                         <ListItem>
@@ -148,12 +149,7 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
     );
 };
 
-AddProcedureDialog.defaultProps = {
-    button: null,
-};
-
 AddProcedureDialog.propTypes = {
-    button: PropTypes.object,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,

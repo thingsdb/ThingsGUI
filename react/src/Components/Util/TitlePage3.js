@@ -1,39 +1,30 @@
-import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
-const useStyles = makeStyles(theme => ({
-    bottom: {
-        marginBottom: theme.spacing(6)
-    },
-}));
 
-const TitlePage3 = ({preTitle, title, content}) => {
-    const classes = useStyles();
-    return (
-        <Grid container spacing={1} className={classes.bottom}>
-            <Grid item xs={12}>
-                <Card>
-                    <CardContent>
-                        <Typography variant="h6" >
-                            {preTitle}
-                        </Typography>
-                        <Typography variant="h3">
-                            {title}
-                        </Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid container item spacing={1} alignItems="flex-start">
-                {content}
-            </Grid>
+const TitlePage3 = ({preTitle, title, content}) => (
+    <Grid container spacing={1} sx={{marginBottom: '48px'}}>
+        <Grid item xs={12}>
+            <Card>
+                <CardContent>
+                    <Typography variant="h6" >
+                        {preTitle}
+                    </Typography>
+                    <Typography variant="h3">
+                        {title}
+                    </Typography>
+                </CardContent>
+            </Card>
         </Grid>
-    );
-};
+        <Grid container item alignItems="flex-start">
+            {content}
+        </Grid>
+    </Grid>
+);
 
 TitlePage3.propTypes = {
     preTitle: PropTypes.string.isRequired,

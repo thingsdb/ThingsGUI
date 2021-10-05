@@ -1,9 +1,9 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 /* eslint-disable react-hooks/exhaustive-deps */
-import Link from '@material-ui/core/Link';
+import Link from '@mui/material/Link';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import {EditActions, useEdit} from '../Context';
 
@@ -25,18 +25,18 @@ const AddCode = ({identifier, init, label, link, numLines}) => {
 
     return(
         <TextField
-            name="value"
-            type="text"
-            value={v}
-            spellCheck={false}
-            onChange={handleOnChange}
             fullWidth
-            multiline
-            rows={numLines}
-            rowsMax="10"
-            variant="standard"
             label={label}
             margin="dense"
+            maxRows="10"
+            minRows={numLines}
+            multiline
+            name="value"
+            onChange={handleOnChange}
+            spellCheck={false}
+            type="text"
+            value={v}
+            variant="standard"
             helperText={
                 <Link target="_blank" href={link}>
                     {'ThingsDocs'}

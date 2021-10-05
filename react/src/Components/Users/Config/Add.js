@@ -1,93 +1,52 @@
+
+import { withVlow } from 'vlow';
+import PropTypes from 'prop-types';
 import React from 'react';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import {withVlow} from 'vlow';
-import { makeStyles} from '@material-ui/core/styles';
+import TextField from '@mui/material/TextField';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
-import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
-import {AddUserTAG} from '../../../Constants/Tags';
+import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
+import { AddUserTAG } from '../../../Constants/Tags';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
     keys: ['users']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    buttonBase: {
-        width: '100%',
-        height: '100%',
-        padding: 0,
-        justifyContent: 'left',
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(2),
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        '&:hover': {
-            backgroundColor: '#303030',
-        },
-        text: 'italic',
-    },
-    icon: {
-        marginTop: theme.spacing(0.5),
-        marginBottom: theme.spacing(0.5),
-        color: theme.palette.primary.main,
-    },
-}));
-
-const initialState = {
-    show: false,
-    errors: {},
-    form: {},
-};
-
-const validation = {
-    name: (f, users) => {
-        if (f.name.length==0) {
-            return 'is required';
-        }
-        if (users.some((u) => u.name===f.name)) {
-            return 'username is already in use';
-        }
-        return '';
-    },
+const validation = (name, users) => {
+    if (name.length === 0) {
+        return 'is required';
+    }
+    if (users.some((u) => u.name === name)) {
+        return 'username is already in use';
+    }
+    return '';
 };
 
 const tag = AddUserTAG;
 
-const Add = ({users}) => {
-    const classes = useStyles();
-    const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+const Add = ({open, onClose, users}) => {
+    const [name, setName] = React.useState('');
+    const [err, setErr] = React.useState('');
 
-    const handleClickOpen = () => {
-        setState({
-            show: true,
-            errors: {},
-            form: {
-                name: '',
-            },
-        });
-    };
-
-    const handleClickClose = () => {
-        setState({...state, show: false});
-    };
+    React.useEffect(() => { // clean state
+        if(open) {
+            setName('');
+            setErr('');
+        }
+    }, [open]);
 
     const handleOnChange = ({target}) => {
-        const {id, value} = target;
-        setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
-            return {...prevState, form: updatedForm, errors: {}};
-        });
+        const {value} = target;
+        setName(value);
+        setErr('');
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, users);  return d; }, {});
-        setState({...state, errors: err});
-        if (!Object.values(err).some(d => Boolean(d))) {
-            ThingsdbActions.addUser(form.name, tag, () => setState({...state, show: false}));
+        const e = validation(name, users);
+        setErr(e);
+        if (!e) {
+            ThingsdbActions.addUser(name, tag, onClose);
         }
     };
 
@@ -98,45 +57,36 @@ const Add = ({users}) => {
         }
     };
 
-
-    const Content = (
-        <React.Fragment>
+    return(
+        <SimpleModal
+            title="New User"
+            open={open}
+            onOk={handleClickOk}
+            onClose={onClose}
+            onKeyPress={handleKeyPress}
+        >
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                margin="dense"
+                error={Boolean(err)}
+                fullWidth
+                helperText={err}
                 id="name"
                 label="Name"
-                type="text"
-                value={form.name}
-                spellCheck={false}
+                margin="dense"
                 onChange={handleOnChange}
-                fullWidth
-                error={Boolean(errors.name)}
-                helperText={errors.name}
+                spellCheck={false}
+                type="text"
+                value={name}
+                variant="standard"
             />
-        </React.Fragment>
-    );
-
-    return(
-        <SimpleModal
-            button={
-                <Button color="primary" className={classes.buttonBase} onClick={handleClickOpen} >
-                    <AddBoxIcon className={classes.icon} />
-                </Button>
-            }
-            title="New User"
-            open={show}
-            onOk={handleClickOk}
-            onClose={handleClickClose}
-            onKeyPress={handleKeyPress}
-        >
-            {Content}
         </SimpleModal>
     );
 };
 
 Add.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
 
     /* application properties */
     users: ThingsdbStore.types.users.isRequired,

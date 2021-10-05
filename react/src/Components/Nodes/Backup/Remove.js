@@ -1,9 +1,9 @@
-import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FormLabel from '@material-ui/core/FormLabel';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FormLabel from '@mui/material/FormLabel';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import {NodesActions} from '../../../Stores';
 import {ErrorMsg, SimpleModal, TwoLabelSwitch} from '../../Util';

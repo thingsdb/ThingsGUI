@@ -1,14 +1,14 @@
 /*eslint-disable react/no-multi-comp*/
 /*eslint-disable react/jsx-props-no-spreading*/
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import IconButton from '@material-ui/core/IconButton';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import IconButton from '@mui/material/IconButton';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Slide from '@material-ui/core/Slide';
+import Slide from '@mui/material/Slide';
 
 import {CollectionActions} from '../../../Stores';
 import {HarmonicCard} from '../../Util';

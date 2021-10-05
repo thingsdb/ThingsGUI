@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import {EditActions, useEdit} from '../../CollectionsUtils';
 import {SET, THING} from '../../../../Constants/ThingTypes';
@@ -22,15 +22,16 @@ const TypeInit = ({type, customTypes, dataTypes, onChange, input}) => {
 
     return(
         <TextField
-            fullWidth
-            margin="dense"
             autoFocus
-            name="dataType"
+            fullWidth
             label="Data type"
-            value={input}
+            margin="dense"
+            name="dataType"
             onChange={handleOnChangeType}
             select
             SelectProps={{native: true}}
+            value={input}
+            variant="standard"
         >
             {dataTypes.map((d, i) => (
                 <option key={i} value={d} disabled={type==SET&&!(d==THING||Boolean(customTypes.find(c=>c.name==d)))} >

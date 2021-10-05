@@ -1,10 +1,10 @@
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import HelpIcon from '@material-ui/icons/HelpOutline';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import HelpIcon from '@mui/icons-material/HelpOutline';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Tooltip from '@material-ui/core/Tooltip';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import Tooltip from '@mui/material/Tooltip';
 
 import { StartStopPolling } from '../../Util';
 
@@ -17,7 +17,7 @@ const Buttons = ({extraButtons, link, onRefresh}) => (
                 </Grid>
             ))}
         </Grid>
-        <Grid container item xs={6} justify="flex-end" spacing={1}>
+        <Grid container item xs={6} justifyContent="flex-end" spacing={1}>
             <Grid item>
                 <Tooltip disableFocusListener disableTouchListener title="Go to ThingsDocs">
                     <Button color="primary" target="_blank" href={link}>

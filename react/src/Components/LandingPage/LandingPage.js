@@ -1,30 +1,20 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 /*eslint-disable react/no-multi-comp*/
-import { makeStyles } from '@material-ui/core/styles';
 import {useHistory} from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import IconButton from '@mui/material/IconButton';
 import React from 'react';
-import Slide from '@material-ui/core/Slide';
-import Typography from '@material-ui/core/Typography';
+import Slide from '@mui/material/Slide';
+import Typography from '@mui/material/Typography';
 // import {version} from '../../package.json';
 
 import {historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Util';
 import {TopBar} from '../Navigation';
 import LandingContent from './LandingContent';
 
-const version='version: 1.0.1';
-
-const useStyles = makeStyles(theme => ({
-    avatar: {
-        height: 35,
-    },
-    color: {
-        color: theme.palette.text.primary
-    },
-}));
+const version='version: 1.0.2';
 
 const Transition = React.forwardRef((props, ref) => {
     return <Slide direction="down" ref={ref} {...props} mountOnEnter unmountOnExit />;
@@ -32,7 +22,6 @@ const Transition = React.forwardRef((props, ref) => {
 
 const LandingPage = () => {
     let history = useHistory();
-    const classes = useStyles();
     const [open, setOpen] = React.useState(() => {
         let landingParam = historyGetQueryParam(history, 'landing');
         if (landingParam) {
@@ -63,8 +52,8 @@ const LandingPage = () => {
                 <img
                     alt="ThingsDB Logo"
                     src="/img/thingsgui-logo.png"
-                    className={classes.avatar}
                     draggable='false'
+                    height={35}
                 />
             </Button>
             <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
@@ -77,7 +66,7 @@ const LandingPage = () => {
                             </Typography>
                         }
                         pageIcon={
-                            <IconButton edge="start" className={classes.color} onClick={handleClose} aria-label="close">
+                            <IconButton edge="start" onClick={handleClose} aria-label="close">
                                 <ExpandLessIcon />
                             </IconButton>
                         }

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 const PropInit = ({onChange, input, thing}) => {
     const [error, setError] = React.useState('');
@@ -16,15 +16,16 @@ const PropInit = ({onChange, input, thing}) => {
 
     return(
         <TextField
+            error={Boolean(error)}
+            helperText={error}
+            label="New property"
             margin="dense"
             name="newProperty"
-            label="New property"
+            onChange={handleOnChangeName}
+            spellCheck={false}
             type="text"
             value={input}
-            spellCheck={false}
-            onChange={handleOnChangeName}
-            helperText={error}
-            error={Boolean(error)}
+            variant="standard"
         />
     );
 };

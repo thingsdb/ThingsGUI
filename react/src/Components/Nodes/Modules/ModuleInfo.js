@@ -1,48 +1,37 @@
-import { makeStyles} from '@material-ui/core/styles';
-import {withVlow} from 'vlow';
-import Badge from '@material-ui/core/Badge';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import CloseIcon from '@material-ui/icons/Close';
-import EditIcon from '@material-ui/icons/Edit';
-import Grid from '@material-ui/core/Grid';
-import InfoIcon from '@material-ui/icons/Info';
-import Link from '@material-ui/core/Link';
+import { withVlow } from 'vlow';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ButtonBase from '@mui/material/ButtonBase';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import Grid from '@mui/material/Grid';
+import InfoIcon from '@mui/icons-material/Info';
+import Link from '@mui/material/Link';
 import moment from 'moment';
-import MoreIcon from '@material-ui/icons/MoreHoriz';
+import MoreIcon from '@mui/icons-material/MoreHoriz';
 import PropTypes from 'prop-types';
 import React from 'react';
-import SaveIcon from '@material-ui/icons/Save';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import SaveIcon from '@mui/icons-material/Save';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-import {ModuleInfoTAG} from '../../../Constants/Tags';
-import {NodesActions, NodesStore} from '../../../Stores';
-import {SimpleModal, ErrorMsg, LocalMsg} from '../../Util';
-import {THINGS_DOC_RENAME_MODULE, THINGS_DOC_SET_MODULE_CONFIG, THINGS_DOC_SET_MODULE_SCOPE} from '../../../Constants/Links';
+import { ModuleInfoTAG } from '../../../Constants/Tags';
+import { NodesActions, NodesStore } from '../../../Stores';
+import { SimpleModal, ErrorMsg, LocalMsg } from '../../Util';
+import { THINGS_DOC_RENAME_MODULE, THINGS_DOC_SET_MODULE_CONFIG, THINGS_DOC_SET_MODULE_SCOPE } from '../../../Constants/Links';
+import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
 
 const withStores = withVlow([{
     store: NodesStore,
     keys: ['_module']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    box: {
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-    },
-    color: {
-        color: theme.palette.text.primary
-    }
-}));
-
 const header = [
     {
         ky: 'created_at',
         label: 'Created at',
-        fnView: (t) => moment(t*1000).format('YYYY-MM-DD HH:mm:ss'),
+        fnView: (t) => moment(t*1000).format(DATE_TIME_SEC_STR),
         canEdit: false
     },
     {
@@ -108,7 +97,6 @@ const header = [
 const tag = ModuleInfoTAG;
 
 const ModuleInfo = ({item, nodeId, _module}) => {
-    const classes = useStyles();
     const [show, setShow] = React.useState(false);
     const [edit, setEdit] = React.useState({});
     const [form, setForm] = React.useState({});
@@ -178,7 +166,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
             <Grid container spacing={1}>
                 <Grid item xs={12}>
                     <ErrorMsg tag={tag} />
-                    <LocalMsg icon={<InfoIcon className={classes.color} />} body={msg} onClose={handleCloseMsg} />
+                    <LocalMsg icon={<InfoIcon sx={{color: 'text.primary'}} />} body={msg} onClose={handleCloseMsg} />
                 </Grid>
                 {header.map(h => (
                     <Grid key={h.ky} container item xs={12}>
@@ -193,16 +181,17 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                     <Grid item xs={8}>
                                         <TextField
                                             autoFocus
-                                            margin="dense"
+                                            fullWidth
                                             id={h.ky}
+                                            margin="dense"
+                                            maxRows="10"
+                                            minRows="1"
+                                            multiline
+                                            onChange={handleChange(h.ky)}
+                                            spellCheck={false}
                                             type="text"
                                             value={form[h.ky]}
-                                            spellCheck={false}
-                                            onChange={handleChange(h.ky)}
-                                            multiline
-                                            rows="1"
-                                            rowsMax="10"
-                                            fullWidth
+                                            variant="standard"
                                             helperText={
                                                 <Link target="_blank" href={h.helperText}>
                                                     {'ThingsDocs'}
@@ -210,7 +199,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                             }
                                         />
                                     </Grid>
-                                    <Grid container spacing={2} item xs={2} justify="flex-start" alignContent="center">
+                                    <Grid container spacing={2} item xs={2} justifyContent="flex-start" alignContent="center">
                                         <ButtonBase onClick={handleSave(h)}>
                                             <SaveIcon color="primary" />
                                         </ButtonBase>
@@ -224,11 +213,18 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                     <Badge
                                         badgeContent={h.canEdit ?
                                             <ButtonBase onClick={handleEdit(h)}>
-                                                <EditIcon color="primary" style={{fontSize: 20}} />
+                                                <EditIcon color="primary" sx={{fontSize: '20px'}} />
                                             </ButtonBase> : null
                                         }
                                     >
-                                        <Box className={classes.box} component="div" fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                        <Box
+                                            component="div"
+                                            sx={{
+                                                fontFamily: 'Monospace',
+                                                fontSize: 'body1.fontSize',
+                                                m: 1,
+                                            }}
+                                        >
                                             {h.fnView ? h.fnView(_module[h.ky]) : _module[h.ky]}
                                         </Box>
                                     </Badge>

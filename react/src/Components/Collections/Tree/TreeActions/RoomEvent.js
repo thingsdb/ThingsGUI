@@ -1,22 +1,21 @@
-import {makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Collapse from '@material-ui/core/Collapse';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Collapse from '@mui/material/Collapse';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Switch from '@material-ui/core/Switch';
-import Timeline from '@material-ui/lab/Timeline';
-import TimelineConnector from '@material-ui/lab/TimelineConnector';
-import TimelineContent from '@material-ui/lab/TimelineContent';
-import TimelineDot from '@material-ui/lab/TimelineDot';
-import TimelineItem from '@material-ui/lab/TimelineItem';
-import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
-import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
-import Typography from '@material-ui/core/Typography';
+import Switch from '@mui/material/Switch';
+import Timeline from '@mui/lab/Timeline';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import Typography from '@mui/material/Typography';
 
 import {EventStore} from '../../../../Stores';
 
@@ -25,17 +24,8 @@ const withStores = withVlow([{
     keys: ['events']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    flex: {
-        display: 'flex'
-    },
-    marginLeft: {
-        marginLeft: theme.spacing(1)
-    }
-}));
 
 const RoomEvent = ({room, events}) => {
-    const classes = useStyles();
     const [checked, setChecked] = React.useState({});
 
     const handleChange = (index) => () => {
@@ -71,18 +61,17 @@ const RoomEvent = ({room, events}) => {
                         <Card variant="outlined">
                             <CardHeader
                                 title={
-                                    <Box fontWeight="fontWeightBold">
+                                    <Box sx={{ fontWeight: 'bold' }}>
                                         {e.event}
                                     </Box>
                                 }
                                 titleTypographyProps={{
                                     variant: 'body2',
                                     component: 'div',
-                                    className: classes.flex
+                                    sx: {display: 'flex'}
                                 }}
                                 subheader="Arguments: "
                                 subheaderTypographyProps={{
-                                    className: classes.warnColor,
                                     variant: 'caption'
                                 }}
                                 action={

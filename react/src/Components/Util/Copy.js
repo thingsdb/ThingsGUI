@@ -1,31 +1,19 @@
-import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+import Button from '@mui/material/Button';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 
 
-const useStyles = makeStyles(theme => ({
-    tooltip: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-    },
-}));
+const Copy = ({text}) => {
 
-
-const Copy = ({reference}) => {
-    const classes = useStyles();
-
-    const handleRef = () => {
-        reference.current.focus();
-        reference.current.select();
-        document.execCommand('copy');
+    const setClipboard = () => {
+        navigator.clipboard.writeText(text);
     };
 
     return(
-        <Tooltip className={classes.tooltip} disableFocusListener disableTouchListener title="Copy to Clipboard">
-            <Button color="primary" onClick={handleRef}>
+        <Tooltip disableFocusListener disableTouchListener title="Copy to Clipboard" sx={{marginLeft: '8px', marginRight: '8px'}}>
+            <Button color="primary" onClick={setClipboard}>
                 <FileCopyIcon color="primary" />
             </Button>
         </Tooltip>
@@ -33,7 +21,7 @@ const Copy = ({reference}) => {
 };
 
 Copy.propTypes = {
-    reference: PropTypes.object.isRequired,
+    text: PropTypes.string.isRequired,
 };
 
 export default Copy;

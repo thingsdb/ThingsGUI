@@ -1,23 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-import {EditActions, useEdit} from '../Context';
-
-const useStyles = makeStyles(theme => ({
-    container: {
-        paddingTop: theme.spacing(1),
-        marginTop: theme.spacing(1),
-    },
-}));
+import { EditActions, useEdit } from '../Context';
 
 
 const AddRegex = ({identifier, init}) => {
-    const classes = useStyles();
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
@@ -32,31 +23,37 @@ const AddRegex = ({identifier, init}) => {
     const v = val[identifier]||(val.constructor === Object?'':val);
 
     return(
-        <Grid className={classes.container} container spacing={2}>
+        <Grid container spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
             <Grid container item xs={12}>
-                <Grid item xs={1} container justify="flex-start">
-                    <Typography variant="h3" color="primary">
-                        {'/'}
-                    </Typography>
+                <Grid item xs={1} container alignItems="center" justifyContent="center">
+                    <Grid item>
+                        <Typography variant="h5" color="primary">
+                            {'/'}
+                        </Typography>
+                    </Grid>
                 </Grid>
-                <Grid item xs={10} container >
-                    <TextField
-                        name="regex"
-                        label="Regex"
-                        type="text"
-                        value={v.trim().slice(1, -1)}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
-                        rowsMax={10}
-                        multiline
-                        variant="outlined"
-                    />
+                <Grid item xs={10} container alignItems="center" justifyContent="center">
+                    <Grid item xs={12}>
+                        <TextField
+                            name="regex"
+                            label="Regex"
+                            type="text"
+                            value={v.trim().slice(1, -1)}
+                            spellCheck={false}
+                            onChange={handleOnChange}
+                            fullWidth
+                            maxRows={10}
+                            multiline
+                            variant="standard"
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs={1} container justify="flex-end">
-                    <Typography variant="h3" color="primary">
-                        {'/'}
-                    </Typography>
+                <Grid item xs={1} container alignItems="center" justifyContent="center">
+                    <Grid item>
+                        <Typography variant="h5" color="primary">
+                            {'/'}
+                        </Typography>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

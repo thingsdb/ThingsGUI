@@ -1,29 +1,23 @@
-import { amber } from '@material-ui/core/colors';
-import { makeStyles} from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import { amber } from '@mui/material/colors';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-import {CollectionActions, ProcedureActions} from '../../../Stores';
-import {Closure, EditName, ErrorMsg, SimpleModal} from '../../Util';
-import {EditProcedureDialogTAG} from '../../../Constants/Tags';
+import { Closure, EditName, ErrorMsg, SimpleModal } from '../../Util';
+import { CollectionActions, ProcedureActions } from '../../../Stores';
+import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
+import { EditProcedureDialogTAG } from '../../../Constants/Tags';
 
-const useStyles = makeStyles(() => ({
-    warnColor: {
-        color: amber[700],
-    },
-}));
 
 const tag = EditProcedureDialogTAG;
 const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
-    const classes = useStyles();
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');
 
@@ -78,7 +72,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
             maxWidth="md"
             actionButtons={procedure.with_side_effects?(
                 <ListItem>
-                    <Typography variant="caption" className={classes.warnColor}>
+                    <Typography variant="caption" sx={{color: amber[700]}}>
                         {'Note: this procedure generates an event.'}
                     </Typography>
                 </ListItem>
@@ -102,13 +96,14 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                             <Collapse in={Boolean(queryString)} timeout="auto">
                                 <ListItem>
                                     <TextField
-                                        name="queryString"
+                                        fullWidth
                                         label="Query"
+                                        maxRows="10"
+                                        multiline
+                                        name="queryString"
                                         type="text"
                                         value={queryString}
-                                        fullWidth
-                                        multiline
-                                        rowsMax="10"
+                                        variant="standard"
                                         InputProps={{
                                             readOnly: true,
                                             disableUnderline: true,
@@ -133,9 +128,9 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                                 <Closure input={closure} onChange={handleClosure} />
                             </ListItem>
                             <ListItem>
-                                <Grid container item xs={11} justify="flex-end">
-                                    <Box fontSize={10} fontStyle="italic" m={1}>
-                                        {`Created on: ${moment(procedure.created_at*1000).format('YYYY-MM-DD HH:mm:ss')}`}
+                                <Grid container item xs={11} justifyContent="flex-end">
+                                    <Box sx={{fontSize: 10, fontStyle: 'italic', m: 1}}>
+                                        {`Created on: ${moment(procedure.created_at*1000).format(DATE_TIME_SEC_STR)}`}
                                     </Box>
                                 </Grid>
                             </ListItem>
@@ -145,7 +140,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                     <Grid container spacing={1} item xs={12}>
                         <Grid item>
                             <Typography>
-                                <Box fontSize={16} fontStyle="italic" m={1} color="text.secondary">
+                                <Box sx={{fontSize: 16, fontStyle: 'italic', m: 1, color: 'text.secondary'}}>
                                     {'Procedure cannot be edited.'}
                                 </Box>
                             </Typography>

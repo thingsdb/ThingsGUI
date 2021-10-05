@@ -1,6 +1,5 @@
-import { makeStyles} from '@material-ui/core/styles';
 import {withVlow} from 'vlow';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -20,17 +19,10 @@ const withStores = withVlow([{
     keys: ['customTypes']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    spacing: {
-        paddingBottom: theme.spacing(1),
-    },
-}));
-
 const enumsTag = TypesTAG;
 const typesTag = EnumsTAG;
 
 const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
-    const classes = useStyles();
     const types = [
         ANY,
         BOOL,
@@ -139,7 +131,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
 
     return (
         <React.Fragment>
-            <Grid className={classes.spacing} item xs={12}>
+            <Grid item xs={12} sx={{paddingBottom: '8px'}}>
                 <HarmonicCardHeader expand={viewType.expand} onExpand={handleExpand('type')} title="TYPES" onRefresh={handleRefreshTypes} unmountOnExit>
                     <EnumTypeChips
                         buttonsView={{add: true, edit: true, run: false, view: false}}

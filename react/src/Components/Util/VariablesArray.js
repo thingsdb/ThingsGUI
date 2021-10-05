@@ -1,22 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { alpha } from '@mui/material/styles';
 import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Chip from '@material-ui/core/Chip';
-import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
+import Chip from '@mui/material/Chip';
+import TextField from '@mui/material/TextField';
 
 import useStateCallback from './useStateCallback';
 
-const useStyles = makeStyles(theme => ({
-    chip: {
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
-    },
-}));
 
 const VariablesArray = ({input, onChange}) => {
-    const classes = useStyles();
     const [item, setItem] = React.useState('');
 
     const [myItems, setMyItems] = useStateCallback([]);
@@ -59,17 +52,36 @@ const VariablesArray = ({input, onChange}) => {
 
     return (
         <div>
-            {myItems.map((listitem, index) => <Chip key={index} id={listitem} className={classes.chip} label={listitem} onDelete={handleClick(index)} color="primary" />)}
+            {myItems.map((listitem, index) => (
+                <Chip
+                    color="primary"
+                    id={listitem}
+                    key={index}
+                    label={listitem}
+                    onDelete={handleClick(index)}
+                    sx={{
+                        color: '#000',
+                        margin: '8px',
+                        padding: '8px',
+                        '& .MuiChip-deleteIcon': {
+                            color: '#000',
+                            '&:hover': {
+                                color: alpha('#000', 0.60),
+                            },
+                        }
+                    }}
+                />
+            ))}
             <TextField
+                helperText={'Add + hit "Enter"'}
                 name="input"
+                onChange={handleChange}
+                onKeyDown={handleKeypress}
+                spellCheck={false}
+                style={{ width: 150 }}
                 type="text"
                 value={item}
-                spellCheck={false}
-                onChange={handleChange}
                 variant="outlined"
-                style={{ width: 150 }}
-                onKeyDown={handleKeypress}
-                helperText={'Add + hit "Enter"'}
             />
         </div>
     );

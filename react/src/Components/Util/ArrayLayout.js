@@ -1,9 +1,9 @@
-import AddIcon from '@material-ui/icons/Add';
-import Fab from '@material-ui/core/Fab';
-import Grid from '@material-ui/core/Grid';
+import AddIcon from '@mui/icons-material/Add';
+import Fab from '@mui/material/Fab';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RemoveIcon from '@material-ui/icons/Remove';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 
 const ArrayLayout = ({child, onAdd, onRemove, fullWidth}) => {
@@ -34,14 +34,14 @@ const ArrayLayout = ({child, onAdd, onRemove, fullWidth}) => {
     return(
         <Grid container spacing={2}>
             {renderChildren()}
-            <Grid container item spacing={1} xs={fullWidth?3:6} justify="center" alignItems="center">
+            <Grid container item spacing={1} xs={fullWidth?3:6} justifyContent="center" alignItems="center">
                 <Grid item>
-                    <Fab color="primary" onClick={handleAdd} size="small">
+                    <Fab color="primary" onClick={handleAdd} size="small" sx={{color: '#000'}}>
                         <AddIcon fontSize="small" />
                     </Fab>
                 </Grid>
                 <Grid item>
-                    <Fab color="primary" onClick={handleRemove} disabled={count==1} size="small">
+                    <Fab color="primary" onClick={handleRemove} disabled={count==1} size="small" sx={{color: '#000'}}>
                         <RemoveIcon fontSize="small" />
                     </Fab>
                 </Grid>

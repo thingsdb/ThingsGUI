@@ -1,8 +1,7 @@
-import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
 
 import InputField from '../InputField';
 import {ListHeader} from '../../../Util';
@@ -10,15 +9,7 @@ import {EditActions, useEdit} from '../Context';
 import {NIL, STR} from '../../../../Constants/ThingTypes';
 
 
-const useStyles = makeStyles(theme => ({
-    nested: {
-        paddingLeft: theme.spacing(6),
-    },
-}));
-
-
 const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) => {
-    const classes = useStyles();
     const [state, setState] = React.useState({
         dataType: STR,
         property: '',
@@ -72,7 +63,7 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
     return (
         <Grid item xs={12}>
             <ListHeader canCollapse onAdd={handleAdd} onDelete={handleClick} onRefresh={handleRefresh} items={array} groupSign="{">
-                <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
+                <Grid container item xs={12} spacing={1} alignItems="center" sx={{paddingLeft: '48px'}}>
                     <Grid item xs={3}>
                         <TextField
                             autoFocus
@@ -108,15 +99,18 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
                             ))}
                         </TextField>
                     </Grid>
-                    <InputField
-                        customTypes={customTypes}
-                        dataType={dataType}
-                        dataTypes={dataTypes}
-                        enums={enums}
-                        name="Input"
-                        variant="standard"
-                        label="Value"
-                    />
+                    <Grid item xs={12}>
+                        <InputField
+                            customTypes={customTypes}
+                            dataType={dataType}
+                            dataTypes={dataTypes}
+                            enums={enums}
+                            fullWidth
+                            label="Value"
+                            name="Input"
+                            variant="standard"
+                        />
+                    </Grid>
                 </Grid>
             </ListHeader>
         </Grid>

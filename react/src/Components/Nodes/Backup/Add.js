@@ -1,11 +1,11 @@
-import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import {AddBackupTAG} from '../../../Constants/Tags';
 import {ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker} from '../../Util';
@@ -113,15 +113,16 @@ const Add = ({nodeId}) => {
                 <ListItem dense disableGutters>
                     <TextField
                         autoFocus
-                        margin="dense"
+                        fullWidth
                         id="file"
                         label="File"
-                        type="text"
-                        value={form.file}
-                        spellCheck={false}
+                        margin="dense"
                         onChange={handleOnChange}
                         placeholder="/tmp/example.tar.gz"
-                        fullWidth
+                        spellCheck={false}
+                        type="text"
+                        value={form.file}
+                        variant="standard"
                     />
                 </ListItem>
                 <ListItem dense disableGutters>
@@ -137,14 +138,15 @@ const Add = ({nodeId}) => {
                                 secondary={
                                     <TextField
                                         autoFocus
-                                        margin="dense"
+                                        fullWidth
                                         id="maxFiles"
                                         inputProps={{min: '1'}}
+                                        margin="dense"
+                                        onChange={handleOnChange}
+                                        spellCheck={false}
                                         type="number"
                                         value={form.maxFiles}
-                                        spellCheck={false}
-                                        onChange={handleOnChange}
-                                        fullWidth
+                                        variant="standard"
                                     />
                                 }
                                 secondaryTypographyProps={{

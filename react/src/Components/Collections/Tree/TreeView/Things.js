@@ -1,18 +1,17 @@
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import { withVlow } from 'vlow';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
-import {withVlow} from 'vlow';
+import Typography from '@mui/material/Typography';
 
-import {ThingActions} from '../TreeActions';
-import {CollectionStore, CollectionActions} from '../../../../Stores';
-import {THING} from '../../../../Constants/ThingTypes';
-import {COLLECTION_SCOPE} from '../../../../Constants/Scopes';
+import { ThingActions } from '../TreeActions';
+import { CollectionStore, CollectionActions } from '../../../../Stores';
+import { THING } from '../../../../Constants/ThingTypes';
+import { COLLECTION_SCOPE } from '../../../../Constants/Scopes';
 import ThingRestrict from './ThingRestrict';
 import Thing from './Thing';
 
@@ -22,31 +21,7 @@ const withStores = withVlow([{
 }]);
 
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        backgroundColor: theme.palette.background.paper,
-    },
-    icon: {
-        paddingTop: theme.spacing(2),
-    },
-    thing: {
-        paddingLeft: theme.spacing(6),
-    },
-    listItem: {
-        margin: 0,
-        padding: 0,
-    },
-    green: {
-        color: theme.palette.primary.green,
-    },
-    divider: {
-        marginTop: theme.spacing(2),
-    }
-}));
-
 const ThingRoot = ({things, collection}) => {
-    const classes = useStyles();
     const fetched = things.hasOwnProperty(collection.collection_id);
 
     React.useEffect(() => {
@@ -57,7 +32,6 @@ const ThingRoot = ({things, collection}) => {
         fetched ? (
             <List
                 component="nav"
-                className={classes.root}
                 dense
                 disablePadding
             >
@@ -66,7 +40,6 @@ const ThingRoot = ({things, collection}) => {
                     onChildren={(k, v) => (
                         <Thing
                             key={k}
-                            className={classes.thing}
                             id={collection.collection_id}
                             thing={v}
                             things={things}
@@ -84,9 +57,9 @@ const ThingRoot = ({things, collection}) => {
                         />
                     )}
                 />
-                <Divider className={classes.divider} />
-                <ListItem className={classes.listItem}>
-                    <ListItemIcon className={classes.icon}>
+                <Divider sx={{marginTop: '16px'}} />
+                <ListItem disableGutters>
+                    <ListItemIcon>
                         <ThingActions
                             child={{
                                 id: collection.collection_id,

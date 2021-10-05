@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import FormLabel from '@material-ui/core/FormLabel';
-import Switch from '@material-ui/core/Switch';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Typography from '@material-ui/core/Typography';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import TextField from '@mui/material/TextField';
+import FormLabel from '@mui/material/FormLabel';
+import Switch from '@mui/material/Switch';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import InputAdornment from '@mui/material/InputAdornment';
+import Typography from '@mui/material/Typography';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
@@ -122,16 +122,17 @@ const Password = ({user}) => {
             {form.set ? (
                 <TextField
                     autoFocus
-                    margin="dense"
+                    error={Boolean(errors.password)}
+                    fullWidth
+                    helperText={errors.password}
                     id="password"
                     label="Password"
+                    margin="dense"
+                    onChange={handleOnChange}
+                    spellCheck={false}
                     type={showPassword?'text':'password'}
                     value={form.password}
-                    spellCheck={false}
-                    onChange={handleOnChange}
-                    fullWidth
-                    error={Boolean(errors.password)}
-                    helperText={errors.password}
+                    variant="standard"
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">

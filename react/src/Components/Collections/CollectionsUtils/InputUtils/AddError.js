@@ -1,24 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-import {EditActions, useEdit} from '../Context';
-import {CollectionActions} from '../../../../Stores';
-import {ThingActionsDialogTAG} from '../../../../Constants/Tags';
+import { EditActions, useEdit } from '../Context';
+import { CollectionActions } from '../../../../Stores';
+import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
 
-const useStyles = makeStyles(theme => ({
-    container: {
-        paddingTop: theme.spacing(1),
-        marginTop: theme.spacing(1),
-    },
-}));
 
 const AddError = ({identifier, init}) => {
-    const classes = useStyles();
     const dispatch = useEdit()[1];
     const [state, setState] = React.useState({
         errCode:'',
@@ -47,52 +39,63 @@ const AddError = ({identifier, init}) => {
     };
 
     const saveErr = (code, msg) => {
-        const c = `err(${code}, '${msg}')`;
+        const c = msg ? `err(${code}, '${msg}')` : `err(${code})`;
         EditActions.updateVal(dispatch, c, identifier);
         setState({errCode: code, errMsg: msg});
     };
 
     return(
-        <Grid className={classes.container} container item xs={12} spacing={2}>
-            <Grid item xs={2} container justify="center">
-                <Typography variant="h3" color="primary">
-                    {'err('}
-                </Typography>
+        <Grid container item xs={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
+            <Grid item xs={2} container alignItems="center" justifyContent="center">
+                <Grid item>
+                    <Typography variant="h5" color="primary">
+                        {'err('}
+                    </Typography>
+                </Grid>
             </Grid>
-            <Grid item xs={4} container justify="center">
-                <TextField
-                    name="errCode"
-                    label="Code"
-                    type="text"
-                    value={errCode}
-                    spellCheck={false}
-                    onChange={handleOnChangeCode}
-                    fullWidth
-                    variant="outlined"
-                    helperText="between -127 and -50"
-                />
+            <Grid item xs={4} container alignItems="center" justifyContent="center">
+                <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        helperText="between -127 and -50"
+                        label="Code"
+                        name="errCode"
+                        onChange={handleOnChangeCode}
+                        spellCheck={false}
+                        type="text"
+                        value={errCode}
+                        variant="standard"
+                    />
+                </Grid>
             </Grid>
-            <Grid item xs={1} container justify="center">
-                <Typography variant="h3" color="primary">
-                    {','}
-                </Typography>
+            <Grid item xs={1} container alignItems="center" justifyContent="center">
+                <Grid item>
+                    <Typography variant="h5" color="primary">
+                        {','}
+                    </Typography>
+                </Grid>
             </Grid>
-            <Grid item xs={4} container justify="center">
-                <TextField
-                    name="errMsg"
-                    label="Message"
-                    type="text"
-                    value={errMsg}
-                    spellCheck={false}
-                    onChange={handleOnChangeMsg}
-                    fullWidth
-                    variant="outlined"
-                />
+            <Grid item xs={4} container alignItems="center" justifyContent="center">
+                <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        helperText="optional"
+                        label="Message"
+                        name="errMsg"
+                        onChange={handleOnChangeMsg}
+                        spellCheck={false}
+                        type="text"
+                        value={errMsg}
+                        variant="standard"
+                    />
+                </Grid>
             </Grid>
-            <Grid item xs={1} container justify="center">
-                <Typography variant="h3" color="primary">
-                    {')'}
-                </Typography>
+            <Grid item xs={1} container alignItems="center" justifyContent="center">
+                <Grid item>
+                    <Typography variant="h5" color="primary">
+                        {')'}
+                    </Typography>
+                </Grid>
             </Grid>
         </Grid>
     );

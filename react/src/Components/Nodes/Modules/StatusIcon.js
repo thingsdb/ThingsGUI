@@ -1,33 +1,21 @@
-import {makeStyles} from '@material-ui/core';
-import FailedIcon from '@material-ui/icons/Clear';
+import FailedIcon from '@mui/icons-material/Clear';
 import PropTypes from 'prop-types';
 import React from 'react';
-import SuccessIcon from '@material-ui/icons/Check';
-import Tooltip from '@material-ui/core/Tooltip';
+import SuccessIcon from '@mui/icons-material/Check';
+import Tooltip from '@mui/material/Tooltip';
 
 
-const useStyles = makeStyles(theme => ({
-    green: {
-        color: theme.palette.primary.green,
-    },
-}));
-
-
-const StatusIcon = ({status}) => {
-    const classes = useStyles();
-
-    return (
-        status === 'running' ? (
-            <Tooltip disableFocusListener disableTouchListener title={status}>
-                <SuccessIcon className={classes.green} />
-            </Tooltip>
-        ) : (
-            <Tooltip disableFocusListener disableTouchListener title={status}>
-                <FailedIcon color="error" />
-            </Tooltip>
-        )
-    );
-};
+const StatusIcon = ({status}) => (
+    status === 'running' ? (
+        <Tooltip disableFocusListener disableTouchListener title={status}>
+            <SuccessIcon sx={{color: 'primary.green'}} />
+        </Tooltip>
+    ) : (
+        <Tooltip disableFocusListener disableTouchListener title={status}>
+            <FailedIcon color="error" />
+        </Tooltip>
+    )
+);
 
 StatusIcon.propTypes = {
     status: PropTypes.string.isRequired,

@@ -1,13 +1,13 @@
-import Collapse from '@material-ui/core/Collapse';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import {AddDialogTAG} from '../../../../Constants/Tags';
 import {ArrayLayout, ErrorMsg, SimpleModal, Switching} from '../../../Util';
@@ -140,12 +140,13 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                         <Collapse in={Boolean(queryString)} timeout="auto">
                             <ListItem>
                                 <TextField
-                                    name="queryString"
+                                    fullWidth
                                     label="Query"
+                                    multiline
+                                    name="queryString"
                                     type="text"
                                     value={queryString}
-                                    fullWidth
-                                    multiline
+                                    variant="standard"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,
@@ -163,13 +164,14 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                         </Collapse>
                         <ListItem>
                             <TextField
-                                name="name"
+                                fullWidth
                                 label="Name"
+                                name="name"
+                                onChange={handleChange}
+                                spellCheck={false}
                                 type="text"
                                 value={name}
-                                spellCheck={false}
-                                onChange={handleChange}
-                                fullWidth
+                                variant="standard"
                             />
                         </ListItem>
                         <ListItem>
@@ -191,15 +193,17 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                                                 <PropertyName onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
                                             </Grid>
                                             {category === 'type' ? (
-                                                <Switching
-                                                    one={
-                                                        <PropertyType onChange={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
-                                                    }
-                                                    two={
-                                                        <PropertyMethod onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
-                                                    }
-                                                    onChange={handleSwitching(i)}
-                                                />
+                                                <Grid item xs={12}>
+                                                    <Switching
+                                                        one={
+                                                            <PropertyType onChange={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
+                                                        }
+                                                        two={
+                                                            <PropertyMethod onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
+                                                        }
+                                                        onChange={handleSwitching(i)}
+                                                    />
+                                                </Grid>
                                             ) : null}
                                             {category === 'enum' ? (
                                                 <Grid item xs={12}>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import {EditActions, useEdit} from '../../CollectionsUtils/Context';
 import {LIST, NIL, SET, STR, THING} from '../../../../Constants/ThingTypes';
@@ -37,13 +37,14 @@ const BuildQueryString = ({child, customTypes, enums, parent}) => {
 
     return(
         <TextField
-            name="queryString"
+            fullWidth
             label="Query"
+            maxRows={4}
+            multiline
+            name="queryString"
             type="text"
             value={query}
-            fullWidth
-            multiline
-            rowsMax={4}
+            variant="standard"
             InputProps={{
                 readOnly: true,
                 disableUnderline: true,

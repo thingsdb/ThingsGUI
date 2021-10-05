@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Collapse from '@material-ui/core/Collapse';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Switch from '@material-ui/core/Switch';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Collapse from '@mui/material/Collapse';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Switch from '@mui/material/Switch';
 
 import { ErrorMsg, SimpleModal, TimePicker } from '../../Util';
 import {ThingsdbActions} from '../../../Stores';
@@ -109,14 +109,15 @@ const Add = ({user}) => {
                     <ListItem>
                         <TextField
                             autoFocus
-                            margin="dense"
+                            fullWidth
                             id="description"
                             label="Description"
+                            margin="dense"
+                            onChange={handleOnChange}
+                            spellCheck={false}
                             type="text"
                             value={form.description}
-                            spellCheck={false}
-                            onChange={handleOnChange}
-                            fullWidth
+                            variant="standard"
                         />
                     </ListItem>
                 </Collapse>

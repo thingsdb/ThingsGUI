@@ -1,36 +1,28 @@
-import { amber } from '@material-ui/core/colors';
-import { makeStyles} from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
+import { amber } from '@mui/material/colors';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-import {CollectionActions, TimerActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal, VariablesArray} from '../../Util';
-import {EditTimerDialogTAG} from '../../../Constants/Tags';
-import {NIL} from '../../../Constants/ThingTypes';
+import { CollectionActions, TimerActions } from '../../../Stores';
+import { ErrorMsg, SimpleModal, VariablesArray } from '../../Util';
+import { EditTimerDialogTAG } from '../../../Constants/Tags';
+import { NIL } from '../../../Constants/ThingTypes';
 
-const useStyles = makeStyles(() => ({
-    warnColor: {
-        color: amber[700],
-    },
-}));
 
 const replaceNull = (items) => items.map(item => item === null ? NIL : item);
 
 const tag = EditTimerDialogTAG;
 
 const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
-    const classes = useStyles();
     const [queryString, setQueryString] = React.useState('set_timer_args()');
     const [args, setArgs] = React.useState([]);
 
@@ -75,7 +67,7 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
             maxWidth="md"
             actionButtons={timer.with_side_effects?(
                 <ListItem>
-                    <Typography variant="caption" className={classes.warnColor}>
+                    <Typography variant="caption" sx={{color: amber[700]}}>
                         {'Note: this timer generates an event.'}
                     </Typography>
                 </ListItem>
@@ -101,13 +93,14 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                             <Collapse in={Boolean(queryString)} timeout="auto">
                                 <ListItem>
                                     <TextField
-                                        name="queryString"
+                                        fullWidth
                                         label="Query"
+                                        maxRows="10"
+                                        multiline
+                                        name="queryString"
                                         type="text"
                                         value={queryString}
-                                        fullWidth
-                                        multiline
-                                        rowsMax="10"
+                                        variant="standard"
                                         InputProps={{
                                             readOnly: true,
                                             disableUnderline: true,
@@ -130,12 +123,12 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                             </ListItem>
                             <ListItem>
                                 <TextField
-                                    name="timer"
-                                    type="text"
-                                    variant="standard"
-                                    value={timer.definition}
                                     fullWidth
                                     multiline
+                                    name="timer"
+                                    type="text"
+                                    value={timer.definition}
+                                    variant="standard"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,
@@ -150,15 +143,16 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                                     }}
                                 />
                             </ListItem>
-                            <ListItem>
-                                <ListItemText
-                                    primary="Set arguments"
-                                />
-                                <ListItemSecondaryAction>
+                            <ListItem
+                                secondaryAction={
                                     <IconButton edge="end" aria-label="refresh" onClick={handleRefresh}>
                                         <RefreshIcon color="primary" />
                                     </IconButton>
-                                </ListItemSecondaryAction>
+                                }
+                            >
+                                <ListItemText
+                                    primary="Set arguments"
+                                />
                             </ListItem>
                             <ListItem>
                                 <VariablesArray input={replaceNull(args)} onChange={handleChangeArgs} />
@@ -169,7 +163,7 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                     <Grid container spacing={1} item xs={12}>
                         <Grid item>
                             <Typography>
-                                <Box fontSize={16} fontStyle="italic" m={1} color="text.secondary">
+                                <Box sx={{fontSize: 16, fontStyle: 'italic', m: 1, color: 'text.secondary'}}>
                                     {'Timer cannot be edited.'}
                                 </Box>
                             </Typography>

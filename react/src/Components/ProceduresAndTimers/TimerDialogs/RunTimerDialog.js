@@ -1,28 +1,20 @@
-import { amber } from '@material-ui/core/colors';
-import { makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import { amber } from '@mui/material/colors';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
-import {TimerActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal, QueryOutput} from '../../Util';
-import {RunTimerDialogTAG} from '../../../Constants/Tags';
-
-const useStyles = makeStyles(() => ({
-    warnColor: {
-        color: amber[700],
-    },
-}));
+import { TimerActions } from '../../../Stores';
+import { ErrorMsg, SimpleModal, QueryOutput } from '../../Util';
+import { RunTimerDialogTAG } from '../../../Constants/Tags';
 
 const tag = RunTimerDialogTAG;
 
 const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
-    const classes = useStyles();
     const [output, setOutput] = React.useState('');
 
     React.useEffect(() => { // clean state
@@ -55,7 +47,7 @@ const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
                 <React.Fragment>
                     {timer.with_side_effects&&(
                         <ListItem>
-                            <Typography variant="caption" className={classes.warnColor}>
+                            <Typography variant="caption" sx={{color: amber[700]}}>
                                 {'Note: this timer generates an event.'}
                             </Typography>
                         </ListItem>

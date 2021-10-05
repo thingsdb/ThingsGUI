@@ -1,9 +1,9 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Collapse from '@material-ui/core/Collapse';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
@@ -90,28 +90,30 @@ const Add = () => {
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                margin="dense"
+                error={Boolean(errors.secret)}
+                fullWidth
+                helperText={errors.secret}
                 id="secret"
                 label="Secret"
+                margin="dense"
+                onChange={handleOnChange}
+                spellCheck={false}
                 type="text"
                 value={form.secret}
-                spellCheck={false}
-                onChange={handleOnChange}
-                fullWidth
-                error={Boolean(errors.secret)}
-                helperText={errors.secret}
+                variant="standard"
             />
             <TextField
-                margin="dense"
+                error={Boolean(errors.nName)}
+                fullWidth
+                helperText={errors.nName}
                 id="nName"
                 label="Node name"
+                margin="dense"
+                onChange={handleOnChange}
+                spellCheck={false}
                 type="text"
                 value={form.nName}
-                spellCheck={false}
-                onChange={handleOnChange}
-                fullWidth
-                error={Boolean(errors.nName)}
-                helperText={errors.nName}
+                variant="standard"
             />
             <FormControlLabel
                 control={(
@@ -126,16 +128,17 @@ const Add = () => {
             />
             <Collapse in={portSwitch} timeout="auto" unmountOnExit>
                 <TextField
-                    margin="dense"
+                    error={Boolean(errors.port)}
+                    fullWidth
+                    helperText={errors.port}
                     id="port"
                     label="Port"
+                    margin="dense"
+                    onChange={handleOnChange}
+                    spellCheck={false}
                     type="text"
                     value={form.port}
-                    spellCheck={false}
-                    onChange={handleOnChange}
-                    fullWidth
-                    error={Boolean(errors.port)}
-                    helperText={errors.port}
+                    variant="standard"
                 />
             </Collapse>
         </React.Fragment>

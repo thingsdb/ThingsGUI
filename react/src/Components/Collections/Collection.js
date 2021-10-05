@@ -1,7 +1,6 @@
-import { makeStyles} from '@material-ui/core/styles';
 import {useLocation} from 'react-router-dom';
 import {withVlow} from 'vlow';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import {ThingsdbActions, ThingsdbStore} from '../../Stores';
@@ -19,15 +18,8 @@ const withStores = withVlow([{
     keys: ['collections']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    spacing: {
-        paddingBottom: theme.spacing(1),
-    },
-}));
-
 const Collection = ({collections}) => {
     let location = useLocation();
-    const classes = useStyles();
 
     React.useEffect(() => {
         ThingsdbActions.getCollections();
@@ -44,7 +36,7 @@ const Collection = ({collections}) => {
                 content={
                     <React.Fragment>
                         <Grid container item md={7} xs={12}>
-                            <Grid className={classes.spacing} item xs={12}>
+                            <Grid item xs={12} sx={{paddingBottom: '8px'}}>
                                 <HarmonicCardHeader title="INFO" unmountOnExit>
                                     <CollectionConfig collection={selectedCollection} />
                                 </HarmonicCardHeader>
@@ -54,14 +46,14 @@ const Collection = ({collections}) => {
                             </Grid>
                         </Grid>
                         <Grid container item md={5} xs={12}>
-                            <Grid className={classes.spacing} item xs={12}>
+                            <Grid item xs={12} sx={{paddingBottom: '8px'}}>
                                 <Procedures
                                     buttonsView={{add: true, edit: true, run: true, view: true}}
                                     dialogsView={{add: true, edit: true, run: true, view: true}}
                                     scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}
                                 />
                             </Grid>
-                            <Grid className={classes.spacing} item xs={12}>
+                            <Grid item xs={12} sx={{paddingBottom: '8px'}}>
                                 <Timers
                                     buttonsView={{add: true, edit: true, run: true, view: true}}
                                     dialogsView={{add: true, edit: true, run: true, view: true}}

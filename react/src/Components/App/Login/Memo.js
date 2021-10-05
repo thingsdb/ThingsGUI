@@ -1,9 +1,9 @@
-import Button from '@material-ui/core/Button';
-import MessageIcon from '@material-ui/icons/Message';
+import IconButton from '@mui/material/IconButton';
+import MessageIcon from '@mui/icons-material/Message';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 
 import { SimpleModal } from '../../Util';
 import {ApplicationActions} from '../../../Stores';
@@ -31,9 +31,9 @@ const Memo = ({connection}) => {
     return (
         <React.Fragment>
             <Tooltip disableFocusListener disableTouchListener title={connection.memo}>
-                <Button color="primary" onClick={handleOpen}>
+                <IconButton color="primary" onClick={handleOpen}>
                     <MessageIcon color="primary" />
-                </Button>
+                </IconButton>
             </Tooltip>
             <SimpleModal
                 title={`Description of ${connection.name}`}
@@ -43,16 +43,16 @@ const Memo = ({connection}) => {
             >
                 <TextField
                     autoFocus
-                    margin="dense"
+                    fullWidth
                     id="memo"
                     label="Message"
+                    margin="dense"
+                    multiline
+                    onChange={handleChange}
+                    spellCheck={false}
                     type="text"
                     value={memo}
-                    spellCheck={false}
-                    onChange={handleChange}
-                    fullWidth
-                    multiline
-
+                    variant="standard"
                 />
             </SimpleModal>
         </React.Fragment>

@@ -1,13 +1,13 @@
-import Collapse from '@material-ui/core/Collapse';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import {CollectionActions, TimerActions} from '../../../Stores';
 import {Closure, ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker, VariablesArray} from '../../Util';
@@ -27,7 +27,7 @@ const initState = {
     start: null,
 };
 
-const AddTimerDialog = ({button, open, onClose, scope}) => {
+const AddTimerDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState(initState);
     const {args, closure, error, queryString, repeat, start} = state;
 
@@ -78,7 +78,6 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
 
     return (
         <SimpleModal
-            button={button}
             open={open}
             onClose={onClose}
             onOk={handleClickOk}
@@ -114,13 +113,14 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
                         <Collapse in={Boolean(queryString)} timeout="auto">
                             <ListItem>
                                 <TextField
-                                    name="queryString"
+                                    fullWidth
                                     label="Query"
+                                    maxRows="10"
+                                    multiline
+                                    name="queryString"
                                     type="text"
                                     value={queryString}
-                                    fullWidth
-                                    multiline
-                                    rowsMax="10"
+                                    variant="standard"
                                     InputProps={{
                                         readOnly: true,
                                         disableUnderline: true,
@@ -169,12 +169,7 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
     );
 };
 
-AddTimerDialog.defaultProps = {
-    button: null,
-};
-
 AddTimerDialog.propTypes = {
-    button: PropTypes.object,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,

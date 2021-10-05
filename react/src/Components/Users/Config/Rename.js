@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import {withVlow} from 'vlow';
 
 import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
@@ -35,8 +35,6 @@ const tag = RenameUserTAG;
 const Rename = ({user, users}) => {
     const [state, setState] = React.useState(initialState);
     const {show, errors, form} = state;
-
-
 
     const handleClickOpen = () => {
         setState({show: true, errors: {}, form: {...user}});
@@ -80,16 +78,17 @@ const Rename = ({user, users}) => {
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                margin="dense"
+                error={Boolean(errors.name)}
+                fullWidth
+                helperText={errors.name}
                 id="name"
                 label="Name"
+                margin="dense"
+                onChange={handleOnChange}
+                spellCheck={false}
                 type="text"
                 value={form.name}
-                spellCheck={false}
-                onChange={handleOnChange}
-                fullWidth
-                error={Boolean(errors.name)}
-                helperText={errors.name}
+                variant="standard"
             />
         </React.Fragment>
     );

@@ -1,70 +1,20 @@
-import { fade, makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import InputBase from '@material-ui/core/InputBase';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RemoveIcon from '@material-ui/icons/Delete';
-import SearchIcon from '@material-ui/icons/Search';
-import Switch from '@material-ui/core/Switch';
+import RemoveIcon from '@mui/icons-material/Delete';
+import Switch from '@mui/material/Switch';
 
-import {ChipsCardTAG} from '../../Constants/Tags';
-import {ErrorMsg, HarmonicCardContent, orderByName, SimpleModal, CardMultiButton} from '.';
+import { ChipsCardTAG } from '../../Constants/Tags';
+import { ErrorMsg, HarmonicCardContent, orderByName, SearchInput, SimpleModal, CardMultiButton } from '.';
 
-
-const useStyles = makeStyles(theme => ({
-    customWidth: {
-        maxWidth: 500,
-    },
-    warning: {
-        color: theme.palette.primary.red
-    },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
-        },
-        marginLeft: 0,
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },
-    },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
-    },
-}));
 
 const step = 20;
 
 const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, title, warnExpression}) => {
-    const classes = useStyles();
     const [deleteItem, setDeleteItem] = React.useState('');
     const [switchDel, setSwitchDel] = React.useState(false);
     const [searchString, setSearchString] = React.useState('');
@@ -116,21 +66,7 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
                     <Grid container spacing={2}>
                         <Grid container item xs={12}>
                             <Grid item>
-                                <div className={classes.search}>
-                                    <div className={classes.searchIcon}>
-                                        <SearchIcon />
-                                    </div>
-                                    <InputBase
-                                        placeholder="Search…"
-                                        value={searchString}
-                                        onChange={handleSearchString}
-                                        classes={{
-                                            root: classes.inputRoot,
-                                            input: classes.inputInput,
-                                        }}
-                                        inputProps={{ 'aria-label': 'search' }}
-                                    />
-                                </div>
+                                <SearchInput onChange={handleSearchString} value={searchString} />
                             </Grid>
                             <ErrorMsg tag={tag} />
                         </Grid>
@@ -141,19 +77,18 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
                                         <CardMultiButton
                                             label={`${listitem[itemKey]}`}
                                             buttons={[...buttons(listitem[itemKey]), remove(listitem[itemKey])]}
-                                            color="primary"
                                             warn={warnExpression(listitem)}
                                         />
                                     </React.Fragment>
                                 )) :  (
-                                    <Box fontSize={12} fontStyle="italic" m={1}>
+                                    <Box sx={{fontSize: 12, fontStyle: 'italic', m: 1}}>
                                         {`No ${title}`}
                                     </Box>
                                 )
                             }
                         </Grid>
                         {searchList && (searchList.length > maxAmount) &&
-                            <Grid container justify="center" alignItems="center" item xs={12}>
+                            <Grid container justifyContent="center" alignItems="center" item xs={12}>
                                 <Grid item>
                                     <Button color="primary" onClick={handleClickLoadMore}>
                                         {'Load more'}
@@ -167,7 +102,6 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
                     <React.Fragment>
                         <Chip
                             clickable
-                            className={classes.chip}
                             label="ADD"
                             onClick={handleClickAdd}
                             color="primary"
@@ -181,7 +115,7 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
                 open={Boolean(deleteItem)}
                 onClose={handleCloseDelete}
                 actionButtons={
-                    <Button color="primary" onClick={handleClickDelete} disabled={!switchDel} className={classes.warning}>
+                    <Button color="error" onClick={handleClickDelete} disabled={!switchDel}>
                         {'Submit'}
                     </Button>
                 }

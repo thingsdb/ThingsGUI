@@ -1,5 +1,5 @@
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 
 
 const bottomInfo = [
@@ -30,7 +30,7 @@ const bottomInfo = [
 const BottomBar = () => {
     return (
         bottomInfo.map((v, i) => (
-            <IconButton color="primary" key={i} href={v.url} size="medium" target="_blank">
+            <IconButton color="primary" key={i} href={v.url} size="large" target="_blank">
                 <img
                     alt={v.name}
                     src={v.icon}

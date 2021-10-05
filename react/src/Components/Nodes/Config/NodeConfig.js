@@ -1,14 +1,13 @@
-import {makeStyles} from '@material-ui/core';
-import {withVlow} from 'vlow';
-import Grid from '@material-ui/core/Grid';
+import { withVlow } from 'vlow';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment';
 
-import {Buttons} from '../Utils';
-import {Info, scaleToBinBytes} from '../../Util';
-import {NodesActions, NodesStore} from '../../../Stores';
-import {THINGS_DOC_NODE_INFO} from '../../../Constants/Links';
+import { Buttons } from '../Utils';
+import { Info, scaleToBinBytes } from '../../Util';
+import { NodesActions, NodesStore } from '../../../Stores';
+import { THINGS_DOC_NODE_INFO } from '../../../Constants/Links';
 import Loglevel from './Loglevel';
 import Shutdown from './Shutdown';
 
@@ -16,14 +15,6 @@ const withStores = withVlow([{
     store: NodesStore,
     keys: ['node']
 }]);
-
-const useStyles = makeStyles(theme => ({
-    overflow: {
-        marginTop: theme.spacing(2),
-        overflowY: 'auto',
-        maxHeight: '400px',
-    },
-}));
 
 const header = [
     {ky: 'title1', title: 'GENERAL', labels: [
@@ -82,7 +73,6 @@ const header = [
 const link = THINGS_DOC_NODE_INFO;
 
 const NodeConfig = ({nodeId, offline, node}) => {
-    const classes = useStyles();
 
     const handleRefresh = () => {
         NodesActions.getNode(nodeId); // update of the selected node; to get the latest info
@@ -93,7 +83,7 @@ const NodeConfig = ({nodeId, offline, node}) => {
             container
             spacing={3}
         >
-            <Grid item xs={12} className={classes.overflow}>
+            <Grid item xs={12} sx={{marginTop: '16px', overflowY: 'auto', maxHeight: '400px'}}>
                 <Info header={header} content={node} />
             </Grid>
             {offline ? null : (

@@ -1,12 +1,12 @@
-import Collapse from '@material-ui/core/Collapse';
-import EditIcon from '@material-ui/icons/Edit';
-import CancelIcon from '@material-ui/icons/Close';
-import SendIcon from '@material-ui/icons/Send';
-import Button from '@material-ui/core/Button';
+import Collapse from '@mui/material/Collapse';
+import EditIcon from '@mui/icons-material/Edit';
+import CancelIcon from '@mui/icons-material/Close';
+import SendIcon from '@mui/icons-material/Send';
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 
 const EditName = ({name, fn}) => {
@@ -43,12 +43,13 @@ const EditName = ({name, fn}) => {
             </Collapse>
             <Collapse in={show} timeout="auto" unmountOnExit>
                 <TextField
+                    color="secondary"
+                    multiline
                     name="newName"
+                    onChange={handleChange}
                     type="text"
                     value={newName}
-                    multiline
-                    onChange={handleChange}
-                    color="secondary"
+                    variant="standard"
                     inputProps={{
                         style: {
                             fontSize: '2.125rem',

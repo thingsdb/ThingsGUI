@@ -1,36 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {makeStyles} from '@material-ui/core/styles';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grid from '@material-ui/core/Grid';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grid from '@mui/material/Grid';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import Paper from '@mui/material/Paper';
+import Popover from '@mui/material/Popover';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
-const useStyles = makeStyles(theme => ({
-    list: {
-        maxHeight: 200,
-        overflowY: 'auto',
-        zIndex: 1500
-    },
-    paper: {
-        border: `0.8px solid ${theme.palette.primary.main}`,
-        zIndex: 1500
-    },
-    popper: {
-        zIndex: 1500,
-    },
-
-}));
 
 const BATCH = 50;
 
 const AutoSelect = ({onChange, label, dropdownItems, input}) => {
-    const classes = useStyles();
     const textRef = React.useRef(null);
     const [end, setEnd] = React.useState(BATCH);
     const [text, setText] = React.useState(input);
@@ -114,18 +97,21 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
                     value={text}
                     variant="standard"
                 />
-
-                <Popper
-                    anchorEl={() => textRef.current}
-                    className={classes.popper}
+                <Popover
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }}
                     onClose={handleClose}
                     open={Boolean(anchorEl) && Boolean(list.length)}
-                    placement="bottom"
-                    style={width ? { width: width } : textRef.current ? { width: textRef.current.offsetWidth } : null}
-                    transition
                 >
-                    <Paper className={classes.paper} elevation={3}>
-                        <MenuList onScroll={handleScroll} className={classes.list} id="menu-list-grow">
+                    <Paper sx={{width : width ? width : textRef.current ? textRef.current.offsetWidth : null, border: '0.1px solid #eee'}} elevation={3}>
+                        <MenuList onScroll={handleScroll} id="menu-list-grow" sx={{maxHeight: 200, overflowY: 'auto'}}>
                             {list.slice(0, end).map( (item, index) => (
                                 <MenuItem
                                     dense
@@ -139,7 +125,7 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
                             ))}
                         </MenuList>
                     </Paper>
-                </Popper>
+                </Popover>
             </Grid>
         </ClickAwayListener>
     );

@@ -1,22 +1,15 @@
-import { makeStyles} from '@material-ui/core/styles';
-import CheckIcon from '@material-ui/icons/Check';
-import Grid from '@material-ui/core/Grid';
+import CheckIcon from '@mui/icons-material/Check';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import RunIcon from '@material-ui/icons/DirectionsRun';
-import ViewIcon from '@material-ui/icons/Visibility';
+import RunIcon from '@mui/icons-material/DirectionsRun';
+import ViewIcon from '@mui/icons-material/Visibility';
 
-import {AddDialog, AddLink, EditDialog, Relation, ViewDialog} from '.';
-import {ChipsCard, DownloadBlob} from '../../../Util';
-import {THINGS_DOC_DATATYPES} from '../../../../Constants/Links';
-import {THINGDB_CACHE} from '../../../../Constants/Files';
+import { AddDialog, AddLink, EditDialog, Relation, ViewDialog } from '.';
+import { ChipsCard, DownloadBlob } from '../../../Util';
+import { THINGS_DOC_DATATYPES } from '../../../../Constants/Links';
+import { THINGDB_CACHE } from '../../../../Constants/Files';
 
-
-const useStyles = makeStyles(theme => ({
-    spacing: {
-        paddingBottom: theme.spacing(1),
-    },
-}));
 
 const headers = {
     type: {
@@ -124,7 +117,6 @@ const tableInfo = {
 };
 
 const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
-    const classes = useStyles();
 
     React.useEffect(() => {
         onInfo(scope, tag);
@@ -197,7 +189,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
     const [item, rows] = React.useMemo(() => tableInfo[categoryInit](onChange, items, scope, view), [categoryInit, onChange, items, scope, view]);
 
     return (
-        <Grid className={classes.spacing} item xs={12}>
+        <Grid item xs={12} sx={{paddingBottom: '8px'}}>
             <ChipsCard
                 buttons={buttons(buttonsView)}
                 items={items}

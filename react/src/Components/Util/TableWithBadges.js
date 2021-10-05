@@ -1,33 +1,17 @@
-import { makeStyles} from '@material-ui/core/styles';
-import Badge from '@material-ui/core/Badge';
-import Box from '@material-ui/core/Box';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
 
-const useStyles = makeStyles(() => ({
-    box: {
-        maxWidth: 300,
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-    },
-    container: {
-        maxHeight: 300,
-    },
-    emptyCell: {
-        width: 50
-    }
-}));
 
 const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
-    const classes = useStyles();
     const [index, setIndex] = React.useState(null);
 
     const mouseEnter = (i) => () => {
@@ -38,7 +22,7 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
     };
 
     return (
-        <TableContainer className={classes.container}>
+        <TableContainer sx={{maxHeight: '300px'}}>
             <Table padding="none">
                 <TableHead>
                     <TableRow>
@@ -62,7 +46,18 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
                                             badgeButton&&index==ri?badgeButton(h, row, ri):null
                                         }
                                     >
-                                        <Box className={classes.box} component="div" fontFamily="Monospace" fontSize="body1.fontSize" m={1}>
+                                        <Box
+                                            component="div"
+                                            sx={{
+                                                fontSize: 'body1.fontSize',
+                                                fontFamily: 'Monospace',
+                                                m: 1,
+                                                maxWidth: '300px',
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                            }}
+                                        >
                                             {row[h.ky]}
                                         </Box>
                                     </Badge>
@@ -72,7 +67,7 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
                                 <TableCell align='right'>
                                     {buttons(row)}
                                 </TableCell>
-                            ) : <TableCell className={classes.emptyCell} />}
+                            ) : <TableCell sx={{width: '50px'}} />}
                         </TableRow>
                     ))}
                 </TableBody>

@@ -1,32 +1,14 @@
-import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import OpenIcon from '@material-ui/icons/OpenInNew';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import OpenIcon from '@mui/icons-material/OpenInNew';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import {Copy, DownloadTextFile, SimpleModal} from '.';
 
 
-const useStyles = makeStyles(theme => ({
-    border: {
-        margin: theme.spacing(1),
-        padding: theme.spacing(2),
-        border: '1px solid #525557',
-        position: 'relative',
-        borderRadius: '5px',
-        zIndex: 1,
-    },
-    someMargin: {
-        margin: theme.spacing(1)
-    },
-}));
-
-
 const StringDialog = ({name, text}) => {
-    const classes = useStyles();
-    const reference = React.useRef(null);
     const [open, setOpen] = React.useState(false);
 
     const handleOpen= () => {
@@ -50,17 +32,29 @@ const StringDialog = ({name, text}) => {
             maxWidth="md"
             actionButtons={
                 <React.Fragment>
-                    <Copy reference={reference} />
+                    <Copy text={text} />
                     <DownloadTextFile name={name} text={text} />
                 </React.Fragment>
             }
         >
-            <Grid className={classes.border} container item xs={12}>
+            <Grid
+                container
+                item
+                xs={12}
+                sx={{
+                    margin: '8px',
+                    padding: '16px',
+                    border: '1px solid #525557',
+                    position: 'relative',
+                    borderRadius: '5px',
+                    zIndex: 1,
+                }}
+            >
                 <TextField
-                    className={classes.someMargin}
                     name="dialog_text"
                     type="text"
                     value={text}
+                    variant="standard"
                     InputProps={{
                         readOnly: true,
                         disableUnderline: true,
@@ -74,10 +68,10 @@ const StringDialog = ({name, text}) => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    inputRef={reference}
                     multiline
-                    rowsMax="40"
+                    maxRows="40"
                     fullWidth
+                    sx={{margin: '8px'}}
                 />
             </Grid>
         </SimpleModal>

@@ -19,7 +19,6 @@ import FixedList from './FixedList';
 import HarmonicCard from './HarmonicCard';
 import HarmonicCardContent from './HarmonicCardContent';
 import HarmonicCardHeader from './HarmonicCardHeader';
-import HarmonicTree from './HarmonicTree';
 import Info from './Info';
 import ListHeader from './ListHeader';
 import LocalMsg from './LocalMsg';
@@ -29,6 +28,7 @@ import moment from 'moment';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import RefreshContainer from './RefreshContainer';
+import SearchInput from './SearchInput';
 import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import StartStopPolling from './StartStopPolling';
@@ -60,6 +60,7 @@ import {ARRAY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL
     SET, STR, THING, TIMEVAL, WRAP} from '../../Constants/ThingTypes';
 import {THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE} from '../../Constants/Scopes';
 import {THINGDB_CACHE} from '../../Constants/Files';
+import {DATE_TIME_MIN_STR} from '../../Constants/DateStrings';
 
 const checkType = (t) => {
     if (t === null) {
@@ -206,7 +207,7 @@ const scaleToBinBytes = (bytes) => {
     return `${rounded === number ? '' : '~'}${rounded} ${metricLabel[i]}`;
 };
 
-const nextRunFn = (t) => (t === 'pending' ? t : moment(t).format('YYYY-MM-DD HH:mm'));
+const nextRunFn = (t) => (t === 'pending' ? t : moment(t).format(DATE_TIME_MIN_STR));
 
 const getIdFromPath = (pathname, name) => {
     const splitPath = pathname.split('/');
@@ -348,7 +349,6 @@ export {
     HarmonicCard,
     HarmonicCardContent,
     HarmonicCardHeader,
-    HarmonicTree,
     historyDeleteQueryParam,
     historyGetQueryParam,
     historyNavigate,
@@ -366,6 +366,7 @@ export {
     RefreshContainer,
     revealCustomType,
     scaleToBinBytes,
+    SearchInput,
     ServerError,
     SimpleModal,
     stableSort,

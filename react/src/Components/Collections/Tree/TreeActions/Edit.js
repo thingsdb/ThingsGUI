@@ -1,31 +1,17 @@
-import {makeStyles} from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {InputField} from '../../CollectionsUtils';
+import { DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL } from '../../../../Constants/ThingTypes';
+import { InputField } from '../../CollectionsUtils';
 import BuildQueryString from './BuildQueryString';
 import PropInit from './PropInit';
 import TypeInit from './TypeInit';
-import {DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL} from '../../../../Constants/ThingTypes';
-
-const useStyles = makeStyles(theme => ({
-    listItem: {
-        margin: 0,
-        padding: 0,
-    },
-    list: {
-        '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-        },
-    },
-}));
 
 
 const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
-    const classes = useStyles();
-
     const [newProperty, setNewProperty] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type==LIST||child.type==THING ? dataTypes[0]: child.type==SET ? THING : child.type);
 
@@ -47,8 +33,8 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
                     : thing;
 
     return(
-        <List disablePadding dense className={classes.list}>
-            <ListItem className={classes.listItem}>
+        <List disablePadding dense>
+            <ListItem>
                 <BuildQueryString
                     child={{
                         id: null,
@@ -60,30 +46,48 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
                     enums={enums}
                     parent={{
                         id: child.type == THING? child.id:parent.id,
-                        name: child.type == THING|| child.type == LIST || child.type == SET ?child.name:parent.name,
-                        type: child.type == THING|| child.type == LIST|| child.type == SET?child.type:parent.type,
+                        name: child.type == THING || child.type == LIST || child.type == SET ?child.name:parent.name,
+                        type: child.type == THING || child.type == LIST || child.type == SET?child.type:parent.type,
                     }}
                 />
             </ListItem>
-            <ListItem className={classes.listItem}>
-                {addNewProperty && (
-                    <PropInit
-                        onChange={handleOnChangeName}
-                        input={newProperty}
-                        thing={thing}
-                    />
-                )}
-                {canChangeType && (
-                    <TypeInit
-                        onChange={handleOnChangeType}
-                        type={child.type}
-                        customTypes={customTypes}
-                        dataTypes={dataTypes}
-                        input={dataType}
-                    />
-                )}
+            <ListItem>
+                <Grid container item xs={12} spacing={1} alignItems="center">
+                    {addNewProperty && (
+                        <Grid item xs={3}>
+                            <PropInit
+                                onChange={handleOnChangeName}
+                                input={newProperty}
+                                thing={thing}
+                            />
+                        </Grid>
+                    )}
+                    {canChangeType && (
+                        <Grid item xs={3}>
+                            <TypeInit
+                                onChange={handleOnChangeType}
+                                type={child.type}
+                                customTypes={customTypes}
+                                dataTypes={dataTypes}
+                                input={dataType}
+                            />
+                        </Grid>
+                    )}
+                </Grid>
             </ListItem>
-            <InputField dataType={dataType} enums={enums} margin="dense" customTypes={customTypes} dataTypes={dataTypes} label="Value" fullWidth init={t==null?'':t} />
+            <ListItem>
+                <InputField
+                    customTypes={customTypes}
+                    dataType={dataType}
+                    dataTypes={dataTypes}
+                    enums={enums}
+                    fullWidth
+                    init={t == null ? '' : t}
+                    label="Value"
+                    margin="dense"
+                    variant="standard"
+                />
+            </ListItem>
         </List>
     );
 };

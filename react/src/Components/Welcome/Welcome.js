@@ -1,14 +1,13 @@
-import {makeStyles} from '@material-ui/core/styles';
-import {withVlow} from 'vlow';
-import Grid from '@material-ui/core/Grid';
+import { withVlow } from 'vlow';
+import Grid from '@mui/material/Grid';
 import moment from 'moment';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
-import {getGreetingTime, getSorting, stableSort, TitlePage3} from '../Util';
-import {ProcedureActions, ProcedureStore, ThingsdbActions, ThingsdbStore, TimerActions, TimerStore} from '../../Stores';
-import {THINGSDB_SCOPE} from '../../Constants/Scopes';
+import { getGreetingTime, getSorting, stableSort, TitlePage3 } from '../Util';
+import { ProcedureActions, ProcedureStore, ThingsdbActions, ThingsdbStore, TimerActions, TimerStore } from '../../Stores';
+import { THINGSDB_SCOPE } from '../../Constants/Scopes';
 import CollectionCard from './CollectionCard';
 import ProcedureCard from './ProcedureCard';
 import TimerCard from './TimerCard';
@@ -26,26 +25,10 @@ const withStores = withVlow([{
     keys: ['timers']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    paper: {
-        margin: theme.spacing(0.5),
-        padding: theme.spacing(2),
-        width: '100%'
-    },
-    lastPaper: {
-        marginTop: theme.spacing(0.5),
-        marginLeft: theme.spacing(0.5),
-        marginRight: theme.spacing(0.5),
-        marginBottom: theme.spacing(6),
-        padding: theme.spacing(2),
-        width: '100%'
-    }
-}));
 
 const scope = THINGSDB_SCOPE;
 
 const Welcome = ({collections, procedures, timers, user, users}) => {
-    const classes = useStyles();
 
     React.useEffect(() => {
         ThingsdbActions.getCollections();
@@ -65,7 +48,7 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
             content={
                 <React.Fragment>
                     {sortedCollections.length > 0 &&
-                        <Paper className={classes.paper}>
+                        <Paper sx={{padding: '16px', width: '100%'}}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} key={'collections_intro'}>
                                     <Typography gutterBottom variant="button" component="h2" color="textSecondary">
@@ -81,7 +64,7 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
                         </Paper>
                     }
                     {users.length > 0 &&
-                        <Paper className={classes.paper}>
+                        <Paper sx={{padding: '16px', width: '100%'}}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} key={'users_intro'}>
                                     <Typography gutterBottom variant="button" component="h2" color="textSecondary">
@@ -97,7 +80,7 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
                         </Paper>
                     }
                     {procedures[scope] && procedures[scope].length > 0 &&
-                        <Paper className={classes.paper}>
+                        <Paper sx={{padding: '16px', width: '100%'}}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} key={'procedures_intro'}>
                                     <Typography gutterBottom variant="button" component="h2" color="textSecondary">
@@ -113,7 +96,7 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
                         </Paper>
                     }
                     {timers[scope] && timers[scope].length > 0 &&
-                        <Paper className={classes.lastPaper}>
+                        <Paper sx={{margin: '4px 4px 48px 4px', padding: '16px', width: '100%'}}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} key={'timers_intro'}>
                                     <Typography gutterBottom variant="button" component="h2" color="textSecondary">

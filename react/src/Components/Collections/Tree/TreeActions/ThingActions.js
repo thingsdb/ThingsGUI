@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import BuildIcon from '@material-ui/icons/Build';
+import Button from '@mui/material/Button';
+import BuildIcon from '@mui/icons-material/Build';
 
 import {EditProvider} from '../../CollectionsUtils';
 import ThingActionsDialog from './ThingActionsDialog';

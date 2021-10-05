@@ -1,11 +1,11 @@
 /*eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Checkbox from '@mui/material/Checkbox';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 import Password from './Password';
 import Remove from './Remove';
@@ -155,7 +155,7 @@ const UserAccess = ({user, collections}) => {
                                     <Grid item container xs={9} >
                                         <Grid item container xs={12} >
                                             {privileges.map(({ky, label}) => (
-                                                <Grid item xs={2} key={ky} container justify="center" >
+                                                <Grid item xs={2} key={ky} container justifyContent="center" >
                                                     <Typography variant="overline" align="center" component="span" noWrap>
                                                         {label}
                                                     </Typography>
@@ -174,7 +174,7 @@ const UserAccess = ({user, collections}) => {
                                         <Grid item container xs={9} >
                                             <Grid item container xs={12} >
                                                 {privileges.map(({ky, label}) => (
-                                                    <Grid item xs={2} key={ky} container justify="center">
+                                                    <Grid item xs={2} key={ky} container justifyContent="center">
                                                         <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
                                                     </Grid>
                                                 ))}
@@ -187,7 +187,7 @@ const UserAccess = ({user, collections}) => {
                     </CardContent>
                 </Card>
             </Grid>
-            <Grid container item lg={6} md={12} spacing={1} direction="row" justify="center" alignItems="center" >
+            <Grid container item lg={6} md={12} spacing={1} direction="row" justifyContent="center" alignItems="center" >
                 {buttons.map(button => (
                     <Grid key={button.name} item>
                         {button.component}

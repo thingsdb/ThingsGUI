@@ -1,22 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import InputField from '../InputField';
-import {ListHeader} from '../../../Util';
-import {EditActions, useEdit} from '../Context';
-import {ANY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NINT, NUMBER, PINT, RAW,
-    REGEX, ROOM, SET, STR, THING, TIMEVAL, UINT, UTF8} from '../../../../Constants/ThingTypes';
-
-const useStyles = makeStyles(theme => ({
-    nested: {
-        paddingLeft: theme.spacing(6),
-        paddingBottom: theme.spacing(1),
-    },
-}));
+import { ListHeader } from '../../../Util';
+import { EditActions, useEdit } from '../Context';
+import { ANY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NINT, NUMBER, PINT, RAW,
+    REGEX, ROOM, SET, STR, THING, TIMEVAL, UINT, UTF8 } from '../../../../Constants/ThingTypes';
 
 
 const typeConv = {
@@ -95,7 +87,6 @@ const typing = ([fprop, type], dataTypes) =>  {
 
 
 const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentDispatch}) => {
-    const classes = useStyles();
     const [typeFields, setTypeFields] = React.useState([]);
     const [dataType, setDataType] = React.useState({});
 
@@ -140,7 +131,7 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
             <Grid item xs={12}>
                 <ListHeader canCollapse onAdd={handleAdd} onRefresh={handleRefresh} items={array} name={type} groupSign="{" unmountOnExit>
                     {( typeFields.map(([fprop, ftype, fchldtype], i) => (
-                        <Grid className={classes.nested} container item xs={12} spacing={1} alignItems="center" key={i}>
+                        <Grid container item xs={12} spacing={1} alignItems="center" key={i} sx={{paddingLeft: '48px', paddingBottom: '8px'}}>
                             <Grid item xs={2}>
                                 <TextField
                                     disabled
@@ -174,16 +165,19 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
                                     ))}
                                 </TextField>
                             </Grid>
-                            <InputField
-                                customTypes={customTypes}
-                                dataType={dataType[fprop]||ftype[0]}
-                                dataTypes={dataTypes}
-                                enums={enums}
-                                childTypes={fchldtype}
-                                variant="standard"
-                                label="Value"
-                                identifier={fprop}
-                            />
+                            <Grid item xs={12}>
+                                <InputField
+                                    childTypes={fchldtype}
+                                    customTypes={customTypes}
+                                    dataType={dataType[fprop]||ftype[0]}
+                                    dataTypes={dataTypes}
+                                    enums={enums}
+                                    fullWidth
+                                    identifier={fprop}
+                                    label="Value"
+                                    variant="standard"
+                                />
+                            </Grid>
                         </Grid>
                     )))}
                 </ListHeader>

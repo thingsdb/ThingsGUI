@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 import { ErrorMsg, SimpleModal } from '../../Util';
 import {NodesActions} from '../../../Stores';
@@ -64,14 +64,15 @@ const Loglevel = ({node}) => {
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                margin="dense"
+                fullWidth
                 id="log_level"
                 label="Loglevel"
-                value={form.log_level}
+                margin="dense"
                 onChange={handleOnChange}
-                fullWidth
                 select
                 SelectProps={{native: true}}
+                value={form.log_level}
+                variant="standard"
             >
                 {loglevels.map(p => (
                     <option key={p} value={p}>

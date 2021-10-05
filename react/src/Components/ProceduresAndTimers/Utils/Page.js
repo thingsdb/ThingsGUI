@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import {TitlePage} from '../../Util';
@@ -35,7 +35,7 @@ const Page = ({item, itemKey, scope, type}) => {
                             <Run item={item} type={type} />
                         </EditProvider>
                     </Grid>
-                    <Grid container item md={4} sm={12} spacing={1} justify="center" alignItems="center" >
+                    <Grid container item md={4} sm={12} spacing={1} justifyContent="center" alignItems="center" >
                         {buttons.map(button => (
                             <Grid key={button.name} item>
                                 {button.component}

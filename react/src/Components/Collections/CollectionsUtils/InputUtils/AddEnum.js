@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import {EditActions, useEdit} from '../Context';
 import {DownloadBlob} from '../../../Util';
@@ -37,15 +37,15 @@ const AddEnum = ({enumName, enums, identifier, init}) => {
         <Grid container>
             <Grid item xs={3}>
                 <TextField
-                    type="text"
-                    name="enum"
+                    fullWidth
                     label="Enum"
+                    name="enum"
                     onChange={handleChangeEnum}
-                    value={enumMem}
-                    variant="standard"
                     select
                     SelectProps={{native: true}}
-                    fullWidth
+                    type="text"
+                    value={enumMem}
+                    variant="standard"
                 >
                     { _enum.members.map((f, i) => (
                         <option key={i} value={f[0]}>
@@ -56,10 +56,10 @@ const AddEnum = ({enumName, enums, identifier, init}) => {
             </Grid>
             {isBlob&&
                 <Grid container item xs={9}>
-                    <Grid container item xs={12} justify="flex-end">
+                    <Grid container item xs={12} justifyContent="flex-end">
                         <DownloadBlob val={init} isImg />
                     </Grid>
-                    <Grid container item xs={12} justify="flex-end">
+                    <Grid container item xs={12} justifyContent="flex-end">
                         <Typography variant="caption">
                             {'Click to download the blob that is currently stored.'}
                         </Typography>

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Fab from '@material-ui/core/Fab';
-import Tooltip from '@material-ui/core/Tooltip';
+import Fab from '@mui/material/Fab';
+import Tooltip from '@mui/material/Tooltip';
 import {withVlow} from 'vlow';
 
 import {EventStore, EventActions} from '../../../../Stores';
@@ -33,7 +33,7 @@ const RoomJoin = ({scope, tag, room, ids}) => {
     };
 
     return (
-        <Tooltip disableFocusListener disableTouchListener title={hasJoined ? 'Leave room' : 'Join room'}>
+        <Tooltip disableFocusListener disableTouchListener title={hasJoined ? 'Leave room' : 'Join room'} sx={{color: '#000'}}>
             <Fab onClick={handleWatcher} color="primary">
                 {hasJoined ? 'Leave' : 'Join' }
             </Fab>

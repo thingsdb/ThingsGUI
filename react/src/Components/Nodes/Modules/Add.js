@@ -1,11 +1,11 @@
-import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 import {AddModuleTAG} from '../../../Constants/Tags';
 import {ErrorMsg, SimpleModal, SwitchOpen} from '../../Util';
@@ -103,42 +103,45 @@ const Add = ({nodeId}) => {
                 <ListItem dense disableGutters>
                     <TextField
                         autoFocus
-                        margin="dense"
+                        fullWidth
                         id="name"
                         label="Name"
+                        margin="dense"
+                        onChange={handleOnChange}
+                        spellCheck={false}
                         type="text"
                         value={form.name}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
+                        variant="standard"
                     />
                 </ListItem>
                 <ListItem dense disableGutters>
                     <TextField
-                        margin="dense"
+                        fullWidth
                         id="file"
                         label="File"
+                        margin="dense"
+                        onChange={handleOnChange}
+                        spellCheck={false}
                         type="text"
                         value={form.file}
-                        spellCheck={false}
-                        onChange={handleOnChange}
-                        fullWidth
+                        variant="standard"
                     />
                 </ListItem>
                 <ListItem dense disableGutters>
                     <SwitchOpen label="Add configuration [optional]" onChange={handleSwitch('config')}>
                         <TextField
-                            margin="dense"
+                            fullWidth
                             id="config"
                             label="Configuration"
+                            margin="dense"
+                            maxRows="10"
+                            minRows="1"
+                            multiline
+                            onChange={handleOnChange}
+                            spellCheck={false}
                             type="text"
                             value={form.config}
-                            spellCheck={false}
-                            onChange={handleOnChange}
-                            multiline
-                            rows="1"
-                            rowsMax="10"
-                            fullWidth
+                            variant="standard"
                         />
                     </SwitchOpen>
                 </ListItem>

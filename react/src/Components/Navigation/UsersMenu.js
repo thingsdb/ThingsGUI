@@ -1,12 +1,12 @@
+import { withVlow } from 'vlow';
+import PersonIcon from '@mui/icons-material/Person';
 import React from 'react';
-import PersonIcon from '@material-ui/icons/Person';
-import {withVlow} from 'vlow';
 
-import {Add} from '../Users/Config';
-import {Menu, orderByName} from '../Util';
-import {ThingsdbActions, ThingsdbStore} from '../../Stores';
-import {USER_ROUTE} from '../../Constants/Routes';
-import {isObjectEmpty} from '../Util';
+import { Add } from '../Users/Config';
+import { Menu, orderByName } from '../Util';
+import { ThingsdbActions, ThingsdbStore } from '../../Stores';
+import { USER_ROUTE } from '../../Constants/Routes';
+import { isObjectEmpty } from '../Util';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
@@ -15,10 +15,19 @@ const withStores = withVlow([{
 
 
 const UsersMenu = ({user, users}) => {
+    const [open, setOpen] = React.useState(false);
 
     const handleRefresh = () => {
         ThingsdbActions.getUser();
         ThingsdbActions.getUsers();
+    };
+
+    const handleClickAdd = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
     };
 
     const users2 =
@@ -30,15 +39,18 @@ const UsersMenu = ({user, users}) => {
     const orderedUsers = orderByName(users2);
 
     return (
-        <Menu
-            addItem={<Add />}
-            homeRoute={USER_ROUTE}
-            icon={<PersonIcon color="primary" />}
-            itemKey="name"
-            items={orderedUsers}
-            onRefresh={handleRefresh}
-            title="users"
-        />
+        <React.Fragment>
+            <Menu
+                homeRoute={USER_ROUTE}
+                icon={<PersonIcon color="primary" />}
+                itemKey="name"
+                items={orderedUsers}
+                onAdd={handleClickAdd}
+                onRefresh={handleRefresh}
+                title="users"
+            />
+            <Add open={open} onClose={handleClose} />
+        </React.Fragment>
     );
 };
 

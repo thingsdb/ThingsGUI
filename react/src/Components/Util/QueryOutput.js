@@ -1,29 +1,17 @@
-import Paper from '@material-ui/core/Paper';
-import React from 'react';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import Paper from '@mui/material/Paper';
 import PropTypes from 'prop-types';
-import List from '@material-ui/core/List';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import { makeStyles} from '@material-ui/core/styles';
+import React from 'react';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 
 import {ThingsTree} from '.';
-
-const useStyles = makeStyles(theme => ({
-    card: {
-        backgroundColor: '#000',
-        padding: theme.spacing(1),
-        overflowX: 'auto',
-        width: '100%'
-
-    },
-    tabs: {
-        marginBottom: theme.spacing(2),
-    },
-}));
+import Copy from './Copy';
 
 
 const QueryOutput = ({output}) => {
-    const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState(0);
     const handleChangeTab = (_event, newValue) => {
         setTabIndex(newValue);
@@ -33,8 +21,8 @@ const QueryOutput = ({output}) => {
     const jsonOutput = JSON.stringify(output, replacer, 4); // output
 
     return (
-        <Paper className={classes.card} >
-            <Tabs className={classes.tabs} value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example">
+        <Paper sx={{backgroundColor: '#000', padding: '8px', overflowX: 'auto', width: '100%'}}>
+            <Tabs value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example" sx={{marginBottom: '16px'}}>
                 <Tab label="Tree view" />
                 <Tab label="JSON view" />
             </Tabs>
@@ -55,9 +43,18 @@ const QueryOutput = ({output}) => {
                 </List>
             }
             {tabIndex === 1 &&
-                <pre>
-                    {jsonOutput}
-                </pre>
+                <Grid container>
+                    <Grid container item xs={12} justifyContent="flex-end">
+                        <Copy text={jsonOutput || ''} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box sx={{overflow: 'auto'}}>
+                            <pre>
+                                {jsonOutput}
+                            </pre>
+                        </Box>
+                    </Grid>
+                </Grid>
             }
         </Paper>
     );
