@@ -1,98 +1,51 @@
+import { withVlow } from 'vlow';
+import PropTypes from 'prop-types';
 import React from 'react';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import {withVlow} from 'vlow';
-import makeStyles from '@mui/styles/makeStyles';
 
-import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
+import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
 import { ErrorMsg, SimpleModal } from '../../Util';
-import {AddCollectionTAG} from '../../../Constants/Tags';
+import { AddCollectionTAG } from '../../../Constants/Tags';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
     keys: ['collections']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    buttonBase: {
-        width: '100%',
-        height: '100%',
-        padding: 0,
-        justifyContent: 'left',
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(2),
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        '&:hover': {
-            backgroundColor: '#303030',
-        },
-        text: 'italic',
-    },
-    icon: {
-        marginTop: theme.spacing(0.5),
-        marginBottom: theme.spacing(0.5),
-        color: theme.palette.primary.main,
-    },
-}));
-
-const initialState = {
-    show: false,
-    errors: {},
-    form: {},
-};
-
-const validation = {
-    name: (f, collections) => {
-        if (f.name.length==0) {
-            return 'is required';
-        }
-        if (collections.some((c) => c.name===f.name)) {
-            return 'collection name is already in use';
-        }
-        return '';
-    },
+const validation =  (name, collections) => {
+    if (name.length === 0) {
+        return 'is required';
+    }
+    if (collections.some((c) => c.name === name)) {
+        return 'collection name is already in use';
+    }
+    return '';
 };
 
 const tag = AddCollectionTAG;
 
-const Add = ({collections}) => {
-    const classes = useStyles();
-    const [state, setState] = React.useState(initialState);
-    const {show, errors, form} = state;
+const Add = ({open, onClose, collections}) => {
+    const [name, setName] = React.useState('');
+    const [err, setErr] = React.useState('');
 
-
-    const handleClickOpen = () => {
-        setState({
-            show: true,
-            errors: {},
-            form: {
-                name: '',
-            },
-        });
-    };
-
-    const handleClickClose = () => {
-        setState({...state, show: false});
-    };
+    React.useEffect(() => { // clean state
+        if(open) {
+            setName('');
+            setErr('');
+        }
+    }, [open]);
 
     const handleOnChange = ({target}) => {
-        const {id, value} = target;
-        setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
-            return {...prevState, form: updatedForm, errors: {}};
-        });
+        const {value} = target;
+        setName(value);
+        setErr('');
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, collections);  return d; }, {});
-        setState({...state, errors: err});
-        if (!Object.values(err).some(d => Boolean(d))) {
-            ThingsdbActions.addCollection(
-                form.name,
-                tag,
-                () => setState({...state, show: false})
-            );
+        const e = validation(name, collections);
+        setErr(e);
+        if (!e) {
+            ThingsdbActions.addCollection(name, tag, onClose);
         }
     };
 
@@ -103,46 +56,36 @@ const Add = ({collections}) => {
         }
     };
 
-
-    const Content = (
-        <React.Fragment>
+    return(
+        <SimpleModal
+            title="New collection"
+            open={open}
+            onOk={handleClickOk}
+            onClose={onClose}
+            onKeyPress={handleKeyPress}
+        >
             <ErrorMsg tag={tag} />
             <TextField
                 autoFocus
-                error={Boolean(errors.name)}
+                error={Boolean(err)}
                 fullWidth
-                helperText={errors.name}
+                helperText={err}
                 id="name"
                 label="Name"
                 margin="dense"
                 onChange={handleOnChange}
                 spellCheck={false}
                 type="text"
-                value={form.name}
+                value={name}
                 variant="standard"
             />
-        </React.Fragment>
-    );
-
-    return(
-        <SimpleModal
-            button={
-                <Button className={classes.buttonBase} color="primary" onClick={handleClickOpen} >
-                    <AddBoxIcon className={classes.icon} color="primary" />
-                </Button>
-            }
-            title="New collection"
-            open={show}
-            onOk={handleClickOk}
-            onClose={handleClickClose}
-            onKeyPress={handleKeyPress}
-        >
-            {Content}
         </SimpleModal>
     );
 };
 
 Add.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
 
     /* collections properties */
     collections: ThingsdbStore.types.collections.isRequired,

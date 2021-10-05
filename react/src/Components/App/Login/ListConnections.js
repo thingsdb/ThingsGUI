@@ -1,5 +1,5 @@
-import makeStyles from '@mui/styles/makeStyles';
-import {withVlow} from 'vlow';
+import { styled } from '@mui/material/styles';
+import { withVlow } from 'vlow';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import Collapse from '@mui/material/Collapse';
@@ -7,19 +7,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import {ApplicationStore, ApplicationActions} from '../../../Stores';
-import {isObjectEmpty, orderByName} from '../../Util';
-import {LoginTAG} from '../../../Constants/Tags';
+import { ApplicationStore, ApplicationActions } from '../../../Stores';
+import { isObjectEmpty, orderByName } from '../../Util';
+import { LoginTAG } from '../../../Constants/Tags';
 import Memo from './Memo';
 
 const withStores = withVlow([{
@@ -27,24 +27,18 @@ const withStores = withVlow([{
     keys: ['cachedConnections']
 }]);
 
-const useStyles = makeStyles((theme) => ({
-    card: {
-        backgroundColor: theme.palette.background.default,
-        margin: theme.spacing(0.5),
-    },
-    cardArea: {
-        padding: theme.spacing(2),
-    },
-    nested: {
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(4),
-    },
+const StyledCard = styled(Card)(({ theme }) => ({
+    backgroundColor: theme.palette.background.default,
+    margin: theme.spacing(0.5),
+}));
+
+const StyledCardActionArea = styled(CardActionArea)(({ theme }) => ({
+    padding: theme.spacing(2),
 }));
 
 const tag = LoginTAG;
 
 const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
-    const classes = useStyles();
     const [openDetail, setOpenDetail] = React.useState({});
 
     const handleOpenDetail = (k) => () => {
@@ -76,34 +70,39 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
         <List>
             {sortedConns.map((v, i) => (
                 <React.Fragment key={i}>
-                    <ListItem button onClick={handleConnectToo(v.name)}>
-                        <ListItemIcon>
-                            <img
-                                alt="ThingsDB Logo"
-                                src="/img/thingsdb-logo.png"
-                                draggable='false'
-                                height="25px"
-                            />
-                        </ListItemIcon>
-                        <ListItemText primary={v.name} secondary={v.address} />
-                        <ListItemSecondaryAction>
-                            <Memo connection={v} />
-                            <Button color="primary" onClick={handleDeleteConn(v.name)}>
-                                <DeleteIcon color="primary" />
-                            </Button>
-                            <Button color="primary" onClick={handleOpenDetail(v.name)}>
-                                {openDetail[v.name] ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-                            </Button>
-                        </ListItemSecondaryAction>
+                    <ListItem
+                        disablePadding
+                        secondaryAction={
+                            <React.Fragment>
+                                <Memo connection={v} />
+                                <IconButton color="primary" onClick={handleDeleteConn(v.name)}>
+                                    <DeleteIcon color="primary" />
+                                </IconButton>
+                                <IconButton color="primary" onClick={handleOpenDetail(v.name)}>
+                                    {openDetail[v.name] ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
+                                </IconButton>
+                            </React.Fragment>
+                        }
+                    >
+                        <ListItemButton disableGutters onClick={handleConnectToo(v.name)}>
+                            <ListItemIcon>
+                                <img
+                                    alt="ThingsDB Logo"
+                                    src="/img/thingsdb-logo.png"
+                                    draggable='false'
+                                    height="25px"
+                                />
+                            </ListItemIcon>
+                            <ListItemText primary={v.name} secondary={v.address} />
+                        </ListItemButton>
                     </ListItem>
                     <Collapse in={openDetail[v.name]} timeout="auto">
                         <Grid container>
                             {rows.map((r,i)=>(
                                 <Grid key={i} item xs={6}>
-                                    <Card className={classes.card}>
-                                        <CardActionArea
+                                    <StyledCard>
+                                        <StyledCardActionArea
                                             focusRipple
-                                            className={classes.cardArea}
                                             onClick={handleClick(r.key, v)}
                                         >
                                             <Typography variant="caption">
@@ -112,8 +111,8 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
                                             <Typography variant="caption" component="div" color="primary" >
                                                 {`${v[r.keyList]||r.default}`}
                                             </Typography>
-                                        </CardActionArea>
-                                    </Card>
+                                        </StyledCardActionArea>
+                                    </StyledCard>
                                 </Grid>
                             ))}
                         </Grid>
@@ -125,8 +124,10 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
                     <ListItemText secondary="No saved connections" secondaryTypographyProps={{variant: 'caption'}} />
                 </ListItem>
             }
-            <ListItem button onClick={onClickNewConn}>
-                <ListItemText primary="Use another connection" />
+            <ListItem>
+                <ListItemButton dense disableGutters onClick={onClickNewConn}>
+                    <ListItemText primary="Use another connection" />
+                </ListItemButton>
             </ListItem>
         </List>
     );

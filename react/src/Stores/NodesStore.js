@@ -75,6 +75,8 @@ class NodesStore extends BaseStore {
             backups: [],
             connectedNode: {},
             counters: {},
+            _module: {},
+            modules: [],
             node: {},
             nodes: [],
             streamInfo: {},

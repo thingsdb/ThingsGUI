@@ -1,5 +1,4 @@
 import { amber } from '@mui/material/colors';
-import makeStyles from '@mui/styles/makeStyles';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import Grid from '@mui/material/Grid';
@@ -11,20 +10,14 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import {Closure, EditName, ErrorMsg, SimpleModal} from '../../Util';
-import {CollectionActions, ProcedureActions} from '../../../Stores';
-import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';
-import {EditProcedureDialogTAG} from '../../../Constants/Tags';
+import { Closure, EditName, ErrorMsg, SimpleModal } from '../../Util';
+import { CollectionActions, ProcedureActions } from '../../../Stores';
+import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
+import { EditProcedureDialogTAG } from '../../../Constants/Tags';
 
-const useStyles = makeStyles(() => ({
-    warnColor: {
-        color: amber[700],
-    },
-}));
 
 const tag = EditProcedureDialogTAG;
 const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
-    const classes = useStyles();
     const [queryString, setQueryString] = React.useState('');
     const [closure, setClosure] = React.useState('');
 
@@ -79,7 +72,7 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
             maxWidth="md"
             actionButtons={procedure.with_side_effects?(
                 <ListItem>
-                    <Typography variant="caption" className={classes.warnColor}>
+                    <Typography variant="caption" sx={{color: amber[700]}}>
                         {'Note: this procedure generates an event.'}
                     </Typography>
                 </ListItem>

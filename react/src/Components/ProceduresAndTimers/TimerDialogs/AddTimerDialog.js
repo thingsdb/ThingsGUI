@@ -27,7 +27,7 @@ const initState = {
     start: null,
 };
 
-const AddTimerDialog = ({button, open, onClose, scope}) => {
+const AddTimerDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState(initState);
     const {args, closure, error, queryString, repeat, start} = state;
 
@@ -78,7 +78,6 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
 
     return (
         <SimpleModal
-            button={button}
             open={open}
             onClose={onClose}
             onOk={handleClickOk}
@@ -170,12 +169,7 @@ const AddTimerDialog = ({button, open, onClose, scope}) => {
     );
 };
 
-AddTimerDialog.defaultProps = {
-    button: null,
-};
-
 AddTimerDialog.propTypes = {
-    button: PropTypes.object,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,

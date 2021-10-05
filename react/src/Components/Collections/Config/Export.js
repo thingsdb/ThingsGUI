@@ -1,5 +1,5 @@
-import makeStyles from '@mui/styles/makeStyles';
 import { amber } from '@mui/material/colors';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -9,44 +9,36 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { Copy, DownloadTextFile, ErrorMsg, SimpleModal } from '../../Util';
-import {CollectionActions} from '../../../Stores';
-import {COLLECTION_SCOPE} from '../../../Constants/Scopes';
-import {ExportCollectionTAG} from '../../../Constants/Tags';
+import { CollectionActions } from '../../../Stores';
+import { COLLECTION_SCOPE } from '../../../Constants/Scopes';
+import { ExportCollectionTAG } from '../../../Constants/Tags';
 
 
-const useStyles = makeStyles(theme => ({
-    border: {
-        margin: theme.spacing(1),
-        padding: theme.spacing(2),
-        border: '1px solid #525557',
-        position: 'relative',
-        borderRadius: '5px',
-        zIndex: 1,
-    },
-    label: {
-        position: 'absolute',
-        top: '-10px',
-        left: '10px',
-        height: '20px',
-        border: 'None',
-        textAlign: 'center',
-        paddingLeft: '3px',
-        paddingRight: '3px',
-        backgroundColor: theme.palette.background.paper,
-        zIndex: 2,
-    },
-    someMargin: {
-        margin: theme.spacing(1)
-    },
-    warnColor: {
-        color: amber[700],
-    },
+const StyledGrid = styled(Grid)(({ theme }) => ({
+    margin: theme.spacing(1),
+    padding: theme.spacing(2),
+    border: '1px solid #525557',
+    position: 'relative',
+    borderRadius: '5px',
+    zIndex: 1,
+}));
+
+const Label = styled(Typography)(({ theme }) => ({
+    position: 'absolute',
+    top: '-10px',
+    left: '10px',
+    height: '20px',
+    border: 'None',
+    textAlign: 'center',
+    paddingLeft: '3px',
+    paddingRight: '3px',
+    backgroundColor: theme.palette.background.paper,
+    zIndex: 2,
 }));
 
 const tag = ExportCollectionTAG;
 
 const Export = ({collection}) => {
-    const classes = useStyles();
     const name = React.useState(collection.name)[0]; //to prevent update of name to undefined, after it is deleted.
     const [show, setShow] = React.useState(false);
     const [script, setScript] = React.useState('');
@@ -86,7 +78,7 @@ const Export = ({collection}) => {
                     <Typography variant="body2">
                         {'This setup script includes all enums, types and procedures.'}
                     </Typography>
-                    <Typography variant="subtitle2" component="span" className={classes.warnColor}>
+                    <Typography variant="subtitle2" component="span" sx={{color: amber[700]}}>
                         {'Note: '}
                         <Box component="span" sx={{ fontStyle: 'italic' }}>
                             {'export() '}
@@ -94,12 +86,11 @@ const Export = ({collection}) => {
                         {'is an experimental function and may change in the future.'}
                     </Typography>
                 </Grid>
-                <Grid className={classes.border} container item xs={12}>
-                    <Typography className={classes.label} variant="caption">
+                <StyledGrid container item xs={12}>
+                    <Label variant="caption">
                         {'script'}
-                    </Typography>
+                    </Label>
                     <TextField
-                        className={classes.someMargin}
                         name="script"
                         type="script"
                         value={script}
@@ -120,8 +111,9 @@ const Export = ({collection}) => {
                         multiline
                         maxRows="40"
                         fullWidth
+                        sx={{margin: '8px'}}
                     />
-                </Grid>
+                </StyledGrid>
             </Grid>
         </SimpleModal>
     );

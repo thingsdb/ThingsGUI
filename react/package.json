@@ -1,6 +1,6 @@
 {
   "name": "things-gui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ThingsGUI",
   "main": "index.js",
   "repository": {
@@ -32,9 +32,8 @@
     "@emotion/react": "11.4.1",
     "@emotion/styled": "11.3.0",
     "@mui/icons-material": "5.0.1",
-    "@mui/lab": "5.0.0-alpha.48",
-    "@mui/material": "5.0.1",
-    "@mui/styles": "5.0.1",
+    "@mui/lab": "5.0.0-alpha.49",
+    "@mui/material": "5.0.2",
     "babel-loader": "8.2.2",
     "css-loader": "5.0.1",
     "deep-equal": "2.0.5",

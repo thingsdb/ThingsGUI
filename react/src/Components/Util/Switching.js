@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Collapse from '@mui/material/Collapse';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
@@ -6,14 +5,7 @@ import React from 'react';
 import Switch from '@mui/material/Switch';
 
 
-const useStyles = makeStyles(() => ({
-    fullWidth: {
-        width: '100%',
-    },
-}));
-
 const Switching = ({one, two, onChange}) => {
-    const classes = useStyles();
     const [switchOI, setSwitch] = React.useState(false);
 
     const handleSwitch = ({target}) => {
@@ -39,12 +31,12 @@ const Switching = ({one, two, onChange}) => {
                     {'Method'}
                 </Grid>
             </Grid>
-            <Collapse in={!switchOI} timeout="auto">
-                <Grid className={classes.fullWidth} item xs={12}>
+            <Collapse in={!switchOI} timeout="auto" sx={{width: '100%'}}>
+                <Grid item xs={12}>
                     {one}
                 </Grid>
             </Collapse>
-            <Collapse className={classes.fullWidth} in={switchOI} timeout="auto">
+            <Collapse in={switchOI} timeout="auto" sx={{width: '100%'}}>
                 <Grid item xs={12}>
                     {two}
                 </Grid>

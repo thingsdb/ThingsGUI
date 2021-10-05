@@ -1,19 +1,11 @@
-import makeStyles from '@mui/styles/makeStyles';
 import DownloadIcon from '@mui/icons-material/SaveAlt';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
-const useStyles = makeStyles(theme => ({
-    tooltip: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-    },
-}));
 
 const DownloadTextFile = ({name, text}) => {
-    const classes = useStyles();
     const [href, setHref] = React.useState(null);
 
     React.useEffect(() => {
@@ -21,7 +13,7 @@ const DownloadTextFile = ({name, text}) => {
     }, [text]);
 
     return(
-        <Tooltip className={classes.tooltip} disableFocusListener disableTouchListener title="Download">
+        <Tooltip disableFocusListener disableTouchListener title="Download" sx={{marginLeft: '8px', marginRight: '8px'}}>
             <Button color="primary" href={href} download={`thingsgui_${name||'text'}`}>
                 <DownloadIcon color="primary" />
             </Button>

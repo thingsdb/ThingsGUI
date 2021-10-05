@@ -1,15 +1,13 @@
-import makeStyles from '@mui/styles/makeStyles';
-import {withVlow} from 'vlow';
+import { withVlow } from 'vlow';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import Fade from '@mui/material/Fade';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Tooltip from '@mui/material/Tooltip';
 
-import {NodesActions, NodesStore} from '../../../Stores';
+import { NodesActions, NodesStore } from '../../../Stores';
 import { SimpleModal, StartStopPolling } from '../../Util';
 import NodeGraph from './NodeGraph';
 
@@ -19,15 +17,8 @@ const withStores = withVlow([{
     keys: ['streamInfo']
 }]);
 
-const useStyles = makeStyles(() => ({
-    graph: {
-        backgroundColor: '#000',
-        height: 600
-    },
-}));
 
 const OpenNodeGraph = ({nodes, streamInfo}) => {
-    const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
 
@@ -82,7 +73,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             onClose={handleClickClose}
             maxWidth="md"
         >
-            <Grid className={classes.graph} container justifyContent="center" alignItems="center">
+            <Grid container justifyContent="center" alignItems="center" sx={{backgroundColor: '#000', height: 600}}>
                 <Grid item>
                     {loading ? <CircularProgress />
                         : (

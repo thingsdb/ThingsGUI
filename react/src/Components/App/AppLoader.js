@@ -1,4 +1,4 @@
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -6,32 +6,30 @@ import Typography from '@mui/material/Typography';
 
 import {ApplicationActions} from '../../Stores';
 
-const useStyles = makeStyles(() => ({
-    root: {
-        flexGrow: 1,
-        position: 'absolute',
-        margin: 'auto',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        maxWidth: 800,
-        maxHeight: 800,
-    },
-    logo: {
-        marginTop: 20,
-    },
-    wrapper: {
-        width: 500,
-        height: 250,
-        textAlign: 'center',
-    },
+const RootGrid = styled(Grid)(() => ({
+    flexGrow: 1,
+    position: 'absolute',
+    margin: 'auto',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    maxWidth: 800,
+    maxHeight: 800,
+}));
+
+const StyledImg = styled('img')(() => ({
+    marginTop: 20,
+}));
+
+const WrapperGrid = styled(Grid)(() => ({
+    width: 500,
+    height: 250,
+    textAlign: 'center',
 }));
 
 
 const AppLoader = ({connect}) => {
-
-    const classes = useStyles();
     React.useEffect(() => {
         if (connect) {
             ApplicationActions.connected();
@@ -40,9 +38,8 @@ const AppLoader = ({connect}) => {
 
 
     return(
-        <Grid
+        <RootGrid
             alignItems="center"
-            className={classes.root}
             container
             direction="row"
             spacing={3}
@@ -55,31 +52,22 @@ const AppLoader = ({connect}) => {
                 spacing={3}
                 justifyContent="center"
             >
-                <Grid
-                    className={classes.wrapper}
-                    item
-                    xs={12}
-                >
+                <WrapperGrid item xs={12}>
                     <Typography variant='h5'>
                         {'Loading...'}
                     </Typography>
-                </Grid>
-                <Grid
-                    className={classes.wrapper}
-                    item
-                    xs={12}
-                >
-                    <img
-                        className={classes.logo}
+                </WrapperGrid>
+                <WrapperGrid item xs={12}>
+                    <StyledImg
                         src="/img/thingsdb.gif"
                         alt="loading..."
                         draggable="false"
                         width="200"
                     />
 
-                </Grid>
+                </WrapperGrid>
             </Grid>
-        </Grid>
+        </RootGrid>
     );
 };
 

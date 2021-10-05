@@ -19,7 +19,6 @@ import FixedList from './FixedList';
 import HarmonicCard from './HarmonicCard';
 import HarmonicCardContent from './HarmonicCardContent';
 import HarmonicCardHeader from './HarmonicCardHeader';
-import HarmonicTree from './HarmonicTree';
 import Info from './Info';
 import ListHeader from './ListHeader';
 import LocalMsg from './LocalMsg';
@@ -350,7 +349,6 @@ export {
     HarmonicCard,
     HarmonicCardContent,
     HarmonicCardHeader,
-    HarmonicTree,
     historyDeleteQueryParam,
     historyGetQueryParam,
     historyNavigate,

@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import OpenIcon from '@mui/icons-material/OpenInNew';
@@ -9,23 +8,7 @@ import TextField from '@mui/material/TextField';
 import {Copy, DownloadTextFile, SimpleModal} from '.';
 
 
-const useStyles = makeStyles(theme => ({
-    border: {
-        margin: theme.spacing(1),
-        padding: theme.spacing(2),
-        border: '1px solid #525557',
-        position: 'relative',
-        borderRadius: '5px',
-        zIndex: 1,
-    },
-    someMargin: {
-        margin: theme.spacing(1)
-    },
-}));
-
-
 const StringDialog = ({name, text}) => {
-    const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
     const handleOpen= () => {
@@ -54,9 +37,20 @@ const StringDialog = ({name, text}) => {
                 </React.Fragment>
             }
         >
-            <Grid className={classes.border} container item xs={12}>
+            <Grid
+                container
+                item
+                xs={12}
+                sx={{
+                    margin: '8px',
+                    padding: '16px',
+                    border: '1px solid #525557',
+                    position: 'relative',
+                    borderRadius: '5px',
+                    zIndex: 1,
+                }}
+            >
                 <TextField
-                    className={classes.someMargin}
                     name="dialog_text"
                     type="text"
                     value={text}
@@ -77,6 +71,7 @@ const StringDialog = ({name, text}) => {
                     multiline
                     maxRows="40"
                     fullWidth
+                    sx={{margin: '8px'}}
                 />
             </Grid>
         </SimpleModal>

@@ -1,36 +1,22 @@
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import clsx from 'clsx';
 import Divider from '@mui/material/Divider';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
-    flex: {
-        display: 'flex',
-    },
-    body: {
-        flexGrow: 1,
-        overflowY: 'auto',
-        height: 'calc(100% - 121px)', // footerHeight (60) + footerMarginTop (5) + topBarHeight (48) + appBarMarginBottom (8) = 121
-    },
-    footer: {
-        position:'fixed',
-        left: 0,
-        bottom: 5,
-        zIndex: 2
-    },
-    full: {
+const Flex = styled('div')(() => ({
+    display: 'flex',
+}));
+
+const Main = styled('main', {shouldForwardProp: (prop) => !['open', 'menuOpen', 'newWidth', 'menuWidth', 'isResizing'].includes(prop)})(
+    ({ theme, open, menuOpen, newWidth, menuWidth, isResizing }) => ({
         display: 'flex',
         flex: '1 0 auto',
         flexDirection: 'column',
@@ -42,30 +28,30 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-    },
-    shrink: {
-        position: 'fixed',
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
+        ...(open || menuOpen && {
+            position: 'fixed',
+            transition: theme.transitions.create(['margin', 'width'], {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
         }),
-    },
-    drawerOpen: {
-        display: 'flex',
-        flex: '1 0 auto',
-        flexDirection: 'column',
-        height: '100%',
-        overflowY: 'auto',
-        paddingBottom: '120px',
-        position: 'fixed',
-        right: 0,
-        zIndex: 1200,
-        transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerClose: {
+        width: open && menuOpen ? `calc(100% - ${newWidth + menuWidth}px)`
+            : open ? `calc(100% - ${newWidth}px)`
+                : menuOpen ? `calc(100% - ${menuWidth}px)`
+                    : '100%',
+        ...( menuOpen && {marginLeft: menuWidth}),
+        ...( isResizing && {transition: 'none'})
+    }),
+);
+
+const Body = styled('div')(() => ({
+    flexGrow: 1,
+    overflowY: 'auto',
+    height: 'calc(100% - 121px)', // footerHeight (60) + footerMarginTop (5) + topBarHeight (48) + appBarMarginBottom (8) = 121
+}));
+
+const StyledDrawer = styled(Card, {shouldForwardProp: (prop) => prop !== 'open' && prop !== 'newWidth'})(
+    ({ theme, open, newWidth }) => ({
         marginRight: '0px',
         width: 0,
         height: '100%',
@@ -73,61 +59,86 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-    },
-    drawerHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        ...theme.mixins.toolbar,
-        justifyContent: 'flex-start',
-    },
-    dragger: {
-        alignItems: 'center',
-        bottom: 0,
-        cursor: 'ew-resize',
-        display: 'flex',
-        justifyContent: 'center',
-        position: 'absolute',
-        top: 0,
-        width: 5,
-        zIndex: 3,
+        ...(open && {
+            display: 'flex',
+            flex: '1 0 auto',
+            flexDirection: 'column',
+            height: '100%',
+            overflowY: 'auto',
+            paddingBottom: '120px',
+            position: 'fixed',
+            right: 0,
+            zIndex: 1200,
+            transition: theme.transitions.create('margin', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+            width: newWidth
+        }),
+    }),
+);
 
-    },
-    draggerClose: {
+const StyledDragger = styled('div', {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({ open }) => ({
         width: 0,
-    },
-    draggerIcon: {
-        transform: 'rotate(90deg)'
-    },
-    open: {
-        display: 'block',
-    },
-    close: {
-        display: 'none'
-    },
-    menuDrawer: {
-        width: drawerWidth,
-        flexShrink: 0,
+        ...(open && {
+            alignItems: 'center',
+            bottom: 0,
+            cursor: 'ew-resize',
+            display: 'flex',
+            justifyContent: 'center',
+            position: 'absolute',
+            top: 0,
+            width: 5,
+            zIndex: 3,
+        }),
+    }),
+);
 
-    },
-    menuDrawerPaper: {
-        overflowY: 'auto',
-        borderColor: theme.palette.background.paper,
-        width: drawerWidth,
-        top: 'unset',
-        paddingBottom: '120px'
-    },
-    menuDrawerClose: {
-        width: 0,
-    },
-    drawerContainer: {
-        overflow: 'auto',
-    },
+const StyledDrawerHeader = styled('div')(({theme}) => ({
+    display: 'flex',
+    alignItems: 'center',
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-start',
 }));
 
+const StyledDrawerContainer = styled('div', {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({ open }) => ({
+        display: open ? 'block' : 'none'
+    }),
+);
 
+const MenuFooter = styled('div')(() => ({
+    position:'fixed',
+    left: 0,
+    bottom: 5,
+    zIndex: 2
+}));
+
+const MenuContainer = styled('div')(() => ({
+    overflow: 'auto',
+}));
+
+const Menu = styled(Drawer, {shouldForwardProp: (prop) => prop !== 'menuWidth'})(
+    ({ theme, open, menuWidth }) => ({
+        width: 0,
+        '& .MuiDrawer-paper': {
+            overflowY: 'auto',
+            borderColor: theme.palette.background.paper,
+            width: menuWidth,
+            top: 'unset',
+            paddingBottom: '120px'
+        },
+        ...(open && {
+            menuOpen: menuWidth,
+            flexShrink: 0,
+        }),
+    }),
+);
+
+const menuWidth = 280;
 
 const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toast, bottomBar, drawerTitle, drawerContent}) => {
-    const classes = useStyles();
     const [isResizing, setIsResizing] = React.useState(false);
     const [newWidth, setNewWidth] = React.useState(650);
 
@@ -165,79 +176,51 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
     return(
         <div>
             {topbar}
-            <div className={classes.flex}>
-                <Drawer
-                    className={clsx(classes.menuDrawerClose, {
-                        [classes.menuDrawer]: menuOpen,
-                    })}
+            <Flex>
+                <Menu
                     variant="persistent"
                     anchor="left"
                     open={menuOpen}
+                    menuWidth={menuWidth}
                     PaperProps={{
                         square: false
                     }}
-                    classes={{
-                        paper: classes.menuDrawerPaper,
-                    }}
                 >
-                    <div className={classes.drawerContainer}>
-                        <List>
-                            {menus.map((item, index) => (
-                                <ListItem key={`menu_item_${index}`}>
-                                    {item}
-                                </ListItem>
-                            ))}
-                        </List>
-                        <div className={classes.footer}>
+                    <MenuContainer>
+                        {menus.map((item, index) => (
+                            <React.Fragment key={`menu_item_${index}`}>
+                                {item}
+                            </React.Fragment>
+                        ))}
+                        <MenuFooter>
                             {bottomBar}
-                        </div>
-                    </div>
-                </Drawer>
-                <main
-                    className={clsx(classes.full, {
-                        [classes.shrink]: open || menuOpen,
-                    })}
-                    style={{
-                        width: open && menuOpen ? `calc(100% - ${newWidth + drawerWidth}px)`
-                            : open ? `calc(100% - ${newWidth}px)`
-                                : menuOpen ? `calc(100% - ${drawerWidth}px)`
-                                    : '100%',
-                        marginLeft: menuOpen ? drawerWidth : null,
-                        transition: isResizing ? 'none' : null
-
-                    }}
-                >
-                    <div className={classes.body}>
+                        </MenuFooter>
+                    </MenuContainer>
+                </Menu>
+                <Main open={open} menuOpen={menuOpen} newWidth={newWidth} menuWidth={menuWidth} isResizing={isResizing}>
+                    <Body>
                         {mainContent}
-                    </div>
-                </main>
-                <Card
-                    className={clsx(classes.drawerClose, {
-                        [classes.drawerOpen]: open,
-                    })}
-                    style={open ? {width: newWidth } : null}
-                >
-                    <div
-                        onMouseDown={handleMousedown}
-                        className={open ? classes.dragger : classes.draggerClose}
-                    >
-                        <DragHandleIcon className={classes.draggerIcon} />
-                    </div>
-                    <div className={open ? classes.open : classes.close}>
-                        <div className={classes.drawerHeader}>
+                    </Body>
+                </Main>
+                <StyledDrawer open={open} newWidth={newWidth}>
+                    <StyledDragger open={open} onMouseDown={handleMousedown}>
+                        <DragHandleIcon sx={{transform: 'rotate(90deg)'}} />
+                    </StyledDragger>
+                    <StyledDrawerContainer open={open}>
+                        <StyledDrawerHeader>
                             <Button color="primary" onClick={onClose}>
                                 {open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
                             </Button>
                             <Typography variant="body2">
                                 {drawerTitle}
                             </Typography>
-                        </div>
+                        </StyledDrawerHeader>
                         <Divider />
                         {open ? drawerContent : null}
-                    </div>
-                </Card>
+                    </StyledDrawerContainer>
+                </StyledDrawer>
                 {toast}
-            </div>
+            </Flex>
         </div>
     );
 };

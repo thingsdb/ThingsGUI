@@ -1,4 +1,4 @@
-import makeStyles from '@mui/styles/makeStyles';
+import { alpha } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/AddCircle';
 import Chip from '@mui/material/Chip';
 import Collapse from '@mui/material/Collapse';
@@ -11,30 +11,6 @@ import RemoveIcon from '@mui/icons-material/RemoveCircle';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-const useStyles = makeStyles(theme => ({
-    chip: {
-        padding: theme.spacing(1),
-        margin: theme.spacing(1),
-        maxWidth: 300,
-    },
-    top: {
-        marginTop: theme.spacing(1),
-        paddingTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-    },
-    sidepadding: {
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
-    },
-    inset: {
-        paddingLeft: theme.spacing(3),
-    },
-    fullWidth: {
-        width: '100%',
-    },
-}));
-
 const groupSigning = {
     '{' : ['{','}'],
     '[' : ['[', ']'],
@@ -42,7 +18,6 @@ const groupSigning = {
 };
 
 const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAdd, onDelete, onRefresh, unmountOnExit}) => {
-    const classes = useStyles();
     const [open, setOpen] = React.useState(isOpen);
 
     const handleOpen = () => {
@@ -53,27 +28,47 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
     };
 
     return(
-        <Grid className={classes.top} container item xs={12}>
+        <Grid container item xs={12} sx={{marginTop: '8px', marginBottom: '8px', paddingTop: '8px', paddingBottom: '8px'}}>
             <Grid item xs={7} container justifyContent="flex-start" alignItems="center">
                 {name&&(
                     <Typography variant="h5" color="primary" >
                         {`${name}`}
                     </Typography>
                 )}
-                <Typography variant="h5" className={classes.sidepadding} color="primary">
+                <Typography variant="h5" color="primary" sx={{paddingLeft: '8px', paddingRight: '8px'}}>
                     {groupSigning[groupSign][0]}
                 </Typography>
-                <Grid item className={classes.inset}>
-                    {items.map((listitem, index) => <Chip key={index} id={listitem} className={classes.chip} label={listitem} color="primary" onDelete={onDelete(index, listitem)} />)}
+                <Grid item sx={{paddingLeft: '24px'}}>
+                    {items.map((listitem, index) => (
+                        <Chip
+                            color="primary"
+                            id={listitem}
+                            key={index}
+                            label={listitem}
+                            onDelete={onDelete(index, listitem)}
+                            sx={{
+                                color: '#000',
+                                padding: '8px',
+                                margin: '8px',
+                                maxWidth: '300px',
+                                '& .MuiChip-deleteIcon': {
+                                    color: '#000',
+                                    '&:hover': {
+                                        color: alpha('#000', 0.60),
+                                    },
+                                }
+                            }}
+                        />
+                    ))}
                 </Grid>
             </Grid>
             <Grid item xs={open?12:1} container justifyContent="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>
-                <Collapse className={classes.fullWidth} in={open} timeout="auto" unmountOnExit={unmountOnExit}>
+                <Collapse sx={{width: '100%'}} in={open} timeout="auto" unmountOnExit={unmountOnExit}>
                     {children}
                 </Collapse>
             </Grid>
             <Grid item xs={4} container justifyContent="flex-start" alignItems="center">
-                <Typography variant="h5" className={classes.sidepadding} color="primary">
+                <Typography variant="h5" color="primary" sx={{paddingLeft: '8px', paddingRight: '8px'}}>
                     {groupSigning[groupSign][1]}
                 </Typography>
                 <Button color="primary" onClick={onAdd}>

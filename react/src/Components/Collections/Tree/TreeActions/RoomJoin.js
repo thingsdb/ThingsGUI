@@ -33,7 +33,7 @@ const RoomJoin = ({scope, tag, room, ids}) => {
     };
 
     return (
-        <Tooltip disableFocusListener disableTouchListener title={hasJoined ? 'Leave room' : 'Join room'}>
+        <Tooltip disableFocusListener disableTouchListener title={hasJoined ? 'Leave room' : 'Join room'} sx={{color: '#000'}}>
             <Fab onClick={handleWatcher} color="primary">
                 {hasJoined ? 'Leave' : 'Join' }
             </Fab>

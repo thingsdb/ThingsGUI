@@ -1,5 +1,4 @@
-import makeStyles from '@mui/styles/makeStyles';
-import {Link as RouterLink} from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -10,80 +9,52 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import {COLLECTION_ROUTE} from '../../Constants/Routes';
+import { COLLECTION_ROUTE } from '../../Constants/Routes';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        // width: props => props.size !== 'big' ? 310 : 690,
-        // height: 310,
-        backgroundColor: theme.palette.background.default,
-    },
-    action: {
-        // width: props => props.size !== 'big' ? 310 : 690,
-        // height: 310,
-        paddingTop: 10,
-    },
-    media: {
-        height: 150,
-        width: 200,
-        margin: 10,
-    },
-    flex: {
-        display: 'flex'
-    },
-    marginLeft: {
-        marginLeft: theme.spacing(1)
-    }
-}));
 
-const CollectionCard = ({collection, size}) => {
-    const classes = useStyles({size});
-
-    return (
-        <Card className={classes.root}>
-            <CardActionArea
-                className={classes.action}
-                component={RouterLink}
-                to={location => ({...location, pathname: `/${COLLECTION_ROUTE}/${collection.name}`})}
-            >
-                <CardMedia
-                    className={classes.media}
-                    image="/img/thingsdb-logo.png"
-                    title="ThingsDB"
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {collection.name}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" gutterBottom component='div' className={classes.flex}>
-                        <Box>
-                            {'Number of things: '}
-                        </Box>
-                        <Box className={classes.marginLeft} sx={{fontWeight: 'bold'}}>
-                            {collection.things}
-                        </Box>
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" gutterBottom component='div' className={classes.flex}>
-                        <Box >
-                            {'Created: '}
-                        </Box>
-                        <Box className={classes.marginLeft} sx={{fontWeight: 'bold'}}>
-                            {moment.unix(collection.created_at).fromNow()}
-                        </Box>
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Card >
-    );
-};
-
-CollectionCard.defaultProps = {
-    size: 'default',
-};
+const CollectionCard = ({collection}) => (
+    <Card sx={{backgroundColor: 'background.default'}}>
+        <CardActionArea
+            component={RouterLink}
+            to={location => ({...location, pathname: `/${COLLECTION_ROUTE}/${collection.name}`})}
+            sx={{paddingTop: 10}}
+        >
+            <CardMedia
+                image="/img/thingsdb-logo.png"
+                title="ThingsDB"
+                sx={{
+                    height: '150px',
+                    width: '200px',
+                    margin: '10px',
+                }}
+            />
+            <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                    {collection.name}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" gutterBottom component='div' sx={{display: 'flex'}}>
+                    <Box>
+                        {'Number of things: '}
+                    </Box>
+                    <Box sx={{fontWeight: 'bold', marginLeft: '8px'}}>
+                        {collection.things}
+                    </Box>
+                </Typography>
+                <Typography variant="body2" color="textSecondary" gutterBottom component='div' sx={{display: 'flex'}}>
+                    <Box >
+                        {'Created: '}
+                    </Box>
+                    <Box sx={{fontWeight: 'bold', marginLeft: '8px'}}>
+                        {moment.unix(collection.created_at).fromNow()}
+                    </Box>
+                </Typography>
+            </CardContent>
+        </CardActionArea>
+    </Card >
+);
 
 CollectionCard.propTypes = {
     collection: PropTypes.object.isRequired,
-    size: PropTypes.string
 };
 
 export default CollectionCard;

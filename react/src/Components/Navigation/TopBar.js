@@ -1,12 +1,13 @@
-import makeStyles from '@mui/styles/makeStyles';
-import {withVlow} from 'vlow';
+import { withVlow } from 'vlow';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import HelpIcon from '@mui/icons-material/HelpOutline';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
@@ -15,9 +16,9 @@ import React from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 
-import {THINGS_DOC} from '../../Constants/Links';
-import {TopBarMenu} from '../Util';
-import {ApplicationActions, ThingsdbStore} from '../../Stores';
+import { THINGS_DOC } from '../../Constants/Links';
+import { TopBarMenu } from '../Util';
+import { ApplicationActions, ThingsdbStore } from '../../Stores';
 // import packageJson from '../../'; TODO does not find package.json
 
 const withStores = withVlow([{
@@ -25,61 +26,35 @@ const withStores = withVlow([{
     keys: ['user']
 }]);
 
-
-const useStyles = makeStyles(theme => ({
-    avatar: {
-        height: 35,
-    },
-    appBar: {
-        backgroundColor: theme.palette.secondary.main,
-        flexGrow: 1,
-        marginBottom: theme.spacing(1),
-    },
-    color: {
-        color: theme.palette.text.primary
-    },
-    flex: {
-        display: 'flex',
-    },
-    flexGrow: {
-        flexGrow: 1,
-    },
-    toolbar: {
-        minHeight: 48,
-    },
-}));
-
-
 const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
-    const classes = useStyles();
     const handleClickLogout = () => {
         ApplicationActions.disconnect();
     };
 
     return (
         <AppBar
-            className={classes.appBar}
             position="static"
+            sx={{backgroundColor: 'secondary.main', flexGrow: 1, marginBottom: '8px'}}
         >
-            <Toolbar className={classes.toolbar}>
+            <Toolbar variant="dense">
                 {menuIcon &&
-                    <div className={classes.flexGrow}>
+                    <Box sx={{flexGrow: 1}}>
                         {menuIcon}
-                    </div>
+                    </Box>
                 }
                 {pageIcon &&
-                    <div className={classes.flexGrow}>
+                    <Box sx={{flexGrow: 1}}>
                         {pageIcon}
-                    </div>
+                    </Box>
                 }
                 {title &&
-                    <div className={classes.flexGrow}>
+                    <Box sx={{flexGrow: 1}}>
                         {title}
-                    </div>
+                    </Box>
                 }
                 <div>
                     <Tooltip disableFocusListener disableTouchListener title="Go to ThingsDocs">
-                        <IconButton target="_blank" href={THINGS_DOC} edge="start" className={classes.color} aria-label="close">
+                        <IconButton target="_blank" href={THINGS_DOC} edge="start" aria-label="close">
                             <HelpIcon />
                         </IconButton>
                     </Tooltip>
@@ -93,11 +68,13 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
                                 </ListItemIcon>
                                 <ListItemText primary={user.name} />
                             </ListItem>
-                            <ListItem button onClick={handleClickLogout}>
-                                <ListItemIcon>
-                                    <ExitToAppIcon color="primary" />
-                                </ListItemIcon>
-                                <ListItemText primary="Logout" />
+                            <ListItem>
+                                <ListItemButton dense disableGutters onClick={handleClickLogout}>
+                                    <ListItemIcon>
+                                        <ExitToAppIcon color="primary" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Logout" />
+                                </ListItemButton>
                             </ListItem>
                         </List>
                     </TopBarMenu>

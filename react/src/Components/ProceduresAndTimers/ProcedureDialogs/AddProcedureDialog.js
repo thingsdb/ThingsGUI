@@ -17,7 +17,7 @@ import {THINGS_DOC_NEW_PROCEDURE} from '../../../Constants/Links';
 
 const tag = AddProcedureDialogTAG;
 
-const AddProcedureDialog = ({button, open, onClose, scope}) => {
+const AddProcedureDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState({
         queryString: 'new_procedure("", )',
         procedureName: '',
@@ -63,7 +63,6 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
 
     return (
         <SimpleModal
-            button={button}
             open={open}
             onClose={onClose}
             onOk={handleClickOk}
@@ -150,12 +149,7 @@ const AddProcedureDialog = ({button, open, onClose, scope}) => {
     );
 };
 
-AddProcedureDialog.defaultProps = {
-    button: null,
-};
-
 AddProcedureDialog.propTypes = {
-    button: PropTypes.object,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,

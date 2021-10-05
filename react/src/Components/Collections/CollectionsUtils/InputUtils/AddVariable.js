@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -10,15 +9,8 @@ import {ListHeader} from '../../../Util';
 import {EditActions, useEdit} from '../Context';
 import {NIL, STR} from '../../../../Constants/ThingTypes';
 
-const useStyles = makeStyles(theme => ({
-    nested: {
-        paddingLeft: theme.spacing(6),
-        paddingBottom: theme.spacing(1),
-    },
-}));
 
 const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, parentDispatch}) => {
-    const classes = useStyles();
     const [dataType, setDataType] = React.useState(STR);
 
     const [editState, dispatch] = useEdit();
@@ -54,7 +46,7 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
             <Grid item xs={12}>
                 <ListHeader isOpen canCollapse={false} onAdd={handleAdd} onRefresh={handleRefresh} items={array} groupSign="{">
                     {( variables.map(v => (
-                        <Grid key={v} className={classes.nested} container item xs={12} spacing={1} alignItems="center" >
+                        <Grid key={v} container item xs={12} spacing={1} alignItems="center" sx={{paddingLeft: '48px', paddingBottom: '8px'}}>
                             <Grid item xs={12}>
                                 <Typography color="primary" variant="body1" >
                                     {v}
@@ -81,16 +73,19 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
                                     ))}
                                 </TextField>
                             </Grid>
-                            <InputField
-                                customTypes={customTypes}
-                                dataType={dataType[v]||dataTypes[0]}
-                                dataTypes={dataTypes}
-                                enums={enums}
-                                name="Input"
-                                variant="standard"
-                                label="Value"
-                                identifier={v}
-                            />
+                            <Grid item xs={12}>
+                                <InputField
+                                    customTypes={customTypes}
+                                    dataType={dataType[v]||dataTypes[0]}
+                                    dataTypes={dataTypes}
+                                    enums={enums}
+                                    fullWidth
+                                    identifier={v}
+                                    label="Value"
+                                    name="Input"
+                                    variant="standard"
+                                />
+                            </Grid>
                         </Grid>
                     )))}
                 </ListHeader>

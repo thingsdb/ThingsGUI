@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import makeStyles from '@mui/styles/makeStyles';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grid from '@mui/material/Grid';
 import ListItemText from '@mui/material/ListItemText';
@@ -11,26 +10,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-const useStyles = makeStyles(theme => ({
-    list: {
-        maxHeight: 200,
-        overflowY: 'auto',
-        zIndex: 1500
-    },
-    paper: {
-        border: `0.8px solid ${theme.palette.primary.main}`,
-        zIndex: 1500
-    },
-    popper: {
-        zIndex: 1500,
-    },
-
-}));
 
 const BATCH = 50;
 
 const AutoSelect = ({onChange, label, dropdownItems, input}) => {
-    const classes = useStyles();
     const textRef = React.useRef(null);
     const [end, setEnd] = React.useState(BATCH);
     const [text, setText] = React.useState(input);
@@ -127,8 +110,8 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
                     onClose={handleClose}
                     open={Boolean(anchorEl) && Boolean(list.length)}
                 >
-                    <Paper style={width ? { width: width } : textRef.current ? { width: textRef.current.offsetWidth } : null} className={classes.paper} elevation={3}>
-                        <MenuList onScroll={handleScroll} className={classes.list} id="menu-list-grow">
+                    <Paper sx={{width : width ? width : textRef.current ? textRef.current.offsetWidth : null, border: '0.1px solid #eee'}} elevation={3}>
+                        <MenuList onScroll={handleScroll} id="menu-list-grow" sx={{maxHeight: 200, overflowY: 'auto'}}>
                             {list.slice(0, end).map( (item, index) => (
                                 <MenuItem
                                     dense

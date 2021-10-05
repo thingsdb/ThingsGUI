@@ -1,15 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import makeStyles from '@mui/styles/makeStyles';
-import {useHistory} from 'react-router-dom';
-import {withVlow} from 'vlow';
+import { useHistory } from 'react-router-dom';
+import { withVlow } from 'vlow';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import NativeSelect from '@mui/material/NativeSelect';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {NodesStore, ThingsdbStore} from '../../Stores';
-import {getScopes2, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Util';
-import {COLLECTION_SCOPE, THINGSDB_SCOPE} from '../../Constants/Scopes';
+import { NodesStore, ThingsdbStore } from '../../Stores';
+import { getScopes2, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam } from '../Util';
+import { COLLECTION_SCOPE, THINGSDB_SCOPE } from '../../Constants/Scopes';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
@@ -19,19 +18,9 @@ const withStores = withVlow([{
     keys: ['nodes']
 }]);
 
-const useStyles = makeStyles(theme => ({
-    icon: {
-        color: theme.palette.primary.main,
-    },
-    input: {
-        color: theme.palette.primary.main,
-        fontSize: '1.5rem',
-    }
-}));
 
 const SelectScope = ({onChangeScope, collections, nodes}) => {
     let history = useHistory();
-    const classes = useStyles();
 
     const [name, setName] = React.useState(() => {
         let scopeParam = historyGetQueryParam(history, 'scope');
@@ -60,9 +49,6 @@ const SelectScope = ({onChangeScope, collections, nodes}) => {
 
     return (
         <NativeSelect
-            classes={{
-                icon: classes.icon
-            }}
             disableUnderline
             IconComponent={ExpandMore}
             id="scope"
@@ -76,6 +62,11 @@ const SelectScope = ({onChangeScope, collections, nodes}) => {
             style={{lineHeight: '2rem'}}
             value={name}
             variant="outlined"
+            sx={{
+                '& .MuiNativeSelect-icon': {
+                    color: 'primary.main',
+                }
+            }}
         >
             {scopes.map(s => (
                 <option key={s} value={s}>

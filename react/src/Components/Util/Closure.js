@@ -4,44 +4,11 @@ import React from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
 
 import VariablesArray from './VariablesArray';
 
 
-const useStyles = makeStyles(theme => ({
-    border: {
-        margin: theme.spacing(1),
-        padding: theme.spacing(2),
-        border: '1px solid #525557',
-        position: 'relative',
-        borderRadius: '5px',
-        zIndex: 1,
-    },
-    container: {
-        paddingTop: theme.spacing(1),
-        marginTop: theme.spacing(1),
-    },
-    label: {
-        position: 'absolute',
-        top: '-10px',
-        left: '10px',
-        height: '20px',
-        border: 'None',
-        textAlign: 'center',
-        paddingLeft: '3px',
-        paddingRight: '3px',
-        backgroundColor: theme.palette.background.paper,
-        zIndex: 2,
-    },
-    someMargin: {
-        margin: theme.spacing(1)
-    },
-}));
-
-
 const Closure = ({input, onChange}) => {
-    const classes = useStyles();
     const [state, setState] = React.useState({
         variables: [],
         body: '',
@@ -84,16 +51,41 @@ const Closure = ({input, onChange}) => {
 
 
     return(
-        <Grid className={classes.container} container>
-            <Grid className={classes.border} container item xs={12}>
-                <Typography className={classes.label} variant="caption">
+        <Grid container sx={{paddingTop: '8px', marginTop: '8px'}}>
+            <Grid
+                container
+                item
+                xs={12}
+                sx={{
+                    padding: '16px',
+                    marginBottom: '8px',
+                    border: '1px solid #525557',
+                    position: 'relative',
+                    borderRadius: '5px',
+                    zIndex: 1,
+                }}
+            >
+                <Typography
+                    variant="caption"
+                    sx={{
+                        position: 'absolute',
+                        top: '-10px',
+                        left: '10px',
+                        height: '20px',
+                        border: 'None',
+                        textAlign: 'center',
+                        paddingLeft: '3px',
+                        paddingRight: '3px',
+                        backgroundColor: 'background.paper',
+                        zIndex: 2,
+                    }}
+                >
                     {'Arguments'}
                 </Typography>
                 <VariablesArray onChange={handleVarArray} input={variables} />
             </Grid>
             <Grid item xs={12} container justifyContent="center">
                 <TextField
-                    className={classes.someMargin}
                     name="body"
                     label="Body"
                     type="text"
