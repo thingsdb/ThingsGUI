@@ -11,7 +11,7 @@ import Password from './Password';
 import Remove from './Remove';
 import Rename from './Rename';
 import {ThingsdbActions} from '../../../Stores';
-import {ErrorMsg, getScopes} from '../../Util';
+import {ErrorMsg, getScopes} from '../../Utils';
 import {UserAccessTAG} from '../../../Constants/Tags';
 
 const privileges = [

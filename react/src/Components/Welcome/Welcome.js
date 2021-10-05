@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import { getGreetingTime, TitlePage3 } from '../Util';
+import { getGreetingTime, TitlePage3 } from '../Utils';
 import { ProcedureActions, ProcedureStore, ThingsdbActions, ThingsdbStore, TimerActions, TimerStore } from '../../Stores';
 import { THINGSDB_SCOPE } from '../../Constants/Scopes';
 import CollectionCard from './CollectionCard';

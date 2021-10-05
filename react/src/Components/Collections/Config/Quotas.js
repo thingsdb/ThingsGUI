@@ -3,7 +3,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
-import { ErrorMsg, SimpleModal } from '../../Util';
+import { ErrorMsg, SimpleModal } from '../../Utils';
 import {ThingsdbActions} from '../../../Stores';
 import {QuotasTAG} from '../../../Constants/Tags';
 import {NIL} from '../../../Constants/ThingTypes';

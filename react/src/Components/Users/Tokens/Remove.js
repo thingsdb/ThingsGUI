@@ -5,7 +5,7 @@ import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
 import {ThingsdbActions} from '../../../Stores';
-import {WarnPopover} from '../../Util';
+import {WarnPopover} from '../../Utils';
 
 
 const Remove = ({token, tag}) => {

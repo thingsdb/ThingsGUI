@@ -9,7 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
-import { Copy, ErrorMsg, HarmonicCard } from '../../Util';
+import { Copy, ErrorMsg, HarmonicCard } from '../../Utils';
 import { TokensTAG } from '../../../Constants/Tags';
 import Add from './Add';
 import Remove from './Remove';

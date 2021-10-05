@@ -6,7 +6,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import {NodesActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal, TwoLabelSwitch} from '../../Util';
+import {ErrorMsg, SimpleModal, TwoLabelSwitch} from '../../Utils';
 import {RemoveBackupTAG} from '../../../Constants/Tags';
 
 const tag = RemoveBackupTAG;

@@ -3,8 +3,8 @@ import CardActions from '@mui/material/CardActions';
 import Grid from '@mui/material/Grid';
 import React from 'react';
 
-import {ErrorActions, NodesActions, ThingsdbActions} from '../../Stores';
-import {DragdownCard, ErrorMsg, HarmonicCard, TitlePage2, QueryOutput} from '../Util';
+import {CollectionActions, ErrorActions, NodesActions, ThingsdbActions} from '../../Stores';
+import {DragdownCard, ErrorMsg, TitlePage2, QueryOutput} from '../Utils';
 import {EditorTAG} from '../../Constants/Tags';
 import EditorInput from './EditorInput';
 import EditorSideContent from './EditorSideContent';
@@ -17,8 +17,9 @@ const Editor = () => {
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState('');
     const [input, setInput] = React.useState('');
+    const [args, setArgs] = React.useState(null);
 
-    const [expandOutput, setExpandOutput] = React.useState(false);
+    // console.log(args)
 
     React.useEffect(() => {
         NodesActions.getNodes();
@@ -38,13 +39,17 @@ const Editor = () => {
         setOutput(out);
     };
 
-    const handleExpand = (exp) => {
-        setExpandOutput(exp);
-    };
-
     const handleInput = React.useCallback((value) => {
         setInput(value);
     }, []);
+
+    const handleArgs= (args) => {
+        setArgs(args);
+    };
+
+    const handleQuery = (query) => {
+        CollectionActions.query(scope, query, tag, handleOutput, null, null, args);
+    };
 
     return (
         <TitlePage2
@@ -60,19 +65,12 @@ const Editor = () => {
                         </Card>
                         <DragdownCard>
                             {(height) => (
-                                <EditorInput height={height} input={input} onExpand={handleExpand} onOutput={handleOutput} scope={scope} />
+                                <EditorInput height={height} input={input} onQuery={handleQuery} />
                             )}
                         </DragdownCard>
                     </Grid>
                     <Grid item xs={12}>
-                        <HarmonicCard
-                            title="OUTPUT"
-                            content={
-                                <QueryOutput output={output} />
-                            }
-                            noPadding
-                            expand={expandOutput}
-                        />
+                        <QueryOutput output={output} onArgs={handleArgs} />
                     </Grid>
                 </React.Fragment>
             }

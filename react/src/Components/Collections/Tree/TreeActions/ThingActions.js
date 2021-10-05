@@ -3,7 +3,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import BuildIcon from '@mui/icons-material/Build';
 
-import {EditProvider} from '../../CollectionsUtils';
+import { EditProvider } from '../../../Utils';
 import ThingActionsDialog from './ThingActionsDialog';
 
 const ThingActions = ({child, parent, thing, scope, isRoot}) => {

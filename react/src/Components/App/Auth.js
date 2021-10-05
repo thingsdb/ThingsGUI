@@ -15,7 +15,7 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-import {ErrorMsg} from '../Util';
+import {ErrorMsg} from '../Utils';
 import {ApplicationStore, ApplicationActions} from '../../Stores';
 import {AuthTAG} from '../../Constants/Tags';
 

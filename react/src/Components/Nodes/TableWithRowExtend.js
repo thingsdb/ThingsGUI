@@ -14,7 +14,7 @@ import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
-import {StartStopPolling} from '../Util';
+import {StartStopPolling} from '../Utils';
 
 
 const Tabel = ({buttons, canExtend, header, rows, rowExtend, connectedNode, onRefresh}) => {

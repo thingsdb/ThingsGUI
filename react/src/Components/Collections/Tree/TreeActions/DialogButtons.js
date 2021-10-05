@@ -6,7 +6,7 @@ import Fab from '@mui/material/Fab';
 import Grid from '@mui/material/Grid';
 
 import {EDITOR_ROUTE} from '../../../../Constants/Routes';
-import {historyNavigate} from '../../../Util';
+import {historyNavigate} from '../../../Utils';
 import {ROOM, THING} from '../../../../Constants/ThingTypes';
 import {THING_KEY} from '../../../../Constants/CharacterKeys';
 import RoomJoin from './RoomJoin';

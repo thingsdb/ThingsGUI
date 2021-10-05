@@ -4,7 +4,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 
 import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
-import { ErrorMsg, SimpleModal } from '../../Util';
+import { ErrorMsg, SimpleModal } from '../../Utils';
 import { AddCollectionTAG } from '../../../Constants/Tags';
 
 const withStores = withVlow([{

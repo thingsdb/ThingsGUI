@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import {withVlow} from 'vlow';
 
-import { ErrorMsg, SimpleModal } from '../../Util';
+import { ErrorMsg, SimpleModal } from '../../Utils';
 import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
 import {RenameCollectionTAG} from '../../../Constants/Tags';
 

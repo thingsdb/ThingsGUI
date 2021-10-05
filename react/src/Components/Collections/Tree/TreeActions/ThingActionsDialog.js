@@ -8,7 +8,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
-import { allDataTypes, ErrorMsg, SimpleModal } from '../../../Util';
+import { allDataTypes, ErrorMsg, SimpleModal } from '../../../Utils';
 import { CollectionActions, EnumActions, ThingsdbActions, TypeActions } from '../../../../Stores';
 import { ROOM, THING, TUPLE } from '../../../../Constants/ThingTypes';
 import { ThingActionsDialogTAG } from '../../../../Constants/Tags';

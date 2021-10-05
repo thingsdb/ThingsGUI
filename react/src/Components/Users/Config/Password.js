@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
+import { CardButton, ErrorMsg, SimpleModal } from '../../Utils';
 import {ThingsdbActions} from '../../../Stores';
 import {PasswordTAG} from '../../../Constants/Tags';
 

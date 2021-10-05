@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {NodesActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal} from '../../Util';
+import {ErrorMsg, SimpleModal} from '../../Utils';
 import {RemoveModuleTAG} from '../../../Constants/Tags';
 
 const tag = RemoveModuleTAG;

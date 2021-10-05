@@ -4,7 +4,7 @@ import {withVlow} from 'vlow';
 
 import {Add} from '../Collections/Config';
 import {COLLECTION_ROUTE} from '../../Constants/Routes';
-import {Menu, orderByName} from '../Util';
+import {Menu, orderByName} from '../Utils';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores';
 
 

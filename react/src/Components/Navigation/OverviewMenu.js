@@ -8,7 +8,7 @@ import React from 'react';
 
 
 const OverviewMenu = () => (
-    <List dense disablePadding>
+    <List dense>
         <ListItem
             button
             component={RouterLink}

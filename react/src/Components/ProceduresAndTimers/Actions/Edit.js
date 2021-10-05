@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CardButton } from '../../Util';
+import { CardButton } from '../../Utils';
 import EditProcedureDialog from '../ProcedureDialogs/EditProcedureDialog';
 import EditTimerDialog from '../TimerDialogs/EditTimerDialog';
 

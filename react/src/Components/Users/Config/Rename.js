@@ -3,7 +3,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import {withVlow} from 'vlow';
 
-import { CardButton, ErrorMsg, SimpleModal } from '../../Util';
+import { CardButton, ErrorMsg, SimpleModal } from '../../Utils';
 import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
 import {RenameUserTAG} from '../../../Constants/Tags';
 

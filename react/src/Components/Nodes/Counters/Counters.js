@@ -7,7 +7,7 @@ import React from 'react';
 
 import { Buttons } from '../Utils';
 import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
-import { Info, scaleToBinBytes } from '../../Util';
+import { Info, scaleToBinBytes } from '../../Utils';
 import { NodesActions, NodesStore } from '../../../Stores';
 import { THINGS_DOC_COUNTERS } from '../../../Constants/Links';
 import CountersReset from './CountersReset';

@@ -6,7 +6,7 @@ import {ProcedureDialogs} from '.';
 import {ProcedureActions, ProcedureStore} from '../../Stores';
 import {ProceduresTAG} from '../../Constants/Tags';
 import {Card} from'./Utils';
-import {HarmonicCardHeader} from '../Util';
+import {HarmonicCardHeader} from '../Utils';
 
 
 const withStores = withVlow([{

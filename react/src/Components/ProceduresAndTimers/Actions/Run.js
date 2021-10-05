@@ -12,8 +12,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { ProcedureActions, TimerActions } from '../../../Stores';
-import { ErrorMsg, QueryOutput, changeSingleToDoubleQuotes, addDoubleQuotesAroundKeys } from '../../Util';
-import { useEdit, InputField } from '../../Collections/CollectionsUtils';
+import { addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, InputField, QueryOutput, useEdit } from '../../Utils';
 import { RunProcedureTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
 import { THINGSDB_SCOPE } from '../../../Constants/Scopes';

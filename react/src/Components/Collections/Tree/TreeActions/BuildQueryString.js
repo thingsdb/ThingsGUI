@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import {EditActions, useEdit} from '../../CollectionsUtils/Context';
+import {EditActions, useEdit} from '../../../Utils';
 import {LIST, NIL, SET, STR, THING} from '../../../../Constants/ThingTypes';
 
 const BuildQueryString = ({child, customTypes, enums, parent}) => {

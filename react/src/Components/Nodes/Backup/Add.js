@@ -8,7 +8,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 
 import {AddBackupTAG} from '../../../Constants/Tags';
-import {ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker} from '../../Util';
+import {ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker} from '../../Utils';
 import {NodesActions} from '../../../Stores';
 import {THINGS_DOC_NEW_BACKUP} from '../../../Constants/Links';
 

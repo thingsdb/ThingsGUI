@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL } from '../../../../Constants/ThingTypes';
-import { InputField } from '../../CollectionsUtils';
+import { InputField } from '../../../Utils';
 import BuildQueryString from './BuildQueryString';
 import PropInit from './PropInit';
 import TypeInit from './TypeInit';

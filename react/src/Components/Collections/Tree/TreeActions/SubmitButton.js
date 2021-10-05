@@ -3,7 +3,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 
 
-import {useEdit} from '../../CollectionsUtils';
+import { useEdit } from '../../../Utils';
 
 
 const SubmitButton = ({disabled, onClickSubmit}) => {

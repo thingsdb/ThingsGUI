@@ -2,9 +2,8 @@ import PropTypes from 'prop-types';
 import Grid from '@mui/material/Grid';
 import React from 'react';
 
-import {TitlePage} from '../../Util';
-import {Edit, Remove, Run, View} from '../Actions';
-import {EditProvider} from '../../Collections/CollectionsUtils';
+import { EditProvider, TitlePage } from '../../Utils';
+import { Edit, Remove, Run, View } from '../Actions';
 
 
 const Page = ({item, itemKey, scope, type}) => {

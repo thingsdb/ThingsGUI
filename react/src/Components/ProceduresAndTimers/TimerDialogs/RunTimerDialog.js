@@ -9,7 +9,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { TimerActions } from '../../../Stores';
-import { ErrorMsg, SimpleModal, QueryOutput } from '../../Util';
+import { ErrorMsg, SimpleModal, QueryOutput } from '../../Utils';
 import { RunTimerDialogTAG } from '../../../Constants/Tags';
 
 const tag = RunTimerDialogTAG;

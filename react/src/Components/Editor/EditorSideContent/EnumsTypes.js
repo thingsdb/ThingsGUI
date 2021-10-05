@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {EnumActions, TypeActions, EnumStore, TypeStore} from '../../../Stores';
-import {HarmonicCardHeader, WarnPopover} from '../../Util';
-import {EnumTypeChips} from '../../Collections/CollectionsUtils/TypesEnumsUtils';
+import {HarmonicCardHeader, WarnPopover} from '../../Utils';
+import {EnumTypeChips} from '../../Collections/EnumsTypes/Utils';
 import {EnumsTAG, TypesTAG} from '../../../Constants/Tags';
 
 const withStores = withVlow([{

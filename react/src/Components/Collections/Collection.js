@@ -5,7 +5,7 @@ import React from 'react';
 
 import {ThingsdbActions, ThingsdbStore} from '../../Stores';
 import {CollectionConfig} from './Config';
-import {getIdFromPath, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Util';
+import {getIdFromPath, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Utils';
 import {Procedures, Timers} from '../ProceduresAndTimers';
 import {COLLECTION_SCOPE} from '../../Constants/Scopes';
 import {COLLECTION_ROUTE} from '../../Constants/Routes';

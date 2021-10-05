@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { DATE_TIME_MIN_STR } from '../../../Constants/DateStrings';
-import { SimpleModal } from '../../Util';
+import { SimpleModal } from '../../Utils';
 
 
 const ViewProcedureDialog = ({button, open, onClose, procedure}) => (

@@ -13,9 +13,9 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import StorageIcon from '@mui/icons-material/Storage';
 import Typography from '@mui/material/Typography';
 
-import PieChart from './Components';
-import {NodesActions, NodesStore, ThingsdbActions, ThingsdbStore} from '../../Stores';
-import {StickyHeadTable} from '../Util';
+import PieChart from './Utils';
+import { NodesActions, NodesStore, ThingsdbActions, ThingsdbStore } from '../../Stores';
+import { StickyHeadTable } from '../Utils';
 
 const withStores = withVlow([{
     store: ThingsdbStore,

@@ -5,7 +5,7 @@ import AddProcedureDialog from './AddProcedureDialog';
 import EditProcedureDialog from './EditProcedureDialog';
 import RunProcedureDialog from './RunProcedureDialog';
 import ViewProcedureDialog from './ViewProcedureDialog';
-import {EditProvider} from '../../Collections/CollectionsUtils';
+import { EditProvider } from '../../Utils';
 
 
 const ProcedureDialogs = ({dialogsView, name, procedures, scope, open, onClose}) => {

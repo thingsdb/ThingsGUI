@@ -8,9 +8,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import { InputField, useEdit } from '../../Collections/CollectionsUtils';
 import { ProcedureActions } from '../../../Stores';
-import { addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, SimpleModal, QueryOutput } from '../../Util';
+import { addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, InputField, QueryOutput, SimpleModal, useEdit } from '../../Utils';
 import { RunProcedureDialogTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
 

@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DialogContentText from '@mui/material/DialogContentText';
 
-import { ErrorMsg, SimpleModal } from '../../Util';
+import { ErrorMsg, SimpleModal } from '../../Utils';
 import {NodesActions} from '../../../Stores';
 import {RemoveNodeTAG} from '../../../Constants/Tags';
 

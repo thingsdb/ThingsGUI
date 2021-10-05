@@ -3,7 +3,7 @@ import TimerIcon from '@mui/icons-material/Timer';
 import React from 'react';
 
 import {AddTimerDialog} from '../ProceduresAndTimers';
-import {Menu, orderByName} from '../Util';
+import {Menu, orderByName} from '../Utils';
 import {THINGSDB_SCOPE} from '../../Constants/Scopes';
 import {TIMER_ROUTE} from '../../Constants/Routes';
 import {TimerActions, TimerStore} from '../../Stores';

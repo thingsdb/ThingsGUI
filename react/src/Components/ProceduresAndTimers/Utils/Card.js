@@ -4,7 +4,7 @@ import React from 'react';
 import RunIcon from '@mui/icons-material/DirectionsRun';
 import ViewIcon from '@mui/icons-material/Visibility';
 
-import {ChipsCard, TableCard} from '../../Util';
+import {ChipsCard, TableCard} from '../../Utils';
 
 
 const Card = ({buttonsView, header, itemKey, list, onAdd, onClick, onDelete, tag}) => {

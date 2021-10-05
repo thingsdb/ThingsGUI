@@ -2,10 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { ARRAY, THING } from '../../../../Constants/ThingTypes';
-import { checkType, fancyName, thingValue, TreeBranch } from '../../../Util';
+import { checkType, EditProvider, fancyName, thingValue, TreeBranch } from '../../../Utils';
 import { COLLECTION_SCOPE } from '../../../../Constants/Scopes';
 import { CollectionActions } from '../../../../Stores/CollectionStore';
-import { EditProvider } from '../../CollectionsUtils';
 import { THING_KEY } from '../../../../Constants/CharacterKeys';
 import { ThingActionsDialog } from '../TreeActions';
 import ThingRestrict from './ThingRestrict';

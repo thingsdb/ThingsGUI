@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 
 import { Buttons } from '../Utils';
 import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
-import { FixedList, TableWithButtons } from '../../Util';
+import { FixedList, TableWithButtons } from '../../Utils';
 import { NodesActions, NodesStore } from '../../../Stores';
 import { THINGS_DOC_BACKUP_INFO } from '../../../Constants/Links';
 import Add from './Add';

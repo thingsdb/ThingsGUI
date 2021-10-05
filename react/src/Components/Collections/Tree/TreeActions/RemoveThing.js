@@ -7,7 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { ErrorMsg, SimpleModal } from '../../../Util';
+import { ErrorMsg, SimpleModal } from '../../../Utils';
 import {CollectionActions, ThingsdbActions} from '../../../../Stores';
 import {RemoveThingTAG} from '../../../../Constants/Tags';
 import {SET, THING} from '../../../../Constants/ThingTypes';

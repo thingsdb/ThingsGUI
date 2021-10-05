@@ -8,7 +8,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { Copy, DownloadTextFile, ErrorMsg, SimpleModal } from '../../Util';
+import { Copy, DownloadTextFile, ErrorMsg, SimpleModal } from '../../Utils';
 import { CollectionActions } from '../../../Stores';
 import { COLLECTION_SCOPE } from '../../../Constants/Scopes';
 import { ExportCollectionTAG } from '../../../Constants/Tags';

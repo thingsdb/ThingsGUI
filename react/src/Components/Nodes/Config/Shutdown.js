@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-import { ErrorMsg, SimpleModal } from '../../Util';
+import { ErrorMsg, SimpleModal } from '../../Utils';
 import { NodesActions } from '../../../Stores';
 import { ShutdownTAG } from '../../../Constants/Tags';
 

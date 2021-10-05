@@ -10,7 +10,7 @@ import Slide from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
 // import {version} from '../../package.json';
 
-import {historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Util';
+import {historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Utils';
 import {TopBar} from '../Navigation';
 import DashboardContent from './DashboardContent';
 

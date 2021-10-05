@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { Buttons} from '../Utils';
 import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
 import { NodesActions, NodesStore } from '../../../Stores';
-import { TableWithButtons } from '../../Util';
+import { TableWithButtons } from '../../Utils';
 import { THINGS_DOC_MODULE_INFO } from '../../../Constants/Links';
 import Add from './Add';
 import ModuleInfo from './ModuleInfo';

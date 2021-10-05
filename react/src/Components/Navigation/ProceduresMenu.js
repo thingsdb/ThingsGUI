@@ -3,7 +3,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import React from 'react';
 
 import {AddProcedureDialog} from '../ProceduresAndTimers';
-import {Menu, orderByName} from '../Util';
+import {Menu, orderByName} from '../Utils';
 import {PROCEDURE_ROUTE} from '../../Constants/Routes';
 import {ProcedureActions, ProcedureStore} from '../../Stores';
 import {THINGSDB_SCOPE} from '../../Constants/Scopes';

@@ -10,7 +10,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { Closure, EditName, ErrorMsg, SimpleModal } from '../../Util';
+import { Closure, EditName, ErrorMsg, SimpleModal } from '../../Utils';
 import { CollectionActions, ProcedureActions } from '../../../Stores';
 import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
 import { EditProcedureDialogTAG } from '../../../Constants/Tags';

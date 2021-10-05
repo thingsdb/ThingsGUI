@@ -9,7 +9,7 @@ import React from 'react';
 import {EDITOR_ROUTE} from '../../Constants/Routes';
 
 const QueryEditorMenu = () => (
-    <List dense disablePadding>
+    <List dense>
         <ListItem
             button
             component={RouterLink}

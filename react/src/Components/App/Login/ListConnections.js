@@ -18,7 +18,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { ApplicationStore, ApplicationActions } from '../../../Stores';
-import { isObjectEmpty, orderByName } from '../../Util';
+import { isObjectEmpty, orderByName } from '../../Utils';
 import { LoginTAG } from '../../../Constants/Tags';
 import Memo from './Memo';
 
