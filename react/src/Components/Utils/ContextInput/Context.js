@@ -15,7 +15,7 @@ const EditActions = {
     },
     deleteBlob: (dispatch, data) => {
         dispatch((state) => {
-            let copy = JSON.parse(JSON.stringify(state.blob)); //copy
+            let copy = {...state.blob};
             let k = Object.keys(copy).find(i=>data.includes(i));
             delete copy[k];
             return {blob: copy};
@@ -23,7 +23,7 @@ const EditActions = {
     },
     updateBlob: (dispatch, data, blob) => {
         dispatch((state) => {
-            let copy = JSON.parse(JSON.stringify(blob)); //copy
+            let copy = {...blob};
             let keys={};
             Object.keys(copy).forEach(k=> {
                 data.forEach(v=> {
@@ -34,18 +34,18 @@ const EditActions = {
                     }
                 });
             });
-            Object.entries(keys).forEach(([k, v]) => !v&&delete copy[k]);
+            Object.entries(keys).forEach(([k, v]) => !v && delete copy[k]);
             return {blob: {...state.blob, ...copy}};
         });
     },
-    addToArr: (dispatch, data) => {
+    updateArray: (dispatch, data) => {
         dispatch((state) => {
             let copy = [...state.array];
             copy.push(data);
             return {array: copy};
         });
     },
-    deleteFromArr: (dispatch, index) => {
+    deleteArray: (dispatch, index) => {
         dispatch((state) => {
             let copy = [...state.array];
             copy.splice(index, 1);
@@ -60,11 +60,10 @@ const EditActions = {
             return {real: copy};
         });
     },
-    updateReal: (dispatch, real) => {
+    updateReal: (dispatch, real, isObj=false) => {
         dispatch((state) => {
             let r = {};
-            console.log(state, real)
-            if (typeof real === 'object'){
+            if (isObj){
                 r = {...state.real, ...real};
             } else {
                 r = real;

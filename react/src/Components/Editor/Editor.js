@@ -3,9 +3,9 @@ import CardActions from '@mui/material/CardActions';
 import Grid from '@mui/material/Grid';
 import React from 'react';
 
-import {CollectionActions, ErrorActions, NodesActions, ThingsdbActions} from '../../Stores';
-import {DragdownCard, ErrorMsg, TitlePage2, QueryOutput} from '../Utils';
-import {EditorTAG} from '../../Constants/Tags';
+import { CollectionActions, ErrorActions, NodesActions, ThingsdbActions } from '../../Stores';
+import { DragdownCard, ErrorMsg, TitlePage2, QueryOutput } from '../Utils';
+import { EditorTAG } from '../../Constants/Tags';
 import EditorInput from './EditorInput';
 import EditorSideContent from './EditorSideContent';
 import SelectScope from './SelectScope';
@@ -19,7 +19,7 @@ const Editor = () => {
     const [input, setInput] = React.useState('');
     const [args, setArgs] = React.useState(null);
 
-    // console.log(args)
+    console.log(args)
 
     React.useEffect(() => {
         NodesActions.getNodes();

@@ -12,13 +12,13 @@ const AddStr = ({identifier, init, ...props}) => {
 
     React.useEffect(()=>{
         EditActions.updateVal(dispatch, `'${init}'`, identifier);
-        EditActions.updateReal(dispatch, init);
+        EditActions.updateReal(dispatch, init, false);
     }, []);
 
     const handleOnChange = ({target}) => {
         const {value} = target;
         EditActions.updateVal(dispatch, `'${value}'`, identifier);
-        EditActions.updateReal(dispatch, value);
+        EditActions.updateReal(dispatch, value, false);
     };
 
     const v = val[identifier]||(val.constructor === Object?'':val);

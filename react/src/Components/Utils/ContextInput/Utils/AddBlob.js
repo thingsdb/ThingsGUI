@@ -24,7 +24,7 @@ const AddBlob = ({identifier, init}) => {
             EditActions.update(dispatch, {
                 blob: {...blob, [f]: b}
             });
-            EditActions.updateReal(dispatch, {[f]: b});
+            EditActions.updateReal(dispatch, {[f]: b}, true);
         }
     },
     [blob, dispatch, identifier],

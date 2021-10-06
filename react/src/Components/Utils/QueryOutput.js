@@ -7,7 +7,7 @@ import React from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
-import {Arguments, EditProvider, ThingsTree} from '.';
+import { Arguments, EditProvider, ThingsTree } from '.';
 import Copy from './Copy';
 
 
@@ -57,7 +57,7 @@ const QueryOutput = ({output, onArgs}) => {
                     </Grid>
                 </Grid>
             }
-            {tabIndex === 2 &&
+            {tabIndex === 2 && onArgs &&
                 <EditProvider>
                     <Arguments onChange={onArgs} />
                 </EditProvider>
@@ -68,10 +68,11 @@ const QueryOutput = ({output, onArgs}) => {
 
 QueryOutput.defaultProps = {
     output: null,
+    onArgs: null,
 };
 
 QueryOutput.propTypes = {
     output: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
-    onArgs: PropTypes.func.isRequired,
+    onArgs: PropTypes.func,
 };
 export default QueryOutput;

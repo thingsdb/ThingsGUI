@@ -15,7 +15,7 @@ const AddInt = ({identifier, init, ...props}) => {
 
     React.useEffect(()=>{
         EditActions.updateVal(dispatch, init, identifier);
-        EditActions.updateReal(dispatch, init);
+        EditActions.updateReal(dispatch, init, false);
     }, []);
 
     const errorTxt = (value) => {
@@ -26,7 +26,7 @@ const AddInt = ({identifier, init, ...props}) => {
         const {value} = target;
         errorTxt(value);
         EditActions.updateVal(dispatch, value, identifier);
-        EditActions.updateReal(dispatch, value);
+        EditActions.updateReal(dispatch, value, false);
     };
 
     const v = val[identifier]||(val.constructor === Object?'':val);

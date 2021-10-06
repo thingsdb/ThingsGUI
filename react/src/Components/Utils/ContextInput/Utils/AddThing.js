@@ -36,6 +36,7 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
         const {value} = target;
         setState({...state, dataType: value});
         EditActions.updateVal(dispatch, '');
+        EditActions.updateReal(dispatch, {});
     };
 
     const typeControls = (type, input) => {
@@ -45,21 +46,24 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
 
     const handleAdd = () => {
         const contentTypeChecked = typeControls(dataType, `${property}: ${val}`);
-        EditActions.addToArr(dispatch, contentTypeChecked);
-        EditActions.updateReal(parentDispatch, {[property]: real});
+        EditActions.updateArray(dispatch, contentTypeChecked);
+        EditActions.updateReal(parentDispatch, {[property]: real}, true);
+        EditActions.updateVal(dispatch, '');
+        EditActions.updateReal(dispatch, {});
+        setState({dataType: STR, property: ''});
     };
 
     const handleRefresh = () => {
         EditActions.update(dispatch, {
             array:  [],
-            real: {},
         });
+        EditActions.updateReal(parentDispatch, {});
         EditActions.updateVal(parentDispatch,'{}', identifier);
     };
 
     const handleClick = (index, item) => () => {
         EditActions.deleteBlob(dispatch, item);
-        EditActions.deleteFromArr(dispatch, index);
+        EditActions.deleteArray(dispatch, index);
         EditActions.deleteReal(parentDispatch, item);
     };
 

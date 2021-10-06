@@ -13,14 +13,13 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
     const [dataType, setDataType] = React.useState(childTypes[0]||dataTypes[0]||STR);
 
     const [editState, dispatch] = useEdit();
-    const {array, val, blob} = editState;
+    const {array, real, val, blob} = editState;
 
     React.useEffect(() => {
         let arr = isSet?`set([${array}])`:`[${array}]`;
 
         EditActions.updateVal(parentDispatch, arr, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
-        // EditActions.updateReal(parentDispatch, val);
     },
     [array, blob, identifier, isSet, val, parentDispatch],
     );
@@ -29,6 +28,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
         const {value} = target;
         setDataType(value);
         EditActions.updateVal(dispatch, '');
+        EditActions.updateReal(dispatch, {});
     };
 
     const typeControls = (type, input) => {
@@ -39,19 +39,25 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
 
     const handleAdd = () => {
         const contentTypeChecked = typeControls(dataType, val);
-        EditActions.addToArr(dispatch, contentTypeChecked);
+        EditActions.updateArray(dispatch, contentTypeChecked);
+        EditActions.updateReal(parentDispatch, real, false);
+        EditActions.updateVal(dispatch, '');
+        EditActions.updateReal(dispatch, {});
+        setDataType(STR);
     };
 
     const handleRefresh = () => {
         EditActions.update(dispatch, {
             array:  [],
         });
+        EditActions.updateReal(parentDispatch, {});
         EditActions.updateVal(parentDispatch,'[]', identifier);
     };
 
     const handleClick = (index, item) => () => {
         EditActions.deleteBlob(dispatch, item);
-        EditActions.deleteFromArr(dispatch, index);
+        EditActions.deleteArray(dispatch, index);
+        EditActions.deleteReal(parentDispatch, item);
     };
 
     return (

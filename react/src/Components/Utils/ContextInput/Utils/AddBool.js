@@ -11,12 +11,12 @@ const AddBool = ({identifier, init}) => {
 
     React.useEffect(()=>{
         EditActions.updateVal(dispatch, init, identifier);
-        EditActions.updateReal(dispatch, init);
+        EditActions.updateReal(dispatch, init, false);
     }, []);
 
     const handleOnChange = (b) => {
         EditActions.updateVal(dispatch, b, identifier);
-        EditActions.updateReal(dispatch, b);
+        EditActions.updateReal(dispatch, b, false);
     };
 
     const v = val[identifier]||(val.constructor === Object?'':val);

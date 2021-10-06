@@ -14,7 +14,7 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
     const [dataType, setDataType] = React.useState(STR);
 
     const [editState, dispatch] = useEdit();
-    const {array, real, val, blob} = editState;
+    const {array, val, blob} = editState;
 
     const handleChangeType = (v) => ({target}) => {
         const {value} = target;
@@ -32,16 +32,11 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
 
         EditActions.updateVal(parentDispatch,`{${s}}`, identifier);
         EditActions.updateBlob(parentDispatch, s, blob);
-        EditActions.updateReal(parentDispatch, {[identifier]: real});
     };
 
     const handleRefresh = () => {
         EditActions.update(dispatch, {
             array:  [],
-            obj: {},
-        });
-        EditActions.update(parentDispatch, {
-            real: {},
         });
         EditActions.updateVal(parentDispatch,'{}', identifier);
     };

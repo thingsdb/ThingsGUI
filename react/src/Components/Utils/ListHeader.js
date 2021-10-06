@@ -1,13 +1,12 @@
-import { alpha } from '@mui/material/styles';
-import AddIcon from '@mui/icons-material/AddCircle';
-import Chip from '@mui/material/Chip';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
+import DeleteIcon from '@mui/icons-material/Clear';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
-import RemoveIcon from '@mui/icons-material/RemoveCircle';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
@@ -38,27 +37,14 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                 <Typography variant="h5" color="primary" sx={{paddingLeft: '8px', paddingRight: '8px'}}>
                     {groupSigning[groupSign][0]}
                 </Typography>
-                <Grid item sx={{paddingLeft: '24px'}}>
+                <Grid item xs={12} sx={{paddingLeft: '48px'}}>
                     {items.map((listitem, index) => (
-                        <Chip
-                            color="primary"
-                            id={listitem}
-                            key={index}
-                            label={listitem}
-                            onDelete={onDelete(index, listitem)}
-                            sx={{
-                                color: '#000',
-                                padding: '8px',
-                                margin: '8px',
-                                maxWidth: '300px',
-                                '& .MuiChip-deleteIcon': {
-                                    color: '#000',
-                                    '&:hover': {
-                                        color: alpha('#000', 0.60),
-                                    },
-                                }
-                            }}
-                        />
+                        <Box key={index}>
+                            {listitem}
+                            <IconButton color="primary" onClick={onDelete(index, listitem)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Box>
                     ))}
                 </Grid>
             </Grid>
@@ -72,10 +58,10 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                     {groupSigning[groupSign][1]}
                 </Typography>
                 <Button color="primary" onClick={onAdd}>
-                    <AddIcon color="primary" />
+                    {'Add'}
                 </Button>
                 <Button color="primary" onClick={onRefresh}>
-                    <RemoveIcon color="primary" />
+                    {'Clear'}
                 </Button>
                 {canCollapse && (
                     <Button color="primary" onClick={open ? handleClose : handleOpen}>

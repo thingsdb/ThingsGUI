@@ -11,7 +11,7 @@ const AddNil = ({identifier}) => {
 
     React.useEffect(()=>{
         EditActions.updateVal(dispatch, NIL, identifier);
-        EditActions.updateReal(dispatch, null);
+        EditActions.updateReal(dispatch, null, false);
     }, []);
 
     return  null;

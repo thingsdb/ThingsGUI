@@ -91,7 +91,7 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
     const [dataType, setDataType] = React.useState({});
 
     const [editState, dispatch] = useEdit();
-    const {array, real, val, blob} = editState;
+    const {array, val, blob} = editState;
 
     React.useEffect(() => {
         EditActions.updateVal(parentDispatch,`${type}{${array}}`, identifier);
@@ -120,14 +120,10 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
         });
         EditActions.updateVal(parentDispatch,`${type}{${s}}`, identifier);
         EditActions.updateBlob(parentDispatch, s, blob);
-        EditActions.updateReal(parentDispatch, {[identifier]: real});
     };
     const handleRefresh = () => {
         EditActions.update(dispatch, {
             array: [],
-        });
-        EditActions.update(parentDispatch, {
-            real: {},
         });
         EditActions.updateVal(parentDispatch,`${type}{}`, identifier);
     };
