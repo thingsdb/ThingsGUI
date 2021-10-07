@@ -14,13 +14,13 @@ const AddCode = ({identifier, init, label, link, numLines}) => {
 
     React.useEffect(()=>{
         EditActions.updateVal(dispatch, init, identifier);
-        EditActions.updateReal(dispatch, init, false);
+        dispatch(() => ({real: init}));
     }, []);
 
     const handleOnChange = ({target}) => {
         const {value} = target;
         EditActions.updateVal(dispatch, value, identifier);
-        EditActions.updateReal(dispatch, value, false);
+        dispatch(() => ({real: value}));
     };
 
     const v = val[identifier]||(val.constructor === Object?'':val);

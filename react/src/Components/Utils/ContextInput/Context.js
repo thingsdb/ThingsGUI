@@ -4,13 +4,11 @@ import React from 'react';
 
 const EditActions = {
     update: (dispatch, data) => {
-        dispatch(() => {
-            return {...data};
-        });
+        dispatch(() => data);
     },
     updateVal: (dispatch, data, identifier=null) => {
         dispatch((state) => {
-            return identifier? {val: {...state.val, [identifier]: data}} : {val: data};
+            return identifier ? {val: {...state.val, [identifier]: data}} : {val: data};
         });
     },
     deleteBlob: (dispatch, data) => {
@@ -52,36 +50,15 @@ const EditActions = {
             return {array: copy};
         });
     },
-    deleteReal: (dispatch, data) => {
-        dispatch((state) => {
-            let copy = {...state.real};
-            let k = Object.keys(copy).find(i=>data.includes(i));
-            delete copy[k];
-            return {real: copy};
-        });
-    },
-    updateReal: (dispatch, real, isObj=false) => {
-        dispatch((state) => {
-            let r = {};
-            if (isObj){
-                r = {...state.real, ...real};
-            } else {
-                r = real;
-            }
-            return {real: r};
-        });
-    },
     resetState: (dispatch) => {
-        dispatch(() => {
-            return {
-                array: [],
-                blob: {},
-                error: '',
-                real: {},
-                query: '',
-                val: '',
-            };
-        });
+        dispatch(() => ({
+            array: [],
+            blob: {},
+            error: '',
+            real: null,
+            query: '',
+            val: '',
+        }));
     },
 };
 
@@ -89,7 +66,7 @@ const initialState = {
     array: [],
     blob: {},
     error: '',
-    real: {},
+    real: null,
     query: '',
     val: '',
 };

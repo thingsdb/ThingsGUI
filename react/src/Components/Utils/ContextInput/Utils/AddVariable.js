@@ -5,90 +5,69 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import InputField from '../InputField';
-import { ListHeader } from '../..';
 import { EditActions, useEdit } from '../Context';
-import { NIL, STR } from '../../../../Constants/ThingTypes';
 
 
 const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, parentDispatch}) => {
-    const [dataType, setDataType] = React.useState(STR);
+    const [dataType, setDataType] = React.useState({});
+    const editState = useEdit()[0];
+    const {val, blob} = editState;
 
-    const [editState, dispatch] = useEdit();
-    const {array, val, blob} = editState;
+    React.useEffect(() => {
+        let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
+        EditActions.updateVal(parentDispatch,`{${s}}`, identifier);
+        EditActions.updateBlob(parentDispatch, s, blob);
+    },[blob, identifier, parentDispatch, val]);
 
     const handleChangeType = (v) => ({target}) => {
         const {value} = target;
         setDataType({...dataType, [v]: value});
-        if (value == NIL) {
-            EditActions.updateVal(dispatch, NIL, v);
-        }
-    };
-
-    const handleAdd = () => {
-        let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        EditActions.update(dispatch, {
-            array:  s,
-        });
-
-        EditActions.updateVal(parentDispatch,`{${s}}`, identifier);
-        EditActions.updateBlob(parentDispatch, s, blob);
-    };
-
-    const handleRefresh = () => {
-        EditActions.update(dispatch, {
-            array:  [],
-        });
-        EditActions.updateVal(parentDispatch,'{}', identifier);
     };
 
     return (
         variables&&(
             <Grid item xs={12}>
-                <ListHeader isOpen canCollapse={false} onAdd={handleAdd} onRefresh={handleRefresh} items={array} groupSign="{">
-                    {( variables.map(v => (
-                        <Grid key={v} container item xs={12} spacing={1} alignItems="center" sx={{paddingLeft: '48px', paddingBottom: '8px'}}>
-                            <Grid item xs={12}>
-                                <Typography color="primary" variant="body1" >
-                                    {v}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <TextField
-                                    fullWidth
-                                    id="dataType"
-                                    label="Data type"
-                                    margin="dense"
-                                    name="dataType"
-                                    onChange={handleChangeType(v)}
-                                    select
-                                    SelectProps={{native: true}}
-                                    type="text"
-                                    value={dataType[v]||dataTypes[0]}
-                                    variant="standard"
-                                >
-                                    {dataTypes.map( p => (
-                                        <option key={p} value={p}>
-                                            {p}
-                                        </option>
-                                    ))}
-                                </TextField>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <InputField
-                                    customTypes={customTypes}
-                                    dataType={dataType[v]||dataTypes[0]}
-                                    dataTypes={dataTypes}
-                                    enums={enums}
-                                    fullWidth
-                                    identifier={v}
-                                    label="Value"
-                                    name="Input"
-                                    variant="standard"
-                                />
-                            </Grid>
+                {( variables.map(v => (
+                    <Grid key={v} container item xs={12} alignItems="center" sx={{paddingBottom: '8px'}}>
+                        <Grid item xs={12}>
+                            <Typography color="primary" variant="body1" >
+                                {v}
+                            </Typography>
                         </Grid>
-                    )))}
-                </ListHeader>
+                        <Grid item xs={3} sx={{paddingRight: '8px'}}>
+                            <TextField
+                                fullWidth
+                                id="dataType"
+                                label="Data type"
+                                margin="dense"
+                                name="dataType"
+                                onChange={handleChangeType(v)}
+                                select
+                                SelectProps={{native: true}}
+                                type="text"
+                                value={dataType[v]||dataTypes[0]}
+                                variant="standard"
+                            >
+                                {dataTypes.map( p => (
+                                    <option key={p} value={p}>
+                                        {p}
+                                    </option>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <InputField
+                            customTypes={customTypes}
+                            dataType={dataType[v]||dataTypes[0]}
+                            dataTypes={dataTypes}
+                            enums={enums}
+                            fullWidth
+                            identifier={v}
+                            label="Value"
+                            name="Input"
+                            variant="standard"
+                        />
+                    </Grid>
+                )))}
             </Grid>
         )
     );

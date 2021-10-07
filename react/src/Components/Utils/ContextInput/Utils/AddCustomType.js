@@ -5,7 +5,6 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 
 import InputField from '../InputField';
-import { ListHeader } from '../..';
 import { EditActions, useEdit } from '../Context';
 import { ANY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NINT, NUMBER, PINT, RAW,
     REGEX, ROOM, SET, STR, THING, TIMEVAL, UINT, UTF8 } from '../../../../Constants/ThingTypes';
@@ -90,13 +89,14 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
     const [typeFields, setTypeFields] = React.useState([]);
     const [dataType, setDataType] = React.useState({});
 
-    const [editState, dispatch] = useEdit();
-    const {array, val, blob} = editState;
+    const editState = useEdit()[0];
+    const {val, blob} = editState;
 
     React.useEffect(() => {
-        EditActions.updateVal(parentDispatch,`${type}{${array}}`, identifier);
-        EditActions.updateBlob(parentDispatch, array, blob);
-    },[]);
+        let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
+        EditActions.updateVal(parentDispatch,`${type}{${s}}`, identifier);
+        EditActions.updateBlob(parentDispatch, s, blob);
+    },[blob, identifier, parentDispatch, type, val]);
 
     const updateTypeFields = React.useCallback(() => {
         const typeObj = customTypes.find(c => c.name == (type[0] == '<' ? type.slice(1, -1) : type));
@@ -113,76 +113,57 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentD
         setDataType({...dataType, [n]: value});
     };
 
-    const handleAdd = () => {
-        let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        EditActions.update(dispatch, {
-            array:  s,
-        });
-        EditActions.updateVal(parentDispatch,`${type}{${s}}`, identifier);
-        EditActions.updateBlob(parentDispatch, s, blob);
-    };
-    const handleRefresh = () => {
-        EditActions.update(dispatch, {
-            array: [],
-        });
-        EditActions.updateVal(parentDispatch,`${type}{}`, identifier);
-    };
-
     return(
-        typeFields&&(
+        typeFields && (
             <Grid item xs={12}>
-                <ListHeader canCollapse onAdd={handleAdd} onRefresh={handleRefresh} items={array} name={type} groupSign="{" unmountOnExit>
-                    {( typeFields.map(([fprop, ftype, fchldtype], i) => (
-                        <Grid container item xs={12} spacing={1} alignItems="center" key={i} sx={{paddingLeft: '48px', paddingBottom: '8px'}}>
-                            <Grid item xs={2}>
-                                <TextField
-                                    disabled
-                                    fullWidth
-                                    label="Property"
-                                    margin="dense"
-                                    name="property"
-                                    type="text"
-                                    value={fprop}
-                                    variant="standard"
-                                />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <TextField
-                                    disabled={ftype.length<2}
-                                    fullWidth
-                                    label="Data type"
-                                    margin="dense"
-                                    name="dataType"
-                                    onChange={handleChangeType(fprop)}
-                                    select
-                                    SelectProps={{native: true}}
-                                    type="text"
-                                    value={dataType[fprop]||ftype[0]}
-                                    variant="standard"
-                                >
-                                    {ftype.map( p => (
-                                        <option key={p} value={p}>
-                                            {p}
-                                        </option>
-                                    ))}
-                                </TextField>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <InputField
-                                    childTypes={fchldtype}
-                                    customTypes={customTypes}
-                                    dataType={dataType[fprop]||ftype[0]}
-                                    dataTypes={dataTypes}
-                                    enums={enums}
-                                    fullWidth
-                                    identifier={fprop}
-                                    label="Value"
-                                    variant="standard"
-                                />
-                            </Grid>
+                {( typeFields.map(([fprop, ftype, fchldtype], i) => (
+                    <Grid container item xs={12} alignItems="center" key={i} sx={{paddingBottom: '8px'}}>
+                        <Grid item xs={2} sx={{paddingRight: '8px'}}>
+                            <TextField
+                                disabled
+                                fullWidth
+                                label="Property"
+                                margin="dense"
+                                name="property"
+                                type="text"
+                                value={fprop}
+                                variant="standard"
+                            />
                         </Grid>
-                    )))}
-                </ListHeader>
+                        <Grid item xs={2} sx={{paddingRight: '8px'}}>
+                            <TextField
+                                disabled={ftype.length<2}
+                                fullWidth
+                                label="Data type"
+                                margin="dense"
+                                name="dataType"
+                                onChange={handleChangeType(fprop)}
+                                select
+                                SelectProps={{native: true}}
+                                type="text"
+                                value={dataType[fprop]||ftype[0]}
+                                variant="standard"
+                            >
+                                {ftype.map( p => (
+                                    <option key={p} value={p}>
+                                        {p}
+                                    </option>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <InputField
+                            childTypes={fchldtype}
+                            customTypes={customTypes}
+                            dataType={dataType[fprop]||ftype[0]}
+                            dataTypes={dataTypes}
+                            enums={enums}
+                            fullWidth
+                            identifier={fprop}
+                            label="Value"
+                            variant="standard"
+                        />
+                    </Grid>
+                )))}
             </Grid>
         )
     );

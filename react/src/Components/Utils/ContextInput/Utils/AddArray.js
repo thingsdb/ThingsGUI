@@ -1,104 +1,130 @@
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Clear';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
-import InputField from '../InputField';
-import { ListHeader } from '../..';
 import { EditActions, useEdit } from '../Context';
-import { NIL, STR } from '../../../../Constants/ThingTypes';
+import { ListHeader } from '../..';
+import InputField from '../InputField';
 
 
 const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier, parentDispatch}) => {
-    const [dataType, setDataType] = React.useState(childTypes[0]||dataTypes[0]||STR);
+    const [dataType, setDataType] = React.useState({});
+    const [variables, setVariables] = React.useState(['0']);
+    const editState = useEdit()[0];
 
-    const [editState, dispatch] = useEdit();
-    const {array, real, val, blob} = editState;
+    const {val, blob} = editState;
 
     React.useEffect(() => {
-        let arr = isSet?`set([${array}])`:`[${array}]`;
+        let s = Object.values(val);
+        EditActions.updateVal(parentDispatch, isSet ? `set([${s}])` : `[${s}]`, identifier);
+        EditActions.updateBlob(parentDispatch, s, blob);
+    },[blob, identifier, isSet, parentDispatch, val]);
 
-        EditActions.updateVal(parentDispatch, arr, identifier);
-        EditActions.updateBlob(parentDispatch, array, blob);
-    },
-    [array, blob, identifier, isSet, val, parentDispatch],
-    );
-
-    const handleChange = ({target}) => {
+    const handleChangeType = (v) => ({target}) => {
         const {value} = target;
-        setDataType(value);
-        EditActions.updateVal(dispatch, '');
-        EditActions.updateReal(dispatch, {});
-    };
-
-    const typeControls = (type, input) => {
-        return type === NIL ? NIL
-            : type === STR ? (input[0]=='\''? `${input}`:`'${input}'`)
-                : `${input}`;
+        setDataType({...dataType, [v]: value});
     };
 
     const handleAdd = () => {
-        const contentTypeChecked = typeControls(dataType, val);
-        EditActions.updateArray(dispatch, contentTypeChecked);
-        EditActions.updateReal(parentDispatch, real, false);
-        EditActions.updateVal(dispatch, '');
-        EditActions.updateReal(dispatch, {});
-        setDataType(STR);
-    };
-
-    const handleRefresh = () => {
-        EditActions.update(dispatch, {
-            array:  [],
+        let index = variables.slice(-1)[0] + 1;
+        setVariables(variables => {
+            let copy = [...variables];
+            copy.push(`${index}`);
+            return copy;
         });
-        EditActions.updateReal(parentDispatch, {});
-        EditActions.updateVal(parentDispatch,'[]', identifier);
     };
 
-    const handleClick = (index, item) => () => {
-        EditActions.deleteBlob(dispatch, item);
-        EditActions.deleteArray(dispatch, index);
-        EditActions.deleteReal(parentDispatch, item);
+    const handleDelete = (index) => () => {
+        setVariables(variables => {
+            let copy = [...variables];
+            copy.splice(index, 1);
+            return copy;
+        });
     };
+
+    // const {array, real, val, blob} = editState;
+
+    // React.useEffect(() => {
+    //     let arr = isSet ? `set([${array}])` : `[${array}]`;
+    //     EditActions.updateVal(parentDispatch, arr, identifier);
+    //     EditActions.updateBlob(parentDispatch, array, blob);
+    // }, [array, blob, identifier, isSet, val, parentDispatch]);
+
+    // const handleChange = ({target}) => {
+    //     const {value} = target;
+    //     setDataType(value);
+    //     EditActions.update(dispatch, {val: '', real: {}});
+    // };
+
+    // const handleAdd = () => {
+    //     parentDispatch(state => (Array.isArray(state.real) ? {real: [...state.real, real]} : {real: [real]}));
+    //     EditActions.updateArray(dispatch, `${val}`);
+    //     EditActions.update(dispatch, {val: '', real: {}});
+    // };
+
+    // const handleRefresh = () => {
+    //     EditActions.update(dispatch, {array:  []});
+    //     EditActions.update(parentDispatch, {real: []});
+    //     EditActions.updateVal(parentDispatch,'[]', identifier);
+    // };
+
+    // const handleClick = (index, item) => () => {
+    //     EditActions.deleteBlob(dispatch, item);
+    //     EditActions.deleteArray(dispatch, index);
+    //     parentDispatch((state) => {
+    //         let copy = [...state.real];
+    //         copy.splice(index, 1);
+    //         return {real: copy};
+    //     });
+    // };
 
     return (
         <Grid item xs={12}>
-            <ListHeader canCollapse onAdd={handleAdd} onDelete={handleClick} onRefresh={handleRefresh} items={array} groupSign="[">
-                <Grid container item xs={12} spacing={1} alignItems="center" sx={{paddingLeft: '48px'}}>
-                    {childTypes.length == 1 ? null : (
-                        <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                id="dataType"
-                                label="Data type"
-                                margin="dense"
-                                name="dataType"
-                                onChange={handleChange}
-                                select
-                                SelectProps={{native: true}}
-                                type="text"
-                                value={dataType}
-                                variant="standard"
-                            >
-                                {(childTypes.length?childTypes:dataTypes).map(p => (
-                                    <option key={p} value={p}>
-                                        {p}
-                                    </option>
-                                ))}
-                            </TextField>
-                        </Grid>
-                    )}
-                    <Grid item xs={12}>
+            <ListHeader canCollapse onAdd={handleAdd} onDelete={handleDelete} groupSign="[">
+                {( variables.map((v, index) => (
+                    <Grid key={v} container item xs={12} alignItems="center" sx={{paddingLeft: '48px'}}>
+                        {childTypes.length == 1 ? null : (
+                            <Grid item xs={4} sx={{paddingRight: '8px'}}>
+                                <TextField
+                                    fullWidth
+                                    id="dataType"
+                                    label="Data type"
+                                    margin="dense"
+                                    name="dataType"
+                                    onChange={handleChangeType(v)}
+                                    select
+                                    SelectProps={{native: true}}
+                                    type="text"
+                                    value={dataType[v]||dataTypes[0]}
+                                    variant="standard"
+                                >
+                                    {dataTypes.map( p => (
+                                        <option key={p} value={p}>
+                                            {p}
+                                        </option>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                        )}
                         <InputField
                             customTypes={customTypes}
-                            dataType={dataType}
+                            dataType={dataType[v]||dataTypes[0]}
                             dataTypes={dataTypes}
                             enums={enums}
                             fullWidth
                             label="Value"
                             variant="standard"
+                            identifier={v}
                         />
+                        <IconButton color="primary" onClick={handleDelete(index)}>
+                            <DeleteIcon />
+                        </IconButton>
                     </Grid>
-                </Grid>
+                )))}
             </ListHeader>
         </Grid>
     );

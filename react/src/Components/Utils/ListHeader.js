@@ -37,19 +37,19 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                 <Typography variant="h5" color="primary" sx={{paddingLeft: '8px', paddingRight: '8px'}}>
                     {groupSigning[groupSign][0]}
                 </Typography>
-                <Grid item xs={12} sx={{paddingLeft: '48px'}}>
-                    {items.map((listitem, index) => (
-                        <Box key={index}>
-                            {listitem}
-                            <IconButton color="primary" onClick={onDelete(index, listitem)}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </Box>
-                    ))}
-                </Grid>
             </Grid>
             <Grid item xs={open?12:1} container justifyContent="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>
                 <Collapse sx={{width: '100%'}} in={open} timeout="auto" unmountOnExit={unmountOnExit}>
+                    {/* <Grid item xs={12} sx={{paddingLeft: '48px'}}>
+                        {items.map((listitem, index) => (
+                            <Box key={index}>
+                                {listitem}
+                                <IconButton color="primary" onClick={onDelete(index, listitem)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Box>
+                        ))}
+                    </Grid> */}
                     {children}
                 </Collapse>
             </Grid>

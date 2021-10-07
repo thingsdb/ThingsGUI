@@ -6,72 +6,61 @@ import TextField from '@mui/material/TextField';
 import InputField from '../InputField';
 import { ListHeader } from '../..';
 import { EditActions, useEdit } from '../Context';
-import { NIL, STR } from '../../../../Constants/ThingTypes';
+import { STR } from '../../../../Constants/ThingTypes';
 
 
 const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) => {
-    const [state, setState] = React.useState({
-        dataType: STR,
-        property: '',
-    });
-    const {dataType, property} = state;
+    const [dataType, setDataType] = React.useState(STR);
+    const [property, setProperty] = React.useState('');
 
     const [editState, dispatch] = useEdit();
     const {array, real, val, blob} = editState;
 
     React.useEffect(() => {
-        let arr = `{${array}}`;
-        EditActions.updateVal(parentDispatch, arr, identifier);
+        EditActions.updateVal(parentDispatch, `{${array}}`, identifier);
         EditActions.updateBlob(parentDispatch, array, blob);
-    },
-    [array, blob, identifier, parentDispatch],
-    );
+    }, [array, blob, identifier, parentDispatch]);
 
     const handleChangeProperty = ({target}) => {
         const {value} = target;
-        setState({...state, property: value});
+        setProperty(value);
     };
 
     const handleChangeType = ({target}) => {
         const {value} = target;
-        setState({...state, dataType: value});
-        EditActions.updateVal(dispatch, '');
-        EditActions.updateReal(dispatch, {});
-    };
-
-    const typeControls = (type, input) => {
-        return type === NIL ? `${input} ${NIL}`
-            : `${input}`;
+        setDataType(value);
+        EditActions.update(dispatch, {val: '', real: {}});
     };
 
     const handleAdd = () => {
-        const contentTypeChecked = typeControls(dataType, `${property}: ${val}`);
-        EditActions.updateArray(dispatch, contentTypeChecked);
-        EditActions.updateReal(parentDispatch, {[property]: real}, true);
-        EditActions.updateVal(dispatch, '');
-        EditActions.updateReal(dispatch, {});
-        setState({dataType: STR, property: ''});
+        parentDispatch( state => (typeof state.real === 'object' ? {real: {...state.real, [property]: real}} : {real: {[property]: real}}));
+        EditActions.updateArray(dispatch, `${property}: ${val}`);
+        EditActions.update(dispatch, {val: '', real: {}});
+        setProperty('');
     };
 
     const handleRefresh = () => {
-        EditActions.update(dispatch, {
-            array:  [],
-        });
-        EditActions.updateReal(parentDispatch, {});
+        EditActions.update(dispatch, {array: []});
+        EditActions.update(parentDispatch, {real: {}});
         EditActions.updateVal(parentDispatch,'{}', identifier);
     };
 
     const handleClick = (index, item) => () => {
         EditActions.deleteBlob(dispatch, item);
         EditActions.deleteArray(dispatch, index);
-        EditActions.deleteReal(parentDispatch, item);
+        parentDispatch((state) => {
+            let copy = {...state.real};
+            let k = Object.keys(copy).find(i=>item.includes(i));
+            delete copy[k];
+            return {real: copy};
+        });
     };
 
     return (
         <Grid item xs={12}>
             <ListHeader canCollapse onAdd={handleAdd} onDelete={handleClick} onRefresh={handleRefresh} items={array} groupSign="{">
-                <Grid container item xs={12} spacing={1} alignItems="center" sx={{paddingLeft: '48px'}}>
-                    <Grid item xs={3}>
+                <Grid container item xs={12} alignItems="center" sx={{paddingLeft: '48px'}}>
+                    <Grid item xs={3} sx={{paddingRight: '8px'}}>
                         <TextField
                             autoFocus
                             fullWidth
@@ -85,7 +74,7 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
                             variant="standard"
                         />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={3} sx={{paddingRight: '8px'}}>
                         <TextField
                             fullWidth
                             id="dataType"
@@ -106,18 +95,16 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parentDispatch}) =
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12}>
-                        <InputField
-                            customTypes={customTypes}
-                            dataType={dataType}
-                            dataTypes={dataTypes}
-                            enums={enums}
-                            fullWidth
-                            label="Value"
-                            name="Input"
-                            variant="standard"
-                        />
-                    </Grid>
+                    <InputField
+                        customTypes={customTypes}
+                        dataType={dataType}
+                        dataTypes={dataTypes}
+                        enums={enums}
+                        fullWidth
+                        label="Value"
+                        name="Input"
+                        variant="standard"
+                    />
                 </Grid>
             </ListHeader>
         </Grid>
