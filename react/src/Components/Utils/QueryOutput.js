@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
@@ -25,9 +26,9 @@ const QueryOutput = ({output, onArgs}) => {
             <Tabs value={tabIndex} onChange={handleChangeTab} indicatorColor="primary" aria-label="styled tabs example" sx={{marginBottom: '16px'}}>
                 <Tab label="Tree view" />
                 <Tab label="JSON view" />
-                <Tab label="Arguments" />
+                {onArgs && <Tab label="Arguments" />}
             </Tabs>
-            {tabIndex === 0 &&
+            <Collapse in={tabIndex === 0}>
                 <List
                     component="nav"
                     dense
@@ -42,8 +43,8 @@ const QueryOutput = ({output, onArgs}) => {
                         root
                     />
                 </List>
-            }
-            {tabIndex === 1 &&
+            </Collapse>
+            <Collapse in={tabIndex === 1}>
                 <Grid container>
                     <Grid container item xs={12} justifyContent="flex-end">
                         <Copy text={jsonOutput || ''} />
@@ -56,12 +57,14 @@ const QueryOutput = ({output, onArgs}) => {
                         </Box>
                     </Grid>
                 </Grid>
-            }
-            {tabIndex === 2 && onArgs &&
-                <EditProvider>
-                    <Arguments onChange={onArgs} />
-                </EditProvider>
-            }
+            </Collapse>
+            {onArgs && (
+                <Collapse in={tabIndex === 2}>
+                    <EditProvider>
+                        <Arguments onChange={onArgs} />
+                    </EditProvider>
+                </Collapse>
+            )}
         </Paper>
     );
 };
