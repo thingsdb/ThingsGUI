@@ -90,7 +90,7 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parent,
     const [typeFields, setTypeFields] = React.useState([]);
     const [dataType, setDataType] = React.useState({});
 
-    const editState = useEdit()[0];
+    const [editState, dispatch] = useEdit();
     const {val, blob} = editState;
 
     const updateContext = React.useCallback(() => {
@@ -120,6 +120,11 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parent,
     const handleChangeType = (n) => ({target}) => {
         const {value} = target;
         setDataType({...dataType, [n]: value});
+        dispatch(prev => {
+            let copy = {...prev.val};
+            copy[n] = '';
+            return {val: copy};
+        });
     };
 
     return(

@@ -11,15 +11,30 @@ import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
 
 
 const AddError = ({identifier, init, parent}) => {
-    const dispatch = useEdit()[1];
     const [state, setState] = React.useState({
         errCode:'',
         errMsg:'',
     });
     const {errCode, errMsg} = state;
+    const [editState, dispatch] = useEdit();
+    const {val} = editState;
 
     React.useEffect(()=>{
-        if(init) {
+        if (val) {
+            let v = identifier === null ? val : val[identifier] || '';
+            let endIndex = v.indexOf(',');
+            if (endIndex === -1) {
+                setState({errCode: v.slice(4, -1), errMsg: ''});
+            } else {
+                setState({errCode: v.slice(4, endIndex), errMsg: v.slice(endIndex + 3, -2)});
+            }
+        } else {
+            setState({errCode: '', errMsg: ''});
+        }
+    }, [identifier, val]);
+
+    React.useEffect(()=>{
+        if (init) {
             CollectionActions.query(init.scope, `{code: #${init.parentId}.${init.propName}.code(), msg: #${init.parentId}.${init.propName}.msg()}`, ThingActionsDialogTAG, handleErr);
         }
     }, []);
@@ -46,14 +61,14 @@ const AddError = ({identifier, init, parent}) => {
 
     return(
         <Grid container item xs={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
-            <Grid item xs={2} container alignItems="center" justifyContent="center">
+            <Grid item xs={2} container alignItems="center" justifyContent="flex-start">
                 <Grid item>
                     <Typography variant="h5" color="primary">
                         {'err('}
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid item xs={4} container alignItems="center" justifyContent="center">
+            <Grid item xs={4} container alignItems="center" justifyContent="flex-start">
                 <Grid item xs={12}>
                     <TextField
                         fullWidth
@@ -68,14 +83,14 @@ const AddError = ({identifier, init, parent}) => {
                     />
                 </Grid>
             </Grid>
-            <Grid item xs={1} container alignItems="center" justifyContent="center">
+            <Grid item xs={1} container alignItems="center" justifyContent="flex-start">
                 <Grid item>
                     <Typography variant="h5" color="primary">
                         {','}
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid item xs={4} container alignItems="center" justifyContent="center">
+            <Grid item xs={4} container alignItems="center" justifyContent="flex-start">
                 <Grid item xs={12}>
                     <TextField
                         fullWidth
@@ -90,7 +105,7 @@ const AddError = ({identifier, init, parent}) => {
                     />
                 </Grid>
             </Grid>
-            <Grid item xs={1} container alignItems="center" justifyContent="center">
+            <Grid item xs={1} container alignItems="center" justifyContent="flex-start">
                 <Grid item>
                     <Typography variant="h5" color="primary">
                         {')'}

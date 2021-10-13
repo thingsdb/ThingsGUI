@@ -13,14 +13,26 @@ import {THINGDB_CACHE} from '../../../../Constants/Files';
 
 const AddEnum = ({enumName, enums, identifier, init, parent}) => {
     const [enumMem, setEnumMem] = React.useState('');
-    const dispatch = useEdit()[1];
+    const [editState, dispatch] = useEdit();
+    const {val} = editState;
 
     const _enum = (enums || []).find(e => e.name === enumName);
     const isBlob = init.constructor === String && init.includes(THINGDB_CACHE);
 
     React.useEffect(()=>{
+        if (val) {
+            let v = identifier === null ? val.slice(enumName.length + 1, -1) : val[identifier].slice(enumName.length + 1, -1) || '';
+            setEnumMem(v);
+        } else {
+            setEnumMem('');
+        }
+    }, [identifier, val]);
+
+    React.useEffect(()=>{
         if (_enum) {
-            const e = init ? (init.constructor === Object ? _enum.members.find(i => i[1][THING_KEY] === init[THING_KEY]) : _enum.members.find(i => i[1] === init) || _enum.members[0])
+            const e = init ? (
+                init.constructor === Object ? _enum.members.find(i => i[1][THING_KEY] === init[THING_KEY])
+                    : _enum.members.find(i => i[1] === init) || _enum.members[0])
                 : _enum.members[0];
             setEnumMem(e[0]);
             EditActions.update(dispatch, 'val', `${enumName}{${e[0]}}`, identifier, parent);

@@ -13,9 +13,14 @@ const AddRoom = ({identifier, init, parent}) => {
     const {val} = editState;
     const [roomId, setRoomId] = React.useState('');
 
-    // React.useEffect(()=>{
-    //     setRoomId(!val ? '' : identifier === null ? val : val[identifier] || '');
-    // }, [identifier, val]);
+    React.useEffect(()=>{
+        if (val) {
+            let v = identifier === null ? val.slice(5, -1) : val[identifier].slice(5, -1) || '';
+            setRoomId(v);
+        } else {
+            setRoomId('');
+        }
+    }, [identifier, val]);
 
     React.useEffect(()=>{
         let roomId = '';

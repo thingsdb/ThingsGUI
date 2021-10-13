@@ -12,7 +12,7 @@ import useDebounce from '../../useDebounce';
 
 const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, parent, parentDispatch}) => {
     const [dataType, setDataType] = React.useState({});
-    const editState = useEdit()[0];
+    const [editState, dispatch] = useEdit();
     const {val, blob} = editState;
 
     const updateContext = React.useCallback(() => {
@@ -32,6 +32,11 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
     const handleChangeType = (v) => ({target}) => {
         const {value} = target;
         setDataType({...dataType, [v]: value});
+        dispatch(prev => {
+            let copy = {...prev.val};
+            copy[v] = '';
+            return {val: copy};
+        });
     };
 
     return (

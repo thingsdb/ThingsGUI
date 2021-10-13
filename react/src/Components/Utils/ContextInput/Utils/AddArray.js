@@ -37,6 +37,11 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
             copy[index] = value;
             return copy;
         });
+        dispatch(prev => {
+            let copy = [...prev.val];
+            copy[index] = '';
+            return {val: copy};
+        });
     };
 
     const handleAdd = () => {
@@ -53,10 +58,10 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
             copy.splice(index, 1);
             return copy;
         });
-        dispatch((state) => {
-            let cVal = [...state.val];
-            cVal.splice(index, 1);
-            return {val: cVal};
+        dispatch(prev => {
+            let copy = [...prev.val];
+            copy.splice(index, 1);
+            return {val: copy};
         });
     };
 
@@ -100,7 +105,6 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
                             enums={enums}
                             fullWidth
                             identifier={index}
-                            init={val[index]}
                             label="Value"
                             parent={ARRAY}
                             variant="standard"

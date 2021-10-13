@@ -48,6 +48,11 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDisp
             copy[index] = value;
             return copy;
         });
+        dispatch(prev => {
+            let copy = [...prev.val];
+            copy[index] = '';
+            return {val: copy};
+        });
     };
 
     const handleAdd = () => {
@@ -74,10 +79,10 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDisp
             copy.splice(index, 1);
             return copy;
         });
-        dispatch((state) => {
-            let cVal = [...state.val];
-            cVal.splice(index, 1);
-            return {val: cVal};
+        dispatch(prev => {
+            let copy = [...prev.val];
+            copy.splice(index, 1);
+            return {val: copy};
         });
     };
 
@@ -133,7 +138,6 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDisp
                             enums={enums}
                             fullWidth
                             identifier={index}
-                            init={val[index]}
                             label="Value"
                             name="Input"
                             parent={ARRAY}

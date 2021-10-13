@@ -14,7 +14,9 @@ const AddInt = ({identifier, init, parent, ...props}) => {
     const [error, setError] = React.useState('');
 
     React.useEffect(()=>{
-        EditActions.update(dispatch, 'val', init, identifier, parent);
+        if (init) {
+            EditActions.update(dispatch, 'val', init, identifier, parent);
+        }
     }, []);
 
     const errorTxt = (value) => {

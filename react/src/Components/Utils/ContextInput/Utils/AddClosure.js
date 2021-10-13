@@ -11,7 +11,9 @@ const AddClosure = ({identifier, init, parent}) => {
     const {val} = editState;
 
     React.useEffect(()=>{
-        EditActions.update(dispatch, 'val', init, identifier, parent);
+        if (init) {
+            EditActions.update(dispatch, 'val', init, identifier, parent);
+        }
     }, []);
 
     const handleUpdateVal = (c) => {

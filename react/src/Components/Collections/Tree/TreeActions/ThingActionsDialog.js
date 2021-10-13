@@ -69,7 +69,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
             }
             return res;
         },{}) : null;
-        console.log(b)
+
         const isChildEnum = Boolean(enums.find(c=>c.name==realChildType));
         const useParent = isChildEnum&&child.id;
         const tid = useParent?parent.id:child.id||parent.id;
