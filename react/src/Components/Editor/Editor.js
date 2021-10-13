@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import { CollectionActions, ErrorActions, NodesActions, ThingsdbActions } from '../../Stores';
-import { DragdownCard, ErrorMsg, TitlePage2, QueryOutput } from '../Utils';
+import { DragdownCard, ErrorMsg, jsonify, QueryOutput, TitlePage2 } from '../Utils';
 import { EditorTAG } from '../../Constants/Tags';
 import EditorInput from './EditorInput';
 import EditorSideContent from './EditorSideContent';
@@ -18,6 +18,7 @@ const Editor = () => {
     const [scope, setScope] = React.useState('');
     const [input, setInput] = React.useState('');
     const [args, setArgs] = React.useState(null);
+    const [tabIndex, setTabIndex] = React.useState(0);
 
     console.log(args)
 
@@ -37,6 +38,7 @@ const Editor = () => {
 
     const handleOutput = (out) => {
         setOutput(out);
+        setTabIndex(0);
     };
 
     const handleInput = React.useCallback((value) => {
@@ -48,7 +50,12 @@ const Editor = () => {
     };
 
     const handleQuery = (query) => {
-        CollectionActions.query(scope, query, tag, handleOutput, null, null, args);
+        const jsonProof = args && jsonify(args); // make it json proof
+        CollectionActions.query(scope, query, tag, handleOutput, null, null, jsonProof);
+    };
+
+    const handleChangeTab = (newValue) => {
+        setTabIndex(newValue);
     };
 
     return (
@@ -70,7 +77,7 @@ const Editor = () => {
                         </DragdownCard>
                     </Grid>
                     <Grid item xs={12}>
-                        <QueryOutput output={output} onArgs={handleArgs} />
+                        <QueryOutput output={output} onArgs={handleArgs} tabIndex={tabIndex} onChangeTab={handleChangeTab} />
                     </Grid>
                 </React.Fragment>
             }

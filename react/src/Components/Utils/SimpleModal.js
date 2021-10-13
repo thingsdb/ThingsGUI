@@ -24,13 +24,12 @@ const SimpleModal = ({
     tooltipMsgOk,
     ...props}) => {
 
-
     const handleClose = () => {
-        onClose&&onClose();
+        onClose && onClose();
     };
 
     const handleOk = () => {
-        onOk&&onOk();
+        onOk && onOk();
     };
 
     return (

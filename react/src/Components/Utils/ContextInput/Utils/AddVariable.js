@@ -4,20 +4,30 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import InputField from '../InputField';
+import { CollectionActions } from '../../../../Stores';
 import { EditActions, useEdit } from '../Context';
+import InputField from '../InputField';
+import useDebounce from '../../useDebounce';
 
 
-const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, parentDispatch}) => {
+const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, parent, parentDispatch}) => {
     const [dataType, setDataType] = React.useState({});
     const editState = useEdit()[0];
     const {val, blob} = editState;
 
-    React.useEffect(() => {
+    const updateContext = React.useCallback(() => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        EditActions.updateVal(parentDispatch,`{${s}}`, identifier);
+        EditActions.update(parentDispatch, 'val', `{${s}}`, identifier, parent);
         EditActions.updateBlob(parentDispatch, s, blob);
-    },[blob, identifier, parentDispatch, val]);
+        CollectionActions.enableSubmit();
+    }, [blob, identifier, parent, parentDispatch, val]);
+
+    const [updateContextDebounced] = useDebounce(updateContext, 200);
+
+    React.useEffect(() => {
+        CollectionActions.disableSubmit();
+        updateContextDebounced();
+    }, [updateContextDebounced]);
 
     const handleChangeType = (v) => ({target}) => {
         const {value} = target;
@@ -83,7 +93,8 @@ AddVariable.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     enums: PropTypes.arrayOf(PropTypes.object).isRequired,
-    identifier: PropTypes.string,
+    identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    parent: PropTypes.string.isRequired,
     parentDispatch: PropTypes.func.isRequired,
 };
 

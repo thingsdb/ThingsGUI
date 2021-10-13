@@ -1,61 +1,56 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { ARRAY, THING } from '../../../Constants/ThingTypes';
+
+
+const setState = (state, type, value, identifier=null, parent=null) => {
+    let data = {};
+    if(identifier !== null) {
+        if(parent === THING) {
+            if (typeof state[type] === 'object' ) {
+                data = {[type]: {...state[type], [identifier]: value}};
+            } else {
+                data = {[type]: {[identifier]: value}};
+            }
+        } else if(parent === ARRAY) {
+            if (Array.isArray(state[type])) {
+                let copy = [...state[type]];
+                copy[identifier] = value;
+                data = {[type]: copy};
+            } else {
+                data = {[type]: [value]};
+            }
+        }
+    } else {
+        data = {[type]: value};
+    }
+
+    return({...data});
+};
 
 const EditActions = {
-    update: (dispatch, data) => {
-        dispatch(() => data);
-    },
-    updateVal: (dispatch, data, identifier=null) => {
+    update: (dispatch, type, value, identifier=null, parent=null) => {
         dispatch((state) => {
-            return identifier ? {val: {...state.val, [identifier]: data}} : {val: data};
-        });
-    },
-    deleteBlob: (dispatch, data) => {
-        dispatch((state) => {
-            let copy = {...state.blob};
-            let k = Object.keys(copy).find(i=>data.includes(i));
-            delete copy[k];
-            return {blob: copy};
+            return(setState(state, type, value, identifier, parent));
         });
     },
     updateBlob: (dispatch, data, blob) => {
         dispatch((state) => {
-            let copy = {...blob};
-            let keys={};
-            Object.keys(copy).forEach(k=> {
-                data.forEach(v=> {
-                    if (keys[k]||v.includes(k)){
-                        keys[k]=true;
-                    } else {
-                        keys[k]=false;
-                    }
-                });
-            });
-            Object.entries(keys).forEach(([k, v]) => !v && delete copy[k]);
-            return {blob: {...state.blob, ...copy}};
-        });
-    },
-    updateArray: (dispatch, data) => {
-        dispatch((state) => {
-            let copy = [...state.array];
-            copy.push(data);
-            return {array: copy};
-        });
-    },
-    deleteArray: (dispatch, index) => {
-        dispatch((state) => {
-            let copy = [...state.array];
-            copy.splice(index, 1);
-            return {array: copy};
+            let updatedBlob = Object.entries(blob).reduce((res, [k, v]) => {
+                if (data.some((item) => item.includes(k))) {
+                    res[k] = v;
+                }
+                return(res);
+            }, {});
+
+            return {blob: {...state.blob, ...updatedBlob}};
         });
     },
     resetState: (dispatch) => {
         dispatch(() => ({
-            array: [],
             blob: {},
             error: '',
-            real: null,
             query: '',
             val: '',
         }));
@@ -63,10 +58,8 @@ const EditActions = {
 };
 
 const initialState = {
-    array: [],
     blob: {},
     error: '',
-    real: null,
     query: '',
     val: '',
 };

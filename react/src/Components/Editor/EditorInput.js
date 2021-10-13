@@ -1,13 +1,13 @@
-import {useHistory} from 'react-router-dom';
-import {withVlow} from 'vlow';
-import Button from '@mui/material/Button';
+import { useHistory } from 'react-router-dom';
+import { withVlow } from 'vlow';
 import CardActions from '@mui/material/CardActions';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {EditorActions, EditorStore, ErrorActions} from '../../Stores';
-import {historyGetQueryParam, QueryInput} from '../Utils';
-import {EditorTAG} from '../../Constants/Tags';
+import { EditorActions, EditorStore, ErrorActions } from '../../Stores';
+import { EditorTAG } from '../../Constants/Tags';
+import { historyGetQueryParam, QueryInput } from '../Utils';
+import SubmitButton from './SubmitButton';
 
 
 const withStores = withVlow([{
@@ -107,14 +107,7 @@ const Editor = ({height, history, input, onQuery}) => {
                 <QueryInput onChange={handleInput} input={queryInput} height={height-60} />
             </div>
             <CardActions disableSpacing sx={{padding: '8px 0px 0px 16px'}}>
-                <Button
-                    onClick={handleSubmit}
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                >
-                    {'Submit'}
-                </Button>
+                <SubmitButton onClickSubmit={handleSubmit} />
             </CardActions>
         </React.Fragment>
     );

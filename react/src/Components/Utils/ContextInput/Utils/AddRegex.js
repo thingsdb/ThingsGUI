@@ -8,19 +8,19 @@ import Typography from '@mui/material/Typography';
 import { EditActions, useEdit } from '../Context';
 
 
-const AddRegex = ({identifier, init}) => {
+const AddRegex = ({identifier, init, parent}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
     React.useEffect(()=>{
-        EditActions.updateVal(dispatch, init, identifier);
+        EditActions.update(dispatch, 'val', init, identifier, parent);
     }, []);
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.updateVal(dispatch, `/${value}/`, identifier);
+        EditActions.update(dispatch, 'val', `/${value}/`, identifier, parent);
     };
-    const v = val[identifier]||(val.constructor === Object?'':val);
+    const v = !val ? '' : identifier === null ? val : val[identifier] || '';
 
     return(
         <Grid container spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
@@ -66,8 +66,9 @@ AddRegex.defaultProps = {
 },
 
 AddRegex.propTypes = {
-    identifier: PropTypes.string,
+    identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     init: PropTypes.string,
+    parent: PropTypes.string.isRequired,
 };
 
 export default AddRegex;

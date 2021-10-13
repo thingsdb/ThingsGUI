@@ -146,7 +146,8 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         <SimpleModal
             open
             onClose={onClose}
-            maxWidth="md"
+            maxWidth="xl"
+            fullWidth={false}
             actionButtons={tabIndex === 0 && canEdit ? <SubmitButton onClickSubmit={handleClickOk} />: null}
         >
             {loaded ? content : (

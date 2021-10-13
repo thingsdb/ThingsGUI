@@ -6,28 +6,26 @@ import TextField from '@mui/material/TextField';
 
 import {EditActions, useEdit} from '../Context';
 
-const AddStr = ({identifier, init, ...props}) => {
+const AddStr = ({identifier, init, parent, ...props}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
     React.useEffect(()=>{
-        EditActions.updateVal(dispatch, `'${init}'`, identifier);
-        dispatch(() => ({real: init}));
+        EditActions.update(dispatch, 'val', `'${init}'`, identifier, parent);
     }, []);
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.updateVal(dispatch, `'${value}'`, identifier);
-        dispatch(() => ({real: value}));
+        EditActions.update(dispatch, 'val', `'${value}'`, identifier, parent);
     };
 
-    const v = val[identifier]||(val.constructor === Object?'':val);
+    const v = !val ? '' : identifier === null ? val : val[identifier] || '';
 
     return(
         <TextField
             name="value"
             type="text"
-            value={v[0]=='\''?v.trim().slice(1, -1):v}
+            value={v[0]=='\'' ? v.trim().slice(1, -1) : v}
             spellCheck={false}
             onChange={handleOnChange}
             multiline
@@ -43,8 +41,9 @@ AddStr.defaultProps = {
 },
 
 AddStr.propTypes = {
-    identifier: PropTypes.string,
+    identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     init: PropTypes.string,
+    parent: PropTypes.string.isRequired,
 };
 
 export default AddStr;

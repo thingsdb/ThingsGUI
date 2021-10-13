@@ -5,21 +5,19 @@ import React from 'react';
 import {BoolInput} from '../..';
 import {EditActions, useEdit} from '../Context';
 
-const AddBool = ({identifier, init}) => {
+const AddBool = ({identifier, init, parent}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
     React.useEffect(()=>{
-        EditActions.updateVal(dispatch, init, identifier);
-        dispatch(() => ({real: init}));
+        EditActions.update(dispatch, 'val', init, identifier, parent);
     }, []);
 
     const handleOnChange = (b) => {
-        EditActions.updateVal(dispatch, b, identifier);
-        dispatch(() => ({real: b}));
+        EditActions.update(dispatch, 'val', b, identifier, parent);
     };
 
-    const v = val[identifier]||(val.constructor === Object?'':val);
+    const v = !val ? '' : identifier === null ? val : val[identifier] || '';
 
     return(
         <BoolInput input={`${v}`} onChange={handleOnChange} />
@@ -32,8 +30,9 @@ AddBool.defaultProps = {
 },
 
 AddBool.propTypes = {
-    identifier: PropTypes.string,
+    identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     init: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    parent: PropTypes.string.isRequired,
 };
 
 export default AddBool;

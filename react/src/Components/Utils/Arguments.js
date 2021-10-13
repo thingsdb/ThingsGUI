@@ -10,11 +10,12 @@ const dataTypes = [BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIME
 
 const Arguments = ({onChange}) => {
     const editState = useEdit()[0];
-    const { real } = editState;
+    const { val } = editState;
 
     React.useEffect(() => {
-        onChange(real);
-    }, [real]);
+        let search = (val || '').search(/\w:/g);
+        onChange(search === -1 ? null : val);
+    }, [val]);
 
     return (
         <InputField dataType={THING} dataTypes={dataTypes} />

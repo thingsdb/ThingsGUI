@@ -1,11 +1,8 @@
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
-import DeleteIcon from '@mui/icons-material/Clear';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
@@ -16,7 +13,7 @@ const groupSigning = {
     '(' : ['(', ')'],
 };
 
-const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAdd, onDelete, onRefresh, unmountOnExit}) => {
+const ListHeader = ({children, canCollapse, groupSign, isOpen, name, onAdd, unmountOnExit}) => {
     const [open, setOpen] = React.useState(isOpen);
 
     const handleOpen = () => {
@@ -40,16 +37,6 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
             </Grid>
             <Grid item xs={open?12:1} container justifyContent="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>
                 <Collapse sx={{width: '100%'}} in={open} timeout="auto" unmountOnExit={unmountOnExit}>
-                    {/* <Grid item xs={12} sx={{paddingLeft: '48px'}}>
-                        {items.map((listitem, index) => (
-                            <Box key={index}>
-                                {listitem}
-                                <IconButton color="primary" onClick={onDelete(index, listitem)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Box>
-                        ))}
-                    </Grid> */}
                     {children}
                 </Collapse>
             </Grid>
@@ -59,9 +46,6 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, items, name, onAd
                 </Typography>
                 <Button color="primary" onClick={onAdd}>
                     {'Add'}
-                </Button>
-                <Button color="primary" onClick={onRefresh}>
-                    {'Clear'}
                 </Button>
                 {canCollapse && (
                     <Button color="primary" onClick={open ? handleClose : handleOpen}>
@@ -77,7 +61,6 @@ ListHeader.defaultProps = {
     canCollapse: true,
     isOpen: false,
     name: '',
-    onDelete: ()=>null,
     unmountOnExit: false,
 };
 
@@ -86,11 +69,8 @@ ListHeader.propTypes = {
     canCollapse: PropTypes.bool,
     groupSign: PropTypes.string.isRequired,
     isOpen: PropTypes.bool,
-    items: PropTypes.arrayOf(PropTypes.string).isRequired,
     name: PropTypes.string,
     onAdd: PropTypes.func.isRequired,
-    onDelete: PropTypes.func,
-    onRefresh: PropTypes.func.isRequired,
     unmountOnExit: PropTypes.bool,
 };
 

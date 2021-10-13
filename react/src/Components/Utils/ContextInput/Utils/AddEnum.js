@@ -11,7 +11,7 @@ import {THING_KEY} from '../../../../Constants/CharacterKeys';
 import {THINGDB_CACHE} from '../../../../Constants/Files';
 
 
-const AddEnum = ({enumName, enums, identifier, init}) => {
+const AddEnum = ({enumName, enums, identifier, init, parent}) => {
     const [enumMem, setEnumMem] = React.useState('');
     const dispatch = useEdit()[1];
 
@@ -23,14 +23,14 @@ const AddEnum = ({enumName, enums, identifier, init}) => {
             const e = init ? (init.constructor === Object ? _enum.members.find(i => i[1][THING_KEY] === init[THING_KEY]) : _enum.members.find(i => i[1] === init) || _enum.members[0])
                 : _enum.members[0];
             setEnumMem(e[0]);
-            EditActions.updateVal(dispatch, `${enumName}{${e[0]}}`, identifier);
+            EditActions.update(dispatch, 'val', `${enumName}{${e[0]}}`, identifier, parent);
         }
     }, [_enum]);
 
     const handleChangeEnum = ({target}) => {
         const {value} = target;
         setEnumMem(value);
-        EditActions.updateVal(dispatch, `${enumName}{${value}}`, identifier);
+        EditActions.update(dispatch, 'val', `${enumName}{${value}}`, identifier, parent);
     };
 
     return(_enum&&_enum.members?(
@@ -77,8 +77,9 @@ AddEnum.defaultProps = {
 AddEnum.propTypes = {
     enumName: PropTypes.string.isRequired,
     enums: PropTypes.arrayOf(PropTypes.object).isRequired,
-    identifier: PropTypes.string,
+    identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     init: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
+    parent: PropTypes.string.isRequired,
 };
 
 export default AddEnum;

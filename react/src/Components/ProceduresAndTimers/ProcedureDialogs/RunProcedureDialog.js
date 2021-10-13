@@ -9,7 +9,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { ProcedureActions } from '../../../Stores';
-import { addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, InputField, QueryOutput, SimpleModal, useEdit } from '../../Utils';
+import { ErrorMsg, InputField, jsonify, QueryOutput, SimpleModal, useEdit } from '../../Utils';
 import { RunProcedureDialogTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
 
@@ -21,12 +21,9 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const editState = useEdit()[0];
     const {val} = editState;
 
-
     React.useEffect(() => { // clean state
         setOutput('');
-    },
-    [open],
-    );
+    },[open]);
 
     const handleResult = (data) => {
         setOutput(data);
@@ -34,7 +31,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
         elmnt.scrollIntoView();
     };
     const handleClickOk = () => {
-        const jsonProof = changeSingleToDoubleQuotes(addDoubleQuotesAroundKeys(val)); // make it json proof
+        const jsonProof = jsonify(val); // make it json proof
         ProcedureActions.runProcedure(
             scope,
             procedure.name,

@@ -52,6 +52,7 @@ import TitlePage3 from './TitlePage3';
 import TopBarMenu from './TopBarMenu';
 import TreeBranch from './TreeBranch';
 import TwoLabelSwitch from './TwoLabelSwitch';
+import useDebounce from './useDebounce';
 import useStateCallback from './useStateCallback';
 import useThingsError from './useThingsError';
 import VariablesArray from './VariablesArray';
@@ -175,8 +176,13 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
-const addDoubleQuotesAroundKeys = (strObject) => strObject.replace(/\{/g, '{"').replace(/:/g, '":').replace(/,(?=[^{]*\})/g, ',"');
-const changeSingleToDoubleQuotes = (strObject) => strObject.replace(/'/g, '"');
+const jsonify = (str) => {
+    let re = /\{|:|(,\s|,)(?=[^{]*\})|'/g;
+    let mapObj = {'{': '{"', ':': '":', ',': ',"', ', ': ',"', '\'': '"'};
+    return str.replace(re, function(matched){
+        return mapObj[matched.toLowerCase()];
+    });
+};
 
 const revealCustomType = (i) => {
     let arr = 0;
@@ -318,7 +324,6 @@ const getSorting = (order, orderBy) => {
 };
 
 export {
-    addDoubleQuotesAroundKeys,
     allDataTypes,
     Arguments,
     ArrayLayout,
@@ -327,7 +332,6 @@ export {
     Buttons,
     CardButton,
     CardMultiButton,
-    changeSingleToDoubleQuotes,
     checkType,
     ChipsCard,
     Closure,
@@ -361,6 +365,7 @@ export {
     Info,
     InputField,
     isObjectEmpty,
+    jsonify,
     ListHeader,
     LocalErrorMsg,
     LocalMsg,
@@ -397,6 +402,7 @@ export {
     TopBarMenu,
     TreeBranch,
     TwoLabelSwitch,
+    useDebounce,
     useEdit,
     useStateCallback,
     useThingsError,

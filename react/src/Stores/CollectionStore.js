@@ -15,7 +15,9 @@ const CollectionActions = Vlow.createActions([
     'cleanupThings',
     'cleanupTmp',
     'decCounter',
+    'disableSubmit',
     'download',
+    'enableSubmit',
     'getThings',
     'incCounter',
     'query',
@@ -30,11 +32,13 @@ class CollectionStore extends BaseStore {
     static types = {
         things: PropTypes.object,
         thingCounters: PropTypes.object,
+        canSubmit: PropTypes.bool,
     }
 
     static defaults = {
         things: {},
         thingCounters: {},
+        canSubmit: true,
     }
 
     constructor() {
@@ -158,6 +162,14 @@ class CollectionStore extends BaseStore {
         this.emit('cleanupTmp').done((_data) => null).fail((event, status, message) => {
             ErrorActions.setToastError(message.Log);
         });
+    }
+
+    onDisableSubmit() {
+        this.setState({canSubmit: false});
+    }
+
+    onEnableSubmit() {
+        this.setState({canSubmit: true});
     }
 }
 

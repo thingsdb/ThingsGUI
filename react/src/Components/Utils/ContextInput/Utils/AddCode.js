@@ -8,22 +8,20 @@ import TextField from '@mui/material/TextField';
 import {EditActions, useEdit} from '../Context';
 
 
-const AddCode = ({identifier, init, label, link, numLines}) => {
+const AddCode = ({identifier, init, label, link, numLines, parent}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
     React.useEffect(()=>{
-        EditActions.updateVal(dispatch, init, identifier);
-        dispatch(() => ({real: init}));
+        EditActions.update(dispatch, 'val', init, identifier, parent);
     }, []);
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.updateVal(dispatch, value, identifier);
-        dispatch(() => ({real: value}));
+        EditActions.update(dispatch, 'val', value, identifier, parent);
     };
 
-    const v = val[identifier]||(val.constructor === Object?'':val);
+    const v = !val ? '' : identifier === null ? val : val[identifier] || '';
 
     return(
         <TextField
@@ -54,12 +52,13 @@ AddCode.defaultProps = {
 },
 
 AddCode.propTypes = {
-    identifier: PropTypes.string,
+    identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /* eslint-disable react/forbid-prop-types */
     init: PropTypes.any,
     label: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
     numLines: PropTypes.string.isRequired,
+    parent: PropTypes.string.isRequired,
 };
 
 export default AddCode;

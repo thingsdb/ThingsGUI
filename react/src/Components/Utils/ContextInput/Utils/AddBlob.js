@@ -10,7 +10,7 @@ import {EditActions, useEdit} from '../Context';
 import {DownloadBlob} from '../..';
 
 
-const AddBlob = ({identifier, init}) => {
+const AddBlob = ({identifier, init, parent}) => {
     const [fileName, setFileName] = React.useState('');
 
     const [editState, dispatch] = useEdit();
@@ -20,13 +20,11 @@ const AddBlob = ({identifier, init}) => {
         f = f.replaceAll('.', '_');
         f = f.replaceAll('-', '_');
         if (f != '' && b != '') {
-            EditActions.updateVal(dispatch, f, identifier);
-            EditActions.update(dispatch, {
-                blob: {...blob, [f]: b}
-            });
+            EditActions.update(dispatch, 'val', f, identifier, parent);
+            dispatch(() => ({ blob: { ...blob, [f]: b } }));
         }
     },
-    [blob, dispatch, identifier],
+    [blob, dispatch, identifier, parent],
     );
 
     const handleDropzone = React.useCallback(acceptedFiles => {
@@ -90,8 +88,9 @@ AddBlob.defaultProps = {
 },
 
 AddBlob.propTypes = {
-    identifier: PropTypes.string,
+    identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     init: PropTypes.string,
+    parent: PropTypes.string.isRequired,
 };
 
 

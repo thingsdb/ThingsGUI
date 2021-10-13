@@ -10,7 +10,7 @@ import { CollectionActions } from '../../../../Stores';
 import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
 
 
-const AddError = ({identifier, init}) => {
+const AddError = ({identifier, init, parent}) => {
     const dispatch = useEdit()[1];
     const [state, setState] = React.useState({
         errCode:'',
@@ -40,7 +40,7 @@ const AddError = ({identifier, init}) => {
 
     const saveErr = (code, msg) => {
         const c = msg ? `err(${code}, '${msg}')` : `err(${code})`;
-        EditActions.updateVal(dispatch, c, identifier);
+        EditActions.update(dispatch, 'val', c, identifier, parent);
         setState({errCode: code, errMsg: msg});
     };
 
@@ -107,8 +107,9 @@ AddError.defaultProps = {
 },
 
 AddError.propTypes = {
-    identifier: PropTypes.string,
+    identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     init: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    parent: PropTypes.string.isRequired,
 };
 
 export default AddError;

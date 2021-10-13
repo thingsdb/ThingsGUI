@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { EditActions, useEdit } from '../Context';
 
 
-const AddRoom = ({identifier, init}) => {
+const AddRoom = ({identifier, init, parent}) => {
     const dispatch = useEdit()[1];
     const [roomId, setRoomId] = React.useState('');
 
@@ -27,7 +27,7 @@ const AddRoom = ({identifier, init}) => {
 
     const saveRoom = (roomId) => {
         const c = `room(${roomId})`;
-        EditActions.updateVal(dispatch, c, identifier);
+        EditActions.update(dispatch, 'val', c, identifier, parent);
         setRoomId(roomId);
     };
 
@@ -72,8 +72,9 @@ AddRoom.defaultProps = {
 },
 
 AddRoom.propTypes = {
-    identifier: PropTypes.string,
+    identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     init: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    parent: PropTypes.string.isRequired,
 };
 
 export default AddRoom;

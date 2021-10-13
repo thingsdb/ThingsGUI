@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import {EditActions, useEdit} from '../../../Utils';
+import {useEdit} from '../../../Utils';
 import {LIST, NIL, SET, STR, THING} from '../../../../Constants/ThingTypes';
 
 const BuildQueryString = ({child, customTypes, enums, parent}) => {
@@ -22,10 +22,7 @@ const BuildQueryString = ({child, customTypes, enums, parent}) => {
                 : parentType===SET ? `#${parentId}.${parentName}.add(${v});`
                     : [...customTypes.map(c=>c.name), ...enums.map(e=>e.name)].includes(parentType) ? `#${parentId}.${childName} = ${v};`
                         : '';
-
-        EditActions.update(dispatch, {
-            query: q,
-        });
+        dispatch(() => ({ query: q }));
 
     }, [customTypes, enums, dispatch, val]);
 

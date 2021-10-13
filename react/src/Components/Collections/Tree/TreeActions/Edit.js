@@ -52,7 +52,7 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
                 />
             </ListItem>
             <ListItem>
-                <Grid container item xs={12} spacing={1} alignItems="center">
+                <Grid container item xs={12} spacing={1} justifyContent="flex-start">
                     {addNewProperty && (
                         <Grid item xs={3}>
                             <PropInit

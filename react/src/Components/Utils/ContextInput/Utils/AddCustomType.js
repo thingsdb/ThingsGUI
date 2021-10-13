@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import InputField from '../InputField';
+import { ANY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NINT, NUMBER, PINT, RAW, REGEX, ROOM, SET, STR, THING, TIMEVAL, UINT, UTF8 } from '../../../../Constants/ThingTypes';
+import { CollectionActions } from '../../../../Stores';
 import { EditActions, useEdit } from '../Context';
-import { ANY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NINT, NUMBER, PINT, RAW,
-    REGEX, ROOM, SET, STR, THING, TIMEVAL, UINT, UTF8 } from '../../../../Constants/ThingTypes';
+import InputField from '../InputField';
+import useDebounce from '../../useDebounce';
 
 
 const typeConv = {
@@ -44,13 +45,13 @@ const optional = (t) => {
     return([t, ftype]);
 };
 
-const fntype = (t, ftype, dataTypes) => {
+const fntype = (t, dataTypes) => {
     if(t.slice(-1) == '>'){
         t = t.split('<')[0];
     }
     return(t == ANY ? dataTypes
-        : typeConv[t] ? [...ftype, ...typeConv[t]]
-            : [...ftype, t]);
+        : typeConv[t] ? [...typeConv[t]]
+            : [t]);
 };
 
 const array = (t, ftype, arrayType, def, dataTypes) => {
@@ -59,7 +60,7 @@ const array = (t, ftype, arrayType, def, dataTypes) => {
     ftype = [...ftype, arrayType];
     t = t.slice(1, -1) ? t.slice(1, -1) : def;
     [t, fchldtype] = optional(t);
-    fchldtype = fntype(t, ftype, dataTypes);
+    fchldtype = fntype(t, dataTypes);
 
     return([ftype, fchldtype]);
 };
@@ -85,18 +86,26 @@ const typing = ([fprop, type], dataTypes) =>  {
 };
 
 
-const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parentDispatch}) => {
+const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parent, parentDispatch}) => {
     const [typeFields, setTypeFields] = React.useState([]);
     const [dataType, setDataType] = React.useState({});
 
     const editState = useEdit()[0];
     const {val, blob} = editState;
 
-    React.useEffect(() => {
+    const updateContext = React.useCallback(() => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        EditActions.updateVal(parentDispatch,`${type}{${s}}`, identifier);
+        EditActions.update(parentDispatch,'val', `${type}{${s}}`, identifier, parent);
         EditActions.updateBlob(parentDispatch, s, blob);
-    },[blob, identifier, parentDispatch, type, val]);
+        CollectionActions.enableSubmit();
+    }, [blob, identifier, parent, parentDispatch, type, val]);
+
+    const [updateContextDebounced] = useDebounce(updateContext, 200);
+
+    React.useEffect(() => {
+        CollectionActions.disableSubmit();
+        updateContextDebounced();
+    }, [updateContextDebounced]);
 
     const updateTypeFields = React.useCallback(() => {
         const typeObj = customTypes.find(c => c.name == (type[0] == '<' ? type.slice(1, -1) : type));
@@ -179,7 +188,8 @@ AddCustomType.propTypes = {
     enums: PropTypes.arrayOf(PropTypes.object),
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     type: PropTypes.string.isRequired,
-    identifier: PropTypes.string,
+    identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    parent: PropTypes.string.isRequired,
     parentDispatch: PropTypes.func.isRequired,
 };
 
