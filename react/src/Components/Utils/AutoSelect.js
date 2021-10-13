@@ -5,7 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Paper from '@mui/material/Paper';
-import Popover from '@mui/material/Popover';
+import Popper from '@mui/material/Popper';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
@@ -85,6 +85,7 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
         <ClickAwayListener onClickAway={handleClose}>
             <Grid item xs={12}>
                 <TextField
+                    autoFocus
                     autoComplete="off"
                     fullWidth
                     inputRef={textRef}
@@ -97,18 +98,12 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
                     value={text}
                     variant="standard"
                 />
-                <Popover
+                <Popper
                     anchorEl={anchorEl}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                    }}
                     onClose={handleClose}
                     open={Boolean(anchorEl) && Boolean(list.length)}
+                    placement="bottom"
+                    style={{zIndex: 1300}}
                 >
                     <Paper sx={{width : width ? width : textRef.current ? textRef.current.offsetWidth : null, border: '0.1px solid #eee'}} elevation={3}>
                         <MenuList onScroll={handleScroll} id="menu-list-grow" sx={{maxHeight: 200, overflowY: 'auto'}}>
@@ -125,7 +120,7 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
                             ))}
                         </MenuList>
                     </Paper>
-                </Popover>
+                </Popper>
             </Grid>
         </ClickAwayListener>
     );

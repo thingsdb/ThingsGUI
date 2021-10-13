@@ -9,8 +9,13 @@ import { EditActions, useEdit } from '../Context';
 
 
 const AddRoom = ({identifier, init, parent}) => {
-    const dispatch = useEdit()[1];
+    const [editState, dispatch] = useEdit();
+    const {val} = editState;
     const [roomId, setRoomId] = React.useState('');
+
+    // React.useEffect(()=>{
+    //     setRoomId(!val ? '' : identifier === null ? val : val[identifier] || '');
+    // }, [identifier, val]);
 
     React.useEffect(()=>{
         let roomId = '';

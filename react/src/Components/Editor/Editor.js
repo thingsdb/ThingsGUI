@@ -20,8 +20,6 @@ const Editor = () => {
     const [args, setArgs] = React.useState(null);
     const [tabIndex, setTabIndex] = React.useState(0);
 
-    console.log(args)
-
     React.useEffect(() => {
         NodesActions.getNodes();
         ThingsdbActions.getCollections();
@@ -49,9 +47,12 @@ const Editor = () => {
         setArgs(args);
     };
 
-    const handleQuery = (query) => {
-        const jsonProof = args && jsonify(args); // make it json proof
-        CollectionActions.query(scope, query, tag, handleOutput, null, null, jsonProof);
+    const handleQuery = (query, withArgs) => {
+        let jsonArgs = null;
+        if(withArgs) {
+            jsonArgs = args && jsonify(args); // make it json proof
+        }
+        CollectionActions.query(scope, query, tag, handleOutput, null, null, jsonArgs);
     };
 
     const handleChangeTab = (newValue) => {

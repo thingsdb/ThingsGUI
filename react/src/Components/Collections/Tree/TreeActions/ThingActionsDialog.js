@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
@@ -19,16 +18,15 @@ import SubmitButton from './SubmitButton';
 
 const tag = ThingActionsDialogTAG;
 
+const initialState = {
+    customTypes: [],
+    loaded: false,
+    setOrList: '',
+    realChildType: '',
+    realParentType: '',
+};
+
 const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
-
-    const initialState = {
-        customTypes: [],
-        loaded: false,
-        setOrList: '',
-        realChildType: '',
-        realParentType: '',
-    };
-
     const [state, setState] = React.useState(initialState);
     const {loaded, realChildType, realParentType, customTypes} = state;
     const [enums, setEnums] = React.useState([]);
@@ -71,6 +69,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
             }
             return res;
         },{}) : null;
+        console.log(b)
         const isChildEnum = Boolean(enums.find(c=>c.name==realChildType));
         const useParent = isChildEnum&&child.id;
         const tid = useParent?parent.id:child.id||parent.id;
@@ -149,25 +148,24 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
             maxWidth="xl"
             fullWidth={false}
             actionButtons={tabIndex === 0 && canEdit ? <SubmitButton onClickSubmit={handleClickOk} />: null}
+            sx={{ '& .MuiDialog-paper': { minWidth: '600px' } }}
         >
             {loaded ? content : (
-                <Box
-                    sx={{
-                        top: 10,
-                        left: 0,
-                        bottom: 10,
-                        right: 0,
-                        position: 'absolute',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
+                <Grid
+                    container
+                    spacing={3}
+                    alignItems="center"
+                    justifyContent="center"
                 >
-                    <CircularProgress size={50} />
-                    <Typography align="right" variant="h6" component="div" color="textSecondary">
-                        {'Loading...'}
-                    </Typography>
-                </Box>
+                    <Grid item xs={6}>
+                        <Typography variant="h6" color="textSecondary">
+                            {'Loading...'}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <CircularProgress size={50} />
+                    </Grid>
+                </Grid>
             )}
         </SimpleModal>
     );

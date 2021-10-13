@@ -14,7 +14,11 @@ const AddBlob = ({identifier, init, parent}) => {
     const [fileName, setFileName] = React.useState('');
 
     const [editState, dispatch] = useEdit();
-    const {blob} = editState;
+    const {blob, val} = editState;
+
+    React.useEffect(()=>{
+        setFileName(!val ? '' : identifier === null ? val : val[identifier] || '');
+    }, [identifier, val]);
 
     const handleUpdate = React.useCallback((f, b) =>  {
         f = f.replaceAll('.', '_');
@@ -23,9 +27,7 @@ const AddBlob = ({identifier, init, parent}) => {
             EditActions.update(dispatch, 'val', f, identifier, parent);
             dispatch(() => ({ blob: { ...blob, [f]: b } }));
         }
-    },
-    [blob, dispatch, identifier, parent],
-    );
+    }, [blob, dispatch, identifier, parent]);
 
     const handleDropzone = React.useCallback(acceptedFiles => {
         const reader = new FileReader();

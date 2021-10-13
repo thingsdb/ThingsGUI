@@ -111,7 +111,7 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDisp
                                 select
                                 SelectProps={{native: true}}
                                 type="text"
-                                value={dataType[index] || dataTypes[0]}
+                                value={dataType[index] || STR}
                                 variant="standard"
                             >
                                 {dataTypes.map( p => (
@@ -128,15 +128,16 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDisp
                         </Grid>
                         <InputField
                             customTypes={customTypes}
-                            dataType={dataType[index] || dataTypes[0]}
+                            dataType={dataType[index] || STR}
                             dataTypes={dataTypes}
                             enums={enums}
                             fullWidth
                             identifier={index}
+                            init={val[index]}
                             label="Value"
                             name="Input"
-                            variant="standard"
                             parent={ARRAY}
+                            variant="standard"
                         />
                     </Grid>
                 )))}

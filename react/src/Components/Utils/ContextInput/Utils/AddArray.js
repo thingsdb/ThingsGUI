@@ -42,7 +42,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
     const handleAdd = () => {
         setDataType(prev => {
             let copy = [...prev];
-            copy.push(STR);
+            copy.push(childTypes.length ? childTypes[0] : STR );
             return copy;
         });
     };
@@ -88,7 +88,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
                                 </TextField>
                             </Grid>
                         }
-                        <Grid container item xs={6} justifyContent="flex-end">
+                        <Grid container item xs={8} justifyContent="flex-end">
                             <IconButton color="primary" onClick={handleDelete(index)}>
                                 <DeleteIcon />
                             </IconButton>
@@ -99,10 +99,11 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
                             dataTypes={dataTypes}
                             enums={enums}
                             fullWidth
-                            label="Value"
-                            variant="standard"
                             identifier={index}
+                            init={val[index]}
+                            label="Value"
                             parent={ARRAY}
+                            variant="standard"
                         />
                     </Grid>
                 )))}
