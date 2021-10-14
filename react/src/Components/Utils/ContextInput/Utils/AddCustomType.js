@@ -36,48 +36,48 @@ const typeConv = {
     [NUMBER]: [INT, FLOAT, CODE],
 };
 
-const optional = (t) => {
+const optional = (type) => {
     let ftype = [];
-    if (t.slice(-1)=='?') {
-        t = t.slice(0, -1);
+    if (type.slice(-1)=='?') {
+        type = type.slice(0, -1);
         ftype = [NIL];
     }
-    return([t, ftype]);
+    return([type, ftype]);
 };
 
-const fntype = (t, dataTypes) => {
-    if(t.slice(-1) == '>'){
-        t = t.split('<')[0];
+const fntype = (type, ftype, dataTypes) => {
+    if(type.slice(-1) == '>'){
+        type = type.split('<')[0];
     }
-    return(t == ANY ? dataTypes
-        : typeConv[t] ? [...typeConv[t]]
-            : [t]);
+    return(type == ANY ? dataTypes
+        : typeConv[type] ? [...ftype, ...typeConv[type]]
+            : [...ftype, type]);
 };
 
-const array = (t, ftype, arrayType, def, dataTypes) => {
+const array = (type, ftype, arrayType, def, dataTypes) => {
     let fchldtype;
 
     ftype = [...ftype, arrayType];
-    t = t.slice(1, -1) ? t.slice(1, -1) : def;
-    [t, fchldtype] = optional(t);
-    fchldtype = fntype(t, dataTypes);
+    type = type.slice(1, -1) ? type.slice(1, -1) : def;
+    [type, fchldtype] = optional(type);
+    fchldtype = fntype(type, fchldtype, dataTypes);
 
     return([ftype, fchldtype]);
 };
 
 const typing = ([fprop, type], dataTypes) =>  {
-    let t = type.trim();
+    type = type.trim();
     let ftype = [];
     let fchldtype = null;
 
-    [t, ftype] = optional(t);
+    [type, ftype] = optional(type);
 
-    if (t[0]=='[') {
-        [ftype, fchldtype] = array(t, ftype, LIST, ANY, dataTypes);
-    } else if (t[0]=='{') {
-        [ftype, fchldtype] = array(t, ftype, SET, THING, dataTypes);
+    if (type[0]=='[') {
+        [ftype, fchldtype] = array(type, ftype, LIST, ANY, dataTypes);
+    } else if (type[0]=='{') {
+        [ftype, fchldtype] = array(type, ftype, SET, THING, dataTypes);
     } else {
-        ftype = fntype(t, ftype, dataTypes);
+        ftype = fntype(type, ftype, dataTypes);
     }
 
     return(

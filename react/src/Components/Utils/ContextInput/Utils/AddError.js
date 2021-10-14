@@ -61,7 +61,7 @@ const AddError = ({identifier, init, parent}) => {
 
     return(
         <Grid container item xs={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
-            <Grid item xs={2} container alignItems="center" justifyContent="flex-start">
+            <Grid item xs={1} container alignItems="center" justifyContent="flex-start">
                 <Grid item>
                     <Typography variant="h5" color="primary">
                         {'err('}
@@ -105,7 +105,7 @@ const AddError = ({identifier, init, parent}) => {
                     />
                 </Grid>
             </Grid>
-            <Grid item xs={1} container alignItems="center" justifyContent="flex-start">
+            <Grid item xs={2} container alignItems="center" justifyContent="flex-start">
                 <Grid item>
                     <Typography variant="h5" color="primary">
                         {')'}
