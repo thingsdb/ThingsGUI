@@ -28,6 +28,26 @@ const ThingRoot = ({things, collection}) => {
         CollectionActions.getThings(collection.collection_id, collection.name);
     }, [collection.collection_id, collection.name]);
 
+    const onChildren = React.useCallback((k, v) => (
+        <Thing
+            key={k}
+            id={collection.collection_id}
+            thing={v}
+            things={things}
+            collection={collection}
+            parent={{
+                id: collection.collection_id,
+                name: 'root',
+                type: THING,
+                isTuple: false,
+            }}
+            child={{
+                name: k,
+                index: null,
+            }}
+        />
+    ), [collection, things]);
+
     return (
         fetched ? (
             <List
@@ -37,25 +57,7 @@ const ThingRoot = ({things, collection}) => {
             >
                 <ThingRestrict
                     thing={things[collection.collection_id]}
-                    onChildren={(k, v) => (
-                        <Thing
-                            key={k}
-                            id={collection.collection_id}
-                            thing={v}
-                            things={things}
-                            collection={collection}
-                            parent={{
-                                id: collection.collection_id,
-                                name: 'root',
-                                type: THING,
-                                isTuple: false,
-                            }}
-                            child={{
-                                name: k,
-                                index: null,
-                            }}
-                        />
-                    )}
+                    onChildren={onChildren}
                 />
                 <Divider sx={{marginTop: '16px'}} />
                 <ListItem disableGutters>

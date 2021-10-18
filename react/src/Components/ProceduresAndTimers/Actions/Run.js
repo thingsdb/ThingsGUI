@@ -24,6 +24,7 @@ const scope = THINGSDB_SCOPE;
 
 const Run = ({item, type}) => {
     const [output, setOutput] = React.useState('');
+    const [tabIndex, setTabIndex] = React.useState(0);
     const editState = useEdit()[0];
     const {val} = editState;
 
@@ -32,12 +33,15 @@ const Run = ({item, type}) => {
     };
     const handleClickRun = () => {
         const jsonProof = jsonify(val); // make it json proof
-
         if(type === 'procedure') {
             ProcedureActions.runProcedure(scope, item.name, jsonProof, tag, handleResult);
         } else {
             TimerActions.runTimer(scope, item, tag, handleResult);
         }
+    };
+
+    const handleChangeTab = (newValue) => {
+        setTabIndex(newValue);
     };
 
     return (
@@ -78,7 +82,7 @@ const Run = ({item, type}) => {
                     }
                 />
                 <CardActions disableSpacing>
-                    <QueryOutput output={output} />
+                    <QueryOutput output={output} tabIndex={tabIndex} onChangeTab={handleChangeTab} />
                 </CardActions>
                 <ErrorMsg tag={tag} />
             </Card>

@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';;
+import { styled } from '@mui/material/styles';
 import { withVlow } from 'vlow';
 import React from 'react';
 

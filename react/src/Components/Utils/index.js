@@ -176,12 +176,15 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
+// str = str.replace(/'/g, '"');
+// return str.replace(/\w*:/g, function(matched){
+//     return `"${matched}":`;
+// });
 const jsonify = (str) => {
-    let re = /\{|:|(,\s|,)(?=[^{]*\})|'/g;
-    let mapObj = {'{': '{"', ':': '":', ',': ',"', ', ': ',"', '\'': '"'};
-    return str.replace(re, function(matched){
-        return mapObj[matched.toLowerCase()];
+    return str.replace(/\w+(?=:)|'/g, function(matched){
+        return matched === '\'' ? '"' : `"${matched}"`;
     });
+
 };
 
 const revealCustomType = (i) => {

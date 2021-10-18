@@ -32,31 +32,31 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
         setShow(false);
     };
 
-    const renderChildren = () => {
-        return (
-            <ThingRestrict
-                thing={currThing}
-                onChildren={(k, v, i, isArray) => (
-                    <Thing
-                        inset
-                        collection={collection}
-                        things={things}
-                        thing={v}
-                        parent={{
-                            id: thingId,
-                            name: child.name,
-                            type: type,
-                            isTuple: isTuple,
-                        }}
-                        child={{
-                            name: fancyName(isArray?child.name:k, i),
-                            index: i,
-                        }}
-                    />
-                )}
-            />
-        );
-    };
+    const onChildren = React.useCallback((k, v, i, isArray) => (
+        <Thing
+            inset
+            collection={collection}
+            things={things}
+            thing={v}
+            parent={{
+                id: thingId,
+                name: child.name,
+                type: type,
+                isTuple: isTuple,
+            }}
+            child={{
+                name: fancyName(isArray?child.name:k, i),
+                index: i,
+            }}
+        />
+    ), [child.name, collection, isTuple, thingId, things, type]);
+
+    const renderChildren = () => (
+        <ThingRestrict
+            thing={currThing}
+            onChildren={onChildren}
+        />
+    );
 
     const handleOpenClose = (open) => {
         if(thing && thing[THING_KEY]) {

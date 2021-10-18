@@ -18,6 +18,7 @@ const dataTypes = [BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIME
 
 const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const [output, setOutput] = React.useState('');
+    const [tabIndex, setTabIndex] = React.useState(0);
     const editState = useEdit()[0];
     const {val} = editState;
 
@@ -30,6 +31,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
         const elmnt = document.getElementById('output');
         elmnt.scrollIntoView();
     };
+
     const handleClickOk = () => {
         const jsonProof = jsonify(val); // make it json proof
         ProcedureActions.runProcedure(
@@ -40,6 +42,11 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
             handleResult,
         );
     };
+
+    const handleChangeTab = (newValue) => {
+        setTabIndex(newValue);
+    };
+
 
     return (
         <SimpleModal
@@ -93,7 +100,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                                 <ListItemText primary="Output:" primaryTypographyProps={{variant: 'body1'}} />
                             </ListItem>
                             <div id="output">
-                                <QueryOutput output={output} />
+                                <QueryOutput output={output} tabIndex={tabIndex} onChangeTab={handleChangeTab} />
                             </div>
                         </React.Fragment>
                     </List>

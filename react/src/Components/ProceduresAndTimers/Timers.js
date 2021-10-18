@@ -74,7 +74,6 @@ const Timers = ({buttonsView, dialogsView, onCallback, timers, scope}) => {
                 onDelete={handleClickDelete}
                 onAdd={handleClickAdd}
                 onClick={handleClick}
-                onDialogs={(name, open, handleClose) => <TimerDialogs id={name} open={open} onClose={handleClose} timers={timers[scope]||[]} scope={scope} />}
                 list={timers[scope] || []}
                 tag={tag}
             />

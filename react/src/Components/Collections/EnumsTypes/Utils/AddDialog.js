@@ -34,9 +34,9 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
     [open],
     );
 
-    const handleBlob = (b) => {
-        setBlob({...blob, ...b});
-    };
+    const handleBlob = React.useCallback((b) => {
+        setBlob(prev => ({...prev, ...b}));
+    }, []);
 
     const handleChange = ({target}) => {
         const {value} = target;
@@ -44,14 +44,14 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
         setState({...state, name: value, queryString: qry});
     };
 
-    const handleChangeProperty = (index) => (property) => {
+    const handleChangeProperty = React.useCallback((index) => (property) => {
         setState(prevState => {
             let update = [...prevState.properties];
             update.splice(index, 1, {...prevState.properties[index], ...property});
             const qry = queries[category](prevState.name, update);
             return {...prevState, properties: update, queryString: qry};
         });
-    };
+    }, [category, queries]);
 
     const handleAdd = (index) => {
         setState(prevState => {
@@ -79,7 +79,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
         });
     };
 
-    const handleSwitching = (index) => (check) => {
+    const handleSwitching = React.useCallback((index) => (check) => {
         setState(prevState => {
             const prop = check ? {propertyType: ''} : {definition: ''};
             let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
@@ -87,7 +87,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
             const qry = queries[category](prevState.name, update);
             return {...prevState, properties: update, queryString: qry};
         });
-    };
+    }, [category, queries]);
 
 
     const handleClickOk = () => {
@@ -111,6 +111,34 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
             b,
         );
     };
+
+    const child = React.useCallback((i) => (
+        <EditProvider>
+            <Grid container item xs={12} spacing={1} alignItems="center" >
+                <Grid item xs={12}>
+                    <PropertyName onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
+                </Grid>
+                {category === 'type' ? (
+                    <Grid item xs={12}>
+                        <Switching
+                            one={
+                                <PropertyType onChange={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
+                            }
+                            two={
+                                <PropertyMethod onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
+                            }
+                            onChange={handleSwitching(i)}
+                        />
+                    </Grid>
+                ) : null}
+                {category === 'enum' ? (
+                    <Grid item xs={12}>
+                        <PropertyVal category={category} onChange={handleChangeProperty(i)} onBlob={handleBlob} scope={scope} />
+                    </Grid>
+                ) : null}
+            </Grid>
+        </EditProvider>
+    ), [category, dataTypes, handleBlob, handleChangeProperty, handleSwitching, properties, scope]);
 
     return (
         <SimpleModal
@@ -185,33 +213,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                         </ListItem>
                         <ListItem>
                             <ArrayLayout
-                                child={(i) => (
-                                    <EditProvider>
-                                        <Grid container item xs={12} spacing={1} alignItems="center" >
-                                            <Grid item xs={12}>
-                                                <PropertyName onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
-                                            </Grid>
-                                            {category === 'type' ? (
-                                                <Grid item xs={12}>
-                                                    <Switching
-                                                        one={
-                                                            <PropertyType onChange={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
-                                                        }
-                                                        two={
-                                                            <PropertyMethod onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].definition||''} />
-                                                        }
-                                                        onChange={handleSwitching(i)}
-                                                    />
-                                                </Grid>
-                                            ) : null}
-                                            {category === 'enum' ? (
-                                                <Grid item xs={12}>
-                                                    <PropertyVal category={category} onChange={handleChangeProperty(i)} onBlob={handleBlob} scope={scope} />
-                                                </Grid>
-                                            ) : null}
-                                        </Grid>
-                                    </EditProvider>
-                                )}
+                                child={child}
                                 fullWidth={category === 'enum'}
                                 onAdd={handleAdd}
                                 onRemove={handleRemove}
