@@ -285,14 +285,4 @@ export default {
         'rename_procedure': 'Rename a procedure.',
         'run': 'Run a procedure.',
     },
-    timers: {
-        'del_timer': 'Delete a timer.',
-        'has_timer': 'Determines if a timer exists in the current scope.',
-        'new_timer': 'Creates a new timer to the @thingsdb or a @collection scope. The given closure will be copied to the timer, so this is not a reference to the given closure.',
-        'run': 'Run a timer.',
-        'set_timer_args': 'Set timer arguments. If less than the required arguments are given, then the remaining arguments will be set using nil. More arguments than the closure accepts are simply removed and thus not used.',
-        'timer_args': 'Get timer arguments as a tuple.',
-        'timer_info': 'Returns information about a timer.',
-        'timers_info': 'Returns timer information about all timers in the scope.',
-    },
 };

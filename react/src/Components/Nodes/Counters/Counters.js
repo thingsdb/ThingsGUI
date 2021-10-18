@@ -47,10 +47,6 @@ const header = [
         {ky: 'changes_unaligned', label: 'Changes unaligned'},
         {ky: 'longest_change_duration', label: 'Longest change duration', fn: (d) => d && d.toFixed(3) + ' s'},
         {ky: 'average_change_duration', label: 'Average change duration', fn: (d) => d && d.toFixed(3) + ' s'},
-    ]},
-    {ky: 'title6', title: 'TIMERS', labels: [
-        {ky: 'timers_success', label: 'Successful timers'},
-        {ky: 'timers_with_error', label: 'Timers with error'},
     ]}
 ];
 

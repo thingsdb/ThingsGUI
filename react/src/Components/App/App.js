@@ -7,10 +7,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
-import { BottomBar, CollectionsMenu, OverviewMenu, ProceduresMenu, TimersMenu, TopBar, UsersMenu, QueryEditorMenu } from '../Navigation';
-import { COLLECTION_ROUTE, EDITOR_ROUTE, PROCEDURE_ROUTE, TIMER_ROUTE, USER_ROUTE } from '../../Constants/Routes';
+import { BottomBar, CollectionsMenu, OverviewMenu, ProceduresMenu, TopBar, UsersMenu, QueryEditorMenu } from '../Navigation';
+import { COLLECTION_ROUTE, EDITOR_ROUTE, PROCEDURE_ROUTE, USER_ROUTE } from '../../Constants/Routes';
 import { DrawerLayout, ErrorToast, getIdFromPath, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam } from '../Utils';
-import { Procedure, Timer } from '../ProceduresAndTimers';
+import { Procedure } from '../ProceduresAndTimers';
 import Collection from '../Collections';
 import Editor from '../Editor';
 import HeaderTitle from './HeaderTitle';
@@ -36,7 +36,6 @@ const App = () => {
     const collectionName = getIdFromPath(location.pathname, COLLECTION_ROUTE);
     const userName = getIdFromPath(location.pathname, USER_ROUTE);
     const procedureName = getIdFromPath(location.pathname, PROCEDURE_ROUTE);
-    const timerId = getIdFromPath(location.pathname, TIMER_ROUTE);
 
     const handleDrawerOpen = () => {
         historySetQueryParam(history, 'drawer', nodes);
@@ -87,14 +86,13 @@ const App = () => {
                                 <Route exact path={`/${COLLECTION_ROUTE}/${collectionName}`} component={Collection} />
                                 <Route exact path={`/${USER_ROUTE}/${userName}`} component={User} />
                                 <Route exact path={`/${PROCEDURE_ROUTE}/${procedureName}`} component={Procedure} />
-                                <Route exact path={`/${TIMER_ROUTE}/${timerId}`} component={Timer} />
                                 <Route exact path={`/${EDITOR_ROUTE}`} component={Editor} />
                             </Switch>
                         </Grid>
                     </Grid>
                 }
                 menuOpen={menuOpen}
-                menus={[<OverviewMenu key="overview_menu" />, <CollectionsMenu key="collections_menu" />, <UsersMenu key="users_menu" />, <ProceduresMenu key="procedures_menu" />, <TimersMenu key="timers_menu" />, <QueryEditorMenu key="editor_menu" />]}
+                menus={[<OverviewMenu key="overview_menu" />, <CollectionsMenu key="collections_menu" />, <UsersMenu key="users_menu" />, <ProceduresMenu key="procedures_menu" />, <QueryEditorMenu key="editor_menu" />]}
                 bottomBar={<BottomBar />}
                 drawerTitle={'NODES'}
                 drawerContent={<Nodes />}

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {Timers} from '../../ProceduresAndTimers';
+import { Timers } from '../../ProceduresAndTimers';
 
 
 const TimersEditor = ({onSetQueryInput, scope}) => {
