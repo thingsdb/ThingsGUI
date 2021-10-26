@@ -6,12 +6,12 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Card from '@mui/material/Card';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import PropTypes from 'prop-types';
 import React from 'react';
 import Slide from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
 import WarningIcon from '@mui/icons-material/Warning';
-import PropTypes from 'prop-types';
 
 import { ErrorActions } from '../../Stores';
 import { useThingsError } from '.';
@@ -41,9 +41,9 @@ const ErrorToastCard = ({index, thingsError}) => {
                         </Typography>
                     </AccordionDetails>
                     <AccordionActions>
-                        <Button onClick={handleCloseError}>
+                        <IconButton onClick={handleCloseError}>
                             <CloseIcon />
-                        </Button>
+                        </IconButton>
                     </AccordionActions>
                 </Accordion>
             </Card>
