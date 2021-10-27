@@ -33,7 +33,7 @@ const View = ({item, scope, type}) => {
             open={open}
             onClose={handleClickClose}
             scope={scope}
-            task={item}
+            taskId={item}
         />
     ));
 };

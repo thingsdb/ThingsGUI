@@ -9,12 +9,11 @@ const TasksEditor = ({onSetQueryInput, scope}) => {
     const handleCallback = (type, task) => {
         switch(type){
         case 'add':
-            onSetQueryInput('new_task(');
+            onSetQueryInput('task(<start>, <closure>, <args>)');
             break;
         case 'run':
             if(task){
-                const run = `run(${task.id})`;
-                const input = task.with_side_effects ? `wse(${run})` : run;
+                const input = `task(${task.id})`;
                 onSetQueryInput(input);
             }
             break;

@@ -17,8 +17,9 @@ const withStores = withVlow([{
 
 const header = [
     {ky: 'id', label: 'ID'},
-    {ky: 'doc', label: 'Documentation', fn: (d) => d.length > 20 ? d.slice(0, 20) + '...' : d},
-    {ky: 'next_run', label: 'Next run', fn: nextRunFn},
+    {ky: 'at', label: 'At', fn: nextRunFn},
+    {ky: 'owner', label: 'Owner'},
+    {ky: 'err', label: 'Error', fn: (e) => e || '-'},
 ];
 
 const tag = TasksTAG;
@@ -28,7 +29,6 @@ const Tasks = ({buttonsView, dialogsView, onCallback, tasks, scope}) => {
     const [open, setOpen] = React.useState({
         add: false,
         edit: false,
-        run: false,
         view: false,
     });
 

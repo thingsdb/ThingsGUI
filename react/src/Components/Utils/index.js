@@ -218,7 +218,7 @@ const scaleToBinBytes = (bytes) => {
     return `${rounded === number ? '' : '~'}${rounded} ${metricLabel[i]}`;
 };
 
-const nextRunFn = (t) => (t === 'pending' ? t : moment(t).format(DATE_TIME_MIN_STR));
+const nextRunFn = (t) => (t ? moment(t).format(DATE_TIME_MIN_STR) : NIL);
 
 const getIdFromPath = (pathname, name) => {
     const splitPath = pathname.split('/');

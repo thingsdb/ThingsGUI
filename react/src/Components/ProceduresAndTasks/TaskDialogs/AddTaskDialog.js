@@ -10,10 +10,9 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { AddTaskDialogTAG } from '../../../Constants/Tags';
-import { Closure, ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker, VariablesArray } from '../../Utils';
+import { Closure, ErrorMsg, SimpleModal, SwitchOpen, TimePicker, VariablesArray } from '../../Utils';
 import { CollectionActions, TaskActions } from '../../../Stores';
-import { NIL } from '../../../Constants/ThingTypes';
-import { THINGS_DOC_NEW_TASK } from '../../../Constants/Links';
+import { THINGS_DOC_TASK } from '../../../Constants/Links';
 
 
 const tag = AddTaskDialogTAG;
@@ -22,14 +21,13 @@ const initState = {
     args: [],
     closure: '',
     error: '',
-    queryString: 'new_task()',
-    repeat: NIL,
+    queryString: 'task()',
     start: null,
 };
 
 const AddTaskDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState(initState);
-    const {args, closure, error, queryString, repeat, start} = state;
+    const {args, closure, error, queryString, start} = state;
 
 
     React.useEffect(() => { // clean state
@@ -37,25 +35,15 @@ const AddTaskDialog = ({open, onClose, scope}) => {
     }, [open]);
 
     const handleChangeStart = (s) => {
-        setState({...state, start: s, queryString: `new_task(datetime(${s}), ${repeat}, ${closure}${args.length ? `, [${args}]`: ''})`});
-    };
-
-    const handleChangeRepeat = (r) => {
-        setState({...state, repeat: r, queryString: `new_task(datetime(${start}), ${r}, ${closure}${args.length ? `, [${args}]`: ''})`});
+        setState({...state, start: s, queryString: `task(datetime(${s}), ${closure}${args.length ? `, [${args}]`: ''})`});
     };
 
     const handleChangeClosure = (c) => {
-        setState({...state, closure: c, queryString: `new_task(datetime(${start}), ${repeat}, ${c}${args.length ? `, [${args}]`: ''})`});
+        setState({...state, closure: c, queryString: `task(datetime(${start}), ${c}${args.length ? `, [${args}]`: ''})`});
     };
 
     const handleChangeArgs = (a) => {
-        setState({...state, args: a, queryString: `new_task(datetime(${start}), ${repeat}, ${closure}${a.length ? `, [${a}]`: ''})`});
-    };
-
-    const handleSwitchRepeat = (open) => {
-        if(!open) {
-            handleChangeRepeat(NIL);
-        }
+        setState({...state, args: a, queryString: `task(datetime(${start}), ${closure}${a.length ? `, [${a}]`: ''})`});
     };
 
     const handleSwitchArgs = (open) => {
@@ -104,7 +92,7 @@ const AddTaskDialog = ({open, onClose, scope}) => {
                             <ListItemText
                                 primary="For more information, see:"
                                 secondary={
-                                    <Link target="_blank" href={THINGS_DOC_NEW_TASK}>
+                                    <Link target="_blank" href={THINGS_DOC_TASK}>
                                         {'ThingsDocs'}
                                     </Link>
                                 }
@@ -143,11 +131,6 @@ const AddTaskDialog = ({open, onClose, scope}) => {
                         </ListItem>
                         <ListItem>
                             <TimePicker onChange={handleChangeStart} />
-                        </ListItem>
-                        <ListItem>
-                            <SwitchOpen label="Add continuous repeat [optional]" onChange={handleSwitchRepeat}>
-                                <TimePeriodPicker onChange={handleChangeRepeat} />
-                            </SwitchOpen>
                         </ListItem>
                         <ListItem>
                             <ListItemText

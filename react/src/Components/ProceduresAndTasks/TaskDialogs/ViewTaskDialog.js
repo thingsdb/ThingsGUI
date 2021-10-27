@@ -21,7 +21,7 @@ const ViewTaskDialog = ({button, open, onClose, scope, task}) => {
     const [args, setArgs] = React.useState([]);
 
     const handleRefresh = React.useCallback(() => {
-        TaskActions.getTaskArgs(
+        TaskActions.getArgs(
             scope,
             task.id,
             tag,
@@ -71,28 +71,20 @@ const ViewTaskDialog = ({button, open, onClose, scope, task}) => {
                         </ListItem>
                         <ListItem>
                             <ListItemText
-                                primary="Documentation"
-                                secondary={task.doc || '-'}
-                            />
-                        </ListItem>
-                        {task.user &&
-                            <ListItem>
-                                <ListItemText
-                                    primary="Creator"
-                                    secondary={task.user}
-                                />
-                            </ListItem>
-                        }
-                        <ListItem>
-                            <ListItemText
-                                primary="Next run"
-                                secondary={nextRunFn(task.next_run)}
+                                primary="At"
+                                secondary={nextRunFn(task.at)}
                             />
                         </ListItem>
                         <ListItem>
                             <ListItemText
-                                primary="Repeat"
-                                secondary={task.repeat + ' seconds'}
+                                primary="Owner"
+                                secondary={task.owner}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemText
+                                primary="Error"
+                                secondary={task.err || '-'}
                             />
                         </ListItem>
                         <ListItem
@@ -109,14 +101,14 @@ const ViewTaskDialog = ({button, open, onClose, scope, task}) => {
                         </ListItem>
                         <ListItem>
                             <ListItemText
-                                primary="Definition"
-                                secondary={task.definition ?
+                                primary="Closure"
+                                secondary={task.closure ?
                                     <TextField
                                         fullWidth
                                         multiline
                                         name="task"
                                         type="text"
-                                        value={task.definition}
+                                        value={task.closure}
                                         variant="standard"
                                         InputProps={{
                                             readOnly: true,

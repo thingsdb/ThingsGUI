@@ -55,8 +55,8 @@ const Collection = ({collections}) => {
                             </Grid>
                             <Grid item xs={12} sx={{paddingBottom: '8px'}}>
                                 <Tasks
-                                    buttonsView={{add: true, edit: true, run: true, view: true}}
-                                    dialogsView={{add: true, edit: true, run: true, view: true}}
+                                    buttonsView={{add: true, edit: true, run: false, view: true}}
+                                    dialogsView={{add: true, edit: true, run: false, view: true}}
                                     scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}
                                 />
                             </Grid>

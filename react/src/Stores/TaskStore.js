@@ -1,14 +1,14 @@
-import PropTypes from 'prop-types';
-import Vlow from 'vlow';
 import { BaseStore } from './BaseStore';
 import { ErrorActions } from './ErrorStore';
+import PropTypes from 'prop-types';
+import Vlow from 'vlow';
 
 const TaskActions = Vlow.createActions([
+    'cancelTask',
     'deleteTask',
-    'getTask',
-    'getTaskArgs',
+    'getArgs',
+    'getOwner',
     'getTasks',
-    'runTask',
 ]);
 
 
@@ -29,24 +29,8 @@ class TaskStore extends BaseStore {
         this.state = TaskStore.defaults;
     }
 
-    onGetTask(scope, task, tag=null, cb=()=>null) {
-        const query = `task_info(${task})`;
-        this.emit('query', {
-            query,
-            scope
-        }).done((data) => {
-            this.setState({
-                task: data
-            });
-            cb(data);
-        }).fail((event, status, message) => {
-            tag===null?ErrorActions.setMsgError(tag, message.Log):ErrorActions.setToastError(message.Log);
-            return [];
-        });
-    }
-
     onGetTasks(scope, tag,  cb=()=>null) {
-        const query = 'tasks_info()';
+        const query = 'tasks = tasks(); tasks.map(|t| {id: t.id(), at: t.at(), owner: t.owner(), closure: t.closure(), err: t.err(), args: t.args()});';
         this.emit('query', {
             query,
             scope
@@ -62,8 +46,8 @@ class TaskStore extends BaseStore {
         });
     }
 
-    onDeleteTask(scope, task, tag,  cb=()=>null) {
-        const query = `del_task(${task}); tasks_info();`;
+    onDeleteTask(scope, taskId, tag,  cb=()=>null) {
+        const query = `task(${taskId}).del(); tasks();`;
         this.emit('query', {
             query,
             scope
@@ -79,8 +63,24 @@ class TaskStore extends BaseStore {
         });
     }
 
-    onRunTask(scope, task, tag,  cb=()=>null) {
-        const query = task.with_side_effects ? `wse(run(${task.id}));` : `run(${task.id});` ;
+    onCancelTask(scope, taskId, tag,  cb=()=>null) {
+        const query = `task(${taskId}).cancel(); tasks();`;
+        this.emit('query', {
+            query,
+            scope
+        }).done((data) => {
+            this.setState(prevState => {
+                const tasks = Object.assign({}, prevState.tasks, {[scope]: data});
+                return {tasks};
+            });
+            cb(data);
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+        });
+    }
+
+    onGetArgs(scope, taskId, tag,  cb=()=>null) {
+        const query = `task(${taskId}).args();`;
         this.emit('query', {
             query,
             scope
@@ -91,8 +91,8 @@ class TaskStore extends BaseStore {
         });
     }
 
-    onGetTaskArgs(scope, task, tag, cb=()=>null) {
-        const query = `task_args(${task});`;
+    onGetOwner(scope, taskId, tag,  cb=()=>null) {
+        const query = `task(${taskId}).owner();`;
         this.emit('query', {
             query,
             scope
@@ -100,7 +100,6 @@ class TaskStore extends BaseStore {
             cb(data);
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
-            return [];
         });
     }
 }

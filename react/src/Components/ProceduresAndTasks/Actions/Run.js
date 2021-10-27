@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { ProcedureActions, TaskActions } from '../../../Stores';
+import { ProcedureActions } from '../../../Stores';
 import { ErrorMsg, InputField, jsonify, QueryOutput, useEdit } from '../../Utils';
 import { RunProcedureTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
@@ -35,8 +35,6 @@ const Run = ({item, type}) => {
         const jsonProof = jsonify(val); // make it json proof
         if(type === 'procedure') {
             ProcedureActions.runProcedure(scope, item.name, jsonProof, tag, handleResult);
-        } else {
-            TaskActions.runTask(scope, item, tag, handleResult);
         }
     };
 
