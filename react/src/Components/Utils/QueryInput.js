@@ -5,9 +5,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Language from './Language.js';
+import { NIL } from '../../Constants/ThingTypes';
 import * as monaco from 'monaco-editor';
-import {NIL} from '../../Constants/ThingTypes';
+import Language from './Language.js';
 
 monaco.languages.register({ id: 'mySpecialLanguage' });
 
@@ -22,7 +22,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         ...Object.keys(Language.node),
         ...Object.keys(Language.thingsdb),
         ...Object.keys(Language.procedures),
-        ...Object.keys(Language.timers),
+        ...Object.keys(Language.tasks),
         ...Object.keys(Language.types.bytes),
         ...Object.keys(Language.types.closure),
         ...Object.keys(Language.types.datetime),
@@ -283,7 +283,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                     documentation: v,
                 }))
             );
-            suggestions.push(...Object.entries(Language.timers)
+            suggestions.push(...Object.entries(Language.tasks)
                 .map(([k, v]) => ({
                     label: k,
                     kind: monaco.languages.CompletionItemKind.Function,

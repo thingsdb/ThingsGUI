@@ -11,24 +11,24 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { nextRunFn, SimpleModal } from '../../Utils';
-import { ViewTimerDialogTAG } from '../../../Constants/Tags';
-import { TimerActions } from '../../../Stores';
+import { TaskActions } from '../../../Stores';
+import { ViewTaskDialogTAG } from '../../../Constants/Tags';
 
 
-const tag = ViewTimerDialogTAG;
+const tag = ViewTaskDialogTAG;
 
-const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
+const ViewTaskDialog = ({button, open, onClose, scope, task}) => {
     const [args, setArgs] = React.useState([]);
 
     const handleRefresh = React.useCallback(() => {
-        TimerActions.getTimerArgs(
+        TaskActions.getTaskArgs(
             scope,
-            timer.id,
+            task.id,
             tag,
             (a) => {
                 setArgs(a);
             });
-    }, [scope, timer.id]);
+    }, [scope, task.id]);
 
     React.useEffect(() => {
         if(open) {
@@ -42,10 +42,10 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
             open={open}
             onClose={onClose}
             maxWidth="md"
-            actionButtons={timer.with_side_effects?(
+            actionButtons={task.with_side_effects?(
                 <ListItem>
                     <Typography variant="caption" sx={{color: amber[700]}}>
-                        {'Note: this timer generates an event.'}
+                        {'Note: this task generates an event.'}
                     </Typography>
                 </ListItem>
             ):null}
@@ -54,10 +54,10 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
-                            {'View ThingDB timer:'}
+                            {'View ThingDB task:'}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {timer.id || ''}
+                            {task.id || ''}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -66,33 +66,33 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                         <ListItem>
                             <ListItemText
                                 primary="ID"
-                                secondary={timer.id}
+                                secondary={task.id}
                             />
                         </ListItem>
                         <ListItem>
                             <ListItemText
                                 primary="Documentation"
-                                secondary={timer.doc || '-'}
+                                secondary={task.doc || '-'}
                             />
                         </ListItem>
-                        {timer.user &&
+                        {task.user &&
                             <ListItem>
                                 <ListItemText
                                     primary="Creator"
-                                    secondary={timer.user}
+                                    secondary={task.user}
                                 />
                             </ListItem>
                         }
                         <ListItem>
                             <ListItemText
                                 primary="Next run"
-                                secondary={nextRunFn(timer.next_run)}
+                                secondary={nextRunFn(task.next_run)}
                             />
                         </ListItem>
                         <ListItem>
                             <ListItemText
                                 primary="Repeat"
-                                secondary={timer.repeat + ' seconds'}
+                                secondary={task.repeat + ' seconds'}
                             />
                         </ListItem>
                         <ListItem
@@ -103,20 +103,20 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
                             }
                         >
                             <ListItemText
-                                primary="Timer arguments"
+                                primary="Task arguments"
                                 secondary={`[${args}]`}
                             />
                         </ListItem>
                         <ListItem>
                             <ListItemText
                                 primary="Definition"
-                                secondary={timer.definition ?
+                                secondary={task.definition ?
                                     <TextField
                                         fullWidth
                                         multiline
-                                        name="timer"
+                                        name="task"
                                         type="text"
-                                        value={timer.definition}
+                                        value={task.definition}
                                         variant="standard"
                                         InputProps={{
                                             readOnly: true,
@@ -144,17 +144,17 @@ const ViewTimerDialog = ({button, open, onClose, scope, timer}) => {
     );
 };
 
-ViewTimerDialog.defaultProps = {
+ViewTaskDialog.defaultProps = {
     button: null,
-    timer: {},
+    task: {},
 };
 
-ViewTimerDialog.propTypes = {
+ViewTaskDialog.propTypes = {
     button: PropTypes.object,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
-    timer: PropTypes.object,
+    task: PropTypes.object,
 };
 
-export default ViewTimerDialog;
+export default ViewTaskDialog;

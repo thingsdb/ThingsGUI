@@ -6,11 +6,11 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { getGreetingTime, TitlePage3 } from '../Utils';
-import { ProcedureActions, ProcedureStore, ThingsdbActions, ThingsdbStore, TimerActions, TimerStore } from '../../Stores';
+import { ProcedureActions, ProcedureStore, ThingsdbActions, ThingsdbStore, TaskActions, TaskStore } from '../../Stores';
 import { THINGSDB_SCOPE } from '../../Constants/Scopes';
 import CollectionCard from './CollectionCard';
 import ProcedureCard from './ProcedureCard';
-import TimerCard from './TimerCard';
+import TaskCard from './TaskCard';
 import UserCard from './UserCard';
 
 
@@ -21,19 +21,19 @@ const withStores = withVlow([{
     store: ProcedureStore,
     keys: ['procedures']
 }, {
-    store: TimerStore,
-    keys: ['timers']
+    store: TaskStore,
+    keys: ['tasks']
 }]);
 
 
 const scope = THINGSDB_SCOPE;
 
-const Welcome = ({collections, procedures, timers, user, users}) => {
+const Welcome = ({collections, procedures, tasks, user, users}) => {
 
     React.useEffect(() => {
         ThingsdbActions.getCollections();
         ProcedureActions.getProcedures();
-        TimerActions.getTimers();
+        TaskActions.getTasks();
         ThingsdbActions.getUsers();
         ThingsdbActions.getUser();
     }, []);
@@ -94,17 +94,17 @@ const Welcome = ({collections, procedures, timers, user, users}) => {
                             </Grid>
                         </Paper>
                     }
-                    {timers[scope] && timers[scope].length > 0 &&
+                    {tasks[scope] && tasks[scope].length > 0 &&
                         <Paper sx={{margin: '4px 4px 48px 4px', padding: '16px', width: '100%'}}>
                             <Grid container spacing={2}>
-                                <Grid item xs={12} key={'timers_intro'}>
+                                <Grid item xs={12} key={'tasks_intro'}>
                                     <Typography gutterBottom variant="button" component="h2" color="textSecondary">
-                                        {'Timers:'}
+                                        {'Tasks:'}
                                     </Typography>
                                 </Grid>
-                                {timers[scope].map((timer, index) => (
+                                {tasks[scope].map((task, index) => (
                                     <Grid item key={index}>
-                                        <TimerCard timer={timer} />
+                                        <TaskCard task={task} />
                                     </Grid>
                                 ))}
                             </Grid>
@@ -124,8 +124,8 @@ Welcome.propTypes = {
     /* Procedures properties */
     procedures: ProcedureStore.types.procedures.isRequired,
 
-    /* Timers properties */
-    timers: TimerStore.types.timers.isRequired,
+    /* Tasks properties */
+    tasks: TaskStore.types.tasks.isRequired,
 
     /* Users properties */
     user: ThingsdbStore.types.user.isRequired,

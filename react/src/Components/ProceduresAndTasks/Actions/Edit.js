@@ -3,7 +3,7 @@ import React from 'react';
 
 import { CardButton } from '../../Utils';
 import EditProcedureDialog from '../ProcedureDialogs/EditProcedureDialog';
-import EditTimerDialog from '../TimerDialogs/EditTimerDialog';
+import EditTaskDialog from '../TaskDialogs/EditTaskDialog';
 
 
 const Edit = ({item, scope, type}) => {
@@ -29,13 +29,13 @@ const Edit = ({item, scope, type}) => {
                 scope={scope}
             />
         ) : (
-            <EditTimerDialog
+            <EditTaskDialog
                 button={
                     <CardButton onClick={handleClickOpen} title="Edit" />
                 }
                 open={open}
                 onClose={handleClickClose}
-                timer={item}
+                task={item}
                 scope={scope}
             />
         )

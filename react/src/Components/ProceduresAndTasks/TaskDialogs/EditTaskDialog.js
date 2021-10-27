@@ -12,32 +12,32 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { CollectionActions, TimerActions } from '../../../Stores';
+import { CollectionActions, TaskActions } from '../../../Stores';
+import { EditTaskDialogTAG } from '../../../Constants/Tags';
 import { ErrorMsg, SimpleModal, VariablesArray } from '../../Utils';
-import { EditTimerDialogTAG } from '../../../Constants/Tags';
 import { NIL } from '../../../Constants/ThingTypes';
 
 
 const replaceNull = (items) => items.map(item => item === null ? NIL : item);
 
-const tag = EditTimerDialogTAG;
+const tag = EditTaskDialogTAG;
 
-const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
-    const [queryString, setQueryString] = React.useState('set_timer_args()');
+const EditTaskDialog = ({button, open, onClose, task, scope}) => {
+    const [queryString, setQueryString] = React.useState('set_task_args()');
     const [args, setArgs] = React.useState([]);
 
     const handleChangeArgs = React.useCallback((a) => {
         setArgs(a);
-        setQueryString(`set_timer_args(${timer.id}, [${replaceNull(a)}])`);
-    }, [timer.id]);
+        setQueryString(`set_task_args(${task.id}, [${replaceNull(a)}])`);
+    }, [task.id]);
 
     const handleRefresh = React.useCallback(() => {
-        TimerActions.getTimerArgs(
+        TaskActions.getTaskArgs(
             scope,
-            timer.id,
+            task.id,
             tag,
             handleChangeArgs);
-    }, [scope, timer.id, handleChangeArgs]);
+    }, [scope, task.id, handleChangeArgs]);
 
 
     React.useEffect(() => {
@@ -52,7 +52,7 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
             queryString,
             tag,
             () => {
-                TimerActions.getTimers(scope, tag);
+                TaskActions.getTasks(scope, tag);
                 onClose();
             }
         );
@@ -65,10 +65,10 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
             onClose={onClose}
             onOk={handleClickOk}
             maxWidth="md"
-            actionButtons={timer.with_side_effects?(
+            actionButtons={task.with_side_effects?(
                 <ListItem>
                     <Typography variant="caption" sx={{color: amber[700]}}>
-                        {'Note: this timer generates an event.'}
+                        {'Note: this task generates an event.'}
                     </Typography>
                 </ListItem>
             ):null}
@@ -77,17 +77,17 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
-                            {'Customizing ThingDB timer:'}
+                            {'Customizing ThingDB task:'}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {timer.id || ''}
+                            {task.id || ''}
                         </Typography>
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
                     <ErrorMsg tag={tag} />
                 </Grid>
-                {timer.definition ? (
+                {task.definition ? (
                     <Grid item xs={12}>
                         <List disablePadding dense>
                             <Collapse in={Boolean(queryString)} timeout="auto">
@@ -118,16 +118,16 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                             </Collapse>
                             <ListItem>
                                 <Typography variant="body1" >
-                                    {'Edit timer:'}
+                                    {'Edit task:'}
                                 </Typography>
                             </ListItem>
                             <ListItem>
                                 <TextField
                                     fullWidth
                                     multiline
-                                    name="timer"
+                                    name="task"
                                     type="text"
-                                    value={timer.definition}
+                                    value={task.definition}
                                     variant="standard"
                                     InputProps={{
                                         readOnly: true,
@@ -164,7 +164,7 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
                         <Grid item>
                             <Typography>
                                 <Box sx={{fontSize: 16, fontStyle: 'italic', m: 1, color: 'text.secondary'}}>
-                                    {'Timer cannot be edited.'}
+                                    {'Task cannot be edited.'}
                                 </Box>
                             </Typography>
                         </Grid>
@@ -175,17 +175,17 @@ const EditTimerDialog = ({button, open, onClose, timer, scope}) => {
     );
 };
 
-EditTimerDialog.defaultProps = {
+EditTaskDialog.defaultProps = {
     button: null,
-    timer: {},
+    task: {},
 };
 
-EditTimerDialog.propTypes = {
+EditTaskDialog.propTypes = {
     button: PropTypes.object,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    timer: PropTypes.object,
+    task: PropTypes.object,
     scope: PropTypes.string.isRequired,
 };
 
-export default EditTimerDialog;
+export default EditTaskDialog;

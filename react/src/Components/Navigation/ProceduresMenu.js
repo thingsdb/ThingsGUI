@@ -2,7 +2,7 @@ import {withVlow} from 'vlow';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import React from 'react';
 
-import {AddProcedureDialog} from '../ProceduresAndTimers';
+import {AddProcedureDialog} from '../ProceduresAndTasks';
 import {Menu, orderByName} from '../Utils';
 import {PROCEDURE_ROUTE} from '../../Constants/Routes';
 import {ProcedureActions, ProcedureStore} from '../../Stores';

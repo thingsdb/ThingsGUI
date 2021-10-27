@@ -3,7 +3,7 @@ import React from 'react';
 
 import { CardButton } from '../../Utils';
 import ViewProcedureDialog from '../ProcedureDialogs/ViewProcedureDialog';
-import ViewTimerDialog from '../TimerDialogs/ViewTimerDialog';
+import ViewTaskDialog from '../TaskDialogs/ViewTaskDialog';
 
 const View = ({item, scope, type}) => {
     const [open, setOpen] = React.useState(false);
@@ -26,14 +26,14 @@ const View = ({item, scope, type}) => {
             procedure={item}
         />
     ) : (
-        <ViewTimerDialog
+        <ViewTaskDialog
             button={
                 <CardButton onClick={handleClickOpen} title="View" />
             }
             open={open}
             onClose={handleClickClose}
             scope={scope}
-            timer={item}
+            task={item}
         />
     ));
 };

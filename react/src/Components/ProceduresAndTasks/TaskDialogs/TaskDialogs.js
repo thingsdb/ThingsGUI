@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import AddTimerDialog from './AddTimerDialog';
-import EditTimerDialog from './EditTimerDialog';
-import RunTimerDialog from './RunTimerDialog';
-import ViewTimerDialog from './ViewTimerDialog';
 import { EditProvider } from '../../Utils';
+import AddTaskDialog from './AddTaskDialog';
+import EditTaskDialog from './EditTaskDialog';
+import RunTaskDialog from './RunTaskDialog';
+import ViewTaskDialog from './ViewTaskDialog';
 
 
-const TimerDialogs = ({dialogsView, id, timers, scope, open, onClose}) => {
+const TaskDialogs = ({dialogsView, id, tasks, scope, open, onClose}) => {
     const {add, edit, run, view} = open;
     const handleCloseEdit = () => {
         onClose({edit: false});
@@ -26,26 +26,26 @@ const TimerDialogs = ({dialogsView, id, timers, scope, open, onClose}) => {
         onClose({view: false});
     };
 
-    let selectedTimer = id ? timers.find(i=>i.id == id):{};
+    let selectedTask = id ? tasks.find(i=>i.id == id):{};
 
     return (
         <React.Fragment>
-            {dialogsView.view && <ViewTimerDialog open={view} onClose={handleCloseView} timer={selectedTimer||{}} scope={scope} />}
-            {dialogsView.add && <AddTimerDialog open={add} onClose={handleCloseAdd} scope={scope} />}
-            {dialogsView.edit && <EditTimerDialog open={edit} onClose={handleCloseEdit} timer={selectedTimer||{}} scope={scope} />}
+            {dialogsView.view && <ViewTaskDialog open={view} onClose={handleCloseView} task={selectedTask||{}} scope={scope} />}
+            {dialogsView.add && <AddTaskDialog open={add} onClose={handleCloseAdd} scope={scope} />}
+            {dialogsView.edit && <EditTaskDialog open={edit} onClose={handleCloseEdit} task={selectedTask||{}} scope={scope} />}
             {dialogsView.run &&
                 <EditProvider>
-                    <RunTimerDialog open={run} onClose={handleCloseRun} timer={selectedTimer||{}} scope={scope} />
+                    <RunTaskDialog open={run} onClose={handleCloseRun} task={selectedTask||{}} scope={scope} />
                 </EditProvider>}
         </React.Fragment>
     );
 };
 
-TimerDialogs.defaultProps = {
+TaskDialogs.defaultProps = {
     id: null,
 };
 
-TimerDialogs.propTypes = {
+TaskDialogs.propTypes = {
     dialogsView: PropTypes.object.isRequired,
     id: PropTypes.number,
     onClose: PropTypes.func.isRequired,
@@ -55,8 +55,8 @@ TimerDialogs.propTypes = {
         run: PropTypes.bool,
         view: PropTypes.bool,
     }).isRequired,
-    timers: PropTypes.arrayOf(PropTypes.object).isRequired,
+    tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
     scope: PropTypes.string.isRequired,
 };
 
-export default TimerDialogs;
+export default TaskDialogs;

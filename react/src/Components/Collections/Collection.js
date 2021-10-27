@@ -1,14 +1,14 @@
-import {useLocation} from 'react-router-dom';
-import {withVlow} from 'vlow';
+import { useLocation } from 'react-router-dom';
+import { withVlow } from 'vlow';
 import Grid from '@mui/material/Grid';
 import React from 'react';
 
-import {ThingsdbActions, ThingsdbStore} from '../../Stores';
-import {CollectionConfig} from './Config';
-import {getIdFromPath, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Utils';
-import {Procedures, Timers} from '../ProceduresAndTimers';
-import {COLLECTION_SCOPE} from '../../Constants/Scopes';
-import {COLLECTION_ROUTE} from '../../Constants/Routes';
+import { ThingsdbActions, ThingsdbStore} from '../../Stores';
+import { CollectionConfig} from './Config';
+import { getIdFromPath, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Utils';
+import { Procedures, Tasks } from '../ProceduresAndTasks';
+import { COLLECTION_SCOPE } from '../../Constants/Scopes';
+import { COLLECTION_ROUTE } from '../../Constants/Routes';
 import CollectionTree from './Tree';
 import CollectionEnumsTypes from './EnumsTypes';
 
@@ -54,7 +54,7 @@ const Collection = ({collections}) => {
                                 />
                             </Grid>
                             <Grid item xs={12} sx={{paddingBottom: '8px'}}>
-                                <Timers
+                                <Tasks
                                     buttonsView={{add: true, edit: true, run: true, view: true}}
                                     dialogsView={{add: true, edit: true, run: true, view: true}}
                                     scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}

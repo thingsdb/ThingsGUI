@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { ProcedureActions, TimerActions } from '../../../Stores';
+import { ProcedureActions, TaskActions } from '../../../Stores';
 import { ErrorMsg, InputField, jsonify, QueryOutput, useEdit } from '../../Utils';
 import { RunProcedureTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
@@ -36,7 +36,7 @@ const Run = ({item, type}) => {
         if(type === 'procedure') {
             ProcedureActions.runProcedure(scope, item.name, jsonProof, tag, handleResult);
         } else {
-            TimerActions.runTimer(scope, item, tag, handleResult);
+            TaskActions.runTask(scope, item, tag, handleResult);
         }
     };
 

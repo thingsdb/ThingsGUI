@@ -1,10 +1,10 @@
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {CardButton, ErrorMsg, historyNavigate, SimpleModal} from '../../Utils';
-import {ProcedureActions, TimerActions} from '../../../Stores';
-import {RemoveProcedureTAG} from '../../../Constants/Tags';
+import { CardButton, ErrorMsg, historyNavigate, SimpleModal } from '../../Utils';
+import { ProcedureActions, TaskActions } from '../../../Stores';
+import { RemoveProcedureTAG } from '../../../Constants/Tags';
 
 
 const tag = RemoveProcedureTAG;
@@ -29,7 +29,7 @@ const Remove = ({item, scope, type}) => {
     };
 
     const handleClickOk = () => {
-        let fn = type === 'procedure' ? ProcedureActions.deleteProcedure : TimerActions.deleteTimer;
+        let fn = type === 'procedure' ? ProcedureActions.deleteProcedure : TaskActions.deleteTask;
         fn(scope, identifier, tag, () => historyNavigate(history, '/'));
     };
 

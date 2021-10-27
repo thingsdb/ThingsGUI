@@ -1,18 +1,18 @@
-import {withVlow} from 'vlow';
+import { withVlow } from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {TimerDialogs} from '.';
-import {TimerActions, TimerStore} from '../../Stores';
-import {TimersTAG} from '../../Constants/Tags';
-import {Card} from'./Utils';
-import {nextRunFn} from '../Utils';
-import {HarmonicCardHeader} from '../Utils';
+import { Card } from'./Utils';
+import { HarmonicCardHeader } from '../Utils';
+import { nextRunFn } from '../Utils';
+import { TaskActions, TaskStore } from '../../Stores';
+import { TaskDialogs } from '.';
+import { TasksTAG } from '../../Constants/Tags';
 
 
 const withStores = withVlow([{
-    store: TimerStore,
-    keys: ['timers']
+    store: TaskStore,
+    keys: ['tasks']
 }]);
 
 const header = [
@@ -21,9 +21,9 @@ const header = [
     {ky: 'next_run', label: 'Next run', fn: nextRunFn},
 ];
 
-const tag = TimersTAG;
+const tag = TasksTAG;
 
-const Timers = ({buttonsView, dialogsView, onCallback, timers, scope}) => {
+const Tasks = ({buttonsView, dialogsView, onCallback, tasks, scope}) => {
     const [identifier, setIdentifier] = React.useState(null);
     const [open, setOpen] = React.useState({
         add: false,
@@ -32,18 +32,18 @@ const Timers = ({buttonsView, dialogsView, onCallback, timers, scope}) => {
         view: false,
     });
 
-    const handleRefreshTimers = React.useCallback(() => {
-        TimerActions.getTimers(scope, TimersTAG);
+    const handleRefreshTasks = React.useCallback(() => {
+        TaskActions.getTasks(scope, TasksTAG);
     }, [scope]);
 
     React.useEffect(() => {
-        handleRefreshTimers();
-    }, [handleRefreshTimers]);
+        handleRefreshTasks();
+    }, [handleRefreshTasks]);
 
     const handleClick = (type, ident) => () => {
         setIdentifier(ident);
         setOpen({...open, [type]: true});
-        onCallback(type, (timers[scope] || []).find(i=>i.id == identifier));
+        onCallback(type, (tasks[scope] || []).find(i=>i.id == identifier));
     };
 
     const handleClickAdd = () => {
@@ -53,7 +53,7 @@ const Timers = ({buttonsView, dialogsView, onCallback, timers, scope}) => {
     };
 
     const handleClickDelete = (id, cb, tag) => {
-        TimerActions.deleteTimer(
+        TaskActions.deleteTask(
             scope,
             id,
             tag,
@@ -66,7 +66,7 @@ const Timers = ({buttonsView, dialogsView, onCallback, timers, scope}) => {
     };
 
     return (
-        <HarmonicCardHeader title="TIMERS" onRefresh={handleRefreshTimers} unmountOnExit>
+        <HarmonicCardHeader title="TASKS" onRefresh={handleRefreshTasks} unmountOnExit>
             <Card
                 buttonsView={buttonsView}
                 header={header}
@@ -74,26 +74,26 @@ const Timers = ({buttonsView, dialogsView, onCallback, timers, scope}) => {
                 onDelete={handleClickDelete}
                 onAdd={handleClickAdd}
                 onClick={handleClick}
-                list={timers[scope] || []}
+                list={tasks[scope] || []}
                 tag={tag}
             />
-            <TimerDialogs dialogsView={dialogsView} id={identifier} open={open} onClose={handleClose} timers={timers[scope]||[]} scope={scope} />
+            <TaskDialogs dialogsView={dialogsView} id={identifier} open={open} onClose={handleClose} tasks={tasks[scope]||[]} scope={scope} />
         </HarmonicCardHeader>
     );
 };
 
-Timers.defaultProps = {
+Tasks.defaultProps = {
     onCallback: () => null,
 };
 
-Timers.propTypes = {
+Tasks.propTypes = {
     buttonsView: PropTypes.object.isRequired,
     dialogsView: PropTypes.object.isRequired,
     onCallback: PropTypes.func,
     scope: PropTypes.string.isRequired,
 
-    /* timers properties */
-    timers: TimerStore.types.timers.isRequired,
+    /* tasks properties */
+    tasks: TaskStore.types.tasks.isRequired,
 };
 
-export default withStores(Timers);
+export default withStores(Tasks);

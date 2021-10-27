@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {Procedures} from '../../ProceduresAndTimers';
+import { Procedures } from '../../ProceduresAndTasks';
 
 const ProceduresEditor = ({onSetQueryInput, scope}) => {
 

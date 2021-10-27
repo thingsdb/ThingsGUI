@@ -3,7 +3,7 @@ import CollectionsMenu from './CollectionsMenu';
 import OverviewMenu from './OverviewMenu';
 import ProceduresMenu from './ProceduresMenu';
 import QueryEditorMenu from './QueryEditorMenu';
-import TimersMenu from './TimersMenu';
+import TasksMenu from './TasksMenu';
 import TopBar from './TopBar';
 import UsersMenu from './UsersMenu';
 
@@ -14,7 +14,7 @@ export {
     OverviewMenu,
     ProceduresMenu,
     QueryEditorMenu,
-    TimersMenu,
+    TasksMenu,
     TopBar,
     UsersMenu,
 };

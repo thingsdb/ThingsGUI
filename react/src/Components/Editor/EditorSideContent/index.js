@@ -2,10 +2,10 @@ import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Timers from './Timers';
-import Procedures from './Procedures';
+import { COLLECTION_SCOPE, NODE_SCOPE } from '../../../Constants/Scopes';
 import EnumsTypes from './EnumsTypes';
-import {COLLECTION_SCOPE, NODE_SCOPE} from '../../../Constants/Scopes';
+import Procedures from './Procedures';
+import Tasks from './Tasks';
 
 
 const EditorSideContent = ({scope, onSetQueryInput}) => (
@@ -16,7 +16,7 @@ const EditorSideContent = ({scope, onSetQueryInput}) => (
                     <Procedures onSetQueryInput={onSetQueryInput} scope={scope} />
                 </Grid>
                 <Grid item xs={12}>
-                    <Timers onSetQueryInput={onSetQueryInput} scope={scope} />
+                    <Tasks onSetQueryInput={onSetQueryInput} scope={scope} />
                 </Grid>
             </React.Fragment>
         )}

@@ -9,25 +9,25 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import {CollectionActions, TimerActions} from '../../../Stores';
-import {Closure, ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker, VariablesArray} from '../../Utils';
-import {AddTimerDialogTAG} from '../../../Constants/Tags';
-import {THINGS_DOC_NEW_TIMER} from '../../../Constants/Links';
-import {NIL} from '../../../Constants/ThingTypes';
+import { AddTaskDialogTAG } from '../../../Constants/Tags';
+import { Closure, ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker, VariablesArray } from '../../Utils';
+import { CollectionActions, TaskActions } from '../../../Stores';
+import { NIL } from '../../../Constants/ThingTypes';
+import { THINGS_DOC_NEW_TASK } from '../../../Constants/Links';
 
 
-const tag = AddTimerDialogTAG;
+const tag = AddTaskDialogTAG;
 
 const initState = {
     args: [],
     closure: '',
     error: '',
-    queryString: 'new_timer()',
+    queryString: 'new_task()',
     repeat: NIL,
     start: null,
 };
 
-const AddTimerDialog = ({open, onClose, scope}) => {
+const AddTaskDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState(initState);
     const {args, closure, error, queryString, repeat, start} = state;
 
@@ -37,19 +37,19 @@ const AddTimerDialog = ({open, onClose, scope}) => {
     }, [open]);
 
     const handleChangeStart = (s) => {
-        setState({...state, start: s, queryString: `new_timer(datetime(${s}), ${repeat}, ${closure}${args.length ? `, [${args}]`: ''})`});
+        setState({...state, start: s, queryString: `new_task(datetime(${s}), ${repeat}, ${closure}${args.length ? `, [${args}]`: ''})`});
     };
 
     const handleChangeRepeat = (r) => {
-        setState({...state, repeat: r, queryString: `new_timer(datetime(${start}), ${r}, ${closure}${args.length ? `, [${args}]`: ''})`});
+        setState({...state, repeat: r, queryString: `new_task(datetime(${start}), ${r}, ${closure}${args.length ? `, [${args}]`: ''})`});
     };
 
     const handleChangeClosure = (c) => {
-        setState({...state, closure: c, queryString: `new_timer(datetime(${start}), ${repeat}, ${c}${args.length ? `, [${args}]`: ''})`});
+        setState({...state, closure: c, queryString: `new_task(datetime(${start}), ${repeat}, ${c}${args.length ? `, [${args}]`: ''})`});
     };
 
     const handleChangeArgs = (a) => {
-        setState({...state, args: a, queryString: `new_timer(datetime(${start}), ${repeat}, ${closure}${a.length ? `, [${a}]`: ''})`});
+        setState({...state, args: a, queryString: `new_task(datetime(${start}), ${repeat}, ${closure}${a.length ? `, [${a}]`: ''})`});
     };
 
     const handleSwitchRepeat = (open) => {
@@ -70,7 +70,7 @@ const AddTimerDialog = ({open, onClose, scope}) => {
             queryString,
             tag,
             () => {
-                TimerActions.getTimers(scope, tag);
+                TaskActions.getTasks(scope, tag);
                 onClose();
             }
         );
@@ -88,10 +88,10 @@ const AddTimerDialog = ({open, onClose, scope}) => {
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
-                            {'Customizing ThingDB timer:'}
+                            {'Customizing ThingDB task:'}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {'Add new timer'}
+                            {'Add new task'}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -104,7 +104,7 @@ const AddTimerDialog = ({open, onClose, scope}) => {
                             <ListItemText
                                 primary="For more information, see:"
                                 secondary={
-                                    <Link target="_blank" href={THINGS_DOC_NEW_TIMER}>
+                                    <Link target="_blank" href={THINGS_DOC_NEW_TASK}>
                                         {'ThingsDocs'}
                                     </Link>
                                 }
@@ -169,10 +169,10 @@ const AddTimerDialog = ({open, onClose, scope}) => {
     );
 };
 
-AddTimerDialog.propTypes = {
+AddTaskDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
 };
 
-export default AddTimerDialog;
+export default AddTaskDialog;

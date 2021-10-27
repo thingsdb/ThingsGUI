@@ -8,13 +8,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import { TimerActions } from '../../../Stores';
+import { TaskActions } from '../../../Stores';
 import { ErrorMsg, SimpleModal, QueryOutput } from '../../Utils';
-import { RunTimerDialogTAG } from '../../../Constants/Tags';
+import { RunTaskDialogTAG } from '../../../Constants/Tags';
 
-const tag = RunTimerDialogTAG;
+const tag = RunTaskDialogTAG;
 
-const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
+const RunTaskDialog = ({button, open, onClose, task, scope}) => {
     const [output, setOutput] = React.useState('');
     const [tabIndex, setTabIndex] = React.useState(0);
 
@@ -31,9 +31,9 @@ const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
     };
 
     const handleClickOk = () => {
-        TimerActions.runTimer(
+        TaskActions.runTask(
             scope,
-            timer,
+            task,
             tag,
             handleResult,
         );
@@ -50,10 +50,10 @@ const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
             onClose={onClose}
             actionButtons={
                 <React.Fragment>
-                    {timer.with_side_effects&&(
+                    {task.with_side_effects&&(
                         <ListItem>
                             <Typography variant="caption" sx={{color: amber[700]}}>
-                                {'Note: this timer generates an event.'}
+                                {'Note: this task generates an event.'}
                             </Typography>
                         </ListItem>
                     )}
@@ -68,10 +68,10 @@ const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="body1" >
-                            {'Run  ThingDB timer:'}
+                            {'Run  ThingDB task:'}
                         </Typography>
                         <Typography variant="h4" color='primary' component='span'>
-                            {timer.id || ''}
+                            {task.id || ''}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -95,18 +95,18 @@ const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
     );
 };
 
-RunTimerDialog.defaultProps = {
+RunTaskDialog.defaultProps = {
     button: null,
-    timer: {},
+    task: {},
 };
 
 
-RunTimerDialog.propTypes = {
+RunTaskDialog.propTypes = {
     button: PropTypes.object,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    timer: PropTypes.object,
+    task: PropTypes.object,
     scope: PropTypes.string.isRequired,
 };
 
-export default RunTimerDialog;
+export default RunTaskDialog;

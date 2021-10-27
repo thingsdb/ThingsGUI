@@ -1,42 +1,42 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
-import {BaseStore} from './BaseStore';
-import {ErrorActions} from './ErrorStore';
+import { BaseStore } from './BaseStore';
+import { ErrorActions } from './ErrorStore';
 
-const TimerActions = Vlow.createActions([
-    'deleteTimer',
-    'getTimer',
-    'getTimerArgs',
-    'getTimers',
-    'runTimer',
+const TaskActions = Vlow.createActions([
+    'deleteTask',
+    'getTask',
+    'getTaskArgs',
+    'getTasks',
+    'runTask',
 ]);
 
 
-class TimerStore extends BaseStore {
+class TaskStore extends BaseStore {
 
     static types = {
-        timer: PropTypes.object,
-        timers: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
+        task: PropTypes.object,
+        tasks: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
     }
 
     static defaults = {
-        timer: {},
-        timers: {},
+        task: {},
+        tasks: {},
     }
 
     constructor() {
-        super(TimerActions);
-        this.state = TimerStore.defaults;
+        super(TaskActions);
+        this.state = TaskStore.defaults;
     }
 
-    onGetTimer(scope, timer, tag=null, cb=()=>null) {
-        const query = `timer_info(${timer})`;
+    onGetTask(scope, task, tag=null, cb=()=>null) {
+        const query = `task_info(${task})`;
         this.emit('query', {
             query,
             scope
         }).done((data) => {
             this.setState({
-                timer: data
+                task: data
             });
             cb(data);
         }).fail((event, status, message) => {
@@ -45,15 +45,15 @@ class TimerStore extends BaseStore {
         });
     }
 
-    onGetTimers(scope, tag,  cb=()=>null) {
-        const query = 'timers_info()';
+    onGetTasks(scope, tag,  cb=()=>null) {
+        const query = 'tasks_info()';
         this.emit('query', {
             query,
             scope
         }).done((data) => {
             this.setState(prevState => {
-                const timers = Object.assign({}, prevState.timers, {[scope]: data});
-                return {timers};
+                const tasks = Object.assign({}, prevState.tasks, {[scope]: data});
+                return {tasks};
             });
             cb(data);
         }).fail((event, status, message) => {
@@ -62,15 +62,15 @@ class TimerStore extends BaseStore {
         });
     }
 
-    onDeleteTimer(scope, timer, tag,  cb=()=>null) {
-        const query = `del_timer(${timer}); timers_info();`;
+    onDeleteTask(scope, task, tag,  cb=()=>null) {
+        const query = `del_task(${task}); tasks_info();`;
         this.emit('query', {
             query,
             scope
         }).done((data) => {
             this.setState(prevState => {
-                const timers = Object.assign({}, prevState.timers, {[scope]: data});
-                return {timers};
+                const tasks = Object.assign({}, prevState.tasks, {[scope]: data});
+                return {tasks};
             });
             cb(data);
         }).fail((event, status, message) => {
@@ -79,8 +79,8 @@ class TimerStore extends BaseStore {
         });
     }
 
-    onRunTimer(scope, timer, tag,  cb=()=>null) {
-        const query = timer.with_side_effects ? `wse(run(${timer.id}));` : `run(${timer.id});` ;
+    onRunTask(scope, task, tag,  cb=()=>null) {
+        const query = task.with_side_effects ? `wse(run(${task.id}));` : `run(${task.id});` ;
         this.emit('query', {
             query,
             scope
@@ -91,8 +91,8 @@ class TimerStore extends BaseStore {
         });
     }
 
-    onGetTimerArgs(scope, timer, tag, cb=()=>null) {
-        const query = `timer_args(${timer});`;
+    onGetTaskArgs(scope, task, tag, cb=()=>null) {
+        const query = `task_args(${task});`;
         this.emit('query', {
             query,
             scope
@@ -105,4 +105,4 @@ class TimerStore extends BaseStore {
     }
 }
 
-export {TimerActions, TimerStore};
+export {TaskActions, TaskStore};
