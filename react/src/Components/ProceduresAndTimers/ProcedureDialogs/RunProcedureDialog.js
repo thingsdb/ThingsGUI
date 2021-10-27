@@ -8,9 +8,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import { InputField, useEdit } from '../../Collections/CollectionsUtils';
 import { ProcedureActions } from '../../../Stores';
-import { addDoubleQuotesAroundKeys, changeSingleToDoubleQuotes, ErrorMsg, SimpleModal, QueryOutput } from '../../Util';
+import { ErrorMsg, InputField, jsonify, QueryOutput, SimpleModal, useEdit } from '../../Utils';
 import { RunProcedureDialogTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
 
@@ -19,23 +18,22 @@ const dataTypes = [BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIME
 
 const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const [output, setOutput] = React.useState('');
+    const [tabIndex, setTabIndex] = React.useState(0);
     const editState = useEdit()[0];
     const {val} = editState;
 
-
     React.useEffect(() => { // clean state
         setOutput('');
-    },
-    [open],
-    );
+    },[open]);
 
     const handleResult = (data) => {
         setOutput(data);
         const elmnt = document.getElementById('output');
         elmnt.scrollIntoView();
     };
+
     const handleClickOk = () => {
-        const jsonProof = changeSingleToDoubleQuotes(addDoubleQuotesAroundKeys(val)); // make it json proof
+        const jsonProof = jsonify(val); // make it json proof
         ProcedureActions.runProcedure(
             scope,
             procedure.name,
@@ -44,6 +42,11 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
             handleResult,
         );
     };
+
+    const handleChangeTab = (newValue) => {
+        setTabIndex(newValue);
+    };
+
 
     return (
         <SimpleModal
@@ -97,7 +100,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                                 <ListItemText primary="Output:" primaryTypographyProps={{variant: 'body1'}} />
                             </ListItem>
                             <div id="output">
-                                <QueryOutput output={output} />
+                                <QueryOutput output={output} tabIndex={tabIndex} onChangeTab={handleChangeTab} />
                             </div>
                         </React.Fragment>
                     </List>

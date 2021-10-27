@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
 import React from 'react';
 
-import { ErrorMsg, isObjectEmpty, SimpleModal } from '../../Util';
+import { ErrorMsg, isObjectEmpty, SimpleModal } from '../../Utils';
 import {ApplicationStore, ApplicationActions} from '../../../Stores';
 import {LoginTAG, LoginEditTAG} from '../../../Constants/Tags';
 import Edit from './Edit';

@@ -1,13 +1,13 @@
-import {useHistory} from 'react-router-dom';
-import {withVlow} from 'vlow';
-import Button from '@mui/material/Button';
+import { useHistory } from 'react-router-dom';
+import { withVlow } from 'vlow';
 import CardActions from '@mui/material/CardActions';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {CollectionActions, EditorActions, EditorStore, ErrorActions} from '../../Stores';
-import {historyGetQueryParam, QueryInput} from '../Util';
-import {EditorTAG} from '../../Constants/Tags';
+import { EditorActions, EditorStore, ErrorActions } from '../../Stores';
+import { EditorTAG } from '../../Constants/Tags';
+import { historyGetQueryParam, QueryInput } from '../Utils';
+import SubmitButton from './SubmitButton';
 
 
 const withStores = withVlow([{
@@ -17,7 +17,7 @@ const withStores = withVlow([{
 
 
 const tag = EditorTAG;
-const Editor = ({height, history, input, onExpand, onOutput, scope}) => {
+const Editor = ({height, history, input, onQuery}) => {
     let routerHistory = useHistory();
 
     const [query, setQuery] = React.useState(() => {
@@ -53,18 +53,8 @@ const Editor = ({height, history, input, onExpand, onOutput, scope}) => {
         setQuery(value);
     };
 
-    const handleOutput = (out) => {
-        onExpand(true);
-        onOutput(out);
-    };
-
-    const handleSubmit = () => {
-        onExpand(false);
-        setTimeout(()=> { // can result in -> Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function. in Editor (created by WithVlow()(Editor)) in WithVlow()(Editor) (created by App)
-            onOutput(null);
-            CollectionActions.query(scope, query, tag, handleOutput);
-        }, 100);
-
+    const handleSubmit = (withArgs) => {
+        onQuery(query, withArgs);
         EditorActions.setHistory(query);
     };
 
@@ -117,14 +107,7 @@ const Editor = ({height, history, input, onExpand, onOutput, scope}) => {
                 <QueryInput onChange={handleInput} input={queryInput} height={height-60} />
             </div>
             <CardActions disableSpacing sx={{padding: '8px 0px 0px 16px'}}>
-                <Button
-                    onClick={handleSubmit}
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                >
-                    {'Submit'}
-                </Button>
+                <SubmitButton onClickSubmit={handleSubmit} />
             </CardActions>
         </React.Fragment>
     );
@@ -133,9 +116,7 @@ const Editor = ({height, history, input, onExpand, onOutput, scope}) => {
 Editor.propTypes = {
     height: PropTypes.number.isRequired,
     input: PropTypes.string.isRequired,
-    onExpand: PropTypes.func.isRequired,
-    onOutput: PropTypes.func.isRequired,
-    scope: PropTypes.string.isRequired,
+    onQuery: PropTypes.func.isRequired,
 
     /* Editor properties */
     history: EditorStore.types.history.isRequired,

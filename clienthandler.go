@@ -75,15 +75,15 @@ type procedure struct {
 	Name      string `json:"name"`
 }
 
-// Data struct that received
+// Data struct that is received
 type dataReq struct {
-	Arguments map[string]interface{} `json:"arguments"`
-	Blob      map[string]string      `json:"blob"`
-	Id        string                 `json:"id"`
-	Procedure procedure              `json:"procedure"`
-	Query     string                 `json:"query"`
-	Scope     string                 `json:"scope"`
-	Wait      int                    `json:"wait"`
+	Arguments string            `json:"arguments"`
+	Blob      map[string]string `json:"blob"`
+	Id        string            `json:"id"`
+	Procedure procedure         `json:"procedure"`
+	Query     string            `json:"query"`
+	Scope     string            `json:"scope"`
+	Wait      int               `json:"wait"`
 }
 
 func connectedResp() connResp {
@@ -528,6 +528,18 @@ func (client *client) saveLastUsedConnection(data loginData) error {
 
 // query sends a query to ThingsDB and receives a result
 func (client *client) query(data dataReq) (int, interface{}, message) {
+	var arguments map[string]interface{}
+	if data.Arguments != "" {
+		var args interface{}
+		decoder := json.NewDecoder(strings.NewReader(data.Arguments))
+		if err := decoder.Decode(&args); err != nil {
+			message := msg(err)
+			return message.Status, "", message
+		}
+		args = convertFloatToInt(args)
+		arguments = args.(map[string]interface{})
+	}
+
 	for k, v := range data.Blob {
 		decodedBlob, err := base64.StdEncoding.DecodeString(v)
 		if err != nil {
@@ -535,16 +547,16 @@ func (client *client) query(data dataReq) (int, interface{}, message) {
 			return message.Status, "", message
 		}
 
-		if data.Arguments == nil {
-			data.Arguments = make(map[string]interface{})
+		if arguments == nil {
+			arguments = make(map[string]interface{})
 		}
-		data.Arguments[k] = decodedBlob
+		arguments[k] = decodedBlob
 	}
 
 	resp, err := client.connection.Query(
 		data.Scope,
 		data.Query,
-		data.Arguments)
+		arguments)
 
 	if err != nil {
 		message := createThingsDBError(err)

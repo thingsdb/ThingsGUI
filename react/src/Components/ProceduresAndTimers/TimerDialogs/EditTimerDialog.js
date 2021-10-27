@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { CollectionActions, TimerActions } from '../../../Stores';
-import { ErrorMsg, SimpleModal, VariablesArray } from '../../Util';
+import { ErrorMsg, SimpleModal, VariablesArray } from '../../Utils';
 import { EditTimerDialogTAG } from '../../../Constants/Tags';
 import { NIL } from '../../../Constants/ThingTypes';
 

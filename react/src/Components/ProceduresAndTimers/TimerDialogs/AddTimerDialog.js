@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import {CollectionActions, TimerActions} from '../../../Stores';
-import {Closure, ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker, VariablesArray} from '../../Util';
+import {Closure, ErrorMsg, SimpleModal, SwitchOpen, TimePicker, TimePeriodPicker, VariablesArray} from '../../Utils';
 import {AddTimerDialogTAG} from '../../../Constants/Tags';
 import {THINGS_DOC_NEW_TIMER} from '../../../Constants/Links';
 import {NIL} from '../../../Constants/ThingTypes';

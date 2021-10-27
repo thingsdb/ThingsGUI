@@ -9,13 +9,14 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { TimerActions } from '../../../Stores';
-import { ErrorMsg, SimpleModal, QueryOutput } from '../../Util';
+import { ErrorMsg, SimpleModal, QueryOutput } from '../../Utils';
 import { RunTimerDialogTAG } from '../../../Constants/Tags';
 
 const tag = RunTimerDialogTAG;
 
 const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
     const [output, setOutput] = React.useState('');
+    const [tabIndex, setTabIndex] = React.useState(0);
 
     React.useEffect(() => { // clean state
         setOutput('');
@@ -36,6 +37,10 @@ const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
             tag,
             handleResult,
         );
+    };
+
+    const handleChangeTab = (newValue) => {
+        setTabIndex(newValue);
     };
 
     return (
@@ -80,7 +85,7 @@ const RunTimerDialog = ({button, open, onClose, timer, scope}) => {
                                 <ListItemText primary="Output:" />
                             </ListItem>
                             <div id="output">
-                                <QueryOutput output={output} />
+                                <QueryOutput output={output} tabIndex={tabIndex} onChangeTab={handleChangeTab} />
                             </div>
                         </React.Fragment>
                     </List>

@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-import { ErrorMsg, historyNavigate, SimpleModal } from '../../Util';
+import { ErrorMsg, historyNavigate, SimpleModal } from '../../Utils';
 import { ThingsdbActions } from '../../../Stores';
 import { RemoveCollectionTAG } from '../../../Constants/Tags';
 

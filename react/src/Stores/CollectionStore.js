@@ -8,14 +8,16 @@ import {ErrorActions} from './ErrorStore';
 import {THING_KEY} from '../Constants/CharacterKeys';
 import {COLLECTION_SCOPE} from '../Constants/Scopes';
 // importing any method from Util creates a webpack error.
-// import {depthOf} from '../Components/Util';
+// import {depthOf} from '../Components/Utils';
 
 
 const CollectionActions = Vlow.createActions([
     'cleanupThings',
     'cleanupTmp',
     'decCounter',
+    'disableSubmit',
     'download',
+    'enableSubmit',
     'getThings',
     'incCounter',
     'query',
@@ -30,11 +32,13 @@ class CollectionStore extends BaseStore {
     static types = {
         things: PropTypes.object,
         thingCounters: PropTypes.object,
+        canSubmit: PropTypes.bool,
     }
 
     static defaults = {
         things: {},
         thingCounters: {},
+        canSubmit: true,
     }
 
     constructor() {
@@ -124,14 +128,15 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQuery(scope, query, tag, cb, thingId=null, blob=null) {
+    onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null) {
         if(thingId){
             query = `${query} #${thingId}`;
         }
         this.emit('query', {
             query,
             scope,
-            blob
+            blob,
+            arguments: args
         }).done((data) => {
             if(thingId){
                 this.setState(prevState => {
@@ -157,6 +162,14 @@ class CollectionStore extends BaseStore {
         this.emit('cleanupTmp').done((_data) => null).fail((event, status, message) => {
             ErrorActions.setToastError(message.Log);
         });
+    }
+
+    onDisableSubmit() {
+        this.setState({canSubmit: false});
+    }
+
+    onEnableSubmit() {
+        this.setState({canSubmit: true});
     }
 }
 

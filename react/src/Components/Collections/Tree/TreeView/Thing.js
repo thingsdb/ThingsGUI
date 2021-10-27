@@ -2,10 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { ARRAY, THING } from '../../../../Constants/ThingTypes';
-import { checkType, fancyName, thingValue, TreeBranch } from '../../../Util';
+import { checkType, EditProvider, fancyName, thingValue, TreeBranch } from '../../../Utils';
 import { COLLECTION_SCOPE } from '../../../../Constants/Scopes';
 import { CollectionActions } from '../../../../Stores/CollectionStore';
-import { EditProvider } from '../../CollectionsUtils';
 import { THING_KEY } from '../../../../Constants/CharacterKeys';
 import { ThingActionsDialog } from '../TreeActions';
 import ThingRestrict from './ThingRestrict';
@@ -33,31 +32,31 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
         setShow(false);
     };
 
-    const renderChildren = () => {
-        return (
-            <ThingRestrict
-                thing={currThing}
-                onChildren={(k, v, i, isArray) => (
-                    <Thing
-                        inset
-                        collection={collection}
-                        things={things}
-                        thing={v}
-                        parent={{
-                            id: thingId,
-                            name: child.name,
-                            type: type,
-                            isTuple: isTuple,
-                        }}
-                        child={{
-                            name: fancyName(isArray?child.name:k, i),
-                            index: i,
-                        }}
-                    />
-                )}
-            />
-        );
-    };
+    const onChildren = React.useCallback((k, v, i, isArray) => (
+        <Thing
+            inset
+            collection={collection}
+            things={things}
+            thing={v}
+            parent={{
+                id: thingId,
+                name: child.name,
+                type: type,
+                isTuple: isTuple,
+            }}
+            child={{
+                name: fancyName(isArray?child.name:k, i),
+                index: i,
+            }}
+        />
+    ), [child.name, collection, isTuple, thingId, things, type]);
+
+    const renderChildren = () => (
+        <ThingRestrict
+            thing={currThing}
+            onChildren={onChildren}
+        />
+    );
 
     const handleOpenClose = (open) => {
         if(thing && thing[THING_KEY]) {

@@ -1,13 +1,13 @@
-import {withVlow} from 'vlow';
+import { withVlow } from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {TimerDialogs} from '.';
-import {TimerActions, TimerStore} from '../../Stores';
-import {TimersTAG} from '../../Constants/Tags';
-import {Card} from'./Utils';
-import {nextRunFn} from '../Util';
-import {HarmonicCardHeader} from '../Util';
+import { TimerDialogs } from '.';
+import { TimerActions, TimerStore } from '../../Stores';
+import { TimersTAG } from '../../Constants/Tags';
+import { Card } from'./Utils';
+import { nextRunFn } from '../Utils';
+import { HarmonicCardHeader } from '../Utils';
 
 
 const withStores = withVlow([{
@@ -74,7 +74,6 @@ const Timers = ({buttonsView, dialogsView, onCallback, timers, scope}) => {
                 onDelete={handleClickDelete}
                 onAdd={handleClickAdd}
                 onClick={handleClick}
-                onDialogs={(name, open, handleClose) => <TimerDialogs id={name} open={open} onClose={handleClose} timers={timers[scope]||[]} scope={scope} />}
                 list={timers[scope] || []}
                 tag={tag}
             />

@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Arrow from './Components/Arrow';
-import Node from './Components/Node';
+import { Arrow, Node} from './Utils';
 
 const NodeGraph = ({width, height, radius, data, streamInfo}) => {
 

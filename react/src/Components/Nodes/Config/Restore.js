@@ -7,7 +7,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import {ErrorMsg, SimpleModal, TwoLabelSwitch} from '../../Util';
+import {ErrorMsg, SimpleModal, TwoLabelSwitch} from '../../Utils';
 import {ApplicationActions, NodesActions} from '../../../Stores';
 import {RestoreNodeTAG} from '../../../Constants/Tags';
 

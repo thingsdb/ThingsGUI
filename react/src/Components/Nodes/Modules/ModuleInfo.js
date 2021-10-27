@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography';
 
 import { ModuleInfoTAG } from '../../../Constants/Tags';
 import { NodesActions, NodesStore } from '../../../Stores';
-import { SimpleModal, ErrorMsg, LocalMsg } from '../../Util';
+import { SimpleModal, ErrorMsg, LocalMsg } from '../../Utils';
 import { THINGS_DOC_RENAME_MODULE, THINGS_DOC_SET_MODULE_CONFIG, THINGS_DOC_SET_MODULE_SCOPE } from '../../../Constants/Links';
 import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
 

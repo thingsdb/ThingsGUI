@@ -3,7 +3,7 @@ import MoreIcon from '@mui/icons-material/MoreHoriz';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {Info, SimpleModal} from '../../Util';
+import {Info, SimpleModal} from '../../Utils';
 
 const BackupInfo = ({header, item}) => {
     const [show, setShow] = React.useState(false);

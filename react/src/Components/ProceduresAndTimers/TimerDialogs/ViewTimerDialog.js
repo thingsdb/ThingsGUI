@@ -10,7 +10,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { nextRunFn, SimpleModal } from '../../Util';
+import { nextRunFn, SimpleModal } from '../../Utils';
 import { ViewTimerDialogTAG } from '../../../Constants/Tags';
 import { TimerActions } from '../../../Stores';
 

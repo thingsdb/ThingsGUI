@@ -11,7 +11,7 @@ import React from 'react';
 import Slide from '@mui/material/Slide';
 
 import {CollectionActions} from '../../../Stores';
-import {HarmonicCard} from '../../Util';
+import {HarmonicCard} from '../../Utils';
 import {TopBar} from '../../Navigation';
 import Things from './TreeView';
 

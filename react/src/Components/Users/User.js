@@ -6,7 +6,7 @@ import React from 'react';
 import {UserAccess} from './Config';
 import Tokens from './Tokens';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores';
-import {getIdFromPath, isObjectEmpty, TitlePage} from '../Util';
+import {getIdFromPath, isObjectEmpty, TitlePage} from '../Utils';
 import {USER_ROUTE} from '../../Constants/Routes';
 
 const withStores = withVlow([{

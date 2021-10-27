@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {ThingsdbActions} from '../../../Stores/ThingsdbStore';
-import {WarnPopover} from '../../Util';
+import {WarnPopover} from '../../Utils';
 
 const RemoveExpired = ({tag}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);

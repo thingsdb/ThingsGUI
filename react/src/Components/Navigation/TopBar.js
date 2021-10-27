@@ -17,7 +17,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 
 import { THINGS_DOC } from '../../Constants/Links';
-import { TopBarMenu } from '../Util';
+import { TopBarMenu } from '../Utils';
 import { ApplicationActions, ThingsdbStore } from '../../Stores';
 // import packageJson from '../../'; TODO does not find package.json
 

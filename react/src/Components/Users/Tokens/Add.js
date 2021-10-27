@@ -8,7 +8,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Switch from '@mui/material/Switch';
 
-import { ErrorMsg, SimpleModal, TimePicker } from '../../Util';
+import { ErrorMsg, SimpleModal, TimePicker } from '../../Utils';
 import {ThingsdbActions} from '../../../Stores';
 import {AddTokenTAG} from '../../../Constants/Tags';
 

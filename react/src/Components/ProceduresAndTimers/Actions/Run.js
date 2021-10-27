@@ -12,8 +12,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { ProcedureActions, TimerActions } from '../../../Stores';
-import { ErrorMsg, QueryOutput, changeSingleToDoubleQuotes, addDoubleQuotesAroundKeys } from '../../Util';
-import { useEdit, InputField } from '../../Collections/CollectionsUtils';
+import { ErrorMsg, InputField, jsonify, QueryOutput, useEdit } from '../../Utils';
 import { RunProcedureTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
 import { THINGSDB_SCOPE } from '../../../Constants/Scopes';
@@ -25,6 +24,7 @@ const scope = THINGSDB_SCOPE;
 
 const Run = ({item, type}) => {
     const [output, setOutput] = React.useState('');
+    const [tabIndex, setTabIndex] = React.useState(0);
     const editState = useEdit()[0];
     const {val} = editState;
 
@@ -32,13 +32,16 @@ const Run = ({item, type}) => {
         setOutput(data);
     };
     const handleClickRun = () => {
-        const jsonProof = changeSingleToDoubleQuotes(addDoubleQuotesAroundKeys(val)); // make it json proof
-
+        const jsonProof = jsonify(val); // make it json proof
         if(type === 'procedure') {
             ProcedureActions.runProcedure(scope, item.name, jsonProof, tag, handleResult);
         } else {
             TimerActions.runTimer(scope, item, tag, handleResult);
         }
+    };
+
+    const handleChangeTab = (newValue) => {
+        setTabIndex(newValue);
     };
 
     return (
@@ -79,7 +82,7 @@ const Run = ({item, type}) => {
                     }
                 />
                 <CardActions disableSpacing>
-                    <QueryOutput output={output} />
+                    <QueryOutput output={output} tabIndex={tabIndex} onChangeTab={handleChangeTab} />
                 </CardActions>
                 <ErrorMsg tag={tag} />
             </Card>

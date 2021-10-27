@@ -3,10 +3,10 @@ import PersonIcon from '@mui/icons-material/Person';
 import React from 'react';
 
 import { Add } from '../Users/Config';
-import { Menu, orderByName } from '../Util';
+import { Menu, orderByName } from '../Utils';
 import { ThingsdbActions, ThingsdbStore } from '../../Stores';
 import { USER_ROUTE } from '../../Constants/Routes';
-import { isObjectEmpty } from '../Util';
+import { isObjectEmpty } from '../Utils';
 
 const withStores = withVlow([{
     store: ThingsdbStore,

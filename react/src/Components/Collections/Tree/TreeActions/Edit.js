@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL } from '../../../../Constants/ThingTypes';
-import { InputField } from '../../CollectionsUtils';
+import { InputField } from '../../../Utils';
 import BuildQueryString from './BuildQueryString';
 import PropInit from './PropInit';
 import TypeInit from './TypeInit';
@@ -52,7 +52,7 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
                 />
             </ListItem>
             <ListItem>
-                <Grid container item xs={12} spacing={1} alignItems="center">
+                <Grid container item xs={12} spacing={1} justifyContent="flex-start">
                     {addNewProperty && (
                         <Grid item xs={3}>
                             <PropInit

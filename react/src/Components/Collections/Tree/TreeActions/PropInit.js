@@ -26,6 +26,7 @@ const PropInit = ({onChange, input, thing}) => {
             type="text"
             value={input}
             variant="standard"
+            fullWidth
         />
     );
 };

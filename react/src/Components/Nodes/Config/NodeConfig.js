@@ -5,7 +5,7 @@ import React from 'react';
 import moment from 'moment';
 
 import { Buttons } from '../Utils';
-import { Info, scaleToBinBytes } from '../../Util';
+import { Info, scaleToBinBytes } from '../../Utils';
 import { NodesActions, NodesStore } from '../../../Stores';
 import { THINGS_DOC_NODE_INFO } from '../../../Constants/Links';
 import Loglevel from './Loglevel';

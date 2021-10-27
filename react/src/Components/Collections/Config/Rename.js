@@ -1,12 +1,12 @@
+import { withVlow } from 'vlow';
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import {withVlow} from 'vlow';
 
-import { ErrorMsg, SimpleModal } from '../../Util';
-import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
-import {RenameCollectionTAG} from '../../../Constants/Tags';
+import { ErrorMsg, SimpleModal } from '../../Utils';
+import { RenameCollectionTAG } from '../../../Constants/Tags';
+import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
 
 const withStores = withVlow([{
     store: ThingsdbStore,

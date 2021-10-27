@@ -6,7 +6,7 @@ import CollectionInfo from './CollectionInfo';
 import ExportCollection from './Export';
 import RemoveCollection from './Remove';
 import RenameCollection from './Rename';
-import {HarmonicCardContent} from '../../Util';
+import {HarmonicCardContent} from '../../Utils';
 
 
 const CollectionConfig = ({collection}) => {

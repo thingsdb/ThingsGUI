@@ -2,7 +2,6 @@ import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Timers from './Timers';
 import Procedures from './Procedures';
 import EnumsTypes from './EnumsTypes';
 import {COLLECTION_SCOPE, NODE_SCOPE} from '../../../Constants/Scopes';
@@ -11,14 +10,9 @@ import {COLLECTION_SCOPE, NODE_SCOPE} from '../../../Constants/Scopes';
 const EditorSideContent = ({scope, onSetQueryInput}) => (
     <React.Fragment>
         {scope.includes(NODE_SCOPE) ? null : (
-            <React.Fragment>
-                <Grid item xs={12}>
-                    <Procedures onSetQueryInput={onSetQueryInput} scope={scope} />
-                </Grid>
-                <Grid item xs={12}>
-                    <Timers onSetQueryInput={onSetQueryInput} scope={scope} />
-                </Grid>
-            </React.Fragment>
+            <Grid item xs={12}>
+                <Procedures onSetQueryInput={onSetQueryInput} scope={scope} />
+            </Grid>
         )}
         {scope.includes(COLLECTION_SCOPE) ? (
             <EnumsTypes onSetQueryInput={onSetQueryInput} scope={scope} />

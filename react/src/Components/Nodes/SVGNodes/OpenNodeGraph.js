@@ -8,7 +8,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import Tooltip from '@mui/material/Tooltip';
 
 import { NodesActions, NodesStore } from '../../../Stores';
-import { SimpleModal, StartStopPolling } from '../../Util';
+import { SimpleModal, StartStopPolling } from '../../Utils';
 import NodeGraph from './NodeGraph';
 
 

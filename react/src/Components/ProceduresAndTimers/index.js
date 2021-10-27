@@ -1,5 +1,5 @@
-import {AddProcedureDialog, ProcedureDialogs} from './ProcedureDialogs';
-import {AddTimerDialog, TimerDialogs} from './TimerDialogs';
+import { AddProcedureDialog, ProcedureDialogs } from './ProcedureDialogs';
+import { AddTimerDialog, TimerDialogs } from './TimerDialogs';
 import Procedure from './Procedure';
 import Procedures from './Procedures';
 import Timer from './Timer';

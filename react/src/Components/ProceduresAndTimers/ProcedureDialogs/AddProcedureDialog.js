@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import {AddProcedureDialogTAG} from '../../../Constants/Tags';
-import {Closure, ErrorMsg, SimpleModal} from '../../Util';
+import {Closure, ErrorMsg, SimpleModal} from '../../Utils';
 import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {THINGS_DOC_NEW_PROCEDURE} from '../../../Constants/Links';
 

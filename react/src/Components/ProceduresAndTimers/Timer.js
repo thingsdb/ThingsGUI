@@ -1,12 +1,12 @@
-import {useLocation} from 'react-router-dom';
-import {withVlow} from 'vlow';
+import { useLocation } from 'react-router-dom';
+import { withVlow } from 'vlow';
 import React from 'react';
 
-import {getIdFromPath, isObjectEmpty} from '../Util';
-import {Page} from './Utils';
-import {THINGSDB_SCOPE} from '../../Constants/Scopes';
-import {TIMER_ROUTE} from '../../Constants/Routes';
-import {TimerActions, TimerStore} from '../../Stores';
+import { getIdFromPath, isObjectEmpty } from '../Utils';
+import { Page } from './Utils';
+import { THINGSDB_SCOPE } from '../../Constants/Scopes';
+import { TIMER_ROUTE } from '../../Constants/Routes';
+import { TimerActions, TimerStore } from '../../Stores';
 
 const withStores = withVlow([{
     store: TimerStore,

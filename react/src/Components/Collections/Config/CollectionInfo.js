@@ -1,4 +1,4 @@
-import { Info } from '../../Util';
+import { Info } from '../../Utils';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';

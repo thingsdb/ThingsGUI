@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import { ErrorMsg, SimpleModal } from '../../Util';
+import { ErrorMsg, SimpleModal } from '../../Utils';
 import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
 import { AddUserTAG } from '../../../Constants/Tags';
 

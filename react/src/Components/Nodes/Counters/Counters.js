@@ -7,7 +7,7 @@ import React from 'react';
 
 import { Buttons } from '../Utils';
 import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
-import { Info, scaleToBinBytes } from '../../Util';
+import { Info, scaleToBinBytes } from '../../Utils';
 import { NodesActions, NodesStore } from '../../../Stores';
 import { THINGS_DOC_COUNTERS } from '../../../Constants/Links';
 import CountersReset from './CountersReset';
@@ -47,10 +47,6 @@ const header = [
         {ky: 'changes_unaligned', label: 'Changes unaligned'},
         {ky: 'longest_change_duration', label: 'Longest change duration', fn: (d) => d && d.toFixed(3) + ' s'},
         {ky: 'average_change_duration', label: 'Average change duration', fn: (d) => d && d.toFixed(3) + ' s'},
-    ]},
-    {ky: 'title6', title: 'TIMERS', labels: [
-        {ky: 'timers_success', label: 'Successful timers'},
-        {ky: 'timers_with_error', label: 'Timers with error'},
     ]}
 ];
 

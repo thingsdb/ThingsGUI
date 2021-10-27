@@ -1,0 +1,98 @@
+import PropTypes from 'prop-types';
+import React from 'react';
+
+import { ARRAY, THING } from '../../../Constants/ThingTypes';
+
+
+const setState = (state, type, value, identifier=null, parent=null) => {
+    let data = {};
+    if(identifier !== null) {
+        if(parent === THING) {
+            if (typeof state[type] === 'object' ) {
+                data = {[type]: {...state[type], [identifier]: value}};
+            } else {
+                data = {[type]: {[identifier]: value}};
+            }
+        } else if(parent === ARRAY) {
+            if (Array.isArray(state[type])) {
+                let copy = [...state[type]];
+                copy[identifier] = value;
+                data = {[type]: copy};
+            } else {
+                data = {[type]: [value]};
+            }
+        }
+    } else {
+        data = {[type]: value};
+    }
+
+    return({...data});
+};
+
+const EditActions = {
+    update: (dispatch, type, value, identifier=null, parent=null) => {
+        dispatch((state) => {
+            return(setState(state, type, value, identifier, parent));
+        });
+    },
+    updateBlob: (dispatch, data, blob) => {
+        dispatch((state) => {
+            let updatedBlob = Object.entries(blob).reduce((res, [k, v]) => {
+                if (data.some((item) => item.includes(k))) {
+                    res[k] = v;
+                }
+                return(res);
+            }, {});
+
+            return {blob: {...state.blob, ...updatedBlob}};
+        });
+    },
+    resetState: (dispatch) => {
+        dispatch(() => ({
+            blob: {},
+            error: '',
+            query: '',
+            val: '',
+        }));
+    },
+};
+
+const initialState = {
+    blob: {},
+    error: '',
+    query: '',
+    val: '',
+};
+
+const StoreContext = React.createContext(initialState);
+
+const useEdit = () => {
+    const {state, dispatch} = React.useContext(StoreContext);
+    return [state, dispatch];
+};
+
+const reducer = (state, action) => {
+    const update = action(state);
+    return { ...state, ...update };
+};
+
+const EditProvider = ({ children }) => {
+    const [state, dispatch] = React.useReducer(reducer, initialState);
+    const memoValue = React.useMemo(() => ({state, dispatch}), [state, dispatch]);
+
+    return (
+        <StoreContext.Provider value={memoValue}>
+            {children}
+        </StoreContext.Provider>
+    );
+};
+
+EditProvider.propTypes = {
+    children: PropTypes.node,
+};
+
+EditProvider.defaultProps = {
+    children: null,
+};
+
+export {EditActions, EditProvider, useEdit};

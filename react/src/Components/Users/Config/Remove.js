@@ -2,7 +2,7 @@ import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {CardButton, ErrorMsg, historyNavigate, SimpleModal} from '../../Util';
+import {CardButton, ErrorMsg, historyNavigate, SimpleModal} from '../../Utils';
 import {ThingsdbActions} from '../../../Stores';
 import {RemoveUserTAG} from '../../../Constants/Tags';
 

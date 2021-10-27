@@ -6,7 +6,7 @@ import React from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Tooltip from '@mui/material/Tooltip';
 
-import { StartStopPolling } from '../../Util';
+import { StartStopPolling } from '../../Utils';
 
 const Buttons = ({extraButtons, link, onRefresh}) => (
     <Grid item container xs={12}>

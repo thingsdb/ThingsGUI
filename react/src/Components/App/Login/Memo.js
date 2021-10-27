@@ -5,7 +5,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 
-import { SimpleModal } from '../../Util';
+import { SimpleModal } from '../../Utils';
 import {ApplicationActions} from '../../../Stores';
 import {LoginTAG} from '../../../Constants/Tags';
 

@@ -5,7 +5,7 @@ import AddTimerDialog from './AddTimerDialog';
 import EditTimerDialog from './EditTimerDialog';
 import RunTimerDialog from './RunTimerDialog';
 import ViewTimerDialog from './ViewTimerDialog';
-import {EditProvider} from '../../Collections/CollectionsUtils';
+import { EditProvider } from '../../Utils';
 
 
 const TimerDialogs = ({dialogsView, id, timers, scope, open, onClose}) => {

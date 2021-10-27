@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import {EditActions, useEdit} from '../../CollectionsUtils';
+import {EditActions, useEdit} from '../../../Utils';
 import {SET, THING} from '../../../../Constants/ThingTypes';
 
 const TypeInit = ({type, customTypes, dataTypes, onChange, input}) => {
@@ -11,13 +11,7 @@ const TypeInit = ({type, customTypes, dataTypes, onChange, input}) => {
     const handleOnChangeType = ({target}) => {
         const {value} = target;
         onChange(value);
-        EditActions.update(dispatch, {
-            query: '',
-            val: '',
-            blob: {},
-            array: [],
-            error: '',
-        });
+        EditActions.resetState(dispatch);
     };
 
     return(

@@ -8,7 +8,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 
 import {AddModuleTAG} from '../../../Constants/Tags';
-import {ErrorMsg, SimpleModal, SwitchOpen} from '../../Util';
+import {ErrorMsg, SimpleModal, SwitchOpen} from '../../Utils';
 import {NodesActions} from '../../../Stores';
 import {THINGS_DOC_NEW_MODULE} from '../../../Constants/Links';
 

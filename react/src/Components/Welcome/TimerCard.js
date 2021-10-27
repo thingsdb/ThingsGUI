@@ -9,7 +9,7 @@ import TimerIcon from '@mui/icons-material/Timer';
 import Typography from '@mui/material/Typography';
 
 import { TIMER_ROUTE } from '../../Constants/Routes';
-import { nextRunFn } from '../Util';
+import { nextRunFn } from '../Utils';
 
 
 const TimerCard = ({timer}) => (
