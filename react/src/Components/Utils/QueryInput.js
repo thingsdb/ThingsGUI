@@ -22,6 +22,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         ...Object.keys(Language.node),
         ...Object.keys(Language.thingsdb),
         ...Object.keys(Language.procedures),
+        ...Object.keys(Language.timers),
         ...Object.keys(Language.types.bytes),
         ...Object.keys(Language.types.closure),
         ...Object.keys(Language.types.datetime),
@@ -275,6 +276,14 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 }))
             );
             suggestions.push(...Object.entries(Language.procedures)
+                .map(([k, v]) => ({
+                    label: k,
+                    kind: monaco.languages.CompletionItemKind.Function,
+                    insertText: k,
+                    documentation: v,
+                }))
+            );
+            suggestions.push(...Object.entries(Language.timers)
                 .map(([k, v]) => ({
                     label: k,
                     kind: monaco.languages.CompletionItemKind.Function,

@@ -1,13 +1,13 @@
-import { withVlow } from 'vlow';
+import {withVlow} from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { TimerDialogs } from '.';
-import { TimerActions, TimerStore } from '../../Stores';
-import { TimersTAG } from '../../Constants/Tags';
-import { Card } from'./Utils';
-import { nextRunFn } from '../Utils';
-import { HarmonicCardHeader } from '../Utils';
+import {TimerDialogs} from '.';
+import {TimerActions, TimerStore} from '../../Stores';
+import {TimersTAG} from '../../Constants/Tags';
+import {Card} from'./Utils';
+import {nextRunFn} from '../Utils';
+import {HarmonicCardHeader} from '../Utils';
 
 
 const withStores = withVlow([{

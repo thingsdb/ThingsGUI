@@ -6,10 +6,11 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { getGreetingTime, TitlePage3 } from '../Utils';
-import { ProcedureActions, ProcedureStore, ThingsdbActions, ThingsdbStore } from '../../Stores';
+import { ProcedureActions, ProcedureStore, ThingsdbActions, ThingsdbStore, TimerActions, TimerStore } from '../../Stores';
 import { THINGSDB_SCOPE } from '../../Constants/Scopes';
 import CollectionCard from './CollectionCard';
 import ProcedureCard from './ProcedureCard';
+import TimerCard from './TimerCard';
 import UserCard from './UserCard';
 
 
@@ -19,16 +20,20 @@ const withStores = withVlow([{
 }, {
     store: ProcedureStore,
     keys: ['procedures']
+}, {
+    store: TimerStore,
+    keys: ['timers']
 }]);
 
 
 const scope = THINGSDB_SCOPE;
 
-const Welcome = ({collections, procedures, user, users}) => {
+const Welcome = ({collections, procedures, timers, user, users}) => {
 
     React.useEffect(() => {
         ThingsdbActions.getCollections();
         ProcedureActions.getProcedures();
+        TimerActions.getTimers();
         ThingsdbActions.getUsers();
         ThingsdbActions.getUser();
     }, []);
@@ -89,6 +94,22 @@ const Welcome = ({collections, procedures, user, users}) => {
                             </Grid>
                         </Paper>
                     }
+                    {timers[scope] && timers[scope].length > 0 &&
+                        <Paper sx={{margin: '4px 4px 48px 4px', padding: '16px', width: '100%'}}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} key={'timers_intro'}>
+                                    <Typography gutterBottom variant="button" component="h2" color="textSecondary">
+                                        {'Timers:'}
+                                    </Typography>
+                                </Grid>
+                                {timers[scope].map((timer, index) => (
+                                    <Grid item key={index}>
+                                        <TimerCard timer={timer} />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </Paper>
+                    }
                 </React.Fragment>
             }
         />
@@ -102,6 +123,9 @@ Welcome.propTypes = {
 
     /* Procedures properties */
     procedures: ProcedureStore.types.procedures.isRequired,
+
+    /* Timers properties */
+    timers: TimerStore.types.timers.isRequired,
 
     /* Users properties */
     user: ThingsdbStore.types.user.isRequired,
