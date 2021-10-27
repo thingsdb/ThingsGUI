@@ -29,11 +29,13 @@ const Page = ({item, itemKey, scope, type}) => {
             title={item[itemKey] || ''}
             content={
                 <React.Fragment>
-                    <Grid container spacing={1} item md={8} sm={12}>
-                        <EditProvider>
-                            <Run item={item} type={type} />
-                        </EditProvider>
-                    </Grid>
+                    {type === 'procedure' && (
+                        <Grid container spacing={1} item md={8} sm={12}>
+                            <EditProvider>
+                                <Run item={item} type={type} />
+                            </EditProvider>
+                        </Grid>
+                    )}
                     <Grid container item md={4} sm={12} spacing={1} justifyContent="center" alignItems="center" >
                         {buttons.map(button => (
                             <Grid key={button.name} item>

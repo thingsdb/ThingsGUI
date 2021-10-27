@@ -11,6 +11,7 @@ const TaskActions = Vlow.createActions([
     'getTasks',
 ]);
 
+const queryGetTasks = 'tasks = tasks(); tasks.map(|t| {id: t.id(), at: t.at(), owner: t.owner(), closure: t.closure(), err: t.err(), args: t.args()});';
 
 class TaskStore extends BaseStore {
 
@@ -30,9 +31,8 @@ class TaskStore extends BaseStore {
     }
 
     onGetTasks(scope, tag,  cb=()=>null) {
-        const query = 'tasks = tasks(); tasks.map(|t| {id: t.id(), at: t.at(), owner: t.owner(), closure: t.closure(), err: t.err(), args: t.args()});';
         this.emit('query', {
-            query,
+            query: queryGetTasks,
             scope
         }).done((data) => {
             this.setState(prevState => {
@@ -47,7 +47,7 @@ class TaskStore extends BaseStore {
     }
 
     onDeleteTask(scope, taskId, tag,  cb=()=>null) {
-        const query = `task(${taskId}).del(); tasks();`;
+        const query = `task(${taskId}).del(); ${queryGetTasks}`;
         this.emit('query', {
             query,
             scope
