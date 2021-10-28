@@ -7,7 +7,7 @@ import React from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import TextField from '@mui/material/TextField';
 
-import { nextRunFn } from '../../Utils';
+import { nextRunFn, useThingsError } from '../../Utils';
 import { TaskActions } from '../../../Stores';
 import { ViewTaskDialogTAG } from '../../../Constants/Tags';
 
@@ -15,6 +15,7 @@ import { ViewTaskDialogTAG } from '../../../Constants/Tags';
 const tag = ViewTaskDialogTAG;
 
 const ViewTask = ({scope, task}) => {
+    const customizedErr = useThingsError(task.err || '')[1];
     const [args, setArgs] = React.useState([]);
 
     const handleRefresh = React.useCallback(() => {
@@ -54,7 +55,7 @@ const ViewTask = ({scope, task}) => {
             <ListItem>
                 <ListItemText
                     primary="Error"
-                    secondary={task.err || '-'}
+                    secondary={!task.err ? '-' : customizedErr}
                 />
             </ListItem>
             <ListItem

@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { Card } from'./Utils';
-import { HarmonicCardHeader } from '../Utils';
-import { nextRunFn } from '../Utils';
+import { HarmonicCardHeader, nextRunFn, LocalErrorMsg } from '../Utils';
 import { TaskActions, TaskStore } from '../../Stores';
 import { TaskDialogs } from '.';
 import { TasksTAG } from '../../Constants/Tags';
@@ -18,8 +17,7 @@ const withStores = withVlow([{
 const header = [
     {ky: 'id', label: 'ID'},
     {ky: 'at', label: 'At', fn: nextRunFn},
-    {ky: 'owner', label: 'Owner'},
-    {ky: 'err', label: 'Error', fn: (e) => e || '-'},
+    {ky: 'err', label: 'Error', fn: (e) => !e ? '-' : e === 'success' ? e : <LocalErrorMsg msg={e} useAsPopUp />},
 ];
 
 const tag = TasksTAG;

@@ -4,4 +4,4 @@ import ViewTask from './ViewTask';
 export {
     ViewProcedure,
     ViewTask
-}
+};
