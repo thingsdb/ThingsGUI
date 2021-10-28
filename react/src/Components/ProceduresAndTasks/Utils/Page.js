@@ -10,10 +10,6 @@ const Page = ({item, itemKey, scope, type}) => {
 
     const buttons = [
         {
-            name: 'view',
-            component: <View item={item} scope={scope} type={type} />
-        },
-        {
             name: 'edit',
             component: <Edit item={item} scope={scope} type={type} />
         },
@@ -29,13 +25,14 @@ const Page = ({item, itemKey, scope, type}) => {
             title={item[itemKey] || ''}
             content={
                 <React.Fragment>
-                    {type === 'procedure' && (
-                        <Grid container spacing={1} item md={8} sm={12}>
+                    <Grid container spacing={1} item md={8} sm={12}>
+                        <View item={item} scope={scope} type={type} />
+                        {type === 'procedure' && (
                             <EditProvider>
                                 <Run item={item} type={type} />
                             </EditProvider>
-                        </Grid>
-                    )}
+                        )}
+                    </Grid>
                     <Grid container item md={4} sm={12} spacing={1} justifyContent="center" alignItems="center" >
                         {buttons.map(button => (
                             <Grid key={button.name} item>

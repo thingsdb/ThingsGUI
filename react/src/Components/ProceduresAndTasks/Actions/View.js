@@ -1,47 +1,31 @@
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CardButton } from '../../Utils';
-import ViewProcedureDialog from '../ProcedureDialogs/ViewProcedureDialog';
-import ViewTaskDialog from '../TaskDialogs/ViewTaskDialog';
+import { THINGSDB_SCOPE } from '../../../Constants/Scopes';
+import { ViewProcedure, ViewTask } from '../Content';
 
-const View = ({item, scope, type}) => {
-    const [open, setOpen] = React.useState(false);
+const scope = THINGSDB_SCOPE;
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+const View = ({item, type}) => (
+    <Grid item xs={12}>
+        <Card>
+            <CardContent>
+                {type === 'procedure' ? <ViewProcedure procedure={item} /> : <ViewTask scope={scope} task={item} />}
+            </CardContent>
+        </Card>
+    </Grid>
+);
 
-    const handleClickClose = () => {
-        setOpen(false);
-    };
-
-    return( type === 'procedure' ? (
-        <ViewProcedureDialog
-            button={
-                <CardButton onClick={handleClickOpen} title="View" />
-            }
-            open={open}
-            onClose={handleClickClose}
-            procedure={item}
-        />
-    ) : (
-        <ViewTaskDialog
-            button={
-                <CardButton onClick={handleClickOpen} title="View" />
-            }
-            open={open}
-            onClose={handleClickClose}
-            scope={scope}
-            task={item}
-        />
-    ));
+View.defaultProps = {
+    item: {},
 };
 
 View.propTypes = {
-    item: PropTypes.object.isRequired,
+    item: PropTypes.object,
     type: PropTypes.string.isRequired,
-    scope: PropTypes.string.isRequired,
 };
 
 export default View;
