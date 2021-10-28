@@ -99,6 +99,21 @@ export default {
             'trim_right': 'Returns a new string with whitespace characters removed from the the end of a string.',
             'upper': 'Return a new string in which all case-based characters are in upper case.',
         },
+        task: {
+            'id': 'Returns the Task ID.',
+            'at': 'Returns the Task start datetime value.',
+            'owner': 'Returns the associated user (username) to the task.',
+            'closure': 'Returns the closure attached to the Task.',
+            'err': 'Returns the error value attached. nil if the task has never ran before, the error is success (0) when the last run was successful.',
+            'args': 'Returns a list with arguments attached to the Task.',
+            'set_args': 'Replace the Task arguments.',
+            'set_owner': 'Replace the Task owner.',
+            'cancel': 'Cancel the Task. The task remains registered except the run_at value will be set to zero 0.',
+            'del': 'Cancels the task if not cancelled already and delete (unsubscribe) the task. All properties of a task will be set to null. Thus, if a value is attached somewhere as a value, it will be presented as task:nil and no other functions will work on this task.',
+            'again_at': 'Schedule a new time for the task (at least one minute after current run).',
+            'again_in': 'Shortcut for again_at(task.at().move(....)).',
+
+        },
         thing: {
             'assign': 'Copies properties from a given thing. Existing properties will be overwritten and new properties will be added. If this function is used on an instance of a custom Type, all properties of the source must be valid according the type specification, otherwise an exception will be raised and no properties will be copied.',
             'clear': 'Removes all properties from a thing.',
