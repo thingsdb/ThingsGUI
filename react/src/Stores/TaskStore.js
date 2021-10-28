@@ -64,7 +64,7 @@ class TaskStore extends BaseStore {
     }
 
     onCancelTask(scope, taskId, tag,  cb=()=>null) {
-        const query = `task(${taskId}).cancel(); tasks();`;
+        const query = `task(${taskId}).cancel(); ${queryGetTasks}`;
         this.emit('query', {
             query,
             scope

@@ -22,8 +22,8 @@ const TasksEditor = ({onSetQueryInput, scope}) => {
 
     return (
         <Tasks
-            buttonsView={{add: true, edit: false, run: true, view: true}}
-            dialogsView={{add: false, edit: false, run: false, view: true}}
+            buttonsView={{add: true, cancel: true, edit: false, run: true, view: true}}
+            dialogsView={{add: false, cancel: true, edit: false, run: false, view: true}}
             onCallback={handleCallback}
             scope={scope}
         />

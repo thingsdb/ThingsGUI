@@ -41,3 +41,4 @@ export const ModuleInfoTAG = 'ModuleInfoTAG';
 export const AddTaskDialogTAG = 'AddTaskDialogTAG';
 export const EditTaskDialogTAG = 'EditTaskDialogTAG';
 export const ViewTaskDialogTAG = 'ViewTaskDialogTAG';
+export const CancelTaskTAG = 'CancelTaskTAG';

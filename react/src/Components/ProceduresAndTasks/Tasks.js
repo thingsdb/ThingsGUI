@@ -28,6 +28,7 @@ const Tasks = ({buttonsView, dialogsView, onCallback, tasks, scope}) => {
     const [identifier, setIdentifier] = React.useState(null);
     const [open, setOpen] = React.useState({
         add: false,
+        cancel: false,
         edit: false,
         view: false,
     });

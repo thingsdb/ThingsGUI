@@ -22,8 +22,8 @@ const ProceduresEditor = ({onSetQueryInput, scope}) => {
 
     return (
         <Procedures
-            buttonsView={{add: true, edit: false, run: true, view: true}}
-            dialogsView={{add: false, edit: false, run: false, view: true}}
+            buttonsView={{add: true, cancel: false, edit: false, run: true, view: true}}
+            dialogsView={{add: false, cancel: false, edit: false, run: false, view: true}}
             onCallback={handleCallback}
             scope={scope}
         />

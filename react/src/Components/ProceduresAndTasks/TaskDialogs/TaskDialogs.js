@@ -2,12 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import AddTaskDialog from './AddTaskDialog';
+import CancelTaskDialog from './CancelTaskDialog';
 import EditTaskDialog from './EditTaskDialog';
 import ViewTaskDialog from './ViewTaskDialog';
 
 
 const TaskDialogs = ({dialogsView, id, tasks, scope, open, onClose}) => {
-    const {add, edit, view} = open;
+    const {add, cancel, edit, view} = open;
     const handleCloseEdit = () => {
         onClose({edit: false});
     };
@@ -20,6 +21,10 @@ const TaskDialogs = ({dialogsView, id, tasks, scope, open, onClose}) => {
         onClose({view: false});
     };
 
+    const handleCloseCancel = () => {
+        onClose({cancel: false});
+    };
+
     let selectedTask = id ? tasks.find(i=>i.id == id):{};
 
     return (
@@ -27,6 +32,7 @@ const TaskDialogs = ({dialogsView, id, tasks, scope, open, onClose}) => {
             {dialogsView.view && <ViewTaskDialog open={view} onClose={handleCloseView} task={selectedTask||{}} scope={scope} />}
             {dialogsView.add && <AddTaskDialog open={add} onClose={handleCloseAdd} scope={scope} />}
             {dialogsView.edit && <EditTaskDialog open={edit} onClose={handleCloseEdit} task={selectedTask||{}} scope={scope} />}
+            {dialogsView.cancel && <CancelTaskDialog open={cancel} onClose={handleCloseCancel} task={selectedTask||{}} scope={scope} />}
         </React.Fragment>
     );
 };
@@ -41,6 +47,7 @@ TaskDialogs.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.shape({
         add: PropTypes.bool,
+        cancel: PropTypes.bool,
         edit: PropTypes.bool,
         run: PropTypes.bool,
         view: PropTypes.bool,

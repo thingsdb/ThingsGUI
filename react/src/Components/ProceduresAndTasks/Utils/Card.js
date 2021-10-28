@@ -1,3 +1,4 @@
+import CancelIcon from '@mui/icons-material/Cancel';
 import EditIcon from '@mui/icons-material/Edit';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -26,6 +27,12 @@ const Card = ({buttonsView, header, itemKey, list, onAdd, onClick, onDelete, tag
             b.push({
                 icon:  <EditIcon fontSize="small" />,
                 onClick: onClick('edit', ident),
+            });
+        }
+        if (bv.cancel) {
+            b.push({
+                icon:  <CancelIcon fontSize="small" />,
+                onClick: onClick('cancel', ident),
             });
         }
 
