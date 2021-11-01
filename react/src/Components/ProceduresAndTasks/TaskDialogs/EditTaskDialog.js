@@ -12,9 +12,10 @@ import Typography from '@mui/material/Typography';
 
 import { CollectionActions, TaskActions } from '../../../Stores';
 import { EditTaskDialogTAG } from '../../../Constants/Tags';
-import { ErrorMsg, SimpleModal, SwitchOpen, VariablesArray } from '../../Utils';
+import { Closure, EditProvider, ErrorMsg, SimpleModal, SwitchOpen } from '../../Utils';
 import { NIL } from '../../../Constants/ThingTypes';
 import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
+import SetArguments from './SetArguments';
 
 
 const withStores = withVlow([{
@@ -22,41 +23,32 @@ const withStores = withVlow([{
     keys: ['users']
 }]);
 
-
 const replaceNull = (items) => (items||[]).map(item => item === null ? NIL : item);
-
 const tag = EditTaskDialogTAG;
 
 const EditTaskDialog = ({button, open, onClose, task, scope, users}) => {
-    const [queryString, setQueryString] = React.useState({set_args: '', set_owner: ''});
+    const [queryString, setQueryString] = React.useState({set_args: '', set_closure: '', set_owner: ''});
     const [args, setArgs] = React.useState([]);
+    const [blob, setBlob] = React.useState({});
     const [owner, setOwner] = React.useState('');
 
-    const handleChangeArgs = React.useCallback((a) => {
-        setArgs(a);
-        setQueryString(query => ({...query, set_args: `task(${task.id}).set_args([${replaceNull(a)}]);`}));
-    }, [task.id]);
-
-    const handleChangeOwner = React.useCallback((o) => {
-        setOwner(o);
-        setQueryString(query => ({...query, set_owner: `task(${task.id}).set_owner('${o}');`}));
-    }, [task.id]);
+    let qstr = `${queryString.set_args}${queryString.set_closure}${queryString.set_owner}`;
 
     const handleRefreshArgs = React.useCallback(() => {
         TaskActions.getArgs(
             scope,
             task.id,
             tag,
-            handleChangeArgs);
-    }, [scope, task.id, handleChangeArgs]);
+            setArgs);
+    }, [scope, task.id]);
 
     const handleRefreshOwner= React.useCallback(() => {
         TaskActions.getOwner(
             scope,
             task.id,
             tag,
-            handleChangeOwner);
-    }, [scope, task.id, handleChangeOwner]);
+            setOwner);
+    }, [scope, task.id]);
 
 
     React.useEffect(() => {
@@ -67,16 +59,19 @@ const EditTaskDialog = ({button, open, onClose, task, scope, users}) => {
         }
     }, [open, handleRefreshArgs, handleRefreshOwner]);
 
-    const handleClickOk = () => {
-        CollectionActions.query(
-            scope,
-            `${queryString.set_args} ${queryString.set_owner}`,
-            tag,
-            () => {
-                TaskActions.getTasks(scope, tag);
-                onClose();
-            }
-        );
+    const handleChangeArgs = React.useCallback((args, blob) => {
+        setArgs(args);
+        setBlob(blob);
+        setQueryString(query => ({...query, set_args: `task(${task.id}).set_args([${replaceNull(args)}]);`}));
+    },[task.id]);
+
+    const handleChangeClosure = (c) => {
+        setQueryString(query => ({...query, set_closure: ` task(${task.id}).set_closure('${c}');`}));
+    };
+
+    const handleChangeOwner = (o) => {
+        setOwner(o);
+        setQueryString(query => ({...query, set_owner: ` task(${task.id}).set_owner('${o}');`}));
     };
 
     const handleChangeSelect = ({target}) => {
@@ -86,17 +81,40 @@ const EditTaskDialog = ({button, open, onClose, task, scope, users}) => {
 
     const handleSwitchArgs = (open) => {
         if(!open) {
-            handleChangeArgs('');
+            setArgs('');
+            setBlob({});
+            setQueryString(query => ({...query, set_args: ''}));
+        }
+    };
+
+
+    const handleSwitchClosure = (open) => {
+        if(!open) {
+            setQueryString(query => ({...query, set_closure: ''}));
         }
     };
 
     const handleSwitchOwner = (open) => {
         if(!open) {
-            handleChangeOwner('');
+            setOwner('');
+            setQueryString(query => ({...query, set_owner: ''}));
         }
     };
 
-    let qstr = `${queryString.set_args} ${queryString.set_owner}`;
+    const handleClickOk = () => {
+        CollectionActions.query(
+            scope,
+            `${queryString.set_args} ${queryString.set_owner}`,
+            tag,
+            () => {
+                TaskActions.getTasks(scope, tag);
+                onClose();
+            },
+            null,
+            blob,
+        );
+    };
+
     return (
         <SimpleModal
             button={button}
@@ -181,8 +199,23 @@ const EditTaskDialog = ({button, open, onClose, task, scope, users}) => {
                                 </IconButton>
                             }
                         >
-                            <SwitchOpen label="Change arguments" onChange={handleSwitchArgs}>
-                                <VariablesArray input={replaceNull(args)} onChange={handleChangeArgs} />
+                            <SwitchOpen label={`Change arguments: ${args}`} onChange={handleSwitchArgs}>
+                                <EditProvider>
+                                    <SetArguments closure={task.closure || ''} onChange={handleChangeArgs} />
+                                </EditProvider>
+                            </SwitchOpen>
+                        </ListItem>
+                        <ListItem
+                            secondaryAction={
+                                <IconButton edge="end" aria-label="refresh" onClick={handleRefreshArgs}>
+                                    <RefreshIcon color="primary" />
+                                </IconButton>
+                            }
+                        >
+                            <SwitchOpen label="Change closure" onChange={handleSwitchClosure}>
+                                <EditProvider>
+                                    <Closure input={task.closure} onChange={handleChangeClosure} />
+                                </EditProvider>
                             </SwitchOpen>
                         </ListItem>
                         <ListItem
@@ -192,7 +225,7 @@ const EditTaskDialog = ({button, open, onClose, task, scope, users}) => {
                                 </IconButton>
                             }
                         >
-                            <SwitchOpen label="Change owner" onChange={handleSwitchOwner}>
+                            <SwitchOpen label={`Change owner: ${task.owner}`} onChange={handleSwitchOwner}>
                                 <TextField
                                     autoFocus
                                     fullWidth

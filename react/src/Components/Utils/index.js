@@ -176,10 +176,6 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
-// str = str.replace(/'/g, '"');
-// return str.replace(/\w*:/g, function(matched){
-//     return `"${matched}":`;
-// });
 const jsonify = (str) => {
     return str.replace(/\w+(?=:)|'/g, function(matched){
         return matched === '\'' ? '"' : `"${matched}"`;

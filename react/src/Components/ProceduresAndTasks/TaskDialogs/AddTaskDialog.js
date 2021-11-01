@@ -10,15 +10,17 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { AddTaskDialogTAG } from '../../../Constants/Tags';
-import { Closure, ErrorMsg, SimpleModal, SwitchOpen, TimePicker, VariablesArray } from '../../Utils';
+import { Closure, EditProvider, ErrorMsg, SimpleModal, SwitchOpen, TimePicker } from '../../Utils';
 import { CollectionActions, TaskActions } from '../../../Stores';
 import { THINGS_DOC_TASK } from '../../../Constants/Links';
+import SetArguments from './SetArguments';
 
 
 const tag = AddTaskDialogTAG;
 
 const initState = {
     args: [],
+    blob: {},
     closure: '',
     error: '',
     queryString: 'task()',
@@ -27,7 +29,7 @@ const initState = {
 
 const AddTaskDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState(initState);
-    const {args, closure, error, queryString, start} = state;
+    const {args, blob, closure, error, queryString, start} = state;
 
 
     React.useEffect(() => { // clean state
@@ -42,9 +44,9 @@ const AddTaskDialog = ({open, onClose, scope}) => {
         setState({...state, closure: c, queryString: `task(datetime(${start}), ${c}${args.length ? `, [${args}]`: ''})`});
     };
 
-    const handleChangeArgs = (a) => {
-        setState({...state, args: a, queryString: `task(datetime(${start}), ${closure}${a.length ? `, [${a}]`: ''})`});
-    };
+    const handleChangeArgs = React.useCallback((args, blob) => {
+        setState(state => ({...state, args: args, blob: blob, queryString: `task(datetime(${start}), ${closure}${args.length ? `, [${args}]`: ''})`}));
+    }, [closure, start]);
 
     const handleSwitchArgs = (open) => {
         if(!open) {
@@ -60,7 +62,9 @@ const AddTaskDialog = ({open, onClose, scope}) => {
             () => {
                 TaskActions.getTasks(scope, tag);
                 onClose();
-            }
+            },
+            null,
+            blob
         );
     };
 
@@ -142,7 +146,9 @@ const AddTaskDialog = ({open, onClose, scope}) => {
                         </ListItem>
                         <ListItem>
                             <SwitchOpen label="Add arguments [optional]" onChange={handleSwitchArgs}>
-                                <VariablesArray input={args} onChange={handleChangeArgs} />
+                                <EditProvider>
+                                    <SetArguments closure={closure} onChange={handleChangeArgs} />
+                                </EditProvider>
                             </SwitchOpen>
                         </ListItem>
                     </List>

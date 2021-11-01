@@ -36,15 +36,14 @@ const EditActions = {
         });
     },
     updateBlob: (dispatch, data, blob) => {
-        dispatch((state) => {
+        dispatch(() => {
             let updatedBlob = Object.entries(blob).reduce((res, [k, v]) => {
                 if (data.some((item) => item.includes(k))) {
                     res[k] = v;
                 }
                 return(res);
             }, {});
-
-            return {blob: {...state.blob, ...updatedBlob}};
+            return {blob: updatedBlob};
         });
     },
     resetState: (dispatch) => {
