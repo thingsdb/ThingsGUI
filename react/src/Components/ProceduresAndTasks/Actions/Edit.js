@@ -1,50 +1,30 @@
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CardButton } from '../../Utils';
-import EditProcedureDialog from '../ProcedureDialogs/EditProcedureDialog';
-import EditTaskDialog from '../TaskDialogs/EditTaskDialog';
+import { THINGSDB_SCOPE } from '../../../Constants/Scopes';
+import { EditProcedure, EditTask } from '../Content';
 
+const scope = THINGSDB_SCOPE;
 
-const Edit = ({item, scope, type}) => {
-    const [open, setOpen] = React.useState(false);
+const Edit = ({item, type}) => (
+    <Grid item xs={12}>
+        <Card>
+            <CardContent>
+                {type === 'procedure' ? <EditProcedure procedure={item} scope={scope} /> : <EditTask scope={scope} task={item} />}
+            </CardContent>
+        </Card>
+    </Grid>
+);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClickClose = () => {
-        setOpen(false);
-    };
-
-    return(
-        type === 'procedure' ? (
-            <EditProcedureDialog
-                button={
-                    <CardButton onClick={handleClickOpen} title="Edit" />
-                }
-                open={open}
-                onClose={handleClickClose}
-                procedure={item}
-                scope={scope}
-            />
-        ) : (
-            <EditTaskDialog
-                button={
-                    <CardButton onClick={handleClickOpen} title="Edit" />
-                }
-                open={open}
-                onClose={handleClickClose}
-                task={item}
-                scope={scope}
-            />
-        )
-    );
+Edit.defaultProps = {
+    item: {},
 };
 
 Edit.propTypes = {
-    item: PropTypes.object.isRequired,
-    scope: PropTypes.string.isRequired,
+    item: PropTypes.object,
     type: PropTypes.string.isRequired,
 };
 

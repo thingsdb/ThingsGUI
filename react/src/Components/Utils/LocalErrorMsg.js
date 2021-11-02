@@ -4,7 +4,7 @@ import React from 'react';
 import WarningIcon from '@mui/icons-material/Warning';
 
 import LocalMsg from './LocalMsg';
-import useThingsError from './useThingsError';
+import { useThingsError } from './useThingsError';
 
 
 const LocalErrorMsg = ({msg, onClose, useAsPopUp}) => {

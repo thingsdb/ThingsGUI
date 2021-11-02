@@ -3,7 +3,7 @@ import React from 'react';
 
 import AddTaskDialog from './AddTaskDialog';
 import CancelTaskDialog from './CancelTaskDialog';
-import EditTaskDialog from './EditTaskDialog';
+import ViewEditTaskDialog from './ViewEditTaskDialog';
 import ViewTaskDialog from './ViewTaskDialog';
 
 
@@ -31,7 +31,7 @@ const TaskDialogs = ({dialogsView, id, tasks, scope, open, onClose}) => {
         <React.Fragment>
             {dialogsView.view && <ViewTaskDialog open={view} onClose={handleCloseView} task={selectedTask||{}} scope={scope} />}
             {dialogsView.add && <AddTaskDialog open={add} onClose={handleCloseAdd} scope={scope} />}
-            {dialogsView.edit && <EditTaskDialog open={edit} onClose={handleCloseEdit} task={selectedTask||{}} scope={scope} />}
+            {dialogsView.edit && <ViewEditTaskDialog open={edit} onClose={handleCloseEdit} task={selectedTask||{}} scope={scope} />}
             {dialogsView.cancel && <CancelTaskDialog open={cancel} onClose={handleCloseCancel} task={selectedTask||{}} scope={scope} />}
         </React.Fragment>
     );

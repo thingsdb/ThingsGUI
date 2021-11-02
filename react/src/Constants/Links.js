@@ -14,6 +14,7 @@ export const THINGS_DOC_SET_MODULE_CONFIG = 'https://docs.thingsdb.net/v1/things
 export const THINGS_DOC_MODULE_INFO = 'https://docs.thingsdb.net/v1/thingsdb-api/module_info/';
 export const THINGS_DOC_NEW_PROCEDURE = 'https://docs.thingsdb.net/v1/procedures-api/new_procedure/';
 export const THINGS_DOC_TASK = 'https://docs.thingsdb.net/v1/tasks-api/task/';
+export const THINGS_DOC_SET_ARGS = 'https://docs.thingsdb.net/v1/data-types/task/set_args';
 export const THINGS_DOC_ERRORS = 'https://docs.thingsdb.net/v1/errors/';
 export const THINGS_DOC_ASSERT_ERROR = 'https://docs.thingsdb.net/v1/errors/assert_err/';
 export const THINGS_DOC_NODE_ERROR = 'https://docs.thingsdb.net/v1/errors/node_err/';

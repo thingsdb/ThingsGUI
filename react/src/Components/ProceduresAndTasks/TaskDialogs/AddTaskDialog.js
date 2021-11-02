@@ -13,7 +13,7 @@ import { AddTaskDialogTAG } from '../../../Constants/Tags';
 import { Closure, EditProvider, ErrorMsg, SimpleModal, SwitchOpen, TimePicker } from '../../Utils';
 import { CollectionActions, TaskActions } from '../../../Stores';
 import { THINGS_DOC_TASK } from '../../../Constants/Links';
-import SetArguments from './SetArguments';
+import { SetArguments } from '../Utils';
 
 
 const tag = AddTaskDialogTAG;

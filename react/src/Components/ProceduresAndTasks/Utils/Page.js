@@ -3,21 +3,14 @@ import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import { EditProvider, TitlePage } from '../../Utils';
-import { Edit, Remove, Run, View } from '../Actions';
+import { Cancel, Edit, Remove, Run } from '../Actions';
 
 
 const Page = ({item, itemKey, scope, type}) => {
 
-    const buttons = [
-        {
-            name: 'edit',
-            component: <Edit item={item} scope={scope} type={type} />
-        },
-        {
-            name: 'remove',
-            component: <Remove item={item} scope={scope} type={type} />
-        },
-    ];
+    const buttons = {
+        task: <Cancel item={item} scope={scope} />
+    };
 
     return (
         <TitlePage
@@ -26,7 +19,7 @@ const Page = ({item, itemKey, scope, type}) => {
             content={
                 <React.Fragment>
                     <Grid container spacing={1} item md={8} sm={12}>
-                        <View item={item} scope={scope} type={type} />
+                        <Edit item={item} scope={scope} type={type} />
                         {type === 'procedure' && (
                             <EditProvider>
                                 <Run item={item} type={type} />
@@ -34,11 +27,12 @@ const Page = ({item, itemKey, scope, type}) => {
                         )}
                     </Grid>
                     <Grid container item md={4} sm={12} spacing={1} justifyContent="center" alignItems="center" >
-                        {buttons.map(button => (
-                            <Grid key={button.name} item>
-                                {button.component}
-                            </Grid>
-                        ))}
+                        <Grid item>
+                            {buttons[type]}
+                        </Grid>
+                        <Grid item>
+                            <Remove item={item} scope={scope} type={type} />
+                        </Grid>
                     </Grid>
                 </React.Fragment>
             }

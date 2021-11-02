@@ -25,7 +25,7 @@ const Card = ({buttonsView, header, itemKey, list, onAdd, onClick, onDelete, tag
         }
         if (bv.edit) {
             b.push({
-                icon:  <EditIcon fontSize="small" />,
+                icon: <EditIcon fontSize="small" />,
                 onClick: onClick('edit', ident),
             });
         }

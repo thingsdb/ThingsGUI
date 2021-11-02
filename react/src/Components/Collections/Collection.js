@@ -48,15 +48,15 @@ const Collection = ({collections}) => {
                         <Grid container item md={5} xs={12}>
                             <Grid item xs={12} sx={{paddingBottom: '8px'}}>
                                 <Procedures
-                                    buttonsView={{add: true, cancel: false, edit: true, run: true, view: true}}
-                                    dialogsView={{add: true, cancel: false, edit: true, run: true, view: true}}
+                                    buttonsView={{add: true, cancel: false, edit: true, run: true, view: false}}
+                                    dialogsView={{add: true, cancel: false, edit: true, run: true, view: false}}
                                     scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}
                                 />
                             </Grid>
                             <Grid item xs={12} sx={{paddingBottom: '8px'}}>
                                 <Tasks
-                                    buttonsView={{add: true, cancel: true, edit: true, run: false, view: true}}
-                                    dialogsView={{add: true, cancel: true, edit: true, run: false, view: true}}
+                                    buttonsView={{add: true, cancel: true, edit: true, run: false, view: false}}
+                                    dialogsView={{add: true, cancel: true, edit: true, run: false, view: false}}
                                     scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}
                                 />
                             </Grid>

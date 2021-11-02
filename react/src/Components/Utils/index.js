@@ -54,8 +54,9 @@ import TreeBranch from './TreeBranch';
 import TwoLabelSwitch from './TwoLabelSwitch';
 import useDebounce from './useDebounce';
 import useStateCallback from './useStateCallback';
-import useThingsError from './useThingsError';
+import { parseError, useThingsError } from './useThingsError';
 import VariablesArray from './VariablesArray';
+import ViewEditFields from './ViewEditFields';
 import WarnPopover from './WarnPopover';
 
 import {SET_KEY, THING_KEY, WRAP_KEY} from '../../Constants/CharacterKeys';
@@ -371,6 +372,7 @@ export {
     Menu,
     nextRunFn,
     orderByName,
+    parseError,
     QueryInput,
     QueryOutput,
     RefreshContainer,
@@ -406,5 +408,6 @@ export {
     useStateCallback,
     useThingsError,
     VariablesArray,
+    ViewEditFields,
     WarnPopover,
 };
