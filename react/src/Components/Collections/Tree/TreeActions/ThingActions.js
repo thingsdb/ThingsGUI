@@ -18,7 +18,7 @@ const ThingActions = ({child, parent, thing, scope, isRoot}) => {
     return (
         <React.Fragment>
             <Button color="primary" onClick={handleClickOpen} variant="outlined" >
-                {'Add'}
+                {Object.entries(thing).length < 2 ? 'Add your first thing!' : 'Add'}
             </Button>
             {show ? (
                 <EditProvider>

@@ -1,9 +1,6 @@
 import { withVlow } from 'vlow';
-import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
@@ -59,31 +56,25 @@ const ThingRoot = ({things, collection}) => {
                     thing={things[collection.collection_id]}
                     onChildren={onChildren}
                 />
-                <Divider sx={{marginTop: '16px'}} />
-                <ListItem disableGutters>
-                    <ListItemIcon>
-                        <ThingActions
-                            child={{
-                                id: collection.collection_id,
-                                index: null,
-                                name: 'root',
-                                type: THING,
-                            }}
-                            parent={{
-                                id: null,
-                                index: null,
-                                name: '',
-                                type: '',
-                                isTuple: false,
-                            }}
-                            scope={`${COLLECTION_SCOPE}:${collection.name}`}
-                            thing={things[collection.collection_id]}
-                            isRoot
-                        />
-                    </ListItemIcon>
-                    {Object.entries(things[collection.collection_id]).length<2 ? (
-                        <ListItemText primary="Add your first thing!" />
-                    ) : null}
+                <ListItem disableGutters sx={{marginTop: '16px'}}>
+                    <ThingActions
+                        child={{
+                            id: collection.collection_id,
+                            index: null,
+                            name: 'root',
+                            type: THING,
+                        }}
+                        parent={{
+                            id: null,
+                            index: null,
+                            name: '',
+                            type: '',
+                            isTuple: false,
+                        }}
+                        scope={`${COLLECTION_SCOPE}:${collection.name}`}
+                        thing={things[collection.collection_id]}
+                        isRoot
+                    />
                 </ListItem>
             </List>
         ) : (
