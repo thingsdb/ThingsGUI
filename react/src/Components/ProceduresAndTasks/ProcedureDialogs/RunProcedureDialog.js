@@ -9,7 +9,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { ProcedureActions } from '../../../Stores';
-import { ErrorMsg, InputField, jsonify, QueryOutput, SimpleModal, useEdit } from '../../Utils';
+import { ErrorMsg, InputField, QueryOutput, SimpleModal, useEdit } from '../../Utils';
 import { RunProcedureDialogTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
 
@@ -33,11 +33,10 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     };
 
     const handleClickOk = () => {
-        const jsonProof = jsonify(val); // make it json proof
         ProcedureActions.runProcedure(
             scope,
             procedure.name,
-            jsonProof,
+            val,
             tag,
             handleResult,
         );

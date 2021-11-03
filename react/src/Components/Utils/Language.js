@@ -93,7 +93,6 @@ export default {
             'replace': 'Returns a new string in witch occurrences of a given substring are replaced with another substring.',
             'split': 'Split a string into a new list with substrings.',
             'starts_with': 'Determines if a string starts with characters given by another string.',
-            'test': 'Test if a string matches a given regular expression and return true or false.',
             'trim': 'Returns a new string with whitespace characters removed from both the start and end of a string.',
             'trim_left': 'Returns a new string with whitespace characters removed from the start of a string.',
             'trim_right': 'Returns a new string with whitespace characters removed from the the end of a string.',

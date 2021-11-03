@@ -70,7 +70,7 @@ const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildre
     return (
         <React.Fragment>
             <StyledListItem inset={inset} ContainerProps={{onMouseEnter: handleOnMouseEnter, onMouseLeave: handleOnMouseLeave}}>
-                <ListItemButton onClick={handleClick}>
+                <ListItemButton onClick={handleClick} disableTouchRipple={!canToggle}>
                     <ListItemIcon>
                         {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
                     </ListItemIcon>

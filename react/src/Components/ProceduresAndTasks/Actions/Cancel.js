@@ -1,8 +1,8 @@
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CancelTaskDialog } from '../TaskDialogs';
-import { CardButton } from '../../Utils';
 
 
 const Cancel = ({item, scope}) => {
@@ -19,7 +19,9 @@ const Cancel = ({item, scope}) => {
     return(
         <CancelTaskDialog
             button={
-                <CardButton onClick={handleClickOpen} title="Cancel" />
+                <Button color="primary" onClick={handleClickOpen} variant="outlined">
+                    {'Cancel'}
+                </Button>
             }
             open={open}
             onClose={handleClickClose}

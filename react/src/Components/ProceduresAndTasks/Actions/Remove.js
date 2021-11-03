@@ -1,8 +1,9 @@
 import { useHistory } from 'react-router-dom';
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CardButton, ErrorMsg, historyNavigate, SimpleModal } from '../../Utils';
+import { ErrorMsg, historyNavigate, SimpleModal } from '../../Utils';
 import { ProcedureActions, TaskActions } from '../../../Stores';
 import { RemoveProcedureTAG } from '../../../Constants/Tags';
 
@@ -36,7 +37,9 @@ const Remove = ({item, scope, type}) => {
     return(
         <SimpleModal
             button={
-                <CardButton onClick={handleClickOpen} title="Remove" />
+                <Button color="primary" onClick={handleClickOpen} variant="outlined">
+                    {'Remove'}
+                </Button>
             }
             title={`Remove ${name}`}
             open={open}

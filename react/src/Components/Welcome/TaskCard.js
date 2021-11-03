@@ -20,9 +20,6 @@ const TaskCard = ({task}) => (
             sx={{paddingTop: '10px'}}
         >
             <CardContent>
-                <Typography color="textSecondary" gutterBottom sx={{fontSize: 14}}>
-                    {task.doc}
-                </Typography>
                 <Typography display="block" variant="h5" component="h2">
                     <TaskIcon />
                     {': '}
@@ -30,10 +27,10 @@ const TaskCard = ({task}) => (
                 </Typography>
                 <Typography variant="body2" gutterBottom component='div' color="textSecondary" sx={{marginBottom: '12px', display: 'flex'}}>
                     <Box>
-                        {'Next run: '}
+                        {'Next run at: '}
                     </Box>
                     <Box sx={{fontWeight: 'bold', marginLeft: '8px'}}>
-                        {nextRunFn(task.next_run)}
+                        {nextRunFn(task.at)}
                     </Box>
                 </Typography>
             </CardContent>

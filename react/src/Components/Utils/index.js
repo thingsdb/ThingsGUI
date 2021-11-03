@@ -59,12 +59,12 @@ import VariablesArray from './VariablesArray';
 import ViewEditFields from './ViewEditFields';
 import WarnPopover from './WarnPopover';
 
-import {SET_KEY, THING_KEY, WRAP_KEY} from '../../Constants/CharacterKeys';
-import {ARRAY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NUMBER, REGEX, ROOM,
-    SET, STR, THING, TIMEVAL, WRAP} from '../../Constants/ThingTypes';
-import {THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE} from '../../Constants/Scopes';
-import {THINGDB_CACHE} from '../../Constants/Files';
-import {DATE_TIME_MIN_STR} from '../../Constants/DateStrings';
+import { SET_KEY, THING_KEY, WRAP_KEY } from '../../Constants/CharacterKeys';
+import { ARRAY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NUMBER, REGEX, ROOM,
+    SET, STR, THING, TIMEVAL, WRAP } from '../../Constants/ThingTypes';
+import { THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE } from '../../Constants/Scopes';
+import { THINGDB_CACHE } from '../../Constants/Files';
+import { DATE_TIME_MIN_STR } from '../../Constants/DateStrings';
 
 const checkType = (t) => {
     if (t === null) {
@@ -175,13 +175,6 @@ const duration = (n) => {
                 [n/86400, 'day'];
     time = Math.round(time);
     return `${time} ${unit}${time>1?'s':''}`;
-};
-
-const jsonify = (str) => {
-    return str.replace(/\w+(?=:)|'/g, function(matched){
-        return matched === '\'' ? '"' : `"${matched}"`;
-    });
-
 };
 
 const revealCustomType = (i) => {
@@ -365,7 +358,6 @@ export {
     Info,
     InputField,
     isObjectEmpty,
-    jsonify,
     ListHeader,
     LocalErrorMsg,
     LocalMsg,

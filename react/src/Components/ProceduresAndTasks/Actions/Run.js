@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { ProcedureActions } from '../../../Stores';
-import { ErrorMsg, InputField, jsonify, QueryOutput, useEdit } from '../../Utils';
+import { ErrorMsg, InputField, QueryOutput, useEdit } from '../../Utils';
 import { RunProcedureTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
 import { THINGSDB_SCOPE } from '../../../Constants/Scopes';
@@ -32,9 +32,8 @@ const Run = ({item, type}) => {
         setOutput(data);
     };
     const handleClickRun = () => {
-        const jsonProof = jsonify(val); // make it json proof
         if(type === 'procedure') {
-            ProcedureActions.runProcedure(scope, item.name, jsonProof, tag, handleResult);
+            ProcedureActions.runProcedure(scope, item.name, val, tag, handleResult);
         }
     };
 
