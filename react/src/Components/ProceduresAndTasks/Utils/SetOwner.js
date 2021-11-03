@@ -7,16 +7,22 @@ import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
-    keys: ['users']
+    keys: ['user', 'users']
 }]);
 
-const SetOwner = ({init, onChange, users}) => {
-    const [owner, setOwner] = React.useState('');
+const SetOwner = ({init, onChange, user, users}) => {
+    const [owner, setOwner] = React.useState(user.name);
+    let userList = users.length ? users : [user];
 
     React.useEffect(() => {
         ThingsdbActions.getUsers();
-        setOwner(init);
-    }, [init]);
+        if(init){
+            setOwner(init);
+            onChange(init);
+        } else {
+            onChange(user.name);
+        }
+    }, [init, onChange, user.name]);
 
     const handleChangeOwner = ({target}) => {
         const {value} = target;
@@ -37,8 +43,8 @@ const SetOwner = ({init, onChange, users}) => {
             value={owner}
             variant="standard"
         >
-            {users.map((u) => (
-                <option key={u.name} value={u.name}>
+            {userList.map((u, index) => (
+                <option key={`${u.name}_${index}`} value={u.name}>
                     {u.name}
                 </option>
             ))}
@@ -51,6 +57,7 @@ SetOwner.propTypes = {
     onChange: PropTypes.func.isRequired,
 
     /* thingsdb properties */
+    user: ThingsdbStore.types.user.isRequired,
     users: ThingsdbStore.types.users.isRequired,
 };
 
