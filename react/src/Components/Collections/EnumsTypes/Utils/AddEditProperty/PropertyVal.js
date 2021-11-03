@@ -37,7 +37,7 @@ const PropertyVal = ({category, onChange, customTypes, enums, onBlob, scope}) =>
 
     return (
         <React.Fragment>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
                 <TypeInit
                     onChange={handleOnChangeType}
                     type={''}

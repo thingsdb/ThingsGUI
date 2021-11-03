@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import { Closure, ErrorMsg, EditProvider, nextRunFn, ViewEditFields } from '../../Utils';
+import { Closure, ErrorMsg, EditProvider, ViewEditFields } from '../../Utils';
 import { CollectionActions, ProcedureActions } from '../../../Stores';
 import { DATE_TIME_MIN_STR } from '../../../Constants/DateStrings';
 import { EditProcedureDialogTAG } from '../../../Constants/Tags';
@@ -20,7 +20,7 @@ const header = [
         ky: 'doc',
         label: 'Documentation',
         canEdit: false,
-        viewComponent: (at) => nextRunFn(at),
+        viewComponent: (doc) => doc,
     },
     {
         ky: 'arguments',

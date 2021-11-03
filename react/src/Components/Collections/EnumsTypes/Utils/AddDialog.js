@@ -115,7 +115,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
     const child = React.useCallback((i) => (
         <EditProvider>
             <Grid container item xs={12} spacing={1} alignItems="center" >
-                <Grid item xs={12}>
+                <Grid item xs={category === 'type' ? 12 : 6}>
                     <PropertyName onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
                 </Grid>
                 {category === 'type' ? (
@@ -132,9 +132,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                     </Grid>
                 ) : null}
                 {category === 'enum' ? (
-                    <Grid item xs={12}>
-                        <PropertyVal category={category} onChange={handleChangeProperty(i)} onBlob={handleBlob} scope={scope} />
-                    </Grid>
+                    <PropertyVal category={category} onChange={handleChangeProperty(i)} onBlob={handleBlob} scope={scope} />
                 ) : null}
             </Grid>
         </EditProvider>

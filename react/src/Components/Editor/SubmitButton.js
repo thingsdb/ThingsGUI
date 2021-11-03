@@ -24,7 +24,7 @@ const options = ['Submit', 'Submit with arguments'];
 const SubmitButton = ({canSubmit, onClickSubmit}) => {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
 
     const handleClick = () => {
         let withArgs = selectedIndex === 1;
