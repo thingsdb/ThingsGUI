@@ -3,14 +3,14 @@ import { withVlow } from 'vlow';
 import Grid from '@mui/material/Grid';
 import React from 'react';
 
-import { COLLECTION_ROUTE } from '../../Constants/Routes';
+import { ThingsdbActions, ThingsdbStore} from '../../Stores';
+import { CollectionConfig} from './Config';
+import { getIdFromPath, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Utils';
+import { Procedures, Tasks } from '../ProceduresAndTasks';
 import { COLLECTION_SCOPE } from '../../Constants/Scopes';
-import { CollectionConfig } from './Config';
-import { getIdFromPath, HarmonicCardHeader, isObjectEmpty, TitlePage } from '../Utils';
-import { Procedures } from '../ProceduresAndTimers';
-import { ThingsdbActions, ThingsdbStore } from '../../Stores';
-import CollectionEnumsTypes from './EnumsTypes';
+import { COLLECTION_ROUTE } from '../../Constants/Routes';
 import CollectionTree from './Tree';
+import CollectionEnumsTypes from './EnumsTypes';
 
 
 const withStores = withVlow([{
@@ -48,8 +48,15 @@ const Collection = ({collections}) => {
                         <Grid container item md={5} xs={12}>
                             <Grid item xs={12} sx={{paddingBottom: '8px'}}>
                                 <Procedures
-                                    buttonsView={{add: true, edit: true, run: true, view: true}}
-                                    dialogsView={{add: true, edit: true, run: true, view: true}}
+                                    buttonsView={{add: true, cancel: false, edit: true, run: true, view: false}}
+                                    dialogsView={{add: true, cancel: false, edit: true, run: true, view: false}}
+                                    scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sx={{paddingBottom: '8px'}}>
+                                <Tasks
+                                    buttonsView={{add: true, cancel: true, edit: true, run: false, view: false}}
+                                    dialogsView={{add: true, cancel: true, edit: true, run: false, view: false}}
                                     scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}
                                 />
                             </Grid>

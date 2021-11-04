@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import {useEdit} from '../../../Utils';
-import {LIST, NIL, SET, STR, THING} from '../../../../Constants/ThingTypes';
+import { useEdit } from '../../../Utils';
+import { LIST, NIL, SET, STR, THING } from '../../../../Constants/ThingTypes';
 
 const BuildQueryString = ({child, customTypes, enums, parent}) => {
     const [editState, dispatch] = useEdit();
@@ -17,10 +17,10 @@ const BuildQueryString = ({child, customTypes, enums, parent}) => {
         let v;
         let q = '';
         v = input(val, childType);
-        q = parentType===LIST ? (childIndex===null ? `#${parentId}.${parentName}.push(${v});` : `#${parentId}.${parentName}[${childIndex}] = ${v};`)
-            : parentType===THING ? `#${parentId}.${childName} = ${v};`
-                : parentType===SET ? `#${parentId}.${parentName}.add(${v});`
-                    : [...customTypes.map(c=>c.name), ...enums.map(e=>e.name)].includes(parentType) ? `#${parentId}.${childName} = ${v};`
+        q = parentType===LIST ? (childIndex===null ? `thing(${parentId}).${parentName}.push(${v});` : `thing(${parentId}).${parentName}[${childIndex}] = ${v};`)
+            : parentType===THING ? `thing(${parentId}).${childName} = ${v};`
+                : parentType===SET ? `thing(${parentId}).${parentName}.add(${v});`
+                    : [...customTypes.map(c=>c.name), ...enums.map(e=>e.name)].includes(parentType) ? `thing(${parentId}).${childName} = ${v};`
                         : '';
         dispatch(() => ({ query: q }));
 

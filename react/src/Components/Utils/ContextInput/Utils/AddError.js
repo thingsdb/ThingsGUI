@@ -35,7 +35,12 @@ const AddError = ({identifier, init, parent}) => {
 
     React.useEffect(()=>{
         if (init) {
-            CollectionActions.query(init.scope, `{code: #${init.parentId}.${init.propName}.code(), msg: #${init.parentId}.${init.propName}.msg()}`, ThingActionsDialogTAG, handleErr);
+            CollectionActions.query(
+                init.scope,
+                `{code: thing(${init.parentId}).${init.propName}.code(), msg: thing(${init.parentId}).${init.propName}.msg()}`,
+                ThingActionsDialogTAG,
+                handleErr
+            );
         }
     }, []);
 

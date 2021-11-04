@@ -86,4 +86,7 @@ useThingsError.propTypes = {
     thingsError: PropTypes.string.isRequired,
 };
 
-export default useThingsError;
+export {
+    parseError,
+    useThingsError,
+};

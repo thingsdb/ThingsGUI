@@ -117,8 +117,8 @@ const Add = ({nodeId}) => {
                 <ListItem dense disableGutters>
                     <TextField
                         fullWidth
-                        id="file"
-                        label="File"
+                        id="source"
+                        label="Source"
                         margin="dense"
                         onChange={handleOnChange}
                         spellCheck={false}

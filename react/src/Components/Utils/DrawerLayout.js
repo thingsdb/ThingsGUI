@@ -110,7 +110,7 @@ const StyledDrawerContainer = styled('div', {shouldForwardProp: (prop) => prop !
 
 const MenuFooter = styled('div')(() => ({
     position:'fixed',
-    left: 0,
+    left: 20,
     bottom: 5,
     zIndex: 2
 }));

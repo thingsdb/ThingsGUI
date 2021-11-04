@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
-import {BaseStore} from './BaseStore';
-import {ErrorActions} from './ErrorStore';
+import { BaseStore } from './BaseStore';
+import { ErrorActions } from './ErrorStore';
+import { jsonify } from './Utils';
 
 const ProcedureActions = Vlow.createActions([
     'getProcedure',
@@ -79,12 +80,13 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onRunProcedure(scope, name, jsonProofArgs, tag,  cb=()=>null) {
+    onRunProcedure(scope, name, args, tag,  cb=()=>null) {
+        const jsonProof = jsonify(args); // make it json proof
         this.emit('run', {
             scope,
             procedure: {
                 name: name,
-                arguments: jsonProofArgs
+                arguments: jsonProof
             },
         }).done((data) => {
             cb(data);

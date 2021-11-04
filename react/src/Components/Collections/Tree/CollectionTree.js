@@ -60,7 +60,7 @@ const CollectionTree = ({collection}) => {
                 <div>
                     <TopBar
                         pageIcon={
-                            <IconButton edge="start" color="primary" onClick={handleOpen} aria-label="close">
+                            <IconButton edge="start" onClick={handleOpen} aria-label="close">
                                 <ExpandMoreIcon />
                             </IconButton>
                         }

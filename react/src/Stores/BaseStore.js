@@ -3,9 +3,9 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
-import {ErrorActions} from './ErrorStore';
-import {LoginTAG} from '../Constants/Tags';
-import {DATE_TIME_MIN_STR} from '../Constants/DateStrings';
+import { ErrorActions } from './ErrorStore';
+import { LoginTAG } from '../Constants/Tags';
+import { DATE_TIME_MIN_STR } from '../Constants/DateStrings';
 
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {

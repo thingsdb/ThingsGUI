@@ -1,14 +1,14 @@
-import {ApplicationActions, ApplicationStore} from './ApplicationStore';
-import {EditorActions, EditorStore} from './EditorStore';
-import {EnumActions, EnumStore} from './EnumStore';
-import {EventActions, EventStore} from './BaseStore';
-import {CollectionActions, CollectionStore} from './CollectionStore';
-import {ErrorActions, ErrorStore} from './ErrorStore';
-import {NodesActions, NodesStore} from './NodesStore';
-import {ProcedureActions, ProcedureStore} from './ProcedureStore';
-import {ThingsdbActions, ThingsdbStore} from './ThingsdbStore';
-import {TimerActions, TimerStore} from './TimerStore';
-import {TypeActions, TypeStore} from './TypeStore';
+import { ApplicationActions, ApplicationStore } from './ApplicationStore';
+import { CollectionActions, CollectionStore } from './CollectionStore';
+import { EditorActions, EditorStore } from './EditorStore';
+import { EnumActions, EnumStore } from './EnumStore';
+import { ErrorActions, ErrorStore } from './ErrorStore';
+import { EventActions, EventStore } from './BaseStore';
+import { NodesActions, NodesStore } from './NodesStore';
+import { ProcedureActions, ProcedureStore } from './ProcedureStore';
+import { ThingsdbActions, ThingsdbStore } from './ThingsdbStore';
+import { TaskActions, TaskStore } from './TaskStore';
+import { TypeActions, TypeStore } from './TypeStore';
 
 
 export {
@@ -21,6 +21,6 @@ export {
     NodesActions, NodesStore,
     ProcedureActions, ProcedureStore,
     ThingsdbActions, ThingsdbStore,
-    TimerActions, TimerStore,
+    TaskActions, TaskStore,
     TypeActions, TypeStore,
 };

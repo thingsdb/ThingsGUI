@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 
 import {EditActions, useEdit} from '../Context';
 
-const onlyInts = (str) => str.length == str.replace(/[^0-9]/g, '').length;
+const onlyInts = (str) => str.length == str.replace(/[^-0-9]/g, '').length;
 
 const AddInt = ({identifier, init, parent, ...props}) => {
     const [editState, dispatch] = useEdit();

@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import { CollectionActions, ErrorActions, NodesActions, ThingsdbActions } from '../../Stores';
-import { DragdownCard, ErrorMsg, jsonify, QueryOutput, TitlePage2 } from '../Utils';
+import { DragdownCard, ErrorMsg, QueryOutput, TitlePage2 } from '../Utils';
 import { EditorTAG } from '../../Constants/Tags';
 import EditorInput from './EditorInput';
 import EditorSideContent from './EditorSideContent';
@@ -50,7 +50,7 @@ const Editor = () => {
     const handleQuery = (query, withArgs) => {
         let jsonArgs = null;
         if(withArgs) {
-            jsonArgs = args && jsonify(args); // make it json proof
+            jsonArgs = args;
         }
         CollectionActions.query(scope, query, tag, handleOutput, null, null, jsonArgs);
     };

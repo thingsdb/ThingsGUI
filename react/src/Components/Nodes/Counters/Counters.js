@@ -47,6 +47,10 @@ const header = [
         {ky: 'changes_unaligned', label: 'Changes unaligned'},
         {ky: 'longest_change_duration', label: 'Longest change duration', fn: (d) => d && d.toFixed(3) + ' s'},
         {ky: 'average_change_duration', label: 'Average change duration', fn: (d) => d && d.toFixed(3) + ' s'},
+    ]},
+    {ky: 'title6', title: 'TASKS', labels: [
+        {ky: 'tasks_success', label: 'Successful tasks'},
+        {ky: 'tasks_with_error', label: 'Tasks with error'},
     ]}
 ];
 

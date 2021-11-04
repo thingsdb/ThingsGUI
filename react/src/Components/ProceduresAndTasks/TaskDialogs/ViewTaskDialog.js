@@ -1,0 +1,48 @@
+import Grid from '@mui/material/Grid';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Typography from '@mui/material/Typography';
+
+import { SimpleModal } from '../../Utils';
+import { ViewTask } from '../Content';
+
+
+const ViewTaskDialog = ({button, open, onClose, scope, task}) => (
+    <SimpleModal
+        button={button}
+        open={open}
+        onClose={onClose}
+        maxWidth="md"
+    >
+        <Grid container spacing={1}>
+            <Grid container spacing={1} item xs={12}>
+                <Grid item xs={8}>
+                    <Typography variant="body1" >
+                        {'View ThingDB task:'}
+                    </Typography>
+                    <Typography variant="h4" color='primary' component='span'>
+                        {task.id || ''}
+                    </Typography>
+                </Grid>
+            </Grid>
+            <Grid item xs={12}>
+                <ViewTask task={task} scope={scope} />
+            </Grid>
+        </Grid>
+    </SimpleModal>
+);
+
+ViewTaskDialog.defaultProps = {
+    button: null,
+    task: {},
+};
+
+ViewTaskDialog.propTypes = {
+    button: PropTypes.object,
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    scope: PropTypes.string.isRequired,
+    task: PropTypes.object,
+};
+
+export default ViewTaskDialog;

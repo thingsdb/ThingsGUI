@@ -1,4 +1,5 @@
 import CheckIcon from '@mui/icons-material/Check';
+import EditIcon from '@mui/icons-material/Edit';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -178,7 +179,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
         }
         if (bv.edit) {
             b.push({
-                icon: <img src="/img/view-edit.png" alt="view/edit" draggable="false" width="20" />,
+                icon: <EditIcon fontSize="small" />,
                 onClick: handleChangeViaButton('edit', n),
             });
         }

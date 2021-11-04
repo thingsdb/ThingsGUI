@@ -1,10 +1,9 @@
+import { withVlow } from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {withVlow} from 'vlow';
 
+import { ErrorActions, ErrorStore } from '../../Stores';
 import LocalErrorMsg from './LocalErrorMsg';
-import {ErrorActions, ErrorStore} from '../../Stores';
-import {useThingsError} from '.';
 
 
 const withStores = withVlow([{
@@ -13,7 +12,6 @@ const withStores = withVlow([{
 }]);
 
 const ErrorMsg = ({tag, msgError}) => {
-    const [title, body] = useThingsError(msgError[tag]);
 
     React.useEffect(()=>{
         return () => {
@@ -26,7 +24,7 @@ const ErrorMsg = ({tag, msgError}) => {
     }, [tag]);
 
     return (
-        <LocalErrorMsg title={title} body={body} onClose={handleCloseError} />
+        <LocalErrorMsg msg={msgError[tag]} onClose={handleCloseError} />
     );
 };
 

@@ -3,12 +3,11 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
-import {BaseStore} from './BaseStore';
-import {ErrorActions} from './ErrorStore';
-import {THING_KEY} from '../Constants/CharacterKeys';
-import {COLLECTION_SCOPE} from '../Constants/Scopes';
-// importing any method from Util creates a webpack error.
-// import {depthOf} from '../Components/Utils';
+import { BaseStore } from './BaseStore';
+import { ErrorActions } from './ErrorStore';
+import { THING_KEY } from '../Constants/CharacterKeys';
+import { COLLECTION_SCOPE } from '../Constants/Scopes';
+import { jsonify } from './Utils';
 
 
 const CollectionActions = Vlow.createActions([
@@ -75,11 +74,11 @@ class CollectionStore extends BaseStore {
     }
 
     onGetThings(collectionId, collectionName, thingId=null) {
-        const query = thingId ? `#${thingId}` : 'thing(.id())';
+        const query = thingId ? `thing(${thingId})` : 'thing(.id())';
         const scope = `${COLLECTION_SCOPE}:${collectionName}`;
         this.emit('query', {
             query,
-            scope
+            scope,
         }).done((data) => {
             this.setState(prevState => {
                 const things = thingId ?
@@ -97,7 +96,7 @@ class CollectionStore extends BaseStore {
         const keys = Object.keys(things);
 
         if(keys.length) {
-            const query = `[${keys.map(k => `#${k}`)}]`;
+            const query = `[${keys.map(k => `thing(${k})`)}]`;
             const scope = `${COLLECTION_SCOPE}:${collectionName}`;
             this.emit('query', {
                 query,
@@ -130,13 +129,19 @@ class CollectionStore extends BaseStore {
 
     onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null) {
         if(thingId){
-            query = `${query} #${thingId}`;
+            query = `${query} thing(${thingId})`;
         }
+
+        let jsonArgs = null;
+        if (args) {
+            jsonArgs = jsonify(args); // make it json proof
+        }
+
         this.emit('query', {
             query,
             scope,
             blob,
-            arguments: args
+            arguments: jsonArgs
         }).done((data) => {
             if(thingId){
                 this.setState(prevState => {

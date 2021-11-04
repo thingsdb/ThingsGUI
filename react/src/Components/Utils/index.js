@@ -54,16 +54,17 @@ import TreeBranch from './TreeBranch';
 import TwoLabelSwitch from './TwoLabelSwitch';
 import useDebounce from './useDebounce';
 import useStateCallback from './useStateCallback';
-import useThingsError from './useThingsError';
+import { parseError, useThingsError } from './useThingsError';
 import VariablesArray from './VariablesArray';
+import ViewEditFields from './ViewEditFields';
 import WarnPopover from './WarnPopover';
 
-import {SET_KEY, THING_KEY, WRAP_KEY} from '../../Constants/CharacterKeys';
-import {ARRAY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NUMBER, REGEX, ROOM,
-    SET, STR, THING, TIMEVAL, WRAP} from '../../Constants/ThingTypes';
-import {THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE} from '../../Constants/Scopes';
-import {THINGDB_CACHE} from '../../Constants/Files';
-import {DATE_TIME_MIN_STR} from '../../Constants/DateStrings';
+import { SET_KEY, THING_KEY, WRAP_KEY } from '../../Constants/CharacterKeys';
+import { ARRAY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NUMBER, REGEX, ROOM,
+    SET, STR, THING, TIMEVAL, WRAP } from '../../Constants/ThingTypes';
+import { THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE } from '../../Constants/Scopes';
+import { THINGDB_CACHE } from '../../Constants/Files';
+import { DATE_TIME_MIN_STR } from '../../Constants/DateStrings';
 
 const checkType = (t) => {
     if (t === null) {
@@ -176,17 +177,6 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
-// str = str.replace(/'/g, '"');
-// return str.replace(/\w*:/g, function(matched){
-//     return `"${matched}":`;
-// });
-const jsonify = (str) => {
-    return str.replace(/\w+(?=:)|'/g, function(matched){
-        return matched === '\'' ? '"' : `"${matched}"`;
-    });
-
-};
-
 const revealCustomType = (i) => {
     let arr = 0;
     let opt = 0;
@@ -218,7 +208,7 @@ const scaleToBinBytes = (bytes) => {
     return `${rounded === number ? '' : '~'}${rounded} ${metricLabel[i]}`;
 };
 
-const nextRunFn = (t) => (t === 'pending' ? t : moment(t).format(DATE_TIME_MIN_STR));
+const nextRunFn = (t) => (t ? moment(t).format(DATE_TIME_MIN_STR) : NIL);
 
 const getIdFromPath = (pathname, name) => {
     const splitPath = pathname.split('/');
@@ -368,13 +358,13 @@ export {
     Info,
     InputField,
     isObjectEmpty,
-    jsonify,
     ListHeader,
     LocalErrorMsg,
     LocalMsg,
     Menu,
     nextRunFn,
     orderByName,
+    parseError,
     QueryInput,
     QueryOutput,
     RefreshContainer,
@@ -410,5 +400,6 @@ export {
     useStateCallback,
     useThingsError,
     VariablesArray,
+    ViewEditFields,
     WarnPopover,
 };

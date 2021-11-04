@@ -4,22 +4,26 @@ import React from 'react';
 import WarningIcon from '@mui/icons-material/Warning';
 
 import LocalMsg from './LocalMsg';
+import { useThingsError } from './useThingsError';
 
 
-const LocalErrorMsg = ({body, onClose, title}) => (
-    <LocalMsg icon={<WarningIcon sx={{color: amber[700]}} />} title={title} body={body} onClose={onClose} />
-);
+const LocalErrorMsg = ({msg, onClose, useAsPopUp}) => {
+    const [title, body] = useThingsError(msg);
+    return (
+        <LocalMsg icon={<WarningIcon sx={{color: amber[700]}} />} title={title} body={body} onClose={onClose} useAsPopUp={useAsPopUp} />
+    );
+};
 
 LocalErrorMsg.defaultProps = {
-    body: '',
+    msg: '',
     onClose: null,
-    title: '',
+    useAsPopUp: false,
 };
 
 LocalErrorMsg.propTypes = {
-    body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    msg: PropTypes.string,
     onClose: PropTypes.func,
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    useAsPopUp: PropTypes.bool,
 };
 
 export default LocalErrorMsg;

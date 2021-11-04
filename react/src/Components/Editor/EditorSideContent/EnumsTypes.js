@@ -106,7 +106,7 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
             <Grid item xs={12}>
                 <HarmonicCardHeader expand={viewType.expand} onExpand={handleExpand('type')} title="TYPES" onRefresh={handleRefreshTypes} unmountOnExit>
                     <EnumTypeChips
-                        buttonsView={{add: false, edit: false, run: true, view: true}}
+                        buttonsView={{add: false, cancel: false, edit: false, run: true, view: true}}
                         categoryInit="type"
                         items={customTypes[scope]}
                         onChange={handleChange}
@@ -124,7 +124,7 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
             <Grid item xs={12}>
                 <HarmonicCardHeader expand={viewEnum.expand} onExpand={handleExpand('enums')} title="ENUMS" onRefresh={handleRefreshEnums} unmountOnExit>
                     <EnumTypeChips
-                        buttonsView={{add: false, edit: false, run: true, view: true}}
+                        buttonsView={{add: false, cancel: false, edit: false, run: true, view: true}}
                         categoryInit="enum"
                         items={enums[scope]}
                         onChange={handleChange}
