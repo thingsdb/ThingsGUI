@@ -213,7 +213,7 @@ Basic information about the collection can be found in the __INFO__ container. I
 
 The __THINGS TREE__ panel contains a tree-like overview of all the [properties](https://docs.thingsdb.net/v1/overview/properties/) stored in the selected collection.
 
-Click <img src="readme/img/key_tool_icon.png" alt="alt watch" width="30px" />  to open a dialog where you can add, edit and delete a property. It really depends on the type (e.g. string, integer, list, thing etc.) of the property which of the above mentioned actions are possible.
+Click <img src="readme/img/key_tool_icon.png" alt="alt watch" width="30px" />  to open a dialog where you can add, edit and delete a property. It depends on the type (e.g. string, integer, list, thing etc.) of the property which of the above mentioned actions are possible.
 
 In case of type [Room](https://docs.thingsdb.net/v1/data-types/room/) you also find a button to join or leave this room.
 
