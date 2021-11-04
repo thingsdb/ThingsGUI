@@ -22,13 +22,15 @@ Tool for managing ThingsDB user accounts, nodes and collections. ThingsGUI is a 
     * [Collection configuration](#collection-configuration-(1))
     * [Things tree](#things-tree-(2))
     * [Procedures](#procedures-(3))
-    * [Timers](#timers-(4))
+    * [Tasks](#tasks-(4))
     * [Types](#types-(5))
     * [Enums](#enums-(6))
   * [Users](#users)
     * [User configuration](#user-configuration-(1))
     * [Access rules](#access-rules-(2))
     * [Tokens](#tokens-(3))
+  * [Procedures](#procedures)
+  * [Tasks](#tasks)
   * [Nodes](#nodes)
     * [Node configuration](#node-configuration)
     * [Backup](#Backup)
@@ -39,7 +41,7 @@ Tool for managing ThingsDB user accounts, nodes and collections. ThingsGUI is a 
 
 ## Requirements
 
-ThingsGUI v1 works with ThingsDB version 1.0.0 and higher.
+ThingsGUI v1 works with ThingsDB version 1.1.0 and higher.
 
 ---------------------------------------
 
@@ -211,13 +213,11 @@ Basic information about the collection can be found in the __INFO__ container. I
 
 The __THINGS TREE__ panel contains a tree-like overview of all the [properties](https://docs.thingsdb.net/v1/overview/properties/) stored in the selected collection.
 
-Clicking a property will open a dialog where you can add, edit and delete a property. It really depends on the type (e.g. string, integer, list, thing etc.) of the property which of the above mentioned actions are possible.
+Click <img src="readme/img/key_tool_icon.png" alt="alt watch" width="30px" />  to open a dialog where you can add, edit and delete a property. It really depends on the type (e.g. string, integer, list, thing etc.) of the property which of the above mentioned actions are possible.
 
 In case of type [Room](https://docs.thingsdb.net/v1/data-types/room/) you also find a button to join or leave this room.
 
 Clicking <img src="readme/img/code_editor_icon.png" alt="alt watch" width="30px" /> will direct you to the code editor.
-
-To modify the __root thing__ you need to click on <img src="readme/img/key_tool_icon.png" alt="alt watch" width="30px" /> that you can find at the bottom of the __THINGS TREE__ container.
 
 #### Procedures (3)
 
@@ -233,13 +233,13 @@ Note: there does not exist a `mod_procedure` method like `mod_type`. In this cas
 
 ---
 
-#### Timers (4)
+#### Tasks (4)
 
-<img src="readme/img/collection_timer.png?" alt="alt Login" style="zoom:70%;" />
+<img src="readme/img/collection_task.png?" alt="alt Login" style="zoom:70%;" />
 
-A [timer](https://docs.thingsdb.net/v1/timers-api/) in ThingsDB is a closure that is attached to a scope and runs at a scheduled time. Timers may be configured with a repeat value *(at least 30 seconds)* or as a one-time schedule.
+A [task](https://docs.thingsdb.net/v1/data-types/task/) in ThingsDB is a closure that is attached to a scope and runs at a scheduled time. Tasks may be re-scheduled or run as a one-time task.
 
-It is possible to add, edit the arguments, delete and run a timer.
+It is possible to add, edit the arguments, owner and closure. A task can be canceled and deleted.
 
 #### Types (5)
 
@@ -282,6 +282,17 @@ If you have `GRANT` rights it is possible to modify the [access rules](https://d
 
 If you have `CHANGE` rights it is possible to add and delete your own access tokens. You need `GRANT` rights to do this for other users.
 
+### Procedures
+
+<img src="readme/img/procedure.png?" alt="alt Login" style="zoom:70%;" />
+
+Procedures can be used in in the `@collection` and `@thingsdb` scopes. Here you find the procedures in the `@thingsdb` scope.
+
+### Tasks
+
+<img src="readme/img/task.png?" alt="alt Login" style="zoom:70%;" />
+
+Tasks can be used in in the `@collection` and `@thingsdb` scopes. Here you find the tasks in the `@thingsdb` scope.
 
 
 ### Nodes
@@ -332,18 +343,15 @@ Under the __MODULES__ tab you can add, edit, restart and remove [modules](https:
 
 The editor provides a way to interact with ThingsDB on a more lower level. ThingsDB has its own native language. Therefore you can choose to code instead of using the graphical interface and build scripts that do a bunch of things. It is even possible to store these scripts in a procedure that you can reuse. To help a bit with learning the language, the graphical interface of ThingsGUI often displays the query that goes along with a basic action. [ThingsDocs](https://docs.thingsdb.net/v1/) informs you about all the functionality.
 
-
-
 Next to the editor you find the __SCOPES__ panel where you can change the [scope](https://docs.thingsdb.net/v1/overview/scopes/) to the one you need before sending the query. ThingsDB has three main scopes: `@thingsdb`, `@node` and `@collection`. Where the collection and node scope are subdivided. The format of a specific collection scope is `@collection:collection_name` and for a node it is `@node:node_id`, e.g. `@collection:stuff`, `@node:0`.
 
-Depending on the selected scope you may also see a __PROCEDURES__, __TIMERS__, __TYPES__ and __ENUMS__ panel.
-
-
+Depending on the selected scope you may also see a __PROCEDURES__, __TASKS__, __TYPES__ and __ENUMS__ panel.
 
 <img src="readme/img/editor.png?" alt="alt Login" style="zoom:70%;" />
 
+In the bottom you also find a tab __ARGUMENTS__. Here you can add the arguments your scripts needs, so you don't need to change your script.
 
-
+<img src="readme/img/editor_arguments.png?" alt="alt Login" style="zoom:70%;" />
 ---
 
 Note:
