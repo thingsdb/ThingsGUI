@@ -19,7 +19,7 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
     const type = checkType(thing);
     const val = thingValue(type, thing);
     const currThing = thing && things[thing[THING_KEY]] || thing;
-    const canToggle =  type === THING || (type === ARRAY && thing.length>0) ;
+    const canToggle = type === 'object' || type === THING || (type === ARRAY && thing.length>0) ;
 
     const isTuple = type === ARRAY && parent.type === ARRAY;
     const thingId = thing && thing[THING_KEY] || parent.id;
