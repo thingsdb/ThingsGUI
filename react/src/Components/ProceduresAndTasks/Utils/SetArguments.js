@@ -4,16 +4,13 @@ import React from 'react';
 import { InputField, useEdit } from '../../Utils';
 import { BOOL, BYTES, CODE, FLOAT, INT, LIST, NIL, STR, THING, VARIABLE } from '../../../Constants/ThingTypes';
 
-
-const reClosureParams = /(?<=,)(.*?)(?=\||,)/g;
-
 const dataTypes = [BOOL, BYTES, CODE, FLOAT, INT, LIST, NIL, STR, THING]; // Supported types
 
 const SetArguments = ({closure, onChange}) => {
     const editState = useEdit()[0];
     const {blob, obj} = editState;
 
-    let argLabels = closure.match(reClosureParams);
+    let argLabels = closure.split('|')[1].split(',').slice(1);
 
     React.useEffect(() => {
         let values = Object.values(obj);
