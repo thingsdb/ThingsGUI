@@ -53,8 +53,8 @@ const Editor = ({height, history, input, onQuery}) => {
         setQuery(value);
     };
 
-    const handleSubmit = (withArgs) => {
-        onQuery(query, withArgs);
+    const handleSubmit = () => {
+        onQuery(query);
         EditorActions.setHistory(query);
     };
 

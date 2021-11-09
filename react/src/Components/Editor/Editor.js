@@ -47,12 +47,8 @@ const Editor = () => {
         setArgs(args);
     };
 
-    const handleQuery = (query, withArgs) => {
-        let jsonArgs = null;
-        if(withArgs) {
-            jsonArgs = args;
-        }
-        CollectionActions.query(scope, query, tag, handleOutput, null, null, jsonArgs);
+    const handleQuery = (query) => {
+        CollectionActions.query(scope, query, tag, handleOutput, null, null, args);
     };
 
     const handleChangeTab = (newValue) => {
