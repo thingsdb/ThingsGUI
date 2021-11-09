@@ -5,9 +5,10 @@ import TextField from '@mui/material/TextField';
 
 import { EditTaskDialogTAG } from '../../../Constants/Tags';
 import { CollectionActions, TaskActions } from '../../../Stores';
-import { Closure, ErrorMsg, EditProvider, nextRunFn, parseError, ViewEditFields } from '../../Utils';
+import { Closure, ErrorMsg, EditProvider, nextRunFn, replacer, parseError, ViewEditFields } from '../../Utils';
 import { NIL } from '../../../Constants/ThingTypes';
 import { SetArguments, SetOwner } from '../Utils';
+
 
 const header = [
     {
@@ -48,7 +49,7 @@ const header = [
                 <SetArguments closure={closure || ''} onChange={onChange} />
             </EditProvider>
         ),
-        viewComponent: (args) => `[${args}]`,
+        viewComponent: (args) => JSON.stringify(args, replacer, 4),
     },
     {
         ky: 'closure',

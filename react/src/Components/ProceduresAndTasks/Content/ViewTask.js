@@ -7,7 +7,7 @@ import React from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import TextField from '@mui/material/TextField';
 
-import { nextRunFn, useThingsError } from '../../Utils';
+import { nextRunFn, replacer, useThingsError } from '../../Utils';
 import { TaskActions } from '../../../Stores';
 import { ViewTaskDialogTAG } from '../../../Constants/Tags';
 
@@ -67,7 +67,7 @@ const ViewTask = ({scope, task}) => {
             >
                 <ListItemText
                     primary="Task arguments"
-                    secondary={`[${args}]`}
+                    secondary={JSON.stringify(args, replacer, 4)}
                 />
             </ListItem>
             <ListItem>

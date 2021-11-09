@@ -50,6 +50,7 @@ const EditActions = {
         dispatch(() => ({
             blob: {},
             error: '',
+            obj: {},
             query: '',
             val: '',
         }));
@@ -59,6 +60,7 @@ const EditActions = {
 const initialState = {
     blob: {},
     error: '',
+    obj: {},
     query: '',
     val: '',
 };

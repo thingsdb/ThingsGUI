@@ -2,26 +2,23 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { InputField, useEdit } from '../../Utils';
-import { BOOL, BYTES, CODE, DATETIME, FLOAT, INT, NIL, REGEX, STR, VARIABLE } from '../../../Constants/ThingTypes';
+import { BOOL, BYTES, CODE, FLOAT, INT, LIST, NIL, STR, THING, VARIABLE } from '../../../Constants/ThingTypes';
 
 
-const reClosureParams = /(?<=\||,)(.*?)(?=\||,)/g;
-const reObjectValues = /(?<=:)(.*?)(?=\}|,)/g;
+const reClosureParams = /(?<=,)(.*?)(?=\||,)/g;
 
-const dataTypes = [BOOL, BYTES, CODE, DATETIME, FLOAT, INT, NIL, REGEX, STR]; // Supported types
+const dataTypes = [BOOL, BYTES, CODE, FLOAT, INT, LIST, NIL, STR, THING]; // Supported types
 
 const SetArguments = ({closure, onChange}) => {
     const editState = useEdit()[0];
-    const {blob, val} = editState;
+    const {blob, obj} = editState;
 
-    let params = closure.match(reClosureParams);
-    let argLabels = params ? params.slice(1) : [];
+    let argLabels = closure.match(reClosureParams);
 
     React.useEffect(() => {
-        let v = val.match(reObjectValues);
-        let values = v ? v.map(v => v.trim()) : [];
+        let values = Object.values(obj);
         onChange(values, blob);
-    }, [blob, onChange, val]);
+    }, [blob, onChange, obj]);
 
     return (
         <InputField dataType={VARIABLE} dataTypes={dataTypes} variables={argLabels} />

@@ -64,7 +64,7 @@ import { ARRAY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NI
     SET, STR, THING, TIMEVAL, WRAP } from '../../Constants/ThingTypes';
 import { THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE } from '../../Constants/Scopes';
 import { THINGDB_CACHE } from '../../Constants/Files';
-import { DATE_TIME_MIN_STR } from '../../Constants/DateStrings';
+import { DATE_TIME_SEC_STR } from '../../Constants/DateStrings';
 
 const checkType = (t) => {
     if (t === null) {
@@ -208,7 +208,7 @@ const scaleToBinBytes = (bytes) => {
     return `${rounded === number ? '' : '~'}${rounded} ${metricLabel[i]}`;
 };
 
-const nextRunFn = (t) => (t ? moment(t).format(DATE_TIME_MIN_STR) : NIL);
+const nextRunFn = (t) => (t ? moment(t).format(DATE_TIME_SEC_STR) : NIL);
 
 const getIdFromPath = (pathname, name) => {
     const splitPath = pathname.split('/');
@@ -316,6 +316,8 @@ const getSorting = (order, orderBy) => {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 };
 
+const replacer = (_key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
+
 export {
     allDataTypes,
     Arguments,
@@ -368,6 +370,7 @@ export {
     QueryInput,
     QueryOutput,
     RefreshContainer,
+    replacer,
     revealCustomType,
     scaleToBinBytes,
     SearchInput,
