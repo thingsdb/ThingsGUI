@@ -10,7 +10,7 @@ const SetArguments = ({closure, onChange}) => {
     const editState = useEdit()[0];
     const {blob, obj} = editState;
 
-    let argLabels = closure.split('|')[1].split(',').slice(1);
+    let argLabels = (closure.split('|')[1] || '').split(',').slice(1);
 
     React.useEffect(() => {
         let values = Object.values(obj);
