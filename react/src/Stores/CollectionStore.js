@@ -127,7 +127,7 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null) {
+    onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null, onFail) {
         if(thingId){
             query = `${query} thing(${thingId})`;
         }
@@ -152,6 +152,7 @@ class CollectionStore extends BaseStore {
             cb(data);
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
+            onFail();
         });
     }
 

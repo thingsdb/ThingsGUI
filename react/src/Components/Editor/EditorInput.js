@@ -17,7 +17,7 @@ const withStores = withVlow([{
 
 
 const tag = EditorTAG;
-const Editor = ({height, history, input, onQuery}) => {
+const Editor = ({height, history, input, loading, onQuery}) => {
     let routerHistory = useHistory();
 
     const [query, setQuery] = React.useState(() => {
@@ -107,7 +107,7 @@ const Editor = ({height, history, input, onQuery}) => {
                 <QueryInput onChange={handleInput} input={queryInput} height={height-60} />
             </div>
             <CardActions disableSpacing sx={{padding: '8px 0px 0px 16px'}}>
-                <SubmitButton onClickSubmit={handleSubmit} />
+                <SubmitButton loading={loading} onClickSubmit={handleSubmit} />
             </CardActions>
         </React.Fragment>
     );
@@ -116,6 +116,7 @@ const Editor = ({height, history, input, onQuery}) => {
 Editor.propTypes = {
     height: PropTypes.number.isRequired,
     input: PropTypes.string.isRequired,
+    loading: PropTypes.bool.isRequired,
     onQuery: PropTypes.func.isRequired,
 
     /* Editor properties */
