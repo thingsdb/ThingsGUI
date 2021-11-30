@@ -43,9 +43,6 @@ const Editor = () => {
     const handleOutput = (out) => {
         setOutput(out);
         setLoading(false);
-        if (tabIndex === tabs.args) {
-            setTabIndex(tabs.tree);
-        }
     };
 
     const handleFail = () => {
