@@ -11,7 +11,7 @@ const TaskActions = Vlow.createActions([
     'getTasks',
 ]);
 
-const queryGetTasks = 'tasks = tasks(); tasks.map(|t| {id: t.id(), at: t.at(), owner: t.owner(), closure: t.closure(), err: t.err(), args: t.args()});';
+const queryGetTasks = 'tasks = tasks(); return(tasks.map(|t| {id: t.id(), at: t.at(), owner: t.owner(), closure: t.closure(), err: t.err(), args: t.args()}), 2);';
 
 class TaskStore extends BaseStore {
 

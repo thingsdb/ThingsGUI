@@ -7,11 +7,13 @@ import Typography from '@mui/material/Typography';
 
 import { EditActions, useEdit } from '../Context';
 
+const onlyInts = (str) => str.length == str.replace(/[^0-9]/g, '').length;
 
 const AddRoom = ({identifier, init, parent}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
     const [roomId, setRoomId] = React.useState('');
+    const [error, setError] = React.useState('');
 
     React.useEffect(()=>{
         if (val) {
@@ -32,6 +34,7 @@ const AddRoom = ({identifier, init, parent}) => {
 
     const handleOnChangeRoomId = ({target}) => {
         const {value} = target;
+        setError(onlyInts(value) ? '' : 'Input needs to be an integer');
         saveRoom(value);
     };
 
@@ -40,6 +43,8 @@ const AddRoom = ({identifier, init, parent}) => {
         EditActions.update(dispatch, 'val', c, identifier, parent);
         setRoomId(roomId);
     };
+
+    const hasError = Boolean(error);
 
     return(
         <Grid container item xs={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
@@ -55,13 +60,14 @@ const AddRoom = ({identifier, init, parent}) => {
                     <TextField
                         name="roomId"
                         label="Room ID"
-                        type="text"
+                        type="text" // setting to "number" contains bug. On entering value e the input is cleared.
                         value={roomId}
                         spellCheck={false}
                         onChange={handleOnChangeRoomId}
                         fullWidth
                         variant="standard"
-                        helperText="Enter room ID or leave empty the create a new room"
+                        error={hasError}
+                        helperText={hasError ? error : 'Enter room ID or leave empty the create a new room'}
                     />
                 </Grid>
             </Grid>

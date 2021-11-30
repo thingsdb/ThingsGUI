@@ -1,10 +1,14 @@
 import Collapse from '@mui/material/Collapse';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -31,9 +35,15 @@ const AddTaskDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState(initState);
     const {args, blob, closure, error, queryString, start} = state;
 
+    const [startType, setStartType] = React.useState('datetime');
+    const showDatetime = startType === 'datetime';
+
 
     React.useEffect(() => { // clean state
-        setState(initState);
+        if(open) {
+            setState(initState);
+            setStartType('datetime');
+        }
     }, [open]);
 
     const handleChangeStart = (s) => {
@@ -52,6 +62,16 @@ const AddTaskDialog = ({open, onClose, scope}) => {
         if(!open) {
             handleChangeArgs([]);
         }
+    };
+
+    const handleChangeStartType = ({target}) => {
+        const {value} = target;
+        setStartType(value);
+    };
+
+    const handleChangeTimestamp = ({target}) => {
+        const {value} = target;
+        handleChangeStart(value);
     };
 
     const handleClickOk = () => {
@@ -134,7 +154,38 @@ const AddTaskDialog = ({open, onClose, scope}) => {
                             />
                         </ListItem>
                         <ListItem>
-                            <TimePicker onChange={handleChangeStart} />
+                            <FormControl margin="none" size="small" fullWidth>
+                                <RadioGroup aria-label="position" name="position" value={startType} onChange={handleChangeStartType} row>
+                                    <FormControlLabel
+                                        value="datetime"
+                                        control={<Radio color="primary" />}
+                                        label="Add datetime"
+                                        labelPlacement="end"
+                                    />
+                                    <FormControlLabel
+                                        value="timestamp"
+                                        control={<Radio color="primary" />}
+                                        label="Add timestamp"
+                                        labelPlacement="end"
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                        </ListItem>
+                        <ListItem>
+                            {showDatetime ? (
+                                <TimePicker onChange={handleChangeStart} />
+                            ) : (
+                                <TextField
+                                    fullWidth
+                                    id="timestamp"
+                                    label="Timestamp"
+                                    margin="dense"
+                                    onChange={handleChangeTimestamp}
+                                    spellCheck={false}
+                                    value={start}
+                                    variant="standard"
+                                />
+                            )}
                         </ListItem>
                         <ListItem>
                             <ListItemText

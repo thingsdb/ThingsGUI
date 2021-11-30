@@ -12,13 +12,19 @@ import SelectScope from './SelectScope';
 
 
 const tag = EditorTAG;
+const tabs = {
+    tree: 0,
+    json: 1,
+    args: 2
+};
 
 const Editor = () => {
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState('');
     const [input, setInput] = React.useState('');
     const [args, setArgs] = React.useState(null);
-    const [tabIndex, setTabIndex] = React.useState(0);
+    const [loading, setLoading] = React.useState(false);
+    const [tabIndex, setTabIndex] = React.useState(tabs.tree);
 
     React.useEffect(() => {
         NodesActions.getNodes();
@@ -36,7 +42,11 @@ const Editor = () => {
 
     const handleOutput = (out) => {
         setOutput(out);
-        setTabIndex(0);
+        setLoading(false);
+    };
+
+    const handleFail = () => {
+        setLoading(false);
     };
 
     const handleInput = React.useCallback((value) => {
@@ -47,12 +57,9 @@ const Editor = () => {
         setArgs(args);
     };
 
-    const handleQuery = (query, withArgs) => {
-        let jsonArgs = null;
-        if(withArgs) {
-            jsonArgs = args;
-        }
-        CollectionActions.query(scope, query, tag, handleOutput, null, null, jsonArgs);
+    const handleQuery = (query) => {
+        setLoading(true);
+        CollectionActions.query(scope, query, tag, handleOutput, null, null, args, handleFail);
     };
 
     const handleChangeTab = (newValue) => {
@@ -73,7 +80,7 @@ const Editor = () => {
                         </Card>
                         <DragdownCard>
                             {(height) => (
-                                <EditorInput height={height} input={input} onQuery={handleQuery} />
+                                <EditorInput loading={loading} height={height} input={input} onQuery={handleQuery} />
                             )}
                         </DragdownCard>
                     </Grid>

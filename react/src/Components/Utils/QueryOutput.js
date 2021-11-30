@@ -8,7 +8,7 @@ import React from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
-import { Arguments, EditProvider, ThingsTree } from '.';
+import { Arguments, EditProvider, replacer, ThingsTree } from '.';
 import Copy from './Copy';
 
 
@@ -22,7 +22,6 @@ const QueryOutput = ({output, onArgs, onChangeTab, tabIndex}) => {
         onArgs(args);
     };
 
-    const replacer = (_key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
     const jsonOutput = JSON.stringify(output, replacer, 4); // output
 
     return (
