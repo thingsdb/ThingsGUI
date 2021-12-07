@@ -1,0 +1,1 @@
+export const LOG_WARNING = 2;

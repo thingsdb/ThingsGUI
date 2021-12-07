@@ -6,6 +6,7 @@ import Vlow from 'vlow';
 import { ErrorActions } from './ErrorStore';
 import { LoginTAG } from '../Constants/Tags';
 import { DATE_TIME_MIN_STR } from '../Constants/DateStrings';
+import { LOG_WARNING } from '../Constants/Warnings';
 
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
@@ -288,7 +289,8 @@ class EventStore extends BaseStore {
         });
 
         socket.on('OnWarning', (data) => {
-            if(data.Code === 2) {
+            // https://docs.thingsdb.net/v1/collection-api/log/
+            if(data.Code === LOG_WARNING) {
                 this.setState(prevState => ({
                     logging: [
                         ...prevState.logging,

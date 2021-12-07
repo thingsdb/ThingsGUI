@@ -6,26 +6,20 @@ import React from 'react';
 import { CollectionActions, ErrorActions, NodesActions, ThingsdbActions } from '../../Stores';
 import { DragdownCard, ErrorMsg, QueryOutput, TitlePage2 } from '../Utils';
 import { EditorTAG } from '../../Constants/Tags';
+import { EditorTab } from '../../Constants/Enums';
 import EditorInput from './EditorInput';
 import EditorSideContent from './EditorSideContent';
 import SelectScope from './SelectScope';
 
 
 const tag = EditorTAG;
-const tabs = {
-    tree: 0,
-    json: 1,
-    args: 2,
-    logs: 3
-};
-
 const Editor = () => {
     const [output, setOutput] = React.useState(null);
     const [scope, setScope] = React.useState('');
     const [input, setInput] = React.useState('');
     const [args, setArgs] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
-    const [tabIndex, setTabIndex] = React.useState(tabs.tree);
+    const [tabIndex, setTabIndex] = React.useState(EditorTab.TREE);
 
     React.useEffect(() => {
         NodesActions.getNodes();

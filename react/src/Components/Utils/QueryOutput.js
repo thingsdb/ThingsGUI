@@ -9,6 +9,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
 import { Arguments, EditProvider, Logging, replacer, ThingsTree } from '.';
+import { EditorTab } from '../../Constants/Enums';
 import Copy from './Copy';
 
 
@@ -32,7 +33,7 @@ const QueryOutput = ({output, onArgs, onChangeTab, showLogs, tabIndex}) => {
                 {onArgs && <Tab label="Arguments" />}
                 {showLogs && <Tab label="Logging" />}
             </Tabs>
-            <Collapse in={tabIndex === 0}>
+            <Collapse in={tabIndex === EditorTab.TREE}>
                 <List
                     component="nav"
                     dense
@@ -48,7 +49,7 @@ const QueryOutput = ({output, onArgs, onChangeTab, showLogs, tabIndex}) => {
                     />
                 </List>
             </Collapse>
-            <Collapse in={tabIndex === 1}>
+            <Collapse in={tabIndex === EditorTab.JSON}>
                 <Grid container>
                     <Grid container item xs={12} justifyContent="flex-end">
                         <Copy text={jsonOutput || ''} />
@@ -63,14 +64,14 @@ const QueryOutput = ({output, onArgs, onChangeTab, showLogs, tabIndex}) => {
                 </Grid>
             </Collapse>
             {onArgs && (
-                <Collapse in={tabIndex === 2}>
+                <Collapse in={tabIndex === EditorTab.ARGUMENTS}>
                     <EditProvider>
                         <Arguments onChange={handleArgs} />
                     </EditProvider>
                 </Collapse>
             )}
             {showLogs && (
-                <Collapse in={tabIndex === 3}>
+                <Collapse in={tabIndex === EditorTab.LOG}>
                     <Logging />
                 </Collapse>
             )}
