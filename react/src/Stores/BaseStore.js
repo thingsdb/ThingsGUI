@@ -210,11 +210,13 @@ class EventStore extends BaseStore {
     static types = {
         events: PropTypes.object,
         ids: PropTypes.object,
+        logging: PropTypes.arrayOf(PropTypes.object),
     }
 
     static defaults = {
         events: {},
         ids: {},
+        logging: []
     }
 
     constructor() {
@@ -286,7 +288,19 @@ class EventStore extends BaseStore {
         });
 
         socket.on('OnWarning', (data) => {
-            ErrorActions.setToastError(data.Msg);
+            if(data.Code === 2) {
+                this.setState(prevState => ({
+                    logging: [
+                        ...prevState.logging,
+                        {
+                            time: moment(),
+                            msg: data.Msg
+                        }
+                    ]
+                }));
+            } else {
+                ErrorActions.setToastError(data.Msg);
+            }
         });
     }
 

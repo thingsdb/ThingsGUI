@@ -15,7 +15,8 @@ const tag = EditorTAG;
 const tabs = {
     tree: 0,
     json: 1,
-    args: 2
+    args: 2,
+    logs: 3
 };
 
 const Editor = () => {
@@ -85,7 +86,7 @@ const Editor = () => {
                         </DragdownCard>
                     </Grid>
                     <Grid item xs={12}>
-                        <QueryOutput output={output} onArgs={handleArgs} tabIndex={tabIndex} onChangeTab={handleChangeTab} />
+                        <QueryOutput output={output} onArgs={handleArgs} showLogs tabIndex={tabIndex} onChangeTab={handleChangeTab} />
                     </Grid>
                 </React.Fragment>
             }
