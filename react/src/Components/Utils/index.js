@@ -25,6 +25,7 @@ import Info from './Info';
 import ListHeader from './ListHeader';
 import LocalMsg from './LocalMsg';
 import LocalErrorMsg from './LocalErrorMsg';
+import Logging from './Logging';
 import Menu from './Menu';
 import moment from 'moment';
 import QueryInput from './QueryInput';
@@ -361,6 +362,7 @@ export {
     InputField,
     isObjectEmpty,
     ListHeader,
+    Logging,
     LocalErrorMsg,
     LocalMsg,
     Menu,

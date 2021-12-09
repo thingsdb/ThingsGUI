@@ -8,11 +8,12 @@ import React from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
-import { Arguments, EditProvider, replacer, ThingsTree } from '.';
+import { Arguments, EditProvider, Logging, replacer, ThingsTree } from '.';
+import { EditorTab } from '../../Constants/Enums';
 import Copy from './Copy';
 
 
-const QueryOutput = ({output, onArgs, onChangeTab, tabIndex}) => {
+const QueryOutput = ({output, onArgs, onChangeTab, showLogs, tabIndex}) => {
 
     const handleChangeTab = (_event, newValue) => {
         onChangeTab(newValue);
@@ -30,8 +31,9 @@ const QueryOutput = ({output, onArgs, onChangeTab, tabIndex}) => {
                 <Tab label="Tree view" />
                 <Tab label="JSON view" />
                 {onArgs && <Tab label="Arguments" />}
+                {showLogs && <Tab label="Logging" />}
             </Tabs>
-            <Collapse in={tabIndex === 0}>
+            <Collapse in={tabIndex === EditorTab.TREE}>
                 <List
                     component="nav"
                     dense
@@ -47,7 +49,7 @@ const QueryOutput = ({output, onArgs, onChangeTab, tabIndex}) => {
                     />
                 </List>
             </Collapse>
-            <Collapse in={tabIndex === 1}>
+            <Collapse in={tabIndex === EditorTab.JSON}>
                 <Grid container>
                     <Grid container item xs={12} justifyContent="flex-end">
                         <Copy text={jsonOutput || ''} />
@@ -62,10 +64,15 @@ const QueryOutput = ({output, onArgs, onChangeTab, tabIndex}) => {
                 </Grid>
             </Collapse>
             {onArgs && (
-                <Collapse in={tabIndex === 2}>
+                <Collapse in={tabIndex === EditorTab.ARGUMENTS}>
                     <EditProvider>
                         <Arguments onChange={handleArgs} />
                     </EditProvider>
+                </Collapse>
+            )}
+            {showLogs && (
+                <Collapse in={tabIndex === EditorTab.LOG}>
+                    <Logging />
                 </Collapse>
             )}
         </Paper>
@@ -75,12 +82,14 @@ const QueryOutput = ({output, onArgs, onChangeTab, tabIndex}) => {
 QueryOutput.defaultProps = {
     output: null,
     onArgs: null,
+    showLogs: false,
 };
 
 QueryOutput.propTypes = {
     output: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     onArgs: PropTypes.func,
     onChangeTab: PropTypes.func.isRequired,
+    showLogs: PropTypes.bool,
     tabIndex: PropTypes.number.isRequired
 };
 export default QueryOutput;

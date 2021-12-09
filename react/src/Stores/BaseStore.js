@@ -6,6 +6,7 @@ import Vlow from 'vlow';
 import { ErrorActions } from './ErrorStore';
 import { LoginTAG } from '../Constants/Tags';
 import { DATE_TIME_MIN_STR } from '../Constants/DateStrings';
+import { LOG_WARNING } from '../Constants/Warnings';
 
 
 const socket = io.connect(`${window.location.protocol}//${window.location.host}`, {
@@ -210,11 +211,13 @@ class EventStore extends BaseStore {
     static types = {
         events: PropTypes.object,
         ids: PropTypes.object,
+        logging: PropTypes.arrayOf(PropTypes.object),
     }
 
     static defaults = {
         events: {},
         ids: {},
+        logging: []
     }
 
     constructor() {
@@ -286,7 +289,20 @@ class EventStore extends BaseStore {
         });
 
         socket.on('OnWarning', (data) => {
-            ErrorActions.setToastError(data.Msg);
+            // https://docs.thingsdb.net/v1/collection-api/log/
+            if(data.Code === LOG_WARNING) {
+                this.setState(prevState => ({
+                    logging: [
+                        ...prevState.logging,
+                        {
+                            time: moment(),
+                            msg: data.Msg
+                        }
+                    ]
+                }));
+            } else {
+                ErrorActions.setToastError(data.Msg);
+            }
         });
     }
 
