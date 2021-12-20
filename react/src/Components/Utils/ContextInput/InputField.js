@@ -9,7 +9,7 @@ import {AddArray, AddBlob, AddBool, AddClosure, AddCustomType, AddEnum, AddError
 import {BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, REGEX, ROOM,
     SET, STR, THING, TIMEVAL, VARIABLE} from '../../../Constants/ThingTypes';
 
-const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identifier, init, parent, variables,...props}) => {
+const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identifier, init, parent, variables, ...props}) => {
 
     const dispatch = useEdit()[1];
 

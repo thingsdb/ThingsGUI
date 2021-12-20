@@ -187,6 +187,7 @@ export default {
         'is_str': 'This function determines whether the value passed to this function is of type raw and contains valid utf8. Alias for is_utf8.',
         'is_task': 'This function determines whether the provided value is a task or not.',
         'is_thing': 'This function determines whether the value passed to this function is a thing or not.',
+        'is_time_zone': 'This function determines whether the provided value is of type str and contains a valid time zone.',
         'is_timeval': 'This function determines whether the provided value is of type timeval.',
         'is_tuple': 'This function determines whether the value passed to this function is a immutable array or not. At least nested arrays are of kind tuple.',
         'is_utf8': 'This function determines whether the value passed to this function is of type raw and contains valid utf8.',
