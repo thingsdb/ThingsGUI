@@ -16,6 +16,7 @@ Tool for managing ThingsDB user accounts, nodes and collections. ThingsGUI is a 
     * [Secure connection (TLS)](#secure-connection-(tls)-(3))
     * [Saving connections](#saving-connections-(4))
     * [Fixed address mode](#fixed-address-mode)
+* [Docker](#docker)
 * [ThingsGUI tour](#thingsgui-tour)
   * [Dashboard](#dashboard)
   * [Collections](#collections)
@@ -103,8 +104,6 @@ Last, the gobuild.py script can be used to build the binary:
 
 ---------------------------------------
 
-
-
 ## Start ThingsGUI
 
 ### Command line
@@ -176,6 +175,18 @@ When you enable `THINGSGUI_USE_LOCAL_SESSION` the last session is saved in the u
 Note: `THINGSGUI_USE_LOCAL_SESSION` should only be enabled if the app is used locally by one user.
 
 ---
+
+## Docker
+
+Start a container with the ThingsGUI image:
+
+```bash
+docker run \
+    -d -p 5000:5000 \
+    -v ~/.config/ThingsGUI:/root/.config/ThingsGUI \
+    -t thingsdb/gui:latest \
+    --host 0.0.0.0
+```
 
 ## ThingsGUI tour
 

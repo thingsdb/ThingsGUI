@@ -190,7 +190,7 @@ func (app *app) start() {
 	http.HandleFunc("/download", handlerDownload)
 	http.HandleFunc("/session", handlerSession)
 
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./react/static/"))))
 
 	http.Handle("/socket.io/", app.server)
 
