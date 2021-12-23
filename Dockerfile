@@ -25,4 +25,5 @@ RUN python3 ./gobuild.py -o things-gui
 FROM alpine:latest
 COPY --from=build-go /build/things-gui ./things-gui
 EXPOSE 5000
+VOLUME ["/root/.config/ThingsGUI"]
 ENTRYPOINT [ "./things-gui" ]
