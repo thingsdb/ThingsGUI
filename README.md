@@ -178,12 +178,6 @@ Note: `THINGSGUI_USE_LOCAL_SESSION` should only be enabled if the app is used lo
 
 ## Docker
 
-Build an image of ThingsGUI:
-
-```bash
-docker build -t things-gui -f test.Dockerfile .
-```
-
 Start a container with the ThingsGUI image:
 
 ```bash
