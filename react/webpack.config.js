@@ -8,7 +8,7 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const VERSION = require(path.resolve(__dirname, './package.json')).version;
-const BUILD_DIR = path.resolve(__dirname, '../static/js');
+const BUILD_DIR = path.resolve(__dirname, './static/js');
 const APP_DIR = path.resolve(__dirname, '');
 
 

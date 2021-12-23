@@ -62,22 +62,22 @@ def get_version(path):
 
 
 binfiles = [
-    ('''./static/js/main-bundle-{}.min.js'''.format(
+    ('''./react/static/js/main-bundle-{}.min.js'''.format(
         get_version(os.path.dirname(__file__))), "FileMainBundleMinJS"),
-    ('''./static/js/vendors-bundle-{}.min.js'''.format(
+    ('''./react/static/js/vendors-bundle-{}.min.js'''.format(
         get_version(os.path.dirname(__file__))), "FileVendorsBundleMinJS"),
-    ("./static/js/editor.worker.js", "FileEditorWorkerJS"),
-    ("./static/fonts/monaco-font.ttf", "FileMonacoFontTTF"),
-    ("./static/img/thingsdb.gif", "FileThingsdbGIF"),
-    ("./static/img/thingsgui-logo.png", "FileThingsguiLogo"),
-    ("./static/img/thingsdb-logo.png", "FileThingsdbLogo"),
-    ("./static/img/githubLogo.svg", "FileGithubLogo"),
-    ("./static/img/facebookLogo.png", "FileFacebookLogo"),
-    ("./static/img/linkedinLogo.png", "FileLinkedinLogo"),
-    ("./static/img/TTLogo.png", "FileTTLogo"),
-    ("./static/img/view-edit.png", "FileViewEditLogo"),
-    ("./static/favicon.ico", "FileFaviconICO"),
-    ("./templates/app.html", "FileAppHTML"),
+    ("./react/static/js/editor.worker.js", "FileEditorWorkerJS"),
+    ("./react/static/fonts/monaco-font.ttf", "FileMonacoFontTTF"),
+    ("./react/static/img/thingsdb.gif", "FileThingsdbGIF"),
+    ("./react/static/img/thingsgui-logo.png", "FileThingsguiLogo"),
+    ("./react/static/img/thingsdb-logo.png", "FileThingsdbLogo"),
+    ("./react/static/img/githubLogo.svg", "FileGithubLogo"),
+    ("./react/static/img/facebookLogo.png", "FileFacebookLogo"),
+    ("./react/static/img/linkedinLogo.png", "FileLinkedinLogo"),
+    ("./react/static/img/TTLogo.png", "FileTTLogo"),
+    ("./react/static/img/view-edit.png", "FileViewEditLogo"),
+    ("./react/static/favicon.ico", "FileFaviconICO"),
+    ("./react/templates/app.html", "FileAppHTML"),
 ]
 
 

@@ -106,11 +106,11 @@ venv.bak/
 # Compiled React
 ../node_modules/
 react/node_modules/
-static/js/*.html
-static/js/*-bundle-*.js
-static/js/*-bundle-*.min.js
-static/js/*-bundle-*.min.js.LICENSE.txt
-static/js/*.worker.js
+react/static/js/*.html
+react/static/js/*-bundle-*.js
+react/static/js/*-bundle-*.min.js
+react/static/js/*-bundle-*.min.js.LICENSE.txt
+react/static/js/*.worker.js
 
 # NPM
 react/npm-debug.log
