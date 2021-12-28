@@ -146,24 +146,24 @@ class ThingsdbStore extends BaseStore {
         const {user} = this.state;
         if (user.access.find(a => a.scope===scope).privileges.includes('FULL') ||
         user.access.find(a => a.scope===scope).privileges.includes('GRANT') ) {
-            const query=`${q}; {collections: collections_info(), users: users_info()};`;
+            const query=`${q} {collections: collections_info(), users: users_info()};`;
             this.returnCollectionsUsers(scope, query, tag, cb);
         } else {
-            const query=`${q}; {collections: collections_info(), user: user_info()};`;
+            const query=`${q} {collections: collections_info(), user: user_info()};`;
             this.returnCollectionsUser(scope, query, tag, cb);
         }
     }
 
     onAddCollection(name, tag, cb) {
-        this.checkBeforeCollectionUpdate(`new_collection('${name}')`, tag, cb);
+        this.checkBeforeCollectionUpdate(`new_collection('${name}');`, tag, cb);
     }
 
     onRenameCollection(oldname, newname, tag, cb) {
-        this.checkBeforeCollectionUpdate(`rename_collection('${oldname}', '${newname}')`, tag, cb);
+        this.checkBeforeCollectionUpdate(`rename_collection('${oldname}', '${newname}');`, tag, cb);
     }
 
     onRemoveCollection(name, tag, cb) {
-        this.checkBeforeCollectionUpdate(`del_collection('${name}')`, tag, cb);
+        this.checkBeforeCollectionUpdate(`del_collection('${name}');`, tag, cb);
     }
 
     //USERS
@@ -286,7 +286,7 @@ class ThingsdbStore extends BaseStore {
         const ky = user.access.find(a => a.scope===scope).privileges.includes('FULL') ||
                         user.access.find(a => a.scope===scope).privileges.includes('GRANT') ? 'users' : 'user';
 
-        const query=`${q}; ${ky}_info();`;
+        const query=`${q} ${ky}_info();`;
         this.emit('query', {
             scope,
             query
@@ -302,31 +302,31 @@ class ThingsdbStore extends BaseStore {
     }
 
     onGrant(name, collection, access, tag) {
-        this.checkBeforeUserUpdate(`grant('${collection}', '${name}', ${access})`, tag);
+        this.checkBeforeUserUpdate(`grant('${collection}', '${name}', ${access});`, tag);
 
     }
 
     onRevoke(name, collection, access, tag) {
-        this.checkBeforeUserUpdate(`revoke('${collection}', '${name}', ${access})`, tag);
+        this.checkBeforeUserUpdate(`revoke('${collection}', '${name}', ${access});`, tag);
     }
 
     onPassword(name, password, tag, cb) {
-        this.checkBeforeUserUpdate(`set_password('${name}', '${password}')`, tag, cb);
+        this.checkBeforeUserUpdate(`set_password('${name}', '${password}');`, tag, cb);
 
     }
 
     onResetPassword(name, tag, cb) {
-        this.checkBeforeUserUpdate(`set_password('${name}', ${NIL})`, tag, cb);
+        this.checkBeforeUserUpdate(`set_password('${name}', ${NIL});`, tag, cb);
     }
 
 
     onNewToken(config, tag, cb){ // name [, expirationTime] [, description]
-        this.checkBeforeUserUpdate(`new_token('${config.name}', expiration_time=${config.expirationTime||NIL}, description='${config.description||''}')`, tag, cb);
+        this.checkBeforeUserUpdate(`new_token('${config.name}', expiration_time=${config.expirationTime||NIL}, description='${config.description||''}');`, tag, cb);
 
     }
 
     onDelToken(key, tag){
-        this.checkBeforeUserUpdate(`del_token('${key}')`, tag);
+        this.checkBeforeUserUpdate(`del_token('${key}');`, tag);
 
     }
 

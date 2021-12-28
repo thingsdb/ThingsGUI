@@ -19,7 +19,7 @@ const tag = AddProcedureDialogTAG;
 
 const AddProcedureDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState({
-        queryString: 'new_procedure("", )',
+        queryString: 'new_procedure("", );',
         procedureName: '',
         error: '',
         closure: '',
@@ -29,7 +29,7 @@ const AddProcedureDialog = ({open, onClose, scope}) => {
 
     React.useEffect(() => { // clean state
         setState({
-            queryString: 'new_procedure("", )',
+            queryString: 'new_procedure("", );',
             procedureName: '',
             error: '',
             closure: '',
@@ -40,11 +40,11 @@ const AddProcedureDialog = ({open, onClose, scope}) => {
 
     const handleChange = ({target}) => {
         const {value} = target;
-        setState({...state, procedureName: value, queryString: `new_procedure("${value}", ${closure})`});
+        setState({...state, procedureName: value, queryString: `new_procedure("${value}", ${closure});`});
     };
 
     const handleClosure = (c) => {
-        setState({...state, closure: c, queryString: `new_procedure("${procedureName}", ${c})`});
+        setState({...state, closure: c, queryString: `new_procedure("${procedureName}", ${c});`});
     };
 
 

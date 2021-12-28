@@ -44,13 +44,13 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         // it would also be nice if we could check for potential custom type childern in an array type. To define the datatype of the edit component.
         let query='';
         if (parent.id==null) {
-            query = `{childType: type(thing(${child.id})), parentType: '', customTypes: types_info()}`; // check if custom type
+            query = `{childType: type(thing(${child.id})), parentType: '', customTypes: types_info()};`; // check if custom type
         } else if (parent.type == THING) {
-            query = `{childType: type(thing(${parent.id}).${child.name}), parentType: type(thing(${parent.id})), customTypes: types_info()}`; // check if custom type
+            query = `{childType: type(thing(${parent.id}).${child.name}), parentType: type(thing(${parent.id})), customTypes: types_info()};`; // check if custom type
         } else if (child.type == THING) {
-            query = `{childType: type(thing(${child.id})), parentType: type(thing(${parent.id}).${parent.name}), customTypes: types_info()}`; // in case parent is set than indexing is not supported. Therefore we need to check child type by id.
+            query = `{childType: type(thing(${child.id})), parentType: type(thing(${parent.id}).${parent.name}), customTypes: types_info()};`; // in case parent is set than indexing is not supported. Therefore we need to check child type by id.
         } else {
-            query = `{childType: type(thing(${parent.id}).${child.name}), parentType: type(thing(${parent.id}).${parent.name}), customTypes: types_info()}`; // check if custom type
+            query = `{childType: type(thing(${parent.id}).${child.name}), parentType: type(thing(${parent.id}).${parent.name}), customTypes: types_info()};`; // check if custom type
         }
         TypeActions.getType(query, scope, tag, setType);
         EnumActions.getEnums(scope, tag, setEnums);

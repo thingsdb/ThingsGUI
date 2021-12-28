@@ -31,7 +31,7 @@ class ProcedureStore extends BaseStore {
     }
 
     onGetProcedure(scope, tag=null, cb=()=>null) {
-        const query = 'procedure_info()';
+        const query = 'procedure_info();';
         this.emit('query', {
             query,
             scope
@@ -47,7 +47,7 @@ class ProcedureStore extends BaseStore {
     }
 
     onGetProcedures(scope, tag,  cb=()=>null) {
-        const query = 'procedures_info()';
+        const query = 'procedures_info();';
         this.emit('query', {
             query,
             scope

@@ -37,7 +37,7 @@ const AddError = ({identifier, init, parent}) => {
         if (init) {
             CollectionActions.query(
                 init.scope,
-                `{code: thing(${init.parentId}).${init.propName}.code(), msg: thing(${init.parentId}).${init.propName}.msg()}`,
+                `[thing(${init.parentId}).${init.propName}.code(), thing(${init.parentId}).${init.propName}.msg()];`,
                 ThingActionsDialogTAG,
                 handleErr
             );
@@ -45,7 +45,8 @@ const AddError = ({identifier, init, parent}) => {
     }, []);
 
     const handleErr = (data) => {
-        saveErr(data.code, data.msg);
+        const [code, msg] = data;
+        saveErr(code, msg);
     };
 
     const handleOnChangeCode = ({target}) => {
@@ -59,7 +60,7 @@ const AddError = ({identifier, init, parent}) => {
     };
 
     const saveErr = (code, msg) => {
-        const c = msg ? `err(${code}, '${msg}')` : `err(${code})`;
+        const c = msg ? `err(${code}, '${msg}');` : `err(${code});`;
         EditActions.update(dispatch, 'val', c, identifier, parent);
         setState({errCode: code, errMsg: msg});
     };

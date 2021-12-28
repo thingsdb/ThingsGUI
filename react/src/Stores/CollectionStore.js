@@ -74,7 +74,7 @@ class CollectionStore extends BaseStore {
     }
 
     onGetThings(collectionId, collectionName, thingId=null) {
-        const query = thingId ? `thing(${thingId})` : 'thing(.id())';
+        const query = thingId ? `thing(${thingId});` : 'thing(.id());';
         const scope = `${COLLECTION_SCOPE}:${collectionName}`;
         this.emit('query', {
             query,
@@ -96,7 +96,7 @@ class CollectionStore extends BaseStore {
         const keys = Object.keys(things);
 
         if(keys.length) {
-            const query = `[${keys.map(k => `thing(${k})`)}]`;
+            const query = `[${keys.map(k => `thing(${k})`)}];`;
             const scope = `${COLLECTION_SCOPE}:${collectionName}`;
             this.emit('query', {
                 query,
@@ -129,7 +129,7 @@ class CollectionStore extends BaseStore {
 
     onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null, onFail) {
         if(thingId){
-            query = `${query} thing(${thingId})`;
+            query = `${query} thing(${thingId});`;
         }
 
         let jsonArgs = null;
