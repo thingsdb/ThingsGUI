@@ -1,13 +1,18 @@
 import { withVlow } from 'vlow';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import ClearIcon from '@mui/icons-material/Clear';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { DATE_TIME_MIN_STR } from '../../Constants/DateStrings';
 import { THINGS_DOC_LOG_WARNING } from '../../Constants/Links';
-import { EventStore } from '../../Stores';
+import { EventActions, EventStore } from '../../Stores';
 
 const withStores = withVlow([{
     store: EventStore,
@@ -15,9 +20,27 @@ const withStores = withVlow([{
 }]);
 
 const Logging = ({logging}) => (
-    <Grid container spacing={1}>
-        {logging.map((log) => (
-            <Grid key={`${log.time.valueOf()}`} item xs={12}>
+    <List dense disablePadding>
+        <Collapse in={Array.isArray(logging) && logging.length > 1}>
+            <ListItem sx={{ justifyContent: 'flex-end' }}>
+                <Button>
+                    {'Clear all'}
+                </Button>
+            </ListItem>
+        </Collapse>
+        {logging.map((log, index) => (
+            <ListItem
+                key={`${log.time.valueOf()}`}
+                secondaryAction={
+                    <IconButton
+                        color="primary"
+                        onClick={() =>  EventActions.clearLogEntry(index)}
+                        size="small"
+                    >
+                        <ClearIcon />
+                    </IconButton>
+                }
+            >
                 <Typography variant="subtitle2" component="div" sx={{ display: 'flex' }}>
                     <Box sx={{ color: 'text.secondary', marginRight: '8px' }}>
                         {`${log.time.format(DATE_TIME_MIN_STR)} `}
@@ -26,16 +49,16 @@ const Logging = ({logging}) => (
                         {log.msg}
                     </Box>
                 </Typography>
-            </Grid>
+            </ListItem>
         ))}
         {logging.length === 0 &&
-            <Grid item xs={12}>
+            <ListItem xs={12}>
                 <Typography variant="subtitle2">
                     {'No logging available'}
                 </Typography>
-            </Grid>
+            </ListItem>
         }
-        <Grid container item justifyContent="flex-end">
+        <ListItem sx={{ justifyContent: 'flex-end' }}>
             <Box sx={{fontSize: 10, fontStyle: 'italic', m: 1}}>
                 {'Visit the '}
                 <Link target="_blank" href={THINGS_DOC_LOG_WARNING}>
@@ -43,8 +66,8 @@ const Logging = ({logging}) => (
                 </Link>
                 {' to learn more about logging'}
             </Box>
-        </Grid>
-    </Grid>
+        </ListItem>
+    </List>
 );
 
 Logging.propTypes = {

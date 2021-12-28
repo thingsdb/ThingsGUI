@@ -200,6 +200,8 @@ class BaseStore extends Vlow.Store {
 }
 
 const EventActions = Vlow.createActions([
+    'clearLogEntry',
+    'clearLogging',
     'join',
     'leave',
     'rejoin',
@@ -293,11 +295,11 @@ class EventStore extends BaseStore {
             if(data.Code === LOG_WARNING) {
                 this.setState(prevState => ({
                     logging: [
-                        ...prevState.logging,
                         {
                             time: moment(),
                             msg: data.Msg
-                        }
+                        },
+                        ...prevState.logging,
                     ]
                 }));
             } else {
@@ -335,6 +337,20 @@ class EventStore extends BaseStore {
         this.setState({
             events: {},
             ids: {},
+        });
+    }
+
+    onClearLogging() {
+        this.setState({
+            logging: [],
+        });
+    }
+
+    onClearLogEntry(index) {
+        this.setState(prevState => {
+            const newArray = [...prevState.logging];
+            newArray.splice(index, 1);
+            return {logging: newArray};
         });
     }
 }
