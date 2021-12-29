@@ -55,7 +55,7 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
                     </Box>
                 }
                 <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                    <Box sx={{ marginLeft: '12px' }}>
+                    <Box sx={{ marginLeft: '16px' }}>
                         <Tooltip disableFocusListener disableTouchListener title="Go to Cesbit page">
                             <IconButton target="_blank" href="https://cesbit.com" edge="start" aria-label="close">
                                 <img
@@ -68,14 +68,14 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
                             </IconButton>
                         </Tooltip>
                     </Box>
-                    <Box sx={{ marginLeft: '12px' }}>
+                    <Box sx={{ marginLeft: '16px' }}>
                         <Tooltip disableFocusListener disableTouchListener title="Go to GitHub repository">
                             <IconButton target="_blank" href="https://github.com/thingsdb" edge="start" aria-label="close">
                                 <GitHubIcon />
                             </IconButton>
                         </Tooltip>
                     </Box>
-                    <Box sx={{ marginLeft: '12px' }}>
+                    <Box sx={{ marginLeft: '16px' }}>
                         <Tooltip disableFocusListener disableTouchListener title="Go to ThingsDocs">
                             <IconButton target="_blank" href={THINGS_DOC} edge="start" aria-label="close">
                                 <HelpIcon />
@@ -100,7 +100,11 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
                             </ListItem>
                         </List>
                     </TopBarMenu>
-                    {additionals}
+                    {additionals && (
+                        <Box sx={{ marginLeft: '10px' }}>
+                            {additionals}
+                        </Box>
+                    )}
                 </Box>
             </Toolbar>
         </AppBar>
