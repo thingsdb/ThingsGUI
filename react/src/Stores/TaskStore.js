@@ -7,21 +7,20 @@ const TaskActions = Vlow.createActions([
     'cancelTask',
     'deleteTask',
     'getArgs',
+    'getLightTasks',
     'getOwner',
-    'getTasks',
+    'getTask',
 ]);
 
-const queryGetTasks = 'tasks = tasks(); return(tasks.map(|t| {id: t.id(), at: t.at(), owner: t.owner(), closure: t.closure(), err: t.err(), args: t.args()}), 2);';
+const queryGetLightTasks = 'tasks = tasks(); return(tasks.map(|t| {id: t.id(), at: t.at(), err: t.err()}), 2);';
 
 class TaskStore extends BaseStore {
 
     static types = {
-        task: PropTypes.object,
         tasks: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
     }
 
     static defaults = {
-        task: {},
         tasks: {},
     }
 
@@ -30,9 +29,9 @@ class TaskStore extends BaseStore {
         this.state = TaskStore.defaults;
     }
 
-    onGetTasks(scope, tag,  cb=()=>null) {
+    onGetLightTasks(scope, tag,  cb=()=>null) {
         this.emit('query', {
-            query: queryGetTasks,
+            query: queryGetLightTasks,
             scope
         }).done((data) => {
             this.setState(prevState => {
@@ -46,8 +45,21 @@ class TaskStore extends BaseStore {
         });
     }
 
+    onGetTask(scope, taskId, tag,  cb=()=>null) {
+        this.emit('query', {
+            query: `t = task(${taskId}); [t.id(), t.at(), t.owner(), t.closure(), t.err(), t.args()];`,
+            scope
+        }).done((data) => {
+            const [id, at, owner, closure, err, args] = data;
+            cb({id, at, owner, closure, err, args});
+        }).fail((event, status, message) => {
+            ErrorActions.setMsgError(tag, message.Log);
+            return [];
+        });
+    }
+
     onDeleteTask(scope, taskId, tag,  cb=()=>null) {
-        const query = `task(${taskId}).del(); ${queryGetTasks}`;
+        const query = `task(${taskId}).del(); ${queryGetLightTasks}`;
         this.emit('query', {
             query,
             scope
@@ -64,7 +76,7 @@ class TaskStore extends BaseStore {
     }
 
     onCancelTask(scope, taskId, tag,  cb=()=>null) {
-        const query = `task(${taskId}).cancel(); ${queryGetTasks}`;
+        const query = `task(${taskId}).cancel(); ${queryGetLightTasks}`;
         this.emit('query', {
             query,
             scope

@@ -80,7 +80,7 @@ const AddTaskDialog = ({open, onClose, scope}) => {
             queryString,
             tag,
             () => {
-                TaskActions.getTasks(scope, tag);
+                TaskActions.getLightTasks(scope, tag);
                 onClose();
             },
             null,

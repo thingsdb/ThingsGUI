@@ -90,22 +90,27 @@ const header = [
 const replaceNull = (items) => (items||[]).map(item => item === null ? NIL : item);
 const tag = EditTaskDialogTAG;
 
-const EditTask = ({task, scope}) => {
+const EditTask = ({taskId, scope}) => {
     const [queryString, setQueryString] = React.useState({args: '', closure: '', owner: ''});
     const [blob, setBlob] = React.useState({});
+    const [task, setTask] = React.useState({});
+
+    React.useEffect(() => {
+        TaskActions.getTask(scope, taskId, tag, setTask);
+    }, [scope, taskId]);
 
     const handleChangeArgs = React.useCallback((args, blob) => {
         setBlob(blob);
-        setQueryString(query => ({...query, args: `task(${task.id}).set_args([${replaceNull(args)}]);`}));
-    },[task.id]);
+        setQueryString(query => ({...query, args: `task(${taskId}).set_args([${replaceNull(args)}]);`}));
+    },[taskId]);
 
     const handleChangeClosure = React.useCallback((c) => {
-        setQueryString(query => ({...query, closure: ` task(${task.id}).set_closure(${c});`}));
-    }, [task.id]);
+        setQueryString(query => ({...query, closure: ` task(${taskId}).set_closure(${c});`}));
+    }, [taskId]);
 
     const handleChangeOwner = React.useCallback((o) => {
-        setQueryString(query => ({...query, owner: ` task(${task.id}).set_owner('${o}');`}));
-    }, [task.id]);
+        setQueryString(query => ({...query, owner: ` task(${taskId}).set_owner('${o}');`}));
+    }, [taskId]);
 
     const handleChange = (ky) => (
         ky === 'args' ? handleChangeArgs
@@ -120,7 +125,7 @@ const EditTask = ({task, scope}) => {
             queryString[ky],
             tag,
             () => {
-                TaskActions.getTasks(scope, tag);
+                TaskActions.getTask(scope, taskId, tag, setTask);
             },
             null,
             blob,
@@ -145,11 +150,11 @@ const EditTask = ({task, scope}) => {
 };
 
 EditTask.defaultProps = {
-    task: {},
+    taskId: null,
 };
 
 EditTask.propTypes = {
-    task: PropTypes.object,
+    taskId: PropTypes.number,
     scope: PropTypes.string.isRequired,
 };
 

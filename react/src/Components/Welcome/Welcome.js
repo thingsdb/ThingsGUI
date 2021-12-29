@@ -33,7 +33,7 @@ const Welcome = ({collections, procedures, tasks, user, users}) => {
     React.useEffect(() => {
         ThingsdbActions.getCollections();
         ProcedureActions.getProcedures();
-        TaskActions.getTasks();
+        TaskActions.getLightTasks();
         ThingsdbActions.getUsers();
         ThingsdbActions.getUser();
     }, []);
