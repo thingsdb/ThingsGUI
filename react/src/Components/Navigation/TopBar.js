@@ -3,6 +3,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import HelpIcon from '@mui/icons-material/HelpOutline';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -20,6 +21,7 @@ import { THINGS_DOC } from '../../Constants/Links';
 import { TopBarMenu } from '../Utils';
 import { ApplicationActions, ThingsdbStore } from '../../Stores';
 // import packageJson from '../../'; TODO does not find package.json
+
 
 const withStores = withVlow([{
     store: ThingsdbStore,
@@ -52,14 +54,34 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
                         {title}
                     </Box>
                 }
-                <div>
-                    <Tooltip disableFocusListener disableTouchListener title="Go to ThingsDocs">
-                        <IconButton target="_blank" href={THINGS_DOC} edge="start" aria-label="close">
-                            <HelpIcon />
-                        </IconButton>
-                    </Tooltip>
-                </div>
-                <div>
+                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ marginLeft: '12px' }}>
+                        <Tooltip disableFocusListener disableTouchListener title="Go to Cesbit page">
+                            <IconButton target="_blank" href="https://cesbit.com" edge="start" aria-label="close">
+                                <img
+                                    alt="cesbitWebpage"
+                                    src="/img/CesbitLogo.png"
+                                    draggable='false'
+                                    height='24em'
+                                    style={{opacity:'0.6'}}
+                                />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                    <Box sx={{ marginLeft: '12px' }}>
+                        <Tooltip disableFocusListener disableTouchListener title="Go to GitHub repository">
+                            <IconButton target="_blank" href="https://github.com/thingsdb" edge="start" aria-label="close">
+                                <GitHubIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                    <Box sx={{ marginLeft: '12px' }}>
+                        <Tooltip disableFocusListener disableTouchListener title="Go to ThingsDocs">
+                            <IconButton target="_blank" href={THINGS_DOC} edge="start" aria-label="close">
+                                <HelpIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
                     <TopBarMenu menuIcon={<AccountCircle />} menuTooltip="Logout">
                         <List>
                             <ListItem>
@@ -78,10 +100,8 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
                             </ListItem>
                         </List>
                     </TopBarMenu>
-                </div>
-                <div>
                     {additionals}
-                </div>
+                </Box>
             </Toolbar>
         </AppBar>
     );
