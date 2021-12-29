@@ -127,7 +127,7 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null, onFail) {
+    onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null, onFail=()=>null) {
         if(thingId){
             query = `${query} thing(${thingId});`;
         }

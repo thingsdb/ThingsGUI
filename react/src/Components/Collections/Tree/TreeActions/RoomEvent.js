@@ -92,9 +92,9 @@ const RoomEvent = ({room, events}) => {
                     </TimelineContent>
                 </TimelineItem>
             )) : (
-                <TimelineItem key="room_event_default">
+                <TimelineItem key="room_event_default" position="left">
                     <TimelineContent>
-                        <Typography variant="subtitle2">
+                        <Typography variant="subtitle2" align="left">
                             {'No recent events'}
                         </Typography>
                     </TimelineContent>

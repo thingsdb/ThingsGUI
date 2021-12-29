@@ -60,7 +60,7 @@ const AddError = ({identifier, init, parent}) => {
     };
 
     const saveErr = (code, msg) => {
-        const c = msg ? `err(${code}, '${msg}');` : `err(${code});`;
+        const c = msg ? `err(${code}, '${msg}')` : `err(${code})`;
         EditActions.update(dispatch, 'val', c, identifier, parent);
         setState({errCode: code, errMsg: msg});
     };

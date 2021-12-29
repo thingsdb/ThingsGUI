@@ -130,10 +130,11 @@ class ThingsdbStore extends BaseStore {
             scope,
             query
         }).done((data) => {
-            if (!deepEqual(data.collections, collections) || !deepEqual(data.users, users)){
+            const [freshCollections, freshUsers] = data;
+            if (!deepEqual(freshCollections, collections) || !deepEqual(freshUsers, users)){
                 this.setState({
-                    collections: data.collections,
-                    users: data.users,
+                    collections: freshCollections,
+                    users: freshUsers,
                 });
             }
             cb();
@@ -146,10 +147,10 @@ class ThingsdbStore extends BaseStore {
         const {user} = this.state;
         if (user.access.find(a => a.scope===scope).privileges.includes('FULL') ||
         user.access.find(a => a.scope===scope).privileges.includes('GRANT') ) {
-            const query=`${q} {collections: collections_info(), users: users_info()};`;
+            const query=`${q} [collections_info(), users_info()];`;
             this.returnCollectionsUsers(scope, query, tag, cb);
         } else {
-            const query=`${q} {collections: collections_info(), user: user_info()};`;
+            const query=`${q} [collections_info(), user_info()];`;
             this.returnCollectionsUser(scope, query, tag, cb);
         }
     }
