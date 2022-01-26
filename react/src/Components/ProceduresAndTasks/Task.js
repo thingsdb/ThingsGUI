@@ -24,7 +24,7 @@ const Task = ({tasks}) => {
     const selectedTask = (tasks[scope] || []).find(c => String(c[itemKey]) === taskId);
 
     React.useEffect(() => {
-        TaskActions.getTasks(scope);
+        TaskActions.getLightTasks(scope);
     }, []);
 
     return (

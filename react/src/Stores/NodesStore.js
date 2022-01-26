@@ -85,15 +85,16 @@ class NodesStore extends BaseStore {
 
     onGetNodes(cb=()=>null){
         const {node, nodes} = this.state;
-        const query = '{nodes: nodes_info(), connectedNode: node_info()};';
+        const query = '[nodes_info(), node_info()];';
         this.emit('query', {
             scope: NODE_SCOPE,
             query
         }).done((data) => {
-            if (!deepEqual(data.nodes, nodes)|| data.connectedNode.node_id != node.node_id){
+            const [freshNodes, connectedNode] = data;
+            if (!deepEqual(freshNodes, nodes)|| connectedNode.node_id != node.node_id){
                 this.setState({
-                    nodes: data.nodes,
-                    connectedNode: data.connectedNode
+                    nodes: freshNodes,
+                    connectedNode: connectedNode
                 });
             }
             cb();
@@ -156,7 +157,7 @@ class NodesStore extends BaseStore {
 
     onGetDashboardInfo(cb=()=>null){
         const {nodes, allNodeInfo} = this.state;
-        const query = '{node_info: node_info(), counters: counters()};';
+        const query = '[node_info(), counters()];';
         const length = nodes.length;
         const arr = [];
         nodes.forEach((n,i) =>
@@ -164,7 +165,11 @@ class NodesStore extends BaseStore {
                 scope: `${NODE_SCOPE}:${n.node_id}`,
                 query
             }).done((data) => {
-                arr.push(data);
+                const [node, counters] = data;
+                arr.push({
+                    node_info: node,
+                    counters: counters
+                });
                 if ((length-1)==i && !deepEqual(arr, allNodeInfo)){
                     this.setState({allNodeInfo: arr});
                     cb(arr);
@@ -237,7 +242,7 @@ class NodesStore extends BaseStore {
     }
 
     onRestore(fileName, takeAccess, tag, cb) {
-        const query = `restore('${fileName}', ${takeAccess})`;
+        const query = `restore('${fileName}', ${takeAccess});`;
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query
@@ -249,13 +254,13 @@ class NodesStore extends BaseStore {
     }
 
     onShutdown(nodeId, tag, cb) {
-        const query = 'shutdown(); {nodes: nodes_info()};';
+        const query = 'shutdown(); nodes_info();';
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
         }).done((data) => {
             this.setState({
-                nodes: data.nodes
+                nodes: data
             });
             cb();
         }).fail((event, status, message) => {
@@ -305,7 +310,7 @@ class NodesStore extends BaseStore {
     }
 
     onAddBackup(nodeId, config, tag, cb) {
-        const query = `new_backup('${config.file}'${config.time ? `, datetime(${config.time})`:', now()'}${config.repeat ? `, ${config.repeat}${config.maxFiles?`, ${config.maxFiles}`:''}`:''})`;
+        const query = `new_backup('${config.file}'${config.time ? `, datetime(${config.time})`:', now()'}${config.repeat ? `, ${config.repeat}${config.maxFiles?`, ${config.maxFiles}`:''}`:''});`;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -357,7 +362,7 @@ class NodesStore extends BaseStore {
     }
 
     onAddModule(nodeId, config, tag, cb) {
-        const query = `new_module('${config.name}', '${config.file}'${config.configuration ? `, ${config.configuration}` : ''})`;
+        const query = `new_module('${config.name}', '${config.file}'${config.configuration ? `, ${config.configuration}` : ''});`;
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query

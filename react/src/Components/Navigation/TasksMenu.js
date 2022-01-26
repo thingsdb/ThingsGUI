@@ -19,11 +19,11 @@ const TasksMenu = ({tasks}) => {
     const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {
-        TaskActions.getTasks(scope);
+        TaskActions.getLightTasks(scope);
     }, []);
 
     const handleRefresh = () => {
-        TaskActions.getTasks(scope);
+        TaskActions.getLightTasks(scope);
     };
 
     const handleClickAdd = () => {

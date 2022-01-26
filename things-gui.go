@@ -13,7 +13,7 @@ import (
 )
 
 // AppVersion exposes version information
-const AppVersion = "1.1.3"
+const AppVersion = "1.1.4"
 
 var cookieName = "uid"
 var cookieMaxAge = 6048000 // (seconds) 10 weeks

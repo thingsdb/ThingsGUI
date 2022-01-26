@@ -27,7 +27,7 @@ const initState = {
     blob: {},
     closure: '',
     error: '',
-    queryString: 'task()',
+    queryString: 'task();',
     start: null,
 };
 
@@ -47,15 +47,15 @@ const AddTaskDialog = ({open, onClose, scope}) => {
     }, [open]);
 
     const handleChangeStart = (s) => {
-        setState({...state, start: s, queryString: `task(datetime(${s}), ${closure}${args.length ? `, [${args}]`: ''})`});
+        setState({...state, start: s, queryString: `task(datetime(${s}), ${closure}${args.length ? `, [${args}]`: ''});`});
     };
 
     const handleChangeClosure = (c) => {
-        setState({...state, closure: c, queryString: `task(datetime(${start}), ${c}${args.length ? `, [${args}]`: ''})`});
+        setState({...state, closure: c, queryString: `task(datetime(${start}), ${c}${args.length ? `, [${args}]`: ''});`});
     };
 
     const handleChangeArgs = React.useCallback((args, blob) => {
-        setState(state => ({...state, args: args, blob: blob, queryString: `task(datetime(${start}), ${closure}${args.length ? `, [${args}]`: ''})`}));
+        setState(state => ({...state, args: args, blob: blob, queryString: `task(datetime(${start}), ${closure}${args.length ? `, [${args}]`: ''});`}));
     }, [closure, start]);
 
     const handleSwitchArgs = (open) => {
@@ -80,7 +80,7 @@ const AddTaskDialog = ({open, onClose, scope}) => {
             queryString,
             tag,
             () => {
-                TaskActions.getTasks(scope, tag);
+                TaskActions.getLightTasks(scope, tag);
                 onClose();
             },
             null,

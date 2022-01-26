@@ -35,43 +35,43 @@ const headers = {
 
 const queries = {
     add: {
-        type: (name, list) => `set_type("${name}", {${list.map(v=>`${v.propertyName}: ${v.propertyType?`'${v.propertyType}'`:`${v.definition}`}`)}})` ,
-        enum: (name, list) => `set_enum("${name}", {${list.map(v=>`${v.propertyName}: ${v.propertyVal}`)}})`
+        type: (name, list) => `set_type("${name}", {${list.map(v=>`${v.propertyName}: ${v.propertyType?`'${v.propertyType}'`:`${v.definition}`}`)}});` ,
+        enum: (name, list) => `set_enum("${name}", {${list.map(v=>`${v.propertyName}: ${v.propertyVal}`)}});`
     },
     mod: {
         addField: {
-            type: (name, update) => `mod_type('${name}', 'add', '${update.propertyName}', '${update.propertyType}'${update.propertyVal?`, ${update.propertyVal}`:''})`,
-            enum: (name, update) => `mod_enum('${name}', 'add', '${update.propertyName}', ${update.propertyVal})`
+            type: (name, update) => `mod_type('${name}', 'add', '${update.propertyName}', '${update.propertyType}'${update.propertyVal?`, ${update.propertyVal}`:''});`,
+            enum: (name, update) => `mod_enum('${name}', 'add', '${update.propertyName}', ${update.propertyVal});`
         },
         addMethod: {
-            type: (name, update) => `mod_type('${name}', 'add', '${update.propertyName}', ${update.definition})`,
+            type: (name, update) => `mod_type('${name}', 'add', '${update.propertyName}', ${update.definition});`,
         },
         mod: {
-            type: (name, update) => ( `mod_type('${name}', 'mod', '${update.propertyName}', '${update.propertyType}'` + (update.callback ? `, ${update.callback}` : '') + ')'),
-            enum: (name, update) => `mod_enum('${name}', 'mod', '${update.propertyName}', ${update.propertyVal})`
+            type: (name, update) => ( `mod_type('${name}', 'mod', '${update.propertyName}', '${update.propertyType}'` + (update.callback ? `, ${update.callback}` : '') + ');'),
+            enum: (name, update) => `mod_enum('${name}', 'mod', '${update.propertyName}', ${update.propertyVal});`
         },
         ren: {
-            type: (name, update) => `mod_type('${name}', 'ren', '${update.oldname}', '${update.newname}')`,
-            enum: (name, update) => `mod_enum('${name}', 'ren', '${update.oldname}', '${update.newname}')`
+            type: (name, update) => `mod_type('${name}', 'ren', '${update.oldname}', '${update.newname}');`,
+            enum: (name, update) => `mod_enum('${name}', 'ren', '${update.oldname}', '${update.newname}');`
         },
         rel: {
-            type: (name, update) => `mod_type('${name}', 'rel', '${update.relation.property}', '${update.relation.propertyToo}')`,
+            type: (name, update) => `mod_type('${name}', 'rel', '${update.relation.property}', '${update.relation.propertyToo}');`,
         },
         delRel: {
-            type: (name, update) => `mod_type('${name}', 'rel', '${update.propertyName}', nil)`,
+            type: (name, update) => `mod_type('${name}', 'rel', '${update.propertyName}', nil);`,
         },
         def: {
-            enum: (name, update) => `mod_enum('${name}', 'def', '${update.propertyName}')`
+            enum: (name, update) => `mod_enum('${name}', 'def', '${update.propertyName}');`
         },
         del: {
-            type: (name, update) => `mod_type('${name}', 'del', '${update.propertyName}')`,
-            enum: (name, update) => `mod_enum('${name}', 'del', '${update.propertyName}')`
+            type: (name, update) => `mod_type('${name}', 'del', '${update.propertyName}');`,
+            enum: (name, update) => `mod_enum('${name}', 'del', '${update.propertyName}');`
         },
         wpo: {
-            type: (name, update) => `mod_type('${name}', 'wpo', ${update.wpo})`,
+            type: (name, update) => `mod_type('${name}', 'wpo', ${update.wpo});`,
         },
         met: {
-            type: (name, update) => (`mod_type('${name}', 'mod', '${update.propertyName}', ${update.definition}` + (update.callback ? `, ${update.callback}` : '') + ')'),
+            type: (name, update) => (`mod_type('${name}', 'mod', '${update.propertyName}', ${update.definition}` + (update.callback ? `, ${update.callback}` : '') + ');'),
         }
     }
 };

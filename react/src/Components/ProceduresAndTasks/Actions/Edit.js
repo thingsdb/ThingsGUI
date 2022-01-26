@@ -20,7 +20,7 @@ const Edit = ({item, type}) => {
         <Grid item xs={12}>
             <Card>
                 <CardContent>
-                    {type === 'procedure' ? <EditProcedure procedure={item} scope={scope} /> : <EditTask scope={scope} task={item} />}
+                    {type === 'procedure' ? <EditProcedure procedure={item} scope={scope} /> : <EditTask scope={scope} taskId={item.id} />}
                 </CardContent>
                 <CardActions>
                     <Grid container item xs={12} spacing={1} >

@@ -17,7 +17,7 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
     let history = useHistory();
 
     const handleClickOpenEditor = () => {
-        historyNavigate(history, `/${EDITOR_ROUTE}`, {scope: scope, query: child.type===THING ? `thing(${child.id})` : `thing(${parent.id}).${child.name}`});
+        historyNavigate(history, `/${EDITOR_ROUTE}`, {scope: scope, query: child.type===THING ? `thing(${child.id});` : `thing(${parent.id}).${child.name};`});
     };
 
     // buttons visible

@@ -40,7 +40,7 @@ class EnumStore extends BaseStore {
     }
 
     onGetEnums(scope, tag, cb=()=>null) {
-        const query = 'enums_info()';
+        const query = 'enums_info();';
         this.emit('query', {
             query,
             scope

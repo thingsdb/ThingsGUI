@@ -27,7 +27,9 @@ const AddRoom = ({identifier, init, parent}) => {
     React.useEffect(()=>{
         let roomId = '';
         if(init && init.includes('room:')) {
-            roomId = init.split(':')[1];
+            let re = /((?<=<room:)[0-9]*(?=>))/g;
+            let match = init.match(re);
+            roomId = match ? match[0] : '';
         }
         saveRoom(roomId);
     }, []);

@@ -40,7 +40,7 @@ class TypeStore extends BaseStore {
     }
 
     onGetTypes(scope, tag, cb=()=>null) {
-        const query = 'types_info()';
+        const query = 'types_info();';
         this.emit('query', {
             query,
             scope

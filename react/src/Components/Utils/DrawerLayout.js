@@ -108,13 +108,6 @@ const StyledDrawerContainer = styled('div', {shouldForwardProp: (prop) => prop !
     }),
 );
 
-const MenuFooter = styled('div')(() => ({
-    position:'fixed',
-    left: 20,
-    bottom: 5,
-    zIndex: 2
-}));
-
 const MenuContainer = styled('div')(() => ({
     overflow: 'auto',
 }));
@@ -138,7 +131,7 @@ const Menu = styled(Drawer, {shouldForwardProp: (prop) => prop !== 'menuWidth'})
 
 const menuWidth = 280;
 
-const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toast, bottomBar, drawerTitle, drawerContent}) => {
+const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toast, drawerTitle, drawerContent}) => {
     const [isResizing, setIsResizing] = React.useState(false);
     const [newWidth, setNewWidth] = React.useState(650);
 
@@ -192,9 +185,6 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
                                 {item}
                             </React.Fragment>
                         ))}
-                        <MenuFooter>
-                            {bottomBar}
-                        </MenuFooter>
                     </MenuContainer>
                 </Menu>
                 <Main open={open} menuOpen={menuOpen} newWidth={newWidth} menuWidth={menuWidth} isResizing={isResizing}>
@@ -237,7 +227,6 @@ DrawerLayout.propTypes = {
     topbar: PropTypes.object.isRequired,
     mainContent: PropTypes.object,
     toast: PropTypes.object.isRequired,
-    bottomBar: PropTypes.object.isRequired,
     drawerTitle: PropTypes.string.isRequired,
     drawerContent: PropTypes.object.isRequired,
 };

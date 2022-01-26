@@ -7,7 +7,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
-import { BottomBar, CollectionsMenu, OverviewMenu, ProceduresMenu, TasksMenu, TopBar, UsersMenu, QueryEditorMenu } from '../Navigation';
+import { CollectionsMenu, OverviewMenu, ProceduresMenu, TasksMenu, TopBar, UsersMenu, QueryEditorMenu } from '../Navigation';
 import { COLLECTION_ROUTE, EDITOR_ROUTE, PROCEDURE_ROUTE, TASK_ROUTE, USER_ROUTE } from '../../Constants/Routes';
 import { DrawerLayout, ErrorToast, getIdFromPath, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam } from '../Utils';
 import { Procedure, Task } from '../ProceduresAndTasks';
@@ -95,7 +95,6 @@ const App = () => {
                 }
                 menuOpen={menuOpen}
                 menus={[<OverviewMenu key="overview_menu" />, <CollectionsMenu key="collections_menu" />, <UsersMenu key="users_menu" />, <ProceduresMenu key="procedures_menu" />, <TasksMenu key="tasks_menu" />, <QueryEditorMenu key="editor_menu" />]}
-                bottomBar={<BottomBar />}
                 drawerTitle={'NODES'}
                 drawerContent={<Nodes />}
                 toast={<ErrorToast />}

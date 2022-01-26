@@ -32,7 +32,7 @@ const Tasks = ({buttonsView, dialogsView, onCallback, tasks, scope}) => {
     });
 
     const handleRefreshTasks = React.useCallback(() => {
-        TaskActions.getTasks(scope, TasksTAG);
+        TaskActions.getLightTasks(scope, TasksTAG);
     }, [scope]);
 
     React.useEffect(() => {

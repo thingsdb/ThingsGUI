@@ -26,7 +26,7 @@ const ViewEditTaskDialog = ({button, open, onClose, task, scope}) => (
                 </Grid>
             </Grid>
             <Grid item xs={12}>
-                <EditTask scope={scope} task={task} />
+                <EditTask scope={scope} taskId={task.id} />
             </Grid>
         </Grid>
     </SimpleModal>

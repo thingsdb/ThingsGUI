@@ -15,13 +15,15 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
     defaultToken: 'invalid',
     // tokenPostfix: '',
 
-    keywords: [
-        NIL, 'true', 'false',
+    functions: [
         ...Object.keys(Language.collection),
         ...Object.keys(Language.errors),
         ...Object.keys(Language.node),
         ...Object.keys(Language.thingsdb),
         ...Object.keys(Language.procedures),
+    ],
+
+    methods: [
         ...Object.keys(Language.types.bytes),
         ...Object.keys(Language.types.closure),
         ...Object.keys(Language.types.datetime),
@@ -39,9 +41,9 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         ...Object.keys(Language.types.type),
     ],
 
-    // typeKeywords: [
-    //     'any', 'boolean', 'number', 'object', 'string', 'undefined'
-    // ],
+    controlKeywords: [
+        NIL, 'true', 'false', 'if', 'else', 'return', 'for', 'in', 'break', 'continue'
+    ],
 
     operators: [
         '*', '/', '%', '//',
@@ -78,15 +80,24 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         common: [
 
             // identifiers and keywords
-            [/[A-Za-z_][0-9A-Za-z_]*/, {
+            [/[A-Za-z_][0-9A-Za-z_$]*/, {
                 cases: {
-                    // '@typeKeywords': 'keyword',
-                    '@keywords': 'keyword',
-                    '@default': 'identifier'
+                    '@controlKeywords': 'keyword',
+                    '@functions': 'function',
+                    '@default': 'identifier',
                 }
             }],
-            // [/[A-Z][\w\$]*/, 'type.identifier'],  // to show class names nicely
-            // [/[A-Z][\w\$]*/, 'identifier'],
+
+            [/(\.)([A-Za-z_][0-9A-Za-z_]*)(\()/, [
+                '',
+                {
+                    cases: {
+                        '@methods': 'method',
+                        '@default': 'identifier',
+                    }
+                },
+                '']
+            ],
 
             // whitespace
             { include: '@whitespace' },
@@ -215,12 +226,15 @@ monaco.languages.setLanguageConfiguration('mySpecialLanguage', {
 monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
     triggerCharacters: ['.'],
     provideCompletionItems: (model, position, _token) => {
-        const textUntilPosition = model.getValueInRange({startLineNumber: 1, startColumn: position.column-1, endLineNumber: position.lineNumber, endColumn: position.column});
+        const textUntilPosition = model.getValueInRange({
+            startLineNumber: 1,
+            startColumn: 1,
+            endLineNumber: position.lineNumber,
+            endColumn: position.column
+        });
 
-        //const re_str = new RegExp('^[\'\"].*[\'|\"]$');
         const suggestions = [];
-        // if (re_str.test(textUntilPosition)) {
-        if (textUntilPosition=='.') {
+        if (textUntilPosition.slice(-1) == '.') {
             suggestions.push(...[
                 ...Object.entries(Language.types.bytes),
                 ...Object.entries(Language.types.closure),
@@ -293,11 +307,13 @@ const theme = {
     base: 'vs-dark',
     inherit: true,
     rules: [
-        { token: 'identifier', foreground: '4c7fbb', fontStyle: 'bold' },
-        { token: 'number', foreground: 'd2a800' },
-        { token: 'string', foreground: 'e26d14' },
-        { token: 'keyword', foreground: 'b064bd' },
-        { token: 'comment', foreground: '608b4e' },
+        { token: 'identifier', foreground: '4fc1ff' },
+        { token: 'number', foreground: 'b5cea8' },
+        { token: 'string', foreground: 'ce9178' },
+        { token: 'keyword', foreground: 'c586c0' },
+        { token: 'function', foreground: 'dcdcaa' },
+        { token: 'method', foreground: 'dcdcaa' },
+        { token: 'comment', foreground: '6a9955' },
         { token: 'whitespace', foreground: '608b4e' },
     ],
     colors: {

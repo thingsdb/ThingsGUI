@@ -35,20 +35,8 @@ func handlerThingsdbLogo(w http.ResponseWriter, r *http.Request) {
 	handleFileRequest(w, "./react/static/img/thingsdb-logo.png", "image/png")
 }
 
-func handlerGithubLogo(w http.ResponseWriter, r *http.Request) {
-	handleFileRequest(w, "./react/static/img/githubLogo.svg", "image/svg+xml")
-}
-
-func handlerFacebookLogo(w http.ResponseWriter, r *http.Request) {
-	handleFileRequest(w, "./react/static/img/facebookLogo.png", "image/png")
-}
-
-func handlerLinkedinLogo(w http.ResponseWriter, r *http.Request) {
-	handleFileRequest(w, "./react/static/img/linkedinLogo.png", "image/png")
-}
-
-func handlerTTLogo(w http.ResponseWriter, r *http.Request) {
-	handleFileRequest(w, "./react/static/img/TTLogo.png", "image/png")
+func handlerCesbitLogo(w http.ResponseWriter, r *http.Request) {
+	handleFileRequest(w, "./react/static/img/CesbitLogo.png", "image/png")
 }
 
 func handlerViewEditLogo(w http.ResponseWriter, r *http.Request) {

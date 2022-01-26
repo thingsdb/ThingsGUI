@@ -1,4 +1,3 @@
-import BottomBar from './BottomBar';
 import CollectionsMenu from './CollectionsMenu';
 import OverviewMenu from './OverviewMenu';
 import ProceduresMenu from './ProceduresMenu';
@@ -9,7 +8,6 @@ import UsersMenu from './UsersMenu';
 
 
 export {
-    BottomBar,
     CollectionsMenu,
     OverviewMenu,
     ProceduresMenu,
