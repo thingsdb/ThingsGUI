@@ -23,7 +23,7 @@ const Logging = ({logging}) => (
     <List dense disablePadding>
         <Collapse in={Array.isArray(logging) && logging.length > 1}>
             <ListItem sx={{ justifyContent: 'flex-end' }}>
-                <Button>
+                <Button onClick={() =>  EventActions.clearLogging()}>
                     {'Clear all'}
                 </Button>
             </ListItem>
