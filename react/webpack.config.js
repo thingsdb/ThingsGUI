@@ -50,7 +50,10 @@ const config = {
         new MonacoWebpackPlugin({
             languages: ['javascript']
         }),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new webpack.IgnorePlugin({
+            resourceRegExp: /^\.\/locale$/,
+            contextRegExp: /moment$/,
+        }),
         new BundleAnalyzerPlugin({
             /* Usage:
              *      NODE_ENV='analyze' ./node_modules/.bin/webpack -p

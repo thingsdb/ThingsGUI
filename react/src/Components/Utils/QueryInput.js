@@ -89,14 +89,14 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             }],
 
             [/(\.)([A-Za-z_][0-9A-Za-z_]*)(\()/, [
-                '',
+                'delimiter',
                 {
                     cases: {
                         '@methods': 'method',
                         '@default': 'identifier',
                     }
                 },
-                '']
+                'delimiter']
             ],
 
             // whitespace
@@ -111,7 +111,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             [/@symbols/, {
                 cases: {
                     '@operators': 'delimiter',
-                    '@default': ''
+                    '@default': 'delimiter'
                 }
             }],
 
@@ -317,10 +317,10 @@ const theme = {
         { token: 'whitespace', foreground: '608b4e' },
     ],
     colors: {
-        'editor.foreground': '#000',
-        'editor.background': '#000',
+        'editor.foreground': '#000000',
+        'editor.background': '#000000',
         'editorCursor.foreground': '#c6c6c6',
-        'editor.lineHighlightBackground': '#000',
+        'editor.lineHighlightBackground': '#000000',
         'editorLineNumber.foreground': '#c6c6c6',
         'editor.selectionBackground': '#20344b',
         'editor.inactiveSelectionBackground': '#c6c6c6',
