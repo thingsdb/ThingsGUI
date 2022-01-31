@@ -112,6 +112,7 @@ react/static/js/*-bundle-*.min.js
 react/static/js/*-bundle-*.min.js.LICENSE.txt
 react/static/js/*.worker.js
 react/static/js/*.ttf
+react/static/font/
 
 # NPM
 react/npm-debug.log
