@@ -1,8 +1,8 @@
 import { styled } from '@mui/material/styles';
-import React from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import { useState } from 'react';
+import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { ApplicationActions } from '../../Stores';
@@ -64,7 +64,7 @@ function CookieBanner() {
                 </Grid>
                 <Grid item>
                     <Button
-                        color="default"
+                        color="inherit"
                         variant="text"
                         onClick={DeclineCookies}
                     >
