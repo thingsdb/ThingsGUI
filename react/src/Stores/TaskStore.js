@@ -17,10 +17,12 @@ const queryGetLightTasks = 'tasks = tasks(); return tasks.map(|t| {id: t.id(), a
 class TaskStore extends BaseStore {
 
     static types = {
+        task: PropTypes.object,
         tasks: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
     }
 
     static defaults = {
+        task: {},
         tasks: {},
     }
 
@@ -45,13 +47,13 @@ class TaskStore extends BaseStore {
         });
     }
 
-    onGetTask(scope, taskId, tag,  cb=()=>null) {
+    onGetTask(scope, taskId, tag) {
         this.emit('query', {
             query: `t = task(${taskId}); [t.id(), t.at(), t.owner(), t.closure(), t.err(), t.args()];`,
             scope
         }).done((data) => {
             const [id, at, owner, closure, err, args] = data;
-            cb({id, at, owner, closure, err, args});
+            this.setState({task: {id, at, owner, closure, err, args}});
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             return [];

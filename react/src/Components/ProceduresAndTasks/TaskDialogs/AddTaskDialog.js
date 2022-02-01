@@ -196,7 +196,7 @@ const AddTaskDialog = ({open, onClose, scope}) => {
                             <Closure onChange={handleChangeClosure} />
                         </ListItem>
                         <ListItem>
-                            <SwitchOpen label="Add arguments [optional]" onChange={handleSwitchArgs}>
+                            <SwitchOpen label="Add argument values [optional]" onChange={handleSwitchArgs}>
                                 <EditProvider>
                                     <SetArguments closure={closure} onChange={handleChangeArgs} />
                                 </EditProvider>

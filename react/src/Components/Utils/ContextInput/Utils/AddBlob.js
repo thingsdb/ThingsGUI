@@ -62,7 +62,6 @@ const AddBlob = ({identifier, init, parent}) => {
     }, [blob, dispatch, identifier, parent]);
 
     const handleDropzone = React.useCallback((acceptedFiles) => {
-        console.log(acceptedFiles)
         const reader = new FileReader();
         reader.onabort = () => window.log('file reading was aborted');
         reader.onerror = () => window.log('file reading has failed');

@@ -1,13 +1,19 @@
 /*eslint-disable react/no-multi-comp*/
+import { withVlow } from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
 import { EditTaskDialogTAG } from '../../../Constants/Tags';
-import { CollectionActions, TaskActions } from '../../../Stores';
+import { CollectionActions, TaskActions, TaskStore } from '../../../Stores';
 import { Closure, ErrorMsg, EditProvider, nextRunFn, replacer, parseError, ViewEditFields } from '../../Utils';
 import { NIL } from '../../../Constants/ThingTypes';
 import { SetArguments, SetOwner } from '../Utils';
+
+const withStores = withVlow([{
+    store: TaskStore,
+    keys: ['task']
+}]);
 
 
 const header = [
@@ -90,13 +96,12 @@ const header = [
 const replaceNull = (items) => (items||[]).map(item => item === null ? NIL : item);
 const tag = EditTaskDialogTAG;
 
-const EditTask = ({taskId, scope}) => {
+const EditTask = ({taskId, task, scope}) => {
     const [queryString, setQueryString] = React.useState({args: '', closure: '', owner: ''});
     const [blob, setBlob] = React.useState({});
-    const [task, setTask] = React.useState({});
 
     React.useEffect(() => {
-        TaskActions.getTask(scope, taskId, tag, setTask);
+        TaskActions.getTask(scope, taskId, tag);
     }, [scope, taskId]);
 
     const handleChangeArgs = React.useCallback((args, blob) => {
@@ -125,7 +130,7 @@ const EditTask = ({taskId, scope}) => {
             queryString[ky],
             tag,
             () => {
-                TaskActions.getTask(scope, taskId, tag, setTask);
+                TaskActions.getTask(scope, taskId, tag);
             },
             null,
             blob,
@@ -156,6 +161,9 @@ EditTask.defaultProps = {
 EditTask.propTypes = {
     taskId: PropTypes.number,
     scope: PropTypes.string.isRequired,
+
+    /* tasks properties */
+    task: TaskStore.types.task.isRequired,
 };
 
-export default EditTask;
+export default withStores(EditTask);
