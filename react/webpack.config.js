@@ -32,10 +32,10 @@ const config = {
             }
         }, {
             test: /\.css$/,
-            use: ['style-loader', 'css-loader']
+            use: ['style-loader', 'css-loader'] // keep at version "css-loader": "5.2.7", because of: https://github.com/microsoft/monaco-editor/issues/2742
         }, {
             test: /\.ttf$/,
-            loader:'file-loader',
+            loader: 'file-loader',
             options: {
                 name: 'monaco-font.ttf',
                 // Failed to decode downloaded font: ...
