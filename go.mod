@@ -6,5 +6,5 @@ require (
 	github.com/gomodule/redigo v2.0.0+incompatible // indirect
 	github.com/googollee/go-socket.io v1.6.0
 	github.com/joho/godotenv v1.3.0
-	github.com/thingsdb/go-thingsdb v1.0.3
+	github.com/thingsdb/go-thingsdb v1.0.5
 )

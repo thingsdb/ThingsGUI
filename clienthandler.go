@@ -122,6 +122,7 @@ func (client *client) connect(data loginData) (connResp, error) {
 	client.connection.LogCh = client.logCh
 	client.connection.DefaultTimeout = time.Duration(timeout) * time.Second
 	client.connection.LogLevel = things.LogDebug
+	client.connection.ReconnectionAttempts = 7
 
 	s := *client.socketConn
 	client.connection.OnNodeStatus = func(ns *things.NodeStatus) {
