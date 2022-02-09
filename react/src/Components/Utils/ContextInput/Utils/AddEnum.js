@@ -35,14 +35,14 @@ const AddEnum = ({enumName, enums, identifier, init, parent}) => {
                     : _enum.members.find(i => i[1] === init) || _enum.members[0])
                 : _enum.members[0];
             setEnumMem(e[0]);
-            EditActions.update(dispatch, 'val', `${enumName}{${e[0]}}`, identifier, parent);
+            EditActions.update(dispatch, 'val', `${enumName}{${e[0]}}`, identifier, parent); // TODO query
         }
     }, [_enum]);
 
     const handleChangeEnum = ({target}) => {
         const {value} = target;
         setEnumMem(value);
-        EditActions.update(dispatch, 'val', `${enumName}{${value}}`, identifier, parent);
+        EditActions.update(dispatch, 'val', `${enumName}{${value}}`, identifier, parent); // TODO query
     };
 
     return(_enum&&_enum.members?(

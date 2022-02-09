@@ -1,14 +1,19 @@
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 import CodeIcon from '@mui/icons-material/Code';
 import Fab from '@mui/material/Fab';
 import Grid from '@mui/material/Grid';
 
-import {EDITOR_ROUTE} from '../../../../Constants/Routes';
-import {historyNavigate} from '../../../Utils';
-import {ROOM, THING} from '../../../../Constants/ThingTypes';
-import {THING_KEY} from '../../../../Constants/CharacterKeys';
+import { EDITOR_ROUTE } from '../../../../Constants/Routes';
+import { historyNavigate } from '../../../Utils';
+import { ROOM, THING } from '../../../../Constants/ThingTypes';
+import { THING_KEY } from '../../../../Constants/CharacterKeys';
+import {
+    THING_PROP_QUERY,
+    THING_QUERY,
+} from '../../../../TiQueries';
+
 import RoomJoin from './RoomJoin';
 import RemoveThing from './RemoveThing';
 
@@ -17,7 +22,7 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
     let history = useHistory();
 
     const handleClickOpenEditor = () => {
-        historyNavigate(history, `/${EDITOR_ROUTE}`, {scope: scope, query: child.type===THING ? `thing(${child.id});` : `thing(${parent.id}).${child.name};`});
+        historyNavigate(history, `/${EDITOR_ROUTE}`, {scope: scope, query: child.type===THING ? THING_QUERY(child.id) : THING_PROP_QUERY(parent.id, child.name)});
     };
 
     // buttons visible

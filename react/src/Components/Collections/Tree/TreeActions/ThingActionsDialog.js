@@ -11,6 +11,7 @@ import { allDataTypes, ErrorMsg, SimpleModal } from '../../../Utils';
 import { CollectionActions, EnumActions, ThingsdbActions, TypeActions } from '../../../../Stores';
 import { ROOM, THING, TUPLE } from '../../../../Constants/ThingTypes';
 import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
+import {TYPE_INFO_ROOT_THING_QUERY, TYPE_INFO_PARENT_THING_QUERY, TYPE_INFO_CHILD_THING_QUERY, TYPE_INFO_ELSE_QUERY} from '../../../../TiQueries';
 import DialogButtons from './DialogButtons';
 import Edit from './Edit';
 import RoomEvent from './RoomEvent';
@@ -44,13 +45,13 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         // it would also be nice if we could check for potential custom type childern in an array type. To define the datatype of the edit component.
         let query='';
         if (parent.id==null) {
-            query = `{childType: type(thing(${child.id})), parentType: '', customTypes: types_info()};`; // check if custom type
+            query = TYPE_INFO_ROOT_THING_QUERY(child.id); // check if custom type
         } else if (parent.type == THING) {
-            query = `{childType: type(thing(${parent.id}).${child.name}), parentType: type(thing(${parent.id})), customTypes: types_info()};`; // check if custom type
+            query = TYPE_INFO_PARENT_THING_QUERY(parent.id, child.name); // check if custom type
         } else if (child.type == THING) {
-            query = `{childType: type(thing(${child.id})), parentType: type(thing(${parent.id}).${parent.name}), customTypes: types_info()};`; // in case parent is set than indexing is not supported. Therefore we need to check child type by id.
+            query = TYPE_INFO_CHILD_THING_QUERY(child.id, parent.id, parent.name); // in case parent is set than indexing is not supported. Therefore we need to check child type by id.
         } else {
-            query = `{childType: type(thing(${parent.id}).${child.name}), parentType: type(thing(${parent.id}).${parent.name}), customTypes: types_info()};`; // check if custom type
+            query = TYPE_INFO_ELSE_QUERY(parent.id, parent.name, child.name); // check if custom type
         }
         TypeActions.getType(query, scope, tag, setType);
         EnumActions.getEnums(scope, tag, setEnums);
@@ -58,7 +59,8 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
     }, []);
 
     const setType = (t) => {
-        setState({...state, realChildType: t.childType, realParentType: t.parentType, loaded: true, customTypes: t.customTypes});
+        const [realChildType, realParentType, customTypes] = t;
+        setState({...state, realChildType, realParentType, customTypes, loaded: true});
     };
 
     const handleClickOk = (blob, query) => {

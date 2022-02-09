@@ -20,7 +20,7 @@ const AddRegex = ({identifier, init, parent}) => {
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.update(dispatch, 'val', `/${value}/`, identifier, parent);
+        EditActions.update(dispatch, 'val', `/${value}/`, identifier, parent); // TODO query
     };
     const v = !val ? '' : identifier === null ? val : val[identifier] || '';
 

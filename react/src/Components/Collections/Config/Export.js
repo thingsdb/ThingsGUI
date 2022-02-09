@@ -12,6 +12,7 @@ import { Copy, DownloadTextFile, ErrorMsg, SimpleModal } from '../../Utils';
 import { CollectionActions } from '../../../Stores';
 import { COLLECTION_SCOPE } from '../../../Constants/Scopes';
 import { ExportCollectionTAG } from '../../../Constants/Tags';
+import { EXPORT_QUERY } from '../../../TiQueries';
 
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
@@ -45,7 +46,7 @@ const Export = ({collection}) => {
 
     const handleClickOpen = () => {
         CollectionActions.query(
-            `${COLLECTION_SCOPE}:${collection.name}`, 'export();', tag, setScript
+            `${COLLECTION_SCOPE}:${collection.name}`, EXPORT_QUERY, tag, setScript
         );
         setShow(true);
     };

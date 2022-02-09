@@ -4,6 +4,12 @@ import TextField from '@mui/material/TextField';
 
 import { useEdit } from '../../../Utils';
 import { LIST, NIL, SET, STR, THING } from '../../../../Constants/ThingTypes';
+import {
+    THING_LIST_EDIT_QUERY,
+    THING_LIST_PUSH_QUERY,
+    THING_PROP_EDIT_QUERY,
+    THING_SET_ADD_QUERY,
+} from '../../../../TiQueries';
 
 const BuildQueryString = ({child, customTypes, enums, parent}) => {
     const [editState, dispatch] = useEdit();
@@ -17,10 +23,10 @@ const BuildQueryString = ({child, customTypes, enums, parent}) => {
         let v;
         let q = '';
         v = input(val, childType);
-        q = parentType===LIST ? (childIndex===null ? `thing(${parentId}).${parentName}.push(${v});` : `thing(${parentId}).${parentName}[${childIndex}] = ${v};`)
-            : parentType===THING ? `thing(${parentId}).${childName} = ${v};`
-                : parentType===SET ? `thing(${parentId}).${parentName}.add(${v});`
-                    : [...customTypes.map(c=>c.name), ...enums.map(e=>e.name)].includes(parentType) ? `thing(${parentId}).${childName} = ${v};`
+        q = parentType===LIST ? (childIndex===null ? THING_LIST_PUSH_QUERY(parentId, parentName, v) : THING_LIST_EDIT_QUERY(parentId, parentName, childIndex, v))
+            : parentType===THING ? THING_PROP_EDIT_QUERY(parentId, childName, v)
+                : parentType===SET ? THING_SET_ADD_QUERY(parentId, parentName, v)
+                    : [...customTypes.map(c=>c.name), ...enums.map(e=>e.name)].includes(parentType) ? THING_PROP_EDIT_QUERY(parentId, childName, v)
                         : '';
         dispatch(() => ({ query: q }));
 

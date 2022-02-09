@@ -17,7 +17,7 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
 
     const updateContext = React.useCallback(() => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        EditActions.update(parentDispatch, 'val', `{${s}}`, identifier, parent);
+        EditActions.update(parentDispatch, 'val', `{${s}}`, identifier, parent); // TODO query
         EditActions.update(parentDispatch, 'obj', val, identifier, parent);
         EditActions.updateBlob(parentDispatch, s, blob);
         CollectionActions.enableSubmit();

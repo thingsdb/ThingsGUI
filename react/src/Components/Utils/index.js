@@ -32,7 +32,6 @@ import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import RefreshContainer from './RefreshContainer';
 import SearchInput from './SearchInput';
-import ServerError from './ServerError';
 import SimpleModal from './SimpleModal';
 import StartStopPolling from './StartStopPolling';
 import StickyHeadTable from './StickyHeadTable';
@@ -93,7 +92,7 @@ const checkType = (t) => {
     return(type);
 };
 
-const thingValue = (type, thing, customTypes=[]) => {
+const thingValue = (type, thing, customTypes=[]) => { // TODO query
     return type === ARRAY ? `[${thing.length}]`
         : type === THING ? Object.keys(thing)[0] == THING_KEY ? `{${Object.keys(thing)[0]}${thing[THING_KEY]}}` : '{}'
             : type === 'object' ? `[${Object.keys(thing).length}]`
@@ -178,7 +177,7 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
-const revealCustomType = (i) => {
+const revealCustomType = (i) => { // TODO query
     let arr = 0;
     let opt = 0;
     if(i[0]=='[' || i[0]=='{') {
@@ -376,7 +375,6 @@ export {
     revealCustomType,
     scaleToBinBytes,
     SearchInput,
-    ServerError,
     SimpleModal,
     stableSort,
     StartStopPolling,

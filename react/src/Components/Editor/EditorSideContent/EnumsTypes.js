@@ -1,12 +1,13 @@
-import {withVlow} from 'vlow';
+import  {withVlow } from 'vlow';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {EnumActions, TypeActions, EnumStore, TypeStore} from '../../../Stores';
-import {HarmonicCardHeader, WarnPopover} from '../../Utils';
-import {EnumTypeChips} from '../../Collections/EnumsTypes/Utils';
-import {EnumsTAG, TypesTAG} from '../../../Constants/Tags';
+import { EnumActions, TypeActions, EnumStore, TypeStore } from '../../../Stores';
+import { EnumsTAG, TypesTAG } from '../../../Constants/Tags';
+import { EnumTypeChips } from '../../Collections/EnumsTypes/Utils';
+import { HarmonicCardHeader, WarnPopover } from '../../Utils';
+import { SET_ENUM_EMPTY_QUERY, SET_TYPE_EMPTY_QUERY } from '../../../TiQueries';
 
 const withStores = withVlow([{
     store: EnumStore,
@@ -47,13 +48,13 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
                 return '';
             } else {
                 circularRefFlag[n] = true;
-                return `${n}{${customTypes.find(i=>i.name==n).fields.map(c =>`${c[0]}: ${makeTypeInstanceInit(c[1], customTypeNames, customTypes, {...circularRefFlag}, target)}`)}}`;
+                return `${n}{${customTypes.find(i=>i.name==n).fields.map(c =>`${c[0]}: ${makeTypeInstanceInit(c[1], customTypeNames, customTypes, {...circularRefFlag}, target)}`)}}`; // TODO query
             }
         }
         return `<${n}>`;
     };
     const makeEnumInstanceInit = (n)  => {
-        return `${n}{...}`;
+        return `${n}{...}`; // TODO query
     };
 
     const handleChange = React.useCallback((a) => (n, c) => {
@@ -69,9 +70,9 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
             break;
         case 'add':
             if (c=='type') {
-                onSetQueryInput('set_type("...", {...})');
+                onSetQueryInput(SET_TYPE_EMPTY_QUERY);
             } else {
-                onSetQueryInput('set_enum("...", {...})');
+                onSetQueryInput(SET_ENUM_EMPTY_QUERY);
             }
             break;
         }

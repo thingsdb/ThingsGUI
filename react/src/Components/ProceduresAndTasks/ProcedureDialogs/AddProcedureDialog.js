@@ -13,13 +13,14 @@ import {AddProcedureDialogTAG} from '../../../Constants/Tags';
 import {Closure, ErrorMsg, SimpleModal} from '../../Utils';
 import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {THINGS_DOC_NEW_PROCEDURE} from '../../../Constants/Links';
+import { NEW_PROCEDURE_EMPTY_QUERY, NEW_PROCEDURE_QUERY } from '../../../TiQueries';
 
 
 const tag = AddProcedureDialogTAG;
 
 const AddProcedureDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState({
-        queryString: 'new_procedure("", );',
+        queryString: NEW_PROCEDURE_EMPTY_QUERY,
         procedureName: '',
         error: '',
         closure: '',
@@ -29,7 +30,7 @@ const AddProcedureDialog = ({open, onClose, scope}) => {
 
     React.useEffect(() => { // clean state
         setState({
-            queryString: 'new_procedure("", );',
+            queryString: NEW_PROCEDURE_EMPTY_QUERY,
             procedureName: '',
             error: '',
             closure: '',
@@ -40,11 +41,11 @@ const AddProcedureDialog = ({open, onClose, scope}) => {
 
     const handleChange = ({target}) => {
         const {value} = target;
-        setState({...state, procedureName: value, queryString: `new_procedure("${value}", ${closure});`});
+        setState({...state, procedureName: value, queryString: NEW_PROCEDURE_QUERY(value, closure)});
     };
 
     const handleClosure = (c) => {
-        setState({...state, closure: c, queryString: `new_procedure("${procedureName}", ${c});`});
+        setState({...state, closure: c, queryString: NEW_PROCEDURE_QUERY(procedureName, c)});
     };
 
 

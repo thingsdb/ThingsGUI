@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { Tasks } from '../../ProceduresAndTasks';
+import { NEW_TASK_EMPTY_QUERY, TASK_QUERY } from '../../../TiQueries';
 
 
 const TasksEditor = ({onSetQueryInput, scope}) => {
@@ -9,11 +10,11 @@ const TasksEditor = ({onSetQueryInput, scope}) => {
     const handleCallback = (type, task) => {
         switch(type){
         case 'add':
-            onSetQueryInput('task(<start>, <closure>, <args>)');
+            onSetQueryInput(NEW_TASK_EMPTY_QUERY('<start>, <closure>, <args>)'));
             break;
         case 'run':
             if(task){
-                const input = `task(${task.id})`;
+                const input = TASK_QUERY(task.id);
                 onSetQueryInput(input);
             }
             break;

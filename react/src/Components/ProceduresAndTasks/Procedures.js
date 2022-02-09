@@ -50,7 +50,7 @@ const Procedures = ({buttonsView, dialogsView, onCallback, procedures, scope}) =
             scope,
             n,
             tag,
-            ()=> cb()
+            () => cb()
         );
     };
 

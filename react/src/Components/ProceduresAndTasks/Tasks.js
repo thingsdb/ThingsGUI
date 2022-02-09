@@ -56,7 +56,7 @@ const Tasks = ({buttonsView, dialogsView, onCallback, tasks, scope}) => {
             scope,
             id,
             tag,
-            ()=> cb()
+            () => cb()
         );
     };
 

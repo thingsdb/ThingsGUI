@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import { EditTaskDialogTAG } from '../../../Constants/Tags';
-import { CollectionActions, TaskActions, TaskStore } from '../../../Stores';
 import { Closure, ErrorMsg, EditProvider, nextRunFn, replacer, parseError, ViewEditFields } from '../../Utils';
+import { CollectionActions, TaskActions, TaskStore } from '../../../Stores';
+import { EditTaskDialogTAG } from '../../../Constants/Tags';
 import { NIL } from '../../../Constants/ThingTypes';
 import { SetArguments, SetOwner } from '../Utils';
+import { TASK_SET_ARGS_QUERY, TASK_SET_CLOSURE_QUERY, TASK_SET_OWNER_QUERY } from '../../../TiQueries';
 
 const withStores = withVlow([{
     store: TaskStore,
@@ -106,15 +107,15 @@ const EditTask = ({taskId, task, scope}) => {
 
     const handleChangeArgs = React.useCallback((args, blob) => {
         setBlob(blob);
-        setQueryString(query => ({...query, args: `task(${taskId}).set_args([${replaceNull(args)}]);`}));
+        setQueryString(query => ({...query, args: TASK_SET_ARGS_QUERY(taskId, replaceNull(args))}));
     },[taskId]);
 
     const handleChangeClosure = React.useCallback((c) => {
-        setQueryString(query => ({...query, closure: ` task(${taskId}).set_closure(${c});`}));
+        setQueryString(query => ({...query, closure: TASK_SET_CLOSURE_QUERY(taskId, c)}));
     }, [taskId]);
 
     const handleChangeOwner = React.useCallback((o) => {
-        setQueryString(query => ({...query, owner: ` task(${taskId}).set_owner('${o}');`}));
+        setQueryString(query => ({...query, owner: TASK_SET_OWNER_QUERY(taskId, o)}));
     }, [taskId]);
 
     const handleChange = (ky) => (
