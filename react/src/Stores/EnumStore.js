@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
-import {BaseStore} from './BaseStore';
-import {ErrorActions} from './ErrorStore';
+
+import { BaseStore } from './BaseStore';
+import { DEL_ENUM_QUERY, ENUMS_INFO_QUERY, RENAME_ENUM_QUERY } from '../TiQueries';
+import { ErrorActions } from './ErrorStore';
 
 const EnumActions = Vlow.createActions([
-    'getEnum',
     'getEnums',
     'deleteEnum',
     'renameEnum'
@@ -26,21 +27,8 @@ class EnumStore extends BaseStore {
         this.state = EnumStore.defaults;
     }
 
-    onGetEnum(q, scope, tag, cb) {
-        const query = `${q}`;
-        this.emit('query', {
-            query,
-            scope
-        }).done((data) => {
-            cb(data);
-        }).fail((event, status, message) => {
-            ErrorActions.setToastError(message.Log);
-            return [];
-        });
-    }
-
     onGetEnums(scope, tag, cb=()=>null) {
-        const query = 'enums_info();';
+        const query = ENUMS_INFO_QUERY;
         this.emit('query', {
             query,
             scope
@@ -57,7 +45,7 @@ class EnumStore extends BaseStore {
     }
 
     onDeleteEnum(scope, name, tag, cb=()=>null) {
-        const query = `del_enum('${name}'); enums_info();`;
+        const query = DEL_ENUM_QUERY(name) + ' ' + ENUMS_INFO_QUERY;
         this.emit('query', {
             query,
             scope
@@ -74,7 +62,7 @@ class EnumStore extends BaseStore {
     }
 
     onRenameEnum(oldName, newName, scope, tag, cb=()=>null) {
-        const query = `rename_enum('${oldName}', '${newName}'); enums_info();`;
+        const query = RENAME_ENUM_QUERY(oldName, newName) + ENUMS_INFO_QUERY;
         this.emit('query', {
             query,
             scope

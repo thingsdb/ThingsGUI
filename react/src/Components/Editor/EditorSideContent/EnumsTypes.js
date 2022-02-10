@@ -7,7 +7,7 @@ import { EnumActions, TypeActions, EnumStore, TypeStore } from '../../../Stores'
 import { EnumsTAG, TypesTAG } from '../../../Constants/Tags';
 import { EnumTypeChips } from '../../Collections/EnumsTypes/Utils';
 import { HarmonicCardHeader, WarnPopover } from '../../Utils';
-import { SET_ENUM_EMPTY_QUERY, SET_TYPE_EMPTY_QUERY } from '../../../TiQueries';
+import { CUSTOM_TYPE_LITERAL, SET_ENUM_EMPTY_QUERY, SET_TYPE_EMPTY_QUERY } from '../../../TiQueries';
 
 const withStores = withVlow([{
     store: EnumStore,
@@ -48,13 +48,14 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
                 return '';
             } else {
                 circularRefFlag[n] = true;
-                return `${n}{${customTypes.find(i=>i.name==n).fields.map(c =>`${c[0]}: ${makeTypeInstanceInit(c[1], customTypeNames, customTypes, {...circularRefFlag}, target)}`)}}`; // TODO query
+                let content = customTypes.find(i=>i.name==n).fields.map(c => `${c[0]}: ${makeTypeInstanceInit(c[1], customTypeNames, customTypes, {...circularRefFlag}, target)}`);
+                return CUSTOM_TYPE_LITERAL(n, content);
             }
         }
         return `<${n}>`;
     };
     const makeEnumInstanceInit = (n)  => {
-        return `${n}{...}`; // TODO query
+        return CUSTOM_TYPE_LITERAL(n, '...');
     };
 
     const handleChange = React.useCallback((a) => (n, c) => {

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import {EditActions, useEdit} from '../Context';
+import { EditActions, useEdit } from '../Context';
+import { STRING_QUERY } from '../../../../TiQueries';
 
 const AddStr = ({identifier, init, parent, ...props}) => {
     const [editState, dispatch] = useEdit();
@@ -12,13 +13,13 @@ const AddStr = ({identifier, init, parent, ...props}) => {
 
     React.useEffect(()=>{
         if (init) {
-            EditActions.update(dispatch, 'val', `'${init}'`, identifier, parent);
+            EditActions.update(dispatch, 'val', STRING_QUERY(init), identifier, parent);
         }
     }, []);
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.update(dispatch, 'val', `'${value}'`, identifier, parent); // TODO query
+        EditActions.update(dispatch, 'val', STRING_QUERY(value), identifier, parent);
     };
 
     const v = !val ? '' : identifier === null ? val : val[identifier] || '';

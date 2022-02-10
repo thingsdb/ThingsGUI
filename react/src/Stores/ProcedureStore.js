@@ -1,8 +1,15 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
+
 import { BaseStore } from './BaseStore';
 import { ErrorActions } from './ErrorStore';
 import { jsonify } from './Utils';
+import {
+    DEL_PROCEDURE_QUERY,
+    PROCEDURE_INFO_QUERY,
+    PROCEDURES_INFO_QUERY,
+    RENAME_PROCEDURE_QUERY,
+} from '../TiQueries';
 
 const ProcedureActions = Vlow.createActions([
     'getProcedure',
@@ -31,7 +38,7 @@ class ProcedureStore extends BaseStore {
     }
 
     onGetProcedure(scope, tag=null, cb=()=>null) {
-        const query = 'procedure_info();';
+        const query = PROCEDURE_INFO_QUERY;
         this.emit('query', {
             query,
             scope
@@ -47,7 +54,7 @@ class ProcedureStore extends BaseStore {
     }
 
     onGetProcedures(scope, tag,  cb=()=>null) {
-        const query = 'procedures_info();';
+        const query = PROCEDURES_INFO_QUERY;
         this.emit('query', {
             query,
             scope
@@ -64,7 +71,7 @@ class ProcedureStore extends BaseStore {
     }
 
     onDeleteProcedure(scope, name, tag,  cb=()=>null) {
-        const query = `del_procedure('${name}'); procedures_info();`;
+        const query = DEL_PROCEDURE_QUERY(name) + ' ' + PROCEDURES_INFO_QUERY;
         this.emit('query', {
             query,
             scope
@@ -96,7 +103,7 @@ class ProcedureStore extends BaseStore {
     }
 
     onRenameProcedure(oldName, newName, scope, tag, cb=()=>null) {
-        const query = `rename_procedure('${oldName}', '${newName}'); procedures_info();`;
+        const query = RENAME_PROCEDURE_QUERY(oldName, newName) + ' ' + PROCEDURES_INFO_QUERY;
         this.emit('query', {
             query,
             scope

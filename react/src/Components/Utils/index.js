@@ -60,11 +60,35 @@ import ViewEditFields from './ViewEditFields';
 import WarnPopover from './WarnPopover';
 
 import { SET_KEY, THING_KEY, WRAP_KEY } from '../../Constants/CharacterKeys';
-import { ARRAY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NUMBER, REGEX, ROOM,
-    SET, STR, THING, TIMEVAL, WRAP } from '../../Constants/ThingTypes';
+import {
+    ARRAY,
+    BOOL,
+    BYTES,
+    CLOSURE,
+    CODE,
+    DATETIME,
+    ERROR,
+    FLOAT,
+    INT,
+    LIST,
+    NIL,
+    NUMBER,
+    REGEX,
+    ROOM,
+    SET,
+    STR,
+    THING,
+    TIMEVAL,
+    WRAP
+} from '../../Constants/ThingTypes';
 import { THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE } from '../../Constants/Scopes';
 import { THINGDB_CACHE } from '../../Constants/Files';
 import { DATE_TIME_SEC_STR } from '../../Constants/DateStrings';
+import {
+    ANGLE_BRACKETS_QUERY,
+    CURLY_BRACKETS_QUERY,
+    SQUARE_BRACKETS_QUERY,
+} from '../../TiQueries';
 
 const checkType = (t) => {
     if (t === null) {
@@ -92,14 +116,14 @@ const checkType = (t) => {
     return(type);
 };
 
-const thingValue = (type, thing, customTypes=[]) => { // TODO query
-    return type === ARRAY ? `[${thing.length}]`
-        : type === THING ? Object.keys(thing)[0] == THING_KEY ? `{${Object.keys(thing)[0]}${thing[THING_KEY]}}` : '{}'
-            : type === 'object' ? `[${Object.keys(thing).length}]`
+const thingValue = (type, thing, customTypes=[]) => {
+    return type === ARRAY ? SQUARE_BRACKETS_QUERY(thing.length)
+        : type === THING ? Object.keys(thing)[0] == THING_KEY ? CURLY_BRACKETS_QUERY(`${Object.keys(thing)[0]}${thing[THING_KEY]}`)`{${Object.keys(thing)[0]}${thing[THING_KEY]}}` : CURLY_BRACKETS_QUERY()
+            : type === 'object' ? SQUARE_BRACKETS_QUERY(Object.keys(thing).length)
                 : type === STR || type === NUMBER || type === BOOL || type === BYTES ? `${thing}`
                     : type === null || type === NIL ? NIL
-                        : type === WRAP ? `<${customTypes.length?customTypes.find(t=> t.type_id==thing[WRAP_KEY][0]).name:thing[WRAP_KEY][0]}, ${THING_KEY}${thing[WRAP_KEY][1][THING_KEY]}>`
-                            : type === SET ? `[${thing[SET_KEY].length}]`
+                        : type === WRAP ? ANGLE_BRACKETS_QUERY(`${customTypes.length?customTypes.find(t=> t.type_id==thing[WRAP_KEY][0]).name:thing[WRAP_KEY][0]}, ${THING_KEY}${thing[WRAP_KEY][1][THING_KEY]}`)
+                            : type === SET ? SQUARE_BRACKETS_QUERY(thing[SET_KEY].length)
                                 : '';
 };
 
@@ -180,11 +204,11 @@ const duration = (n) => {
 const revealCustomType = (i) => { // TODO query
     let arr = 0;
     let opt = 0;
-    if(i[0]=='[' || i[0]=='{') {
+    if(i[0] == '[' || i[0] == '{') {
         arr = 1;
     }
     if(i.includes('?')) {
-        opt = arr&&i.slice(-1)=='?'&&i.slice(-3, -2)=='?'? 2: 1;
+        opt = arr && i.slice(-1) == '?' && i.slice(-3, -2) == '?'? 2: 1;
     }
     return i.slice(arr, i.length-(arr+opt));
 };
