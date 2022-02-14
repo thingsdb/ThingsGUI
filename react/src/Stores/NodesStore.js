@@ -224,7 +224,7 @@ class NodesStore extends BaseStore {
 
     onGetCounters(nodeId) {
         const {counters} = this.state;
-        const query = ' counters();';
+        const query = COUNTERS_QUERY;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
