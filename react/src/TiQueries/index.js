@@ -65,19 +65,21 @@ export const TYPE_INFO_ROOT_THING_QUERY = '[type(thing(id)), "", types_info()];'
 export const DEL_PROCEDURE_QUERY = 'del_procedure(name);';
 export const EDIT_PROCEDURE_QUERY = (name, closure) => `del_procedure('${name}'); new_procedure('${name}', ${closure});`;
 export const NEW_PROCEDURE_EMPTY_QUERY = 'new_procedure("", );';
-export const NEW_PROCEDURE_QUERY = (name, closure) => `new_procedure('${name}', ${closure});`;
+export const NEW_PROCEDURE_QUERY = 'new_procedure(name, closure(closure));';
+export const NEW_PROCEDURE_FORMAT_QUERY = (name, closure) => `new_procedure('${name}', ${closure});`;
 export const PROCEDURE_INFO_QUERY = 'procedure_info();';
 export const PROCEDURES_INFO_QUERY = 'procedures_info();';
 export const RENAME_PROCEDURE_QUERY = 'rename_procedure(current, newName);';
 
 // tasks
 export const NEW_TASK_EMPTY_QUERY = (args) => `task(${args});`;
-export const NEW_TASK_QUERY = (start, closure, args) => `task(datetime(${start}), ${closure}${args.length ? `, [${args}]`: ''});`;
+export const NEW_TASK_FORMAT_QUERY = (start, closure, args) => `task(datetime(${start}), ${closure}${args.length ? `, [${args}]`: ''});`;
+export const NEW_TASK_QUERY = 'task(datetime(start), closure(closure), args);';
 export const TASK_EMPTY_QUERY = 'task();';
 export const TASK_QUERY = (id) => `task(${id});`;
-export const TASK_SET_ARGS_QUERY = (id, args) => `task(${id}).set_args([${args}]);`;
-export const TASK_SET_CLOSURE_QUERY = (id, closure) => ` task(${id}).set_closure(${closure});`;
-export const TASK_SET_OWNER_QUERY = (id, owner) => ` task(${id}).set_owner('${owner}');`;
+export const TASK_SET_ARGS_QUERY = 'task(id).set_args(args);';
+export const TASK_SET_CLOSURE_QUERY = 'task(id).set_closure(closure(closure));';
+export const TASK_SET_OWNER_QUERY = 'task(id).set_owner(owner);';
 
 export const GET_TASK_QUERY = 't = task(id); [t.id(), t.at(), t.owner(), t.closure(), t.err(), t.args()];';
 export const LIGHT_TASKS_QUERY = 'tasks = tasks(); return tasks.map(|t| {id: t.id(), at: t.at(), err: t.err()});';

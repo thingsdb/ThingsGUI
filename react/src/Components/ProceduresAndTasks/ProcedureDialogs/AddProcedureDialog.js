@@ -13,51 +13,50 @@ import {AddProcedureDialogTAG} from '../../../Constants/Tags';
 import {Closure, ErrorMsg, SimpleModal} from '../../Utils';
 import {CollectionActions, ProcedureActions} from '../../../Stores';
 import {THINGS_DOC_NEW_PROCEDURE} from '../../../Constants/Links';
-import { NEW_PROCEDURE_EMPTY_QUERY, NEW_PROCEDURE_QUERY } from '../../../TiQueries';
+import { NEW_PROCEDURE_EMPTY_QUERY, NEW_PROCEDURE_QUERY, NEW_PROCEDURE_FORMAT_QUERY } from '../../../TiQueries';
 
 
 const tag = AddProcedureDialogTAG;
+const initState = {
+    closure: '',
+    error: '',
+    jsonArgs: [],
+    procedureName: '',
+    queryString: NEW_PROCEDURE_EMPTY_QUERY,
+};
+
+const query = NEW_PROCEDURE_QUERY;
 
 const AddProcedureDialog = ({open, onClose, scope}) => {
-    const [state, setState] = React.useState({
-        queryString: NEW_PROCEDURE_EMPTY_QUERY,
-        procedureName: '',
-        error: '',
-        closure: '',
-    });
-    const {queryString, procedureName, error, closure} = state;
-
+    const [state, setState] = React.useState(initState);
+    const {closure, error, jsonArgs, procedureName, queryString} = state;
 
     React.useEffect(() => { // clean state
-        setState({
-            queryString: NEW_PROCEDURE_EMPTY_QUERY,
-            procedureName: '',
-            error: '',
-            closure: '',
-        });
-    },
-    [open],
-    );
+        setState(initState);
+    }, [open]);
 
     const handleChange = ({target}) => {
         const {value} = target;
-        setState({...state, procedureName: value, queryString: NEW_PROCEDURE_QUERY(value, closure)});
+        setState({...state, procedureName: value, jsonArgs: `{"name": "${value}", "closure": "${closure}"}`, queryString: NEW_PROCEDURE_FORMAT_QUERY(value, closure)});
     };
 
     const handleClosure = (c) => {
-        setState({...state, closure: c, queryString: NEW_PROCEDURE_QUERY(procedureName, c)});
+        setState({...state, closure: c, jsonArgs: `{"name": "${procedureName}", "closure": "${c}"}`, queryString: NEW_PROCEDURE_FORMAT_QUERY(procedureName, c)});
     };
 
 
     const handleClickOk = () => {
         CollectionActions.query(
             scope,
-            queryString,
+            query,
             tag,
             () => {
                 ProcedureActions.getProcedures(scope, tag);
                 onClose();
-            }
+            },
+            null,
+            null,
+            jsonArgs
         );
     };
 

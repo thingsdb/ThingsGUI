@@ -99,6 +99,7 @@ const tag = EditTaskDialogTAG;
 
 const EditTask = ({taskId, task, scope}) => {
     const [queryString, setQueryString] = React.useState({args: '', closure: '', owner: ''});
+    const [jsonArgs, setJsonArgs] = React.useState({args: '', closure: '', owner: ''});
     const [blob, setBlob] = React.useState({});
 
     React.useEffect(() => {
@@ -107,15 +108,18 @@ const EditTask = ({taskId, task, scope}) => {
 
     const handleChangeArgs = React.useCallback((args, blob) => {
         setBlob(blob);
-        setQueryString(query => ({...query, args: TASK_SET_ARGS_QUERY(taskId, replaceNull(args))}));
+        setQueryString(query => ({...query, args: TASK_SET_ARGS_QUERY}));
+        setJsonArgs(jsonArgs => ({...jsonArgs, args: `{"id": ${taskId}, "args": [${replaceNull(args)}]}`}));
     },[taskId]);
 
     const handleChangeClosure = React.useCallback((c) => {
-        setQueryString(query => ({...query, closure: TASK_SET_CLOSURE_QUERY(taskId, c)}));
+        setQueryString(query => ({...query, closure: TASK_SET_CLOSURE_QUERY}));
+        setJsonArgs(jsonArgs => ({...jsonArgs, closure: `{"id": ${taskId}, "closure": "${c}"}`}));
     }, [taskId]);
 
     const handleChangeOwner = React.useCallback((o) => {
-        setQueryString(query => ({...query, owner: TASK_SET_OWNER_QUERY(taskId, o)}));
+        setQueryString(query => ({...query, owner: TASK_SET_OWNER_QUERY}));
+        setJsonArgs(jsonArgs => ({...jsonArgs, owner: `{"id": ${taskId}, "owner": "${o}"}`}));
     }, [taskId]);
 
     const handleChange = (ky) => (
@@ -135,6 +139,7 @@ const EditTask = ({taskId, task, scope}) => {
             },
             null,
             blob,
+            jsonArgs[ky],
         );
     };
 
