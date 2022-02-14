@@ -62,7 +62,7 @@ class TypeStore extends BaseStore {
     }
 
     onDeleteType(scope, name, tag, cb=()=>null) {
-        const query = DEL_TYPE_QUERY + ' ' + TYPES_INFO_QUERY;
+        const query = DEL_TYPE_QUERY(name) + ' ' + TYPES_INFO_QUERY;
         this.emit('query', {
             query,
             scope
@@ -79,7 +79,7 @@ class TypeStore extends BaseStore {
     }
 
     onRenameType(oldName, newName, scope, tag, cb=()=>null) {
-        const query = RENAME_TYPE_QUERY + ' ' + TYPES_INFO_QUERY;
+        const query = RENAME_TYPE_QUERY(oldName, newName) + ' ' + TYPES_INFO_QUERY;
         this.emit('query', {
             query,
             scope
