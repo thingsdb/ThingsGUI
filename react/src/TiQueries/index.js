@@ -102,10 +102,10 @@ export const MODULES_INFO_QUERY = 'modules_info();';
 export const NEW_BACKUP_QUERY = (file, time, repeat, maxFiles) => `new_backup('${file}'${time ? `, datetime(${time})` : ', now()'}${repeat ? `, ${repeat}${maxFiles ? `, ${maxFiles}` : ''}` : ''});`;
 export const NEW_MODULE_QUERY = (name, file, configuration) => `new_module('${name}', '${file}'${configuration ? `, ${configuration}` : ''});`;
 export const NEW_NODE_QUERY = (secret, name, port) => `new_node('${secret}', '${name}'${port ? `, ${port}` : ''});`;
-export const NODE_COUNTERS_INFO_QUERY = `[${NODE_INFO_QUERY}, ${COUNTERS_QUERY}];`;
+export const NODE_COUNTERS_INFO_QUERY = '[node_info(), counters()];';
 export const NODE_INFO_QUERY = 'node_info();';
 export const NODES_INFO_QUERY = 'nodes_info();';
-export const NODES_NODE_INFO_QUERY = `[${NODES_INFO_QUERY}, ${NODE_INFO_QUERY}];`;
+export const NODES_NODE_INFO_QUERY = '[nodes_info(), node_info()];';
 export const RENAME_MODULE_QUERY = (current, newName) =>  `rename_module('${current}', '${newName}');`;
 export const RESET_COUNTERS_QUERY = 'reset_counters();';
 export const RESTART_MODULE_QUERY = (name) => `restart_module('${name}');`;
@@ -122,8 +122,8 @@ export const DEL_COLLECTION_QUERY = (name) => `del_collection('${name}');`;
 export const NEW_COLLECTION_QUERY = (name) => `new_collection('${name}');`;
 export const RENAME_COLLECTION_QUERY = (current, newName) => `rename_collection('${current}', '${newName}');`;
 
-export const COLLECTIONS_USER_INFO_QUERY = `[${COLLECTIONS_INFO_QUERY}, ${USER_INFO_QUERY}];`;
-export const COLLECTIONS_USERS_INFO_QUERY = `[${COLLECTIONS_INFO_QUERY}, ${USERS_INFO_QUERY}];`;
+export const COLLECTIONS_USER_INFO_QUERY = '[collections_info(), user_info()];';
+export const COLLECTIONS_USERS_INFO_QUERY = '[collections_info(), users_info()];';
 
 // users
 export const DEL_EXPIRED_QUERY = 'del_expired();';
