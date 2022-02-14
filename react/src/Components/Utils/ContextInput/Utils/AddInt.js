@@ -20,7 +20,9 @@ const AddInt = ({identifier, init, parent, ...props}) => {
     }, []);
 
     const errorTxt = (value) => {
-        setError(onlyInts(value) ? '' : 'only integers');
+        const err = onlyInts(value) ? '' : 'only integers';
+        setError(err);
+        dispatch(() => ({ error: err }));
     };
 
     const handleOnChange = ({target}) => {

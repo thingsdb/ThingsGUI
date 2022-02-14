@@ -11,7 +11,12 @@ import { ErrorMsg, SimpleModal } from '../../../Utils';
 import { CollectionActions, ThingsdbActions } from '../../../../Stores';
 import { RemoveThingTAG } from '../../../../Constants/Tags';
 import { SET, THING } from '../../../../Constants/ThingTypes';
-import { THING_PROP_DEL_QUERY, THING_SET_REMOVE_QUERY, THING_LIST_DEL_QUERY} from '../../../../TiQueries';
+import {
+    THING_FROM_ID_QUERY,
+    THING_LIST_DEL_QUERY,
+    THING_PROP_DEL_QUERY,
+    THING_SET_REMOVE_QUERY,
+} from '../../../../TiQueries';
 
 const tag = RemoveThingTAG;
 const RemoveThing = ({child, onClose, parent, scope}) => {
@@ -36,12 +41,14 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
     const handleClickOk = () => {
         CollectionActions.query(
             scope,
-            query,
+            query + ' ' + THING_FROM_ID_QUERY,
             tag,
             () => {
                 ThingsdbActions.getCollections();
             },
             parent.id,
+            null,
+            `{"id", ${parent.id}}`
         );
         onClose();
     };

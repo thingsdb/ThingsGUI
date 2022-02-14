@@ -11,7 +11,13 @@ import { allDataTypes, ErrorMsg, SimpleModal } from '../../../Utils';
 import { CollectionActions, EnumActions, ThingsdbActions, TypeActions } from '../../../../Stores';
 import { ROOM, THING, TUPLE } from '../../../../Constants/ThingTypes';
 import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
-import {TYPE_INFO_ROOT_THING_QUERY, TYPE_INFO_PARENT_THING_QUERY, TYPE_INFO_CHILD_THING_QUERY, TYPE_INFO_ELSE_QUERY} from '../../../../TiQueries';
+import {
+    THING_FROM_ID_QUERY,
+    TYPE_INFO_CHILD_THING_QUERY,
+    TYPE_INFO_ELSE_QUERY,
+    TYPE_INFO_PARENT_THING_QUERY,
+    TYPE_INFO_ROOT_THING_QUERY,
+} from '../../../../TiQueries';
 import DialogButtons from './DialogButtons';
 import Edit from './Edit';
 import RoomEvent from './RoomEvent';
@@ -44,16 +50,21 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 
         // it would also be nice if we could check for potential custom type childern in an array type. To define the datatype of the edit component.
         let query='';
+        let jsonArgs = '';
         if (parent.id==null) {
-            query = TYPE_INFO_ROOT_THING_QUERY(child.id); // check if custom type
+            query = TYPE_INFO_ROOT_THING_QUERY; // check if custom type
+            jsonArgs = `{"id": ${child.id}}`;
         } else if (parent.type == THING) {
-            query = TYPE_INFO_PARENT_THING_QUERY(parent.id, child.name); // check if custom type
+            query = TYPE_INFO_PARENT_THING_QUERY; // check if custom type
+            jsonArgs = `{"id": ${parent.id}, "name": "${child.name}"}`;
         } else if (child.type == THING) {
-            query = TYPE_INFO_CHILD_THING_QUERY(child.id, parent.id, parent.name); // in case parent is set than indexing is not supported. Therefore we need to check child type by id.
+            query = TYPE_INFO_CHILD_THING_QUERY; // in case parent is set than indexing is not supported. Therefore we need to check child type by id.
+            jsonArgs = `{"cid": ${child.id}, "pid": ${parent.id}, "name": "${parent.name}"}`;
         } else {
-            query = TYPE_INFO_ELSE_QUERY(parent.id, parent.name, child.name); // check if custom type
+            query = TYPE_INFO_ELSE_QUERY; // check if custom type
+            jsonArgs = `{"pid": ${parent.id}, "pname": "${parent.name}", "cname": "${child.name}"}`;
         }
-        TypeActions.getType(query, scope, tag, setType);
+        TypeActions.getType(query, scope, jsonArgs, tag, setType);
         EnumActions.getEnums(scope, tag, setEnums);
 
     }, []);
@@ -78,7 +89,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 
         CollectionActions.query(
             scope,
-            query,
+            query + ' ' + THING_FROM_ID_QUERY,
             tag,
             () => {
                 ThingsdbActions.getCollections();
@@ -86,6 +97,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
             },
             tid,
             b,
+            `{"id": ${tid}}`
         );
     };
 

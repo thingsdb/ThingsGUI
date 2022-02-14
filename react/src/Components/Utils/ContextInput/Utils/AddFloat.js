@@ -20,7 +20,9 @@ const AddFloat = ({identifier, init, parent, ...props}) => {
     }, []);
 
     const errorTxt = (value) => {
-        setError(onlyFloats(value) ? '' : 'only floats');
+        const err = onlyFloats(value) ? '' : 'only floats';
+        setError(err);
+        dispatch(() => ({ error: err }));
     };
     const handleOnChange = ({target}) => {
         const {value} = target;

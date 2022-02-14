@@ -71,10 +71,12 @@ class ProcedureStore extends BaseStore {
     }
 
     onDeleteProcedure(scope, name, tag,  cb=()=>null) {
-        const query = DEL_PROCEDURE_QUERY(name) + ' ' + PROCEDURES_INFO_QUERY;
+        const query = DEL_PROCEDURE_QUERY + ' ' + PROCEDURES_INFO_QUERY;
+        const jsonArgs = `{"name": "${name}"}`;
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const procedures = Object.assign({}, prevState.procedures, {[scope]: data});
@@ -102,11 +104,13 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onRenameProcedure(oldName, newName, scope, tag, cb=()=>null) {
-        const query = RENAME_PROCEDURE_QUERY(oldName, newName) + ' ' + PROCEDURES_INFO_QUERY;
+    onRenameProcedure(current, newName, scope, tag, cb=()=>null) {
+        const query = RENAME_PROCEDURE_QUERY + ' ' + PROCEDURES_INFO_QUERY;
+        const jsonArgs = `{"current": "${current}", "newName": "${newName}"}`;
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const procedures = Object.assign({}, prevState.procedures, {[scope]: data});

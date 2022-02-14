@@ -45,10 +45,12 @@ class EnumStore extends BaseStore {
     }
 
     onDeleteEnum(scope, name, tag, cb=()=>null) {
-        const query = DEL_ENUM_QUERY(name) + ' ' + ENUMS_INFO_QUERY;
+        const query = DEL_ENUM_QUERY + ' ' + ENUMS_INFO_QUERY;
+        const jsonArgs = `{"name": "${name}"}`;
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const enums = Object.assign({}, prevState.enums, {[scope]: data});
@@ -61,11 +63,13 @@ class EnumStore extends BaseStore {
         });
     }
 
-    onRenameEnum(oldName, newName, scope, tag, cb=()=>null) {
-        const query = RENAME_ENUM_QUERY(oldName, newName) + ENUMS_INFO_QUERY;
+    onRenameEnum(current, newName, scope, tag, cb=()=>null) {
+        const query = RENAME_ENUM_QUERY + ENUMS_INFO_QUERY;
+        const jsonArgs = `{"current": "${current}", "newName": "${newName}"}`;
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const enums = Object.assign({}, prevState.enums, {[scope]: data});

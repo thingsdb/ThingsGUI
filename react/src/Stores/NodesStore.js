@@ -1,10 +1,12 @@
 /*eslint-disable no-unused-vars */
 
 import deepEqual from 'deep-equal';
-import {BaseStore} from './BaseStore';
-import {ErrorActions} from './ErrorStore';
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
+
+import { BaseStore } from './BaseStore';
+import { ErrorActions } from './ErrorStore';
+import { jsonify } from './Utils';
 
 import {
     BACKUPS_INFO_QUERY,
@@ -238,10 +240,12 @@ class NodesStore extends BaseStore {
     }
 
     onSetLoglevel(nodeId, level, tag, cb) {
-        const query = SET_LOG_LEVEL_QUERY(level) + ' ' + NODE_INFO_QUERY ;
+        const query = SET_LOG_LEVEL_QUERY + ' ' + NODE_INFO_QUERY ;
+        const jsonArgs = `{"level": ${level}}`;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
-            query
+            query,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState({
                 node: data
@@ -265,10 +269,12 @@ class NodesStore extends BaseStore {
     }
 
     onRestore(fileName, takeAccess, tag, cb) {
-        const query = RESTORE_QUERY(fileName, takeAccess);
+        const query = RESTORE_QUERY;
+        const jsonArgs = `{"fileName": "${fileName}", "takeAccess": ${takeAccess}}`;
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((data) => {
             cb();
         }).fail((event, status, message) => {
@@ -292,10 +298,12 @@ class NodesStore extends BaseStore {
     }
 
     onAddNode(config, tag, cb) { // secret , nodename [, port]
-        const query = NEW_NODE_QUERY(config.secret, config.nName, config.port);
+        const query = NEW_NODE_QUERY(config.port);
+        const jsonArgs = `{"secret": "${config.secret}", "name": "${config.nName}"${config.port ? `, "port": ${config.port}` : ''}}`;
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             cb();
             this.onGetNodes();
@@ -305,10 +313,12 @@ class NodesStore extends BaseStore {
     }
 
     onDelNode(nodeId, tag, cb) {
-        const query = DEL_NODE_QUERY(nodeId);
+        const query = DEL_NODE_QUERY;
+        const jsonArgs = `{"id": ${nodeId}}`;
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             cb();
             this.onGetNodes();
@@ -333,21 +343,25 @@ class NodesStore extends BaseStore {
     }
 
     onAddBackup(nodeId, config, tag, cb) {
-        const query = NEW_BACKUP_QUERY(config.file, config.time, config.repeat, config.maxFiles);
+        const query = NEW_BACKUP_QUERY(config.time, config.repeat, config.maxFiles);
+        const jsonArgs = `{"file": "${config.file}"${config.time ? `, "time": ${config.time}` : ''}${config.repeat ? `, "repeat": ${config.repeat}${config.maxFiles ? `, "maxFiles": ${config.maxFiles}` : ''}` : ''}}`;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             cb();
             this.onGetBackups(nodeId);
         }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 
-    onDelBackup(nodeId, backupId, cb, removeFile=false) {
-        const query = DEL_BACKUP_QUERY(backupId, removeFile);
+    onDelBackup(nodeId, backupId, cb, deleteFiles=false) {
+        const query = DEL_BACKUP_QUERY;
+        const jsonArgs = `{"id": ${backupId}, "deleteFiles": ${deleteFiles}}`;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetBackups(nodeId);
             cb();
@@ -371,10 +385,12 @@ class NodesStore extends BaseStore {
 
     onGetModule(nodeId, name) {
         const {_module} = this.state;
-        const query = MODULE_INFO_QUERY(name);
+        const query = MODULE_INFO_QUERY;
+        const jsonArgs = `{"name": "${name}"}`;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
-            query
+            query,
+            arguments: jsonArgs
         }).done((data) => {
             if (!deepEqual(data, _module)){
                 this.setState({
@@ -385,10 +401,16 @@ class NodesStore extends BaseStore {
     }
 
     onAddModule(nodeId, config, tag, cb) {
-        const query = NEW_MODULE_QUERY(config.name, config.file, config.configuration);
+        const query = NEW_MODULE_QUERY(config.configuration);
+        let jsonArgs = `{"name": "${config.name}", "file": "${config.file}"}`;
+        if (config.configuration) {
+            let configuration = jsonify(config.configuration);
+            jsonArgs = `{"name": "${config.name}", "file": "${config.file}", "configuration": ` + configuration + '}';
+        }
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModules(nodeId);
             cb();
@@ -396,21 +418,25 @@ class NodesStore extends BaseStore {
     }
 
     onDelModule(nodeId, name, cb) {
-        const query = DEL_MODULE_QUERY(name);
+        const query = DEL_MODULE_QUERY;
+        const jsonArgs = `{"name": "${name}"}`;
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModules(nodeId);
             cb();
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRenameModule(nodeId, name, newName, tag, cb) {
-        const query = RENAME_MODULE_QUERY(name, newName);
+    onRenameModule(nodeId, current, newName, tag, cb) {
+        const query = RENAME_MODULE_QUERY;
+        const jsonArgs = `{"current": "${current}", "newName": "${newName}"}`;
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModule(nodeId, newName);
             this.onGetModules(nodeId);
@@ -419,10 +445,12 @@ class NodesStore extends BaseStore {
     }
 
     onRestartModule(nodeId, name, cb) {
-        const query = RESTART_MODULE_QUERY(name);
+        const query = RESTART_MODULE_QUERY;
+        const jsonArgs = `{"name": "${name}"}`;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModules(nodeId);
             cb();
@@ -430,10 +458,17 @@ class NodesStore extends BaseStore {
     }
 
     onSetModuleConf(nodeId, name, configuration, tag, cb) {
-        const query = SET_MODULE_CONF_QUERY(name, configuration);
+        const query = SET_MODULE_CONF_QUERY(configuration);
+        let jsonArgs = `{"name": "${name}", "configuration": ${null}}`;
+        if (configuration) {
+            let jsonConfig = jsonify(configuration);
+            jsonArgs = `{"name": "${name}", "configuration": ` + jsonConfig + '}';
+        }
+
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModule(nodeId, name);
             cb();
@@ -442,9 +477,11 @@ class NodesStore extends BaseStore {
 
     onSetModuleScope(nodeId, name, scope, tag, cb) {
         const query = SET_MODULE_SCOPE_QUERY(name, scope);
+        const jsonArgs = `{"name": "${name}" , "scope": ${scope ? `"${scope}"` : null}}`;
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModule(nodeId, name);
             this.onGetModules(nodeId);

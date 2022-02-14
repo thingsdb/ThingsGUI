@@ -38,9 +38,12 @@ const AddError = ({identifier, init, parent}) => {
         if (init) {
             CollectionActions.query(
                 init.scope,
-                ERROR_OUPUT_QUERY(init.parentId, init.propName),
+                ERROR_OUPUT_QUERY,
                 ThingActionsDialogTAG,
-                handleErr
+                handleErr,
+                null,
+                null,
+                `{"id": ${init.parentId}, "name": "${init.propName}"}`
             );
         }
     }, []);

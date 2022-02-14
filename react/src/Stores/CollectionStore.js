@@ -8,7 +8,12 @@ import { COLLECTION_SCOPE } from '../Constants/Scopes';
 import { ErrorActions } from './ErrorStore';
 import { jsonify } from './Utils';
 import { THING_KEY } from '../Constants/CharacterKeys';
-import { SQUARE_BRACKETS_QUERY, THING_STAT_QUERY, THING_QUERY } from '../TiQueries';
+import {
+    SQUARE_BRACKETS_QUERY,
+    THING_QUERY,
+    THING_CURRENT_QUERY,
+    THING_FROM_ID_QUERY,
+} from '../TiQueries';
 
 
 const CollectionActions = Vlow.createActions([
@@ -75,11 +80,18 @@ class CollectionStore extends BaseStore {
     }
 
     onGetThings(collectionId, collectionName, thingId=null) {
-        const query = THING_STAT_QUERY(thingId);
         const scope = `${COLLECTION_SCOPE}:${collectionName}`;
+        let query = THING_CURRENT_QUERY;
+        let jsonArgs = '';
+
+        if (thingId) {
+            query = THING_FROM_ID_QUERY;
+            jsonArgs = `{"id": ${thingId}}`;
+        }
         this.emit('query', {
             query,
             scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const things = thingId ?
@@ -129,10 +141,6 @@ class CollectionStore extends BaseStore {
     }
 
     onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null, onFail=()=>null) {
-        if(thingId){
-            query = query + ' ' + THING_STAT_QUERY(thingId);
-        }
-
         let jsonArgs = null;
         if (args) {
             jsonArgs = jsonify(args); // make it json proof

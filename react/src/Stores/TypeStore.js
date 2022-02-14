@@ -32,14 +32,15 @@ class TypeStore extends BaseStore {
         this.state = TypeStore.defaults;
     }
 
-    onGetType(q, scope, tag, cb) {
+    onGetType(query, scope, args, tag, cb) {
         this.emit('query', {
-            q,
-            scope
+            query,
+            scope,
+            arguments: args
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {
-            ErrorActions.setToastError(message.Log);
+            ErrorActions.setMsgError(tag, message.Log);
             return [];
         });
     }
@@ -62,10 +63,12 @@ class TypeStore extends BaseStore {
     }
 
     onDeleteType(scope, name, tag, cb=()=>null) {
-        const query = DEL_TYPE_QUERY(name) + ' ' + TYPES_INFO_QUERY;
+        const query = DEL_TYPE_QUERY + ' ' + TYPES_INFO_QUERY;
+        const jsonArgs = `{"name": "${name}"}`;
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const customTypes = Object.assign({}, prevState.customTypes, {[scope]: data});
@@ -78,11 +81,13 @@ class TypeStore extends BaseStore {
         });
     }
 
-    onRenameType(oldName, newName, scope, tag, cb=()=>null) {
-        const query = RENAME_TYPE_QUERY(oldName, newName) + ' ' + TYPES_INFO_QUERY;
+    onRenameType(current, newName, scope, tag, cb=()=>null) {
+        const query = RENAME_TYPE_QUERY + ' ' + TYPES_INFO_QUERY;
+        const jsonArgs = `{"current": "${current}", "newName": "${newName}"}`;
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const customTypes = Object.assign({}, prevState.customTypes, {[scope]: data});

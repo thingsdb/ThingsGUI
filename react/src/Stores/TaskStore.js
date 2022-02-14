@@ -55,9 +55,12 @@ class TaskStore extends BaseStore {
     }
 
     onGetTask(scope, taskId, tag) {
+        const query = GET_TASK_QUERY;
+        const jsonArgs = `{"id": ${taskId}}`;
         this.emit('query', {
-            query: GET_TASK_QUERY(taskId),
-            scope
+            query,
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             const [id, at, owner, closure, err, args] = data;
             this.setState({task: {id, at, owner, closure, err, args}});
@@ -68,10 +71,12 @@ class TaskStore extends BaseStore {
     }
 
     onDeleteTask(scope, taskId, tag,  cb=()=>null) {
-        const query = TASK_DEL_QUERY(taskId) + ' ' + LIGHT_TASKS_QUERY;
+        const query = TASK_DEL_QUERY + ' ' + LIGHT_TASKS_QUERY;
+        const jsonArgs = `{"id": ${taskId}}`;
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const tasks = Object.assign({}, prevState.tasks, {[scope]: data});
@@ -85,10 +90,12 @@ class TaskStore extends BaseStore {
     }
 
     onCancelTask(scope, taskId, tag,  cb=()=>null) {
-        const query =  TASK_CANCEL_QUERY(taskId) + ' ' + LIGHT_TASKS_QUERY;
+        const query =  TASK_CANCEL_QUERY + ' ' + LIGHT_TASKS_QUERY;
+        const jsonArgs = `{"id": ${taskId}}`;
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const tasks = Object.assign({}, prevState.tasks, {[scope]: data});
@@ -101,10 +108,12 @@ class TaskStore extends BaseStore {
     }
 
     onGetArgs(scope, taskId, tag,  cb=()=>null) {
-        const query = TASK_ARGS_QUERY(taskId);
+        const query = TASK_ARGS_QUERY;
+        const jsonArgs = `{"id": ${taskId}}`;
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {
@@ -113,10 +122,12 @@ class TaskStore extends BaseStore {
     }
 
     onGetOwner(scope, taskId, tag,  cb=()=>null) {
-        const query = TASK_OWNER_QUERY(taskId);
+        const query = TASK_OWNER_QUERY;
+        const jsonArgs = `{"id": ${taskId}}`;
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {

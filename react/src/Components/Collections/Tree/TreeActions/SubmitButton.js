@@ -14,14 +14,14 @@ const withStores = withVlow([{
 
 const SubmitButton = ({canSubmit, onClickSubmit}) => {
     const editState = useEdit()[0];
-    const {query, blob} = editState;
+    const {query, blob, error} = editState;
 
     const handleClickOk = () => {
         onClickSubmit(blob, query);
     };
 
     return (
-        <Button onClick={handleClickOk} disabled={!canSubmit} color="primary">
+        <Button onClick={handleClickOk} disabled={!canSubmit || Boolean(error)} color="primary">
             {'Submit'}
         </Button>
     );
