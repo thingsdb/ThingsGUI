@@ -9,18 +9,19 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import {AddProcedureDialogTAG} from '../../../Constants/Tags';
-import {Closure, ErrorMsg, SimpleModal} from '../../Utils';
-import {CollectionActions, ProcedureActions} from '../../../Stores';
-import {THINGS_DOC_NEW_PROCEDURE} from '../../../Constants/Links';
-import { NEW_PROCEDURE_EMPTY_QUERY, NEW_PROCEDURE_QUERY, NEW_PROCEDURE_FORMAT_QUERY } from '../../../TiQueries';
+import { AddProcedureDialogTAG } from '../../../Constants/Tags';
+import { Closure, ErrorMsg, SimpleModal } from '../../Utils';
+import { CollectionActions, ProcedureActions } from '../../../Stores';
+import { NEW_EDIT_PROCEDURE_ARGS } from '../../../TiQueries/Arguments';
+import { NEW_PROCEDURE_EMPTY_QUERY, NEW_PROCEDURE_QUERY, NEW_PROCEDURE_FORMAT_QUERY } from '../../../TiQueries/Queries';
+import { THINGS_DOC_NEW_PROCEDURE } from '../../../Constants/Links';
 
 
 const tag = AddProcedureDialogTAG;
 const initState = {
     closure: '',
     error: '',
-    jsonArgs: [],
+    jsonArgs: '',
     procedureName: '',
     queryString: NEW_PROCEDURE_EMPTY_QUERY,
 };
@@ -37,11 +38,11 @@ const AddProcedureDialog = ({open, onClose, scope}) => {
 
     const handleChange = ({target}) => {
         const {value} = target;
-        setState({...state, procedureName: value, jsonArgs: `{"name": "${value}", "closure": "${closure}"}`, queryString: NEW_PROCEDURE_FORMAT_QUERY(value, closure)});
+        setState({...state, procedureName: value, jsonArgs: NEW_EDIT_PROCEDURE_ARGS(value, closure), queryString: NEW_PROCEDURE_FORMAT_QUERY(value, closure)});
     };
 
     const handleClosure = (c) => {
-        setState({...state, closure: c, jsonArgs: `{"name": "${procedureName}", "closure": "${c}"}`, queryString: NEW_PROCEDURE_FORMAT_QUERY(procedureName, c)});
+        setState({...state, closure: c, jsonArgs: NEW_EDIT_PROCEDURE_ARGS(procedureName, c), queryString: NEW_PROCEDURE_FORMAT_QUERY(procedureName, c)});
     };
 
 

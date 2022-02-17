@@ -5,7 +5,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 
 import { EditActions, useEdit } from '../Context';
-import { STRING_QUERY } from '../../../../TiQueries';
+import { STRING_QUERY } from '../../../../TiQueries/Queries';
 
 const AddStr = ({identifier, init, parent, ...props}) => {
     const [editState, dispatch] = useEdit();

@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { EditActions, useEdit } from '../Context';
-import { ROOM_QUERY } from '../../../../TiQueries';
+import { ROOM_QUERY } from '../../../../TiQueries/Queries';
 
 const onlyInts = (str) => str.length == str.replace(/[^0-9]/g, '').length;
 

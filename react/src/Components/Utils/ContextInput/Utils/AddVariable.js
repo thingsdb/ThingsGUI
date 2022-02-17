@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { CollectionActions } from '../../../../Stores';
-import { CURLY_BRACKETS_QUERY } from '../../../../TiQueries';
+import { CURLY_BRACKETS_QUERY } from '../../../../TiQueries/Queries';
 import { EditActions, useEdit } from '../Context';
 import InputField from '../InputField';
 import useDebounce from '../../useDebounce';

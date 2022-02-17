@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { CLOSURE_QUERY } from '../../TiQueries';
+import { CLOSURE_QUERY } from '../../TiQueries/Queries';
 import VariablesArray from './VariablesArray';
 
 

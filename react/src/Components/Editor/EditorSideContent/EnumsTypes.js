@@ -7,7 +7,7 @@ import { EnumActions, TypeActions, EnumStore, TypeStore } from '../../../Stores'
 import { EnumsTAG, TypesTAG } from '../../../Constants/Tags';
 import { EnumTypeChips } from '../../Collections/EnumsTypes/Utils';
 import { HarmonicCardHeader, WarnPopover } from '../../Utils';
-import { CUSTOM_TYPE_LITERAL, SET_ENUM_EMPTY_QUERY, SET_TYPE_EMPTY_QUERY } from '../../../TiQueries';
+import { CUSTOM_TYPE_LITERAL, SET_ENUM_EMPTY_QUERY, SET_TYPE_EMPTY_QUERY } from '../../../TiQueries/Queries';
 
 const withStores = withVlow([{
     store: EnumStore,

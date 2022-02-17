@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { Procedures } from '../../ProceduresAndTasks';
-import { NEW_PROCEDURE_EMPTY_QUERY, RUN_QUERY, WSE_QUERY } from '../../../TiQueries';
+import { NEW_PROCEDURE_EMPTY_QUERY, RUN_QUERY, WSE_QUERY } from '../../../TiQueries/Queries';
 
 const ProceduresEditor = ({onSetQueryInput, scope}) => {
 

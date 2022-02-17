@@ -12,6 +12,7 @@ export const STRING_QUERY = (content='') => `'${content}'`; // don't place a `;`
 export const THING_QUERY = (id) => `thing(${id ? id : '.id()'})`; // don't place a `;`
 export const TIMEVAL_QUERY = (thing) => `timeval(${thing})`; // don't place a `;`
 export const WSE_QUERY = (run) => `wse(${run})`; // don't place a `;`
+export const ERROR_QUERY = (code, msg) => `err(${code}${msg ? `, '${msg}'` : ''})`; // don't place a `;`
 
 export const EXPORT_QUERY = 'export();';
 
@@ -63,7 +64,7 @@ export const TYPE_INFO_ROOT_THING_QUERY = '[type(thing(id)), "", types_info()];'
 
 // procedures
 export const DEL_PROCEDURE_QUERY = 'del_procedure(name);';
-export const EDIT_PROCEDURE_QUERY = (name, closure) => `del_procedure('${name}'); new_procedure('${name}', ${closure});`;
+export const EDIT_PROCEDURE_QUERY = 'del_procedure(name); new_procedure(name, closure);';
 export const NEW_PROCEDURE_EMPTY_QUERY = 'new_procedure("", );';
 export const NEW_PROCEDURE_QUERY = 'new_procedure(name, closure(closure));';
 export const NEW_PROCEDURE_FORMAT_QUERY = (name, closure) => `new_procedure('${name}', ${closure});`;
@@ -76,7 +77,7 @@ export const NEW_TASK_EMPTY_QUERY = (args) => `task(${args});`;
 export const NEW_TASK_FORMAT_QUERY = (start, closure, args) => `task(datetime(${start}), ${closure}${args.length ? `, [${args}]`: ''});`;
 export const NEW_TASK_QUERY = 'task(datetime(start), closure(closure), args);';
 export const TASK_EMPTY_QUERY = 'task();';
-export const TASK_QUERY = (id) => `task(${id});`;
+export const TASK_FORMAT_QUERY = (id) => `task(${id});`;
 export const TASK_SET_ARGS_QUERY = 'task(id).set_args(args);';
 export const TASK_SET_CLOSURE_QUERY = 'task(id).set_closure(closure(closure));';
 export const TASK_SET_OWNER_QUERY = 'task(id).set_owner(owner);';
@@ -90,7 +91,6 @@ export const TASK_OWNER_QUERY = 'task(id).owner();';
 
 // error
 export const ERROR_OUPUT_QUERY = 'err = thing(id).get(name); [err.code(), err.msg()];';
-export const ERROR_QUERY = (code, msg) => `err(${code}${msg ? `, '${msg}'` : ''})`;
 
 // nodes
 export const BACKUPS_INFO_QUERY = 'backups_info();';

@@ -8,12 +8,13 @@ import { COLLECTION_SCOPE } from '../Constants/Scopes';
 import { ErrorActions } from './ErrorStore';
 import { jsonify } from './Utils';
 import { THING_KEY } from '../Constants/CharacterKeys';
+import { ID_ARGS } from '../TiQueries/Arguments';
 import {
     SQUARE_BRACKETS_QUERY,
     THING_QUERY,
     THING_CURRENT_QUERY,
     THING_FROM_ID_QUERY,
-} from '../TiQueries';
+} from '../TiQueries/Queries';
 
 
 const CollectionActions = Vlow.createActions([
@@ -86,7 +87,7 @@ class CollectionStore extends BaseStore {
 
         if (thingId) {
             query = THING_FROM_ID_QUERY;
-            jsonArgs = `{"id": ${thingId}}`;
+            jsonArgs = ID_ARGS(thingId);
         }
         this.emit('query', {
             query,

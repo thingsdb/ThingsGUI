@@ -16,7 +16,7 @@ import {
     THING_LIST_DEL_QUERY,
     THING_PROP_DEL_QUERY,
     THING_SET_REMOVE_QUERY,
-} from '../../../../TiQueries';
+} from '../../../../TiQueries/Queries';
 
 const tag = RemoveThingTAG;
 const RemoveThing = ({child, onClose, parent, scope}) => {

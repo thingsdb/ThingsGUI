@@ -9,7 +9,8 @@ import { CollectionActions, TaskActions, TaskStore } from '../../../Stores';
 import { EditTaskDialogTAG } from '../../../Constants/Tags';
 import { NIL } from '../../../Constants/ThingTypes';
 import { SetArguments, SetOwner } from '../Utils';
-import { TASK_SET_ARGS_QUERY, TASK_SET_CLOSURE_QUERY, TASK_SET_OWNER_QUERY } from '../../../TiQueries';
+import { TASK_SET_ARGS_ARGS, TASK_SET_CLOSURE_ARGS, TASK_SET_OWNER_ARGS } from '../../../TiQueries/Arguments';
+import { TASK_SET_ARGS_QUERY, TASK_SET_CLOSURE_QUERY, TASK_SET_OWNER_QUERY } from '../../../TiQueries/Queries';
 
 const withStores = withVlow([{
     store: TaskStore,
@@ -109,17 +110,17 @@ const EditTask = ({taskId, task, scope}) => {
     const handleChangeArgs = React.useCallback((args, blob) => {
         setBlob(blob);
         setQueryString(query => ({...query, args: TASK_SET_ARGS_QUERY}));
-        setJsonArgs(jsonArgs => ({...jsonArgs, args: `{"id": ${taskId}, "args": [${replaceNull(args)}]}`}));
+        setJsonArgs(jsonArgs => ({...jsonArgs, args: TASK_SET_ARGS_ARGS(taskId, replaceNull(args))}));
     },[taskId]);
 
     const handleChangeClosure = React.useCallback((c) => {
         setQueryString(query => ({...query, closure: TASK_SET_CLOSURE_QUERY}));
-        setJsonArgs(jsonArgs => ({...jsonArgs, closure: `{"id": ${taskId}, "closure": "${c}"}`}));
+        setJsonArgs(jsonArgs => ({...jsonArgs, closure:TASK_SET_CLOSURE_ARGS(taskId, c)}));
     }, [taskId]);
 
     const handleChangeOwner = React.useCallback((o) => {
         setQueryString(query => ({...query, owner: TASK_SET_OWNER_QUERY}));
-        setJsonArgs(jsonArgs => ({...jsonArgs, owner: `{"id": ${taskId}, "owner": "${o}"}`}));
+        setJsonArgs(jsonArgs => ({...jsonArgs, owner: TASK_SET_OWNER_ARGS(taskId, o)}));
     }, [taskId]);
 
     const handleChange = (ky) => (

@@ -9,7 +9,7 @@ import {
     THING_LIST_PUSH_QUERY,
     THING_PROP_EDIT_QUERY,
     THING_SET_ADD_QUERY,
-} from '../../../../TiQueries';
+} from '../../../../TiQueries/Queries';
 
 const BuildQueryString = ({child, customTypes, enums, parent}) => {
     const [editState, dispatch] = useEdit();

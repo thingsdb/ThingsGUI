@@ -5,7 +5,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { CUSTOM_TYPE_LITERAL } from '../../../../TiQueries';
+import { CUSTOM_TYPE_LITERAL } from '../../../../TiQueries/Queries';
 import { DownloadBlob } from '../..';
 import { EditActions, useEdit } from '../Context';
 import { THING_KEY } from '../../../../Constants/CharacterKeys';

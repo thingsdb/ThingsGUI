@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 
 import { ARRAY, STR } from '../../../../Constants/ThingTypes';
 import { CollectionActions } from '../../../../Stores';
-import { CURLY_BRACKETS_QUERY } from '../../../../TiQueries';
+import { CURLY_BRACKETS_QUERY } from '../../../../TiQueries/Queries';
 import { EditActions, useEdit } from '../Context';
 import { ListHeader, useDebounce } from '../..';
 import InputField from '../InputField';

@@ -5,11 +5,15 @@ import { BaseStore } from './BaseStore';
 import { ErrorActions } from './ErrorStore';
 import { jsonify } from './Utils';
 import {
+    NAME_ARGS,
+    RENAME_ARGS,
+} from '../TiQueries/Arguments';
+import {
     DEL_PROCEDURE_QUERY,
     PROCEDURE_INFO_QUERY,
     PROCEDURES_INFO_QUERY,
     RENAME_PROCEDURE_QUERY,
-} from '../TiQueries';
+} from '../TiQueries/Queries';
 
 const ProcedureActions = Vlow.createActions([
     'getProcedure',
@@ -72,7 +76,7 @@ class ProcedureStore extends BaseStore {
 
     onDeleteProcedure(scope, name, tag,  cb=()=>null) {
         const query = DEL_PROCEDURE_QUERY + ' ' + PROCEDURES_INFO_QUERY;
-        const jsonArgs = `{"name": "${name}"}`;
+        const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
             query,
             scope,
@@ -106,7 +110,7 @@ class ProcedureStore extends BaseStore {
 
     onRenameProcedure(current, newName, scope, tag, cb=()=>null) {
         const query = RENAME_PROCEDURE_QUERY + ' ' + PROCEDURES_INFO_QUERY;
-        const jsonArgs = `{"current": "${current}", "newName": "${newName}"}`;
+        const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
             query,
             scope,

@@ -7,8 +7,9 @@ import TextField from '@mui/material/TextField';
 import { Closure, ErrorMsg, EditProvider, ViewEditFields } from '../../Utils';
 import { CollectionActions, ProcedureActions } from '../../../Stores';
 import { DATE_TIME_MIN_STR } from '../../../Constants/DateStrings';
-import { EDIT_PROCEDURE_QUERY } from '../../../TiQueries';
+import { EDIT_PROCEDURE_QUERY } from '../../../TiQueries/Queries';
 import { EditProcedureDialogTAG } from '../../../Constants/Tags';
+import { NEW_EDIT_PROCEDURE_ARGS } from '../../../TiQueries/Arguments';
 
 const header = [
     {
@@ -68,11 +69,12 @@ const tag = EditProcedureDialogTAG;
 
 const EditProcedure = ({procedure, scope}) => {
     const [queryString, setQueryString] = React.useState({definition: ''});
+    const [jsonArgs, setJsonArgs] = React.useState('');
 
     const handleChangeDefinition = React.useCallback((c) => {
         setQueryString(query => ({...query, definition: EDIT_PROCEDURE_QUERY(procedure.name, c)}));
+        setJsonArgs(NEW_EDIT_PROCEDURE_ARGS(procedure.name, c));
     }, [procedure.name]);
-
 
     const handleChange = (ky) => (
         ky === 'definition' ? handleChangeDefinition
@@ -87,6 +89,9 @@ const EditProcedure = ({procedure, scope}) => {
             () => {
                 ProcedureActions.getProcedures(scope, tag);
             },
+            null,
+            null,
+            jsonArgs
         );
     };
 

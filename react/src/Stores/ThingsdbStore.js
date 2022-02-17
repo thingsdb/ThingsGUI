@@ -9,6 +9,14 @@ import { ApplicationActions } from './ApplicationStore';
 import { LoginTAG } from '../Constants/Tags';
 import { THINGSDB_SCOPE } from '../Constants/Scopes';
 import {
+    DEL_TOKEN_ARGS,
+    GRANT_REVOKE_ARGS,
+    NAME_ARGS,
+    NEW_TOKEN_ARGS,
+    RENAME_ARGS,
+    SET_PASSWORD_ARGS,
+} from '../TiQueries/Arguments';
+import {
     COLLECTION_INFO_QUERY,
     COLLECTIONS_INFO_QUERY,
     COLLECTIONS_USER_INFO_QUERY,
@@ -28,7 +36,7 @@ import {
     SET_PASSWORD_QUERY,
     USER_INFO_QUERY,
     USERS_INFO_QUERY,
-} from '../TiQueries';
+} from '../TiQueries/Queries';
 
 const scope = THINGSDB_SCOPE;
 
@@ -180,7 +188,7 @@ class ThingsdbStore extends BaseStore {
     onAddCollection(name, tag, cb) {
         this.checkBeforeCollectionUpdate(
             NEW_COLLECTION_QUERY,
-            `{"name": "${name}"}`,
+            NAME_ARGS(name),
             tag,
             cb
         );
@@ -189,7 +197,7 @@ class ThingsdbStore extends BaseStore {
     onRenameCollection(current, newName, tag, cb) {
         this.checkBeforeCollectionUpdate(
             RENAME_COLLECTION_QUERY,
-            `{"current": "${current}", "newName": "${newName}"}`,
+            RENAME_ARGS(current, newName),
             tag,
             cb
         );
@@ -198,7 +206,7 @@ class ThingsdbStore extends BaseStore {
     onRemoveCollection(name, tag, cb) {
         this.checkBeforeCollectionUpdate(
             DEL_COLLECTION_QUERY,
-            `{"name": "${name}"}`,
+            NAME_ARGS(name),
             tag,
             cb
         );
@@ -258,7 +266,7 @@ class ThingsdbStore extends BaseStore {
 
     onAddUser(name, tag, cb){
         const query = NEW_USER_QUERY + ' ' + USERS_INFO_QUERY;
-        const jsonArgs = `{"name": "${name}"}`;
+        const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
             scope,
             query,
@@ -275,7 +283,7 @@ class ThingsdbStore extends BaseStore {
 
     onRemoveUser(name, tag, cb) {
         const query = DEL_USER_QUERY + ' ' + USERS_INFO_QUERY;
-        const jsonArgs = `{"name": "${name}"}`;
+        const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
             scope,
             query,
@@ -292,7 +300,7 @@ class ThingsdbStore extends BaseStore {
 
     onRenameUser(current, newName, tag, cb) {
         const query = RENAME_USER_QUERY + ' ' + USERS_INFO_QUERY;
-        const jsonArgs = `{"current": "${current}", "newName": "${newName}"}`;
+        const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
             scope,
             query,
@@ -349,7 +357,7 @@ class ThingsdbStore extends BaseStore {
     onGrant(name, collection, access, tag) {
         this.checkBeforeUserUpdate(
             GRANT_QUERY,
-            `{"collection": "${collection}", "name": "${name}", "access": ${access}}`,
+            GRANT_REVOKE_ARGS(collection, name, access),
             tag
         );
 
@@ -358,7 +366,7 @@ class ThingsdbStore extends BaseStore {
     onRevoke(name, collection, access, tag) {
         this.checkBeforeUserUpdate(
             REVOKE_QUERY,
-            `{"collection": "${collection}", "name": "${name}", "access": ${access}}`,
+            GRANT_REVOKE_ARGS(collection, name, access),
             tag
         );
     }
@@ -366,7 +374,7 @@ class ThingsdbStore extends BaseStore {
     onPassword(name, password, tag, cb) {
         this.checkBeforeUserUpdate(
             SET_PASSWORD_QUERY,
-            `{"name": "${name}", "password": "${password}"}`,
+            SET_PASSWORD_ARGS(name, password),
             tag,
             cb
         );
@@ -376,7 +384,7 @@ class ThingsdbStore extends BaseStore {
     onResetPassword(name, tag, cb) {
         this.checkBeforeUserUpdate(
             SET_PASSWORD_QUERY,
-            `{"name": "${name}", "password": ${null}}`,
+            SET_PASSWORD_ARGS(name, null),
             tag,
             cb
         );
@@ -386,7 +394,7 @@ class ThingsdbStore extends BaseStore {
     onNewToken(config, tag, cb){ // name [, expirationTime] [, description]
         this.checkBeforeUserUpdate(
             NEW_TOKEN_QUERY,
-            `{"name": "${config.name}", "expirationTime": ${config.expirationTime || null}, "description": "${config.description || ''}"}`,
+            NEW_TOKEN_ARGS(config.name, config.expirationTime, config.description),
             tag,
             cb
         );
@@ -396,7 +404,7 @@ class ThingsdbStore extends BaseStore {
     onDelToken(key, tag){
         this.checkBeforeUserUpdate(
             DEL_TOKEN_QUERY,
-            `{"key", "${key}"}`,
+            DEL_TOKEN_ARGS(key),
             tag
         );
 

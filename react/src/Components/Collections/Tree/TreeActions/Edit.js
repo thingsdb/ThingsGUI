@@ -4,7 +4,7 @@ import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { DATETIME_QUERY, TIMEVAL_QUERY } from '../../../../TiQueries';
+import { DATETIME_QUERY, TIMEVAL_QUERY } from '../../../../TiQueries/Queries';
 import { DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL } from '../../../../Constants/ThingTypes';
 import { InputField } from '../../../Utils';
 import BuildQueryString from './BuildQueryString';

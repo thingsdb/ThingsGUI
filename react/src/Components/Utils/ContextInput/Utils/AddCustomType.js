@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 
 import { ANY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NINT, NUMBER, PINT, RAW, REGEX, ROOM, SET, STR, THING, TIMEVAL, UINT, UTF8 } from '../../../../Constants/ThingTypes';
 import { CollectionActions } from '../../../../Stores';
-import { CUSTOM_TYPE_LITERAL } from '../../../../TiQueries';
+import { CUSTOM_TYPE_LITERAL } from '../../../../TiQueries/Queries';
 import { EditActions, useEdit } from '../Context';
 import InputField from '../InputField';
 import useDebounce from '../../useDebounce';

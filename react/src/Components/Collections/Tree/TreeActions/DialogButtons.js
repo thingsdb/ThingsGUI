@@ -12,7 +12,7 @@ import { THING_KEY } from '../../../../Constants/CharacterKeys';
 import {
     THING_PROP_QUERY,
     THING_QUERY,
-} from '../../../../TiQueries';
+} from '../../../../TiQueries/Queries';
 
 import RoomJoin from './RoomJoin';
 import RemoveThing from './RemoveThing';

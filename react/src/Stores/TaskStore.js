@@ -3,6 +3,7 @@ import Vlow from 'vlow';
 
 import { BaseStore } from './BaseStore';
 import { ErrorActions } from './ErrorStore';
+import { ID_ARGS } from '../TiQueries/Arguments';
 import {
     GET_TASK_QUERY,
     LIGHT_TASKS_QUERY,
@@ -10,7 +11,7 @@ import {
     TASK_CANCEL_QUERY,
     TASK_DEL_QUERY,
     TASK_OWNER_QUERY,
-} from '../TiQueries';
+} from '../TiQueries/Queries';
 
 const TaskActions = Vlow.createActions([
     'cancelTask',
@@ -56,7 +57,7 @@ class TaskStore extends BaseStore {
 
     onGetTask(scope, taskId, tag) {
         const query = GET_TASK_QUERY;
-        const jsonArgs = `{"id": ${taskId}}`;
+        const jsonArgs = ID_ARGS(taskId);
         this.emit('query', {
             query,
             scope,
@@ -72,7 +73,7 @@ class TaskStore extends BaseStore {
 
     onDeleteTask(scope, taskId, tag,  cb=()=>null) {
         const query = TASK_DEL_QUERY + ' ' + LIGHT_TASKS_QUERY;
-        const jsonArgs = `{"id": ${taskId}}`;
+        const jsonArgs = ID_ARGS(taskId);
         this.emit('query', {
             query,
             scope,
@@ -91,7 +92,7 @@ class TaskStore extends BaseStore {
 
     onCancelTask(scope, taskId, tag,  cb=()=>null) {
         const query =  TASK_CANCEL_QUERY + ' ' + LIGHT_TASKS_QUERY;
-        const jsonArgs = `{"id": ${taskId}}`;
+        const jsonArgs = ID_ARGS(taskId);
         this.emit('query', {
             query,
             scope,
@@ -109,7 +110,7 @@ class TaskStore extends BaseStore {
 
     onGetArgs(scope, taskId, tag,  cb=()=>null) {
         const query = TASK_ARGS_QUERY;
-        const jsonArgs = `{"id": ${taskId}}`;
+        const jsonArgs = ID_ARGS(taskId);
         this.emit('query', {
             query,
             scope,
@@ -123,7 +124,7 @@ class TaskStore extends BaseStore {
 
     onGetOwner(scope, taskId, tag,  cb=()=>null) {
         const query = TASK_OWNER_QUERY;
-        const jsonArgs = `{"id": ${taskId}}`;
+        const jsonArgs = ID_ARGS(taskId);
         this.emit('query', {
             query,
             scope,

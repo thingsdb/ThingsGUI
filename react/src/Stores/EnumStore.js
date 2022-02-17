@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
 import { BaseStore } from './BaseStore';
-import { DEL_ENUM_QUERY, ENUMS_INFO_QUERY, RENAME_ENUM_QUERY } from '../TiQueries';
+import { NAME_ARGS, RENAME_ARGS } from '../TiQueries/Arguments';
+import { DEL_ENUM_QUERY, ENUMS_INFO_QUERY, RENAME_ENUM_QUERY } from '../TiQueries/Queries';
 import { ErrorActions } from './ErrorStore';
 
 const EnumActions = Vlow.createActions([
@@ -46,7 +47,7 @@ class EnumStore extends BaseStore {
 
     onDeleteEnum(scope, name, tag, cb=()=>null) {
         const query = DEL_ENUM_QUERY + ' ' + ENUMS_INFO_QUERY;
-        const jsonArgs = `{"name": "${name}"}`;
+        const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
             query,
             scope,
@@ -65,7 +66,7 @@ class EnumStore extends BaseStore {
 
     onRenameEnum(current, newName, scope, tag, cb=()=>null) {
         const query = RENAME_ENUM_QUERY + ENUMS_INFO_QUERY;
-        const jsonArgs = `{"current": "${current}", "newName": "${newName}"}`;
+        const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
             query,
             scope,

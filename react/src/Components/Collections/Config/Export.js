@@ -12,7 +12,7 @@ import { Copy, DownloadTextFile, ErrorMsg, SimpleModal } from '../../Utils';
 import { CollectionActions } from '../../../Stores';
 import { COLLECTION_SCOPE } from '../../../Constants/Scopes';
 import { ExportCollectionTAG } from '../../../Constants/Tags';
-import { EXPORT_QUERY } from '../../../TiQueries';
+import { EXPORT_QUERY } from '../../../TiQueries/Queries';
 
 
 const StyledGrid = styled(Grid)(({ theme }) => ({

@@ -17,7 +17,14 @@ import {
     TYPE_INFO_ELSE_QUERY,
     TYPE_INFO_PARENT_THING_QUERY,
     TYPE_INFO_ROOT_THING_QUERY,
-} from '../../../../TiQueries';
+} from '../../../../TiQueries/Queries';
+import {
+    TYPE_INFO_CHILD_THING_ARGS,
+    TYPE_INFO_ELSE_ARGS,
+    TYPE_INFO_PARENT_THING_ARGS,
+    ID_ARGS,
+} from '../../../../TiQueries/Arguments';
+
 import DialogButtons from './DialogButtons';
 import Edit from './Edit';
 import RoomEvent from './RoomEvent';
@@ -53,16 +60,16 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         let jsonArgs = '';
         if (parent.id==null) {
             query = TYPE_INFO_ROOT_THING_QUERY; // check if custom type
-            jsonArgs = `{"id": ${child.id}}`;
+            jsonArgs = ID_ARGS(child.id);
         } else if (parent.type == THING) {
             query = TYPE_INFO_PARENT_THING_QUERY; // check if custom type
-            jsonArgs = `{"id": ${parent.id}, "name": "${child.name}"}`;
+            jsonArgs = TYPE_INFO_PARENT_THING_ARGS(parent.id, child.name);
         } else if (child.type == THING) {
             query = TYPE_INFO_CHILD_THING_QUERY; // in case parent is set than indexing is not supported. Therefore we need to check child type by id.
-            jsonArgs = `{"cid": ${child.id}, "pid": ${parent.id}, "name": "${parent.name}"}`;
+            jsonArgs = TYPE_INFO_CHILD_THING_ARGS(child.id, parent.id, parent.name);
         } else {
             query = TYPE_INFO_ELSE_QUERY; // check if custom type
-            jsonArgs = `{"pid": ${parent.id}, "pname": "${parent.name}", "cname": "${child.name}"}`;
+            jsonArgs = TYPE_INFO_ELSE_ARGS(parent.id, parent.name, child.name);
         }
         TypeActions.getType(query, scope, jsonArgs, tag, setType);
         EnumActions.getEnums(scope, tag, setEnums);

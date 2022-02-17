@@ -9,7 +9,7 @@ import { ARRAY, STR } from '../../../../Constants/ThingTypes';
 import { CollectionActions } from '../../../../Stores';
 import { EditActions, useEdit } from '../Context';
 import { ListHeader, useDebounce } from '../..';
-import { SET_QUERY } from '../../../../TiQueries';
+import { SET_QUERY } from '../../../../TiQueries/Queries';
 import InputField from '../InputField';
 
 

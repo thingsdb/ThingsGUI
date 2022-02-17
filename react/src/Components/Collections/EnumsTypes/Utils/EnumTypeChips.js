@@ -27,7 +27,7 @@ import {
     MOD_TYPE_WPO_QUERY,
     SET_ENUM_QUERY,
     SET_TYPE_QUERY,
-} from '../../../../TiQueries';
+} from '../../../../TiQueries/Queries';
 
 
 const headers = {

@@ -88,7 +88,7 @@ import {
     ANGLE_BRACKETS_QUERY,
     CURLY_BRACKETS_QUERY,
     SQUARE_BRACKETS_QUERY,
-} from '../../TiQueries';
+} from '../../TiQueries/Queries';
 
 const checkType = (t) => {
     if (t === null) {

@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { EditActions, useEdit } from '../Context';
-import { REGEX_QUERY } from '../../../../TiQueries';
+import { REGEX_QUERY } from '../../../../TiQueries/Queries';
 
 
 const AddRegex = ({identifier, init, parent}) => {
