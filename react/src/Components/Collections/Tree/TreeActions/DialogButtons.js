@@ -10,8 +10,8 @@ import { historyNavigate } from '../../../Utils';
 import { ROOM, THING } from '../../../../Constants/ThingTypes';
 import { THING_KEY } from '../../../../Constants/CharacterKeys';
 import {
-    THING_PROP_QUERY,
-    THING_QUERY,
+    THING_PROP_FORMAT_QUERY,
+    THING_FORMAT_QUERY,
 } from '../../../../TiQueries/Queries';
 
 import RoomJoin from './RoomJoin';
@@ -22,7 +22,7 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
     let history = useHistory();
 
     const handleClickOpenEditor = () => {
-        historyNavigate(history, `/${EDITOR_ROUTE}`, {scope: scope, query: child.type===THING ? THING_QUERY(child.id) : THING_PROP_QUERY(parent.id, child.name)});
+        historyNavigate(history, `/${EDITOR_ROUTE}`, {scope: scope, query: child.type===THING ? THING_FORMAT_QUERY(child.id) : THING_PROP_FORMAT_QUERY(parent.id, child.name)});
     };
 
     // buttons visible

@@ -3,6 +3,11 @@ export const RENAME_ARGS = (current, newName) => `{"current": "${current}", "new
 export const NAME_ARGS = (name) => `{"name": "${name}"}`;
 export const ID_ARGS = (id) => `{"id": ${id}}`;
 
+// things
+export const THING_LIST_DEL_ARGS = (id, name, index) => `{"id": ${id}, "name": "${name}", "index": ${index}}`;
+export const THING_PROP_DEL_ARGS = (id, name) => `{"id": ${id}, "name": "${name}"}`;
+export const THING_SET_REMOVE_ARGS = (pid, name, cid) => `{"pid": ${pid}, "name": "${name}", "cid": ${cid}}`;
+
 // check types
 export const TYPE_INFO_CHILD_THING_ARGS = (cid, pid, name) =>  `{"cid": ${cid}, "pid": ${pid}, "name": "${name}"}`;
 export const TYPE_INFO_ELSE_ARGS = (pid, cname, pname) =>  `{"pid": ${pid}, "pname": "${pname}", "cname": "${cname}"}`;

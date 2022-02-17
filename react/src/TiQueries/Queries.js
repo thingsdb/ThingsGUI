@@ -9,7 +9,7 @@ export const RUN_QUERY = (name, args) => `run('${name}',${args})`; // don't plac
 export const SET_QUERY = (list) => `set(${list})`; // don't place a `;`
 export const SQUARE_BRACKETS_QUERY = (content='') => `[${content}]`; // don't place a `;`
 export const STRING_QUERY = (content='') => `'${content}'`; // don't place a `;`
-export const THING_QUERY = (id) => `thing(${id ? id : '.id()'})`; // don't place a `;`
+export const THING_FORMAT_QUERY = (id) => `thing(${id ? id : '.id()'})`; // don't place a `;`
 export const TIMEVAL_QUERY = (thing) => `timeval(${thing})`; // don't place a `;`
 export const WSE_QUERY = (run) => `wse(${run})`; // don't place a `;`
 export const ERROR_QUERY = (code, msg) => `err(${code}${msg ? `, '${msg}'` : ''})`; // don't place a `;`
@@ -44,17 +44,24 @@ export const RENAME_ENUM_QUERY = 'rename_enum(current, newName);';
 export const SET_ENUM_EMPTY_QUERY = 'set_enum("...", {...});';
 export const SET_ENUM_QUERY = (enum_, members) => `set_enum("${enum_}", ${members});`;
 
-// things
-export const THING_LIST_DEL_QUERY = (id, name, index) => `thing(${id}).${name}.splice(${index}, 1);`;
-export const THING_LIST_EDIT_QUERY = (id, name, index, value) => `thing(${id}).${name}[${index}] = ${value};`;
-export const THING_LIST_PUSH_QUERY = (id, name, value) => `thing(${id}).${name}.push(${value});`;
-export const THING_PROP_DEL_QUERY = (id, name) => `thing(${id}).del('${name}');`;
-export const THING_PROP_EDIT_QUERY = (id, name, value) => `thing(${id}).${name} = ${value};`;
-export const THING_PROP_QUERY = (id, name) => `thing(${id}).${name};`;
+// things - general
 export const THING_CURRENT_QUERY = 'thing(.id());';
-export const THING_FROM_ID_QUERY = 'thing(id);';
-export const THING_SET_ADD_QUERY = (id, name, value) => `thing(${id}).${name}.add(${value});`;
-export const THING_SET_REMOVE_QUERY = (pid, name, cid) => `thing(${pid}).${name}.remove(thing(${cid}));`;
+export const THING_PROP_FORMAT_QUERY = (id, name) => `thing(${id}).${name};`;
+export const THING_QUERY = 'thing(id);';
+
+// things - del
+export const THING_LIST_DEL_QUERY = 'thing(id).get(name).splice(index, 1); thing(id);';
+export const THING_PROP_DEL_QUERY = 'thing(id).del(name); thing(id);';
+export const THING_SET_REMOVE_QUERY = 'thing(pid).get(name).remove(thing(cid)); thing(pid);';
+export const THING_LIST_DEL_FORMAT_QUERY = (id, name, index) => `thing(${id}).${name}.splice(${index}, 1);`;
+export const THING_PROP_DEL_FORMAT_QUERY = (id, name) => `thing(${id}).del('${name}');`;
+export const THING_SET_REMOVE_FORMAT_QUERY = (pid, name, cid) => `thing(${pid}).${name}.remove(thing(${cid}));`;
+
+// things - edit
+export const THING_LIST_EDIT_FORMAT_QUERY = (id, name, index, value) => `thing(${id}).${name}[${index}] = ${value};`;
+export const THING_LIST_PUSH_FORMAT_QUERY = (id, name, value) => `thing(${id}).${name}.push(${value});`;
+export const THING_PROP_EDIT_FORMAT_QUERY = (id, name, value) => `thing(${id}).${name} = ${value};`;
+export const THING_SET_ADD_FORMAT_QUERY = (id, name, value) => `thing(${id}).${name}.add(${value});`;
 
 // check types
 export const TYPE_INFO_CHILD_THING_QUERY = '[type(thing(cid)), type(thing(pid).get(name)), types_info()];';

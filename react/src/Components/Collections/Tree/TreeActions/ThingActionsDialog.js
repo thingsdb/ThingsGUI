@@ -12,7 +12,7 @@ import { CollectionActions, EnumActions, ThingsdbActions, TypeActions } from '..
 import { ROOM, THING, TUPLE } from '../../../../Constants/ThingTypes';
 import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
 import {
-    THING_FROM_ID_QUERY,
+    THING_QUERY,
     TYPE_INFO_CHILD_THING_QUERY,
     TYPE_INFO_ELSE_QUERY,
     TYPE_INFO_PARENT_THING_QUERY,
@@ -56,7 +56,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         // Furthermore we check if the parent has a custom type. In that case we remove the remove button. Custom type instances have no delete options.
 
         // it would also be nice if we could check for potential custom type childern in an array type. To define the datatype of the edit component.
-        let query='';
+        let query = '';
         let jsonArgs = '';
         if (parent.id==null) {
             query = TYPE_INFO_ROOT_THING_QUERY; // check if custom type
@@ -96,7 +96,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 
         CollectionActions.query(
             scope,
-            query + ' ' + THING_FROM_ID_QUERY,
+            query + ' ' + THING_QUERY,
             tag,
             () => {
                 ThingsdbActions.getCollections();
@@ -104,7 +104,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
             },
             tid,
             b,
-            `{"id": ${tid}}`
+            ID_ARGS(tid)
         );
     };
 

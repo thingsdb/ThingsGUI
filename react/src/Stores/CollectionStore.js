@@ -11,9 +11,9 @@ import { THING_KEY } from '../Constants/CharacterKeys';
 import { ID_ARGS } from '../TiQueries/Arguments';
 import {
     SQUARE_BRACKETS_QUERY,
-    THING_QUERY,
+    THING_FORMAT_QUERY,
     THING_CURRENT_QUERY,
-    THING_FROM_ID_QUERY,
+    THING_QUERY,
 } from '../TiQueries/Queries';
 
 
@@ -86,7 +86,7 @@ class CollectionStore extends BaseStore {
         let jsonArgs = '';
 
         if (thingId) {
-            query = THING_FROM_ID_QUERY;
+            query = THING_QUERY;
             jsonArgs = ID_ARGS(thingId);
         }
         this.emit('query', {
@@ -110,7 +110,7 @@ class CollectionStore extends BaseStore {
         const ids = Object.keys(things);
 
         if(ids.length) {
-            const query = SQUARE_BRACKETS_QUERY(ids.map(id => THING_QUERY(id)));
+            const query = SQUARE_BRACKETS_QUERY(ids.map(id => THING_FORMAT_QUERY(id)));
             const scope = `${COLLECTION_SCOPE}:${collectionName}`;
             this.emit('query', {
                 query,
