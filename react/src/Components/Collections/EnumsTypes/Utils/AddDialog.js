@@ -17,7 +17,7 @@ import { PropertyMethod, PropertyName, PropertyType, PropertyVal } from './AddEd
 const tag = AddDialogTAG;
 
 const initState = {
-    queryString: '',
+    queryObj: {},
     name: '',
     error: '',
     properties: [{propertyName: '', propertyType: '', propertyVal: '', definition: ''}],
@@ -25,7 +25,7 @@ const initState = {
 
 const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, scope}) => {
     const [state, setState] = React.useState(initState);
-    const {queryString, name, error, properties} = state;
+    const {queryObj, name, error, properties} = state;
     const [blob, setBlob] = React.useState({});
 
     React.useEffect(() => {
@@ -41,7 +41,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
     const handleChange = ({target}) => {
         const {value} = target;
         const qry = queries[category](value, properties);
-        setState({...state, name: value, queryString: qry});
+        setState({...state, name: value, queryObj: qry});
     };
 
     const handleChangeProperty = React.useCallback((index) => (property) => {
@@ -49,7 +49,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
             let update = [...prevState.properties];
             update.splice(index, 1, {...prevState.properties[index], ...property});
             const qry = queries[category](prevState.name, update);
-            return {...prevState, properties: update, queryString: qry};
+            return {...prevState, properties: update, queryObj: qry};
         });
     }, [category, queries]);
 
@@ -58,7 +58,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
             let update = [...prevState.properties];
             update.splice(index, 1, {propertyName: '', propertyType: '', propertyVal: '', definition: ''});
             const qry = queries[category](prevState.name, update);
-            return {...prevState, properties: update, queryString: qry};
+            return {...prevState, properties: update, queryObj: qry};
         });
     };
 
@@ -75,7 +75,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
             let update = [...prevState.properties];
             update.splice(index, 1);
             const qry = queries[category](prevState.name, update);
-            return {...prevState, properties: update, queryString: qry};
+            return {...prevState, properties: update, queryObj: qry};
         });
     };
 
@@ -85,7 +85,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
             let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
             update.splice(index, 1, {...prevState.properties[index], ...prop});
             const qry = queries[category](prevState.name, update);
-            return {...prevState, properties: update, queryString: qry};
+            return {...prevState, properties: update, queryObj: qry};
         });
     }, [category, queries]);
 
@@ -93,7 +93,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
     const handleClickOk = () => {
         const keys = Object.keys(blob || {});
         const b = keys ? keys.reduce((res, k) => {
-            if(queryString.includes(k)){
+            if(queryObj?.queryString && queryObj?.queryString.includes(k)){
                 res[k]=blob[k];
             }
             return res;
@@ -101,7 +101,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
 
         CollectionActions.query(
             scope,
-            queryString,
+            queryObj?.query,
             tag,
             () => {
                 getInfo(scope, tag);
@@ -109,6 +109,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
             },
             null,
             b,
+            queryObj?.jsonArgs
         );
     };
 
@@ -162,7 +163,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                 </Grid>
                 <Grid item xs={12}>
                     <List disablePadding dense>
-                        <Collapse in={Boolean(queryString)} timeout="auto">
+                        <Collapse in={Boolean(queryObj?.queryString)} timeout="auto">
                             <ListItem>
                                 <TextField
                                     fullWidth
@@ -170,7 +171,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                                     multiline
                                     name="queryString"
                                     type="text"
-                                    value={queryString}
+                                    value={queryObj?.queryString}
                                     variant="standard"
                                     InputProps={{
                                         readOnly: true,

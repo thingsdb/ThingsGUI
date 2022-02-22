@@ -18,31 +18,49 @@ export const EXPORT_QUERY = 'export();';
 
 // Types
 export const DEL_TYPE_QUERY = 'del_type(name);';
-export const MOD_TYPE_ADD_FIELD_QUERY = (type, name, definition, init) => `mod_type('${type}', 'add', '${name}', '${definition}'${init ? `, ${init}` : ''});`;
-export const MOD_TYPE_ADD_METHOD_QUERY = (type, name, closure) => `mod_type('${type}', 'add', '${name}', ${closure});`;
-export const MOD_TYPE_DEL_QUERY = (type, name) => `mod_type('${type}', 'del', '${name}');`;
-export const MOD_TYPE_MOD_FIELD_QUERY = (type, name, definition, callback) => `mod_type('${type}', 'mod', '${name}', '${definition}'${callback ? `, ${callback}` : ''});`;
-export const MOD_TYPE_MOD_QUERY= (type, name, closure, callback) => `mod_type('${type}', 'mod', '${name}', ${closure}${callback ? `, ${callback}` : ''});`;
-export const MOD_TYPE_REL_ADD_QUERY = (type, name, to) => `mod_type('${type}', 'rel', '${name}', '${to}');`;
-export const MOD_TYPE_REL_DEL_QUERY = (type, name) => `mod_type('${type}', 'rel', '${name}', nil);`;
-export const MOD_TYPE_REN_QUERY = (type, name, to) => `mod_type('${type}', 'ren', '${name}', '${to}');`;
-export const MOD_TYPE_WPO_QUERY = (type, mode) => `mod_type('${type}', 'wpo', ${mode});`;
+export const MOD_TYPE_ADD_FIELD_QUERY = (init) => init ? 'mod_type(type, \'add\', name, definition, init);' : 'mod_type(type, \'add\', name, definition);';
+export const MOD_TYPE_ADD_METHOD_QUERY = 'mod_type(type, \'add\', name, closure(closure));';
+export const MOD_TYPE_DEL_QUERY = 'mod_type(type, \'del\', name);';
+export const MOD_TYPE_MOD_FIELD_QUERY = (callback) => callback ? 'mod_type(type, \'mod\', name, definition, closure(callback));' : 'mod_type(type, \'mod\', name, definition);';
+export const MOD_TYPE_MOD_QUERY = (callback) => callback ? 'mod_type(type, \'mod\', name, closure(closure), closure(callback));' : 'mod_type(type, \'mod\', name, closure(closure));';
+export const MOD_TYPE_REL_ADD_QUERY = 'mod_type(type, \'rel\', name, to);';
+export const MOD_TYPE_REL_DEL_QUERY = 'mod_type(type, \'rel\', name, nil);';
+export const MOD_TYPE_REN_QUERY = 'mod_type(type, \'ren\', name, to);';
+export const MOD_TYPE_WPO_QUERY = 'mod_type(type, \'wpo\', mode);';
 export const RENAME_TYPE_QUERY = 'rename_type(current, newName);';
 export const SET_TYPE_EMPTY_QUERY = 'set_type("...", {...});';
-export const SET_TYPE_QUERY = (type, value) => `set_type("${type}", ${value});`;
+export const SET_TYPE_QUERY = 'set_type(type, value);';
 export const TYPES_INFO_QUERY = 'types_info();';
+
+export const MOD_TYPE_ADD_FIELD_FORMAT_QUERY = (type, name, definition, init) => `mod_type('${type}', 'add', '${name}', '${definition}'${init ? `, ${init}` : ''});`;
+export const MOD_TYPE_ADD_METHOD_FORMAT_QUERY = (type, name, closure) => `mod_type('${type}', 'add', '${name}', ${closure});`;
+export const MOD_TYPE_DEL_FORMAT_QUERY = (type, name) => `mod_type('${type}', 'del', '${name}');`;
+export const MOD_TYPE_MOD_FIELD_FORMAT_QUERY = (type, name, definition, callback) => `mod_type('${type}', 'mod', '${name}', '${definition}'${callback ? `, ${callback}` : ''});`;
+export const MOD_TYPE_MOD_FORMAT_QUERY = (type, name, closure, callback) => `mod_type('${type}', 'mod', '${name}', ${closure}${callback ? `, ${callback}` : ''});`;
+export const MOD_TYPE_REL_ADD_FORMAT_QUERY = (type, name, to) => `mod_type('${type}', 'rel', '${name}', '${to}');`;
+export const MOD_TYPE_REL_DEL_FORMAT_QUERY = (type, name) => `mod_type('${type}', 'rel', '${name}', nil);`;
+export const MOD_TYPE_REN_FORMAT_QUERY = (type, name, to) => `mod_type('${type}', 'ren', '${name}', '${to}');`;
+export const MOD_TYPE_WPO_FORMAT_QUERY = (type, mode) => `mod_type('${type}', 'wpo', ${mode});`;
+export const SET_TYPE_FORMAT_QUERY = (type, value) => `set_type("${type}", ${value});`;
 
 // enums
 export const DEL_ENUM_QUERY = 'del_enum(name);';
 export const ENUMS_INFO_QUERY = 'enums_info();';
-export const MOD_ENUM_ADD_QUERY = (enum_, name, value) => `mod_enum('${enum_}', 'add', '${name}', ${value});`;
-export const MOD_ENUM_DEF_QUERY = (enum_, name) => `mod_enum('${enum_}', 'def', '${name}');`;
-export const MOD_ENUM_DEL_QUERY = (enum_, name) => `mod_enum('${enum_}', 'del', '${name}');`;
-export const MOD_ENUM_MOD_QUERY = (enum_, name, value) => `mod_enum('${enum_}', 'mod', '${name}', ${value});`;
-export const MOD_ENUM_REN_QUERY = (enum_, name, to) => `mod_enum('${enum_}', 'ren', '${name}', '${to}');`;
+export const MOD_ENUM_ADD_QUERY = 'mod_enum(enum, \'add\', name, value);';
+export const MOD_ENUM_DEF_QUERY = 'mod_enum(enum, \'def\', name);';
+export const MOD_ENUM_DEL_QUERY = 'mod_enum(enum, \'del\', name);';
+export const MOD_ENUM_MOD_QUERY = 'mod_enum(enum, \'mod\', name, value);';
+export const MOD_ENUM_REN_QUERY = 'mod_enum(enum, \'ren\', name, to);';
 export const RENAME_ENUM_QUERY = 'rename_enum(current, newName);';
 export const SET_ENUM_EMPTY_QUERY = 'set_enum("...", {...});';
-export const SET_ENUM_QUERY = (enum_, members) => `set_enum("${enum_}", ${members});`;
+export const SET_ENUM_QUERY = 'set_enum(enum, members);';
+
+export const MOD_ENUM_ADD_FORMAT_QUERY = (enum_, name, value) => `mod_enum('${enum_}', 'add', '${name}', ${value});`;
+export const MOD_ENUM_DEF_FORMAT_QUERY = (enum_, name) => `mod_enum('${enum_}', 'def', '${name}');`;
+export const MOD_ENUM_DEL_FORMAT_QUERY = (enum_, name) => `mod_enum('${enum_}', 'del', '${name}');`;
+export const MOD_ENUM_MOD_FORMAT_QUERY = (enum_, name, value) => `mod_enum('${enum_}', 'mod', '${name}', ${value});`;
+export const MOD_ENUM_REN_FORMAT_QUERY = (enum_, name, to) => `mod_enum('${enum_}', 'ren', '${name}', '${to}');`;
+export const SET_ENUM_FORMAT_QUERY = (enum_, members) => `set_enum("${enum_}", ${members});`;
 
 // things - general
 export const THING_CURRENT_QUERY = 'thing(.id());';
@@ -71,7 +89,7 @@ export const TYPE_INFO_ROOT_THING_QUERY = '[type(thing(id)), "", types_info()];'
 
 // procedures
 export const DEL_PROCEDURE_QUERY = 'del_procedure(name);';
-export const EDIT_PROCEDURE_QUERY = 'del_procedure(name); new_procedure(name, closure);';
+export const EDIT_PROCEDURE_QUERY = 'del_procedure(name); new_procedure(name, closure(closure));';
 export const NEW_PROCEDURE_EMPTY_QUERY = 'new_procedure("", );';
 export const NEW_PROCEDURE_QUERY = 'new_procedure(name, closure(closure));';
 export const NEW_PROCEDURE_FORMAT_QUERY = (name, closure) => `new_procedure('${name}', ${closure});`;

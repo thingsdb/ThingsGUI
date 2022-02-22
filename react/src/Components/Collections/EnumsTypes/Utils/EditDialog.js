@@ -36,7 +36,7 @@ const initState = {
         },
         propertyRelation: null,
     },
-    queryString: '',
+    queryObj: {},
 };
 
 const initShow = {
@@ -50,7 +50,7 @@ const initShow = {
 
 const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChangeItem, onClose, open, onRename, queries, rows, scope}) => {
     const [state, setState] = React.useState(initState);
-    const {queryString, property} = state;
+    const {queryObj, property} = state;
     const [action, setAction] = React.useState('');
     const [oldname, setOldname] = React.useState(null);
     const [blob, setBlob] = React.useState({});
@@ -77,7 +77,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     const showWpo = isType&&overview;
     const showWpoWarning = wpo;
     const showRelation = rel;
-    const showQuery = Boolean(queryString);
+    const showQuery = Boolean(queryObj?.queryString);
 
 
     React.useEffect(() => {
@@ -106,7 +106,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
             const update = {...prev.property, ...p};
             return({
                 property: update,
-                queryString: queries[act]?queries[act][category](item.name, update):''
+                queryObj: queries[act]?queries[act][category](item.name, update):''
             });
         });
     };
@@ -117,7 +117,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
             const update = {oldname: name, newname: p.propertyName};
             return({
                 property: {...prev.property, ...p},
-                queryString: queries.ren[category](item.name, update)
+                queryObj: queries.ren[category](item.name, update)
             });
         });
     };
@@ -219,7 +219,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         handleCloseError();
         const keys = Object.keys(blob || {});
         const b = keys ? keys.reduce((res, k) => {
-            if(queryString.includes(k)){
+            if(queryObj?.queryString && queryObj?.queryString.includes(k)){
                 res[k]=blob[k];
             }
             return res;
@@ -227,7 +227,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
         CollectionActions.query(
             scope,
-            queryString,
+            queryObj?.query,
             tag,
             () => {
                 getInfo(scope, tag);
@@ -235,6 +235,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
             },
             null,
             b,
+            queryObj?.jsonArgs
         );
     };
 
@@ -304,7 +305,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                                     multiline
                                     name="queryString"
                                     type="text"
-                                    value={queryString}
+                                    value={queryObj?.queryString}
                                     variant="standard"
                                     InputProps={{
                                         readOnly: true,

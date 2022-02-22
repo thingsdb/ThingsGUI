@@ -9,12 +9,12 @@ import { ErrorActions } from './ErrorStore';
 import { jsonify } from './Utils';
 import {
     DEL_BACKUP_ARGS,
-    NAME_ARGS,
     ID_ARGS,
+    NAME_ARGS,
     NEW_BACKUP_ARGS,
     NEW_MODULE_ARGS,
     NEW_NODE_ARGS,
-    RENAME_MODULE_ARGS,
+    RENAME_ARGS,
     RESTORE_ARGS,
     SET_LOG_LEVEL_ARGS,
     SET_MODULE_CONF_ARGS,
@@ -441,7 +441,7 @@ class NodesStore extends BaseStore {
 
     onRenameModule(nodeId, current, newName, tag, cb) {
         const query = RENAME_MODULE_QUERY;
-        const jsonArgs = RENAME_MODULE_ARGS(current, newName);
+        const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query,

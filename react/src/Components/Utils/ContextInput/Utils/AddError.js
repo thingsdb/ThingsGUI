@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import { CollectionActions } from '../../../../Stores';
 import { EditActions, useEdit } from '../Context';
-import { ERROR_OUPUT_ARGS } from '../../../../TiQueries/Arguments';
+import { ERROR_OUTPUT_ARGS } from '../../../../TiQueries/Arguments';
 import { ERROR_OUPUT_QUERY, ERROR_QUERY } from '../../../../TiQueries/Queries';
 import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
 
@@ -44,7 +44,7 @@ const AddError = ({identifier, init, parent}) => {
                 handleErr,
                 null,
                 null,
-                ERROR_OUPUT_ARGS(init.parentId, init.propName)
+                ERROR_OUTPUT_ARGS(init.parentId, init.propName)
             );
         }
     }, []);
