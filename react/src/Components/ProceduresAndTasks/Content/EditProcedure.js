@@ -72,7 +72,7 @@ const EditProcedure = ({procedure, scope}) => {
     const [jsonArgs, setJsonArgs] = React.useState('');
 
     const handleChangeDefinition = React.useCallback((c) => {
-        setQueryString(query => ({...query, definition: EDIT_PROCEDURE_QUERY(procedure.name, c)}));
+        setQueryString(query => ({...query, definition: EDIT_PROCEDURE_QUERY}));
         setJsonArgs(NEW_EDIT_PROCEDURE_ARGS(procedure.name, c));
     }, [procedure.name]);
 

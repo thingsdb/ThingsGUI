@@ -39,8 +39,8 @@ export const NEW_EDIT_PROCEDURE_ARGS = (name, closure) => `{"name": "${name}", "
 // tasks
 export const NEW_TASK_ARGS = (start, closure, args) => `{"start": ${start}, "closure": "${closure}", "args": [${args}]}`; // TODO check []
 export const TASK_SET_ARGS_ARGS = (id, args) => `{"id": ${id}, "args": [${args}]}`;
-export const TASK_SET_CLOSURE_ARGS = (id, closure) => `{"id": ${id}, "closure": "${closure}",}`;
-export const TASK_SET_OWNER_ARGS = (id, owner) => `{"id": ${id}, "owner": "${owner}",}`;
+export const TASK_SET_CLOSURE_ARGS = (id, closure) => `{"id": ${id}, "closure": "${closure}"}`;
+export const TASK_SET_OWNER_ARGS = (id, owner) => `{"id": ${id}, "owner": "${owner}"}`;
 
 // error
 export const ERROR_OUTPUT_ARGS = (id, name) => `{"id": ${id}, "name": "${name}"}`;
