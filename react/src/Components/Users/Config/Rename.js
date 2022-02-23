@@ -1,11 +1,13 @@
+import { useHistory } from 'react-router-dom';
+import { withVlow } from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
-import {withVlow} from 'vlow';
 
-import { CardButton, ErrorMsg, SimpleModal } from '../../Utils';
-import {ThingsdbActions, ThingsdbStore} from '../../../Stores';
-import {RenameUserTAG} from '../../../Constants/Tags';
+import { CardButton, ErrorMsg, historyNavigate, SimpleModal } from '../../Utils';
+import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
+import { RenameUserTAG } from '../../../Constants/Tags';
+import { USER_ROUTE } from '../../../Constants/Routes';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
@@ -34,6 +36,7 @@ const tag = RenameUserTAG;
 
 const Rename = ({user, users}) => {
     const [state, setState] = React.useState(initialState);
+    let history = useHistory();
     const {show, errors, form} = state;
 
     const handleClickOpen = () => {
@@ -60,7 +63,7 @@ const Rename = ({user, users}) => {
                 user.name,
                 form.name,
                 tag,
-                () => setState({...state, show: false})
+                () => historyNavigate(history, `/${USER_ROUTE}/${form.name}`)
             );
         }
     };
