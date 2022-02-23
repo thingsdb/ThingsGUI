@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { CollectionActions } from '../../../../Stores';
 import { EditActions, useEdit } from '../Context';
 import { ERROR_OUTPUT_ARGS } from '../../../../TiQueries/Arguments';
-import { ERROR_OUPUT_QUERY, ERROR_QUERY } from '../../../../TiQueries/Queries';
+import { ERROR_OUPUT_QUERY, ERROR_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
 
 
@@ -65,7 +65,7 @@ const AddError = ({identifier, init, parent}) => {
     };
 
     const saveErr = (code, msg) => {
-        const c = ERROR_QUERY(code, msg);
+        const c = ERROR_FORMAT_QUERY(code, msg);
         EditActions.update(dispatch, 'val', c, identifier, parent);
         setState({errCode: code, errMsg: msg});
     };

@@ -10,7 +10,7 @@ import { jsonify } from './Utils';
 import { THING_KEY } from '../Constants/CharacterKeys';
 import { ID_ARGS } from '../TiQueries/Arguments';
 import {
-    SQUARE_BRACKETS_QUERY,
+    SQUARE_BRACKETS_FORMAT_QUERY,
     THING_FORMAT_QUERY,
     THING_CURRENT_QUERY,
     THING_QUERY,
@@ -110,7 +110,7 @@ class CollectionStore extends BaseStore {
         const ids = Object.keys(things);
 
         if(ids.length) {
-            const query = SQUARE_BRACKETS_QUERY(ids.map(id => THING_FORMAT_QUERY(id)));
+            const query = SQUARE_BRACKETS_FORMAT_QUERY(ids.map(id => THING_FORMAT_QUERY(id)));
             const scope = `${COLLECTION_SCOPE}:${collectionName}`;
             this.emit('query', {
                 query,

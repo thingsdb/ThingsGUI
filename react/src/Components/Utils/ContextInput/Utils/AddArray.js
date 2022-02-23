@@ -9,7 +9,7 @@ import { ARRAY, STR } from '../../../../Constants/ThingTypes';
 import { CollectionActions } from '../../../../Stores';
 import { EditActions, useEdit } from '../Context';
 import { ListHeader, useDebounce } from '../..';
-import { SET_QUERY } from '../../../../TiQueries/Queries';
+import { SET_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 import InputField from '../InputField';
 
 
@@ -19,7 +19,7 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
     const {val, blob} = editState;
 
     const updateContext = React.useCallback(() => {
-        EditActions.update(parentDispatch, 'val', isSet ? SET_QUERY(`[${val}]`) : `[${val}]`, identifier, parent);
+        EditActions.update(parentDispatch, 'val', isSet ? SET_FORMAT_QUERY(`[${val}]`) : `[${val}]`, identifier, parent);
         EditActions.updateBlob(parentDispatch, val, blob);
         CollectionActions.enableSubmit();
     }, [blob, identifier, isSet, parent, parentDispatch, val]);

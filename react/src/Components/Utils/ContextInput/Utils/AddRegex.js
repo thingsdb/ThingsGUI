@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { EditActions, useEdit } from '../Context';
-import { REGEX_QUERY } from '../../../../TiQueries/Queries';
+import { REGEX_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 
 
 const AddRegex = ({identifier, init, parent}) => {
@@ -21,7 +21,7 @@ const AddRegex = ({identifier, init, parent}) => {
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.update(dispatch, 'val', REGEX_QUERY(value), identifier, parent);
+        EditActions.update(dispatch, 'val', REGEX_FORMAT_QUERY(value), identifier, parent);
     };
     const v = !val ? '' : identifier === null ? val : val[identifier] || '';
 

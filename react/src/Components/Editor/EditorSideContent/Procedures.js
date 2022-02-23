@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { Procedures } from '../../ProceduresAndTasks';
-import { NEW_PROCEDURE_EMPTY_QUERY, RUN_QUERY, WSE_QUERY } from '../../../TiQueries/Queries';
+import { NEW_PROCEDURE_EMPTY_QUERY, RUN_FORMAT_QUERY, WSE_FORMAT_QUERY } from '../../../TiQueries/Queries';
 
 const ProceduresEditor = ({onSetQueryInput, scope}) => {
 
@@ -13,8 +13,8 @@ const ProceduresEditor = ({onSetQueryInput, scope}) => {
             break;
         case 'run':
             if(procedure){
-                const run = RUN_QUERY(procedure.name, procedure.arguments.map(a=>` <${a}>` ));
-                const input = procedure.with_side_effects ? WSE_QUERY(run) : run;
+                const run = RUN_FORMAT_QUERY(procedure.name, procedure.arguments.map(a=>` <${a}>` ));
+                const input = procedure.with_side_effects ? WSE_FORMAT_QUERY(run) : run;
                 onSetQueryInput(input);
             }
             break;

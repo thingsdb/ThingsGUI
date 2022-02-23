@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 
 import { ANY, BOOL, BYTES, CLOSURE, CODE, DATETIME,ERROR, FLOAT, INT, LIST, NIL, NINT, NUMBER, PINT, RAW, REGEX, ROOM, SET, STR, THING, TIMEVAL, UINT, UTF8 } from '../../../../Constants/ThingTypes';
 import { CollectionActions } from '../../../../Stores';
-import { CUSTOM_TYPE_LITERAL } from '../../../../TiQueries/Queries';
+import { CUSTOM_TYPE_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 import { EditActions, useEdit } from '../Context';
 import InputField from '../InputField';
 import useDebounce from '../../useDebounce';
@@ -96,7 +96,7 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parent,
 
     const updateContext = React.useCallback(() => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        EditActions.update(parentDispatch,'val', CUSTOM_TYPE_LITERAL(type, s), identifier, parent);
+        EditActions.update(parentDispatch,'val', CUSTOM_TYPE_FORMAT_QUERY(type, s), identifier, parent);
         EditActions.updateBlob(parentDispatch, s, blob);
         CollectionActions.enableSubmit();
     }, [blob, identifier, parent, parentDispatch, type, val]);

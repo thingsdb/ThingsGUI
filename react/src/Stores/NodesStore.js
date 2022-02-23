@@ -467,7 +467,7 @@ class NodesStore extends BaseStore {
     }
 
     onSetModuleConf(nodeId, name, configuration, tag, cb) {
-        const query = SET_MODULE_CONF_QUERY(configuration);
+        const query = SET_MODULE_CONF_QUERY;
         const jsonConfig = configuration ? jsonify(configuration) : null;
         const jsonArgs = SET_MODULE_CONF_ARGS(name, jsonConfig);
 
@@ -482,7 +482,7 @@ class NodesStore extends BaseStore {
     }
 
     onSetModuleScope(nodeId, name, scope, tag, cb) {
-        const query = SET_MODULE_SCOPE_QUERY(name, scope);
+        const query = SET_MODULE_SCOPE_QUERY;
         const jsonArgs = SET_MODULE_SCOPE_ARGS(name, scope);
         this.emit('query', {
             scope: THINGSDB_SCOPE,

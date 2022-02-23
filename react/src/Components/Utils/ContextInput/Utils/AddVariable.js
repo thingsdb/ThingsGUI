@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { CollectionActions } from '../../../../Stores';
-import { CURLY_BRACKETS_QUERY } from '../../../../TiQueries/Queries';
+import { CURLY_BRACKETS_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 import { EditActions, useEdit } from '../Context';
 import InputField from '../InputField';
 import useDebounce from '../../useDebounce';
@@ -18,7 +18,7 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
 
     const updateContext = React.useCallback(() => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
-        EditActions.update(parentDispatch, 'val', CURLY_BRACKETS_QUERY(s), identifier, parent);
+        EditActions.update(parentDispatch, 'val', CURLY_BRACKETS_FORMAT_QUERY(s), identifier, parent);
         EditActions.update(parentDispatch, 'obj', val, identifier, parent);
         EditActions.updateBlob(parentDispatch, s, blob);
         CollectionActions.enableSubmit();
