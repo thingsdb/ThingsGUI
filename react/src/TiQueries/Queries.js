@@ -46,14 +46,14 @@ export const SET_TYPE_FORMAT_QUERY = (type, value) => `set_type('${type}', ${val
 // enums
 export const DEL_ENUM_QUERY = 'del_enum(name);';
 export const ENUMS_INFO_QUERY = 'enums_info();';
-export const MOD_ENUM_ADD_QUERY = 'mod_enum(enum, \'add\', name, value);';
-export const MOD_ENUM_DEF_QUERY = 'mod_enum(enum, \'def\', name);';
-export const MOD_ENUM_DEL_QUERY = 'mod_enum(enum, \'del\', name);';
-export const MOD_ENUM_MOD_QUERY = 'mod_enum(enum, \'mod\', name, value);';
-export const MOD_ENUM_REN_QUERY = 'mod_enum(enum, \'ren\', name, to);';
+export const MOD_ENUM_ADD_QUERY = 'mod_enum(enum_, \'add\', name, value);';
+export const MOD_ENUM_DEF_QUERY = 'mod_enum(enum_, \'def\', name);';
+export const MOD_ENUM_DEL_QUERY = 'mod_enum(enum_, \'del\', name);';
+export const MOD_ENUM_MOD_QUERY = 'mod_enum(enum_, \'mod\', name, value);';
+export const MOD_ENUM_REN_QUERY = 'mod_enum(enum_, \'ren\', name, to);';
 export const RENAME_ENUM_QUERY = 'rename_enum(current, newName);';
 export const SET_ENUM_EMPTY_QUERY = 'set_enum("...", {...});';
-export const SET_ENUM_QUERY = 'set_enum(enum, members);';
+export const SET_ENUM_QUERY = 'set_enum(enum_, members);';
 
 export const MOD_ENUM_ADD_FORMAT_QUERY = (enum_, name, value) => `mod_enum('${enum_}', 'add', '${name}', ${value});`;
 export const MOD_ENUM_DEF_FORMAT_QUERY = (enum_, name) => `mod_enum('${enum_}', 'def', '${name}');`;

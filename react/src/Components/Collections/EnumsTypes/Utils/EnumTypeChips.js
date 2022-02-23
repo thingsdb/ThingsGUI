@@ -91,14 +91,14 @@ const queries = {
                 const uniqueKey = `set_type_${v.propertyName}`;
 
                 res.value.push(`${v.propertyName}: ${v.propertyType ? `'${v.propertyType}'` : `${v.definition}`}`);
-                res.valueJson.push(`"${uniqueKey}": ${v.propertyType ? `"${v.propertyType}"` : `"${v.definition}"`}`);
-                res.valueQuery.push(`${v.propertyName}: ${v.propertyType ? `${uniqueKey}` : `closure(${uniqueKey})`}`);
+                res.valueJson = {...res.valueJson, [uniqueKey]: v.propertyType ? v.propertyType : v.definition};
+                res.valueQuery.push(`${v.propertyName}: ${v.propertyType ? uniqueKey : `closure(${uniqueKey})`}`);
 
                 return res;
             }, {value: [], valueJson: [], valueQuery: []});
 
             const value = `{${obj.value}}`;
-            const valueJson = `${obj.valueJson}`;
+            const valueJson = obj.valueJson;
             const valueQuery = `{${obj.valueQuery}}`;
 
             return ({
@@ -108,8 +108,15 @@ const queries = {
             });
         },
         enum: (name, list) => {
-            const value = `{${list.map(v=>`${v.propertyName}: ${v.propertyVal}`)}}`;
-            const valueJson = `{${list.map(v=>`"${v.propertyName}": ${v.propertyVal}`)}}`;
+            const obj = list.reduce((res, v) => {
+                res.value.push(`${v.propertyName}: ${v.propertyVal}`);
+                res.valueJson = {...res.valueJson, [v.propertyName]: v.propertyVal};
+
+                return res;
+            }, {value: [], valueJson: [], valueQuery: []});
+
+            const value = `{${obj.value}}`;
+            const valueJson = obj.valueJson;
 
             return ({
                 jsonArgs: SET_ENUM_ARGS(name, valueJson),
