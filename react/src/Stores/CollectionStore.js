@@ -6,7 +6,6 @@ import Vlow from 'vlow';
 import { BaseStore } from './BaseStore';
 import { COLLECTION_SCOPE } from '../Constants/Scopes';
 import { ErrorActions } from './ErrorStore';
-import { jsonify } from './Utils';
 import { THING_KEY } from '../Constants/CharacterKeys';
 import { ID_ARGS } from '../TiQueries/Arguments';
 import {
@@ -141,12 +140,8 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null, onFail=()=>null) {
-        let jsonArgs = null;
-        if (args) {
-            jsonArgs = jsonify(args); // make it json proof
-        }
-
+    onQuery(scope, query, tag, cb, thingId=null, blob=null, jsonArgs=null, onFail=()=>null) {
+        console.log(query, jsonArgs)
         this.emit('query', {
             query,
             scope,

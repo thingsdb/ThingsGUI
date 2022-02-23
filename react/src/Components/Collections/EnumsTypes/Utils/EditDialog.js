@@ -101,12 +101,12 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     };
 
     const handleQuery = (p, a) => {
-        const act = a||action;
+        const act = a || action;
         setState(prev=>{
             const update = {...prev.property, ...p};
             return({
                 property: update,
-                queryObj: queries[act]?queries[act][category](item.name, update):''
+                queryObj: queries[act] ? queries[act][category](item.name, update) : ''
             });
         });
     };

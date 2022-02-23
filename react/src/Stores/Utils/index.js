@@ -4,3 +4,8 @@ export const jsonify = (str) => {
         return matched === '\'' ? '"' : `"${matched}"`;
     });
 };
+
+export const escapeDoubleQuotes = (str) => {
+    return str.replace(/"/g, '\\"');
+};
+

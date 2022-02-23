@@ -86,17 +86,33 @@ const headers = {
 const queries = {
     add: {
         type: (name, list) => {
-            const value = `{${list.map(v=>`${v.propertyName}: ${v.propertyType?`'${v.propertyType}'`:`${v.definition}`}`)}}`;
+            const obj = list.reduce((res, v) => {
+                // the set_type_ prefix is there to guarantee that the key in the argument object is unique.
+                const uniqueKey = `set_type_${v.propertyName}`;
+
+                res.value.push(`${v.propertyName}: ${v.propertyType ? `'${v.propertyType}'` : `${v.definition}`}`);
+                res.valueJson.push(`"${uniqueKey}": ${v.propertyType ? `"${v.propertyType}"` : `"${v.definition}"`}`);
+                res.valueQuery.push(`${v.propertyName}: ${v.propertyType ? `${uniqueKey}` : `closure(${uniqueKey})`}`);
+
+                return res;
+            }, {value: [], valueJson: [], valueQuery: []});
+
+            const value = `{${obj.value}}`;
+            const valueJson = `${obj.valueJson}`;
+            const valueQuery = `{${obj.valueQuery}}`;
+
             return ({
-                jsonArgs: SET_TYPE_ARGS(name, value),
-                query: SET_TYPE_QUERY,
+                jsonArgs: SET_TYPE_ARGS(name, valueJson),
+                query: SET_TYPE_QUERY(valueQuery),
                 queryString: SET_TYPE_FORMAT_QUERY(name, value)
             });
         },
         enum: (name, list) => {
             const value = `{${list.map(v=>`${v.propertyName}: ${v.propertyVal}`)}}`;
+            const valueJson = `{${list.map(v=>`"${v.propertyName}": ${v.propertyVal}`)}}`;
+
             return ({
-                jsonArgs: SET_ENUM_ARGS(name, value),
+                jsonArgs: SET_ENUM_ARGS(name, valueJson),
                 query: SET_ENUM_QUERY,
                 queryString: SET_ENUM_FORMAT_QUERY(name, value)
             });

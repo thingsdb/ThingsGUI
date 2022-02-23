@@ -29,7 +29,7 @@ export const MOD_TYPE_REN_QUERY = 'mod_type(type, \'ren\', name, to);';
 export const MOD_TYPE_WPO_QUERY = 'mod_type(type, \'wpo\', mode);';
 export const RENAME_TYPE_QUERY = 'rename_type(current, newName);';
 export const SET_TYPE_EMPTY_QUERY = 'set_type("...", {...});';
-export const SET_TYPE_QUERY = 'set_type(type, value);';
+export const SET_TYPE_QUERY = (value) => `set_type(type, ${value});`;
 export const TYPES_INFO_QUERY = 'types_info();';
 
 export const MOD_TYPE_ADD_FIELD_FORMAT_QUERY = (type, name, definition, init) => `mod_type('${type}', 'add', '${name}', '${definition}'${init ? `, ${init}` : ''});`;
@@ -41,7 +41,7 @@ export const MOD_TYPE_REL_ADD_FORMAT_QUERY = (type, name, to) => `mod_type('${ty
 export const MOD_TYPE_REL_DEL_FORMAT_QUERY = (type, name) => `mod_type('${type}', 'rel', '${name}', nil);`;
 export const MOD_TYPE_REN_FORMAT_QUERY = (type, name, to) => `mod_type('${type}', 'ren', '${name}', '${to}');`;
 export const MOD_TYPE_WPO_FORMAT_QUERY = (type, mode) => `mod_type('${type}', 'wpo', ${mode});`;
-export const SET_TYPE_FORMAT_QUERY = (type, value) => `set_type("${type}", ${value});`;
+export const SET_TYPE_FORMAT_QUERY = (type, value) => `set_type('${type}', ${value});`;
 
 // enums
 export const DEL_ENUM_QUERY = 'del_enum(name);';
@@ -126,7 +126,7 @@ export const DEL_NODE_QUERY = 'del_node(id);';
 export const MODULE_INFO_QUERY = 'module_info(name);';
 export const MODULES_INFO_QUERY = 'modules_info();';
 export const NEW_BACKUP_QUERY = (time, repeat, maxFiles) => `new_backup(file${time ? ', datetime(time)' : ', now()'}${repeat ? `, repeat${maxFiles ? ', maxFiles' : ''}` : ''});`;
-export const NEW_MODULE_QUERY = (configuration) => configuration ? 'new_module(name, file);' : 'new_module(name, file, configuration);';
+export const NEW_MODULE_QUERY = (configuration) => configuration ? 'new_module(name, source, configuration);' : 'new_module(name, source);';
 export const NEW_NODE_QUERY = (port) => port ? 'new_node(secret, name, port);' : 'new_node(secret, name);';
 export const NODE_COUNTERS_INFO_QUERY = '[node_info(), counters()];';
 export const NODE_INFO_QUERY = 'node_info();';

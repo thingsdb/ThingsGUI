@@ -415,7 +415,7 @@ class NodesStore extends BaseStore {
     onAddModule(nodeId, config, tag, cb) {
         const query = NEW_MODULE_QUERY(config.configuration);
         const configuration = config.configuration ? jsonify(config.configuration) : null;
-        const jsonArgs = NEW_MODULE_ARGS(config.name, config.file, configuration);
+        const jsonArgs = NEW_MODULE_ARGS(config.name, config.source, configuration);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query,
