@@ -1,12 +1,14 @@
+import { useHistory } from 'react-router-dom';
 import { withVlow } from 'vlow';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import { ErrorMsg, SimpleModal } from '../../Utils';
+import { ErrorMsg, historyNavigate, SimpleModal } from '../../Utils';
 import { RenameCollectionTAG } from '../../../Constants/Tags';
 import { ThingsdbActions, ThingsdbStore } from '../../../Stores';
+import { COLLECTION_ROUTE } from '../../../Constants/Routes';
 
 const withStores = withVlow([{
     store: ThingsdbStore,
@@ -35,6 +37,7 @@ const tag = RenameCollectionTAG;
 
 const Rename = ({collection, collections}) => {
     const [state, setState] = React.useState(initialState);
+    let history = useHistory();
     const {show, errors, form} = state;
 
     const handleClickOpen = () => {
@@ -65,7 +68,7 @@ const Rename = ({collection, collections}) => {
                 collection.name,
                 form.name,
                 tag,
-                () => setState({...state, show: false})
+                () => historyNavigate(history, `/${COLLECTION_ROUTE}/${form.name}`)
             );
         }
     };
