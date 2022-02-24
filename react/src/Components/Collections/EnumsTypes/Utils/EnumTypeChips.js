@@ -136,7 +136,6 @@ const tableInfo = {
 };
 
 const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
-
     React.useEffect(() => {
         onInfo(scope, tag);
     }, [onInfo, scope, tag]);

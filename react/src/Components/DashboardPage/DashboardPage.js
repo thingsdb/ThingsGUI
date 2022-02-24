@@ -30,16 +30,16 @@ const DashboardPage = () => {
         return false;
     });
 
+    const handleOpen = React.useCallback(() => {
+        historySetQueryParam(history, 'dashboard', true);
+        setOpen(true);
+    }, [history]);
+
     React.useEffect(() => {
         if(history.location.pathname === '/'){
             handleOpen();
         }
     }, [handleOpen, history]);
-
-    const handleOpen = React.useCallback(() => {
-        historySetQueryParam(history, 'dashboard', true);
-        setOpen(true);
-    }, [history]);
 
     const handleClose = () => {
         historyDeleteQueryParam(history, 'dashboard');

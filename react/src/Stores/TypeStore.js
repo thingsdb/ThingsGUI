@@ -32,14 +32,14 @@ class TypeStore extends BaseStore {
         this.state = TypeStore.defaults;
     }
 
-    onGetType(q, scope, tag, cb) {
+    onGetType(query, scope, tag, cb) {
         this.emit('query', {
-            q,
+            query,
             scope
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {
-            ErrorActions.setToastError(message.Log);
+            ErrorActions.setMsgError(tag, message.Log);
             return [];
         });
     }

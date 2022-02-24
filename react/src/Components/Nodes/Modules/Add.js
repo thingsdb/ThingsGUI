@@ -16,7 +16,7 @@ const initialState = {
     show: false,
     form: {
         name: '',
-        file: '',
+        source: '',
         config: '',
     },
     switches: {
@@ -60,7 +60,7 @@ const Add = ({nodeId}) => {
             nodeId,
             {
                 name: form.name,
-                file: form.file,
+                source: form.source,
                 configuration: switches.config ? form.config : null,
             },
             tag,
@@ -123,7 +123,7 @@ const Add = ({nodeId}) => {
                         onChange={handleOnChange}
                         spellCheck={false}
                         type="text"
-                        value={form.file}
+                        value={form.source}
                         variant="standard"
                     />
                 </ListItem>

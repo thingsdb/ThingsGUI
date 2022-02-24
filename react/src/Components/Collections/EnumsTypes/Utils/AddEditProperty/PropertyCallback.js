@@ -16,12 +16,12 @@ const PropertyCallback = ({onChange}) => {
         const {checked} = target;
         setSwitch(checked);
         if (!checked) {
-            onChange({propertyVal:''});
+            onChange({callback: ''});
         }
     };
 
     const handleClosure = (c) => {
-        onChange({callback:c});
+        onChange({callback: c});
     };
 
     return (

@@ -8,7 +8,6 @@ import { ErrorActions } from './ErrorStore';
 import { ApplicationActions } from './ApplicationStore';
 import { LoginTAG } from '../Constants/Tags';
 import { THINGSDB_SCOPE } from '../Constants/Scopes';
-import { NIL } from '../Constants/ThingTypes';
 import {
     COLLECTION_INFO_QUERY,
     COLLECTIONS_INFO_QUERY,
@@ -25,6 +24,7 @@ import {
     NEW_USER_QUERY,
     RENAME_COLLECTION_QUERY,
     RENAME_USER_QUERY,
+    RESET_PASSWORD_QUERY,
     REVOKE_QUERY,
     SET_PASSWORD_QUERY,
     USER_INFO_QUERY,
@@ -338,7 +338,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onResetPassword(name, tag, cb) {
-        this.checkBeforeUserUpdate(SET_PASSWORD_QUERY(name, NIL), tag, cb);
+        this.checkBeforeUserUpdate(RESET_PASSWORD_QUERY(name), tag, cb);
     }
 
 

@@ -118,7 +118,7 @@ const checkType = (t) => {
 
 const thingValue = (type, thing, customTypes=[]) => {
     return type === ARRAY ? SQUARE_BRACKETS_QUERY(thing.length)
-        : type === THING ? Object.keys(thing)[0] == THING_KEY ? CURLY_BRACKETS_QUERY(`${Object.keys(thing)[0]}${thing[THING_KEY]}`)`{${Object.keys(thing)[0]}${thing[THING_KEY]}}` : CURLY_BRACKETS_QUERY()
+        : type === THING ? Object.keys(thing)[0] == THING_KEY ? CURLY_BRACKETS_QUERY(`${Object.keys(thing)[0]}${thing[THING_KEY]}`) : CURLY_BRACKETS_QUERY()
             : type === 'object' ? SQUARE_BRACKETS_QUERY(Object.keys(thing).length)
                 : type === STR || type === NUMBER || type === BOOL || type === BYTES ? `${thing}`
                     : type === null || type === NIL ? NIL

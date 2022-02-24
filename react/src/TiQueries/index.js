@@ -31,7 +31,7 @@ export const MOD_TYPE_WPO_QUERY = (type, mode) => `mod_type('${type}', 'wpo', ${
 export const RENAME_TYPE_QUERY = (current, newName) => `rename_type('${current}', '${newName}');`;
 export const SET_TYPE_EMPTY_QUERY = 'set_type("...", {...});';
 export const SET_TYPE_QUERY = (type, value) => `set_type("${type}", ${value});`;
-export const TYPES_INFO_QUERY = () => 'types_info();';
+export const TYPES_INFO_QUERY = 'types_info();';
 
 // enums
 export const DEL_ENUM_QUERY = (name) => `del_enum('${name}');`;
@@ -136,5 +136,6 @@ export const NEW_USER_QUERY = (name) => `new_user('${name}');`;
 export const RENAME_USER_QUERY = (current, newName) => `rename_user('${current}', '${newName}');`;
 export const REVOKE_QUERY = (collection, name, access) => `revoke('${collection}', '${name}', ${access});`;
 export const SET_PASSWORD_QUERY = (name, password) => `set_password('${name}', '${password}');`;
+export const RESET_PASSWORD_QUERY = (name) => `set_password('${name}', ${NIL});`;
 export const USER_INFO_QUERY = 'user_info();';
 export const USERS_INFO_QUERY = 'users_info();';
