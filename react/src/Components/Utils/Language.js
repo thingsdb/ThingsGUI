@@ -136,6 +136,9 @@ export default {
             'values': 'Returns an list with all the property values of a thing. The same could be returned using map so the following statement is true: (.values() == .map(|_, v| v))',
             'wrap': 'Wrap a thing with a Type.',
         },
+        typed: {
+            'to_thing': 'Converts a typed thing into a thing.'
+        },
         type: {
             'copy': 'Copy a thing to a new thing. A Type is not preserved.',
             'dup': 'Duplicate a thing while preserving the Type.',
