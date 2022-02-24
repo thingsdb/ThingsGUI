@@ -116,7 +116,6 @@ react/static/font/
 
 # NPM
 react/npm-debug.log
-react/package-lock.json
 
 # BIN files
 /bin/
