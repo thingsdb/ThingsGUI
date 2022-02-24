@@ -19,34 +19,33 @@ func TestEncryptedfilemanagment(t *testing.T) {
 		}
 	}()
 
-	mapping_in := map[string]loginTest{
+	mappingIn := map[string]loginTest{
 		"John": loginTest{User: "John", Password: "pass1"},
 		"Jane": loginTest{User: "Jane", Password: "pass2"},
 		"Mary": loginTest{User: "Mary", Password: "pass3"},
 	}
 
-	mapping_out := make(map[string]loginTest)
+	mappingOut := make(map[string]loginTest)
 
 	_, err := createFile(path, logCh)
 	if err != nil {
 		t.Errorf("Creating file FAILED: %s\n", err)
 	}
 
-	err = writeEncryptedFile(path, mapping_in, logCh)
+	err = writeEncryptedFile(path, mappingIn, logCh)
 	if err != nil {
 		t.Errorf("Writing file FAILED: %s\n", err)
 	}
 
-	err = readEncryptedFile(path, &mapping_out, logCh)
+	err = readEncryptedFile(path, &mappingOut, logCh)
 	if err != nil {
 		t.Errorf("Reading encrypted file FAILED: %s\n", err)
 	}
 
-	if mapping_in["John"].Password != mapping_out["John"].Password {
+	if mappingIn["John"].Password != mappingOut["John"].Password {
 		t.Errorf("TEST 4: FAILED. Encrypting file management.\n")
 	}
 
-	fmt.Println("TEST 5: deleting file")
 	err = deleteFile(path, logCh)
 	if err != nil {
 		t.Errorf("Deleting encrypted file FAILED: %s\n", err)

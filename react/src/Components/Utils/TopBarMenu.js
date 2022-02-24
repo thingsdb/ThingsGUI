@@ -8,6 +8,8 @@ import Tooltip from '@mui/material/Tooltip';
 const TopBarMenu = ({ children, menuIcon, menuTooltip}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
+    const handleMenuClose = React.useCallback(() => setAnchorEl(null), [setAnchorEl]);
+
     React.useEffect(() => {
         // add when mounted
         document.addEventListener('mousedown', handleMenuClose);
@@ -21,7 +23,6 @@ const TopBarMenu = ({ children, menuIcon, menuTooltip}) => {
         setAnchorEl(currentTarget);
     };
 
-    const handleMenuClose = React.useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const isOpen = Boolean(anchorEl);
 
     return (

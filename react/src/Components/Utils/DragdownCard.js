@@ -9,20 +9,6 @@ const DragdownCard = ({children}) => {
     const [isResizing, setIsResizing] = React.useState(false);
     const [newHeight, setNewHeight] = React.useState(500);
 
-    React.useEffect(() => {
-        if (isResizing) {
-            window.addEventListener('mousemove', handleMousemove);
-            window.addEventListener('mouseup', handleMouseup);
-        } else {
-            window.removeEventListener('mousemove', handleMousemove);
-            window.removeEventListener('mouseup', handleMouseup);
-        }
-    },[isResizing, handleMousemove, handleMouseup]);
-
-    const handleMousedown = () => {
-        setIsResizing(true);
-    };
-
     const handleMousemove = React.useCallback((event) => {
         let el = document.getElementById('editor');
         let height = event.clientY - el.offsetTop;
@@ -36,6 +22,19 @@ const DragdownCard = ({children}) => {
         setIsResizing(false);
     }, []);
 
+    React.useEffect(() => {
+        if (isResizing) {
+            window.addEventListener('mousemove', handleMousemove);
+            window.addEventListener('mouseup', handleMouseup);
+        } else {
+            window.removeEventListener('mousemove', handleMousemove);
+            window.removeEventListener('mouseup', handleMouseup);
+        }
+    },[isResizing, handleMousemove, handleMouseup]);
+
+    const handleMousedown = () => {
+        setIsResizing(true);
+    };
 
     return (
         <Card id='editor' style={{height: newHeight}}>

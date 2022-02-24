@@ -135,22 +135,6 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
     const [isResizing, setIsResizing] = React.useState(false);
     const [newWidth, setNewWidth] = React.useState(650);
 
-
-    React.useEffect(() => {
-        if (isResizing) {
-            window.addEventListener('mousemove', handleMousemove);
-            window.addEventListener('mouseup', handleMouseup);
-        } else {
-            window.removeEventListener('mousemove', handleMousemove);
-            window.removeEventListener('mouseup', handleMouseup);
-        }
-    },[handleMousemove, handleMouseup, isResizing]);
-
-
-    const handleMousedown = () => {
-        setIsResizing(true);
-    };
-
     const handleMousemove = React.useCallback((event) => {
         let offsetRight =
             document.body.offsetWidth - (event.clientX - document.body.offsetLeft);
@@ -165,6 +149,20 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
     const handleMouseup = React.useCallback(() => {
         setIsResizing(false);
     }, []);
+
+    React.useEffect(() => {
+        if (isResizing) {
+            window.addEventListener('mousemove', handleMousemove);
+            window.addEventListener('mouseup', handleMouseup);
+        } else {
+            window.removeEventListener('mousemove', handleMousemove);
+            window.removeEventListener('mouseup', handleMouseup);
+        }
+    },[handleMousemove, handleMouseup, isResizing]);
+
+    const handleMousedown = () => {
+        setIsResizing(true);
+    };
 
     return(
         <div>

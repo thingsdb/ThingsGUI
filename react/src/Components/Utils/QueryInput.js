@@ -38,6 +38,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         ...Object.keys(Language.types.string),
         ...Object.keys(Language.types.task),
         ...Object.keys(Language.types.thing),
+        ...Object.keys(Language.types.typed),
         ...Object.keys(Language.types.type),
     ],
 
@@ -250,6 +251,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 ...Object.entries(Language.types.string),
                 ...Object.entries(Language.types.task),
                 ...Object.entries(Language.types.thing),
+                ...Object.entries(Language.types.typed),
                 ...Object.entries(Language.types.type)
             ].map(([k, v]) => ({
                 label: k,

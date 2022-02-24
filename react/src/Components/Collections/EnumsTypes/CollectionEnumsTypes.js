@@ -92,13 +92,13 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
         expand: false,
     });
 
+    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, enumsTag), [scope]);
+    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, typesTag), [scope]);
+
     React.useEffect(()=>{
         handleRefreshEnums();
         handleRefreshTypes();
     },[handleRefreshEnums, handleRefreshTypes]);
-
-    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, enumsTag), [scope]);
-    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, typesTag), [scope]);
 
     const handleChange = React.useCallback((a) => (n, c) => {
         if (c=='type') {

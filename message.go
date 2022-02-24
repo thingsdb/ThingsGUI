@@ -13,9 +13,8 @@ type message struct {
 func msg(err error) message {
 	if err == nil {
 		return successMsg()
-	} else {
-		return failedMsg(err)
 	}
+	return failedMsg(err)
 }
 
 // successMsg returns OK

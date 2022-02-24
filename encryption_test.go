@@ -7,6 +7,7 @@ import (
 var testKey = []byte("eofnt846dtrwphgnv587f6sw73jr9fhf")
 
 func TestEncryptDecrypt(t *testing.T) {
+
 	encrypted, err := encrypt([]byte("testing_this_string"), testKey)
 	if err != nil {
 		t.Errorf("Encrypting FAILED: %s\n", err)

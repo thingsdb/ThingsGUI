@@ -47,7 +47,7 @@ export const DEL_BACKUP_ARGS = (id, deleteFiles) => JSON.stringify({ id, deleteF
 export const NEW_BACKUP_ARGS = (file, time, repeat, maxFiles) => JSON.stringify({ file, time, repeat, maxFiles });
 export const NEW_MODULE_ARGS = (name, source, configuration) => JSON.stringify({ name, source, configuration });
 export const NEW_NODE_ARGS = (secret, name, port) => JSON.stringify({ secret, name, port });
-export const RESTORE_ARGS = (fileName, takeAccess) => JSON.stringify({ fileName, takeAccess });
+export const RESTORE_ARGS = (fileName, takeAccess, restoreTasks) => JSON.stringify({ fileName, takeAccess, restoreTasks });
 export const SET_LOG_LEVEL_ARGS = (level) => JSON.stringify({ level });
 export const SET_MODULE_CONF_ARGS = (name, configuration) => JSON.stringify({ name, configuration });
 export const SET_MODULE_SCOPE_ARGS = (name, scope) => JSON.stringify({ name, scope });

@@ -1,5 +1,6 @@
 import { amber } from '@mui/material/colors';
 import Button from '@mui/material/Button';
+import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
@@ -17,6 +18,7 @@ const initialState = {
     showRedirectModal: false,
     fileName: '',
     takeAccess: false,
+    restoreTasks: false,
 };
 
 const tag = RestoreNodeTAG;
@@ -30,7 +32,7 @@ const nodeNotReady = (nodes) => {
 
 const Restore = ({nodes}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, fileName, takeAccess, showRedirectModal} = state;
+    const {show, fileName, takeAccess, restoreTasks, showRedirectModal} = state;
 
     React.useEffect(()=>{
         let id;
@@ -63,11 +65,16 @@ const Restore = ({nodes}) => {
         setState({...state, takeAccess: checked});
     };
 
+    const handleRestoreTasks = ({target}) => {
+        const {checked} = target;
+        setState({...state, restoreTasks: checked});
+    };
 
     const handleClickOk = () => {
         NodesActions.restore(
             fileName,
             takeAccess,
+            restoreTasks,
             tag,
             () => {
                 handleClickClose();
@@ -115,7 +122,6 @@ const Restore = ({nodes}) => {
                         }
                     }}
                 />
-
                 <Typography component="div" variant="caption">
                     <FormLabel component="label">
                         {'Keep your access rights?'}
@@ -126,6 +132,20 @@ const Restore = ({nodes}) => {
                         labelTwo="yes"
                         onChange={handleTakeAccess}
                     />
+                </Typography>
+                <Typography component="div" variant="caption">
+                    <FormLabel component="label">
+                        {'Keep your tasks?'}
+                    </FormLabel>
+                    <TwoLabelSwitch
+                        input={restoreTasks}
+                        labelOne="no"
+                        labelTwo="yes"
+                        onChange={handleRestoreTasks}
+                    />
+                    <FormHelperText sx={{color: amber[700]}}>
+                        {'It is not possible to keep both your access rights and tasks.'}
+                    </FormHelperText>
                 </Typography>
             </SimpleModal>
             <SimpleModal

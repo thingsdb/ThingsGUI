@@ -79,7 +79,6 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     const showRelation = rel;
     const showQuery = Boolean(queryObj?.queryString);
 
-
     React.useEffect(() => {
         setIsType(category === 'type');
     }, [category]);
@@ -87,14 +86,6 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     React.useEffect(() => {
         setAction('');
     }, [open]);
-
-    React.useEffect(() => {
-        handleWpo();
-    }, [handleWpo]);
-
-    const handleWpo = React.useCallback(() => {
-        setState({...initState, property: {...initState.property, wpo: item.wrap_only}});
-    }, [item.wrap_only]);
 
     const handleBlob = (b) => {
         setBlob(b);
@@ -208,7 +199,6 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
     const handleBack = () => {
         handleCloseError();
-        handleWpo();
         setAction('');
         setAnchorEl(null);
         setBlob({});
@@ -373,7 +363,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                                 />
                             </ListItem>
                             <ListItem>
-                                <Wpo onChange={handleQueryWpo} input={property.wpo} />
+                                <Wpo onChange={handleQueryWpo} input={item.wrap_only} />
                             </ListItem>
                         </Collapse>
                         <Collapse in={showRelation} timeout="auto" unmountOnExit>
