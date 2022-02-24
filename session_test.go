@@ -25,9 +25,9 @@ func addSessionTest(t *testing.T) {
 	login := getSession(testKeySession)
 
 	if login == nil {
-		t.Errorf("TEST: session FAILED: getSession returned nil.\n")
+		t.Errorf("TEST 7: session FAILED; getSession returned nil.\n")
 	} else if login.Address != testAddress {
-		t.Errorf("Encrypting FAILED: getSession returned wrong value\n")
+		t.Errorf("TEST 7: encrypting FAILED; getSession returned wrong value\n")
 	}
 }
 
@@ -37,13 +37,13 @@ func TestSessions(t *testing.T) {
 	resetSession(testKeySession)
 	login := getSession(testKeySession)
 	if login != nil {
-		t.Errorf("TEST: session FAILED: getSession should return nil after resetSession.\n")
+		t.Errorf("TEST 7: session FAILED; getSession should return nil after resetSession.\n")
 	}
 
 	addSessionTest(t)
 	time.Sleep(time.Duration(testMaxAge) * time.Second)
 	login = getSession(testKeySession)
 	if login != nil {
-		t.Errorf("TEST: session FAILED: getSession should return nil after max expiration time.\n")
+		t.Errorf("TEST 7: session FAILED; getSession should return nil after max expiration time.\n")
 	}
 }
