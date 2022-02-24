@@ -34,8 +34,8 @@ export const TYPE_INFO_PARENT_THING_ARGS = (id, name) => JSON.stringify({ id, na
 export const NEW_EDIT_PROCEDURE_ARGS = (name, closure) => JSON.stringify({ name, closure });
 
 // tasks
-export const NEW_TASK_ARGS = (start, closure, args) => JSON.stringify({ start, closure }).slice(0, -1) + `, "args": [${args}]}`;
-export const TASK_SET_ARGS_ARGS = (id, args) => JSON.stringify({ id }).slice(0, -1) + `, "args": [${args}]}`;
+export const NEW_TASK_ARGS = (start, closure, args) => JSON.stringify({ start, closure }).slice(0, -1) + `, "args": [${args}]}`; // TODO: Args are formatted different due to InputField strings; this should be changed in the future.
+export const TASK_SET_ARGS_ARGS = (id, args) => JSON.stringify({ id }).slice(0, -1) + `, "args": [${args}]}`; // TODO: Args are formatted different due to InputField strings; this should be changed in the future.
 export const TASK_SET_CLOSURE_ARGS = (id, closure) => JSON.stringify({ id, closure });
 export const TASK_SET_OWNER_ARGS = (id, owner) => JSON.stringify({ id, owner });
 
