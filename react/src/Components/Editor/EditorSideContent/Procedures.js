@@ -2,18 +2,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { Procedures } from '../../ProceduresAndTasks';
+import { NEW_PROCEDURE_EMPTY_QUERY, RUN_QUERY, WSE_QUERY } from '../../../TiQueries';
 
 const ProceduresEditor = ({onSetQueryInput, scope}) => {
 
     const handleCallback = (type, procedure) => {
         switch(type){
         case 'add':
-            onSetQueryInput('new_procedure(');
+            onSetQueryInput(NEW_PROCEDURE_EMPTY_QUERY);
             break;
         case 'run':
             if(procedure){
-                const run = `run('${procedure.name}',${procedure.arguments.map(a=>` <${a}>` )})`;
-                const input = procedure.with_side_effects ? `wse(${run})` : run;
+                const run = RUN_QUERY(procedure.name, procedure.arguments.map(a=>` <${a}>` ));
+                const input = procedure.with_side_effects ? WSE_QUERY(run) : run;
                 onSetQueryInput(input);
             }
             break;

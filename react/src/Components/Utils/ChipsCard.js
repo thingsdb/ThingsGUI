@@ -57,7 +57,7 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
         setMaxAmount(maxAmount=>maxAmount+step);
     };
 
-    let searchList = orderByName(searchString?items.filter(i=>i[itemKey].includes(searchString)):items, itemKey);
+    let searchList = orderByName(searchString ? items.filter(i=>i[itemKey].includes(searchString)) : items, itemKey);
 
     return (
         <React.Fragment>

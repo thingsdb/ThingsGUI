@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
 import { BaseStore } from './BaseStore';
-import { ErrorActions } from './ErrorStore';
-import { THING_KEY } from '../Constants/CharacterKeys';
 import { COLLECTION_SCOPE } from '../Constants/Scopes';
+import { ErrorActions } from './ErrorStore';
 import { jsonify } from './Utils';
+import { THING_KEY } from '../Constants/CharacterKeys';
+import { SQUARE_BRACKETS_QUERY, THING_STAT_QUERY, THING_QUERY } from '../TiQueries';
 
 
 const CollectionActions = Vlow.createActions([
@@ -74,7 +75,7 @@ class CollectionStore extends BaseStore {
     }
 
     onGetThings(collectionId, collectionName, thingId=null) {
-        const query = thingId ? `thing(${thingId});` : 'thing(.id());';
+        const query = THING_STAT_QUERY(thingId);
         const scope = `${COLLECTION_SCOPE}:${collectionName}`;
         this.emit('query', {
             query,
@@ -93,10 +94,10 @@ class CollectionStore extends BaseStore {
 
     onRefreshThings(collectionName) {
         const {things} = this.state;
-        const keys = Object.keys(things);
+        const ids = Object.keys(things);
 
-        if(keys.length) {
-            const query = `[${keys.map(k => `thing(${k})`)}];`;
+        if(ids.length) {
+            const query = SQUARE_BRACKETS_QUERY(ids.map(id => THING_QUERY(id)));
             const scope = `${COLLECTION_SCOPE}:${collectionName}`;
             this.emit('query', {
                 query,
@@ -129,7 +130,7 @@ class CollectionStore extends BaseStore {
 
     onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null, onFail=()=>null) {
         if(thingId){
-            query = `${query} thing(${thingId});`;
+            query = query + ' ' + THING_STAT_QUERY(thingId);
         }
 
         let jsonArgs = null;

@@ -22,7 +22,6 @@ class EditorStore extends Vlow.Store {
     }
 
     onSetHistory(line) {
-        // const l = line.split('\n').filter(i=>i!=='');
         this.setState(prevState => {
             const copy = [...prevState.history];
             copy.push(line);

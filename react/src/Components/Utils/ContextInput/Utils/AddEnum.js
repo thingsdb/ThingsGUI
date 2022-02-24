@@ -5,10 +5,11 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import {EditActions, useEdit} from '../Context';
-import {DownloadBlob} from '../..';
-import {THING_KEY} from '../../../../Constants/CharacterKeys';
-import {THINGDB_CACHE} from '../../../../Constants/Files';
+import { CUSTOM_TYPE_LITERAL } from '../../../../TiQueries';
+import { DownloadBlob } from '../..';
+import { EditActions, useEdit } from '../Context';
+import { THING_KEY } from '../../../../Constants/CharacterKeys';
+import { THINGDB_CACHE } from '../../../../Constants/Files';
 
 
 const AddEnum = ({enumName, enums, identifier, init, parent}) => {
@@ -35,14 +36,14 @@ const AddEnum = ({enumName, enums, identifier, init, parent}) => {
                     : _enum.members.find(i => i[1] === init) || _enum.members[0])
                 : _enum.members[0];
             setEnumMem(e[0]);
-            EditActions.update(dispatch, 'val', `${enumName}{${e[0]}}`, identifier, parent);
+            EditActions.update(dispatch, 'val', CUSTOM_TYPE_LITERAL(enumName, e[0]), identifier, parent);
         }
     }, [_enum]);
 
     const handleChangeEnum = ({target}) => {
         const {value} = target;
         setEnumMem(value);
-        EditActions.update(dispatch, 'val', `${enumName}{${value}}`, identifier, parent);
+        EditActions.update(dispatch, 'val', CUSTOM_TYPE_LITERAL(enumName, value), identifier, parent);
     };
 
     return(_enum&&_enum.members?(

@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import { Closure, ErrorMsg, EditProvider, ViewEditFields } from '../../Utils';
 import { CollectionActions, ProcedureActions } from '../../../Stores';
 import { DATE_TIME_MIN_STR } from '../../../Constants/DateStrings';
+import { EDIT_PROCEDURE_QUERY } from '../../../TiQueries';
 import { EditProcedureDialogTAG } from '../../../Constants/Tags';
 
 const header = [
@@ -69,7 +70,7 @@ const EditProcedure = ({procedure, scope}) => {
     const [queryString, setQueryString] = React.useState({definition: ''});
 
     const handleChangeDefinition = React.useCallback((c) => {
-        setQueryString(query => ({...query, definition: `del_procedure("${procedure.name}"); new_procedure("${procedure.name}", ${c});`}));
+        setQueryString(query => ({...query, definition: EDIT_PROCEDURE_QUERY(procedure.name, c)}));
     }, [procedure.name]);
 
 

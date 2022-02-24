@@ -5,8 +5,9 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { EditActions, useEdit } from '../Context';
 import { CollectionActions } from '../../../../Stores';
+import { EditActions, useEdit } from '../Context';
+import { ERROR_OUPUT_QUERY, ERROR_QUERY } from '../../../../TiQueries';
 import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
 
 
@@ -37,7 +38,7 @@ const AddError = ({identifier, init, parent}) => {
         if (init) {
             CollectionActions.query(
                 init.scope,
-                `[thing(${init.parentId}).${init.propName}.code(), thing(${init.parentId}).${init.propName}.msg()];`,
+                ERROR_OUPUT_QUERY(init.parentId, init.propName),
                 ThingActionsDialogTAG,
                 handleErr
             );
@@ -60,7 +61,7 @@ const AddError = ({identifier, init, parent}) => {
     };
 
     const saveErr = (code, msg) => {
-        const c = msg ? `err(${code}, '${msg}')` : `err(${code})`;
+        const c = ERROR_QUERY(code, msg);
         EditActions.update(dispatch, 'val', c, identifier, parent);
         setState({errCode: code, errMsg: msg});
     };

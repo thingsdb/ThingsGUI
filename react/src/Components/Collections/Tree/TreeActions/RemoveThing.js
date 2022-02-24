@@ -8,10 +8,10 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { ErrorMsg, SimpleModal } from '../../../Utils';
-import {CollectionActions, ThingsdbActions} from '../../../../Stores';
-import {RemoveThingTAG} from '../../../../Constants/Tags';
-import {SET, THING} from '../../../../Constants/ThingTypes';
-
+import { CollectionActions, ThingsdbActions } from '../../../../Stores';
+import { RemoveThingTAG } from '../../../../Constants/Tags';
+import { SET, THING } from '../../../../Constants/ThingTypes';
+import { THING_PROP_DEL_QUERY, THING_SET_REMOVE_QUERY, THING_LIST_DEL_QUERY} from '../../../../TiQueries';
 
 const tag = RemoveThingTAG;
 const RemoveThing = ({child, onClose, parent, scope}) => {
@@ -19,9 +19,9 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
     const [query, setQuery] = React.useState('');
 
     React.useEffect(() => {
-        const q = parent.type === THING ? `thing(${parent.id}).del('${child.name}');`
-            : parent.type === SET ? `thing(${parent.id}).${parent.name}.remove(thing(${child.id}));`
-                : `thing(${parent.id}).${parent.name}.splice(${child.index}, 1);`;
+        const q = parent.type === THING ? THING_PROP_DEL_QUERY(parent.id, child.name)
+            : parent.type === SET ? THING_SET_REMOVE_QUERY(parent.id, parent.name, child.id)
+                : THING_LIST_DEL_QUERY(parent.id, parent.name, child.index);
         setQuery(q);
     }, [child.index, child.id, child.name, parent.id, parent.name, parent.type]);
 

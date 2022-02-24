@@ -1,5 +1,7 @@
+import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Typography from '@mui/material/Typography';
 
 import { InputField, useEdit } from '../../Utils';
 import { BOOL, BYTES, CODE, FLOAT, INT, LIST, NIL, STR, THING, VARIABLE } from '../../../Constants/ThingTypes';
@@ -18,7 +20,15 @@ const SetArguments = ({closure, onChange}) => {
     }, [blob, onChange, obj]);
 
     return (
-        <InputField dataType={VARIABLE} dataTypes={dataTypes} variables={argLabels} />
+        argLabels?.length ? (
+            <InputField dataType={VARIABLE} dataTypes={dataTypes} variables={argLabels} />
+        ) : (
+            <Typography variant="subtitle2">
+                <Box sx={{fontStyle: 'italic', m: 2, color: (theme) => theme.palette.text.secondary}}>
+                    {'No arguments'}
+                </Box>
+            </Typography>
+        )
     );
 };
 

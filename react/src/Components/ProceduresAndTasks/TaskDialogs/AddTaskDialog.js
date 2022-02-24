@@ -16,8 +16,9 @@ import Typography from '@mui/material/Typography';
 import { AddTaskDialogTAG } from '../../../Constants/Tags';
 import { Closure, EditProvider, ErrorMsg, SimpleModal, SwitchOpen, TimePicker } from '../../Utils';
 import { CollectionActions, TaskActions } from '../../../Stores';
-import { THINGS_DOC_TASK } from '../../../Constants/Links';
 import { SetArguments } from '../Utils';
+import { NEW_TASK_QUERY, TASK_EMPTY_QUERY } from '../../../TiQueries';
+import { THINGS_DOC_TASK } from '../../../Constants/Links';
 
 
 const tag = AddTaskDialogTAG;
@@ -27,7 +28,7 @@ const initState = {
     blob: {},
     closure: '',
     error: '',
-    queryString: 'task();',
+    queryString: TASK_EMPTY_QUERY,
     start: null,
 };
 
@@ -47,15 +48,15 @@ const AddTaskDialog = ({open, onClose, scope}) => {
     }, [open]);
 
     const handleChangeStart = (s) => {
-        setState({...state, start: s, queryString: `task(datetime(${s}), ${closure}${args.length ? `, [${args}]`: ''});`});
+        setState({...state, start: s, queryString: NEW_TASK_QUERY(s, closure, args)});
     };
 
     const handleChangeClosure = (c) => {
-        setState({...state, closure: c, queryString: `task(datetime(${start}), ${c}${args.length ? `, [${args}]`: ''});`});
+        setState({...state, closure: c, queryString: NEW_TASK_QUERY(start, c, args)});
     };
 
     const handleChangeArgs = React.useCallback((args, blob) => {
-        setState(state => ({...state, args: args, blob: blob, queryString: `task(datetime(${start}), ${closure}${args.length ? `, [${args}]`: ''});`}));
+        setState(state => ({...state, args: args, blob: blob, queryString: NEW_TASK_QUERY(start, closure, args)}));
     }, [closure, start]);
 
     const handleSwitchArgs = (open) => {
@@ -196,7 +197,7 @@ const AddTaskDialog = ({open, onClose, scope}) => {
                             <Closure onChange={handleChangeClosure} />
                         </ListItem>
                         <ListItem>
-                            <SwitchOpen label="Add arguments [optional]" onChange={handleSwitchArgs}>
+                            <SwitchOpen label="Add argument values [optional]" onChange={handleSwitchArgs}>
                                 <EditProvider>
                                     <SetArguments closure={closure} onChange={handleChangeArgs} />
                                 </EditProvider>

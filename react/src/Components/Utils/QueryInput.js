@@ -38,6 +38,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         ...Object.keys(Language.types.string),
         ...Object.keys(Language.types.task),
         ...Object.keys(Language.types.thing),
+        ...Object.keys(Language.types.typed),
         ...Object.keys(Language.types.type),
     ],
 
@@ -89,14 +90,14 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             }],
 
             [/(\.)([A-Za-z_][0-9A-Za-z_]*)(\()/, [
-                '',
+                'delimiter',
                 {
                     cases: {
                         '@methods': 'method',
                         '@default': 'identifier',
                     }
                 },
-                '']
+                'delimiter']
             ],
 
             // whitespace
@@ -111,7 +112,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             [/@symbols/, {
                 cases: {
                     '@operators': 'delimiter',
-                    '@default': ''
+                    '@default': 'delimiter'
                 }
             }],
 
@@ -250,6 +251,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 ...Object.entries(Language.types.string),
                 ...Object.entries(Language.types.task),
                 ...Object.entries(Language.types.thing),
+                ...Object.entries(Language.types.typed),
                 ...Object.entries(Language.types.type)
             ].map(([k, v]) => ({
                 label: k,
@@ -317,10 +319,10 @@ const theme = {
         { token: 'whitespace', foreground: '608b4e' },
     ],
     colors: {
-        'editor.foreground': '#000',
-        'editor.background': '#000',
+        'editor.foreground': '#000000',
+        'editor.background': '#000000',
         'editorCursor.foreground': '#c6c6c6',
-        'editor.lineHighlightBackground': '#000',
+        'editor.lineHighlightBackground': '#000000',
         'editorLineNumber.foreground': '#c6c6c6',
         'editor.selectionBackground': '#20344b',
         'editor.inactiveSelectionBackground': '#c6c6c6',

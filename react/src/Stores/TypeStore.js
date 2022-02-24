@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
-import {BaseStore} from './BaseStore';
-import {ErrorActions} from './ErrorStore';
+
+import { BaseStore } from './BaseStore';
+import { ErrorActions } from './ErrorStore';
+import {
+    DEL_TYPE_QUERY,
+    RENAME_TYPE_QUERY,
+    TYPES_INFO_QUERY,
+} from '../TiQueries';
 
 const TypeActions = Vlow.createActions([
     'getType',
@@ -26,21 +32,20 @@ class TypeStore extends BaseStore {
         this.state = TypeStore.defaults;
     }
 
-    onGetType(q, scope, tag, cb) {
-        const query = `${q}`;
+    onGetType(query, scope, tag, cb) {
         this.emit('query', {
             query,
             scope
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {
-            ErrorActions.setToastError(message.Log);
+            ErrorActions.setMsgError(tag, message.Log);
             return [];
         });
     }
 
     onGetTypes(scope, tag, cb=()=>null) {
-        const query = 'types_info();';
+        const query = TYPES_INFO_QUERY;
         this.emit('query', {
             query,
             scope
@@ -57,7 +62,7 @@ class TypeStore extends BaseStore {
     }
 
     onDeleteType(scope, name, tag, cb=()=>null) {
-        const query = `del_type('${name}'); types_info();`;
+        const query = DEL_TYPE_QUERY(name) + ' ' + TYPES_INFO_QUERY;
         this.emit('query', {
             query,
             scope
@@ -74,7 +79,7 @@ class TypeStore extends BaseStore {
     }
 
     onRenameType(oldName, newName, scope, tag, cb=()=>null) {
-        const query = `rename_type('${oldName}', '${newName}'); types_info();`;
+        const query = RENAME_TYPE_QUERY(oldName, newName) + ' ' + TYPES_INFO_QUERY;
         this.emit('query', {
             query,
             scope

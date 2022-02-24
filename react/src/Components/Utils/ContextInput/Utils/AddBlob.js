@@ -1,13 +1,45 @@
 /*eslint-disable react/jsx-props-no-spreading*/
-import PropTypes from 'prop-types';
-import React from 'react';
+import { styled } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
 import Dropzone from 'react-dropzone';
 import Grid from '@mui/material/Grid';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import {EditActions, useEdit} from '../Context';
 import {DownloadBlob} from '../..';
+
+const getColor = (theme, isFocused, isDragAccept, isDragReject) => {
+    if (isDragAccept) {
+        return theme.palette.primary.main;
+    }
+    if (isDragReject) {
+        return '#ff1744';
+    }
+    if (isFocused) {
+        return theme.palette.primary.main;
+    }
+    return '#eeeeee';
+};
+
+const Container = styled('div', {shouldForwardProp: (prop) => prop !== 'isFocused' && prop !== 'isDragAccept' && prop !== 'isDragReject' })(
+    ({ theme, isFocused, isDragAccept, isDragReject }) => ({
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '20px',
+        borderWidth: '2px',
+        borderRadius: '2px',
+        borderColor: getColor(theme, isFocused, isDragAccept, isDragReject),
+        borderStyle: 'dashed',
+        backgroundColor: theme.palette.background.primary,
+        color: theme.palette.text.main,
+        outline: 'none',
+        transition: 'border .24s ease-in-out',
+    })
+);
 
 
 const AddBlob = ({identifier, init, parent}) => {
@@ -29,7 +61,7 @@ const AddBlob = ({identifier, init, parent}) => {
         }
     }, [blob, dispatch, identifier, parent]);
 
-    const handleDropzone = React.useCallback(acceptedFiles => {
+    const handleDropzone = React.useCallback((acceptedFiles) => {
         const reader = new FileReader();
         reader.onabort = () => window.log('file reading was aborted');
         reader.onerror = () => window.log('file reading has failed');
@@ -46,16 +78,22 @@ const AddBlob = ({identifier, init, parent}) => {
     return(
         <Grid container>
             <Grid item xs={8}>
-                <Grid item xs={9}>
+                <Grid item xs={12}>
                     <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
-                        {({getRootProps, getInputProps}) => (
+                        {({
+                            getRootProps,
+                            getInputProps,
+                            isFocused,
+                            isDragAccept,
+                            isDragReject
+                        }) => (
                             <section>
-                                <div {...getRootProps()}>
+                                <Container {...getRootProps()} isFocused={isFocused} isDragAccept={isDragAccept} isDragReject={isDragReject}>
                                     <input {...getInputProps()} />
                                     <p>
-                                        {'Drag "n" drop some files here, or click to select files'}
+                                        {'Drag "n" drop a file here, or click to select'}
                                     </p>
-                                </div>
+                                </Container>
                             </section>
                         )}
                     </Dropzone>

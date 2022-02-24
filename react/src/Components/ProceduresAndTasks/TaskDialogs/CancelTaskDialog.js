@@ -16,7 +16,14 @@ const CancelTaskDialog = ({button, open, onClose, scope, task}) => {
     }, [task.id]);
 
     const handleClickOk = () => {
-        TaskActions.cancelTask(scope, task.id, tag, onClose);
+        TaskActions.cancelTask(
+            scope,
+            task.id,
+            tag,
+            () => {
+                TaskActions.getTask(scope, task.id, tag);
+                onClose();
+            });
     };
 
     return(

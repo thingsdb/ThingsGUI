@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 
 import { ARRAY, STR } from '../../../../Constants/ThingTypes';
 import { CollectionActions } from '../../../../Stores';
+import { CURLY_BRACKETS_QUERY } from '../../../../TiQueries';
 import { EditActions, useEdit } from '../Context';
 import { ListHeader, useDebounce } from '../..';
 import InputField from '../InputField';
@@ -20,7 +21,7 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDisp
 
     const updateContext = React.useCallback(() => {
         let array = (val || []).map((v, index) => `${property[index]}: ${v}`);
-        EditActions.update(parentDispatch, 'val', `{${array}}`, identifier, parent);
+        EditActions.update(parentDispatch, 'val', CURLY_BRACKETS_QUERY(array), identifier, parent);
         EditActions.updateBlob(parentDispatch, val, blob);
         CollectionActions.enableSubmit();
     }, [blob, identifier, property, parent, parentDispatch, val]);

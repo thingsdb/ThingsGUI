@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { EditActions, useEdit } from '../Context';
+import { ROOM_QUERY } from '../../../../TiQueries';
 
 const onlyInts = (str) => str.length == str.replace(/[^0-9]/g, '').length;
 
@@ -41,7 +42,7 @@ const AddRoom = ({identifier, init, parent}) => {
     };
 
     const saveRoom = (roomId) => {
-        const c = `room(${roomId})`;
+        const c = ROOM_QUERY(roomId);
         EditActions.update(dispatch, 'val', c, identifier, parent);
         setRoomId(roomId);
     };

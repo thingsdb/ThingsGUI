@@ -14,7 +14,7 @@ import {historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} fro
 import {TopBar} from '../Navigation';
 import DashboardContent from './DashboardContent';
 
-const version='version: 1.1.6';
+const version='version: 1.1.7';
 
 const Transition = React.forwardRef((props, ref) => {
     return <Slide direction="down" ref={ref} {...props} mountOnEnter unmountOnExit />;
@@ -30,16 +30,16 @@ const DashboardPage = () => {
         return false;
     });
 
+    const handleOpen = React.useCallback(() => {
+        historySetQueryParam(history, 'dashboard', true);
+        setOpen(true);
+    }, [history]);
+
     React.useEffect(() => {
         if(history.location.pathname === '/'){
             handleOpen();
         }
     }, [handleOpen, history]);
-
-    const handleOpen = React.useCallback(() => {
-        historySetQueryParam(history, 'dashboard', true);
-        setOpen(true);
-    }, [history]);
 
     const handleClose = () => {
         historyDeleteQueryParam(history, 'dashboard');

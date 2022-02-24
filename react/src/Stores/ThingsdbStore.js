@@ -3,12 +3,33 @@ import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
-import {BaseStore} from './BaseStore';
-import {ErrorActions} from './ErrorStore';
-import {ApplicationActions} from './ApplicationStore';
-import {LoginTAG} from '../Constants/Tags';
-import {THINGSDB_SCOPE} from '../Constants/Scopes';
-import {NIL} from '../Constants/ThingTypes';
+import { BaseStore } from './BaseStore';
+import { ErrorActions } from './ErrorStore';
+import { ApplicationActions } from './ApplicationStore';
+import { LoginTAG } from '../Constants/Tags';
+import { THINGSDB_SCOPE } from '../Constants/Scopes';
+import {
+    COLLECTION_INFO_QUERY,
+    COLLECTIONS_INFO_QUERY,
+    COLLECTIONS_USER_INFO_QUERY,
+    COLLECTIONS_USERS_INFO_QUERY,
+    DEL_COLLECTION_QUERY,
+    DEL_EXPIRED_QUERY,
+    DEL_TOKEN_QUERY,
+    DEL_USER_QUERY,
+    GRANT_QUERY,
+    INFO_QUERY,
+    NEW_COLLECTION_QUERY,
+    NEW_TOKEN_QUERY,
+    NEW_USER_QUERY,
+    RENAME_COLLECTION_QUERY,
+    RENAME_USER_QUERY,
+    RESET_PASSWORD_QUERY,
+    REVOKE_QUERY,
+    SET_PASSWORD_QUERY,
+    USER_INFO_QUERY,
+    USERS_INFO_QUERY,
+} from '../TiQueries';
 
 const scope = THINGSDB_SCOPE;
 
@@ -72,7 +93,7 @@ class ThingsdbStore extends BaseStore {
 
     onGetCollection() {
         const {collection} = this.state;
-        const query='collection_info();';
+        const query = COLLECTION_INFO_QUERY;
         this.emit('query', {
             scope,
             query
@@ -90,7 +111,7 @@ class ThingsdbStore extends BaseStore {
 
     onGetCollections() {
         const {collections} = this.state;
-        const query='collections_info();';
+        const query = COLLECTIONS_INFO_QUERY;
         this.emit('query', {
             scope,
             query
@@ -147,31 +168,31 @@ class ThingsdbStore extends BaseStore {
         const {user} = this.state;
         if (user.access.find(a => a.scope===scope).privileges.includes('FULL') ||
         user.access.find(a => a.scope===scope).privileges.includes('GRANT') ) {
-            const query=`${q} [collections_info(), users_info()];`;
+            const query = q + ' ' + COLLECTIONS_USERS_INFO_QUERY;
             this.returnCollectionsUsers(scope, query, tag, cb);
         } else {
-            const query=`${q} [collections_info(), user_info()];`;
+            const query = q + ' ' + COLLECTIONS_USER_INFO_QUERY;
             this.returnCollectionsUser(scope, query, tag, cb);
         }
     }
 
     onAddCollection(name, tag, cb) {
-        this.checkBeforeCollectionUpdate(`new_collection('${name}');`, tag, cb);
+        this.checkBeforeCollectionUpdate(NEW_COLLECTION_QUERY(name), tag, cb);
     }
 
-    onRenameCollection(oldname, newname, tag, cb) {
-        this.checkBeforeCollectionUpdate(`rename_collection('${oldname}', '${newname}');`, tag, cb);
+    onRenameCollection(oldName, newName, tag, cb) {
+        this.checkBeforeCollectionUpdate(RENAME_COLLECTION_QUERY(oldName, newName), tag, cb);
     }
 
     onRemoveCollection(name, tag, cb) {
-        this.checkBeforeCollectionUpdate(`del_collection('${name}');`, tag, cb);
+        this.checkBeforeCollectionUpdate(DEL_COLLECTION_QUERY(name), tag, cb);
     }
 
     //USERS
 
     onGetUser(success=()=>null, failed=()=>null){
         const {user} = this.state;
-        const query = 'user_info();';
+        const query = USER_INFO_QUERY;
         this.emit('query', {
             scope,
             query
@@ -196,7 +217,7 @@ class ThingsdbStore extends BaseStore {
         const {user, users} = this.state;
         if (user.access&&(user.access.find(a => a.scope===scope).privileges.includes('FULL') ||
         user.access.find(a => a.scope===scope).privileges.includes('GRANT')) ) {
-            const query = 'users_info();';
+            const query = USERS_INFO_QUERY;
             this.emit('query', {
                 scope,
                 query
@@ -220,7 +241,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onAddUser(name, tag, cb){
-        const query = `new_user('${name}'); users_info();`;
+        const query = NEW_USER_QUERY(name) + ' ' + USERS_INFO_QUERY;
         this.emit('query', {
             scope,
             query
@@ -235,7 +256,7 @@ class ThingsdbStore extends BaseStore {
     }
 
     onRemoveUser(name, tag, cb) {
-        const query = `del_user('${name}'); users_info();`;
+        const query = DEL_USER_QUERY(name) + ' ' + USERS_INFO_QUERY;
         this.emit('query', {
             scope,
             query
@@ -249,8 +270,8 @@ class ThingsdbStore extends BaseStore {
         });
     }
 
-    onRenameUser(oldname, newname, tag, cb) {
-        const query = `rename_user('${oldname}', '${newname}'); users_info();`;
+    onRenameUser(oldName, newName, tag, cb) {
+        const query = RENAME_USER_QUERY(oldName, newName) + ' ' + USERS_INFO_QUERY;
         this.emit('query', {
             scope,
             query
@@ -266,7 +287,7 @@ class ThingsdbStore extends BaseStore {
 
     // TOKENS
     onDelExpired(tag){
-        const query = 'del_expired(); users_info();';
+        const query = DEL_EXPIRED_QUERY + ' ' + USERS_INFO_QUERY;
         this.emit('query', {
             scope,
             query
@@ -287,7 +308,7 @@ class ThingsdbStore extends BaseStore {
         const ky = user.access.find(a => a.scope===scope).privileges.includes('FULL') ||
                         user.access.find(a => a.scope===scope).privileges.includes('GRANT') ? 'users' : 'user';
 
-        const query=`${q} ${ky}_info();`;
+        const query = q + ' ' + INFO_QUERY(ky);
         this.emit('query', {
             scope,
             query
@@ -303,31 +324,31 @@ class ThingsdbStore extends BaseStore {
     }
 
     onGrant(name, collection, access, tag) {
-        this.checkBeforeUserUpdate(`grant('${collection}', '${name}', ${access});`, tag);
+        this.checkBeforeUserUpdate(GRANT_QUERY(collection, name, access), tag);
 
     }
 
     onRevoke(name, collection, access, tag) {
-        this.checkBeforeUserUpdate(`revoke('${collection}', '${name}', ${access});`, tag);
+        this.checkBeforeUserUpdate(REVOKE_QUERY(collection, name, access), tag);
     }
 
     onPassword(name, password, tag, cb) {
-        this.checkBeforeUserUpdate(`set_password('${name}', '${password}');`, tag, cb);
+        this.checkBeforeUserUpdate(SET_PASSWORD_QUERY(name, password), tag, cb);
 
     }
 
     onResetPassword(name, tag, cb) {
-        this.checkBeforeUserUpdate(`set_password('${name}', ${NIL});`, tag, cb);
+        this.checkBeforeUserUpdate(RESET_PASSWORD_QUERY(name), tag, cb);
     }
 
 
     onNewToken(config, tag, cb){ // name [, expirationTime] [, description]
-        this.checkBeforeUserUpdate(`new_token('${config.name}', expiration_time=${config.expirationTime||NIL}, description='${config.description||''}');`, tag, cb);
+        this.checkBeforeUserUpdate(NEW_TOKEN_QUERY(config.name, config.expirationTime, config.description), tag, cb);
 
     }
 
     onDelToken(key, tag){
-        this.checkBeforeUserUpdate(`del_token('${key}');`, tag);
+        this.checkBeforeUserUpdate(DEL_TOKEN_QUERY(key), tag);
 
     }
 

@@ -10,6 +10,24 @@ import { AddDialog, AddLink, EditDialog, Relation, ViewDialog } from '.';
 import { ChipsCard, DownloadBlob } from '../../../Utils';
 import { THINGS_DOC_DATATYPES } from '../../../../Constants/Links';
 import { THINGDB_CACHE } from '../../../../Constants/Files';
+import {
+    MOD_ENUM_ADD_QUERY,
+    MOD_ENUM_DEF_QUERY,
+    MOD_ENUM_DEL_QUERY,
+    MOD_ENUM_MOD_QUERY,
+    MOD_ENUM_REN_QUERY,
+    MOD_TYPE_ADD_FIELD_QUERY,
+    MOD_TYPE_ADD_METHOD_QUERY,
+    MOD_TYPE_DEL_QUERY,
+    MOD_TYPE_MOD_FIELD_QUERY,
+    MOD_TYPE_MOD_QUERY,
+    MOD_TYPE_REL_ADD_QUERY,
+    MOD_TYPE_REL_DEL_QUERY,
+    MOD_TYPE_REN_QUERY,
+    MOD_TYPE_WPO_QUERY,
+    SET_ENUM_QUERY,
+    SET_TYPE_QUERY,
+} from '../../../../TiQueries';
 
 
 const headers = {
@@ -35,43 +53,43 @@ const headers = {
 
 const queries = {
     add: {
-        type: (name, list) => `set_type("${name}", {${list.map(v=>`${v.propertyName}: ${v.propertyType?`'${v.propertyType}'`:`${v.definition}`}`)}});` ,
-        enum: (name, list) => `set_enum("${name}", {${list.map(v=>`${v.propertyName}: ${v.propertyVal}`)}});`
+        type: (name, list) => SET_TYPE_QUERY(name, `{${list.map(v=>`${v.propertyName}: ${v.propertyType?`'${v.propertyType}'`:`${v.definition}`}`)}}`),
+        enum: (name, list) => SET_ENUM_QUERY(name, `{${list.map(v=>`${v.propertyName}: ${v.propertyVal}`)}}`)
     },
     mod: {
         addField: {
-            type: (name, update) => `mod_type('${name}', 'add', '${update.propertyName}', '${update.propertyType}'${update.propertyVal?`, ${update.propertyVal}`:''});`,
-            enum: (name, update) => `mod_enum('${name}', 'add', '${update.propertyName}', ${update.propertyVal});`
+            type: (name, update) => MOD_TYPE_ADD_FIELD_QUERY(name, update.propertyName, update.propertyType, update.propertyVal),
+            enum: (name, update) => MOD_ENUM_ADD_QUERY(name, update.propertyName, update.propertyVal)
         },
         addMethod: {
-            type: (name, update) => `mod_type('${name}', 'add', '${update.propertyName}', ${update.definition});`,
+            type: (name, update) => MOD_TYPE_ADD_METHOD_QUERY(name, update.propertyName, update.definition),
         },
         mod: {
-            type: (name, update) => ( `mod_type('${name}', 'mod', '${update.propertyName}', '${update.propertyType}'` + (update.callback ? `, ${update.callback}` : '') + ');'),
-            enum: (name, update) => `mod_enum('${name}', 'mod', '${update.propertyName}', ${update.propertyVal});`
+            type: (name, update) => MOD_TYPE_MOD_FIELD_QUERY(name, update.propertyName, update.propertyType, update.callback),
+            enum: (name, update) => MOD_ENUM_MOD_QUERY(name, update.propertyName, update.propertyVal)
         },
         ren: {
-            type: (name, update) => `mod_type('${name}', 'ren', '${update.oldname}', '${update.newname}');`,
-            enum: (name, update) => `mod_enum('${name}', 'ren', '${update.oldname}', '${update.newname}');`
+            type: (name, update) => MOD_TYPE_REN_QUERY(name, update.oldname, update.newname),
+            enum: (name, update) => MOD_ENUM_REN_QUERY(name, update.oldname, update.newname)
         },
         rel: {
-            type: (name, update) => `mod_type('${name}', 'rel', '${update.relation.property}', '${update.relation.propertyToo}');`,
+            type: (name, update) => MOD_TYPE_REL_ADD_QUERY(name, update.relation.property, update.relation.propertyToo),
         },
         delRel: {
-            type: (name, update) => `mod_type('${name}', 'rel', '${update.propertyName}', nil);`,
+            type: (name, update) => MOD_TYPE_REL_DEL_QUERY(name, update.propertyName)
         },
         def: {
-            enum: (name, update) => `mod_enum('${name}', 'def', '${update.propertyName}');`
+            enum: (name, update) => MOD_ENUM_DEF_QUERY(name, update.propertyName)
         },
         del: {
-            type: (name, update) => `mod_type('${name}', 'del', '${update.propertyName}');`,
-            enum: (name, update) => `mod_enum('${name}', 'del', '${update.propertyName}');`
+            type: (name, update) => MOD_TYPE_DEL_QUERY(name, update.propertyName),
+            enum: (name, update) => MOD_ENUM_DEL_QUERY(name, update.propertyName),
         },
         wpo: {
-            type: (name, update) => `mod_type('${name}', 'wpo', ${update.wpo});`,
+            type: (name, update) => MOD_TYPE_WPO_QUERY(name, update.wpo),
         },
         met: {
-            type: (name, update) => (`mod_type('${name}', 'mod', '${update.propertyName}', ${update.definition}` + (update.callback ? `, ${update.callback}` : '') + ');'),
+            type: (name, update) => MOD_TYPE_MOD_QUERY(name, update.propertyName, update.definition, update.callback)
         }
     }
 };
@@ -118,7 +136,6 @@ const tableInfo = {
 };
 
 const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
-
     React.useEffect(() => {
         onInfo(scope, tag);
     }, [onInfo, scope, tag]);

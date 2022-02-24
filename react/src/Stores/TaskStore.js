@@ -1,7 +1,16 @@
-import { BaseStore } from './BaseStore';
-import { ErrorActions } from './ErrorStore';
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
+
+import { BaseStore } from './BaseStore';
+import { ErrorActions } from './ErrorStore';
+import {
+    GET_TASK_QUERY,
+    LIGHT_TASKS_QUERY,
+    TASK_ARGS_QUERY,
+    TASK_CANCEL_QUERY,
+    TASK_DEL_QUERY,
+    TASK_OWNER_QUERY,
+} from '../TiQueries';
 
 const TaskActions = Vlow.createActions([
     'cancelTask',
@@ -12,15 +21,15 @@ const TaskActions = Vlow.createActions([
     'getTask',
 ]);
 
-const queryGetLightTasks = 'tasks = tasks(); return(tasks.map(|t| {id: t.id(), at: t.at(), err: t.err()}), 1);';
-
 class TaskStore extends BaseStore {
 
     static types = {
+        task: PropTypes.object,
         tasks: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
     }
 
     static defaults = {
+        task: {},
         tasks: {},
     }
 
@@ -31,7 +40,7 @@ class TaskStore extends BaseStore {
 
     onGetLightTasks(scope, tag,  cb=()=>null) {
         this.emit('query', {
-            query: queryGetLightTasks,
+            query: LIGHT_TASKS_QUERY,
             scope
         }).done((data) => {
             this.setState(prevState => {
@@ -45,13 +54,13 @@ class TaskStore extends BaseStore {
         });
     }
 
-    onGetTask(scope, taskId, tag,  cb=()=>null) {
+    onGetTask(scope, taskId, tag) {
         this.emit('query', {
-            query: `t = task(${taskId}); [t.id(), t.at(), t.owner(), t.closure(), t.err(), t.args()];`,
+            query: GET_TASK_QUERY(taskId),
             scope
         }).done((data) => {
             const [id, at, owner, closure, err, args] = data;
-            cb({id, at, owner, closure, err, args});
+            this.setState({task: {id, at, owner, closure, err, args}});
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             return [];
@@ -59,7 +68,7 @@ class TaskStore extends BaseStore {
     }
 
     onDeleteTask(scope, taskId, tag,  cb=()=>null) {
-        const query = `task(${taskId}).del(); ${queryGetLightTasks}`;
+        const query = TASK_DEL_QUERY(taskId) + ' ' + LIGHT_TASKS_QUERY;
         this.emit('query', {
             query,
             scope
@@ -76,7 +85,7 @@ class TaskStore extends BaseStore {
     }
 
     onCancelTask(scope, taskId, tag,  cb=()=>null) {
-        const query = `task(${taskId}).cancel(); ${queryGetLightTasks}`;
+        const query =  TASK_CANCEL_QUERY(taskId) + ' ' + LIGHT_TASKS_QUERY;
         this.emit('query', {
             query,
             scope
@@ -92,7 +101,7 @@ class TaskStore extends BaseStore {
     }
 
     onGetArgs(scope, taskId, tag,  cb=()=>null) {
-        const query = `task(${taskId}).args();`;
+        const query = TASK_ARGS_QUERY(taskId);
         this.emit('query', {
             query,
             scope
@@ -104,7 +113,7 @@ class TaskStore extends BaseStore {
     }
 
     onGetOwner(scope, taskId, tag,  cb=()=>null) {
-        const query = `task(${taskId}).owner();`;
+        const query = TASK_OWNER_QUERY(taskId);
         this.emit('query', {
             query,
             scope

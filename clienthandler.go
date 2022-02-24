@@ -122,6 +122,7 @@ func (client *client) connect(data loginData) (connResp, error) {
 	client.connection.LogCh = client.logCh
 	client.connection.DefaultTimeout = time.Duration(timeout) * time.Second
 	client.connection.LogLevel = things.LogDebug
+	client.connection.ReconnectionAttempts = 7
 
 	s := *client.socketConn
 	client.connection.OnNodeStatus = func(ns *things.NodeStatus) {
@@ -340,15 +341,15 @@ func (client *client) reconnect() (int, connResp, message) {
 			resp := connectedResp()
 			message := successMsg()
 			return message.Status, resp, message
-		} else {
-			interval *= 2
-			client.logCh <- fmt.Sprintf("connecting to %s:%d failed, \ntry next connect in %d seconds", client.host, client.port, interval)
-			go func() {
-				time.Sleep(time.Duration(interval) * time.Second)
-				timeoutCh <- true
-			}()
-			<-timeoutCh
 		}
+
+		interval *= 2
+		client.logCh <- fmt.Sprintf("connecting to %s:%d failed, \ntry next connect in %d seconds", client.host, client.port, interval)
+		go func() {
+			time.Sleep(time.Duration(interval) * time.Second)
+			timeoutCh <- true
+		}()
+		<-timeoutCh
 	}
 
 	resp := disconnectedResp()

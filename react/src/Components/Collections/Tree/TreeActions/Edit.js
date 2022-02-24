@@ -4,6 +4,7 @@ import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { DATETIME_QUERY, TIMEVAL_QUERY } from '../../../../TiQueries';
 import { DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL } from '../../../../Constants/ThingTypes';
 import { InputField } from '../../../Utils';
 import BuildQueryString from './BuildQueryString';
@@ -28,8 +29,8 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
 
     const t = (child.type == THING || child.type == LIST || child.type == SET) ? ''
         : child.type == ERROR ? {propName: child.name, parentId: parent.id, scope: scope}
-            : child.type == DATETIME ? `datetime("${thing}")`
-                :child.type == TIMEVAL ? `timeval(${thing})`
+            : child.type == DATETIME ? DATETIME_QUERY(thing)
+                :child.type == TIMEVAL ? TIMEVAL_QUERY(thing)
                     : thing;
 
     return(

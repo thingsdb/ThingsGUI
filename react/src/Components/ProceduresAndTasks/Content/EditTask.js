@@ -1,13 +1,20 @@
 /*eslint-disable react/no-multi-comp*/
+import { withVlow } from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import { EditTaskDialogTAG } from '../../../Constants/Tags';
-import { CollectionActions, TaskActions } from '../../../Stores';
 import { Closure, ErrorMsg, EditProvider, nextRunFn, replacer, parseError, ViewEditFields } from '../../Utils';
+import { CollectionActions, TaskActions, TaskStore } from '../../../Stores';
+import { EditTaskDialogTAG } from '../../../Constants/Tags';
 import { NIL } from '../../../Constants/ThingTypes';
 import { SetArguments, SetOwner } from '../Utils';
+import { TASK_SET_ARGS_QUERY, TASK_SET_CLOSURE_QUERY, TASK_SET_OWNER_QUERY } from '../../../TiQueries';
+
+const withStores = withVlow([{
+    store: TaskStore,
+    keys: ['task']
+}]);
 
 
 const header = [
@@ -90,26 +97,25 @@ const header = [
 const replaceNull = (items) => (items||[]).map(item => item === null ? NIL : item);
 const tag = EditTaskDialogTAG;
 
-const EditTask = ({taskId, scope}) => {
+const EditTask = ({taskId, task, scope}) => {
     const [queryString, setQueryString] = React.useState({args: '', closure: '', owner: ''});
     const [blob, setBlob] = React.useState({});
-    const [task, setTask] = React.useState({});
 
     React.useEffect(() => {
-        TaskActions.getTask(scope, taskId, tag, setTask);
+        TaskActions.getTask(scope, taskId, tag);
     }, [scope, taskId]);
 
     const handleChangeArgs = React.useCallback((args, blob) => {
         setBlob(blob);
-        setQueryString(query => ({...query, args: `task(${taskId}).set_args([${replaceNull(args)}]);`}));
+        setQueryString(query => ({...query, args: TASK_SET_ARGS_QUERY(taskId, replaceNull(args))}));
     },[taskId]);
 
     const handleChangeClosure = React.useCallback((c) => {
-        setQueryString(query => ({...query, closure: ` task(${taskId}).set_closure(${c});`}));
+        setQueryString(query => ({...query, closure: TASK_SET_CLOSURE_QUERY(taskId, c)}));
     }, [taskId]);
 
     const handleChangeOwner = React.useCallback((o) => {
-        setQueryString(query => ({...query, owner: ` task(${taskId}).set_owner('${o}');`}));
+        setQueryString(query => ({...query, owner: TASK_SET_OWNER_QUERY(taskId, o)}));
     }, [taskId]);
 
     const handleChange = (ky) => (
@@ -125,7 +131,7 @@ const EditTask = ({taskId, scope}) => {
             queryString[ky],
             tag,
             () => {
-                TaskActions.getTask(scope, taskId, tag, setTask);
+                TaskActions.getTask(scope, taskId, tag);
             },
             null,
             blob,
@@ -156,6 +162,9 @@ EditTask.defaultProps = {
 EditTask.propTypes = {
     taskId: PropTypes.number,
     scope: PropTypes.string.isRequired,
+
+    /* tasks properties */
+    task: TaskStore.types.task.isRequired,
 };
 
-export default EditTask;
+export default withStores(EditTask);

@@ -6,8 +6,31 @@ import {ErrorActions} from './ErrorStore';
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
-import {THINGSDB_SCOPE, NODE_SCOPE} from '../Constants/Scopes';
-import {NIL} from '../Constants/ThingTypes';
+import {
+    BACKUPS_INFO_QUERY,
+    COUNTERS_QUERY,
+    DEL_BACKUP_QUERY,
+    DEL_MODULE_QUERY,
+    DEL_NODE_QUERY,
+    MODULE_INFO_QUERY,
+    MODULES_INFO_QUERY,
+    NEW_BACKUP_QUERY,
+    NEW_MODULE_QUERY,
+    NEW_NODE_QUERY,
+    NODE_COUNTERS_INFO_QUERY,
+    NODE_INFO_QUERY,
+    NODES_INFO_QUERY,
+    NODES_NODE_INFO_QUERY,
+    RENAME_MODULE_QUERY,
+    RESET_COUNTERS_QUERY,
+    RESTART_MODULE_QUERY,
+    RESTORE_QUERY,
+    SET_LOG_LEVEL_QUERY,
+    SET_MODULE_CONF_QUERY,
+    SET_MODULE_SCOPE_QUERY,
+    SHUTDOWN_QUERY,
+} from '../TiQueries';
+import { THINGSDB_SCOPE, NODE_SCOPE } from '../Constants/Scopes';
 
 const NodesActions = Vlow.createActions([
     'addBackup',
@@ -85,7 +108,7 @@ class NodesStore extends BaseStore {
 
     onGetNodes(cb=()=>null){
         const {node, nodes} = this.state;
-        const query = '[nodes_info(), node_info()];';
+        const query = NODES_NODE_INFO_QUERY;
         this.emit('query', {
             scope: NODE_SCOPE,
             query
@@ -110,7 +133,7 @@ class NodesStore extends BaseStore {
 
     onGetConnectedNode() {
         const {connectedNode} = this.state;
-        const query = 'node_info();';
+        const query = NODE_INFO_QUERY;
         this.emit('query', {
             scope: NODE_SCOPE,
             query
@@ -125,7 +148,7 @@ class NodesStore extends BaseStore {
 
     onGetStreamInfo(callback=()=>null){
         const {nodes, streamInfo} = this.state;
-        const query = 'nodes_info();';
+        const query = NODES_INFO_QUERY;
         const obj = {};
         const length = nodes.length;
         nodes.slice(0, -1).forEach((n,i) => // need all nodes -1
@@ -157,7 +180,7 @@ class NodesStore extends BaseStore {
 
     onGetDashboardInfo(cb=()=>null){
         const {nodes, allNodeInfo} = this.state;
-        const query = '[node_info(), counters()];';
+        const query = NODE_COUNTERS_INFO_QUERY;
         const length = nodes.length;
         const arr = [];
         nodes.forEach((n,i) =>
@@ -186,7 +209,7 @@ class NodesStore extends BaseStore {
 
     onGetNode(nodeId) {
         const {node} = this.state;
-        const query = ' node_info();';
+        const query = NODE_INFO_QUERY;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -201,7 +224,7 @@ class NodesStore extends BaseStore {
 
     onGetCounters(nodeId) {
         const {counters} = this.state;
-        const query = ' counters();';
+        const query = COUNTERS_QUERY;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -215,7 +238,7 @@ class NodesStore extends BaseStore {
     }
 
     onSetLoglevel(nodeId, level, tag, cb) {
-        const query = `set_log_level(${level}); node_info();`;
+        const query = SET_LOG_LEVEL_QUERY(level) + ' ' + NODE_INFO_QUERY ;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -230,7 +253,7 @@ class NodesStore extends BaseStore {
         });
     }
     onResetCounters(nodeId) {
-        const query = 'reset_counters(); counters();';
+        const query = RESET_COUNTERS_QUERY + ' ' + COUNTERS_QUERY;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -241,8 +264,8 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRestore(fileName, takeAccess, tag, cb) {
-        const query = `restore('${fileName}', ${takeAccess});`;
+    onRestore(fileName, takeAccess, restoreTasks, tag, cb) {
+        const query = RESTORE_QUERY(fileName, takeAccess, restoreTasks);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query
@@ -254,7 +277,7 @@ class NodesStore extends BaseStore {
     }
 
     onShutdown(nodeId, tag, cb) {
-        const query = 'shutdown(); nodes_info();';
+        const query = SHUTDOWN_QUERY + ' ' + NODES_INFO_QUERY;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -269,7 +292,7 @@ class NodesStore extends BaseStore {
     }
 
     onAddNode(config, tag, cb) { // secret , nodename [, port]
-        const query = config.port ? `new_node('${config.secret}', '${config.nName}', ${config.port});`: `new_node('${config.secret}', '${config.nName}');`;
+        const query = NEW_NODE_QUERY(config.secret, config.nName, config.port);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query
@@ -282,7 +305,7 @@ class NodesStore extends BaseStore {
     }
 
     onDelNode(nodeId, tag, cb) {
-        const query = `del_node(${nodeId});`;
+        const query = DEL_NODE_QUERY(nodeId);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query
@@ -296,7 +319,7 @@ class NodesStore extends BaseStore {
 
     onGetBackups(nodeId) {
         const {backups} = this.state;
-        const query = 'backups_info();';
+        const query = BACKUPS_INFO_QUERY;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -310,7 +333,7 @@ class NodesStore extends BaseStore {
     }
 
     onAddBackup(nodeId, config, tag, cb) {
-        const query = `new_backup('${config.file}'${config.time ? `, datetime(${config.time})`:', now()'}${config.repeat ? `, ${config.repeat}${config.maxFiles?`, ${config.maxFiles}`:''}`:''});`;
+        const query = NEW_BACKUP_QUERY(config.file, config.time, config.repeat, config.maxFiles);
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -321,7 +344,7 @@ class NodesStore extends BaseStore {
     }
 
     onDelBackup(nodeId, backupId, cb, removeFile=false) {
-        const query = `del_backup(${backupId}, ${removeFile});`;
+        const query = DEL_BACKUP_QUERY(backupId, removeFile);
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -333,7 +356,7 @@ class NodesStore extends BaseStore {
 
     onGetModules(nodeId) {
         const {modules} = this.state;
-        const query = 'modules_info();';
+        const query = MODULES_INFO_QUERY;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -348,7 +371,7 @@ class NodesStore extends BaseStore {
 
     onGetModule(nodeId, name) {
         const {_module} = this.state;
-        const query = `module_info('${name}');`;
+        const query = MODULE_INFO_QUERY(name);
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -362,7 +385,7 @@ class NodesStore extends BaseStore {
     }
 
     onAddModule(nodeId, config, tag, cb) {
-        const query = `new_module('${config.name}', '${config.file}'${config.configuration ? `, ${config.configuration}` : ''});`;
+        const query = NEW_MODULE_QUERY(config.name, config.source, config.configuration);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query
@@ -373,7 +396,7 @@ class NodesStore extends BaseStore {
     }
 
     onDelModule(nodeId, name, cb) {
-        const query = `del_module('${name}');`;
+        const query = DEL_MODULE_QUERY(name);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query
@@ -384,7 +407,7 @@ class NodesStore extends BaseStore {
     }
 
     onRenameModule(nodeId, name, newName, tag, cb) {
-        const query = `rename_module('${name}', '${newName}');`;
+        const query = RENAME_MODULE_QUERY(name, newName);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query
@@ -396,7 +419,7 @@ class NodesStore extends BaseStore {
     }
 
     onRestartModule(nodeId, name, cb) {
-        const query = `restart_module('${name}');`;
+        const query = RESTART_MODULE_QUERY(name);
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
             query
@@ -407,7 +430,7 @@ class NodesStore extends BaseStore {
     }
 
     onSetModuleConf(nodeId, name, configuration, tag, cb) {
-        const query = `set_module_conf('${name}', ${configuration ? `${configuration}` : NIL});`;
+        const query = SET_MODULE_CONF_QUERY(name, configuration);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query
@@ -418,7 +441,7 @@ class NodesStore extends BaseStore {
     }
 
     onSetModuleScope(nodeId, name, scope, tag, cb) {
-        const query = `set_module_scope('${name}', ${scope ? `'${scope}'` : NIL});`;
+        const query = SET_MODULE_SCOPE_QUERY(name, scope);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query
