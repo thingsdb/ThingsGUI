@@ -264,8 +264,8 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRestore(fileName, takeAccess, tag, cb) {
-        const query = RESTORE_QUERY(fileName, takeAccess);
+    onRestore(fileName, takeAccess, restoreTasks, tag, cb) {
+        const query = RESTORE_QUERY(fileName, takeAccess, restoreTasks);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query

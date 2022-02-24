@@ -109,7 +109,7 @@ export const NODES_NODE_INFO_QUERY = '[nodes_info(), node_info()];';
 export const RENAME_MODULE_QUERY = (current, newName) =>  `rename_module('${current}', '${newName}');`;
 export const RESET_COUNTERS_QUERY = 'reset_counters();';
 export const RESTART_MODULE_QUERY = (name) => `restart_module('${name}');`;
-export const RESTORE_QUERY = (fileName, takeAccess) => `restore('${fileName}', ${takeAccess});`;
+export const RESTORE_QUERY = (fileName, takeAccess, restoreTasks) => `restore('${fileName}'${takeAccess || restoreTasks ? `, {take_access: ${takeAccess}, restore_tasks: ${restoreTasks}}` : ''});`;
 export const SET_LOG_LEVEL_QUERY = (level) => `set_log_level(${level});`;
 export const SET_MODULE_CONF_QUERY = (name, configuration) =>  `set_module_conf('${name}', ${configuration ? `${configuration}` : NIL});`;
 export const SET_MODULE_SCOPE_QUERY = (name, scope) => `set_module_scope('${name}', ${scope ? `'${scope}'` : NIL});`;
