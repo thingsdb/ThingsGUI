@@ -99,7 +99,7 @@ export const RENAME_PROCEDURE_QUERY = 'rename_procedure(current, newName);';
 
 // tasks
 export const NEW_TASK_EMPTY_QUERY = (args) => `task(${args});`;
-export const NEW_TASK_FORMAT_QUERY = (start, closure, args) => `task(datetime(${start}), ${closure}${args.length ? `, [${args}]`: ''});`;
+export const NEW_TASK_FORMAT_QUERY = (start, closure, args) => `task(datetime(${start}), ${closure}${args.length ? `, ${args}`: ''});`;
 export const NEW_TASK_QUERY = 'task(datetime(start), closure(closure), args);';
 export const TASK_EMPTY_QUERY = 'task();';
 export const TASK_FORMAT_QUERY = (id) => `task(${id});`;

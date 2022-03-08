@@ -98,6 +98,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
             }
             return res;
         },{}) : null;
+        console.log(queryObj, b, blob)
 
         CollectionActions.query(
             scope,

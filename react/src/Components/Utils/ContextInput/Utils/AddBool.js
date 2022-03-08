@@ -5,18 +5,22 @@ import React from 'react';
 import {BoolInput} from '../..';
 import {EditActions, useEdit} from '../Context';
 
+const isTrue = (str) => str === 'true';
+
 const AddBool = ({identifier, init, parent}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         if (init) {
             EditActions.update(dispatch, 'val', init, identifier, parent);
+            EditActions.update(dispatch, 'obj', isTrue(init), identifier, parent);
         }
     }, []);
 
     const handleOnChange = (b) => {
         EditActions.update(dispatch, 'val', b, identifier, parent);
+        EditActions.update(dispatch, 'obj', isTrue(b), identifier, parent);
     };
 
     const v = !val ? '' : identifier === null ? val : val[identifier] || '';

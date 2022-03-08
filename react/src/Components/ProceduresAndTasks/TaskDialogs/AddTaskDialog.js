@@ -60,7 +60,7 @@ const AddTaskDialog = ({open, onClose, scope}) => {
     };
 
     const handleChangeArgs = React.useCallback((args, blob) => {
-        setState(state => ({...state, args: args, blob: blob, queryString: NEW_TASK_FORMAT_QUERY(start, closure, args), jsonArgs: NEW_TASK_ARGS(start, closure, args)}));
+        setState(state => ({...state, args: args, blob: blob, queryString: NEW_TASK_FORMAT_QUERY(start, closure, JSON.stringify(args)), jsonArgs: NEW_TASK_ARGS(start, closure, args)}));
     }, [closure, start]);
 
     const handleSwitchArgs = (open) => {

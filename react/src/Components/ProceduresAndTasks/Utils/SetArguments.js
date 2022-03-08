@@ -4,9 +4,9 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { InputField, useEdit } from '../../Utils';
-import { BOOL, BYTES, CODE, FLOAT, INT, LIST, NIL, STR, THING, VARIABLE } from '../../../Constants/ThingTypes';
+import { BOOL, FLOAT, INT, LIST, NIL, STR, THING, VARIABLE } from '../../../Constants/ThingTypes';
 
-const dataTypes = [BOOL, BYTES, CODE, FLOAT, INT, LIST, NIL, STR, THING]; // Supported types
+const dataTypes = [BOOL, FLOAT, INT, LIST, NIL, STR, THING]; // Supported types
 
 const SetArguments = ({closure, onChange}) => {
     const editState = useEdit()[0];

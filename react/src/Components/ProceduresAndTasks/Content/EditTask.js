@@ -7,7 +7,6 @@ import TextField from '@mui/material/TextField';
 import { Closure, ErrorMsg, EditProvider, nextRunFn, replacer, parseError, ViewEditFields } from '../../Utils';
 import { CollectionActions, TaskActions, TaskStore } from '../../../Stores';
 import { EditTaskDialogTAG } from '../../../Constants/Tags';
-import { NIL } from '../../../Constants/ThingTypes';
 import { SetArguments, SetOwner } from '../Utils';
 import { TASK_SET_ARGS_ARGS, TASK_SET_CLOSURE_ARGS, TASK_SET_OWNER_ARGS } from '../../../TiQueries/Arguments';
 import { TASK_SET_ARGS_QUERY, TASK_SET_CLOSURE_QUERY, TASK_SET_OWNER_QUERY } from '../../../TiQueries/Queries';
@@ -95,7 +94,6 @@ const header = [
     },
 ];
 
-const replaceNull = (items) => (items||[]).map(item => item === null ? NIL : item);
 const tag = EditTaskDialogTAG;
 
 const EditTask = ({taskId, task, scope}) => {
@@ -110,7 +108,7 @@ const EditTask = ({taskId, task, scope}) => {
     const handleChangeArgs = React.useCallback((args, blob) => {
         setBlob(blob);
         setQueryString(query => ({...query, args: TASK_SET_ARGS_QUERY}));
-        setJsonArgs(jsonArgs => ({...jsonArgs, args: TASK_SET_ARGS_ARGS(taskId, replaceNull(args))}));
+        setJsonArgs(jsonArgs => ({...jsonArgs, args: TASK_SET_ARGS_ARGS(taskId, args)}));
     },[taskId]);
 
     const handleChangeClosure = React.useCallback((c) => {

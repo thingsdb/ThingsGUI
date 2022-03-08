@@ -17,14 +17,16 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDisp
     const [dataType, setDataType] = React.useState([STR]);
     const [property, setProperty] = React.useState(['']);
     const [editState, dispatch] = useEdit();
-    const {val, blob} = editState;
+    const {blob, obj, val} = editState;
 
     const updateContext = React.useCallback(() => {
         let array = (val || []).map((v, index) => `${property[index]}: ${v}`);
+        let o = property.reduce((res, k, i) => ({ ...res, [k]: obj[i]}), {});
         EditActions.update(parentDispatch, 'val', CURLY_BRACKETS_FORMAT_QUERY(array), identifier, parent);
+        EditActions.update(parentDispatch, 'obj', o, identifier, parent);
         EditActions.updateBlob(parentDispatch, val, blob);
         CollectionActions.enableSubmit();
-    }, [blob, identifier, property, parent, parentDispatch, val]);
+    }, [blob, identifier, obj, property, parent, parentDispatch, val]);
 
     const [updateContextDebounced] = useDebounce(updateContext, 200);
 

@@ -14,12 +14,14 @@ const AddStr = ({identifier, init, parent, ...props}) => {
     React.useEffect(()=>{
         if (init) {
             EditActions.update(dispatch, 'val', STRING_FORMAT_QUERY(init), identifier, parent);
+            EditActions.update(dispatch, 'obj', init, identifier, parent);
         }
     }, []);
 
     const handleOnChange = ({target}) => {
         const {value} = target;
         EditActions.update(dispatch, 'val', STRING_FORMAT_QUERY(value), identifier, parent);
+        EditActions.update(dispatch, 'obj', value, identifier, parent);
     };
 
     const v = !val ? '' : identifier === null ? val : val[identifier] || '';

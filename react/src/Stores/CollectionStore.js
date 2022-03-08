@@ -82,7 +82,7 @@ class CollectionStore extends BaseStore {
     onGetThings(collectionId, collectionName, thingId=null) {
         const scope = `${COLLECTION_SCOPE}:${collectionName}`;
         let query = THING_CURRENT_QUERY;
-        let jsonArgs = '';
+        let jsonArgs = null;
 
         if (thingId) {
             query = THING_QUERY;
@@ -141,7 +141,6 @@ class CollectionStore extends BaseStore {
     }
 
     onQuery(scope, query, tag, cb, thingId=null, blob=null, jsonArgs=null, onFail=()=>null) {
-        console.log(query, jsonArgs)
         this.emit('query', {
             query,
             scope,

@@ -11,6 +11,7 @@ const AddNil = ({identifier, parent}) => {
 
     React.useEffect(()=>{
         EditActions.update(dispatch, 'val', NIL, identifier, parent);
+        EditActions.update(dispatch, 'obj', null, identifier, parent);
     }, []);
 
     return  null;

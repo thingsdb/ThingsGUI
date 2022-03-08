@@ -16,13 +16,14 @@ import InputField from '../InputField';
 const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier, parent, parentDispatch}) => {
     const [dataType, setDataType] = React.useState([childTypes.length ? childTypes[0] : STR]);
     const [editState, dispatch] = useEdit();
-    const {val, blob} = editState;
+    const {blob, obj, val} = editState;
 
     const updateContext = React.useCallback(() => {
         EditActions.update(parentDispatch, 'val', isSet ? SET_FORMAT_QUERY(`[${val}]`) : `[${val}]`, identifier, parent);
+        EditActions.update(parentDispatch, 'obj', obj, identifier, parent);
         EditActions.updateBlob(parentDispatch, val, blob);
         CollectionActions.enableSubmit();
-    }, [blob, identifier, isSet, parent, parentDispatch, val]);
+    }, [blob, identifier, isSet, obj, parent, parentDispatch, val]);
 
     const [updateContextDebounced] = useDebounce(updateContext, 200);
 

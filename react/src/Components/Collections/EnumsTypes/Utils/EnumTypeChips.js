@@ -95,7 +95,7 @@ const queries = {
                 res.valueQuery.push(`${v.propertyName}: ${v.propertyType ? uniqueKey : `closure(${uniqueKey})`}`);
 
                 return res;
-            }, {value: [], valueJson: [], valueQuery: []});
+            }, {value: [], valueJson: {}, valueQuery: []});
 
             const value = `{${obj.value}}`;
             const valueJson = obj.valueJson;
@@ -108,12 +108,13 @@ const queries = {
             });
         },
         enum: (name, list) => {
+            // TODO blob bug; don't support blobs?
             const obj = list.reduce((res, v) => {
                 res.value.push(`${v.propertyName}: ${v.propertyVal}`);
                 res.valueJson = {...res.valueJson, [v.propertyName]: v.propertyVal};
 
                 return res;
-            }, {value: [], valueJson: [], valueQuery: []});
+            }, {value: [], valueJson: {}, valueQuery: []});
 
             const value = `{${obj.value}}`;
             const valueJson = obj.valueJson;

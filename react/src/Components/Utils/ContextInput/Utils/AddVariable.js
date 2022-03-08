@@ -14,15 +14,15 @@ import useDebounce from '../../useDebounce';
 const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, parent, parentDispatch}) => {
     const [dataType, setDataType] = React.useState({});
     const [editState, dispatch] = useEdit();
-    const {val, blob} = editState;
+    const {blob, obj, val} = editState;
 
     const updateContext = React.useCallback(() => {
         let s = Object.entries(val).map(([k, v])=> `${k}: ${v}`);
         EditActions.update(parentDispatch, 'val', CURLY_BRACKETS_FORMAT_QUERY(s), identifier, parent);
-        EditActions.update(parentDispatch, 'obj', val, identifier, parent);
+        EditActions.update(parentDispatch, 'obj', obj, identifier, parent);
         EditActions.updateBlob(parentDispatch, s, blob);
         CollectionActions.enableSubmit();
-    }, [blob, identifier, parent, parentDispatch, val]);
+    }, [blob, identifier, obj, parent, parentDispatch, val]);
 
     const [updateContextDebounced] = useDebounce(updateContext, 200);
 

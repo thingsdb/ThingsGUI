@@ -77,7 +77,7 @@ type procedure struct {
 
 // Data struct that is received
 type dataReq struct {
-	Arguments string            `json:"arguments"`
+	Arguments interface{}       `json:"arguments"`
 	Blob      map[string]string `json:"blob"`
 	Id        string            `json:"id"`
 	Procedure procedure         `json:"procedure"`
@@ -530,14 +530,8 @@ func (client *client) saveLastUsedConnection(data loginData) error {
 // query sends a query to ThingsDB and receives a result
 func (client *client) query(data dataReq) (int, interface{}, message) {
 	var arguments map[string]interface{}
-	if data.Arguments != "" {
-		var args interface{}
-		decoder := json.NewDecoder(strings.NewReader(data.Arguments))
-		if err := decoder.Decode(&args); err != nil {
-			message := msg(err)
-			return message.Status, "", message
-		}
-		args = convertFloatToInt(args)
+	if data.Arguments != nil {
+		args := convertFloatToInt(data.Arguments)
 		arguments = args.(map[string]interface{})
 	}
 

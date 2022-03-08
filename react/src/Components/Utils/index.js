@@ -342,6 +342,8 @@ const getSorting = (order, orderBy) => {
 
 const replacer = (_key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
 
+const toNum = v => +v || v;
+
 export {
     allDataTypes,
     Arguments,
@@ -419,6 +421,7 @@ export {
     TitlePage,
     TitlePage2,
     TitlePage3,
+    toNum,
     TopBarMenu,
     TreeBranch,
     TwoLabelSwitch,
