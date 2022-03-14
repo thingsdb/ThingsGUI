@@ -6,7 +6,6 @@ import Vlow from 'vlow';
 
 import { BaseStore } from './BaseStore';
 import { ErrorActions } from './ErrorStore';
-import { jsonify } from './Utils';
 import {
     DEL_BACKUP_ARGS,
     ID_ARGS,
@@ -414,8 +413,7 @@ class NodesStore extends BaseStore {
 
     onAddModule(nodeId, config, tag, cb) {
         const query = NEW_MODULE_QUERY(config.configuration);
-        const configuration = config.configuration ? jsonify(config.configuration) : null;
-        const jsonArgs = NEW_MODULE_ARGS(config.name, config.source, configuration);
+        const jsonArgs = NEW_MODULE_ARGS(config.name, config.source, config.configuration);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query,
@@ -468,8 +466,7 @@ class NodesStore extends BaseStore {
 
     onSetModuleConf(nodeId, name, configuration, tag, cb) {
         const query = SET_MODULE_CONF_QUERY;
-        const jsonConfig = configuration ? jsonify(configuration) : null;
-        const jsonArgs = SET_MODULE_CONF_ARGS(name, jsonConfig);
+        const jsonArgs = SET_MODULE_CONF_ARGS(name, configuration);
 
         this.emit('query', {
             scope: THINGSDB_SCOPE,

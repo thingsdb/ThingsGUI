@@ -94,7 +94,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
         const keys = Object.keys(blob || {});
         const b = keys ? keys.reduce((res, k) => {
             if(queryObj?.queryString && queryObj?.queryString.includes(k)){
-                res[k]=blob[k];
+                res[k] = blob[k];
             }
             return res;
         },{}) : null;

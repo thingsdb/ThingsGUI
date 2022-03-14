@@ -7,7 +7,6 @@ import { CollectionActions, ErrorActions, NodesActions, ThingsdbActions } from '
 import { DragdownCard, ErrorMsg, QueryOutput, TitlePage2 } from '../Utils';
 import { EditorTab } from '../../Constants/Enums';
 import { EditorTAG } from '../../Constants/Tags';
-import { jsonify } from '../../Stores/Utils';
 import EditorInput from './EditorInput';
 import EditorSideContent from './EditorSideContent';
 import SelectScope from './SelectScope';
@@ -55,8 +54,7 @@ const Editor = () => {
 
     const handleQuery = (query) => {
         setLoading(true);
-        const jsonArgs = jsonify(args);
-        CollectionActions.query(scope, query, tag, handleOutput, null, null, jsonArgs, handleFail);
+        CollectionActions.query(scope, query, tag, handleOutput, null, null, args, handleFail);
     };
 
     const handleChangeTab = (newValue) => {

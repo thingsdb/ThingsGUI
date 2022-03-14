@@ -71,8 +71,8 @@ type lMapping map[string]map[string]interface{}
 type lData map[string]interface{}
 
 type procedure struct {
-	Arguments string `json:"arguments"`
-	Name      string `json:"name"`
+	Arguments interface{} `json:"arguments"`
+	Name      string      `json:"name"`
 }
 
 // Data struct that is received
@@ -623,13 +623,8 @@ func (client *client) run(data dataReq) (int, interface{}, message) {
 	var args interface{}
 	message := successMsg()
 
-	if data.Procedure.Name != "" && data.Procedure.Arguments != "" {
-		decoder := json.NewDecoder(strings.NewReader(data.Procedure.Arguments))
-		if err := decoder.Decode(&args); err != nil {
-			message = msg(err)
-			return message.Status, "", message
-		}
-		args = convertFloatToInt(args)
+	if data.Procedure.Name != "" && data.Procedure.Arguments != nil {
+		args = convertFloatToInt(data.Procedure.Arguments)
 	}
 
 	resp, err := client.connection.Run(data.Scope, data.Procedure.Name, args)

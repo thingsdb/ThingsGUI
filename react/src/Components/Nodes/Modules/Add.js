@@ -13,6 +13,7 @@ import {NodesActions} from '../../../Stores';
 import {THINGS_DOC_NEW_MODULE} from '../../../Constants/Links';
 
 const initialState = {
+    confErr: '',
     show: false,
     form: {
         name: '',
@@ -28,7 +29,7 @@ const tag = AddModuleTAG;
 
 const Add = ({nodeId}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, form, switches} = state;
+    const {show, form, switches, confErr} = state;
 
     const handleClickOpen = () => {
         setState({
@@ -51,21 +52,28 @@ const Add = ({nodeId}) => {
     const handleOnChange = ({target}) => {
         const {id, value} = target;
         setState(prevState => {
-            return {...prevState, form: {...prevState.form, [id]: value}};
+            return {...prevState, confErr: '', form: {...prevState.form, [id]: value}};
         });
     };
 
     const handleClickOk = () => {
-        NodesActions.addModule(
-            nodeId,
-            {
-                name: form.name,
-                source: form.source,
-                configuration: switches.config ? form.config : null,
-            },
-            tag,
-            () => setState({...state, show: false})
-        );
+        try {
+            const conf = switches.config ? JSON.parse(form.config) : null;
+            NodesActions.addModule(
+                nodeId,
+                {
+                    name: form.name,
+                    source: form.source,
+                    configuration: conf,
+                },
+                tag,
+                () => setState({...state, show: false})
+            );
+        }
+        catch {
+            const err = 'Invalid JSON provided';
+            setState(prevState => ({...prevState, confErr: err}));
+        }
     };
 
     const handleKeyPress = (event) => {
@@ -130,7 +138,9 @@ const Add = ({nodeId}) => {
                 <ListItem dense disableGutters>
                     <SwitchOpen label="Add configuration [optional]" onChange={handleSwitch('config')}>
                         <TextField
+                            error={Boolean(confErr)}
                             fullWidth
+                            helperText={confErr}
                             id="config"
                             label="Configuration"
                             margin="dense"

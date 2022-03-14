@@ -65,21 +65,30 @@ const header = [
         fnView: (c) => {
             if(c){
                 const json = JSON.stringify(c);
-                let unquoted = json.replace(/"([^"]+)":/g, '$1:');
-                return unquoted;
+                // let unquoted = json.replace(/"([^"]+)":/g, '$1:');
+                return json;
             }
             return 'No configuration';
         },
         fnEdit: (c) => {
             if(c){
                 const json = JSON.stringify(c);
-                let unquoted = json.replace(/"([^"]+)":/g, '$1:');
-                return unquoted;
+                // let unquoted = json.replace(/"([^"]+)":/g, '$1:');
+                return json;
             }
             return c;
         },
         canEdit: true,
-        editMethod: NodesActions.setModuleConf,
+        editMethod: (id, name, val, tag, cb) => {
+            try {
+                const conf = JSON.parse(val);
+                NodesActions.setModuleConf(id, name, conf, tag, cb);
+            }
+            catch {
+                const err = 'Invalid JSON provided';
+                cb(err);
+            }
+        },
         helperText: THINGS_DOC_SET_MODULE_CONFIG,
     },
     {
@@ -101,6 +110,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
     const [edit, setEdit] = React.useState({});
     const [form, setForm] = React.useState({});
     const [msg, setMsg] = React.useState('');
+    const [err, setErr] = React.useState({});
 
     const handleClickOpen = () => {
         NodesActions.getModule(nodeId, item.name);
@@ -125,15 +135,19 @@ const ModuleInfo = ({item, nodeId, _module}) => {
     };
 
     const handleSave = (h) => () => {
-        h.editMethod(nodeId, _module.name, form[h.ky], tag, () => {
-            setEdit({...edit, [h.ky]: false});
-            setForm({...form, [h.ky]: ''});
+        h.editMethod(nodeId, _module.name, form[h.ky], tag, (err='') => {
+            if (!err) {
+                setEdit({...edit, [h.ky]: false});
+                setForm({...form, [h.ky]: ''});
+            }
+            setErr({...err, [h.ky]: err});
         });
     };
 
     const handleClose = (ky) => () => {
         setEdit({...edit, [ky]: false});
         setForm({...form, [ky]: ''});
+        setErr({...err, [ky]: ''});
     };
 
     const handleRestart = () => {
@@ -181,6 +195,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                     <Grid item xs={8}>
                                         <TextField
                                             autoFocus
+                                            error={Boolean(err[h.ky])}
                                             fullWidth
                                             id={h.ky}
                                             margin="dense"
@@ -192,7 +207,7 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                                             type="text"
                                             value={form[h.ky]}
                                             variant="standard"
-                                            helperText={
+                                            helperText={err[h.ky] ||
                                                 <Link target="_blank" href={h.helperText}>
                                                     {'ThingsDocs'}
                                                 </Link>

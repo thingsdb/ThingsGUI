@@ -3,7 +3,6 @@ import Vlow from 'vlow';
 
 import { BaseStore } from './BaseStore';
 import { ErrorActions } from './ErrorStore';
-import { jsonify } from './Utils';
 import {
     NAME_ARGS,
     RENAME_ARGS,
@@ -94,12 +93,11 @@ class ProcedureStore extends BaseStore {
     }
 
     onRunProcedure(scope, name, args, tag,  cb=()=>null) {
-        const jsonProof = jsonify(args); // make it json proof
         this.emit('run', {
             scope,
             procedure: {
                 name: name,
-                arguments: jsonProof
+                arguments: args
             },
         }).done((data) => {
             cb(data);
