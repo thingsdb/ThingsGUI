@@ -8,7 +8,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 
 import {AddModuleTAG} from '../../../Constants/Tags';
-import {ErrorMsg, SimpleModal, SwitchOpen} from '../../Utils';
+import {Arguments, EditProvider, ErrorMsg, SimpleModal, SwitchOpen} from '../../Utils';
 import {NodesActions} from '../../../Stores';
 import {THINGS_DOC_NEW_MODULE} from '../../../Constants/Links';
 
@@ -29,7 +29,7 @@ const tag = AddModuleTAG;
 
 const Add = ({nodeId}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, form, switches, confErr} = state;
+    const {show, form, switches} = state;
 
     const handleClickOpen = () => {
         setState({
@@ -52,28 +52,28 @@ const Add = ({nodeId}) => {
     const handleOnChange = ({target}) => {
         const {id, value} = target;
         setState(prevState => {
-            return {...prevState, confErr: '', form: {...prevState.form, [id]: value}};
+            return {...prevState, form: {...prevState.form, [id]: value}};
+        });
+    };
+
+    const handleOnChangeConf = (config) => {
+        setState(prevState => {
+            return {...prevState, form: {...prevState.form, config}};
         });
     };
 
     const handleClickOk = () => {
-        try {
-            const conf = switches.config ? JSON.parse(form.config) : null;
-            NodesActions.addModule(
-                nodeId,
-                {
-                    name: form.name,
-                    source: form.source,
-                    configuration: conf,
-                },
-                tag,
-                () => setState({...state, show: false})
-            );
-        }
-        catch {
-            const err = 'Invalid JSON provided';
-            setState(prevState => ({...prevState, confErr: err}));
-        }
+        const conf = switches.config ? form.config : null;
+        NodesActions.addModule(
+            nodeId,
+            {
+                name: form.name,
+                source: form.source,
+                configuration: conf,
+            },
+            tag,
+            () => setState({...state, show: false})
+        );
     };
 
     const handleKeyPress = (event) => {
@@ -90,11 +90,12 @@ const Add = ({nodeId}) => {
                     {'Add module'}
                 </Button>
             }
-            title="New module"
-            open={show}
-            onOk={handleClickOk}
+            maxWidth="sm"
             onClose={handleClickClose}
             onKeyPress={handleKeyPress}
+            onOk={handleClickOk}
+            open={show}
+            title="New module"
         >
             <ErrorMsg tag={tag} />
             <List dense disablePadding>
@@ -137,22 +138,9 @@ const Add = ({nodeId}) => {
                 </ListItem>
                 <ListItem dense disableGutters>
                     <SwitchOpen label="Add configuration [optional]" onChange={handleSwitch('config')}>
-                        <TextField
-                            error={Boolean(confErr)}
-                            fullWidth
-                            helperText={confErr}
-                            id="config"
-                            label="Configuration"
-                            margin="dense"
-                            maxRows="10"
-                            minRows="1"
-                            multiline
-                            onChange={handleOnChange}
-                            spellCheck={false}
-                            type="text"
-                            value={form.config}
-                            variant="standard"
-                        />
+                        <EditProvider>
+                            <Arguments onChange={handleOnChangeConf} />
+                        </EditProvider>
                     </SwitchOpen>
                 </ListItem>
             </List>
