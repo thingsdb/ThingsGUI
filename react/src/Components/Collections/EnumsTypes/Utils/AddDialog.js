@@ -20,23 +20,18 @@ const initState = {
     queryObj: {},
     name: '',
     error: '',
-    properties: [{propertyName: '', propertyType: '', propertyVal: '', definition: ''}],
+    properties: [{propertyBlob: null, propertyName: '', propertyType: '', propertyVal: '', definition: ''}],
 };
 
 const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, scope}) => {
     const [state, setState] = React.useState(initState);
     const {queryObj, name, error, properties} = state;
-    const [blob, setBlob] = React.useState({});
 
     React.useEffect(() => {
         setState(initState);
     },
     [open],
     );
-
-    const handleBlob = React.useCallback((b) => {
-        setBlob(prev => ({...prev, ...b}));
-    }, []);
 
     const handleChange = ({target}) => {
         const {value} = target;
@@ -56,21 +51,13 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
     const handleAdd = (index) => {
         setState(prevState => {
             let update = [...prevState.properties];
-            update.splice(index, 1, {propertyName: '', propertyType: '', propertyVal: '', definition: ''});
+            update.splice(index, 1, {propertyBlob: null, propertyName: '', propertyType: '', propertyVal: '', definition: ''});
             const qry = queries[category](prevState.name, update);
             return {...prevState, properties: update, queryObj: qry};
         });
     };
 
     const handleRemove = (index) => {
-        if(category === 'enum'){
-            setBlob(prevBlob => {
-                let val = properties[index].propertyVal;
-                let update = {...prevBlob};
-                delete update[val];
-                return {...update};
-            });
-        }
         setState(prevState => {
             let update = [...prevState.properties];
             update.splice(index, 1);
@@ -91,15 +78,6 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
 
 
     const handleClickOk = () => {
-        const keys = Object.keys(blob || {});
-        const b = keys ? keys.reduce((res, k) => {
-            if(queryObj?.queryString && queryObj?.queryString.includes(k)){
-                res[k] = blob[k];
-            }
-            return res;
-        },{}) : null;
-        console.log(queryObj, b, blob)
-
         CollectionActions.query(
             scope,
             queryObj?.query,
@@ -109,7 +87,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                 onClose();
             },
             null,
-            b,
+            queryObj?.blob,
             queryObj?.jsonArgs
         );
     };
@@ -134,11 +112,11 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                     </Grid>
                 ) : null}
                 {category === 'enum' ? (
-                    <PropertyVal category={category} onChange={handleChangeProperty(i)} onBlob={handleBlob} scope={scope} />
+                    <PropertyVal category={category} onChange={handleChangeProperty(i)} scope={scope} />
                 ) : null}
             </Grid>
         </EditProvider>
-    ), [category, dataTypes, handleBlob, handleChangeProperty, handleSwitching, properties, scope]);
+    ), [category, dataTypes, handleChangeProperty, handleSwitching, properties, scope]);
 
     return (
         <SimpleModal

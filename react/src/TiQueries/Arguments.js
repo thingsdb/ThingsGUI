@@ -16,9 +16,11 @@ export const SET_TYPE_ARGS = (type, values) => ({ type, ...values });
 
 // enums
 export const MOD_ENUM_ADD_MOD_ARGS = (enum_, name, value) => ({ enum_, name, value });
+export const MOD_ENUM_ADD_MOD_BLOB = (value) => ({ value });
 export const MOD_ENUM_ARGS = (enum_, name) => ({ enum_, name });
 export const MOD_ENUM_REN_ARGS = (enum_, name, to) => ({ enum_, name, to });
 export const SET_ENUM_ARGS = (enum_, members) => ({ enum_, members });
+export const SET_ENUM_BLOB = (members) => ({ members });
 
 // things
 export const THING_LIST_DEL_ARGS = (id, name, index) => ({ id, name, index });

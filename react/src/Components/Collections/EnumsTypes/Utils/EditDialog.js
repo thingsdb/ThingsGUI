@@ -87,10 +87,6 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         setAction('');
     }, [open]);
 
-    const handleBlob = (b) => {
-        setBlob(b);
-    };
-
     const handleQuery = (p, a) => {
         const act = a || action;
         setState(prev=>{
@@ -207,14 +203,6 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 
     const handleClickOk = () => {
         handleCloseError();
-        const keys = Object.keys(blob || {});
-        const b = keys ? keys.reduce((res, k) => {
-            if(queryObj?.queryString && queryObj?.queryString.includes(k)){
-                res[k]=blob[k];
-            }
-            return res;
-        },{}) : null;
-
         CollectionActions.query(
             scope,
             queryObj?.query,
@@ -224,7 +212,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                 handleBack();
             },
             null,
-            b,
+            queryObj?.blob,
             queryObj?.jsonArgs
         );
     };
@@ -333,11 +321,11 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                                         ) : null}
                                         {show.val? (
                                             <Grid item xs={12}>
-                                                <PropertyVal category={category} onChange={handleQuery} onBlob={handleBlob} scope={scope} />
+                                                <PropertyVal category={category} onChange={handleQuery} scope={scope} />
                                             </Grid>
                                         ) : show.valInit ? (
                                             <Grid item xs={12}>
-                                                <PropertyInitVal category={category} onChange={handleQuery} onBlob={handleBlob} scope={scope} />
+                                                <PropertyInitVal category={category} onChange={handleQuery} scope={scope} />
                                             </Grid>
                                         ) : null}
                                         {show.callback ? (

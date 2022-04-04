@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"crypto/tls"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -77,13 +76,13 @@ type procedure struct {
 
 // Data struct that is received
 type dataReq struct {
-	Arguments interface{}       `json:"arguments"`
-	Blob      map[string]string `json:"blob"`
-	Id        string            `json:"id"`
-	Procedure procedure         `json:"procedure"`
-	Query     string            `json:"query"`
-	Scope     string            `json:"scope"`
-	Wait      int               `json:"wait"`
+	Arguments interface{} `json:"arguments"`
+	Blob      interface{} `json:"blob"`
+	Id        string      `json:"id"`
+	Procedure procedure   `json:"procedure"`
+	Query     string      `json:"query"`
+	Scope     string      `json:"scope"`
+	Wait      int         `json:"wait"`
 }
 
 func connectedResp() connResp {
@@ -535,17 +534,20 @@ func (client *client) query(data dataReq) (int, interface{}, message) {
 		arguments = args.(map[string]interface{})
 	}
 
-	for k, v := range data.Blob {
-		decodedBlob, err := base64.StdEncoding.DecodeString(v)
+	if data.Blob != nil {
+		decodedBlob, err := decodeBase64(data.Blob)
 		if err != nil {
 			message := failedMsg(err)
 			return message.Status, "", message
 		}
+		blob := decodedBlob.(map[string]interface{})
 
-		if arguments == nil {
-			arguments = make(map[string]interface{})
+		for k, v := range blob {
+			if arguments == nil {
+				arguments = make(map[string]interface{})
+			}
+			arguments[k] = v
 		}
-		arguments[k] = decodedBlob
 	}
 
 	resp, err := client.connection.Query(

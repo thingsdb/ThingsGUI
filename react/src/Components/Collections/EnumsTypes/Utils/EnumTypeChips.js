@@ -12,6 +12,7 @@ import { THINGS_DOC_DATATYPES } from '../../../../Constants/Links';
 import { THINGDB_CACHE } from '../../../../Constants/Files';
 import {
     MOD_ENUM_ADD_MOD_ARGS,
+    MOD_ENUM_ADD_MOD_BLOB,
     MOD_ENUM_ARGS,
     MOD_ENUM_REN_ARGS,
     MOD_TYPE_ADD_FIELD_ARGS,
@@ -23,6 +24,7 @@ import {
     MOD_TYPE_REL_DEL_ARGS,
     MOD_TYPE_WPO_ARGS,
     SET_ENUM_ARGS,
+    SET_ENUM_BLOB,
     SET_TYPE_ARGS,
 } from '../../../../TiQueries/Arguments';
 import {
@@ -109,23 +111,36 @@ const queries = {
         },
         enum: (name, list) => {
             // TODO blob bug; don't support blobs?
+            let hasBlob = false;
             const obj = list.reduce((res, v) => {
-                res.value.push(`${v.propertyName}: ${v.propertyVal}`);
-                res.valueJson = {...res.valueJson, [v.propertyName]: v.propertyVal};
+                let blob = v.propertyBlob;
+                let name = v.propertyName;
+                let val = v.propertyVal;
+                res.value.push(`${name}: ${val}`);
+
+                if (blob && Object.keys(blob).length > 0) {
+                    hasBlob = true;
+                    res.valueBlob = {...res.valueBlob, [name]: blob[val]};
+                } else {
+                    res.valueJson = {...res.valueJson, [name]: val};
+                }
 
                 return res;
-            }, {value: [], valueJson: {}, valueQuery: []});
+            }, {value: [], valueBlob: {}, valueJson: {}, valueQuery: []});
 
             const value = `{${obj.value}}`;
             const valueJson = obj.valueJson;
+            const valueBlob = obj.valueBlob;
 
             return ({
                 jsonArgs: SET_ENUM_ARGS(name, valueJson),
                 query: SET_ENUM_QUERY,
-                queryString: SET_ENUM_FORMAT_QUERY(name, value)
+                queryString: SET_ENUM_FORMAT_QUERY(name, value),
+                blob: hasBlob ? SET_ENUM_BLOB(valueBlob) : null
             });
         }
     },
+    // TODO add blob
     mod: {
         addField: {
             type: (name, update) => ({
@@ -133,11 +148,16 @@ const queries = {
                 query: MOD_TYPE_ADD_FIELD_QUERY(update.propertyVal),
                 queryString: MOD_TYPE_ADD_FIELD_FORMAT_QUERY(name, update.propertyName, update.propertyType, update.propertyVal),
             }),
-            enum: (name, update) => ({
-                jsonArgs: MOD_ENUM_ADD_MOD_ARGS(name, update.propertyName, update.propertyVal),
-                query: MOD_ENUM_ADD_QUERY,
-                queryString: MOD_ENUM_ADD_FORMAT_QUERY(name, update.propertyName, update.propertyVal)
-            })
+            enum: (name, update) => {
+                let blob = update.propertyBlob;
+                let hasBlob = blob && Object.keys(blob).length > 0;
+                return ({
+                    jsonArgs: MOD_ENUM_ADD_MOD_ARGS(name, update.propertyName, update.propertyVal),
+                    query: MOD_ENUM_ADD_QUERY,
+                    queryString: MOD_ENUM_ADD_FORMAT_QUERY(name, update.propertyName, update.propertyVal),
+                    blob: hasBlob ? MOD_ENUM_ADD_MOD_BLOB(blob[update.propertyVal]) : null
+                });
+            }
         },
         addMethod: {
             type: (name, update) => ({
@@ -152,11 +172,16 @@ const queries = {
                 query: MOD_TYPE_MOD_FIELD_QUERY(update.callback),
                 queryString: MOD_TYPE_MOD_FIELD_FORMAT_QUERY(name, update.propertyName, update.propertyType, update.callback),
             }),
-            enum: (name, update) => ({
-                jsonArgs: MOD_ENUM_ADD_MOD_ARGS(name, update.propertyName, update.propertyVal),
-                query: MOD_ENUM_MOD_QUERY,
-                queryString: MOD_ENUM_MOD_FORMAT_QUERY(name, update.propertyName, update.propertyVal)
-            }),
+            enum: (name, update) => {
+                let blob = update.propertyBlob;
+                let hasBlob = blob && Object.keys(blob).length > 0;
+                return ({
+                    jsonArgs: MOD_ENUM_ADD_MOD_ARGS(name, update.propertyName, update.propertyVal),
+                    query: MOD_ENUM_MOD_QUERY,
+                    queryString: MOD_ENUM_MOD_FORMAT_QUERY(name, update.propertyName, update.propertyVal),
+                    blob: hasBlob ? MOD_ENUM_ADD_MOD_BLOB(blob[update.propertyVal]) : null
+                });
+            }
         },
         ren: {
             type: (name, update) => ({
