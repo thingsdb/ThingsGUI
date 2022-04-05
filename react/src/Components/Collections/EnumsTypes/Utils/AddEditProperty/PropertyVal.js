@@ -7,7 +7,7 @@ import React from 'react';
 import {allDataTypes, InputField, useEdit} from '../../../../Utils';
 import {EnumStore, TypeStore} from '../../../../../Stores';
 import TypeInit from '../../../Tree/TreeActions/TypeInit';
-import {STR, INT, FLOAT, THING, BYTES, CODE} from '../../../../../Constants/ThingTypes';
+import {STR, INT, FLOAT, BYTES} from '../../../../../Constants/ThingTypes';
 
 const withStores = withVlow([{
     store: EnumStore,
@@ -24,7 +24,7 @@ const PropertyVal = ({category, onChange, customTypes, enums, scope}) => {
     const [dataType, setDataType] = React.useState(STR);
 
     const allTypes = allDataTypes([...customTypes[scope]||[], ...enums[scope]||[]]);
-    const dataTypes = category == 'type' ? allTypes : [STR, INT, FLOAT, THING, BYTES, CODE];
+    const dataTypes = category == 'type' ? allTypes : [STR, INT, FLOAT, BYTES];
 
     React.useEffect(()=>{
         onChange({propertyVal: val, propertyBlob: blob});
