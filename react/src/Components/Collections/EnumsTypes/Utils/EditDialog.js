@@ -53,7 +53,6 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     const {queryObj, property} = state;
     const [action, setAction] = React.useState('');
     const [oldname, setOldname] = React.useState(null);
-    const [blob, setBlob] = React.useState({});
     const [show, setShow] = React.useState(initShow);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -197,7 +196,6 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         handleCloseError();
         setAction('');
         setAnchorEl(null);
-        setBlob({});
         setOldname(null);
     };
 
