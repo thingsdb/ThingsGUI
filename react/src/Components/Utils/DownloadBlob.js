@@ -22,7 +22,7 @@ const DownloadBlob = ({val, isImg}) => {
 
     React.useEffect(() => {
         CollectionActions.download(val, setLink);
-    }, []); // eslint-disable-line
+    }, [val]); // eslint-disable-line
 
     return (
         <Button target="_blank" href={link} download="blob" type="application/octet-stream" color="primary">

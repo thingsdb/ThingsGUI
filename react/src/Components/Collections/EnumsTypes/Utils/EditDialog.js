@@ -36,7 +36,7 @@ const initState = {
         },
         propertyRelation: null,
     },
-    queryString: '',
+    queryObj: {},
 };
 
 const initShow = {
@@ -50,10 +50,9 @@ const initShow = {
 
 const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChangeItem, onClose, open, onRename, queries, rows, scope}) => {
     const [state, setState] = React.useState(initState);
-    const {queryString, property} = state;
+    const {queryObj, property} = state;
     const [action, setAction] = React.useState('');
     const [oldname, setOldname] = React.useState(null);
-    const [blob, setBlob] = React.useState({});
     const [show, setShow] = React.useState(initShow);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -77,7 +76,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
     const showWpo = isType&&overview;
     const showWpoWarning = wpo;
     const showRelation = rel;
-    const showQuery = Boolean(queryString);
+    const showQuery = Boolean(queryObj?.queryString);
 
     React.useEffect(() => {
         setIsType(category === 'type');
@@ -87,17 +86,13 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         setAction('');
     }, [open]);
 
-    const handleBlob = (b) => {
-        setBlob(b);
-    };
-
     const handleQuery = (p, a) => {
-        const act = a||action;
+        const act = a || action;
         setState(prev=>{
             const update = {...prev.property, ...p};
             return({
                 property: update,
-                queryString: queries[act]?queries[act][category](item.name, update):''
+                queryObj: queries[act] ? queries[act][category](item.name, update) : ''
             });
         });
     };
@@ -108,7 +103,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
             const update = {oldname: name, newname: p.propertyName};
             return({
                 property: {...prev.property, ...p},
-                queryString: queries.ren[category](item.name, update)
+                queryObj: queries.ren[category](item.name, update)
             });
         });
     };
@@ -201,30 +196,22 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         handleCloseError();
         setAction('');
         setAnchorEl(null);
-        setBlob({});
         setOldname(null);
     };
 
     const handleClickOk = () => {
         handleCloseError();
-        const keys = Object.keys(blob || {});
-        const b = keys ? keys.reduce((res, k) => {
-            if(queryString.includes(k)){
-                res[k]=blob[k];
-            }
-            return res;
-        },{}) : null;
-
         CollectionActions.query(
             scope,
-            queryString,
+            queryObj?.query,
             tag,
             () => {
                 getInfo(scope, tag);
                 handleBack();
             },
             null,
-            b,
+            queryObj?.blob,
+            queryObj?.jsonArgs
         );
     };
 
@@ -294,7 +281,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                                     multiline
                                     name="queryString"
                                     type="text"
-                                    value={queryString}
+                                    value={queryObj?.queryString}
                                     variant="standard"
                                     InputProps={{
                                         readOnly: true,
@@ -332,11 +319,11 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                                         ) : null}
                                         {show.val? (
                                             <Grid item xs={12}>
-                                                <PropertyVal category={category} onChange={handleQuery} onBlob={handleBlob} scope={scope} />
+                                                <PropertyVal category={category} onChange={handleQuery} scope={scope} />
                                             </Grid>
                                         ) : show.valInit ? (
                                             <Grid item xs={12}>
-                                                <PropertyInitVal category={category} onChange={handleQuery} onBlob={handleBlob} scope={scope} />
+                                                <PropertyInitVal category={category} onChange={handleQuery} scope={scope} />
                                             </Grid>
                                         ) : null}
                                         {show.callback ? (

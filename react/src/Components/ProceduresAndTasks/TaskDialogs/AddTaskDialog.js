@@ -17,7 +17,8 @@ import { AddTaskDialogTAG } from '../../../Constants/Tags';
 import { Closure, EditProvider, ErrorMsg, SimpleModal, SwitchOpen, TimePicker } from '../../Utils';
 import { CollectionActions, TaskActions } from '../../../Stores';
 import { SetArguments } from '../Utils';
-import { NEW_TASK_QUERY, TASK_EMPTY_QUERY } from '../../../TiQueries';
+import { NEW_TASK_QUERY, NEW_TASK_FORMAT_QUERY, TASK_EMPTY_QUERY } from '../../../TiQueries/Queries';
+import { NEW_TASK_ARGS } from '../../../TiQueries/Arguments';
 import { THINGS_DOC_TASK } from '../../../Constants/Links';
 
 
@@ -28,13 +29,16 @@ const initState = {
     blob: {},
     closure: '',
     error: '',
+    jsonArgs: '',
     queryString: TASK_EMPTY_QUERY,
     start: null,
 };
 
+const query = NEW_TASK_QUERY;
+
 const AddTaskDialog = ({open, onClose, scope}) => {
     const [state, setState] = React.useState(initState);
-    const {args, blob, closure, error, queryString, start} = state;
+    const {args, blob, closure, error, jsonArgs, queryString, start} = state;
 
     const [startType, setStartType] = React.useState('datetime');
     const showDatetime = startType === 'datetime';
@@ -48,15 +52,15 @@ const AddTaskDialog = ({open, onClose, scope}) => {
     }, [open]);
 
     const handleChangeStart = (s) => {
-        setState({...state, start: s, queryString: NEW_TASK_QUERY(s, closure, args)});
+        setState({...state, start: s, queryString: NEW_TASK_FORMAT_QUERY(s, closure, args), jsonArgs: NEW_TASK_ARGS(s, closure, args)});
     };
 
     const handleChangeClosure = (c) => {
-        setState({...state, closure: c, queryString: NEW_TASK_QUERY(start, c, args)});
+        setState({...state, closure: c, queryString: NEW_TASK_FORMAT_QUERY(start, c, args), jsonArgs: NEW_TASK_ARGS(start, c, args)});
     };
 
     const handleChangeArgs = React.useCallback((args, blob) => {
-        setState(state => ({...state, args: args, blob: blob, queryString: NEW_TASK_QUERY(start, closure, args)}));
+        setState(state => ({...state, args: args, blob: blob, queryString: NEW_TASK_FORMAT_QUERY(start, closure, JSON.stringify(args)), jsonArgs: NEW_TASK_ARGS(start, closure, args)}));
     }, [closure, start]);
 
     const handleSwitchArgs = (open) => {
@@ -78,14 +82,15 @@ const AddTaskDialog = ({open, onClose, scope}) => {
     const handleClickOk = () => {
         CollectionActions.query(
             scope,
-            queryString,
+            query,
             tag,
             () => {
                 TaskActions.getLightTasks(scope, tag);
                 onClose();
             },
             null,
-            blob
+            blob,
+            jsonArgs
         );
     };
 

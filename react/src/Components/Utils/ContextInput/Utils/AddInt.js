@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-import {EditActions, useEdit} from '../Context';
+import { EditActions, useEdit } from '../Context';
+import { toNum } from '../../../Utils';
 
 const onlyInts = (str) => str.length == str.replace(/[^-0-9]/g, '').length;
 
@@ -16,17 +17,21 @@ const AddInt = ({identifier, init, parent, ...props}) => {
     React.useEffect(()=>{
         if (init) {
             EditActions.update(dispatch, 'val', init, identifier, parent);
+            EditActions.update(dispatch, 'obj', toNum(init), identifier, parent);
         }
     }, []);
 
     const errorTxt = (value) => {
-        setError(onlyInts(value) ? '' : 'only integers');
+        const err = onlyInts(value) ? '' : 'only integers';
+        setError(err);
+        dispatch(() => ({ error: err }));
     };
 
     const handleOnChange = ({target}) => {
         const {value} = target;
         errorTxt(value);
         EditActions.update(dispatch, 'val', value, identifier, parent);
+        EditActions.update(dispatch, 'obj', toNum(value), identifier, parent);
     };
 
     const v = !val ? '' : identifier === null ? val : val[identifier] || '';

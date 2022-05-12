@@ -8,11 +8,12 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 
 import {AddModuleTAG} from '../../../Constants/Tags';
-import {ErrorMsg, SimpleModal, SwitchOpen} from '../../Utils';
+import {Arguments, EditProvider, ErrorMsg, SimpleModal, SwitchOpen} from '../../Utils';
 import {NodesActions} from '../../../Stores';
 import {THINGS_DOC_NEW_MODULE} from '../../../Constants/Links';
 
 const initialState = {
+    confErr: '',
     show: false,
     form: {
         name: '',
@@ -55,13 +56,20 @@ const Add = ({nodeId}) => {
         });
     };
 
+    const handleOnChangeConf = (config) => {
+        setState(prevState => {
+            return {...prevState, form: {...prevState.form, config}};
+        });
+    };
+
     const handleClickOk = () => {
+        const conf = switches.config ? form.config : null;
         NodesActions.addModule(
             nodeId,
             {
                 name: form.name,
                 source: form.source,
-                configuration: switches.config ? form.config : null,
+                configuration: conf,
             },
             tag,
             () => setState({...state, show: false})
@@ -82,11 +90,12 @@ const Add = ({nodeId}) => {
                     {'Add module'}
                 </Button>
             }
-            title="New module"
-            open={show}
-            onOk={handleClickOk}
+            maxWidth="sm"
             onClose={handleClickClose}
             onKeyPress={handleKeyPress}
+            onOk={handleClickOk}
+            open={show}
+            title="New module"
         >
             <ErrorMsg tag={tag} />
             <List dense disablePadding>
@@ -129,20 +138,9 @@ const Add = ({nodeId}) => {
                 </ListItem>
                 <ListItem dense disableGutters>
                     <SwitchOpen label="Add configuration [optional]" onChange={handleSwitch('config')}>
-                        <TextField
-                            fullWidth
-                            id="config"
-                            label="Configuration"
-                            margin="dense"
-                            maxRows="10"
-                            minRows="1"
-                            multiline
-                            onChange={handleOnChange}
-                            spellCheck={false}
-                            type="text"
-                            value={form.config}
-                            variant="standard"
-                        />
+                        <EditProvider>
+                            <Arguments onChange={handleOnChangeConf} />
+                        </EditProvider>
                     </SwitchOpen>
                 </ListItem>
             </List>

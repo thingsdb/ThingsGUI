@@ -15,15 +15,15 @@ const timeUnit = [
     },
     {
         label: 'Hour',
-        value: '60*60'
+        value: '3600'
     },
     {
         label: 'Day',
-        value: '60*60*24'
+        value: '86400'
     },
     {
         label: 'Week',
-        value: '60*60*24*7'
+        value: '604800'
     },
 ];
 
@@ -34,7 +34,7 @@ const TimePeriodPicker = ({onChange}) => {
     });
 
     React.useEffect(() => {
-        onChange(`${state.number }*${state.unit}`);
+        onChange(`${state.number * state.unit}`);
     },
     [state.number, state.unit],
     );

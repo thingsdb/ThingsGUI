@@ -20,7 +20,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const [output, setOutput] = React.useState('');
     const [tabIndex, setTabIndex] = React.useState(0);
     const editState = useEdit()[0];
-    const {val} = editState;
+    const {obj} = editState;
 
     React.useEffect(() => { // clean state
         setOutput('');
@@ -36,7 +36,7 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
         ProcedureActions.runProcedure(
             scope,
             procedure.name,
-            val,
+            obj,
             tag,
             handleResult,
         );

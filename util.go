@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"os/exec"
 	"runtime"
 	"strings"
@@ -81,6 +82,38 @@ func convertFloatToInt(arg interface{}) interface{} {
 
 	}
 	return arg
+}
+
+// decodeBase64 decodes base64 strings
+func decodeBase64(arg interface{}) (interface{}, error) {
+	switch v := arg.(type) {
+	case []interface{}:
+		arr := make([]interface{}, 0)
+		for i := range v {
+			r, err := decodeBase64(v[i])
+			if err != nil {
+				return nil, err
+			}
+
+			arr = append(arr, r)
+		}
+		return arr, nil
+	case map[string]interface{}:
+		dict := make(map[string]interface{})
+		for k := range v {
+			r, err := decodeBase64(v[k])
+			if err != nil {
+				return nil, err
+			}
+
+			dict[k] = r
+		}
+		return dict, nil
+	case string:
+		return base64.StdEncoding.DecodeString(v)
+
+	}
+	return arg, nil
 }
 
 func open(url string) error { //https://stackoverflow.com/questions/39320371/how-start-web-server-to-open-page-in-browser-in-golang

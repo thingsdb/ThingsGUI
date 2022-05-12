@@ -7,28 +7,48 @@ import { ErrorMsg, SimpleModal } from '../../Utils';
 import {NodesActions} from '../../../Stores';
 import {LoglevelTAG} from '../../../Constants/Tags';
 
-
-const loglevels = [
-    'DEBUG',
-    'INFO',
-    'WARNING',
-    'ERROR',
-    'CRITICAL',
+const logLevels = [
+    {
+        ky: 'debug',
+        label: 'DEBUG',
+        value: 0,
+    },
+    {
+        ky: 'info',
+        label: 'INFO',
+        value: 1,
+    },
+    {
+        ky: 'warning',
+        label: 'WARNING',
+        value: 2,
+    },
+    {
+        ky: 'error',
+        label: 'ERROR',
+        value: 3,
+    },
+    {
+        ky: 'critical',
+        label: 'CRITICAL',
+        value: 4,
+    },
 ];
 
 const initialState = {
     show: false,
-    form: {},
+    logLevel: '',
 };
 
 const tag = LoglevelTAG;
 
 const Loglevel = ({node}) => {
     const [state, setState] = React.useState(initialState);
-    const {show, form} = state;
+    const {show, logLevel} = state;
 
     const handleClickOpen = () => {
-        setState({show: true, form: {...node}});
+        const l = logLevels.find(l => l.label === node.log_level);
+        setState({show: true, logLevel: l ? l.value : logLevels[0].value});
     };
 
     const handleClickClose = () => {
@@ -36,17 +56,14 @@ const Loglevel = ({node}) => {
     };
 
     const handleOnChange = ({target}) => {
-        const {id, value} = target;
-        setState(prevState => {
-            const updatedForm = Object.assign({}, prevState.form, {[id]: value});
-            return {...prevState, form: updatedForm};
-        });
+        const {value} = target;
+        setState(prevState => ({...prevState, logLevel: value}));
     };
 
     const handleClickOk = () => {
         NodesActions.setLoglevel(
             node.node_id,
-            form.log_level,
+            logLevel,
             tag,
             () => setState({...state, show: false})
         );
@@ -71,12 +88,12 @@ const Loglevel = ({node}) => {
                 onChange={handleOnChange}
                 select
                 SelectProps={{native: true}}
-                value={form.log_level}
+                value={logLevel}
                 variant="standard"
             >
-                {loglevels.map(p => (
-                    <option key={p} value={p}>
-                        {p.toLowerCase()}
+                {logLevels.map(l => (
+                    <option key={l.ky} value={l.value}>
+                        {l.label}
                     </option>
                 ))}
             </TextField>

@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { CLOSURE_QUERY } from '../../TiQueries';
+import { CLOSURE_FORMAT_QUERY } from '../../TiQueries/Queries';
 import VariablesArray from './VariablesArray';
 
 
@@ -17,7 +17,7 @@ const Closure = ({input, onChange}) => {
     const {variables, body} = state;
 
     React.useEffect(() => {
-        const c = CLOSURE_QUERY(variables, body);
+        const c = CLOSURE_FORMAT_QUERY(variables, body);
         if(input) {
             if (input!=c) {
                 let endVarArr = input.indexOf('|', 1);
@@ -42,12 +42,12 @@ const Closure = ({input, onChange}) => {
     const handleBody = ({target}) => {
         const {value} = target;
         setState({...state, body: value});
-        onChange(CLOSURE_QUERY(variables, value));
+        onChange(CLOSURE_FORMAT_QUERY(variables, value));
     };
 
     const handleVarArray = (items) => {
         setState({...state, variables: items});
-        onChange(CLOSURE_QUERY(items, body));
+        onChange(CLOSURE_FORMAT_QUERY(items, body));
     };
 
 

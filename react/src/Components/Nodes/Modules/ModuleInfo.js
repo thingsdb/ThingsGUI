@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography';
 
 import { ModuleInfoTAG } from '../../../Constants/Tags';
 import { NodesActions, NodesStore } from '../../../Stores';
-import { SimpleModal, ErrorMsg, LocalMsg } from '../../Utils';
+import { Arguments, EditProvider, ErrorMsg, LocalMsg, SimpleModal } from '../../Utils';
 import { THINGS_DOC_RENAME_MODULE, THINGS_DOC_SET_MODULE_CONFIG, THINGS_DOC_SET_MODULE_SCOPE } from '../../../Constants/Links';
 import { DATE_TIME_SEC_STR } from '../../../Constants/DateStrings';
 
@@ -124,6 +124,10 @@ const ModuleInfo = ({item, nodeId, _module}) => {
         setForm({...form, [ky]: value});
     };
 
+    const handleOnChangeConf = (conf) => {
+        setForm({...form, conf});
+    };
+
     const handleSave = (h) => () => {
         h.editMethod(nodeId, _module.name, form[h.ky], tag, () => {
             setEdit({...edit, [h.ky]: false});
@@ -177,29 +181,35 @@ const ModuleInfo = ({item, nodeId, _module}) => {
                         </Grid>
                         <Grid item xs={8}>
                             {h.canEdit && edit[h.ky] ? (
-                                <Grid container spacing={1}>
-                                    <Grid item xs={8}>
-                                        <TextField
-                                            autoFocus
-                                            fullWidth
-                                            id={h.ky}
-                                            margin="dense"
-                                            maxRows="10"
-                                            minRows="1"
-                                            multiline
-                                            onChange={handleChange(h.ky)}
-                                            spellCheck={false}
-                                            type="text"
-                                            value={form[h.ky]}
-                                            variant="standard"
-                                            helperText={
-                                                <Link target="_blank" href={h.helperText}>
-                                                    {'ThingsDocs'}
-                                                </Link>
-                                            }
-                                        />
+                                <Grid container>
+                                    <Grid item xs={10}>
+                                        {h.ky === 'conf' ? (
+                                            <EditProvider>
+                                                <Arguments onChange={handleOnChangeConf} />
+                                            </EditProvider>
+                                        ) : (
+                                            <TextField
+                                                autoFocus
+                                                fullWidth
+                                                id={h.ky}
+                                                margin="dense"
+                                                maxRows="10"
+                                                minRows="1"
+                                                multiline
+                                                onChange={handleChange(h.ky)}
+                                                spellCheck={false}
+                                                type="text"
+                                                value={form[h.ky]}
+                                                variant="standard"
+                                                helperText={
+                                                    <Link target="_blank" href={h.helperText}>
+                                                        {'ThingsDocs'}
+                                                    </Link>
+                                                }
+                                            />
+                                        )}
                                     </Grid>
-                                    <Grid container spacing={2} item xs={2} justifyContent="flex-start" alignContent="center">
+                                    <Grid container item xs={2} justifyContent="flex-end" alignContent="center">
                                         <ButtonBase onClick={handleSave(h)}>
                                             <SaveIcon color="primary" />
                                         </ButtonBase>

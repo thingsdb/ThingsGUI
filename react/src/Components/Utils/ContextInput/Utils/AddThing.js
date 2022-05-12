@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 
 import { ARRAY, STR } from '../../../../Constants/ThingTypes';
 import { CollectionActions } from '../../../../Stores';
-import { CURLY_BRACKETS_QUERY } from '../../../../TiQueries';
+import { CURLY_BRACKETS_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 import { EditActions, useEdit } from '../Context';
 import { ListHeader, useDebounce } from '../..';
 import InputField from '../InputField';
@@ -17,14 +17,16 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDisp
     const [dataType, setDataType] = React.useState([STR]);
     const [property, setProperty] = React.useState(['']);
     const [editState, dispatch] = useEdit();
-    const {val, blob} = editState;
+    const {blob, obj, val} = editState;
 
     const updateContext = React.useCallback(() => {
         let array = (val || []).map((v, index) => `${property[index]}: ${v}`);
-        EditActions.update(parentDispatch, 'val', CURLY_BRACKETS_QUERY(array), identifier, parent);
+        let o = property.reduce((res, k, i) => ({ ...res, [k]: obj[i]}), {});
+        EditActions.update(parentDispatch, 'val', CURLY_BRACKETS_FORMAT_QUERY(array), identifier, parent);
+        EditActions.update(parentDispatch, 'obj', o, identifier, parent);
         EditActions.updateBlob(parentDispatch, val, blob);
         CollectionActions.enableSubmit();
-    }, [blob, identifier, property, parent, parentDispatch, val]);
+    }, [blob, identifier, obj, property, parent, parentDispatch, val]);
 
     const [updateContextDebounced] = useDebounce(updateContext, 200);
 

@@ -11,6 +11,23 @@ import { ChipsCard, DownloadBlob } from '../../../Utils';
 import { THINGS_DOC_DATATYPES } from '../../../../Constants/Links';
 import { THINGDB_CACHE } from '../../../../Constants/Files';
 import {
+    MOD_ENUM_ADD_MOD_ARGS,
+    MOD_ENUM_ADD_MOD_BLOB,
+    MOD_ENUM_ARGS,
+    MOD_ENUM_REN_ARGS,
+    MOD_TYPE_ADD_FIELD_ARGS,
+    MOD_TYPE_ADD_METHOD_ARGS,
+    MOD_TYPE_DEL_ARGS,
+    MOD_TYPE_MOD_ARGS,
+    MOD_TYPE_MOD_FIELD_ARGS,
+    MOD_TYPE_REL_ADD_REN_ARGS,
+    MOD_TYPE_REL_DEL_ARGS,
+    MOD_TYPE_WPO_ARGS,
+    SET_ENUM_ARGS,
+    SET_ENUM_BLOB,
+    SET_TYPE_ARGS,
+} from '../../../../TiQueries/Arguments';
+import {
     MOD_ENUM_ADD_QUERY,
     MOD_ENUM_DEF_QUERY,
     MOD_ENUM_DEL_QUERY,
@@ -27,7 +44,24 @@ import {
     MOD_TYPE_WPO_QUERY,
     SET_ENUM_QUERY,
     SET_TYPE_QUERY,
-} from '../../../../TiQueries';
+
+    MOD_ENUM_ADD_FORMAT_QUERY,
+    MOD_ENUM_DEF_FORMAT_QUERY,
+    MOD_ENUM_DEL_FORMAT_QUERY,
+    MOD_ENUM_MOD_FORMAT_QUERY,
+    MOD_ENUM_REN_FORMAT_QUERY,
+    MOD_TYPE_ADD_FIELD_FORMAT_QUERY,
+    MOD_TYPE_ADD_METHOD_FORMAT_QUERY,
+    MOD_TYPE_DEL_FORMAT_QUERY,
+    MOD_TYPE_MOD_FIELD_FORMAT_QUERY,
+    MOD_TYPE_MOD_FORMAT_QUERY,
+    MOD_TYPE_REL_ADD_FORMAT_QUERY,
+    MOD_TYPE_REL_DEL_FORMAT_QUERY,
+    MOD_TYPE_REN_FORMAT_QUERY,
+    MOD_TYPE_WPO_FORMAT_QUERY,
+    SET_ENUM_FORMAT_QUERY,
+    SET_TYPE_FORMAT_QUERY,
+} from '../../../../TiQueries/Queries';
 
 
 const headers = {
@@ -53,43 +87,160 @@ const headers = {
 
 const queries = {
     add: {
-        type: (name, list) => SET_TYPE_QUERY(name, `{${list.map(v=>`${v.propertyName}: ${v.propertyType?`'${v.propertyType}'`:`${v.definition}`}`)}}`),
-        enum: (name, list) => SET_ENUM_QUERY(name, `{${list.map(v=>`${v.propertyName}: ${v.propertyVal}`)}}`)
+        type: (name, list) => {
+            const obj = list.reduce((res, v) => {
+                // the set_type_ prefix is there to guarantee that the key in the argument object is unique.
+                const uniqueKey = `set_type_${v.propertyName}`;
+
+                res.value.push(`${v.propertyName}: ${v.propertyType ? `'${v.propertyType}'` : `${v.definition}`}`);
+                res.valueJson = {...res.valueJson, [uniqueKey]: v.propertyType ? v.propertyType : v.definition};
+                res.valueQuery.push(`${v.propertyName}: ${v.propertyType ? uniqueKey : `closure(${uniqueKey})`}`);
+
+                return res;
+            }, {value: [], valueJson: {}, valueQuery: []});
+
+            const value = `{${obj.value}}`;
+            const valueJson = obj.valueJson;
+            const valueQuery = `{${obj.valueQuery}}`;
+
+            return ({
+                jsonArgs: SET_TYPE_ARGS(name, valueJson),
+                query: SET_TYPE_QUERY(valueQuery),
+                queryString: SET_TYPE_FORMAT_QUERY(name, value)
+            });
+        },
+        enum: (name, list) => {
+            // TODO blob bug; don't support blobs?
+            let hasBlob = false;
+            const obj = list.reduce((res, v) => {
+                let blob = v.propertyBlob;
+                let name = v.propertyName;
+                let val = v.propertyVal;
+                res.value.push(`${name}: ${val}`);
+
+                if (blob && Object.keys(blob).length > 0) {
+                    hasBlob = true;
+                    res.valueBlob = {...res.valueBlob, [name]: blob[val]};
+                } else {
+                    res.valueJson = {...res.valueJson, [name]: val};
+                }
+
+                return res;
+            }, {value: [], valueBlob: {}, valueJson: {}, valueQuery: []});
+
+            const value = `{${obj.value}}`;
+            const valueJson = obj.valueJson;
+            const valueBlob = obj.valueBlob;
+
+            return ({
+                jsonArgs: SET_ENUM_ARGS(name, valueJson),
+                query: SET_ENUM_QUERY,
+                queryString: SET_ENUM_FORMAT_QUERY(name, value),
+                blob: hasBlob ? SET_ENUM_BLOB(valueBlob) : null
+            });
+        }
     },
+    // TODO add blob
     mod: {
         addField: {
-            type: (name, update) => MOD_TYPE_ADD_FIELD_QUERY(name, update.propertyName, update.propertyType, update.propertyVal),
-            enum: (name, update) => MOD_ENUM_ADD_QUERY(name, update.propertyName, update.propertyVal)
+            type: (name, update) => ({
+                jsonArgs: MOD_TYPE_ADD_FIELD_ARGS(name, update.propertyName, update.propertyType, update.propertyVal),
+                query: MOD_TYPE_ADD_FIELD_QUERY(update.propertyVal),
+                queryString: MOD_TYPE_ADD_FIELD_FORMAT_QUERY(name, update.propertyName, update.propertyType, update.propertyVal),
+            }),
+            enum: (name, update) => {
+                let blob = update.propertyBlob;
+                let hasBlob = blob && Object.keys(blob).length > 0;
+                return ({
+                    jsonArgs: MOD_ENUM_ADD_MOD_ARGS(name, update.propertyName, update.propertyVal),
+                    query: MOD_ENUM_ADD_QUERY,
+                    queryString: MOD_ENUM_ADD_FORMAT_QUERY(name, update.propertyName, update.propertyVal),
+                    blob: hasBlob ? MOD_ENUM_ADD_MOD_BLOB(blob[update.propertyVal]) : null
+                });
+            }
         },
         addMethod: {
-            type: (name, update) => MOD_TYPE_ADD_METHOD_QUERY(name, update.propertyName, update.definition),
+            type: (name, update) => ({
+                jsonArgs: MOD_TYPE_ADD_METHOD_ARGS(name, update.propertyName, update.definition),
+                query: MOD_TYPE_ADD_METHOD_QUERY,
+                queryString: MOD_TYPE_ADD_METHOD_FORMAT_QUERY(name, update.propertyName, update.definition),
+            }),
         },
         mod: {
-            type: (name, update) => MOD_TYPE_MOD_FIELD_QUERY(name, update.propertyName, update.propertyType, update.callback),
-            enum: (name, update) => MOD_ENUM_MOD_QUERY(name, update.propertyName, update.propertyVal)
+            type: (name, update) => ({
+                jsonArgs: MOD_TYPE_MOD_FIELD_ARGS(name, update.propertyName, update.propertyType, update.callback),
+                query: MOD_TYPE_MOD_FIELD_QUERY(update.callback),
+                queryString: MOD_TYPE_MOD_FIELD_FORMAT_QUERY(name, update.propertyName, update.propertyType, update.callback),
+            }),
+            enum: (name, update) => {
+                let blob = update.propertyBlob;
+                let hasBlob = blob && Object.keys(blob).length > 0;
+                return ({
+                    jsonArgs: MOD_ENUM_ADD_MOD_ARGS(name, update.propertyName, update.propertyVal),
+                    query: MOD_ENUM_MOD_QUERY,
+                    queryString: MOD_ENUM_MOD_FORMAT_QUERY(name, update.propertyName, update.propertyVal),
+                    blob: hasBlob ? MOD_ENUM_ADD_MOD_BLOB(blob[update.propertyVal]) : null
+                });
+            }
         },
         ren: {
-            type: (name, update) => MOD_TYPE_REN_QUERY(name, update.oldname, update.newname),
-            enum: (name, update) => MOD_ENUM_REN_QUERY(name, update.oldname, update.newname)
+            type: (name, update) => ({
+                jsonArgs: MOD_TYPE_REL_ADD_REN_ARGS(name, update.oldname, update.newname),
+                query: MOD_TYPE_REN_QUERY,
+                queryString: MOD_TYPE_REN_FORMAT_QUERY(name, update.oldname, update.newname),
+            }),
+            enum: (name, update) => ({
+                jsonArgs: MOD_ENUM_REN_ARGS(name, update.oldname, update.newname),
+                query: MOD_ENUM_REN_QUERY,
+                queryString: MOD_ENUM_REN_FORMAT_QUERY(name, update.oldname, update.newname)
+            }),
         },
         rel: {
-            type: (name, update) => MOD_TYPE_REL_ADD_QUERY(name, update.relation.property, update.relation.propertyToo),
+            type: (name, update) => ({
+                jsonArgs:  MOD_TYPE_REL_ADD_REN_ARGS(name, update.relation.property, update.relation.propertyToo),
+                query: MOD_TYPE_REL_ADD_QUERY,
+                queryString: MOD_TYPE_REL_ADD_FORMAT_QUERY(name, update.relation.property, update.relation.propertyToo),
+            }),
         },
         delRel: {
-            type: (name, update) => MOD_TYPE_REL_DEL_QUERY(name, update.propertyName)
+            type: (name, update) => ({
+                jsonArgs: MOD_TYPE_REL_DEL_ARGS(name, update.propertyName),
+                query: MOD_TYPE_REL_DEL_QUERY,
+                queryString: MOD_TYPE_REL_DEL_FORMAT_QUERY(name, update.propertyName)
+            }),
         },
         def: {
-            enum: (name, update) => MOD_ENUM_DEF_QUERY(name, update.propertyName)
+            enum: (name, update) => ({
+                jsonArgs: MOD_ENUM_ARGS(name, update.propertyName),
+                query: MOD_ENUM_DEF_QUERY,
+                queryString: MOD_ENUM_DEF_FORMAT_QUERY(name, update.propertyName)
+            }),
         },
         del: {
-            type: (name, update) => MOD_TYPE_DEL_QUERY(name, update.propertyName),
-            enum: (name, update) => MOD_ENUM_DEL_QUERY(name, update.propertyName),
+            type: (name, update) => ({
+                jsonArgs: MOD_TYPE_DEL_ARGS(name, update.propertyName),
+                query: MOD_TYPE_DEL_QUERY,
+                queryString: MOD_TYPE_DEL_FORMAT_QUERY(name, update.propertyName),
+            }),
+            enum: (name, update) => ({
+                jsonArgs: MOD_ENUM_ARGS(name, update.propertyName),
+                query: MOD_ENUM_DEL_QUERY,
+                queryString: MOD_ENUM_DEL_FORMAT_QUERY(name, update.propertyName),
+            }),
         },
         wpo: {
-            type: (name, update) => MOD_TYPE_WPO_QUERY(name, update.wpo),
+            type: (name, update) => ({
+                jsonArgs: MOD_TYPE_WPO_ARGS(name, update.wpo),
+                query: MOD_TYPE_WPO_QUERY,
+                queryString: MOD_TYPE_WPO_FORMAT_QUERY(name, update.wpo),
+            }),
         },
         met: {
-            type: (name, update) => MOD_TYPE_MOD_QUERY(name, update.propertyName, update.definition, update.callback)
+            type: (name, update) => ({
+                jsonArgs: MOD_TYPE_MOD_ARGS(name, update.propertyName, update.definition, update.callback),
+                query: MOD_TYPE_MOD_QUERY(update.callback),
+                queryString: MOD_TYPE_MOD_FORMAT_QUERY(name, update.propertyName, update.definition, update.callback)
+            }),
         }
     }
 };

@@ -6,9 +6,14 @@ import Vlow from 'vlow';
 import { BaseStore } from './BaseStore';
 import { COLLECTION_SCOPE } from '../Constants/Scopes';
 import { ErrorActions } from './ErrorStore';
-import { jsonify } from './Utils';
 import { THING_KEY } from '../Constants/CharacterKeys';
-import { SQUARE_BRACKETS_QUERY, THING_STAT_QUERY, THING_QUERY } from '../TiQueries';
+import { ID_ARGS } from '../TiQueries/Arguments';
+import {
+    SQUARE_BRACKETS_FORMAT_QUERY,
+    THING_FORMAT_QUERY,
+    THING_CURRENT_QUERY,
+    THING_QUERY,
+} from '../TiQueries/Queries';
 
 
 const CollectionActions = Vlow.createActions([
@@ -75,11 +80,18 @@ class CollectionStore extends BaseStore {
     }
 
     onGetThings(collectionId, collectionName, thingId=null) {
-        const query = THING_STAT_QUERY(thingId);
         const scope = `${COLLECTION_SCOPE}:${collectionName}`;
+        let query = THING_CURRENT_QUERY;
+        let jsonArgs = null;
+
+        if (thingId) {
+            query = THING_QUERY;
+            jsonArgs = ID_ARGS(thingId);
+        }
         this.emit('query', {
             query,
             scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const things = thingId ?
@@ -97,7 +109,7 @@ class CollectionStore extends BaseStore {
         const ids = Object.keys(things);
 
         if(ids.length) {
-            const query = SQUARE_BRACKETS_QUERY(ids.map(id => THING_QUERY(id)));
+            const query = SQUARE_BRACKETS_FORMAT_QUERY(ids.map(id => THING_FORMAT_QUERY(id)));
             const scope = `${COLLECTION_SCOPE}:${collectionName}`;
             this.emit('query', {
                 query,
@@ -128,16 +140,7 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onQuery(scope, query, tag, cb, thingId=null, blob=null, args=null, onFail=()=>null) {
-        if(thingId){
-            query = query + ' ' + THING_STAT_QUERY(thingId);
-        }
-
-        let jsonArgs = null;
-        if (args) {
-            jsonArgs = jsonify(args); // make it json proof
-        }
-
+    onQuery(scope, query, tag, cb, thingId=null, blob=null, jsonArgs=null, onFail=()=>null) {
         this.emit('query', {
             query,
             scope,

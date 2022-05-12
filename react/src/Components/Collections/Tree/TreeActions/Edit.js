@@ -4,7 +4,7 @@ import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { DATETIME_QUERY, TIMEVAL_QUERY } from '../../../../TiQueries';
+import { DATETIME_FORMAT_QUERY, TIMEVAL_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 import { DATETIME, ERROR, LIST, NIL, SET, THING, TIMEVAL } from '../../../../Constants/ThingTypes';
 import { InputField } from '../../../Utils';
 import BuildQueryString from './BuildQueryString';
@@ -29,8 +29,8 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
 
     const t = (child.type == THING || child.type == LIST || child.type == SET) ? ''
         : child.type == ERROR ? {propName: child.name, parentId: parent.id, scope: scope}
-            : child.type == DATETIME ? DATETIME_QUERY(thing)
-                :child.type == TIMEVAL ? TIMEVAL_QUERY(thing)
+            : child.type == DATETIME ? DATETIME_FORMAT_QUERY(thing)
+                :child.type == TIMEVAL ? TIMEVAL_FORMAT_QUERY(thing)
                     : thing;
 
     return(
@@ -47,8 +47,8 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
                     enums={enums}
                     parent={{
                         id: child.type == THING? child.id:parent.id,
-                        name: child.type == THING || child.type == LIST || child.type == SET ?child.name:parent.name,
-                        type: child.type == THING || child.type == LIST || child.type == SET?child.type:parent.type,
+                        name: child.type == THING || child.type == LIST || child.type == SET ? child.name : parent.name,
+                        type: child.type == THING || child.type == LIST || child.type == SET ? child.type : parent.type,
                     }}
                 />
             </ListItem>

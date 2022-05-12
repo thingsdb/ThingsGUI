@@ -3,11 +3,12 @@ import Vlow from 'vlow';
 
 import { BaseStore } from './BaseStore';
 import { ErrorActions } from './ErrorStore';
+import { NAME_ARGS, RENAME_ARGS } from '../TiQueries/Arguments';
 import {
     DEL_TYPE_QUERY,
     RENAME_TYPE_QUERY,
     TYPES_INFO_QUERY,
-} from '../TiQueries';
+} from '../TiQueries/Queries';
 
 const TypeActions = Vlow.createActions([
     'getType',
@@ -32,10 +33,11 @@ class TypeStore extends BaseStore {
         this.state = TypeStore.defaults;
     }
 
-    onGetType(query, scope, tag, cb) {
+    onGetType(query, scope, args, tag, cb) {
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: args
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {
@@ -62,10 +64,12 @@ class TypeStore extends BaseStore {
     }
 
     onDeleteType(scope, name, tag, cb=()=>null) {
-        const query = DEL_TYPE_QUERY(name) + ' ' + TYPES_INFO_QUERY;
+        const query = DEL_TYPE_QUERY + ' ' + TYPES_INFO_QUERY;
+        const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const customTypes = Object.assign({}, prevState.customTypes, {[scope]: data});
@@ -78,11 +82,13 @@ class TypeStore extends BaseStore {
         });
     }
 
-    onRenameType(oldName, newName, scope, tag, cb=()=>null) {
-        const query = RENAME_TYPE_QUERY(oldName, newName) + ' ' + TYPES_INFO_QUERY;
+    onRenameType(current, newName, scope, tag, cb=()=>null) {
+        const query = RENAME_TYPE_QUERY + ' ' + TYPES_INFO_QUERY;
+        const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const customTypes = Object.assign({}, prevState.customTypes, {[scope]: data});

@@ -3,13 +3,16 @@ import Vlow from 'vlow';
 
 import { BaseStore } from './BaseStore';
 import { ErrorActions } from './ErrorStore';
-import { jsonify } from './Utils';
+import {
+    NAME_ARGS,
+    RENAME_ARGS,
+} from '../TiQueries/Arguments';
 import {
     DEL_PROCEDURE_QUERY,
     PROCEDURE_INFO_QUERY,
     PROCEDURES_INFO_QUERY,
     RENAME_PROCEDURE_QUERY,
-} from '../TiQueries';
+} from '../TiQueries/Queries';
 
 const ProcedureActions = Vlow.createActions([
     'getProcedure',
@@ -71,10 +74,12 @@ class ProcedureStore extends BaseStore {
     }
 
     onDeleteProcedure(scope, name, tag,  cb=()=>null) {
-        const query = DEL_PROCEDURE_QUERY(name) + ' ' + PROCEDURES_INFO_QUERY;
+        const query = DEL_PROCEDURE_QUERY + ' ' + PROCEDURES_INFO_QUERY;
+        const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const procedures = Object.assign({}, prevState.procedures, {[scope]: data});
@@ -88,12 +93,11 @@ class ProcedureStore extends BaseStore {
     }
 
     onRunProcedure(scope, name, args, tag,  cb=()=>null) {
-        const jsonProof = jsonify(args); // make it json proof
         this.emit('run', {
             scope,
             procedure: {
                 name: name,
-                arguments: jsonProof
+                arguments: args
             },
         }).done((data) => {
             cb(data);
@@ -102,11 +106,13 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onRenameProcedure(oldName, newName, scope, tag, cb=()=>null) {
-        const query = RENAME_PROCEDURE_QUERY(oldName, newName) + ' ' + PROCEDURES_INFO_QUERY;
+    onRenameProcedure(current, newName, scope, tag, cb=()=>null) {
+        const query = RENAME_PROCEDURE_QUERY + ' ' + PROCEDURES_INFO_QUERY;
+        const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const procedures = Object.assign({}, prevState.procedures, {[scope]: data});

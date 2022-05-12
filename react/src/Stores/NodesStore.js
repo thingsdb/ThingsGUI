@@ -1,11 +1,24 @@
 /*eslint-disable no-unused-vars */
 
 import deepEqual from 'deep-equal';
-import {BaseStore} from './BaseStore';
-import {ErrorActions} from './ErrorStore';
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
+import { BaseStore } from './BaseStore';
+import { ErrorActions } from './ErrorStore';
+import {
+    DEL_BACKUP_ARGS,
+    ID_ARGS,
+    NAME_ARGS,
+    NEW_BACKUP_ARGS,
+    NEW_MODULE_ARGS,
+    NEW_NODE_ARGS,
+    RENAME_ARGS,
+    RESTORE_ARGS,
+    SET_LOG_LEVEL_ARGS,
+    SET_MODULE_CONF_ARGS,
+    SET_MODULE_SCOPE_ARGS,
+} from '../TiQueries/Arguments';
 import {
     BACKUPS_INFO_QUERY,
     COUNTERS_QUERY,
@@ -29,7 +42,7 @@ import {
     SET_MODULE_CONF_QUERY,
     SET_MODULE_SCOPE_QUERY,
     SHUTDOWN_QUERY,
-} from '../TiQueries';
+} from '../TiQueries/Queries';
 import { THINGSDB_SCOPE, NODE_SCOPE } from '../Constants/Scopes';
 
 const NodesActions = Vlow.createActions([
@@ -238,10 +251,12 @@ class NodesStore extends BaseStore {
     }
 
     onSetLoglevel(nodeId, level, tag, cb) {
-        const query = SET_LOG_LEVEL_QUERY(level) + ' ' + NODE_INFO_QUERY ;
+        const query = SET_LOG_LEVEL_QUERY + ' ' + NODE_INFO_QUERY ;
+        const jsonArgs = SET_LOG_LEVEL_ARGS(level);
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
-            query
+            query,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState({
                 node: data
@@ -265,10 +280,12 @@ class NodesStore extends BaseStore {
     }
 
     onRestore(fileName, takeAccess, restoreTasks, tag, cb) {
-        const query = RESTORE_QUERY(fileName, takeAccess, restoreTasks);
+        const query = RESTORE_QUERY(takeAccess, restoreTasks);
+        const jsonArgs = RESTORE_ARGS(fileName, takeAccess, restoreTasks);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((data) => {
             cb();
         }).fail((event, status, message) => {
@@ -292,10 +309,12 @@ class NodesStore extends BaseStore {
     }
 
     onAddNode(config, tag, cb) { // secret , nodename [, port]
-        const query = NEW_NODE_QUERY(config.secret, config.nName, config.port);
+        const query = NEW_NODE_QUERY(config.port);
+        const jsonArgs = NEW_NODE_ARGS(config.secret, config.nName, config.port);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             cb();
             this.onGetNodes();
@@ -305,10 +324,12 @@ class NodesStore extends BaseStore {
     }
 
     onDelNode(nodeId, tag, cb) {
-        const query = DEL_NODE_QUERY(nodeId);
+        const query = DEL_NODE_QUERY;
+        const jsonArgs = ID_ARGS(nodeId);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             cb();
             this.onGetNodes();
@@ -333,21 +354,25 @@ class NodesStore extends BaseStore {
     }
 
     onAddBackup(nodeId, config, tag, cb) {
-        const query = NEW_BACKUP_QUERY(config.file, config.time, config.repeat, config.maxFiles);
+        const query = NEW_BACKUP_QUERY(config.time, config.repeat, config.maxFiles);
+        const jsonArgs = NEW_BACKUP_ARGS(config.file, config.time, config.repeat, config.maxFiles);
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             cb();
             this.onGetBackups(nodeId);
         }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 
-    onDelBackup(nodeId, backupId, cb, removeFile=false) {
-        const query = DEL_BACKUP_QUERY(backupId, removeFile);
+    onDelBackup(nodeId, backupId, cb, deleteFiles=false) {
+        const query = DEL_BACKUP_QUERY;
+        const jsonArgs = DEL_BACKUP_ARGS(backupId, deleteFiles);
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetBackups(nodeId);
             cb();
@@ -371,10 +396,12 @@ class NodesStore extends BaseStore {
 
     onGetModule(nodeId, name) {
         const {_module} = this.state;
-        const query = MODULE_INFO_QUERY(name);
+        const query = MODULE_INFO_QUERY;
+        const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
-            query
+            query,
+            arguments: jsonArgs
         }).done((data) => {
             if (!deepEqual(data, _module)){
                 this.setState({
@@ -385,10 +412,12 @@ class NodesStore extends BaseStore {
     }
 
     onAddModule(nodeId, config, tag, cb) {
-        const query = NEW_MODULE_QUERY(config.name, config.source, config.configuration);
+        const query = NEW_MODULE_QUERY(config.configuration);
+        const jsonArgs = NEW_MODULE_ARGS(config.name, config.source, config.configuration);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModules(nodeId);
             cb();
@@ -396,21 +425,25 @@ class NodesStore extends BaseStore {
     }
 
     onDelModule(nodeId, name, cb) {
-        const query = DEL_MODULE_QUERY(name);
+        const query = DEL_MODULE_QUERY;
+        const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModules(nodeId);
             cb();
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRenameModule(nodeId, name, newName, tag, cb) {
-        const query = RENAME_MODULE_QUERY(name, newName);
+    onRenameModule(nodeId, current, newName, tag, cb) {
+        const query = RENAME_MODULE_QUERY;
+        const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModule(nodeId, newName);
             this.onGetModules(nodeId);
@@ -419,10 +452,12 @@ class NodesStore extends BaseStore {
     }
 
     onRestartModule(nodeId, name, cb) {
-        const query = RESTART_MODULE_QUERY(name);
+        const query = RESTART_MODULE_QUERY;
+        const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModules(nodeId);
             cb();
@@ -430,10 +465,13 @@ class NodesStore extends BaseStore {
     }
 
     onSetModuleConf(nodeId, name, configuration, tag, cb) {
-        const query = SET_MODULE_CONF_QUERY(name, configuration);
+        const query = SET_MODULE_CONF_QUERY;
+        const jsonArgs = SET_MODULE_CONF_ARGS(name, configuration);
+
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModule(nodeId, name);
             cb();
@@ -441,10 +479,12 @@ class NodesStore extends BaseStore {
     }
 
     onSetModuleScope(nodeId, name, scope, tag, cb) {
-        const query = SET_MODULE_SCOPE_QUERY(name, scope);
+        const query = SET_MODULE_SCOPE_QUERY;
+        const jsonArgs = SET_MODULE_SCOPE_ARGS(name, scope);
         this.emit('query', {
             scope: THINGSDB_SCOPE,
-            query
+            query,
+            arguments: jsonArgs
         }).done((_data) => {
             this.onGetModule(nodeId, name);
             this.onGetModules(nodeId);

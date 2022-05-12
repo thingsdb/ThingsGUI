@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"crypto/tls"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -71,19 +70,19 @@ type lMapping map[string]map[string]interface{}
 type lData map[string]interface{}
 
 type procedure struct {
-	Arguments string `json:"arguments"`
-	Name      string `json:"name"`
+	Arguments interface{} `json:"arguments"`
+	Name      string      `json:"name"`
 }
 
 // Data struct that is received
 type dataReq struct {
-	Arguments string            `json:"arguments"`
-	Blob      map[string]string `json:"blob"`
-	Id        string            `json:"id"`
-	Procedure procedure         `json:"procedure"`
-	Query     string            `json:"query"`
-	Scope     string            `json:"scope"`
-	Wait      int               `json:"wait"`
+	Arguments interface{} `json:"arguments"`
+	Blob      interface{} `json:"blob"`
+	Id        string      `json:"id"`
+	Procedure procedure   `json:"procedure"`
+	Query     string      `json:"query"`
+	Scope     string      `json:"scope"`
+	Wait      int         `json:"wait"`
 }
 
 func connectedResp() connResp {
@@ -530,28 +529,25 @@ func (client *client) saveLastUsedConnection(data loginData) error {
 // query sends a query to ThingsDB and receives a result
 func (client *client) query(data dataReq) (int, interface{}, message) {
 	var arguments map[string]interface{}
-	if data.Arguments != "" {
-		var args interface{}
-		decoder := json.NewDecoder(strings.NewReader(data.Arguments))
-		if err := decoder.Decode(&args); err != nil {
-			message := msg(err)
-			return message.Status, "", message
-		}
-		args = convertFloatToInt(args)
+	if data.Arguments != nil {
+		args := convertFloatToInt(data.Arguments)
 		arguments = args.(map[string]interface{})
 	}
 
-	for k, v := range data.Blob {
-		decodedBlob, err := base64.StdEncoding.DecodeString(v)
+	if data.Blob != nil {
+		decodedBlob, err := decodeBase64(data.Blob)
 		if err != nil {
 			message := failedMsg(err)
 			return message.Status, "", message
 		}
+		blob := decodedBlob.(map[string]interface{})
 
-		if arguments == nil {
-			arguments = make(map[string]interface{})
+		for k, v := range blob {
+			if arguments == nil {
+				arguments = make(map[string]interface{})
+			}
+			arguments[k] = v
 		}
-		arguments[k] = decodedBlob
 	}
 
 	resp, err := client.connection.Query(
@@ -629,13 +625,8 @@ func (client *client) run(data dataReq) (int, interface{}, message) {
 	var args interface{}
 	message := successMsg()
 
-	if data.Procedure.Name != "" && data.Procedure.Arguments != "" {
-		decoder := json.NewDecoder(strings.NewReader(data.Procedure.Arguments))
-		if err := decoder.Decode(&args); err != nil {
-			message = msg(err)
-			return message.Status, "", message
-		}
-		args = convertFloatToInt(args)
+	if data.Procedure.Name != "" && data.Procedure.Arguments != nil {
+		args = convertFloatToInt(data.Procedure.Arguments)
 	}
 
 	resp, err := client.connection.Run(data.Scope, data.Procedure.Name, args)

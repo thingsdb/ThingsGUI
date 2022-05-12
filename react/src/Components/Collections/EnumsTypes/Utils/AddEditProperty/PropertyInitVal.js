@@ -8,23 +8,19 @@ import Switch from '@mui/material/Switch';
 import PropertyVal from './PropertyVal';
 
 
-const PropertyInitVal = ({category, onChange, onBlob, scope}) => {
+const PropertyInitVal = ({category, onChange, scope}) => {
     const [switchIni, setSwitch] = React.useState(false);
 
     const handleSwitch = ({target}) => {
         const {checked} = target;
         setSwitch(checked);
         if (!checked) {
-            onChange({propertyVal:''});
+            onChange({propertyVal:'', propertyBlob: '',});
         }
     };
 
     const handleVal = (v) => {
         onChange(v);
-    };
-
-    const handleBlob = (b) => {
-        onBlob(b);
     };
 
     return (
@@ -43,7 +39,7 @@ const PropertyInitVal = ({category, onChange, onBlob, scope}) => {
                 />
             </Grid>
             <Collapse in={switchIni} timeout="auto" unmountOnExit sx={{width: '100%'}}>
-                <PropertyVal category={category} onChange={handleVal} onBlob={handleBlob} scope={scope} />
+                <PropertyVal category={category} onChange={handleVal} scope={scope} />
             </Collapse>
         </React.Fragment>
     );
@@ -52,7 +48,6 @@ const PropertyInitVal = ({category, onChange, onBlob, scope}) => {
 PropertyInitVal.propTypes = {
     category: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
-    onBlob: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired,
 };
 

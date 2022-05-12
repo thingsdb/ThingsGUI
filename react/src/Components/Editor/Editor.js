@@ -5,8 +5,8 @@ import React from 'react';
 
 import { CollectionActions, ErrorActions, NodesActions, ThingsdbActions } from '../../Stores';
 import { DragdownCard, ErrorMsg, QueryOutput, TitlePage2 } from '../Utils';
-import { EditorTAG } from '../../Constants/Tags';
 import { EditorTab } from '../../Constants/Enums';
+import { EditorTAG } from '../../Constants/Tags';
 import EditorInput from './EditorInput';
 import EditorSideContent from './EditorSideContent';
 import SelectScope from './SelectScope';

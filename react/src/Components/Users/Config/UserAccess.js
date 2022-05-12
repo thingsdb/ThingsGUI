@@ -18,22 +18,27 @@ const privileges = [
     {
         ky: 'query',
         label: 'QUERY',
+        value: 1,
     },
     {
         ky: 'change',
         label: 'CHANGE',
+        value: 2,
     },
     {
         ky: 'grant',
         label: 'GRANT',
+        value: 4,
     },
     {
         ky: 'join',
         label: 'JOIN',
+        value: 8,
     },
     {
         ky: 'run',
         label: 'RUN',
+        value: 16,
     },
 ];
 
@@ -173,9 +178,9 @@ const UserAccess = ({user, collections}) => {
                                         </Grid>
                                         <Grid item container xs={9} >
                                             <Grid item container xs={12} >
-                                                {privileges.map(({ky, label}) => (
+                                                {privileges.map(({ky, value}) => (
                                                     <Grid item xs={2} key={ky} container justifyContent="center">
-                                                        <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={label} color="primary" />
+                                                        <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={value} color="primary" />
                                                     </Grid>
                                                 ))}
                                             </Grid>

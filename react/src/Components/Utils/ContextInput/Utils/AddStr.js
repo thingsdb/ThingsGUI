@@ -5,7 +5,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 
 import { EditActions, useEdit } from '../Context';
-import { STRING_QUERY } from '../../../../TiQueries';
+import { STRING_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 
 const AddStr = ({identifier, init, parent, ...props}) => {
     const [editState, dispatch] = useEdit();
@@ -13,13 +13,15 @@ const AddStr = ({identifier, init, parent, ...props}) => {
 
     React.useEffect(()=>{
         if (init) {
-            EditActions.update(dispatch, 'val', STRING_QUERY(init), identifier, parent);
+            EditActions.update(dispatch, 'val', STRING_FORMAT_QUERY(init), identifier, parent);
+            EditActions.update(dispatch, 'obj', init, identifier, parent);
         }
     }, []);
 
     const handleOnChange = ({target}) => {
         const {value} = target;
-        EditActions.update(dispatch, 'val', STRING_QUERY(value), identifier, parent);
+        EditActions.update(dispatch, 'val', STRING_FORMAT_QUERY(value), identifier, parent);
+        EditActions.update(dispatch, 'obj', value, identifier, parent);
     };
 
     const v = !val ? '' : identifier === null ? val : val[identifier] || '';

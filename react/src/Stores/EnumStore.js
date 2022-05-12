@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
 import { BaseStore } from './BaseStore';
-import { DEL_ENUM_QUERY, ENUMS_INFO_QUERY, RENAME_ENUM_QUERY } from '../TiQueries';
+import { NAME_ARGS, RENAME_ARGS } from '../TiQueries/Arguments';
+import { DEL_ENUM_QUERY, ENUMS_INFO_QUERY, RENAME_ENUM_QUERY } from '../TiQueries/Queries';
 import { ErrorActions } from './ErrorStore';
 
 const EnumActions = Vlow.createActions([
@@ -45,10 +46,12 @@ class EnumStore extends BaseStore {
     }
 
     onDeleteEnum(scope, name, tag, cb=()=>null) {
-        const query = DEL_ENUM_QUERY(name) + ' ' + ENUMS_INFO_QUERY;
+        const query = DEL_ENUM_QUERY + ' ' + ENUMS_INFO_QUERY;
+        const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const enums = Object.assign({}, prevState.enums, {[scope]: data});
@@ -61,11 +64,13 @@ class EnumStore extends BaseStore {
         });
     }
 
-    onRenameEnum(oldName, newName, scope, tag, cb=()=>null) {
-        const query = RENAME_ENUM_QUERY(oldName, newName) + ENUMS_INFO_QUERY;
+    onRenameEnum(current, newName, scope, tag, cb=()=>null) {
+        const query = RENAME_ENUM_QUERY + ENUMS_INFO_QUERY;
+        const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
             query,
-            scope
+            scope,
+            arguments: jsonArgs
         }).done((data) => {
             this.setState(prevState => {
                 const enums = Object.assign({}, prevState.enums, {[scope]: data});

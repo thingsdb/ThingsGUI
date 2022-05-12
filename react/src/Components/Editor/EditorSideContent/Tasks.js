@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { Tasks } from '../../ProceduresAndTasks';
-import { NEW_TASK_EMPTY_QUERY, TASK_QUERY } from '../../../TiQueries';
+import { NEW_TASK_EMPTY_QUERY, TASK_FORMAT_QUERY } from '../../../TiQueries/Queries';
 
 
 const TasksEditor = ({onSetQueryInput, scope}) => {
@@ -14,7 +14,7 @@ const TasksEditor = ({onSetQueryInput, scope}) => {
             break;
         case 'run':
             if(task){
-                const input = TASK_QUERY(task.id);
+                const input = TASK_FORMAT_QUERY(task.id);
                 onSetQueryInput(input);
             }
             break;

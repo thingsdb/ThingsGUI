@@ -85,10 +85,10 @@ import { THINGSDB_SCOPE, NODE_SCOPE, COLLECTION_SCOPE } from '../../Constants/Sc
 import { THINGDB_CACHE } from '../../Constants/Files';
 import { DATE_TIME_SEC_STR } from '../../Constants/DateStrings';
 import {
-    ANGLE_BRACKETS_QUERY,
-    CURLY_BRACKETS_QUERY,
-    SQUARE_BRACKETS_QUERY,
-} from '../../TiQueries';
+    ANGLE_BRACKETS_FORMAT_QUERY,
+    CURLY_BRACKETS_FORMAT_QUERY,
+    SQUARE_BRACKETS_FORMAT_QUERY,
+} from '../../TiQueries/Queries';
 
 const checkType = (t) => {
     if (t === null) {
@@ -117,13 +117,13 @@ const checkType = (t) => {
 };
 
 const thingValue = (type, thing, customTypes=[]) => {
-    return type === ARRAY ? SQUARE_BRACKETS_QUERY(thing.length)
-        : type === THING ? Object.keys(thing)[0] == THING_KEY ? CURLY_BRACKETS_QUERY(`${Object.keys(thing)[0]}${thing[THING_KEY]}`) : CURLY_BRACKETS_QUERY()
-            : type === 'object' ? SQUARE_BRACKETS_QUERY(Object.keys(thing).length)
+    return type === ARRAY ? SQUARE_BRACKETS_FORMAT_QUERY(thing.length)
+        : type === THING ? Object.keys(thing)[0] == THING_KEY ? CURLY_BRACKETS_FORMAT_QUERY(`${Object.keys(thing)[0]}${thing[THING_KEY]}`) : CURLY_BRACKETS_FORMAT_QUERY()
+            : type === 'object' ? SQUARE_BRACKETS_FORMAT_QUERY(Object.keys(thing).length)
                 : type === STR || type === NUMBER || type === BOOL || type === BYTES ? `${thing}`
                     : type === null || type === NIL ? NIL
-                        : type === WRAP ? ANGLE_BRACKETS_QUERY(`${customTypes.length?customTypes.find(t=> t.type_id==thing[WRAP_KEY][0]).name:thing[WRAP_KEY][0]}, ${THING_KEY}${thing[WRAP_KEY][1][THING_KEY]}`)
-                            : type === SET ? SQUARE_BRACKETS_QUERY(thing[SET_KEY].length)
+                        : type === WRAP ? ANGLE_BRACKETS_FORMAT_QUERY(`${customTypes.length?customTypes.find(t=> t.type_id==thing[WRAP_KEY][0]).name:thing[WRAP_KEY][0]}, ${THING_KEY}${thing[WRAP_KEY][1][THING_KEY]}`)
+                            : type === SET ? SQUARE_BRACKETS_FORMAT_QUERY(thing[SET_KEY].length)
                                 : '';
 };
 
@@ -342,6 +342,8 @@ const getSorting = (order, orderBy) => {
 
 const replacer = (_key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
 
+const toNum = v => +v || v;
+
 export {
     allDataTypes,
     Arguments,
@@ -419,6 +421,7 @@ export {
     TitlePage,
     TitlePage2,
     TitlePage3,
+    toNum,
     TopBarMenu,
     TreeBranch,
     TwoLabelSwitch,

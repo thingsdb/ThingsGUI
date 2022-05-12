@@ -26,14 +26,14 @@ const Run = ({item, type}) => {
     const [output, setOutput] = React.useState('');
     const [tabIndex, setTabIndex] = React.useState(0);
     const editState = useEdit()[0];
-    const {val} = editState;
+    const {obj} = editState;
 
     const handleResult = (data) => {
         setOutput(data);
     };
     const handleClickRun = () => {
         if(type === 'procedure') {
-            ProcedureActions.runProcedure(scope, item.name, val, tag, handleResult);
+            ProcedureActions.runProcedure(scope, item.name, obj, tag, handleResult);
         }
     };
 
