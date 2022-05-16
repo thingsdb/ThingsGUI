@@ -110,7 +110,6 @@ const queries = {
             });
         },
         enum: (name, list) => {
-            // TODO blob bug; don't support blobs?
             let hasBlob = false;
             const obj = list.reduce((res, v) => {
                 let blob = v.propertyBlob;
@@ -140,7 +139,6 @@ const queries = {
             });
         }
     },
-    // TODO add blob
     mod: {
         addField: {
             type: (name, update) => ({

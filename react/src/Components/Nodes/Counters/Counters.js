@@ -31,13 +31,10 @@ const header = [
         {ky: 'queries_from_cache', label: 'Queries from cache'},
         {ky: 'wasted_cache', label: 'Wasted cache'},
     ]},
-    {ky: 'title3', title: 'WATCHER', labels: [
-        {ky: 'watcher_failed', label: 'Watcher failed'}, // TODO
-    ]},
-    {ky: 'title4', title: 'GARBAGE', labels: [
+    {ky: 'title3', title: 'GARBAGE', labels: [
         {ky: 'garbage_collected', label: 'Garbage collected'},
     ]},
-    {ky: 'title5', title: 'CHANGES', labels: [
+    {ky: 'title4', title: 'CHANGES', labels: [
         {ky: 'changes_with_gap', label: 'Changes with gap'},
         {ky: 'changes_skipped', label: 'Changes skipped'},
         {ky: 'changes_failed', label: 'Changes failed'},
@@ -48,7 +45,7 @@ const header = [
         {ky: 'longest_change_duration', label: 'Longest change duration', fn: (d) => d && d.toFixed(3) + ' s'},
         {ky: 'average_change_duration', label: 'Average change duration', fn: (d) => d && d.toFixed(3) + ' s'},
     ]},
-    {ky: 'title6', title: 'TASKS', labels: [
+    {ky: 'title5', title: 'TASKS', labels: [
         {ky: 'tasks_success', label: 'Successful tasks'},
         {ky: 'tasks_with_error', label: 'Tasks with error'},
     ]}
