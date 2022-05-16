@@ -37,7 +37,7 @@ const logLevels = [
 
 const initialState = {
     show: false,
-    logLevel: '',
+    logLevel: 0,
 };
 
 const tag = LoglevelTAG;
@@ -63,7 +63,7 @@ const Loglevel = ({node}) => {
     const handleClickOk = () => {
         NodesActions.setLoglevel(
             node.node_id,
-            logLevel,
+            Number(logLevel),
             tag,
             () => setState({...state, show: false})
         );

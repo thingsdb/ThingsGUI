@@ -310,7 +310,7 @@ class NodesStore extends BaseStore {
 
     onAddNode(config, tag, cb) { // secret , nodename [, port]
         const query = NEW_NODE_QUERY(config.port);
-        const jsonArgs = NEW_NODE_ARGS(config.secret, config.nName, config.port);
+        const jsonArgs = NEW_NODE_ARGS(config.secret, config.nName, Number(config.port));
         this.emit('query', {
             scope: THINGSDB_SCOPE,
             query,

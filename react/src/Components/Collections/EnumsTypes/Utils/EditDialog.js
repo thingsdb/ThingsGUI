@@ -131,6 +131,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                     val: !isType,
                 });
                 setAction('addField');
+                setState(initState);
                 break;
             case 'definition':
                 setShow({...initShow,
@@ -138,6 +139,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
                     method: true,
                 });
                 setAction('addMethod');
+                setState(initState);
                 break;
             }
         });
@@ -165,7 +167,6 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
             handleQuery(p, 'met');
             setShow({...initShow,
                 method: true,
-                callback: true,
             });
             break;
         case 'default':

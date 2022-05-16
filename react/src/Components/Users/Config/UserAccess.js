@@ -103,14 +103,14 @@ const UserAccess = ({user, collections}) => {
             ThingsdbActions.grant(
                 user.name,
                 key,
-                value,
+                Number(value),
                 tag,
             );
         } else {
             ThingsdbActions.revoke(
                 user.name,
                 key,
-                value,
+                Number(value),
                 tag,
             );
         }

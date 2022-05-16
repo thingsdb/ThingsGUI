@@ -27,7 +27,7 @@ const PropertyVal = ({category, onChange, customTypes, enums, scope}) => {
     const dataTypes = category == 'type' ? allTypes : [STR, INT, FLOAT, BYTES];
 
     React.useEffect(()=>{
-        onChange({propertyVal: val, propertyBlob: blob});
+        onChange({propertyVal: [INT, FLOAT].includes(dataType) ? Number(val) : val, propertyBlob: blob});
     }, [val, blob]);
 
     const handleOnChangeType = (t) => {

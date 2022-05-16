@@ -92,7 +92,7 @@ const queries = {
                 // the set_type_ prefix is there to guarantee that the key in the argument object is unique.
                 const uniqueKey = `set_type_${v.propertyName}`;
 
-                res.value.push(`${v.propertyName}: ${v.propertyType ? `'${v.propertyType}'` : `${v.definition}`}`);
+                res.value.push(`${v.propertyName}: ${v.propertyType ? `'${v.propertyType}'` : `'${v.definition}'`}`);
                 res.valueJson = {...res.valueJson, [uniqueKey]: v.propertyType ? v.propertyType : v.definition};
                 res.valueQuery.push(`${v.propertyName}: ${v.propertyType ? uniqueKey : `closure(${uniqueKey})`}`);
 
@@ -110,7 +110,6 @@ const queries = {
             });
         },
         enum: (name, list) => {
-            // TODO blob bug; don't support blobs?
             let hasBlob = false;
             const obj = list.reduce((res, v) => {
                 let blob = v.propertyBlob;
@@ -140,7 +139,6 @@ const queries = {
             });
         }
     },
-    // TODO add blob
     mod: {
         addField: {
             type: (name, update) => ({

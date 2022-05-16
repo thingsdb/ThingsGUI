@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { StartStopPolling } from '../../Utils';
 
-const Buttons = ({extraButtons, link, onRefresh}) => (
+const Buttons = ({extraButtons, link, onRefresh, title}) => (
     <Grid item container xs={12}>
         <Grid container item xs={6} spacing={1}>
             {extraButtons.map((b, i) => (
@@ -26,14 +26,14 @@ const Buttons = ({extraButtons, link, onRefresh}) => (
                 </Tooltip>
             </Grid>
             <Grid item>
-                <Tooltip disableFocusListener disableTouchListener title="Refresh counters">
+                <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title}`}>
                     <Button variant="text" color="primary" onClick={onRefresh} >
                         <RefreshIcon color="primary" />
                     </Button>
                 </Tooltip>
             </Grid>
             <Grid item>
-                <StartStopPolling onPoll={onRefresh} title="counters" variant="text" />
+                <StartStopPolling onPoll={onRefresh} title={title} variant="text" />
             </Grid>
         </Grid>
     </Grid>
@@ -43,6 +43,7 @@ Buttons.propTypes = {
     extraButtons: PropTypes.arrayOf(PropTypes.object).isRequired,
     link: PropTypes.string.isRequired,
     onRefresh: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
 };
 
 export default Buttons;

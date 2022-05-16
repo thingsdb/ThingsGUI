@@ -71,7 +71,7 @@ const Add = ({nodeId}) => {
                 file: form.file,
                 time: switches.time ? form.time : null,
                 repeat: switches.repeat ? form.repeat : null,
-                maxFiles: switches.maxFiles ? form.maxFiles : null,
+                maxFiles: switches.maxFiles ? Number(form.maxFiles) : null,
             },
             tag,
             () => setState({...state, show: false})
