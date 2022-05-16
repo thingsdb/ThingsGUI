@@ -132,6 +132,7 @@ export default {
             'restrict': 'Set or remove a value restriction on a thing. Function restriction() can be used to view the current restriction.',
             'restriction': 'Returns the value restriction of a thing as type str or nil when the thing is not value restricted.',
             'set': 'Creates a new property on a thing. If the property already existed then the old property will be overwritten. This function is equal to an assignment except that it can be used when the name of the property is dynamic.',
+            'search': 'Find the parent(s) of a given thing.',
             'to_type': 'Converts a thing into an instance of a given Type.',
             'values': 'Returns an list with all the property values of a thing. The same could be returned using map so the following statement is true: (.values() == .map(|_, v| v))',
             'wrap': 'Wrap a thing with a Type.',
