@@ -92,7 +92,7 @@ const queries = {
                 // the set_type_ prefix is there to guarantee that the key in the argument object is unique.
                 const uniqueKey = `set_type_${v.propertyName}`;
 
-                res.value.push(`${v.propertyName}: ${v.propertyType ? `'${v.propertyType}'` : `${v.definition}`}`);
+                res.value.push(`${v.propertyName}: ${v.propertyType ? `'${v.propertyType}'` : `'${v.definition}'`}`);
                 res.valueJson = {...res.valueJson, [uniqueKey]: v.propertyType ? v.propertyType : v.definition};
                 res.valueQuery.push(`${v.propertyName}: ${v.propertyType ? uniqueKey : `closure(${uniqueKey})`}`);
 

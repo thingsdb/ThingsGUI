@@ -80,6 +80,7 @@ const Counters = ({nodeId, offline, counters}) => {
                     extraButtons={[<CountersReset key="counters_reset_button" nodeId={nodeId} />]}
                     link={link}
                     onRefresh={handleRefresh}
+                    title="counters"
                 />
             )}
         </Grid>

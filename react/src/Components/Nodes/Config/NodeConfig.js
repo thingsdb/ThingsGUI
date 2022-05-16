@@ -91,6 +91,7 @@ const NodeConfig = ({nodeId, offline, node}) => {
                     extraButtons={[<Loglevel key="loglevel_button" node={node} />, <Shutdown key="shutdown_button" node={node} />]}
                     link={link}
                     onRefresh={handleRefresh}
+                    title="node info"
                 />
             )}
         </Grid>

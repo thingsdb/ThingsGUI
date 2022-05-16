@@ -132,11 +132,12 @@ const Add = () => {
                     fullWidth
                     helperText={errors.port}
                     id="port"
+                    inputProps={{min: '1'}}
                     label="Port"
                     margin="dense"
                     onChange={handleOnChange}
                     spellCheck={false}
-                    type="text"
+                    type="number"
                     value={form.port}
                     variant="standard"
                 />

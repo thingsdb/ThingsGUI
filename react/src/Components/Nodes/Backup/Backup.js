@@ -97,6 +97,7 @@ const Backup = ({nodeId, offline, backups}) => {
                     extraButtons={[<Add key="add_button" nodeId={nodeId} />]}
                     link={link}
                     onRefresh={handleRefresh}
+                    title="backup"
                 />
             )}
         </Grid>

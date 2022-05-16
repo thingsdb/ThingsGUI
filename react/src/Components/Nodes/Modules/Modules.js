@@ -63,6 +63,7 @@ const Modules = ({nodeId, offline, modules}) => {
                     extraButtons={[<Add key="add_button" nodeId={nodeId} />]}
                     link={link}
                     onRefresh={handleRefresh}
+                    title="modules"
                 />
             )}
         </Grid>

@@ -7,23 +7,23 @@ import TextField from '@mui/material/TextField';
 const timeUnit = [
     {
         label: 'Second',
-        value: '1'
+        value: 1
     },
     {
         label: 'Minute',
-        value: '60'
+        value: 60
     },
     {
         label: 'Hour',
-        value: '3600'
+        value: 3600
     },
     {
         label: 'Day',
-        value: '86400'
+        value: 86400
     },
     {
         label: 'Week',
-        value: '604800'
+        value: 604800
     },
 ];
 
@@ -34,7 +34,7 @@ const TimePeriodPicker = ({onChange}) => {
     });
 
     React.useEffect(() => {
-        onChange(`${state.number * state.unit}`);
+        onChange(Number(state.number * state.unit));
     },
     [state.number, state.unit],
     );
