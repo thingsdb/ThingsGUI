@@ -92,7 +92,7 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onRunProcedure(scope, name, args, tag,  cb=()=>null) {
+    onRunProcedure(scope, name, args, tag,  cb=()=>null, failCb=()=>null) {
         this.emit('run', {
             scope,
             procedure: {
@@ -102,6 +102,7 @@ class ProcedureStore extends BaseStore {
         }).done((data) => {
             cb(data);
         }).fail((event, status, message) => {
+            failCb();
             ErrorActions.setMsgError(tag, message.Log);
         });
     }

@@ -1,5 +1,4 @@
 import { amber } from '@mui/material/colors';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -9,7 +8,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { ProcedureActions } from '../../../Stores';
-import { ErrorMsg, InputField, QueryOutput, SimpleModal, useEdit } from '../../Utils';
+import { ErrorMsg, InputField, QueryOutput, SendButton, SimpleModal, useEdit } from '../../Utils';
 import { RunProcedureDialogTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
 
@@ -19,6 +18,7 @@ const dataTypes = [BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIME
 const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
     const [output, setOutput] = React.useState('');
     const [tabIndex, setTabIndex] = React.useState(0);
+    const [loading, setLoading] = React.useState(false);
     const editState = useEdit()[0];
     const {obj} = editState;
 
@@ -30,15 +30,24 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
         setOutput(data);
         const elmnt = document.getElementById('output');
         elmnt.scrollIntoView();
+        setTimeout(()=> {
+            setLoading(false);
+        }, 750);
     };
 
     const handleClickOk = () => {
+        setLoading(true);
         ProcedureActions.runProcedure(
             scope,
             procedure.name,
             obj,
             tag,
             handleResult,
+            () => {
+                setTimeout(()=> {
+                    setLoading(false);
+                }, 750);
+            }
         );
     };
 
@@ -61,9 +70,12 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
                             </Typography>
                         </ListItem>
                     )}
-                    <Button color="primary" onClick={handleClickOk}>
-                        {'Run'}
-                    </Button>
+                    <SendButton
+                        label="Run"
+                        loading={loading}
+                        onClickSend={handleClickOk}
+                        variant="text"
+                    />
                 </React.Fragment>
             }
             maxWidth="md"

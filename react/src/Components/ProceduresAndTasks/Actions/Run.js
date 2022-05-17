@@ -1,5 +1,4 @@
 import { amber } from '@mui/material/colors';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
@@ -12,7 +11,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { ProcedureActions } from '../../../Stores';
-import { ErrorMsg, InputField, QueryOutput, useEdit } from '../../Utils';
+import { ErrorMsg, InputField, QueryOutput, SendButton, useEdit } from '../../Utils';
 import { RunProcedureTAG } from '../../../Constants/Tags';
 import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIABLE } from '../../../Constants/ThingTypes';
 import { THINGSDB_SCOPE } from '../../../Constants/Scopes';
@@ -25,15 +24,31 @@ const scope = THINGSDB_SCOPE;
 const Run = ({item, type}) => {
     const [output, setOutput] = React.useState('');
     const [tabIndex, setTabIndex] = React.useState(0);
+    const [loading, setLoading] = React.useState(false);
     const editState = useEdit()[0];
     const {obj} = editState;
 
     const handleResult = (data) => {
         setOutput(data);
+        setTimeout(()=> {
+            setLoading(false);
+        }, 750);
     };
     const handleClickRun = () => {
+        setLoading(true);
         if(type === 'procedure') {
-            ProcedureActions.runProcedure(scope, item.name, obj, tag, handleResult);
+            ProcedureActions.runProcedure(
+                scope,
+                item.name,
+                obj,
+                tag,
+                handleResult,
+                () => {
+                    setTimeout(()=> {
+                        setLoading(false);
+                    }, 750);
+                }
+            );
         }
     };
 
@@ -67,15 +82,11 @@ const Run = ({item, type}) => {
                         variant: 'caption'
                     }}
                     action={
-                        <Button
-                            onClick={handleClickRun}
-                            variant="outlined"
-                            color="primary"
-                            size="small"
-                            sx={{margin: '16px'}}
-                        >
-                            {'Run'}
-                        </Button>
+                        <SendButton
+                            label="Run"
+                            loading={loading}
+                            onClickSend={handleClickRun}
+                        />
                     }
                 />
                 <CardActions disableSpacing>

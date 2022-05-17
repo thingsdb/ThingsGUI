@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { withVlow } from 'vlow';
-import * as React from 'react';
-import LoadingButton from '@mui/lab/LoadingButton';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import { CollectionStore } from '../../Stores';
+import { SendButton } from '../Utils';
 
 const withStores = withVlow([{
     store: CollectionStore,
@@ -12,14 +12,12 @@ const withStores = withVlow([{
 }]);
 
 const SubmitButton = ({canSubmit, loading, onClickSubmit}) => (
-    <LoadingButton
+    <SendButton
         disabled={!canSubmit}
-        onClick={onClickSubmit}
+        label="Submit"
         loading={loading}
-        variant="outlined"
-    >
-        {'Submit'}
-    </LoadingButton>
+        onClickSend={onClickSubmit}
+    />
 );
 
 SubmitButton.propTypes = {
