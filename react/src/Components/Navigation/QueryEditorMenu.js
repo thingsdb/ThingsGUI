@@ -13,7 +13,7 @@ const QueryEditorMenu = () => (
         <ListItem
             button
             component={RouterLink}
-            to={location => ({...location, pathname: `/${EDITOR_ROUTE}`})}
+            to={`/${EDITOR_ROUTE}`}
         >
             <ListItemIcon>
                 <CodeIcon color="primary" />

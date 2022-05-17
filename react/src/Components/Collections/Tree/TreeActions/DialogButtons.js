@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 import CodeIcon from '@mui/icons-material/Code';
@@ -19,10 +19,11 @@ import RemoveThing from './RemoveThing';
 
 
 const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, tag, thing, isRoot}) => {
-    let history = useHistory();
+    let navigate = useNavigate();
+    let location = useLocation();
 
     const handleClickOpenEditor = () => {
-        historyNavigate(history, `/${EDITOR_ROUTE}`, {scope: scope, query: child.type===THING ? THING_FORMAT_QUERY(child.id) : THING_PROP_FORMAT_QUERY(parent.id, child.name)});
+        historyNavigate(navigate, location, `/${EDITOR_ROUTE}`, {scope: scope, query: child.type===THING ? THING_FORMAT_QUERY(child.id) : THING_PROP_FORMAT_QUERY(parent.id, child.name)});
     };
 
     // buttons visible

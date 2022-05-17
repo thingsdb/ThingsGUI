@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '@mui/material/Button';
@@ -13,7 +13,8 @@ import { RemoveCollectionTAG } from '../../../Constants/Tags';
 const tag = RemoveCollectionTAG;
 
 const Remove = ({collection}) => {
-    let history = useHistory();
+    let navigate = useNavigate();
+    let location = useLocation();
     const [show, setShow] = React.useState(false);
     const name = React.useState(collection.name)[0]; //to prevent update of name to undefined, after it is deleted.
     const [switchDel, setSwitchDel] = React.useState(false);
@@ -32,7 +33,7 @@ const Remove = ({collection}) => {
         ThingsdbActions.removeCollection(
             collection.name,
             tag,
-            () => historyNavigate(history, '/'),
+            () => historyNavigate(navigate, location, '/'),
         );
     };
 

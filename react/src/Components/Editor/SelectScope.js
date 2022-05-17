@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useHistory } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { withVlow } from 'vlow';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import NativeSelect from '@mui/material/NativeSelect';
@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { NodesStore, ThingsdbStore } from '../../Stores';
-import { getScopes2, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam } from '../Utils';
+import { getScopes2 } from '../Utils';
 import { COLLECTION_SCOPE, THINGSDB_SCOPE } from '../../Constants/Scopes';
 
 const withStores = withVlow([{
@@ -20,10 +20,10 @@ const withStores = withVlow([{
 
 
 const SelectScope = ({onChangeScope, collections, nodes}) => {
-    let history = useHistory();
+    let [searchParams, setSearchParams] = useSearchParams();
 
     const [name, setName] = React.useState(() => {
-        let scopeParam = historyGetQueryParam(history, 'scope');
+        let scopeParam = searchParams.get('scope');
         if (scopeParam) {
             return scopeParam;
         }
@@ -34,13 +34,17 @@ const SelectScope = ({onChangeScope, collections, nodes}) => {
 
     React.useEffect(()=> {
         let sName = scopes.includes(name) ? name : THINGSDB_SCOPE;
-        historySetQueryParam(history, 'scope', sName);
+        const current = Object.fromEntries(searchParams);
+        setSearchParams({ ...current, scope: sName });
         onChangeScope(sName);
-    }, [name, scopes]);
+    }, [name, scopes, searchParams]);
 
-    React.useEffect(() => {
-        return () => historyDeleteQueryParam(history, 'scope');
-    }, [history]);
+    // React.useEffect(() => {
+    //     return () => {
+    //         const { scope, ...newParams } = Object.fromEntries(searchParams); // TODO delete
+    //         setSearchParams(newParams);
+    //     };
+    // }, [searchParams, setSearchParams]);
 
     const handleOnChangeScope = ({target}) => {
         const {value} = target;

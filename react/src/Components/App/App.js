@@ -1,4 +1,4 @@
-import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, useSearchParams } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { CollectionsMenu, OverviewMenu, ProceduresMenu, TasksMenu, TopBar, UsersMenu, QueryEditorMenu } from '../Navigation';
 import { COLLECTION_ROUTE, EDITOR_ROUTE, PROCEDURE_ROUTE, TASK_ROUTE, USER_ROUTE } from '../../Constants/Routes';
-import { DrawerLayout, ErrorToast, getIdFromPath, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam } from '../Utils';
+import { DrawerLayout, ErrorToast, getIdFromPath } from '../Utils';
 import { Procedure, Task } from '../ProceduresAndTasks';
 import Collection from '../Collections';
 import Editor from '../Editor';
@@ -21,12 +21,12 @@ import Welcome from '../Welcome';
 
 const nodes = 'nodes';
 const App = () => {
-    let history = useHistory();
     let location = useLocation();
+    let [searchParams, setSearchParams] = useSearchParams();
 
     const [menuOpen, setMenuOpen] = React.useState(true);
     const [drawerContent, setDrawerContent] = React.useState(() => {
-        let drawerParam = historyGetQueryParam(history, 'drawer');
+        let drawerParam = searchParams.get('drawer');
         if (drawerParam) {
             return drawerParam;
         }
@@ -39,12 +39,14 @@ const App = () => {
     const taskId = getIdFromPath(location.pathname, TASK_ROUTE);
 
     const handleDrawerOpen = () => {
-        historySetQueryParam(history, 'drawer', nodes);
+        const current = Object.fromEntries(searchParams);
+        setSearchParams({ ...current, drawer: nodes });
         setDrawerContent(nodes);
     };
 
     const handleDrawerClose = () => {
-        historyDeleteQueryParam(history, 'drawer');
+        const { drawer, ...newParams } = Object.fromEntries(searchParams); // TODO delete?
+        setSearchParams(newParams);
         setDrawerContent(null);
     };
 
@@ -82,14 +84,14 @@ const App = () => {
                 mainContent={
                     <Grid container alignItems="flex-start">
                         <Grid container item xs={12} sx={{padding: '0px 8px 8px 8px'}}>
-                            <Switch>
-                                <Route exact path="/" component={Welcome} />
-                                <Route exact path={`/${COLLECTION_ROUTE}/${collectionName}`} component={Collection} />
-                                <Route exact path={`/${USER_ROUTE}/${userName}`} component={User} />
-                                <Route exact path={`/${PROCEDURE_ROUTE}/${procedureName}`} component={Procedure} />
-                                <Route exact path={`/${TASK_ROUTE}/${taskId}`} component={Task} />
-                                <Route exact path={`/${EDITOR_ROUTE}`} component={Editor} />
-                            </Switch>
+                            <Routes>
+                                <Route path="/" element={<Welcome />} />
+                                <Route path={`/${COLLECTION_ROUTE}/${collectionName}`} element={<Collection />} />
+                                <Route path={`/${USER_ROUTE}/${userName}`} element={<User />} />
+                                <Route path={`/${PROCEDURE_ROUTE}/${procedureName}`} element={<Procedure />} />
+                                <Route path={`/${TASK_ROUTE}/${taskId}`} element={<Task />} />
+                                <Route path={`/${EDITOR_ROUTE}`} element={<Editor />} />
+                            </Routes>
                         </Grid>
                     </Grid>
                 }

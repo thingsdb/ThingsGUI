@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -11,7 +11,8 @@ import { RemoveProcedureTAG } from '../../../Constants/Tags';
 const tag = RemoveProcedureTAG;
 
 const Remove = ({item, scope, type}) => {
-    let history = useHistory();
+    let navigate = useNavigate();
+    let location = useLocation();
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState('');
 
@@ -31,7 +32,7 @@ const Remove = ({item, scope, type}) => {
 
     const handleClickOk = () => {
         let fn = type === 'procedure' ? ProcedureActions.deleteProcedure : TaskActions.deleteTask;
-        fn(scope, identifier, tag, () => historyNavigate(history, '/'));
+        fn(scope, identifier, tag, () => historyNavigate(navigate, location, '/'));
     };
 
     return(

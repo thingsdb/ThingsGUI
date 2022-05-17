@@ -1,6 +1,6 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 /*eslint-disable react/no-multi-comp*/
-import {useHistory} from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -10,7 +10,6 @@ import Slide from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
 // import {version} from '../../package.json';
 
-import {historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Utils';
 import {TopBar} from '../Navigation';
 import DashboardContent from './DashboardContent';
 
@@ -21,9 +20,10 @@ const Transition = React.forwardRef((props, ref) => {
 });
 
 const DashboardPage = () => {
-    let history = useHistory();
+    let location = useLocation();
+    let [searchParams, setSearchParams] = useSearchParams();
     const [open, setOpen] = React.useState(() => {
-        let dashboardParam = historyGetQueryParam(history, 'dashboard');
+        let dashboardParam = searchParams.get('dashboard');
         if (dashboardParam) {
             return true;
         }
@@ -31,18 +31,20 @@ const DashboardPage = () => {
     });
 
     const handleOpen = React.useCallback(() => {
-        historySetQueryParam(history, 'dashboard', true);
+        const current = Object.fromEntries(searchParams);
+        setSearchParams({ ...current, dashboard: true });
         setOpen(true);
-    }, [history]);
+    }, [searchParams, setSearchParams]);
 
-    React.useEffect(() => {
-        if(history.location.pathname === '/'){
-            handleOpen();
-        }
-    }, [handleOpen, history]);
+    // React.useEffect(() => {
+    //     if(location.pathname === '/'){
+    //         handleOpen();
+    //     }
+    // }, [handleOpen, location]);
 
     const handleClose = () => {
-        historyDeleteQueryParam(history, 'dashboard');
+        const { dashboard, ...newParams } = Object.fromEntries(searchParams); // TODO delete
+        setSearchParams(newParams);
         setOpen(false);
     };
 

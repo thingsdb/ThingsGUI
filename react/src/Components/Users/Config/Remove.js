@@ -1,4 +1,4 @@
-import {useHistory} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -10,7 +10,9 @@ import {RemoveUserTAG} from '../../../Constants/Tags';
 const tag = RemoveUserTAG;
 
 const Remove = ({user}) => {
-    let history = useHistory();
+    let navigate = useNavigate();
+    let location = useLocation();
+
     const [show, setShow] = React.useState(false);
     const [name, setName] = React.useState('');
 
@@ -30,7 +32,7 @@ const Remove = ({user}) => {
         ThingsdbActions.removeUser(
             user.name,
             tag,
-            () => historyNavigate(history, '/'),
+            () => historyNavigate(navigate, location, '/'),
         );
     };
 

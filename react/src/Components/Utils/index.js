@@ -58,6 +58,7 @@ import { parseError, useThingsError } from './useThingsError';
 import VariablesArray from './VariablesArray';
 import ViewEditFields from './ViewEditFields';
 import WarnPopover from './WarnPopover';
+import { createSearchParams } from 'react-router-dom';
 
 import { SET_KEY, THING_KEY, WRAP_KEY } from '../../Constants/CharacterKeys';
 import {
@@ -245,53 +246,21 @@ const getIdFromPath = (pathname, name) => {
     }
 };
 
-const historyNavigate = (history, pathname, queryParams) => {
+const historyNavigate = (navigate, location, pathname, searchParams=null, state=null) => {
     let params = {};
 
     if (pathname) {
         params.pathname = pathname;
     }
 
-    if (queryParams) {
-        let search = '';
-        Object.entries(queryParams).forEach(([key, value], index) => {
-            let queryParam = '';
-            if (index === 0) {
-                queryParam = `?${key}=${value}`;
-            }
-            else {
-                queryParam = `&${key}=${value}`;
-            }
-            search = search.concat(queryParam);
-        });
-        params.search = search;
+    if (searchParams) {
+        params.search = createSearchParams(searchParams).toString();
+    }
+    else {
+        params.search = location.search;
     }
 
-    else if (queryParams === undefined) {
-        params.search = history.location.search;
-    }
-
-    history.push(params);
-};
-
-const historySetQueryParam = (history, name, value) => {
-    let params = new URLSearchParams(history.location.search);
-    params.set(name, value);
-    const string = params.toString();
-    history.push({ search: string });
-};
-
-const historyDeleteQueryParam = (history, name) => {
-    let params = new URLSearchParams(history.location.search);
-    params.delete(name);
-    const string = params.toString();
-    history.push({ search: string });
-};
-
-const historyGetQueryParam = (history, name) => {
-    const params = new URLSearchParams(history.location.search);
-    const result = params.get(name);
-    return result;
+    navigate(params, { state: state });
 };
 
 const getGreetingTime = (m) => {
@@ -379,10 +348,7 @@ export {
     HarmonicCard,
     HarmonicCardContent,
     HarmonicCardHeader,
-    historyDeleteQueryParam,
-    historyGetQueryParam,
     historyNavigate,
-    historySetQueryParam,
     Info,
     InputField,
     isObjectEmpty,

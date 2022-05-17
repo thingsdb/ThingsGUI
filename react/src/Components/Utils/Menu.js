@@ -56,7 +56,7 @@ const Menu = ({onAdd, homeRoute, icon, itemKey, items, onRefresh, title}) => {
                 <List dense>
                     {items.length ? items.map((item, i) => (
                         <ListItem disableGutters key={i}>
-                            <ListItemButton component={RouterLink} to={location => ({...location, pathname: `/${homeRoute}/${item[itemKey]}`})} sx={{ pl: 4 }}>
+                            <ListItemButton component={RouterLink} to={`/${homeRoute}/${item[itemKey]}`} sx={{ pl: 4 }}>
                                 <ListItemIcon>
                                     {icon}
                                 </ListItemIcon>

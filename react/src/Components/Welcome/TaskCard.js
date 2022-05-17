@@ -16,7 +16,7 @@ const TaskCard = ({task}) => (
     <Card sx={{backgroundColor: 'background.default'}}>
         <CardActionArea
             component={RouterLink}
-            to={location => ({...location, pathname: `/${TASK_ROUTE}/${task.id}`})}
+            to={`/${TASK_ROUTE}/${task.id}`}
             sx={{paddingTop: '10px'}}
         >
             <CardContent>
