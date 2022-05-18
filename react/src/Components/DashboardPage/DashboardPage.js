@@ -1,6 +1,6 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 /*eslint-disable react/no-multi-comp*/
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -20,7 +20,6 @@ const Transition = React.forwardRef((props, ref) => {
 });
 
 const DashboardPage = () => {
-    let location = useLocation();
     let [searchParams, setSearchParams] = useSearchParams();
     const [open, setOpen] = React.useState(() => {
         let dashboardParam = searchParams.get('dashboard');
@@ -30,21 +29,18 @@ const DashboardPage = () => {
         return false;
     });
 
-    const handleOpen = React.useCallback(() => {
+    const handleOpen = () => {
         const current = Object.fromEntries(searchParams);
         setSearchParams({ ...current, dashboard: true });
         setOpen(true);
-    }, [searchParams, setSearchParams]);
-
-    // React.useEffect(() => {
-    //     if(location.pathname === '/'){
-    //         handleOpen();
-    //     }
-    // }, [handleOpen, location]);
+    };
 
     const handleClose = () => {
-        const { dashboard, ...newParams } = Object.fromEntries(searchParams); // TODO delete
-        setSearchParams(newParams);
+        const dashboard = searchParams.has('dashboard');
+        if (dashboard) {
+            searchParams.delete('dashboard');
+            setSearchParams(searchParams);
+        }
         setOpen(false);
     };
 

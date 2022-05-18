@@ -19,9 +19,24 @@ const Img = styled('img')(() => ({
 
 const DownloadBlob = ({val, isImg}) => {
     const [link, setLink] = React.useState('');
+    const isComponentUnmounted = React.useRef(false);
 
     React.useEffect(() => {
-        CollectionActions.download(val, setLink);
+        isComponentUnmounted.current = false;
+        return(() => {
+            isComponentUnmounted.current = true;
+        });
+    },[]);
+
+    React.useEffect(() => {
+        CollectionActions.download(
+            val,
+            (l) => {
+                if (!isComponentUnmounted.current) {
+                    setLink(l);
+                }
+            }
+        );
     }, [val]); // eslint-disable-line
 
     return (

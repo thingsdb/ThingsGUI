@@ -18,7 +18,7 @@ const withStores = withVlow([{
 
 const tag = EditorTAG;
 const Editor = ({height, history, input, loading, onQuery}) => {
-    let searchParams = useSearchParams()[0];
+    let [searchParams] = useSearchParams();
 
     const [query, setQuery] = React.useState(() => {
         let query = searchParams.get('query');

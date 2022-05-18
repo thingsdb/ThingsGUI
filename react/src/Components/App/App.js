@@ -45,8 +45,11 @@ const App = () => {
     };
 
     const handleDrawerClose = () => {
-        const { drawer, ...newParams } = Object.fromEntries(searchParams); // TODO delete?
-        setSearchParams(newParams);
+        const drawer = searchParams.has('drawer');
+        if (drawer) {
+            searchParams.delete('drawer');
+            setSearchParams(searchParams);
+        }
         setDrawerContent(null);
     };
 
