@@ -17,11 +17,11 @@ class EnumStore extends BaseStore {
 
     static types = {
         enums: PropTypes.object,
-    }
+    };
 
     static defaults = {
         enums: {},
-    }
+    };
 
     constructor() {
         super(EnumActions);

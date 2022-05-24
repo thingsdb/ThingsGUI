@@ -10,11 +10,11 @@ import {Closure} from '../../../../Utils';
 
 
 const PropertyCallback = ({onChange}) => {
-    const [switchIni, setSwitch] = React.useState(false);
+    const [switchCallback, setSwitchCallback] = React.useState(false);
 
     const handleSwitch = ({target}) => {
         const {checked} = target;
-        setSwitch(checked);
+        setSwitchCallback(checked);
         if (!checked) {
             onChange({callback: ''});
         }
@@ -30,16 +30,16 @@ const PropertyCallback = ({onChange}) => {
                 <FormControlLabel
                     control={(
                         <Switch
-                            checked={switchIni}
+                            checked={switchCallback}
                             color="primary"
-                            id="switchIni"
+                            id="switchCallback"
                             onChange={handleSwitch}
                         />
                     )}
                     label="Add a closure that will be called on each existing instance and can be used to set a new value"
                 />
             </Grid>
-            <Collapse in={switchIni} timeout="auto" unmountOnExit sx={{width: '100%'}}>
+            <Collapse in={switchCallback} timeout="auto" unmountOnExit sx={{width: '100%'}}>
                 <Typography variant="caption">
                     {'Callback'}
                 </Typography>

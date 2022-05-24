@@ -25,7 +25,7 @@ class Piece extends React.Component {
         strokeWidth: PropTypes.number.isRequired,
         trueHole: PropTypes.number.isRequired,
         value: PropTypes.number.isRequired,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -59,7 +59,7 @@ class Piece extends React.Component {
 
     animate = () => {
         this.draw(0);
-    }
+    };
 
     draw = (s) => {
         const {fraction, hole, offset, radius, showLabel, start, trueHole} = this.props;
@@ -88,12 +88,12 @@ class Piece extends React.Component {
             path: p,
             part: s
         });
-    }
+    };
 
     handleStopTimeOut = () => {
         const {timeId} = this.state;
         clearTimeout(timeId);
-    }
+    };
 
     render() {
         const {fill, fraction, hole, offset, radius, showLabel, showPercent, stroke, strokeWidth, value} = this.props;

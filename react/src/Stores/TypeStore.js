@@ -22,11 +22,11 @@ class TypeStore extends BaseStore {
 
     static types = {
         customTypes: PropTypes.object,
-    }
+    };
 
     static defaults = {
         customTypes: {},
-    }
+    };
 
     constructor() {
         super(TypeActions);

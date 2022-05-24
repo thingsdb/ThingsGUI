@@ -27,12 +27,12 @@ class TaskStore extends BaseStore {
     static types = {
         task: PropTypes.object,
         tasks: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
-    }
+    };
 
     static defaults = {
         task: {},
         tasks: {},
-    }
+    };
 
     constructor() {
         super(TaskActions);

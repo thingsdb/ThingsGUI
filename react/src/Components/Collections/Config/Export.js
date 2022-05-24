@@ -40,7 +40,8 @@ const Label = styled(Typography)(({ theme }) => ({
 const tag = ExportCollectionTAG;
 
 const Export = ({collection}) => {
-    const name = React.useState(collection.name)[0]; //to prevent update of name to undefined, after it is deleted.
+    // to prevent update of name to undefined, after it is deleted.
+    const [name] = React.useState(collection.name); // eslint-disable-line
     const [show, setShow] = React.useState(false);
     const [script, setScript] = React.useState('');
 

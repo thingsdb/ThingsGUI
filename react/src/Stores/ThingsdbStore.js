@@ -73,14 +73,14 @@ class ThingsdbStore extends BaseStore {
         collection: PropTypes.object,
         users: PropTypes.arrayOf(PropTypes.object),
         user: PropTypes.object,
-    }
+    };
 
     static defaults = {
         collections: [],
         collection: {},
         users: [],
         user: {},
-    }
+    };
 
     constructor() {
         super(ThingsdbActions);

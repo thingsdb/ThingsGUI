@@ -38,13 +38,13 @@ class CollectionStore extends BaseStore {
         things: PropTypes.object,
         thingCounters: PropTypes.object,
         canSubmit: PropTypes.bool,
-    }
+    };
 
     static defaults = {
         things: {},
         thingCounters: {},
         canSubmit: true,
-    }
+    };
 
     constructor() {
         super(CollectionActions);

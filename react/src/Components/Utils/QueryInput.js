@@ -336,7 +336,7 @@ class QueryInput extends React.Component {
         onChange: PropTypes.func.isRequired,
         input: PropTypes.string.isRequired,
         height: PropTypes.number.isRequired,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -400,7 +400,7 @@ class QueryInput extends React.Component {
 
     handleEditorSize = () => {
         this._editor.layout();
-    }
+    };
 
 
     render() {

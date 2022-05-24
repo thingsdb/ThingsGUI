@@ -93,7 +93,7 @@ VariablesArray.defaultProps = {
 
 VariablesArray.propTypes = {
     onChange: PropTypes.func.isRequired,
-    input: PropTypes.arrayOf(PropTypes.any),
+    input: PropTypes.arrayOf(PropTypes.any), // eslint-disable-line
 };
 
 export default VariablesArray;

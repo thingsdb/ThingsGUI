@@ -7,16 +7,16 @@ import Typography from '@mui/material/Typography';
 
 
 const Wpo = ({onChange, input, disabled}) => {
-    const [switchIni, setSwitch] = React.useState(input);
+    const [switchWpo, setSwitchWpo] = React.useState(input);
 
     React.useEffect(()=>{
-        setSwitch(input);
+        setSwitchWpo(input);
     },[input]);
 
     const handleSetWpo = ({target}) => {
         const {checked} = target;
         if(!disabled) {
-            setSwitch(checked);
+            setSwitchWpo(checked);
             onChange({wpo:checked});
         }
     };
@@ -29,7 +29,7 @@ const Wpo = ({onChange, input, disabled}) => {
                 </Grid>
                 <Grid item>
                     <Switch
-                        checked={switchIni}
+                        checked={switchWpo}
                         onChange={handleSetWpo}
                         sx={{
                             '& .MuiSwitch-switchBase': {

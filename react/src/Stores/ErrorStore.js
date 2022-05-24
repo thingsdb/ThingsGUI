@@ -17,12 +17,12 @@ class ErrorStore extends Vlow.Store {
     static types = {
         toastErrors: PropTypes.arrayOf(PropTypes.string),
         msgError: PropTypes.object,
-    }
+    };
 
     static defaults = {
         toastErrors: [],
         msgError: {},
-    }
+    };
 
     constructor() {
         super(ErrorActions);
