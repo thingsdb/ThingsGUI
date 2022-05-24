@@ -11,10 +11,10 @@ const withStores = withVlow([{
     keys: ['ids']
 }]);
 
-const RoomJoin = ({scope, tag, room, ids}) => {
+const reNumbers = /[0-9]+/g;
 
-    // stringify thingId
-    const roomId = room.includes('room:') ? room.split(':')[1] : null;
+const RoomJoin = ({scope, tag, room, ids}) => {
+    const roomId = room.includes('room:') ? room.match(reNumbers)[0] : null;
     const hasJoined = Boolean(roomId !== null && ids[roomId]);
 
     const handleWatcher = () => {

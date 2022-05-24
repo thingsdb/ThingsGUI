@@ -31,6 +31,7 @@ import moment from 'moment';
 import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import RefreshContainer from './RefreshContainer';
+import RemoveModal from './RemoveModal';
 import SearchInput from './SearchInput';
 import SimpleModal from './SimpleModal';
 import StartStopPolling from './StartStopPolling';
@@ -363,6 +364,7 @@ export {
     QueryInput,
     QueryOutput,
     RefreshContainer,
+    RemoveModal,
     replacer,
     revealCustomType,
     scaleToBinBytes,

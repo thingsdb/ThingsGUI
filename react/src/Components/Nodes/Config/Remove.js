@@ -2,58 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DialogContentText from '@mui/material/DialogContentText';
 
-import { ErrorMsg, SimpleModal } from '../../Utils';
-import {NodesActions} from '../../../Stores';
-import {RemoveNodeTAG} from '../../../Constants/Tags';
+import { RemoveModal } from '../../Utils';
+import { NodesActions } from '../../../Stores';
+import { RemoveNodeTAG } from '../../../Constants/Tags';
 
 const tag = RemoveNodeTAG;
 
 const Remove = ({node}) => {
-    const [show, setShow] = React.useState(false);
+    // to prevent update of name to undefined, after it is deleted.
+    const [name] = React.useState(`${node.node_name}:${node.port}`); // eslint-disable-line
 
-    const handleClickOpen = () => {
-        setShow(true);
-    };
-
-    const handleClickClose = () => {
-        setShow(false);
-    };
-
-    const handleClickOk = () => {
+    const handleClickOk = (callback) => {
         NodesActions.delNode(
             node.node_id,
             tag,
-            () => setShow(false)
+            callback
         );
     };
 
-    const handleKeyPress = (event) => {
-        const {key} = event;
-        if (key == 'Enter') {
-            handleClickOk();
-        }
-    };
-
     return(
-        <SimpleModal
-            button={
-                <Button color="primary" onClick={handleClickOpen}>
-                    <DeleteIcon color="primary" />
-                </Button>
-            }
-            title="CAUTION"
-            open={show}
-            onOk={handleClickOk}
-            onClose={handleClickClose}
-            onKeyPress={handleKeyPress}
-        >
-            <ErrorMsg tag={tag} />
-            <DialogContentText>
-                {'Are you sure you want to remove this node?'}
-            </DialogContentText>
-        </SimpleModal>
+        <RemoveModal
+            buttonComponent={Button}
+            buttonLabel={<DeleteIcon color="primary" />}
+            buttonProps={{color: 'primary'}}
+            onSubmit={handleClickOk}
+            tag={tag}
+            title={`Remove '${name}'`}
+        />
     );
 };
 

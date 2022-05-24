@@ -3,41 +3,30 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {NodesActions} from '../../../Stores';
-import {ErrorMsg, SimpleModal} from '../../Utils';
-import {RemoveModuleTAG} from '../../../Constants/Tags';
+import { NodesActions } from '../../../Stores';
+import { RemoveModal } from '../../Utils';
+import { RemoveModuleTAG } from '../../../Constants/Tags';
 
 const tag = RemoveModuleTAG;
 
 const Remove = ({nodeId, item}) => {
-    const [show, setShow] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setShow(true);
-    };
-
-    const handleClickClose = () => {
-        setShow(false);
-    };
-
-    const handleClickOk = () => {
-        NodesActions.delModule(nodeId, item.name, handleClickClose);
+    const handleClickOk = (callback) => {
+        NodesActions.delModule(
+            nodeId,
+            item.name,
+            callback
+        );
     };
 
     return (
-        <SimpleModal
-            button={
-                <Button color="primary" onClick={handleClickOpen}>
-                    <DeleteIcon color="primary" />
-                </Button>
-            }
-            title={`Remove module: ${item.name}`}
-            open={show}
-            onOk={handleClickOk}
-            onClose={handleClickClose}
-        >
-            <ErrorMsg tag={tag} />
-        </SimpleModal>
+        <RemoveModal
+            buttonComponent={Button}
+            buttonLabel={<DeleteIcon color="primary" />}
+            buttonProps={{color: 'primary'}}
+            onSubmit={handleClickOk}
+            tag={tag}
+            title={`Remove '${item.name}'`}
+        />
     );
 };
 

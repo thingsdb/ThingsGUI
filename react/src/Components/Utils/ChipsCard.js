@@ -1,25 +1,21 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RemoveIcon from '@mui/icons-material/Delete';
-import Switch from '@mui/material/Switch';
 
 import { ChipsCardTAG } from '../../Constants/Tags';
-import { ErrorMsg, HarmonicCardContent, orderByName, SearchInput, SimpleModal, CardMultiButton } from '.';
+import { CardMultiButton, ErrorMsg, HarmonicCardContent, orderByName, RemoveModal, SearchInput } from '.';
 
 
 const step = 20;
 
 const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, title, warnExpression}) => {
     const [deleteItem, setDeleteItem] = React.useState('');
-    const [switchDel, setSwitchDel] = React.useState(false);
     const [searchString, setSearchString] = React.useState('');
     const [maxAmount, setMaxAmount] = React.useState(step);
-
 
     const handleClickDelete = () => {
         onDelete(deleteItem, handleCloseDelete, ChipsCardTAG);
@@ -32,13 +28,9 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
     const handleOpenDelete = (name) => () => {
         setDeleteItem(name);
     };
-    const handleSwitch = ({target}) => {
-        const {checked} = target;
-        setSwitchDel(checked);
-    };
+
     const handleCloseDelete = () => {
         setDeleteItem('');
-        setSwitchDel(false);
     };
 
     const handleSearchString = ({target}) => {
@@ -111,32 +103,13 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
                     </React.Fragment>
                 }
             />
-            <SimpleModal
+            <RemoveModal
                 open={Boolean(deleteItem)}
                 onClose={handleCloseDelete}
-                actionButtons={
-                    <Button color="error" onClick={handleClickDelete} disabled={!switchDel}>
-                        {'Submit'}
-                    </Button>
-                }
-                maxWidth="xs"
-                title={deleteItem?`Are you sure you want to remove '${deleteItem}'?`:''}
-            >
-                <React.Fragment>
-                    <ErrorMsg tag={ChipsCardTAG} />
-                    <FormControlLabel
-                        control={(
-                            <Switch
-                                checked={switchDel}
-                                color="primary"
-                                id="description"
-                                onChange={handleSwitch}
-                            />
-                        )}
-                        label="Are you really sure?"
-                    />
-                </React.Fragment>
-            </SimpleModal>
+                onSubmit={handleClickDelete}
+                tag={ChipsCardTAG}
+                title={deleteItem ? `Remove '${deleteItem}'` : ''}
+            />
         </React.Fragment>
     );
 };

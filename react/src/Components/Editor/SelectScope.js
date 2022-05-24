@@ -32,6 +32,12 @@ const SelectScope = ({onChangeScope, collections, nodes}) => {
 
     const scopes = React.useMemo(() => getScopes2(collections, nodes), [collections, nodes]);
 
+    React.useEffect(() => {
+        // This useEffect is needed to guarantee that scope is updated
+        // in the parent when name is updated via the searchParams.
+        onChangeScope(name);
+    }, [name]);
+
     const handleOnChangeScope = ({target}) => {
         const {value} = target;
         setName(value);
@@ -39,7 +45,6 @@ const SelectScope = ({onChangeScope, collections, nodes}) => {
         let sName = scopes.includes(value) ? value : THINGSDB_SCOPE;
         const current = Object.fromEntries(searchParams);
         setSearchParams({ ...current, scope: sName });
-        onChangeScope(sName);
     };
 
     return (
