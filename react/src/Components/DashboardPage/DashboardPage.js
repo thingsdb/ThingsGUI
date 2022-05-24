@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import {TopBar} from '../Navigation';
 import DashboardContent from './DashboardContent';
 
-const version='version: 1.1.8';
+const version='version: 1.1.9';
 
 const Transition = React.forwardRef((props, ref) => {
     return <Slide direction="down" ref={ref} {...props} mountOnEnter unmountOnExit />;
