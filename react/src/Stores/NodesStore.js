@@ -85,7 +85,7 @@ class NodesStore extends BaseStore {
         node: PropTypes.object,
         nodes: PropTypes.arrayOf(PropTypes.object),
         streamInfo: PropTypes.object,
-    }
+    };
 
     static defaults = {
         allNodeInfo: [],
@@ -97,7 +97,7 @@ class NodesStore extends BaseStore {
         node: {},
         nodes: [],
         streamInfo: {},
-    }
+    };
 
     constructor() {
         super(NodesActions);

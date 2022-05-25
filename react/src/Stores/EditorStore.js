@@ -10,11 +10,11 @@ class EditorStore extends Vlow.Store {
 
     static types = {
         history: PropTypes.arrayOf(PropTypes.string),
-    }
+    };
 
     static defaults = {
         history: [],
-    }
+    };
 
     constructor() {
         super(EditorActions);

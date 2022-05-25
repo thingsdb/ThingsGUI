@@ -41,7 +41,7 @@ class ApplicationStore extends BaseStore {
         input: PropTypes.string,
         cachedConnections: PropTypes.object,
         useCookies: PropTypes.bool
-    }
+    };
 
     static defaults = {
         authOnly: false,
@@ -53,7 +53,7 @@ class ApplicationStore extends BaseStore {
         input: '',
         cachedConnections: {},
         useCookies: false
-    }
+    };
 
     constructor() {
         super(ApplicationActions);

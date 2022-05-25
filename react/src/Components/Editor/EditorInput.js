@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { withVlow } from 'vlow';
 import CardActions from '@mui/material/CardActions';
 import PropTypes from 'prop-types';
@@ -6,7 +6,7 @@ import React from 'react';
 
 import { EditorActions, EditorStore, ErrorActions } from '../../Stores';
 import { EditorTAG } from '../../Constants/Tags';
-import { historyGetQueryParam, QueryInput } from '../Utils';
+import { QueryInput } from '../Utils';
 import SubmitButton from './SubmitButton';
 
 
@@ -18,10 +18,10 @@ const withStores = withVlow([{
 
 const tag = EditorTAG;
 const Editor = ({height, history, input, loading, onQuery}) => {
-    let routerHistory = useHistory();
+    let [searchParams] = useSearchParams();
 
     const [query, setQuery] = React.useState(() => {
-        let query = historyGetQueryParam(routerHistory, 'query');
+        let query = searchParams.get('query');
         if (query) {
             return query;
         } else {
@@ -29,7 +29,7 @@ const Editor = ({height, history, input, loading, onQuery}) => {
         }
     });
     const [queryInput, setQueryInput] = React.useState(() => {
-        let query = historyGetQueryParam(routerHistory, 'query');
+        let query = searchParams.get('query');
         if (query) {
             return query;
         } else {

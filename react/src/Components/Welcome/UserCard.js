@@ -15,7 +15,7 @@ const UserCard = ({user}) => (
     <Card sx={{backgroundColor: 'background.default'}}>
         <CardActionArea
             component={RouterLink}
-            to={location => ({...location, pathname: `/${USER_ROUTE}/${user.name}`})}
+            to={`/${USER_ROUTE}/${user.name}`}
             sx={{paddingTop: '10px'}}
         >
             <CardContent>

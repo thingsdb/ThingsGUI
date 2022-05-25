@@ -12,7 +12,7 @@ const OverviewMenu = () => (
         <ListItem
             button
             component={RouterLink}
-            to={location => ({...location, pathname: '/'})}
+            to="/"
         >
             <ListItemIcon>
                 <HomeIcon color="primary" />

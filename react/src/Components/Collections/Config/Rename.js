@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { withVlow } from 'vlow';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
@@ -37,7 +37,9 @@ const tag = RenameCollectionTAG;
 
 const Rename = ({collection, collections}) => {
     const [state, setState] = React.useState(initialState);
-    let history = useHistory();
+    let navigate = useNavigate();
+    let location = useLocation();
+
     const {show, errors, form} = state;
 
     const handleClickOpen = () => {
@@ -68,7 +70,7 @@ const Rename = ({collection, collections}) => {
                 collection.name,
                 form.name,
                 tag,
-                () => historyNavigate(history, `/${COLLECTION_ROUTE}/${form.name}`)
+                () => historyNavigate(navigate, location, `/${COLLECTION_ROUTE}/${form.name}`)
             );
         }
     };

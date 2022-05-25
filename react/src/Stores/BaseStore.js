@@ -214,13 +214,13 @@ class EventStore extends BaseStore {
         events: PropTypes.object,
         ids: PropTypes.object,
         logging: PropTypes.arrayOf(PropTypes.object),
-    }
+    };
 
     static defaults = {
         events: {},
         ids: {},
         logging: []
-    }
+    };
 
     constructor() {
         super(EventActions);

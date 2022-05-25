@@ -11,9 +11,13 @@ module.exports = {
             'experimentalObjectRestSpread': true,
             'jsx': true
         },
-        'sourceType': 'module'
+        'sourceType': 'module',
+        'requireConfigFile': false,
+        'babelOptions': {
+            'presets': ['@babel/preset-react']
+        },
     },
-    'parser': 'babel-eslint',
+    'parser': '@babel/eslint-parser',
     'plugins': [
         'react',
         'react-hooks'

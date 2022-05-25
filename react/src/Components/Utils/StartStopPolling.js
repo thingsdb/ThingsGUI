@@ -11,11 +11,11 @@ class StartStopPolling extends React.Component {
         onPoll: PropTypes.func.isRequired,
         title: PropTypes.string.isRequired,
         variant: PropTypes.string,
-    }
+    };
 
     static defaultProps = {
         variant: 'text',
-    }
+    };
 
     constructor(props) {
         super(props);

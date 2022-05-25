@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, createSearchParams, useSearchParams } from 'react-router-dom';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -19,6 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 
 const Menu = ({onAdd, homeRoute, icon, itemKey, items, onRefresh, title}) => {
+    let [searchParams] = useSearchParams();
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -56,7 +57,14 @@ const Menu = ({onAdd, homeRoute, icon, itemKey, items, onRefresh, title}) => {
                 <List dense>
                     {items.length ? items.map((item, i) => (
                         <ListItem disableGutters key={i}>
-                            <ListItemButton component={RouterLink} to={location => ({...location, pathname: `/${homeRoute}/${item[itemKey]}`})} sx={{ pl: 4 }}>
+                            <ListItemButton
+                                component={RouterLink}
+                                to={{
+                                    pathname: `/${homeRoute}/${item[itemKey]}`,
+                                    search: searchParams.has('drawer') ? createSearchParams({drawer: searchParams.get('drawer')}).toString() : ''
+                                }}
+                                sx={{ pl: 4 }}
+                            >
                                 <ListItemIcon>
                                     {icon}
                                 </ListItemIcon>

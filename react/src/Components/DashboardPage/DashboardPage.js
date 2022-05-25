@@ -1,6 +1,6 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 /*eslint-disable react/no-multi-comp*/
-import {useHistory} from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -10,39 +10,37 @@ import Slide from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
 // import {version} from '../../package.json';
 
-import {historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam} from '../Utils';
 import {TopBar} from '../Navigation';
 import DashboardContent from './DashboardContent';
 
-const version='version: 1.1.8';
+const version='version: 1.1.9';
 
 const Transition = React.forwardRef((props, ref) => {
     return <Slide direction="down" ref={ref} {...props} mountOnEnter unmountOnExit />;
 });
 
 const DashboardPage = () => {
-    let history = useHistory();
+    let [searchParams, setSearchParams] = useSearchParams();
     const [open, setOpen] = React.useState(() => {
-        let dashboardParam = historyGetQueryParam(history, 'dashboard');
+        let dashboardParam = searchParams.get('dashboard');
         if (dashboardParam) {
             return true;
         }
         return false;
     });
 
-    const handleOpen = React.useCallback(() => {
-        historySetQueryParam(history, 'dashboard', true);
+    const handleOpen = () => {
+        const current = Object.fromEntries(searchParams);
+        setSearchParams({ ...current, dashboard: true });
         setOpen(true);
-    }, [history]);
-
-    React.useEffect(() => {
-        if(history.location.pathname === '/'){
-            handleOpen();
-        }
-    }, [handleOpen, history]);
+    };
 
     const handleClose = () => {
-        historyDeleteQueryParam(history, 'dashboard');
+        const dashboard = searchParams.has('dashboard');
+        if (dashboard) {
+            searchParams.delete('dashboard');
+            setSearchParams(searchParams);
+        }
         setOpen(false);
     };
 

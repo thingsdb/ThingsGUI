@@ -9,11 +9,11 @@ import PropertyVal from './PropertyVal';
 
 
 const PropertyInitVal = ({category, onChange, scope}) => {
-    const [switchIni, setSwitch] = React.useState(false);
+    const [switchInit, setSwitchInit] = React.useState(false);
 
     const handleSwitch = ({target}) => {
         const {checked} = target;
-        setSwitch(checked);
+        setSwitchInit(checked);
         if (!checked) {
             onChange({propertyVal:'', propertyBlob: '',});
         }
@@ -29,16 +29,16 @@ const PropertyInitVal = ({category, onChange, scope}) => {
                 <FormControlLabel
                     control={(
                         <Switch
-                            checked={switchIni}
+                            checked={switchInit}
                             color="primary"
-                            id="switchIni"
+                            id="switchInit"
                             onChange={handleSwitch}
                         />
                     )}
                     label="Add initial value or closure"
                 />
             </Grid>
-            <Collapse in={switchIni} timeout="auto" unmountOnExit sx={{width: '100%'}}>
+            <Collapse in={switchInit} timeout="auto" unmountOnExit sx={{width: '100%'}}>
                 <PropertyVal category={category} onChange={handleVal} scope={scope} />
             </Collapse>
         </React.Fragment>

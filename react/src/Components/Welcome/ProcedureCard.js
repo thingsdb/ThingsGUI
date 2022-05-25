@@ -15,7 +15,7 @@ const ProcedureCard = ({procedure}) => (
     <Card sx={{backgroundColor: 'background.default'}}>
         <CardActionArea
             component={RouterLink}
-            to={location => ({...location, pathname: `/${PROCEDURE_ROUTE}/${procedure.name}`})}
+            to={`/${PROCEDURE_ROUTE}/${procedure.name}`}
             sx={{paddingTop: '10px'}}
         >
             <CardContent>

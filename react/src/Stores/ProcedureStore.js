@@ -28,12 +28,12 @@ class ProcedureStore extends BaseStore {
     static types = {
         procedure: PropTypes.object,
         procedures: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
-    }
+    };
 
     static defaults = {
         procedure: {},
         procedures: {},
-    }
+    };
 
     constructor() {
         super(ProcedureActions);

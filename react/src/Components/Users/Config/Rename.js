@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { withVlow } from 'vlow';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -35,8 +35,10 @@ const validation = {
 const tag = RenameUserTAG;
 
 const Rename = ({user, users}) => {
+    let navigate = useNavigate();
+    let location = useLocation();
+
     const [state, setState] = React.useState(initialState);
-    let history = useHistory();
     const {show, errors, form} = state;
 
     const handleClickOpen = () => {
@@ -63,7 +65,7 @@ const Rename = ({user, users}) => {
                 user.name,
                 form.name,
                 tag,
-                () => historyNavigate(history, `/${USER_ROUTE}/${form.name}`)
+                () => historyNavigate(navigate, location, `/${USER_ROUTE}/${form.name}`)
             );
         }
     };

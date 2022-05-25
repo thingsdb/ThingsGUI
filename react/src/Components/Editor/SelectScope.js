@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useHistory } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { withVlow } from 'vlow';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import NativeSelect from '@mui/material/NativeSelect';
@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { NodesStore, ThingsdbStore } from '../../Stores';
-import { getScopes2, historyDeleteQueryParam, historyGetQueryParam, historySetQueryParam } from '../Utils';
+import { getScopes2 } from '../Utils';
 import { COLLECTION_SCOPE, THINGSDB_SCOPE } from '../../Constants/Scopes';
 
 const withStores = withVlow([{
@@ -20,10 +20,10 @@ const withStores = withVlow([{
 
 
 const SelectScope = ({onChangeScope, collections, nodes}) => {
-    let history = useHistory();
+    let [searchParams, setSearchParams] = useSearchParams();
 
     const [name, setName] = React.useState(() => {
-        let scopeParam = historyGetQueryParam(history, 'scope');
+        let scopeParam = searchParams.get('scope');
         if (scopeParam) {
             return scopeParam;
         }
@@ -32,19 +32,19 @@ const SelectScope = ({onChangeScope, collections, nodes}) => {
 
     const scopes = React.useMemo(() => getScopes2(collections, nodes), [collections, nodes]);
 
-    React.useEffect(()=> {
-        let sName = scopes.includes(name) ? name : THINGSDB_SCOPE;
-        historySetQueryParam(history, 'scope', sName);
-        onChangeScope(sName);
-    }, [name, scopes]);
-
     React.useEffect(() => {
-        return () => historyDeleteQueryParam(history, 'scope');
-    }, [history]);
+        // This useEffect is needed to guarantee that scope is updated
+        // in the parent when name is updated via the searchParams.
+        onChangeScope(name);
+    }, [name]);
 
     const handleOnChangeScope = ({target}) => {
         const {value} = target;
         setName(value);
+
+        let sName = scopes.includes(value) ? value : THINGSDB_SCOPE;
+        const current = Object.fromEntries(searchParams);
+        setSearchParams({ ...current, scope: sName });
     };
 
     return (

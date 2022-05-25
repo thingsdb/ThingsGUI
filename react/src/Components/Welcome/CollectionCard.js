@@ -16,7 +16,7 @@ const CollectionCard = ({collection}) => (
     <Card sx={{backgroundColor: 'background.default'}}>
         <CardActionArea
             component={RouterLink}
-            to={location => ({...location, pathname: `/${COLLECTION_ROUTE}/${collection.name}`})}
+            to={`/${COLLECTION_ROUTE}/${collection.name}`}
             sx={{padding: '10px'}}
         >
             <CardMedia
