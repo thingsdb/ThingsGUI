@@ -37,11 +37,16 @@ const Editor = () => {
 
     const handleOutput = (out) => {
         setOutput(out);
-        setLoading(false);
+        setTimeout(()=> {
+            setLoading(false);
+        }, 750);
     };
 
     const handleFail = () => {
         setLoading(false);
+        setTimeout(()=> {
+            setLoading(false);
+        }, 750);
     };
 
     const handleInput = React.useCallback((value) => {

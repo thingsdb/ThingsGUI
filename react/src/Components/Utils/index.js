@@ -32,6 +32,7 @@ import QueryInput from './QueryInput';
 import QueryOutput from './QueryOutput';
 import RefreshContainer from './RefreshContainer';
 import SearchInput from './SearchInput';
+import SendButton from './SendButton';
 import SimpleModal from './SimpleModal';
 import StartStopPolling from './StartStopPolling';
 import StickyHeadTable from './StickyHeadTable';
@@ -401,6 +402,7 @@ export {
     revealCustomType,
     scaleToBinBytes,
     SearchInput,
+    SendButton,
     SimpleModal,
     stableSort,
     StartStopPolling,
