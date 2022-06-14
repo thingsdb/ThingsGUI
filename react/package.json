@@ -54,6 +54,7 @@
     "style-loader": "3.3.1",
     "terser": "5.13.1",
     "terser-webpack-plugin": "5.3.1",
+    "vis-network": "^9.1.2",
     "vlow": "1.1.14",
     "webpack": "5.72.1",
     "webpack-bundle-analyzer": "4.5.0",
@@ -61,7 +62,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.17.0",
-    "@babel/preset-react": "7.17.12",
+    "@babel/preset-react": "^7.17.12",
     "eslint": "8.10.0",
     "eslint-plugin-react": "7.29.4",
     "eslint-plugin-react-hooks": "4.5.0",

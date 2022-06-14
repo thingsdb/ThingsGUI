@@ -1,4 +1,5 @@
 import CheckIcon from '@mui/icons-material/Check';
+import Chip from '@mui/material/Chip';
 import EditIcon from '@mui/icons-material/Edit';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
@@ -6,7 +7,7 @@ import React from 'react';
 import RunIcon from '@mui/icons-material/DirectionsRun';
 import ViewIcon from '@mui/icons-material/Visibility';
 
-import { AddDialog, AddLink, EditDialog, Relation, ViewDialog } from '.';
+import { AddDialog, AddLink, EditDialog, Relation, ShowOverview, ViewDialog } from '.';
 import { ChipsCard, DownloadBlob } from '../../../Utils';
 import { THINGS_DOC_DATATYPES } from '../../../../Constants/Links';
 import { THINGDB_CACHE } from '../../../../Constants/Files';
@@ -285,6 +286,7 @@ const tableInfo = {
 };
 
 const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
+    const [showOverview, setShowOverview] = React.useState(false);
     React.useEffect(() => {
         onInfo(scope, tag);
     }, [onInfo, scope, tag]);
@@ -312,14 +314,13 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
     const handleClickAdd = () => {
         onChange('add')('', categoryInit);
     };
-    const handleCloseAdd= () => {
+    const handleCloseAdd = () => {
         onClose('add', categoryInit);
     };
 
     const handleCloseView = () => {
         onClose('view', categoryInit);
     };
-
 
     const handleCloseEdit = () => {
         onClose('edit', categoryInit);
@@ -365,7 +366,23 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
                 warnExpression={i=>i.wrap_only}
                 tag={tag}
                 title={`${categoryInit}s`}
+                moreButtons={
+                    <Chip
+                        clickable
+                        label="Show overview"
+                        onClick={() => setShowOverview(true)}
+                        color="primary"
+                        variant="outlined"
+                    />
+                }
             />
+            {showOverview && categoryInit === 'type' && (
+                <ShowOverview
+                    onClose={() => setShowOverview(false)}
+                    open
+                    items={items}
+                />
+            )}
             {buttonsView.add && (
                 <AddDialog
                     dataTypes={datatypes}

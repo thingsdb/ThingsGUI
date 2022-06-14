@@ -16,9 +16,8 @@ const withStores = withVlow([{
 const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
     const pattern = '\\b' + name + '\\b';
     const re= new RegExp(pattern);
-    const u = customTypes[scope]&&name?customTypes[scope].filter(i=>
-        re.test(`${i.fields}`)
-    ):[];
+    const u = customTypes[scope] && name ? customTypes[scope].filter(i => re.test(`${i.fields}`))
+        :[];
 
     const handleChange = (name, category) => () => {
         onChangeItem(name, category);
@@ -43,7 +42,7 @@ const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
                 ))}
             </Grid>
         </React.Fragment>
-    ):null);
+    ) : null);
 };
 
 UsedByType.defaultProps = {
