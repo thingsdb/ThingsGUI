@@ -184,7 +184,7 @@ Start a container with the ThingsGUI image:
 docker run \
     -d -p 5000:5000 \
     -v ~/.config/ThingsGUI:/root/.config/ThingsGUI \
-    -t thingsdb/gui:latest \
+    -t ghcr.io/thingsdb/gui:latest \
     --host 0.0.0.0
 ```
 
