@@ -3,8 +3,8 @@ import { useTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-
 
 import { SimpleModal } from '../../../Utils';
 import VisNetwork from './VisNetwork';
@@ -12,6 +12,7 @@ import VisNetwork from './VisNetwork';
 
 const ShowOverview = ({customTypes, enums, onClose, open}) => {
     const theme = useTheme();
+    const [search, setSearch] = React.useState('');
 
     const typeNodes = customTypes.map(t => ({
         id: 't' + t.type_id,
@@ -90,7 +91,10 @@ const ShowOverview = ({customTypes, enums, onClose, open}) => {
             },
           },
     };
-    console.log(edges)
+
+    const nodeObj = customTypes.find(ct => ct.name.toLowerCase() === search.toLowerCase()) || enums.find(ct => ct.name.toLowerCase() === search.toLowerCase());
+    const nodeId = nodeObj?.enum_id !== undefined ? 'e' + nodeObj.enum_id : nodeObj?.type_id !== undefined ? 't' + nodeObj.type_id : '';
+
 
     return (
         <SimpleModal
@@ -106,8 +110,17 @@ const ShowOverview = ({customTypes, enums, onClose, open}) => {
                         </Typography>
                     </Grid>
                 </Grid>
+                <Grid container spacing={1} item xs={12}>
+                    <Grid item xs={8}>
+                        <TextField
+                            label="Search"
+                            onChange={({target}) => setSearch(target.value)}
+                            value={search}
+                        />
+                    </Grid>
+                </Grid>
                 <Grid item xs={12}>
-                    <VisNetwork edges={edges} nodes={nodes} options={options} />
+                    <VisNetwork edges={edges} nodes={nodes} options={options} nodeId={nodeId} />
                 </Grid>
             </Grid>
         </SimpleModal>

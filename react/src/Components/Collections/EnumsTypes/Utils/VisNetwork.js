@@ -4,19 +4,31 @@ import PropTypes from 'prop-types';
 import useVisNetwork from './useVisNetwork';
 
 
-const VisNetwork = ({ edges, nodes, options }) => {
+const VisNetwork = ({ edges, nodeId, nodes, options }) => {
     const { ref, network } = useVisNetwork({
         edges,
         nodes,
         options,
     });
 
+    React.useEffect(() => {
+        if (nodeId) {
+            const position = network.getPosition(nodeId);
+            network.moveTo({
+                position,
+                scale: 2,
+                animation: true
+            });
+            network.selectNodes([nodeId]);
+        }
+    }, [nodeId]);
+
     return (
         <div
             ref={ref}
             style={{
-                width: '1000px',
-                height: '1000px'
+                width: '1150px',
+                height: '700px'
             }}
         />
     );
@@ -24,12 +36,14 @@ const VisNetwork = ({ edges, nodes, options }) => {
 
 VisNetwork.defaultProps = {
     edges: [],
+    nodeId: '',
     nodes: [],
     options: {},
 };
 
 VisNetwork.propTypes = {
     edges: PropTypes.arrayOf(PropTypes.object),
+    nodeId: PropTypes.string,
     nodes: PropTypes.arrayOf(PropTypes.object),
     options: PropTypes.object,
 };
