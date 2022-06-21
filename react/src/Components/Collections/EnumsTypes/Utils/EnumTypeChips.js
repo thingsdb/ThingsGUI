@@ -285,8 +285,10 @@ const tableInfo = {
     },
 };
 
-const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
+const EnumTypeChips = ({buttonsView, categoryInit, customTypes, datatypes, enums, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
     const [showOverview, setShowOverview] = React.useState(false);
+    const items = categoryInit === 'type' ? customTypes : enums;
+
     React.useEffect(() => {
         onInfo(scope, tag);
     }, [onInfo, scope, tag]);
@@ -376,11 +378,12 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
                     />
                 }
             />
-            {showOverview && categoryInit === 'type' && (
+            {showOverview && (
                 <ShowOverview
+                    customTypes={customTypes}
+                    enums={enums}
                     onClose={() => setShowOverview(false)}
                     open
-                    items={items}
                 />
             )}
             {buttonsView.add && (
@@ -430,7 +433,9 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
 };
 
 EnumTypeChips.defaultProps = {
+    customTypes: [],
     datatypes: [],
+    enums: [],
     onChange: ()=>null,
     onClose: ()=>null,
     onDelete: ()=>null,
@@ -438,14 +443,14 @@ EnumTypeChips.defaultProps = {
     onMakeInstanceInit: ()=>null,
     onRename: ()=>null,
     onSetQueryInput: ()=>null,
-    items: [],
 };
 
 EnumTypeChips.propTypes = {
     buttonsView: PropTypes.object.isRequired,
     categoryInit: PropTypes.string.isRequired,
+    customTypes: PropTypes.arrayOf(PropTypes.object),
     datatypes: PropTypes.arrayOf(PropTypes.string),
-    items: PropTypes.arrayOf(PropTypes.object),
+    enums: PropTypes.arrayOf(PropTypes.object),
     onChange: PropTypes.func,
     onClose: PropTypes.func,
     onDelete: PropTypes.func,

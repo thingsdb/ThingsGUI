@@ -110,7 +110,8 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
                     <EnumTypeChips
                         buttonsView={{add: false, cancel: false, edit: false, run: true, view: true}}
                         categoryInit="type"
-                        items={customTypes[scope]}
+                        customTypes={customTypes[scope]}
+                        enums={enums[scope]}
                         onChange={handleChange}
                         onClose={handleClose}
                         onDelete={TypeActions.deleteType}
@@ -128,7 +129,8 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
                     <EnumTypeChips
                         buttonsView={{add: false, cancel: false, edit: false, run: true, view: true}}
                         categoryInit="enum"
-                        items={enums[scope]}
+                        customTypes={customTypes[scope]}
+                        enums={enums[scope]}
                         onChange={handleChange}
                         onClose={handleClose}
                         onDelete={EnumActions.deleteEnum}

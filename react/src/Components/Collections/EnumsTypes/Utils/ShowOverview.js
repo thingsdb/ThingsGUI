@@ -10,10 +10,11 @@ import { SimpleModal } from '../../../Utils';
 import VisNetwork from './VisNetwork';
 
 
-const ShowOverview = ({onClose, open, items}) => {
+const ShowOverview = ({customTypes, enums, onClose, open}) => {
     const theme = useTheme();
+    const items = [...customTypes, ...enums];
 
-    const nodes = items.map(t => ({
+    const typeNodes = customTypes.map(t => ({
         id: t.type_id,
         label: t.name,
         // title: 'blaba',
@@ -22,32 +23,44 @@ const ShowOverview = ({onClose, open, items}) => {
         color: t.wrap_only ? amber[700] : theme.palette.primary.main,
     }));
 
-    const edges = items.reduce((res, t) => {
+    const enumNodes = enums.map(t => ({
+        id: t.enum_id + customTypes.length,
+        label: t.name,
+        // title: 'blaba',
+        // level: 1,
+        shape: 'box',
+        color: theme.palette.secondary.main,
+    }));
+
+    const nodes = [...typeNodes, ...enumNodes];
+
+    const edges = [...customTypes, ...enums].reduce((res, t) => {
         const re = new RegExp('\\b' + t.name + '\\b');
-        const fct = items.filter(t => re.test(`${t.fields}`));
+        const fct = customTypes.filter(t => re.test(`${t.fields}`));
         const fieldEdges = fct.map(ft => ({
-            from: t.type_id,
-            to: ft.type_id,
+            from: t.type_id ? t.type_id : t.enum_id + customTypes.length,
+            to: ft.type_id ? ft.type_id : ft.enum_id + customTypes.length,
             arrows: 'from',
+            color: theme.palette.text.primary
         }));
 
         let rct = [];
-        Object.values(t.relations).forEach(rel => {
-            const relatedType = items.find(rt => rt.name === rel.type);
+        Object.values(t.relations || {}).forEach(rel => {
+            const relatedType = customTypes.find(rt => rt.name === rel.type);
             rct.push(relatedType);
         });
         const relationEdges = rct.map(rt => ({
             from: t.type_id,
             to: rt.type_id,
             arrows: 'to',
-            color: 'green'
+            color: theme.palette.primary.green
         }));
 
         res.push(...fieldEdges, ...relationEdges);
         return res;
     }, []);
 
-    const options = {
+    // const options = {
         // groups: {
         //     wrapped: {
         //         shape: 'triangleDown'
@@ -76,6 +89,24 @@ const ShowOverview = ({onClose, open, items}) => {
         //         enabled: true
         //     }
         // }
+    // };
+    var options = {
+        edges: {
+            font: {
+                size: 12,
+            },
+        },
+        nodes: {
+            shape: "box",
+            font: {
+                // bold: {
+                    color: theme.palette.text.primary,
+                // },
+            },
+        },
+        physics: {
+            enabled: false,
+        },
     };
     console.log(edges)
 
@@ -103,15 +134,17 @@ const ShowOverview = ({onClose, open, items}) => {
 
 
 ShowOverview.defaultProps = {
-    items: [],
+    customTypes: [],
+    enums: [],
     open: false,
 };
 
 
 ShowOverview.propTypes = {
+    customTypes: PropTypes.arrayOf(PropTypes.object),
+    enums: PropTypes.arrayOf(PropTypes.object),
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool,
-    items: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default ShowOverview;
