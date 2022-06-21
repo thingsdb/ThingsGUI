@@ -12,24 +12,23 @@ import VisNetwork from './VisNetwork';
 
 const ShowOverview = ({customTypes, enums, onClose, open}) => {
     const theme = useTheme();
-    const items = [...customTypes, ...enums];
 
     const typeNodes = customTypes.map(t => ({
-        id: t.type_id,
+        id: 't' + t.type_id,
         label: t.name,
+        title: t.wrap_only ? 'Wrapped type' : 'Type',
+        group: t.wrap_only ? 'wrappedType' : 'type',
         // title: 'blaba',
         // level: 1,
-        shape: 'box',
-        color: t.wrap_only ? amber[700] : theme.palette.primary.main,
     }));
 
     const enumNodes = enums.map(t => ({
-        id: t.enum_id + customTypes.length,
+        id: 'e' + t.enum_id,
         label: t.name,
+        title: 'Enum',
+        group: 'enum',
         // title: 'blaba',
         // level: 1,
-        shape: 'box',
-        color: theme.palette.secondary.main,
     }));
 
     const nodes = [...typeNodes, ...enumNodes];
@@ -38,8 +37,8 @@ const ShowOverview = ({customTypes, enums, onClose, open}) => {
         const re = new RegExp('\\b' + t.name + '\\b');
         const fct = customTypes.filter(t => re.test(`${t.fields}`));
         const fieldEdges = fct.map(ft => ({
-            from: t.type_id ? t.type_id : t.enum_id + customTypes.length,
-            to: ft.type_id ? ft.type_id : ft.enum_id + customTypes.length,
+            from: t.type_id ? 't' + t.type_id : 'e' + t.enum_id,
+            to: ft.type_id ? 't' + ft.type_id : 'e' + ft.enum_id,
             arrows: 'from',
             color: theme.palette.text.primary
         }));
@@ -50,63 +49,45 @@ const ShowOverview = ({customTypes, enums, onClose, open}) => {
             rct.push(relatedType);
         });
         const relationEdges = rct.map(rt => ({
-            from: t.type_id,
-            to: rt.type_id,
+            from: 't' + t.type_id,
+            to: 't' + rt.type_id,
             arrows: 'to',
-            color: theme.palette.primary.green
+            color: theme.palette.primary.warning
         }));
 
         res.push(...fieldEdges, ...relationEdges);
         return res;
     }, []);
 
-    // const options = {
-        // groups: {
-        //     wrapped: {
-        //         shape: 'triangleDown'
-        //     },
-        //     not_wrapped: {
-        //         shape: 'hexagon'
-        //     }
-        // },
-        // interaction: {
-        //     selectable: false,
-        //     selectConnectedEdges: false
-        // },
-        // edges: {
-        //     smooth: {
-        //         enabled: true,
-        //         type: 'diagonalCross',
-        //         roundness: 0.5
-        //     }
-        // },
-        // nodes: {
-        //     shape: 'dot',
-        //     size: 16
-        // },
-        // layout: {
-        //     hierarchical: {
-        //         enabled: true
-        //     }
-        // }
-    // };
-    var options = {
+    const options = {
         edges: {
             font: {
                 size: 12,
             },
         },
         nodes: {
-            shape: "box",
+            shape: 'box',
             font: {
-                // bold: {
-                    color: theme.palette.text.primary,
-                // },
+                color: '#000',
             },
         },
         physics: {
             enabled: false,
         },
+        groups: {
+            type: {
+                shape: 'box',
+                color: theme.palette.primary.main,
+            },
+            wrappedType: {
+                shape: 'box',
+                color: amber[300],
+            },
+            enum: {
+                shape: 'box',
+                color: theme.palette.primary.green,
+            },
+          },
     };
     console.log(edges)
 
