@@ -52,6 +52,7 @@ const ShowOverview = ({customTypes, enums, onClose, open}) => {
             from: 't' + t.type_id,
             to: 't' + rt.type_id,
             arrows: 'to',
+            label: 'relation',
             color: theme.palette.primary.warning
         }));
 
