@@ -393,8 +393,8 @@ class ThingsdbStore extends BaseStore {
 
     onNewToken(config, tag, cb){ // name [, expirationTime] [, description]
         this.checkBeforeUserUpdate(
-            NEW_TOKEN_QUERY(config.expirationTime, config.description),
-            NEW_TOKEN_ARGS(config.name, config.expirationTime, config.description),
+            NEW_TOKEN_QUERY(config.description),
+            NEW_TOKEN_ARGS(config.name, config.expirationTime || null, config.description),
             tag,
             cb
         );

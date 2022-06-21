@@ -157,7 +157,7 @@ export const DEL_TOKEN_QUERY = 'del_token(key);';
 export const DEL_USER_QUERY = 'del_user(name);';
 export const GRANT_QUERY = 'grant(collection, name, access);';
 export const INFO_QUERY = (name) => `${name}_info();`;
-export const NEW_TOKEN_QUERY = (expirationTime, description) => `new_token(name, ${expirationTime ? 'expirationTime': 'nil'}${description ? ', description': ''});`;
+export const NEW_TOKEN_QUERY = (description) => description ? 'new_token(name, expirationTime, description);' : 'new_token(name, expirationTime);';
 export const NEW_USER_QUERY = 'new_user(name);';
 export const RENAME_USER_QUERY = 'rename_user(current, newName);';
 export const REVOKE_QUERY = 'revoke(collection, name, access);';
