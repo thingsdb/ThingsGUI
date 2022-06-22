@@ -291,6 +291,7 @@ export default {
         'rename_user': 'Rename a user.',
         'restore': 'Restore from a backup file created with the new_backup function.',
         'revoke': 'Revoke collection or general privileges from a user. See grant for more information on how access privileges can be set for a user.',
+        'set_default_deep': 'The deep value determines how many levels of data are returned by a query. Only things count towards this value.',
         'set_module_conf': 'Change the module configuration. This will (re-send) the module configuration to the module. If the module was not started, ThingsDB will also auto-load the module and send the configuration. Any Value is accepted as config but value nil will not be considered as a configuration and thus will not be send to the module.',
         'set_module_scope': 'Modules can be restricted for usage in a single scope. This can be a @collection:.. scope, but also a @node or @thingsdb scope. This function can be used to change the module scope. When the scope is set to nil, the module can be used in any scope.',
         'set_password': 'Change a users password. This function can also be used to remove an existing password by using nil as the new password. Passwords must contain 1 to 128 printable characters.',
