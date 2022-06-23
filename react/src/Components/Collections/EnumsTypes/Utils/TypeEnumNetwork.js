@@ -27,12 +27,8 @@ const changeChosenEdgeWidth = (values) => {
 };
 
 const findNodeId = (arr, search, key, prefix) => {
-    return arr.find((el, i) => {
-        if (el.name.toLowerCase() === search.toLowerCase()) {
-            arr[i] = prefix + arr[i][key];
-            return true; // stop searching
-        }
-    });
+    let obj = arr.find((el) => el.name.toLowerCase() === search.toLowerCase());
+    return obj ? prefix + obj[key] : '';
 };
 
 const tag = TypeEnumNetworkTag;
