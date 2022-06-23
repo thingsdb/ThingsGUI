@@ -1,5 +1,4 @@
 import CheckIcon from '@mui/icons-material/Check';
-import Chip from '@mui/material/Chip';
 import EditIcon from '@mui/icons-material/Edit';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
@@ -7,7 +6,7 @@ import React from 'react';
 import RunIcon from '@mui/icons-material/DirectionsRun';
 import ViewIcon from '@mui/icons-material/Visibility';
 
-import { AddDialog, AddLink, EditDialog, Relation, ShowOverview, ViewDialog } from '.';
+import { AddDialog, AddLink, EditDialog, Relation, ViewDialog } from '.';
 import { ChipsCard, DownloadBlob } from '../../../Utils';
 import { THINGS_DOC_DATATYPES } from '../../../../Constants/Links';
 import { THINGDB_CACHE } from '../../../../Constants/Files';
@@ -285,10 +284,7 @@ const tableInfo = {
     },
 };
 
-const EnumTypeChips = ({buttonsView, categoryInit, customTypes, datatypes, enums, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
-    const [showOverview, setShowOverview] = React.useState(false);
-    const items = categoryInit === 'type' ? customTypes : enums;
-
+const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
     React.useEffect(() => {
         onInfo(scope, tag);
     }, [onInfo, scope, tag]);
@@ -368,24 +364,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, customTypes, datatypes, enums
                 warnExpression={i=>i.wrap_only}
                 tag={tag}
                 title={`${categoryInit}s`}
-                moreButtons={
-                    <Chip
-                        clickable
-                        label="Show overview"
-                        onClick={() => setShowOverview(true)}
-                        color="primary"
-                        variant="outlined"
-                    />
-                }
             />
-            {showOverview && (
-                <ShowOverview
-                    customTypes={customTypes}
-                    enums={enums}
-                    onClose={() => setShowOverview(false)}
-                    open
-                />
-            )}
             {buttonsView.add && (
                 <AddDialog
                     dataTypes={datatypes}
@@ -433,9 +412,8 @@ const EnumTypeChips = ({buttonsView, categoryInit, customTypes, datatypes, enums
 };
 
 EnumTypeChips.defaultProps = {
-    customTypes: [],
     datatypes: [],
-    enums: [],
+    items: [],
     onChange: ()=>null,
     onClose: ()=>null,
     onDelete: ()=>null,
@@ -448,9 +426,8 @@ EnumTypeChips.defaultProps = {
 EnumTypeChips.propTypes = {
     buttonsView: PropTypes.object.isRequired,
     categoryInit: PropTypes.string.isRequired,
-    customTypes: PropTypes.arrayOf(PropTypes.object),
     datatypes: PropTypes.arrayOf(PropTypes.string),
-    enums: PropTypes.arrayOf(PropTypes.object),
+    items: PropTypes.arrayOf(PropTypes.object),
     onChange: PropTypes.func,
     onClose: PropTypes.func,
     onDelete: PropTypes.func,

@@ -12,7 +12,7 @@ const VisNetwork = ({ edges, nodeId, nodes, options }) => {
     });
 
     React.useEffect(() => {
-        if (nodeId) {
+        if (network && nodeId) {
             const position = network.getPosition(nodeId);
             network.moveTo({
                 position,
@@ -21,7 +21,7 @@ const VisNetwork = ({ edges, nodeId, nodes, options }) => {
             });
             network.selectNodes([nodeId]);
         }
-    }, [nodeId]);
+    }, [network, nodeId]);
 
     return (
         <div

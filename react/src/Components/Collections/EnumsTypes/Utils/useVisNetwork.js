@@ -13,7 +13,7 @@ const useVisNetwork = ({edges, nodes, options}) => {
             setNetwork(instance);
         }
         return () => network?.destroy();
-    }, []);
+    }, []); // eslint-disable-line
 
     return {
         network,
