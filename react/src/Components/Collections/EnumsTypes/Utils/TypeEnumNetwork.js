@@ -1,4 +1,4 @@
-import { amber } from '@mui/material/colors';
+import { amber, red } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 import { withVlow } from 'vlow';
 import Button from '@mui/material/Button';
@@ -58,14 +58,14 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
     const typeNodes = _customTypes.map(t => ({
         id: 't' + t.type_id,
         label: t.name,
-        title: t.wrap_only ? 'Wrapped type' : 'Type',
+        title: t.wrap_only ? 'WRAPPED TYPE' : 'TYPE',
         group: t.wrap_only ? 'wrappedType' : 'type',
     }));
 
     const enumNodes = _enums.map(t => ({
         id: 'e' + t.enum_id,
         label: t.name,
-        title: 'Enum',
+        title: 'ENUM',
         group: 'enum',
     }));
 
@@ -89,7 +89,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
         });
         const relationEdges = rct.map(rt => ({
             arrows: 'to',
-            color: theme.palette.secondary.main,
+            color: red[700],
             from: 't' + t.type_id,
             title: 'RELATION\n' + Object.entries(rt.relations).map(([k, v]) => `${k}: ${`${v.property} on ${v.type} as ${v.definition}`}`).join(',\n'),
             to: 't' + rt.type_id,
