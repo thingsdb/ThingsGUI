@@ -21,10 +21,21 @@ const withStores = withVlow([{
     keys: ['customTypes']
 }]);
 
-const tag = TypeEnumNetworkTag;
+
 const changeChosenEdgeWidth = (values) => {
     values.width = 3;
 };
+
+const findNodeId = (arr, search, key, prefix) => {
+    return arr.find((el, i) => {
+        if (el.name.toLowerCase() === search.toLowerCase()) {
+            arr[i] = prefix + arr[i][key];
+            return true; // stop searching
+        }
+    });
+};
+
+const tag = TypeEnumNetworkTag;
 
 const TypeEnumNetwork = ({collection, customTypes, enums}) => {
     const theme = useTheme();
@@ -71,7 +82,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
             arrows: 'from',
             color: theme.palette.text.primary,
             from: t.type_id ? 't' + t.type_id : 'e' + t.enum_id,
-            title: ft.fields.map(([k, v]) => `${k}: ${v}`).join(',\n'),
+            title: 'PROPERTY\n' + ft.fields.map(([k, v]) => `${k}: ${v}`).join(',\n'),
             to: ft.type_id ? 't' + ft.type_id : 'e' + ft.enum_id,
         }));
 
@@ -82,9 +93,9 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
         });
         const relationEdges = rct.map(rt => ({
             arrows: 'to',
-            color: theme.palette.primary.warning,
+            color: theme.palette.secondary.main,
             from: 't' + t.type_id,
-            title: Object.entries(rt.relations).map(([k, v]) => `${k}: ${`${v.property} on ${v.type} as ${v.definition}`}`).join(',\n'),
+            title: 'RELATION\n' + Object.entries(rt.relations).map(([k, v]) => `${k}: ${`${v.property} on ${v.type} as ${v.definition}`}`).join(',\n'),
             to: 't' + rt.type_id,
             smooth: {
                 type: 'curvedCW',
@@ -142,8 +153,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
         },
     };
 
-    const nodeObj = _customTypes.find(ct => ct.name.toLowerCase() === search.toLowerCase()) || _enums.find(ct => ct.name.toLowerCase() === search.toLowerCase());
-    const nodeId = nodeObj?.enum_id !== undefined ? 'e' + nodeObj.enum_id : nodeObj?.type_id !== undefined ? 't' + nodeObj.type_id : '';
+    const nodeId = findNodeId(_customTypes, search, 'type_id', 't') || findNodeId(_enums, search, 'enum_id', 'e') || '';
 
     return (
         <SimpleModal

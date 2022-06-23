@@ -16,12 +16,12 @@ const withStores = withVlow([{
 const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
     const pattern = '\\b' + name + '\\b';
     const re= new RegExp(pattern);
-    const u = customTypes[scope] && name ? customTypes[scope].filter(i => re.test(`${i.fields}`))
-        :[];
+    const u = customTypes[scope] && name ? customTypes[scope].filter(i => re.test(`${i.fields}`)) : [];
 
     const handleChange = (name, category) => () => {
         onChangeItem(name, category);
     };
+
     return(u.length ? (
         <React.Fragment>
             <ListItem>
@@ -30,7 +30,7 @@ const UsedByType = ({customTypes, name, onChangeItem, scope}) => {
                 />
             </ListItem>
             <Grid>
-                {u.map((item, index)=>(
+                {u.map((item, index) => (
                     <Chip
                         color="primary"
                         key={index}
