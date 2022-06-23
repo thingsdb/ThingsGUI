@@ -166,7 +166,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
                 <Grid container spacing={1} item xs={12}>
                     <Grid item xs={8}>
                         <Typography variant="h4" color='primary' component='span'>
-                            {'Type and Enum connections'}
+                            {'Type and Enum network'}
                         </Typography>
                     </Grid>
                 </Grid>
