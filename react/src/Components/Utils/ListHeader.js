@@ -32,7 +32,7 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, name, onAdd, unmo
                     </Typography>
                 )}
                 <Typography variant="h5" color="primary" sx={{paddingLeft: '8px', paddingRight: '8px'}}>
-                    {groupSigning[groupSign][0]}
+                    {groupSigning[groupSign] ? groupSigning[groupSign][0] : groupSign}
                 </Typography>
             </Grid>
             <Grid item xs={open?12:1} container justifyContent="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>
@@ -42,11 +42,13 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, name, onAdd, unmo
             </Grid>
             <Grid item xs={4} container justifyContent="flex-start" alignItems="center">
                 <Typography variant="h5" color="primary" sx={{paddingLeft: '8px', paddingRight: '8px'}}>
-                    {groupSigning[groupSign][1]}
+                    {groupSigning[groupSign] ? groupSigning[groupSign][1] : ''}
                 </Typography>
-                <Button color="primary" onClick={onAdd}>
-                    {'Add'}
-                </Button>
+                {onAdd && (
+                    <Button color="primary" onClick={onAdd}>
+                        {'Add'}
+                    </Button>
+                )}
                 {canCollapse && (
                     <Button color="primary" onClick={open ? handleClose : handleOpen}>
                         {open ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
@@ -62,6 +64,7 @@ ListHeader.defaultProps = {
     isOpen: false,
     name: '',
     unmountOnExit: false,
+    onAdd: null,
 };
 
 ListHeader.propTypes = {
@@ -70,7 +73,7 @@ ListHeader.propTypes = {
     groupSign: PropTypes.string.isRequired,
     isOpen: PropTypes.bool,
     name: PropTypes.string,
-    onAdd: PropTypes.func.isRequired,
+    onAdd: PropTypes.func,
     unmountOnExit: PropTypes.bool,
 };
 
