@@ -133,15 +133,17 @@ const AddCustomType = ({customTypes, dataTypes, enums, type, identifier, parent,
     // console.log(type)
 
     const makeTypeInstanceInit = (t, customTypeNames, customTypes, circularRefFlag, i) => {
-        let n = customTypeNames.find(ct => t.includes(ct));
-        if (n) {
+        let n = t.match(/\w+/g);
+        n = n && n[0];
+        if (customTypeNames.includes(n)) {
             if (circularRefFlag[n]) {
                 return t;
             } else {
                 circularRefFlag[n] = true;
                 let content = customTypes.find(i=>i.name==n).fields.map(c => `\n\t${'\t'.repeat(i)}${c[0]}: ${makeTypeInstanceInit(c[1], customTypeNames, customTypes, {...circularRefFlag}, i + 1)}`);
                 content += '\n';
-                content = CUSTOM_TYPE_FORMAT_QUERY(n, content);
+                content = `${type}{${content}`;
+                content += `${'\t'.repeat(i)}}`;
                 if (n.length !== t.length) {
                     content = t.replace(n, content);
                 }
