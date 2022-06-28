@@ -106,6 +106,7 @@ const Restore = ({nodes}) => {
             >
                 <ErrorMsg tag={tag} />
                 <TextField
+                    autoFocus
                     fullWidth
                     helperText="Note: file should exist on node server"
                     id="fileName"

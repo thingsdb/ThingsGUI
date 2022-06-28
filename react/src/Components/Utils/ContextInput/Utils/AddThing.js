@@ -96,7 +96,6 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDisp
                     <Grid key={index} container item xs={12} alignItems="center" sx={{paddingLeft: '32px'}} >
                         <Grid item xs={3} sx={{paddingRight: '8px'}}>
                             <TextField
-                                autoFocus
                                 fullWidth
                                 id="property"
                                 label="Property"

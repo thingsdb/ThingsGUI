@@ -85,7 +85,6 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
         <ClickAwayListener onClickAway={handleClose}>
             <Grid item xs={12}>
                 <TextField
-                    autoFocus
                     autoComplete="off"
                     fullWidth
                     inputRef={textRef}

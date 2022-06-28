@@ -96,7 +96,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
         <EditProvider>
             <Grid container item xs={12} spacing={1} alignItems="center" >
                 <Grid item xs={category === 'type' ? 12 : 6}>
-                    <PropertyName onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} />
+                    <PropertyName onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} autoFocus={Boolean(i)} />
                 </Grid>
                 {category === 'type' ? (
                     <Grid item xs={12}>
@@ -169,6 +169,7 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
                         </Collapse>
                         <ListItem>
                             <TextField
+                                autoFocus
                                 fullWidth
                                 label="Name"
                                 name="name"

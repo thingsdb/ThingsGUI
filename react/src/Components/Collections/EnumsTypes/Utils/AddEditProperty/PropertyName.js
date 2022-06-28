@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-const PropertyName = ({onChange, input}) => {
+const PropertyName = ({onChange, input, ...props}) => {
     const [propertyName, setPropertyName] = React.useState(input);
 
     const handlePropertyName = ({target}) => {
@@ -13,7 +13,7 @@ const PropertyName = ({onChange, input}) => {
 
     return (
         <TextField
-            autoFocus
+            {...props} // eslint-disable-line
             fullWidth
             label="Name"
             name="propertyName"

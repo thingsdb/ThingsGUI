@@ -16,6 +16,7 @@ const PropInit = ({onChange, input, thing}) => {
 
     return(
         <TextField
+            autoFocus
             error={Boolean(error)}
             helperText={error}
             label="New property"
