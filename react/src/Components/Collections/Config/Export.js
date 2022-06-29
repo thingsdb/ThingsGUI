@@ -104,7 +104,8 @@ const Export = ({collection}) => {
                         inputProps={{
                             style: {
                                 fontFamily: 'monospace',
-                                fontSize: 'caption.fontSize'
+                                fontSize: 'caption.fontSize',
+                                tabSize: 4,
                             },
                         }}
                         InputLabelProps={{
