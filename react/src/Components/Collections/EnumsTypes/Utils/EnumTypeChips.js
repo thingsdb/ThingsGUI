@@ -312,14 +312,13 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
     const handleClickAdd = () => {
         onChange('add')('', categoryInit);
     };
-    const handleCloseAdd= () => {
+    const handleCloseAdd = () => {
         onClose('add', categoryInit);
     };
 
     const handleCloseView = () => {
         onClose('view', categoryInit);
     };
-
 
     const handleCloseEdit = () => {
         onClose('edit', categoryInit);
@@ -414,6 +413,7 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
 
 EnumTypeChips.defaultProps = {
     datatypes: [],
+    items: [],
     onChange: ()=>null,
     onClose: ()=>null,
     onDelete: ()=>null,
@@ -421,7 +421,6 @@ EnumTypeChips.defaultProps = {
     onMakeInstanceInit: ()=>null,
     onRename: ()=>null,
     onSetQueryInput: ()=>null,
-    items: [],
 };
 
 EnumTypeChips.propTypes = {

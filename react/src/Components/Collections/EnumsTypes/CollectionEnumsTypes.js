@@ -136,8 +136,8 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
                     <EnumTypeChips
                         buttonsView={{add: true, cancel: false, edit: true, run: false, view: false}}
                         categoryInit="type"
-                        datatypes={datatypesMap}
                         items={customTypes[scope]}
+                        datatypes={datatypesMap}
                         onChange={handleChange}
                         onClose={handleClose}
                         onDelete={TypeActions.deleteType}
