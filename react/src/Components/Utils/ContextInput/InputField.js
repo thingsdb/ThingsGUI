@@ -5,7 +5,7 @@ import React from 'react';
 
 import {EditProvider, useEdit} from './Context';
 import {THINGS_DOC_COLLECTION, THINGS_DOC_DATETIME, THINGS_DOC_TIMEVAL, THINGS_DOC_TYPES} from '../../../Constants/Links';
-import {AddArray, AddBlob, AddBool, AddClosure, AddEnum, AddError, AddFloat, AddInt, AddCode, AddRegex, AddRoom, AddNil, AddStr, AddThing, AddVariable} from './Utils';
+import {AddArray, AddBlob, AddBool, AddClosure, AddEnum, AddError, AddFloat, AddInt, AddCode, AddRegex, AddRoom, AddNil, AddStr, AddThing, AddType, AddVariable} from './Utils';
 import {BOOL, BYTES, CLOSURE, CODE, DATETIME, ERROR, FLOAT, INT, LIST, NIL, REGEX, ROOM,
     SET, STR, THING, TIMEVAL, VARIABLE} from '../../../Constants/ThingTypes';
 
@@ -50,7 +50,7 @@ const InputField = ({customTypes, childTypes, dataTypes, dataType, enums, identi
     );
     default: return(
         [...customTypes.map(c=>c.name)].includes(dataType) ? (
-            <AddCode identifier={identifier} init={`${dataType}()`} label="Value" link={THINGS_DOC_TYPES} numLines="1" parent={parent} />
+            <AddType identifier={identifier} type={dataType} label="Value" link={THINGS_DOC_TYPES} numLines="1" parent={parent} />
         ) : <AddEnum identifier={identifier} enumName={dataType} enums={enums} init={init} parent={parent} {...props} />
     );
     }

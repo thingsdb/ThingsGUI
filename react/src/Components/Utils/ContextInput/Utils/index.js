@@ -12,6 +12,7 @@ import AddRegex from './AddRegex';
 import AddRoom from './AddRoom';
 import AddStr from './AddStr';
 import AddThing from './AddThing';
+import AddType from './AddType';
 import AddVariable from './AddVariable';
 
 export {
@@ -29,5 +30,6 @@ export {
     AddRoom,
     AddStr,
     AddThing,
+    AddType,
     AddVariable
 };

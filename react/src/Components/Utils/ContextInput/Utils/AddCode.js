@@ -50,7 +50,7 @@ const AddCode = ({identifier, init, label, link, numLines, parent}) => {
 
 AddCode.defaultProps = {
     identifier: null,
-    init:'',
+    init: '',
 },
 
 AddCode.propTypes = {
