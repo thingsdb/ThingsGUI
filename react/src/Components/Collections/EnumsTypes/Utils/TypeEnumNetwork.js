@@ -153,10 +153,11 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
 
     return (
         <SimpleModal
-            button={(_customTypes.length > 0 || _enums.length > 0) &&
+            button={(_customTypes.length > 0 || _enums.length > 0) ?
                 <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                     {'Type and Enum network'}
                 </Button>
+                : null
             }
             open={show}
             onClose={handleClickClose}
