@@ -16,7 +16,6 @@ const TypeInit = ({type, customTypes, dataTypes, onChange, input}) => {
 
     return(
         <TextField
-            autoFocus
             fullWidth
             label="Data type"
             margin="dense"
