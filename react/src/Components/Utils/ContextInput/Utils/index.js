@@ -3,7 +3,6 @@ import AddBlob from './AddBlob';
 import AddBool from './AddBool';
 import AddClosure from './AddClosure';
 import AddCode from './AddCode';
-import AddCustomType from './AddCustomType';
 import AddEnum from './AddEnum';
 import AddError from './AddError';
 import AddFloat from './AddFloat';
@@ -21,7 +20,6 @@ export {
     AddBool,
     AddClosure,
     AddCode,
-    AddCustomType,
     AddEnum,
     AddError,
     AddFloat,

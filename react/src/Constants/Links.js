@@ -32,3 +32,4 @@ export const THINGS_DOC_NUM_ARGUMENTS_ERROR = 'https://docs.thingsdb.net/v1/erro
 export const THINGS_DOC_OPERATION_ERROR = 'https://docs.thingsdb.net/v1/errors/operation_err/';
 export const THINGS_DOC_CANCELLED_ERROR = 'https://docs.thingsdb.net/v1/errors/cancelled_err/';
 export const THINGS_DOC_LOG_WARNING = 'https://docs.thingsdb.net/v1/collection-api/log/';
+export const THINGS_DOC_TYPES = 'https://docs.thingsdb.net/v1/data-types/typed/';
