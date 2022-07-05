@@ -32,6 +32,8 @@ const findNodeId = (arr, search, key, prefix) => {
 };
 
 const tag = TypeEnumNetworkTag;
+const createEnumId = (id) => 'e' + id;
+const createTypeId = (id) => 't' + id;
 
 const TypeEnumNetwork = ({collection, customTypes, enums}) => {
     const theme = useTheme();
@@ -56,14 +58,14 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
     };
 
     const typeNodes = _customTypes.map(t => ({
-        id: 't' + t.type_id,
+        id: createTypeId(t.type_id),
         label: t.name,
         title: t.wrap_only ? 'WRAPPED TYPE' : 'TYPE',
         group: t.wrap_only ? 'wrappedType' : 'type',
     }));
 
     const enumNodes = _enums.map(t => ({
-        id: 'e' + t.enum_id,
+        id: createEnumId(t.enum_id),
         label: t.name,
         title: 'ENUM',
         group: 'enum',
@@ -77,9 +79,9 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
         const fieldEdges = fct.map(ft => ({
             arrows: 'from',
             color: theme.palette.text.primary,
-            from: t.type_id ? 't' + t.type_id : 'e' + t.enum_id,
+            from: t.type_id != undefined ? createTypeId(t.type_id) : createEnumId(t.enum_id),
             title: 'PROPERTY\n' + ft.fields.map(([k, v]) => `${k}: ${v}`).join(',\n'),
-            to: ft.type_id ? 't' + ft.type_id : 'e' + ft.enum_id,
+            to: ft.type_id != undefined ? createTypeId(ft.type_id) : createEnumId(ft.enum_id),
         }));
 
         let rct = [];
@@ -90,9 +92,9 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
         const relationEdges = rct.map(rt => ({
             arrows: 'to',
             color: red[700],
-            from: 't' + t.type_id,
+            from: createTypeId(t.type_id),
             title: 'RELATION\n' + Object.entries(rt.relations).map(([k, v]) => `${k}: ${`${v.property} on ${v.type} as ${v.definition}`}`).join(',\n'),
-            to: 't' + rt.type_id,
+            to: createTypeId(rt.type_id),
             smooth: {
                 type: 'curvedCW',
                 roundness: 0.4
