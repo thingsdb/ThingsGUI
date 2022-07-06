@@ -27,7 +27,6 @@ const VisNetwork = ({ edges, nodeId, nodes, options }) => {
         <div
             ref={ref}
             style={{
-                width: '1150px',
                 height: '700px'
             }}
         />

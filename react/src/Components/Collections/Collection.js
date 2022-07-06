@@ -10,7 +10,7 @@ import { Procedures, Tasks } from '../ProceduresAndTasks';
 import { COLLECTION_SCOPE } from '../../Constants/Scopes';
 import { COLLECTION_ROUTE } from '../../Constants/Routes';
 import CollectionTree from './Tree';
-import CollectionEnumsTypes from './EnumsTypes';
+import {CollectionEnumsTypes, TypeEnumNetwork} from './EnumsTypes';
 
 
 const withStores = withVlow([{
@@ -41,6 +41,7 @@ const Collection = ({collections}) => {
                                     <CollectionConfig collection={selectedCollection} />
                                 </HarmonicCardHeader>
                             </Grid>
+                            <TypeEnumNetwork collection={selectedCollection} />
                             <Grid item xs={12}>
                                 <CollectionTree collection={selectedCollection} />
                             </Grid>
