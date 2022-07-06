@@ -135,6 +135,7 @@ export default {
             'search': 'Find the parent(s) of a given thing.',
             'to_type': 'Converts a thing into an instance of a given Type.',
             'values': 'Returns an list with all the property values of a thing. The same could be returned using map so the following statement is true: (.values() == .map(|_, v| v))',
+            'vmap': 'The function returns a new thing with equal keys but values computed as a result of a given closure callback.',
             'wrap': 'Wrap a thing with a Type.',
         },
         typed: {
