@@ -48,7 +48,7 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
         } else {
             qs = THING_LIST_DEL_FORMAT_QUERY(parent.id, parent.name, child.index);
             q = THING_LIST_DEL_QUERY;
-            a = THING_LIST_DEL_ARGS(parent.id, child.name);
+            a = THING_LIST_DEL_ARGS(parent.id, parent.name, child.index);
         }
         setState({
             jsonArgs: a,
