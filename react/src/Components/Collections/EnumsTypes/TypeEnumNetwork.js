@@ -1,17 +1,16 @@
 import { amber, red } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 import { withVlow } from 'vlow';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import { COLLECTION_SCOPE } from '../../../../Constants/Scopes';
-import { EnumActions, EnumStore, TypeActions, TypeStore } from '../../../../Stores';
-import { SearchInput, SimpleModal } from '../../../Utils';
-import { TypeEnumNetworkTag } from '../../../../Constants/Tags';
-import VisNetwork from './VisNetwork';
+import { COLLECTION_SCOPE } from '../../../Constants/Scopes';
+import { EnumActions, EnumStore, TypeActions, TypeStore } from '../../../Stores';
+import { HarmonicCard, SearchInput } from '../../Utils';
+import { TypeEnumNetworkTag } from '../../../Constants/Tags';
+import VisNetwork from './Utils/VisNetwork';
 
 const withStores = withVlow([{
     store: EnumStore,
@@ -37,37 +36,31 @@ const createTypeId = (id) => 't' + id;
 
 const TypeEnumNetwork = ({collection, customTypes, enums}) => {
     const theme = useTheme();
-    const [show, setShow] = React.useState(false);
     const [search, setSearch] = React.useState('');
     const scope = `${COLLECTION_SCOPE}:${collection.name}`;
     const _customTypes = customTypes[scope] || [];
     const _enums = enums[scope] || [];
 
-    React.useEffect(() => {
+    const handleRefresh = React.useCallback(() => {
         EnumActions.getEnums(scope, tag);
         TypeActions.getTypes(scope, tag);
     }, [scope]);
 
-    const handleClickOpen = () => {
-        setShow(true);
-    };
-
-    const handleClickClose = () => {
-        setShow(false);
-        setSearch('');
-    };
+    React.useEffect(() => {
+        handleRefresh();
+    }, [handleRefresh]);
 
     const typeNodes = _customTypes.map(t => ({
         id: createTypeId(t.type_id),
         label: t.name,
-        title: t.wrap_only ? 'WRAPPED TYPE' : 'TYPE',
+        title: t.wrap_only ? `${t.name} (Wrap-only Type)\n${t.fields.map(([k, v]) => `${k}: ${v}`).join(',\n')}` : `${t.name} (Type)\n${t.fields.map(([k, v]) => `${k}: ${v}`).join(',\n')}`,
         group: t.wrap_only ? 'wrappedType' : 'type',
     }));
 
-    const enumNodes = _enums.map(t => ({
-        id: createEnumId(t.enum_id),
-        label: t.name,
-        title: 'ENUM',
+    const enumNodes = _enums.map(e => ({
+        id: createEnumId(e.enum_id),
+        label: e.name,
+        title: `${e.name} (Enum)\n${e.members.map(([k, v]) => `${k}: ${v}`).join(',\n')}`,
         group: 'enum',
     }));
 
@@ -80,7 +73,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
             arrows: 'from',
             color: theme.palette.text.primary,
             from: t.type_id != undefined ? createTypeId(t.type_id) : createEnumId(t.enum_id),
-            title: 'PROPERTY\n' + ft.fields.map(([k, v]) => `${k}: ${v}`).join(',\n'),
+            title: ft.fields.filter(([, v]) => v.includes(t.name)).map(([k, v]) => `property ${k} on ${ft.name} as ${v}`).join(',\n'),
             to: ft.type_id != undefined ? createTypeId(ft.type_id) : createEnumId(ft.enum_id),
         }));
 
@@ -93,7 +86,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
             arrows: 'to',
             color: red[700],
             from: createTypeId(t.type_id),
-            title: 'RELATION\n' + Object.entries(rt.relations).map(([k, v]) => `${k}: ${`${v.property} on ${v.type} as ${v.definition}`}`).join(',\n'),
+            title: Object.entries(rt.relations).map(([k, v]) => `relation ${k}<->${`${v.property} on ${v.type} as ${v.definition}`}`).join(',\n'),
             to: createTypeId(rt.type_id),
             smooth: {
                 type: 'curvedCW',
@@ -153,40 +146,30 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
 
     const nodeId = findNodeId(_customTypes, search, 'type_id', 't') || findNodeId(_enums, search, 'enum_id', 'e') || '';
 
-    return (
-        <SimpleModal
-            button={(_customTypes.length > 0 || _enums.length > 0) ?
-                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                    {'Type and Enum network'}
-                </Button>
-                : null
-            }
-            open={show}
-            onClose={handleClickClose}
-            maxWidth="lg"
-        >
-            <Grid container spacing={1}>
-                <Grid container spacing={1} item xs={12}>
-                    <Grid item xs={8}>
-                        <Typography variant="h4" color='primary' component='span'>
-                            {'Type and Enum network'}
-                        </Typography>
+    return ((_customTypes.length > 0 || _enums.length > 0) && (
+        <Grid item xs={12} sx={{paddingBottom: '8px'}}>
+            <HarmonicCard
+                title="TYPE AND ENUM NETWORK"
+                content={
+                    <Grid container spacing={1}>
+                        <Grid container spacing={1} item xs={12}>
+                            <Grid item>
+                                <SearchInput
+                                    onChange={({target}) => setSearch(target.value)}
+                                    value={search}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <VisNetwork edges={edges} nodes={nodes} options={options} nodeId={nodeId} />
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid container spacing={1} item xs={12}>
-                    <Grid item>
-                        <SearchInput
-                            onChange={({target}) => setSearch(target.value)}
-                            value={search}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                    <VisNetwork edges={edges} nodes={nodes} options={options} nodeId={nodeId} />
-                </Grid>
-            </Grid>
-        </SimpleModal>
-    );
+                }
+                unmountOnExit
+                onRefresh={handleRefresh}
+            />
+        </Grid>
+    ));
 };
 
 TypeEnumNetwork.propTypes = {

@@ -1,4 +1,8 @@
 import CollectionEnumsTypes from './CollectionEnumsTypes';
+import TypeEnumNetwork from './TypeEnumNetwork';
 
 
-export default CollectionEnumsTypes;
+export {
+    CollectionEnumsTypes,
+    TypeEnumNetwork
+};

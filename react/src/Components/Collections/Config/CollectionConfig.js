@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { HarmonicCardContent } from '../../Utils';
-import { TypeEnumNetwork } from '../EnumsTypes/Utils';
 import CollectionInfo from './CollectionInfo';
 import ExportCollection from './Export';
 import RemoveCollection from './Remove';
@@ -23,10 +22,6 @@ const CollectionConfig = ({collection}) => {
         {
             name: 'export',
             component: <ExportCollection collection={collection} />
-        },
-        {
-            name: 'network',
-            component: <TypeEnumNetwork collection={collection} />
         },
     ];
 
