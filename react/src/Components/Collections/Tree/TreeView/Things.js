@@ -37,10 +37,12 @@ const ThingRoot = ({things, collection}) => {
                 name: 'root',
                 type: THING,
                 isTuple: false,
+                index: null,
             }}
             child={{
-                name: k,
                 index: null,
+                name: k,
+                pname: k,
             }}
         />
     ), [collection, things]);

@@ -29,7 +29,8 @@ export const THING_SET_REMOVE_ARGS = (pid, name, cid) => ({ pid, name, cid });
 
 // check types
 export const TYPE_INFO_CHILD_THING_ARGS = (cid, pid, name) => ({ cid, pid, name });
-export const TYPE_INFO_ELSE_ARGS = (pid, cindex, pname) => ({ pid, cindex, pname });
+export const TYPE_INFO_CHILD_ARRAY_ARGS = (pid, pname, cindex) => ({ pid, pname, cindex });
+export const TYPE_INFO_PARENT_ARRAY_ARGS = (pid, pindex, pname, cindex) => ({ pid, pindex, pname, cindex });
 export const TYPE_INFO_PARENT_THING_ARGS = (id, name) => ({ id, name });
 
 // procedures

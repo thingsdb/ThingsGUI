@@ -83,7 +83,8 @@ export const THING_SET_ADD_FORMAT_QUERY = (id, name, value) => `thing(${id}).${n
 
 // check types
 export const TYPE_INFO_CHILD_THING_QUERY = '[type(thing(cid)), type(thing(pid).get(name)), types_info()];';
-export const TYPE_INFO_ELSE_QUERY = '[type(thing(pid).get(pname)[cindex]), type(thing(pid).get(pname)), types_info()];';
+export const TYPE_INFO_CHILD_ARRAY_QUERY = '[type(thing(pid).get(pname)[cindex]), type(thing(pid).get(pname)), types_info()];';
+export const TYPE_INFO_PARENT_ARRAY_QUERY = '[type(thing(pid).get(pname)[pindex][cindex]), type(thing(pid).get(pname)[pindex]), types_info()];';
 export const TYPE_INFO_PARENT_THING_QUERY = '[type(thing(id).get(name)), type(thing(id)), types_info()];';
 export const TYPE_INFO_ROOT_THING_QUERY = '[type(thing(id)), "", types_info()];'; // child type, parent type, custom types
 

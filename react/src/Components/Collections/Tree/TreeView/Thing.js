@@ -40,13 +40,16 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
             thing={v}
             parent={{
                 id: thingId,
-                name: child.name,
-                type: type,
+                index: child.index,
                 isTuple: isTuple,
+                name: child.name,
+                pname: child.pname,
+                type: type,
             }}
             child={{
-                name: fancyName(isArray?child.name:k, i),
                 index: i,
+                name: fancyName(isArray ? child.name : k, i),
+                pname: isArray ? child.name : k,
             }}
         />
     ), [child.name, collection, isTuple, thingId, things, type]);
@@ -89,6 +92,7 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
                             id: thing ? thing[THING_KEY] : null,
                             index: child.index,
                             name: child.name,
+                            pname: child.pname,
                             type: type,
                             val: val
                         }}
@@ -113,13 +117,16 @@ Thing.propTypes = {
     collection: PropTypes.object.isRequired,
     parent: PropTypes.shape({
         id: PropTypes.number,
-        name: PropTypes.string,
-        type: PropTypes.string,
+        index: PropTypes.number,
         isTuple: PropTypes.bool,
+        name: PropTypes.string,
+        pname: PropTypes.string,
+        type: PropTypes.string,
     }).isRequired,
     child: PropTypes.shape({
-        name: PropTypes.string,
         index: PropTypes.number,
+        name: PropTypes.string,
+        pname: PropTypes.string,
     }).isRequired,
     things: PropTypes.object.isRequired,
     inset: PropTypes.bool,
