@@ -69,7 +69,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
             jsonArgs = TYPE_INFO_CHILD_THING_ARGS(child.id, parent.id, parent.name);
         } else {
             query = TYPE_INFO_ELSE_QUERY; // check if custom type
-            jsonArgs = TYPE_INFO_ELSE_ARGS(parent.id, parent.name, child.name);
+            jsonArgs = TYPE_INFO_ELSE_ARGS(parent.id, child.index, parent.name);
         }
         TypeActions.getType(query, scope, jsonArgs, tag, setType);
         EnumActions.getEnums(scope, tag, setEnums);

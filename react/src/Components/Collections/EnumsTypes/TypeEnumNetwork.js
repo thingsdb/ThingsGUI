@@ -4,7 +4,6 @@ import { withVlow } from 'vlow';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@mui/material/Typography';
 
 import { COLLECTION_SCOPE } from '../../../Constants/Scopes';
 import { EnumActions, EnumStore, TypeActions, TypeStore } from '../../../Stores';
