@@ -1,4 +1,5 @@
 import { withVlow } from 'vlow';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -18,7 +19,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 
 import { THINGS_DOC } from '../../Constants/Links';
-import { TopBarMenu } from '../Utils';
+import { historyNavigate, TopBarMenu } from '../Utils';
 import { ApplicationActions, ThingsdbStore } from '../../Stores';
 // import packageJson from '../../'; TODO does not find package.json
 
@@ -29,8 +30,13 @@ const withStores = withVlow([{
 }]);
 
 const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
+    let navigate = useNavigate();
+    let location = useLocation();
     const handleClickLogout = () => {
-        ApplicationActions.disconnect();
+        ApplicationActions.disconnect(
+            // clear path and search params
+            () => historyNavigate(navigate, location, '/', {})
+        );
     };
 
     return (
