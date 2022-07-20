@@ -6,7 +6,7 @@ import React from 'react';
 import {UserAccess} from './Config';
 import Tokens from './Tokens';
 import {ThingsdbActions, ThingsdbStore} from '../../Stores';
-import {getIdFromPath, isObjectEmpty, TitlePage} from '../Utils';
+import {getNameFromPath, isObjectEmpty, TitlePage} from '../Utils';
 import {USER_ROUTE} from '../../Constants/Routes';
 
 const withStores = withVlow([{
@@ -27,7 +27,7 @@ const User = ({user, users, collections}) => {
             : isObjectEmpty(user) ? []
                 : [user];
 
-    const userName = getIdFromPath(location.pathname, USER_ROUTE);
+    const userName = getNameFromPath(location.pathname, USER_ROUTE);
     const selectedUser = users2.find(u => u['name'] === userName);
 
     return (

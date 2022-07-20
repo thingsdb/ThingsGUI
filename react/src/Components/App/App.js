@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { CollectionsMenu, OverviewMenu, ProceduresMenu, TasksMenu, TopBar, UsersMenu, QueryEditorMenu } from '../Navigation';
 import { COLLECTION_ROUTE, EDITOR_ROUTE, PROCEDURE_ROUTE, TASK_ROUTE, USER_ROUTE } from '../../Constants/Routes';
-import { DrawerLayout, ErrorToast, getIdFromPath } from '../Utils';
+import { DrawerLayout, ErrorToast, getNameFromPath } from '../Utils';
 import { Procedure, Task } from '../ProceduresAndTasks';
 import Collection from '../Collections';
 import Editor from '../Editor';
@@ -33,10 +33,10 @@ const App = () => {
         return null;
     });
 
-    const collectionName = getIdFromPath(location.pathname, COLLECTION_ROUTE);
-    const userName = getIdFromPath(location.pathname, USER_ROUTE);
-    const procedureName = getIdFromPath(location.pathname, PROCEDURE_ROUTE);
-    const taskId = getIdFromPath(location.pathname, TASK_ROUTE);
+    const collectionName = getNameFromPath(location.pathname, COLLECTION_ROUTE);
+    const userName = getNameFromPath(location.pathname, USER_ROUTE);
+    const procedureName = getNameFromPath(location.pathname, PROCEDURE_ROUTE);
+    const taskId = getNameFromPath(location.pathname, TASK_ROUTE);
 
     const handleDrawerOpen = () => {
         const current = Object.fromEntries(searchParams);

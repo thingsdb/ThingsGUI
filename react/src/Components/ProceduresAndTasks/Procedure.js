@@ -2,7 +2,7 @@ import {useLocation} from 'react-router-dom';
 import {withVlow} from 'vlow';
 import React from 'react';
 
-import {getIdFromPath, isObjectEmpty} from '../Utils';
+import {getNameFromPath, isObjectEmpty} from '../Utils';
 import {Page} from './Utils';
 import {PROCEDURE_ROUTE} from '../../Constants/Routes';
 import {ProcedureActions, ProcedureStore} from '../../Stores';
@@ -19,7 +19,7 @@ const itemKey = 'name';
 
 const Procedure = ({procedures}) => {
     let location = useLocation();
-    const procedureName = getIdFromPath(location.pathname, PROCEDURE_ROUTE);
+    const procedureName = getNameFromPath(location.pathname, PROCEDURE_ROUTE);
     const selectedProcedure = (procedures[scope] || []).find(c => c[itemKey] === procedureName);
 
     React.useEffect(() => {
