@@ -53,7 +53,7 @@
     "socket.io": "2.4.1",
     "socket.io-client": "2.4.0",
     "style-loader": "3.3.1",
-    "terser": "5.13.1",
+    "terser": "5.14.2",
     "terser-webpack-plugin": "5.3.1",
     "vis-network": "^9.1.2",
     "vlow": "1.1.14",
