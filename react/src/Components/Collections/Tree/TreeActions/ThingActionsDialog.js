@@ -13,16 +13,18 @@ import { ROOM, THING, TUPLE } from '../../../../Constants/ThingTypes';
 import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
 import {
     THING_QUERY,
+    TYPE_INFO_CHILD_ARRAY_QUERY,
     TYPE_INFO_CHILD_THING_QUERY,
-    TYPE_INFO_ELSE_QUERY,
+    TYPE_INFO_PARENT_ARRAY_QUERY,
     TYPE_INFO_PARENT_THING_QUERY,
     TYPE_INFO_ROOT_THING_QUERY,
 } from '../../../../TiQueries/Queries';
 import {
-    TYPE_INFO_CHILD_THING_ARGS,
-    TYPE_INFO_ELSE_ARGS,
-    TYPE_INFO_PARENT_THING_ARGS,
     ID_ARGS,
+    TYPE_INFO_CHILD_ARRAY_ARGS,
+    TYPE_INFO_CHILD_THING_ARGS,
+    TYPE_INFO_PARENT_ARRAY_ARGS,
+    TYPE_INFO_PARENT_THING_ARGS,
 } from '../../../../TiQueries/Arguments';
 
 import DialogButtons from './DialogButtons';
@@ -59,17 +61,21 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         let query = '';
         let jsonArgs = null;
         if (parent.id==null) {
-            query = TYPE_INFO_ROOT_THING_QUERY; // check if custom type
+            query = TYPE_INFO_ROOT_THING_QUERY;
             jsonArgs = ID_ARGS(child.id);
         } else if (parent.type == THING) {
-            query = TYPE_INFO_PARENT_THING_QUERY; // check if custom type
+            query = TYPE_INFO_PARENT_THING_QUERY;
             jsonArgs = TYPE_INFO_PARENT_THING_ARGS(parent.id, child.name);
         } else if (child.type == THING) {
             query = TYPE_INFO_CHILD_THING_QUERY; // in case parent is set than indexing is not supported. Therefore we need to check child type by id.
             jsonArgs = TYPE_INFO_CHILD_THING_ARGS(child.id, parent.id, parent.name);
+        } else if (parent.index == null) {
+            query = TYPE_INFO_CHILD_ARRAY_QUERY;
+            jsonArgs = TYPE_INFO_CHILD_ARRAY_ARGS(parent.id, parent.pname, child.index);
         } else {
-            query = TYPE_INFO_ELSE_QUERY; // check if custom type
-            jsonArgs = TYPE_INFO_ELSE_ARGS(parent.id, parent.name, child.name);
+            query = TYPE_INFO_PARENT_ARRAY_QUERY;
+            // pname is the property name without any index indication; so `arr` instead of `arr[2]`
+            jsonArgs = TYPE_INFO_PARENT_ARRAY_ARGS(parent.id, parent.index, parent.pname, child.index);
         }
         TypeActions.getType(query, scope, jsonArgs, tag, setType);
         EnumActions.getEnums(scope, tag, setEnums);
@@ -205,14 +211,16 @@ ThingActionsDialog.propTypes = {
     parent: PropTypes.shape({
         id: PropTypes.number,
         index: PropTypes.number,
-        name: PropTypes.string,
-        type: PropTypes.string,
         isTuple: PropTypes.bool,
+        name: PropTypes.string,
+        pname: PropTypes.string,
+        type: PropTypes.string,
     }).isRequired,
     child: PropTypes.shape({
         id: PropTypes.number,
         index: PropTypes.number,
         name: PropTypes.string,
+        pname: PropTypes.string,
         type: PropTypes.string,
         val: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     }).isRequired,

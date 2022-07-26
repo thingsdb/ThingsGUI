@@ -14,7 +14,7 @@ import TypeInit from './TypeInit';
 
 const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
     const [newProperty, setNewProperty] = React.useState('');
-    const [dataType, setDataType] = React.useState(child.type==LIST||child.type==THING ? dataTypes[0]: child.type==SET ? THING : child.type);
+    const [dataType, setDataType] = React.useState(child.type == LIST || child.type == THING ? dataTypes[0] : child.type == SET ? THING : child.type);
 
     const handleOnChangeName = (p) => {
         setNewProperty(p);
@@ -40,13 +40,13 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
                     child={{
                         id: null,
                         index: child.index,
-                        name: child.type == THING?newProperty:child.name,
+                        name: child.type == THING ? newProperty : child.name,
                         type: dataType,
                     }}
                     customTypes={customTypes}
                     enums={enums}
                     parent={{
-                        id: child.type == THING? child.id:parent.id,
+                        id: child.type == THING ? child.id : parent.id,
                         name: child.type == THING || child.type == LIST || child.type == SET ? child.name : parent.name,
                         type: child.type == THING || child.type == LIST || child.type == SET ? child.type : parent.type,
                     }}
