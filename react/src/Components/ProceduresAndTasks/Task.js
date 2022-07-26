@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { withVlow } from 'vlow';
 import React from 'react';
 
-import { getIdFromPath, isObjectEmpty } from '../Utils';
+import { getNameFromPath, isObjectEmpty } from '../Utils';
 import { Page } from './Utils';
 import { TASK_ROUTE } from '../../Constants/Routes';
 import { TaskActions, TaskStore } from '../../Stores';
@@ -20,7 +20,7 @@ const itemKey = 'id';
 const Task = ({tasks}) => {
     let location = useLocation();
 
-    const taskId = getIdFromPath(location.pathname, TASK_ROUTE);
+    const taskId = getNameFromPath(location.pathname, TASK_ROUTE);
     const selectedTask = (tasks[scope] || []).find(c => String(c[itemKey]) === taskId);
 
     React.useEffect(() => {

@@ -153,7 +153,7 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onDisconnect() {
+    onDisconnect(cb=() => null) {
         EventActions.reset();
         this.emit('disconn').done((data) => {
             CollectionActions.resetCollectionStore();
@@ -164,6 +164,7 @@ class ApplicationStore extends BaseStore {
                 connected: data.Connected,
                 match: {},
             });
+            cb();
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 

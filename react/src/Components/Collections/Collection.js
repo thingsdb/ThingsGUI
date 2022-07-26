@@ -5,7 +5,7 @@ import React from 'react';
 
 import { ThingsdbActions, ThingsdbStore} from '../../Stores';
 import { CollectionConfig} from './Config';
-import { getIdFromPath, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Utils';
+import { getNameFromPath, HarmonicCardHeader, isObjectEmpty, TitlePage} from '../Utils';
 import { Procedures, Tasks } from '../ProceduresAndTasks';
 import { COLLECTION_SCOPE } from '../../Constants/Scopes';
 import { COLLECTION_ROUTE } from '../../Constants/Routes';
@@ -25,7 +25,7 @@ const Collection = ({collections}) => {
         ThingsdbActions.getCollections();
     }, []);
 
-    const collectionName = getIdFromPath(location.pathname, COLLECTION_ROUTE);
+    const collectionName = getNameFromPath(location.pathname, COLLECTION_ROUTE);
     const selectedCollection = collections.find(c => c['name'] === collectionName);
 
     return (
