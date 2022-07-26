@@ -19,8 +19,6 @@ const withStores = withVlow([{
     keys: ['customTypes']
 }]);
 
-const enumsTag = TypesTAG;
-const typesTag = EnumsTAG;
 
 const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
     const types = [
@@ -92,8 +90,8 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
         expand: false,
     });
 
-    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, enumsTag), [scope]);
-    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, typesTag), [scope]);
+    const handleRefreshEnums = React.useCallback(() => EnumActions.getEnums(scope, EnumsTAG), [scope]);
+    const handleRefreshTypes = React.useCallback(() => TypeActions.getTypes(scope, TypesTAG), [scope]);
 
     React.useEffect(()=>{
         handleRefreshEnums();
@@ -144,7 +142,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
                         onInfo={TypeActions.getTypes}
                         onRename={TypeActions.renameType}
                         scope={scope}
-                        tag={typesTag}
+                        tag={TypesTAG}
                         view={viewType}
                     />
                 </HarmonicCardHeader>
@@ -161,7 +159,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
                         onInfo={EnumActions.getEnums}
                         onRename={EnumActions.renameEnum}
                         scope={scope}
-                        tag={enumsTag}
+                        tag={EnumsTAG}
                         view={viewEnum}
                     />
                 </HarmonicCardHeader>

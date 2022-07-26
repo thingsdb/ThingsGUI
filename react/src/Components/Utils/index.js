@@ -237,12 +237,12 @@ const scaleToBinBytes = (bytes) => {
 
 const nextRunFn = (t) => (t ? moment(t).format(DATE_TIME_SEC_STR) : NIL);
 
-const getIdFromPath = (pathname, name) => {
+const getNameFromPath = (pathname, key) => {
     const splitPath = pathname.split('/');
-    const index = splitPath.indexOf(name);
+    const index = splitPath.indexOf(key);
     if (index !== -1) {
-        const id = splitPath[index + 1];
-        return id || '';
+        const name = splitPath[index + 1];
+        return name || '';
     } else {
         return '';
     }
@@ -343,7 +343,7 @@ export {
     findItem,
     FixedList,
     getGreetingTime,
-    getIdFromPath,
+    getNameFromPath,
     getScopes,
     getScopes2,
     getSorting,
