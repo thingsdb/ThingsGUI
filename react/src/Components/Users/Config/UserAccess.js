@@ -50,6 +50,7 @@ const UserAccess = ({user, collections}) => {
     const getSwitches = (scope, privileges) => {
         let s = {
             full: false,
+            user: false,
             query: false,
             change: false,
             grant: false,
@@ -58,10 +59,16 @@ const UserAccess = ({user, collections}) => {
         };
 
         s.full = privileges.includes('FULL');
+        s.user = privileges.includes('USER');
         if (s.full) {
             s.query = true;
             s.change = true;
             s.grant = true;
+            s.join = true;
+            s.run = true;
+        } else if (s.user) {
+            s.query = true;
+            s.change = true;
             s.join = true;
             s.run = true;
         } else {
