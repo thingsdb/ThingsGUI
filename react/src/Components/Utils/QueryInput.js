@@ -128,8 +128,6 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             [/[;,.]/, 'delimiter'],
 
             // strings
-            [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
-            [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
             [/"/, 'string', '@string_double'],
             [/'/, 'string', '@string_single'],
             [/`/, 'string', '@string_backtick'],
