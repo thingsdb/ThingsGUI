@@ -21,6 +21,7 @@ const withStores = withVlow([{
 const OpenNodeGraph = ({nodes, streamInfo}) => {
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const hasStreamInfo = nodes.length > 1;
 
     const handleLoading = React.useCallback(() => {
         setTimeout(()=> {
@@ -29,7 +30,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
     }, []);
 
     React.useEffect(() => {
-        if (open) {
+        if (open && hasStreamInfo) {
             setLoading(true);
             NodesActions.getStreamInfo(handleLoading);
         }
@@ -52,7 +53,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             actionButtons={
                 <React.Fragment>
                     <Tooltip disableFocusListener disableTouchListener title="Refresh stream info">
-                        <Button color="primary" onClick={handleRefresh} >
+                        <Button color="primary" onClick={handleRefresh}>
                             <RefreshIcon color="primary" />
                         </Button>
                     </Tooltip>
@@ -60,9 +61,9 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
                 </React.Fragment>
             }
             button={
-                <Tooltip disableFocusListener disableTouchListener title={Object.keys(streamInfo).length ? 'Ready' : 'Getting stream data...'} >
+                <Tooltip disableFocusListener disableTouchListener title={!hasStreamInfo ? 'No stream data on one node' : Object.keys(streamInfo).length ? 'Ready' : 'Getting stream data...'} >
                     <span>
-                        <Button variant="outlined" color="primary" onClick={handleClickOpen} >
+                        <Button variant="outlined" color="primary" disabled={!hasStreamInfo} onClick={handleClickOpen} >
                             {'View stream graph'}
                         </Button>
                     </span>

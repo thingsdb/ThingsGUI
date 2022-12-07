@@ -104,7 +104,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             { include: '@whitespace' },
 
             // regular expression: ensure it is terminated before beginning (otherwise it is an opeator)
-            [/\/(?=([^\\\/]|\\.)+\/(i?)(\s*)(\.|;|\/|,|\)|\]|\}|$))/, { token: 'regexp', bracket: '@open', next: '@regexp' }],
+            [/\/(?=([^\\\/]|\\.)+\/([ims]*)(\s*)(\.|;|\/|,|\)|\]|\}|$))/, { token: 'regexp', bracket: '@open', next: '@regexp' }],
 
             // delimiters and operators
             [/[()\[\]]/, '@brackets'],
@@ -128,8 +128,6 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             [/[;,.]/, 'delimiter'],
 
             // strings
-            [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
-            [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
             [/"/, 'string', '@string_double'],
             [/'/, 'string', '@string_single'],
             [/`/, 'string', '@string_backtick'],
@@ -157,7 +155,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             [/[^\\\/]/, 'regexp'],
             [/@regexpesc/, 'regexp.escape'],
             [/\\\./, 'regexp.invalid'],
-            [/(\/)(i?)/, [{ token: 'regexp', bracket: '@close', next: '@pop' }, 'keyword.other']],
+            [/(\/)([ims]*)/, [{ token: 'regexp', bracket: '@close', next: '@pop' }, 'keyword.other']],
         ],
 
         regexrange: [
@@ -183,8 +181,9 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         ],
 
         string_backtick: [
+            [/\{\{/, 'string'],
             [/\{/, { token: 'delimiter.bracket', next: '@bracketCounting' }],
-            [/[^\\`{]+/, 'string'],
+            [/[^\{`\{]+/, 'string'],
             [/@escapes/, 'string.escape'],
             [/\\./, 'string.escape.invalid'],
             [/`/, 'string', '@pop']
