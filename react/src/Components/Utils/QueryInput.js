@@ -183,8 +183,9 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
         ],
 
         string_backtick: [
+            [/\{\{/, 'string'],
             [/\{/, { token: 'delimiter.bracket', next: '@bracketCounting' }],
-            [/[^\\`{]+/, 'string'],
+            [/[^\{`\{]+/, 'string'],
             [/@escapes/, 'string.escape'],
             [/\\./, 'string.escape.invalid'],
             [/`/, 'string', '@pop']
