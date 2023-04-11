@@ -54,15 +54,15 @@ const Wpo = ({onChange, input, disabled}) => {
 };
 
 Wpo.defaultProps = {
-    onChange: ()=>null,
-    input: false,
     disabled: false,
+    input: false,
+    onChange: ()=>null,
 };
 
 Wpo.propTypes = {
-    onChange: PropTypes.func,
-    input: PropTypes.bool,
     disabled: PropTypes.bool,
+    input: PropTypes.bool,
+    onChange: PropTypes.func,
 };
 
 export default Wpo;

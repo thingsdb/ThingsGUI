@@ -25,18 +25,18 @@ const NodeGraph = ({width, height, radius, data, streamInfo}) => {
 
 
 NodeGraph.defaultProps = {
-    width: 900,
     height: 600,
     radius: 250,
     streamInfo: {},
+    width: 900,
 };
 
 NodeGraph.propTypes = {
-    width: PropTypes.number,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
     height: PropTypes.number,
     radius: PropTypes.number,
-    data: PropTypes.arrayOf(PropTypes.object).isRequired,
     streamInfo:PropTypes.object,
+    width: PropTypes.number,
 };
 
 

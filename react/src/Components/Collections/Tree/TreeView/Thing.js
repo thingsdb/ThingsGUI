@@ -52,7 +52,7 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
                 pname: isArray ? child.name : k,
             }}
         />
-    ), [child.name, collection, isTuple, thingId, things, type]);
+    ), [child.index, child.name, child.pname, collection, isTuple, thingId, things, type]);
 
     const renderChildren = () => (
         <ThingRestrict
@@ -107,14 +107,19 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
 };
 
 Thing.defaultProps = {
-    thing: null,
     inset: false,
+    thing: null,
 };
 
 
 Thing.propTypes = {
-    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
+    child: PropTypes.shape({
+        index: PropTypes.number,
+        name: PropTypes.string,
+        pname: PropTypes.string,
+    }).isRequired,
     collection: PropTypes.object.isRequired,
+    inset: PropTypes.bool,
     parent: PropTypes.shape({
         id: PropTypes.number,
         index: PropTypes.number,
@@ -123,13 +128,8 @@ Thing.propTypes = {
         pname: PropTypes.string,
         type: PropTypes.string,
     }).isRequired,
-    child: PropTypes.shape({
-        index: PropTypes.number,
-        name: PropTypes.string,
-        pname: PropTypes.string,
-    }).isRequired,
+    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     things: PropTypes.object.isRequired,
-    inset: PropTypes.bool,
 };
 
 export default Thing;

@@ -124,15 +124,16 @@ const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildre
 };
 
 TreeBranch.defaultProps = {
+    inset: false,
     name: null,
     onAction: null,
     onClick: null,
     onOpen: () => null,
-    inset: false,
 };
 
 TreeBranch.propTypes = {
     canToggle: PropTypes.bool.isRequired,
+    inset: PropTypes.bool,
     name: PropTypes.string,
     onAction: PropTypes.func,
     onClick: PropTypes.func,
@@ -140,7 +141,6 @@ TreeBranch.propTypes = {
     onRenderChildren: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
     val: PropTypes.string.isRequired,
-    inset: PropTypes.bool,
 };
 
 export default TreeBranch;

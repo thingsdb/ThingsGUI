@@ -120,8 +120,8 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
 
 AddArray.defaultProps = {
     childTypes: [],
-    isSet: false,
     identifier: null,
+    isSet: false,
 };
 
 AddArray.propTypes = {
@@ -129,8 +129,8 @@ AddArray.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
     dataTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     enums: PropTypes.arrayOf(PropTypes.object).isRequired,
-    isSet: PropTypes.bool,
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    isSet: PropTypes.bool,
     parent: PropTypes.string.isRequired,
     parentDispatch: PropTypes.func.isRequired,
 };

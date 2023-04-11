@@ -72,8 +72,8 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
 };
 
 DialogButtons.defaultProps = {
-    thing: null,
     isRoot: false,
+    thing: null,
 };
 
 
@@ -86,6 +86,7 @@ DialogButtons.propTypes = {
         val: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     }).isRequired,
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
+    isRoot: PropTypes.bool,
     onClose: PropTypes.func.isRequired,
     parent: PropTypes.shape({
         id: PropTypes.number,
@@ -99,7 +100,6 @@ DialogButtons.propTypes = {
     scope: PropTypes.string.isRequired,
     tag: PropTypes.string.isRequired,
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
-    isRoot: PropTypes.bool,
 };
 
 export default DialogButtons;

@@ -199,23 +199,12 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
 };
 
 ThingActionsDialog.defaultProps = {
-    thing: null,
     isRoot: false,
+    thing: null,
 };
 
 
 ThingActionsDialog.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    scope: PropTypes.string.isRequired,
-    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
-    parent: PropTypes.shape({
-        id: PropTypes.number,
-        index: PropTypes.number,
-        isTuple: PropTypes.bool,
-        name: PropTypes.string,
-        pname: PropTypes.string,
-        type: PropTypes.string,
-    }).isRequired,
     child: PropTypes.shape({
         id: PropTypes.number,
         index: PropTypes.number,
@@ -225,6 +214,17 @@ ThingActionsDialog.propTypes = {
         val: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     }).isRequired,
     isRoot: PropTypes.bool,
+    onClose: PropTypes.func.isRequired,
+    parent: PropTypes.shape({
+        id: PropTypes.number,
+        index: PropTypes.number,
+        isTuple: PropTypes.bool,
+        name: PropTypes.string,
+        pname: PropTypes.string,
+        type: PropTypes.string,
+    }).isRequired,
+    scope: PropTypes.string.isRequired,
+    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
 };
 
 export default ThingActionsDialog;
