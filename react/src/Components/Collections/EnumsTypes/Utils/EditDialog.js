@@ -198,6 +198,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         setAction('');
         setAnchorEl(null);
         setOldname(null);
+        setState(initState);
     };
 
     const handleClickOk = () => {
