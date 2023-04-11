@@ -59,13 +59,16 @@ const Rename = ({user, users}) => {
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, users);  return d; }, {});
-        setState({...state, errors: err});
+        setState(state=> ({...state, errors: err}));
         if (!Object.values(err).some(d => Boolean(d))) {
             ThingsdbActions.renameUser(
                 user.name,
                 form.name,
                 tag,
-                () => historyNavigate(navigate, location, `/${USER_ROUTE}/${form.name}`)
+                () => {
+                    setState(state => ({...state, show: false}));
+                    historyNavigate(navigate, location, `/${USER_ROUTE}/${form.name}`);
+                }
             );
         }
     };
