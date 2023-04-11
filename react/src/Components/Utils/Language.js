@@ -260,6 +260,7 @@ export default {
     node: {
         'backup_info': 'Returns information about a specific scheduled backup.',
         'backups_info': 'Returns backup schedule information for all backup schedules in the selected node scope.',
+        'backups_ok': 'Returns false if at least one backup had failed (result code != 0). In all other cases this function returns true (also when no backups are available or not yet started).',
         'counters': 'Returns counters for the ThingsDB node you are connected too. Counters start all at zero when ThingsDB is started, or when the counters are reset by using reset_counters()’. Counters give information about things, queries and changes. If you suspect failed queries, then counters might provide you with more information.',
         'del_backup': 'Delete a scheduled backup. If the schedule was pending, the backup job will be cancelled.',
         'has_backup': 'Determines if a backup exists in ThingsDB.',
