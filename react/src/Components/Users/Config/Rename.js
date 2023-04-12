@@ -46,7 +46,7 @@ const Rename = ({user, users}) => {
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setState(state => ({...state, show: false}));
     };
 
     const handleOnChange = ({target}) => {
@@ -59,7 +59,7 @@ const Rename = ({user, users}) => {
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, users);  return d; }, {});
-        setState(state=> ({...state, errors: err}));
+        setState(state => ({...state, errors: err}));
         if (!Object.values(err).some(d => Boolean(d))) {
             ThingsdbActions.renameUser(
                 user.name,
