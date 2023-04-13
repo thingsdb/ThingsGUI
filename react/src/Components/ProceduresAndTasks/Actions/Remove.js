@@ -13,9 +13,7 @@ const tag = RemoveProcedureTAG;
 const Remove = ({item, scope, type}) => {
     let navigate = useNavigate();
     let location = useLocation();
-
-    //to prevent update of name to undefined, after it is deleted.
-    const [name] = React.useState(type === 'procedure' ? item.name : item.id); // eslint-disable-line
+    const name = type === 'procedure' ? item.name : item.id;
 
     const handleClickOk = () => {
         let fn = type === 'procedure' ? ProcedureActions.deleteProcedure : TaskActions.deleteTask;
@@ -29,7 +27,7 @@ const Remove = ({item, scope, type}) => {
             buttonProps={{variant: 'outlined', color: 'primary'}}
             onSubmit={handleClickOk}
             tag={tag}
-            title={`Remove '${name}'`}
+            title={name ? `Remove '${name}'` : ''}
         />
     );
 };

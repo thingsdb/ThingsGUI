@@ -10,8 +10,7 @@ import { RemoveNodeTAG } from '../../../Constants/Tags';
 const tag = RemoveNodeTAG;
 
 const Remove = ({node}) => {
-    // to prevent update of name to undefined, after it is deleted.
-    const [name] = React.useState(`${node.node_name}:${node.port}`); // eslint-disable-line
+    const name = `${node.node_name}:${node.port}`;
 
     const handleClickOk = (callback) => {
         NodesActions.delNode(
@@ -28,7 +27,7 @@ const Remove = ({node}) => {
             buttonProps={{color: 'primary'}}
             onSubmit={handleClickOk}
             tag={tag}
-            title={`Remove '${name}'`}
+            title={name ? `Remove '${name}'` : ''}
         />
     );
 };

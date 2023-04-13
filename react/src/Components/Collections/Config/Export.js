@@ -40,14 +40,13 @@ const Label = styled(Typography)(({ theme }) => ({
 const tag = ExportCollectionTAG;
 
 const Export = ({collection}) => {
-    // to prevent update of name to undefined, after it is deleted.
-    const [name] = React.useState(collection.name); // eslint-disable-line
     const [show, setShow] = React.useState(false);
     const [script, setScript] = React.useState('');
+    const name = collection.name;
 
     const handleClickOpen = () => {
         CollectionActions.query(
-            `${COLLECTION_SCOPE}:${collection.name}`, EXPORT_QUERY, tag, setScript
+            `${COLLECTION_SCOPE}:${name}`, EXPORT_QUERY, tag, setScript
         );
         setShow(true);
     };
@@ -63,7 +62,7 @@ const Export = ({collection}) => {
                     {'View setup script'}
                 </Button>
             }
-            title={`View the setup script of ${name}.`}
+            title={name ? `View the setup script of '${name}'.` : ''}
             open={show}
             onClose={handleClickClose}
             maxWidth="md"
