@@ -51,7 +51,7 @@ const Rename = ({collection, collections}) => {
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setState(state => ({...state, show: false}));
     };
 
     const handleOnChange = ({target}) => {
@@ -64,13 +64,16 @@ const Rename = ({collection, collections}) => {
 
     const handleClickOk = () => {
         const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, collections);  return d; }, {});
-        setState({...state, errors: err});
+        setState(state => ({...state, errors: err}));
         if (!Object.values(err).some(d => Boolean(d))) {
             ThingsdbActions.renameCollection(
                 collection.name,
                 form.name,
                 tag,
-                () => historyNavigate(navigate, location, `/${COLLECTION_ROUTE}/${form.name}`)
+                () => {
+                    setState(state => ({...state, show: false}));
+                    historyNavigate(navigate, location, `/${COLLECTION_ROUTE}/${form.name}`);
+                }
             );
         }
     };

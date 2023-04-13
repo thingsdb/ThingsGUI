@@ -38,11 +38,11 @@ const Password = ({user}) => {
     const {show, showPassword, errors, form} = state;
 
     const handleClickOpen = () => {
-        setState({...state, show: true, showPassword: false, errors: {}, form: {password: '', set: user.has_password}});
+        setState(state => ({...state, show: true, showPassword: false, errors: {}, form: {password: '', set: user.has_password}}));
     };
 
     const handleClickClose = () => {
-        setState({...state, show: false});
+        setState(state => ({...state, show: false}));
     };
 
     const handleOnChange = ({target}) => {
@@ -62,14 +62,14 @@ const Password = ({user}) => {
                     user.name,
                     form.password,
                     tag,
-                    () => setState({...state, show: false})
+                    () => setState(state => ({...state, show: false}))
                 );
             }
         } else {
             ThingsdbActions.resetPassword(
                 user.name,
                 tag,
-                () => setState({...state, show: false})
+                () => setState(state => ({...state, show: false}))
             );
         }
     };
@@ -90,7 +90,7 @@ const Password = ({user}) => {
     };
 
     const handleClickShowPassword = () => {
-        setState({...state, showPassword: !showPassword});
+        setState(state => ({...state, showPassword: !showPassword}));
     };
 
 

@@ -38,20 +38,11 @@ const ThingActions = ({child, parent, thing, scope, isRoot}) => {
 };
 
 ThingActions.defaultProps = {
-    thing: null,
     isRoot: false,
+    thing: null,
 };
 
 ThingActions.propTypes = {
-    scope: PropTypes.string.isRequired,
-    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
-    parent: PropTypes.shape({
-        id: PropTypes.number,
-        index: PropTypes.number,
-        name: PropTypes.string,
-        type: PropTypes.string,
-        isTuple: PropTypes.bool,
-    }).isRequired,
     child: PropTypes.shape({
         id: PropTypes.number,
         index: PropTypes.number,
@@ -59,6 +50,15 @@ ThingActions.propTypes = {
         type: PropTypes.string,
     }).isRequired,
     isRoot: PropTypes.bool,
+    parent: PropTypes.shape({
+        id: PropTypes.number,
+        index: PropTypes.number,
+        name: PropTypes.string,
+        type: PropTypes.string,
+        isTuple: PropTypes.bool,
+    }).isRequired,
+    scope: PropTypes.string.isRequired,
+    thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
 };
 
 export default ThingActions;

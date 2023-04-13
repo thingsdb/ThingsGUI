@@ -12,13 +12,11 @@ const tag = RemoveUserTAG;
 const Remove = ({user}) => {
     let navigate = useNavigate();
     let location = useLocation();
-
-    //to prevent update of name to undefined, after it is deleted.
-    const [name] = React.useState(user.name); // eslint-disable-line
+    const name = user.name;
 
     const handleClickOk = () => {
         ThingsdbActions.removeUser(
-            user.name,
+            name,
             tag,
             () => historyNavigate(navigate, location, '/'),
         );
@@ -30,7 +28,7 @@ const Remove = ({user}) => {
             buttonProps={{title: 'Remove'}}
             onSubmit={handleClickOk}
             tag={tag}
-            title={`Remove '${name}'`}
+            title={name ? `Remove '${name}'`: ''}
         />
     );
 };

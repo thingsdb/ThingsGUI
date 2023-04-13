@@ -40,17 +40,17 @@ const Err = ({icon, title, body, onClose}) => (
 );
 
 Err.defaultProps = {
-    title: '',
     body: '',
-    onClose: null,
     icon: null,
+    onClose: null,
+    title: '',
 };
 
 Err.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    onClose: PropTypes.func,
     icon: PropTypes.object,
+    onClose: PropTypes.func,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 const LocalMsg = ({icon, title, body, onClose, useAsPopUp}) => {
@@ -99,18 +99,18 @@ const LocalMsg = ({icon, title, body, onClose, useAsPopUp}) => {
 };
 
 LocalMsg.defaultProps = {
-    title: '',
     body: '',
-    onClose: null,
     icon: null,
+    onClose: null,
+    title: '',
     useAsPopUp: false,
 };
 
 LocalMsg.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    onClose: PropTypes.func,
     icon: PropTypes.object,
+    onClose: PropTypes.func,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     useAsPopUp: PropTypes.bool,
 };
 

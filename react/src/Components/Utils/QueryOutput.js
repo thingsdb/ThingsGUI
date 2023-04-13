@@ -80,15 +80,15 @@ const QueryOutput = ({output, onArgs, onChangeTab, showLogs, tabIndex}) => {
 };
 
 QueryOutput.defaultProps = {
-    output: null,
     onArgs: null,
+    output: null,
     showLogs: false,
 };
 
 QueryOutput.propTypes = {
-    output: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     onArgs: PropTypes.func,
     onChangeTab: PropTypes.func.isRequired,
+    output: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),
     showLogs: PropTypes.bool,
     tabIndex: PropTypes.number.isRequired
 };

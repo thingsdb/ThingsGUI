@@ -198,6 +198,7 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
         setAction('');
         setAnchorEl(null);
         setOldname(null);
+        setState(initState);
     };
 
     const handleClickOk = () => {
@@ -386,23 +387,23 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
 };
 
 EditDialog.defaultProps = {
-    item: {},
     dataTypes: [],
+    item: {},
     onChangeItem: ()=>null,
     open: false,
 };
 
 EditDialog.propTypes = {
-    dataTypes: PropTypes.arrayOf(PropTypes.string),
     category: PropTypes.string.isRequired,
+    dataTypes: PropTypes.arrayOf(PropTypes.string),
     getInfo: PropTypes.func.isRequired,
     headers: PropTypes.object.isRequired,
     item: PropTypes.object,
     link: PropTypes.string.isRequired,
     onChangeItem: PropTypes.func,
     onClose: PropTypes.func.isRequired,
-    open: PropTypes.bool,
     onRename: PropTypes.func.isRequired,
+    open: PropTypes.bool,
     queries: PropTypes.object.isRequired,
     rows: PropTypes.object.isRequired,
     scope: PropTypes.string.isRequired,

@@ -76,15 +76,15 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
     );
 };
 TableWithBadges.defaultProps = {
-    buttons: null,
     badgeButton: null,
+    buttons: null,
 };
 
 TableWithBadges.propTypes = {
+    badgeButton: PropTypes.func,
+    buttons: PropTypes.func,
     header: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
-    buttons: PropTypes.func,
-    badgeButton: PropTypes.func,
 };
 
 export default TableWithBadges;

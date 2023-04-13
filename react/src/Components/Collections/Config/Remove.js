@@ -13,13 +13,11 @@ const tag = RemoveCollectionTAG;
 const Remove = ({collection}) => {
     let navigate = useNavigate();
     let location = useLocation();
-
-    //to prevent update of name to undefined, after it is deleted.
-    const [name] = React.useState(collection.name); // eslint-disable-line
+    const name = collection.name;
 
     const handleClickOk = () => {
         ThingsdbActions.removeCollection(
-            collection.name,
+            name,
             tag,
             () => historyNavigate(navigate, location, '/'),
         );
@@ -32,7 +30,7 @@ const Remove = ({collection}) => {
             buttonProps={{variant: 'outlined', color: 'primary'}}
             onSubmit={handleClickOk}
             tag={tag}
-            title={`Remove '${name}'`}
+            title={name ? `Remove '${name}'` : ''}
         />
     );
 };

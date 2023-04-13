@@ -34,7 +34,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             setLoading(true);
             NodesActions.getStreamInfo(handleLoading);
         }
-    }, [handleLoading, open]);
+    }, [handleLoading, hasStreamInfo, open]);
 
     const handleRefresh = () => {
         setLoading(true);
