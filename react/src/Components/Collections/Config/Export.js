@@ -69,7 +69,11 @@ const Export = ({collection}) => {
             actionButtons={
                 <React.Fragment>
                     <Copy text={script} />
-                    <DownloadTextFile name={name} text={script} />
+                    <DownloadTextFile
+                        extension=".ti"
+                        name={name}
+                        text={script}
+                    />
                 </React.Fragment>
             }
         >

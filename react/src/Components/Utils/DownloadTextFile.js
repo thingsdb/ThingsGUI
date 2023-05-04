@@ -5,7 +5,7 @@ import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
 
-const DownloadTextFile = ({name, text}) => {
+const DownloadTextFile = ({extension, name, text}) => {
     const [href, setHref] = React.useState(null);
 
     React.useEffect(() => {
@@ -14,7 +14,7 @@ const DownloadTextFile = ({name, text}) => {
 
     return(
         <Tooltip disableFocusListener disableTouchListener title="Download" sx={{marginLeft: '8px', marginRight: '8px'}}>
-            <Button color="primary" href={href} download={`thingsgui_${name||'text'}`}>
+            <Button color="primary" href={href} download={`thingsgui_${name || 'text'}${extension || ''}`}>
                 <DownloadIcon color="primary" />
             </Button>
         </Tooltip>
@@ -22,10 +22,12 @@ const DownloadTextFile = ({name, text}) => {
 };
 
 DownloadTextFile.defaultProps = {
+    extension: '',
     name: '',
 };
 
 DownloadTextFile.propTypes = {
+    extension: PropTypes.string,
     name: PropTypes.string,
     text: PropTypes.string.isRequired,
 };
