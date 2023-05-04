@@ -42,7 +42,6 @@ const StringDialog = ({name, text}) => {
                 item
                 xs={12}
                 sx={{
-                    margin: '8px',
                     padding: '16px',
                     border: '1px solid #525557',
                     position: 'relative',
@@ -71,7 +70,6 @@ const StringDialog = ({name, text}) => {
                     multiline
                     maxRows="40"
                     fullWidth
-                    sx={{margin: '8px'}}
                 />
             </Grid>
         </SimpleModal>

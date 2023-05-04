@@ -40,7 +40,10 @@ const RoomEvent = ({room, events}) => {
     };
 
     // stringify thingId
-    const roomId = room.includes('room:') ? room.split(':')[1] : null;
+    const roomId = room.includes('room:') ? room.substring(
+        room.indexOf(':') + 1,
+        room.lastIndexOf('>')
+    ) : null;
     const roomEvents = roomId !== null && events[roomId] || [];
     const lastIndex = roomEvents.length - 1;
 
