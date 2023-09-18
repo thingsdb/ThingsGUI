@@ -33,6 +33,8 @@ export default {
         list: {
             'choice': 'This function returns a pseudo-random item from the list. The list must contain at least one item, otherwise a lookup_err() is raised.',
             'clear': 'Removes all items from a list.',
+            'copy': 'Copy a list.',
+            'count': 'Returns the number of times a value appears in a list. A closure might be given which can be used as a shortcut for .filter().len().',
             'each': 'Iterate over all the items in an list or tuple. Use this functions instead of map when you are not interested in the return value.',
             'every': 'This function tests whether all elements in the array pass a given test. It returns a boolean value.',
             'extend': 'Adds a list or tuple with items to the end of a list, and returns the new length.',
@@ -42,6 +44,7 @@ export default {
             'find': 'This function returns the value of the first element in the list or tuple that satisfies the callback function. Otherwise nil is returned unless an alternative return value is specified.',
             'find_index': 'This function returns the index of the first element in a list or tuple that satisfies the callback function. Otherwise nil is returned.',
             'first':'Returns the first item in the list. A lookup_err() is raised when this function is used on an empty list unless a default value is given, in which case the given value will be returned.',
+            'flat': 'The function returns a new list with all tuple elements concatenated into it recursively up to a specified depth.',
             'has':'Return true if a given value is found in the list, or false if not found.',
             'index_of': 'Returns the first index at which a given value can be found in the list or tuple, or nil if it is not present. The index of an array starts at 0, so the first item has index 0 the second 1 and so on.',
             'is_unique': 'This function determines whether each item in a list is unique or not.',
@@ -61,6 +64,7 @@ export default {
             'some': 'This function tests whether at least one element in the array passes a given test. It returns a boolean value.',
             'sort': 'When this method is used on an list or tuple, a new sorted list is returned.',
             'splice': 'The splice() method changes the contents of an list by removing or replacing existing elements and/or adding new elements in place.',
+            'sum': 'Returns the sum of each value in a list. A closure might be given which can be used as a shortcut for .map().sum().',
             'unique': 'This function returns a new list where each item in the list is unique. If duplicated items are found, the first item will be retained.',
             'unshift': 'Add new items to the start of a list and returns the new length.',
         },
@@ -317,6 +321,7 @@ export default {
     procedures: {
         'del_procedure': 'Delete a procedure.',
         'has_procedure': 'Determines if a procedure exists in the current scope.',
+        'mod_procedure': 'Changes the closure for an existing procedure. This function also updates the created_at time as if it is a new procedure.',
         'new_procedure': 'Creates a new procedure to the @thingsdb or a @collection scope. The name of the procedure must be unique within the scope. The given closure will be copied to the procedure, so this is not a reference to a given closure.',
         'procedure_doc': 'Returns the doc string for a given procedure. An empty string is returned if the procedure has no doc string.',
         'procedure_info': 'Returns information about a procedure.',
