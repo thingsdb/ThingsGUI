@@ -126,7 +126,7 @@ export const DEL_MODULE_QUERY = 'del_module(name);';
 export const DEL_NODE_QUERY = 'del_node(id);';
 export const MODULE_INFO_QUERY = 'module_info(name);';
 export const MODULES_INFO_QUERY = 'modules_info();';
-export const NEW_BACKUP_QUERY = (time, repeat, maxFiles) => `new_backup(file${time ? ', datetime(time)' : ', now()'}${repeat ? `, repeat${maxFiles ? ', maxFiles' : ''}` : ''});`;
+export const NEW_BACKUP_QUERY = (time, repeat, maxFiles) => `new_backup(file${time ? ', datetime(time)' : ', timeval()'}${repeat ? `, repeat${maxFiles ? ', maxFiles' : ''}` : ''});`;
 export const NEW_MODULE_QUERY = (configuration) => configuration ? 'new_module(name, source, configuration);' : 'new_module(name, source);';
 export const NEW_NODE_QUERY = (port) => port ? 'new_node(secret, name, port);' : 'new_node(secret, name);';
 export const NODE_COUNTERS_INFO_QUERY = '[node_info(), counters()];';
