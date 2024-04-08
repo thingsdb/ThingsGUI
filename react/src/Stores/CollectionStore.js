@@ -17,7 +17,6 @@ import {
 
 
 const CollectionActions = Vlow.createActions([
-    'cleanupThings',
     'cleanupTmp',
     'decCounter',
     'disableSubmit',
@@ -79,7 +78,7 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onGetThings(collectionId, collectionName, thingId=null) {
+    onGetThings(collectionName, thingId=null, onCb=() => null) {
         const scope = `${COLLECTION_SCOPE}:${collectionName}`;
         let query = THING_CURRENT_QUERY;
         let jsonArgs = null;
@@ -93,14 +92,13 @@ class CollectionStore extends BaseStore {
             scope,
             arguments: jsonArgs
         }).done((data) => {
+            const id = data[THING_KEY];
             this.setState(prevState => {
-                const things = thingId ?
-                    Object.assign({}, prevState.things, {[thingId]: data})
-                    :
-                    Object.assign({}, prevState.things, {[collectionId]: data});
+                const things = Object.assign({}, prevState.things, {[id]: data});
                 return {things};
             });
-            this.onIncCounter(thingId || collectionId);
+            this.onIncCounter(id);
+            onCb(id);
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
@@ -132,14 +130,6 @@ class CollectionStore extends BaseStore {
         this.onDecCounter(thingId);
     }
 
-    onCleanupThings(collectionId=null) {
-        const {things} = this.state;
-        this.setState({
-            things: collectionId && things[collectionId] ? {[collectionId]: things[collectionId]} : {}, // To ensure that the collection data is shown on opening. Clicking the container (open->close->open) to fast will not trigger the onGetThings() and no data is shown otherwise.
-            thingCounters: {} // Will be inc at onGetThings()
-        });
-    }
-
     onQuery(scope, query, tag, cb, thingId=null, blob=null, jsonArgs=null, onFail=()=>null) {
         this.emit('query', {
             query,
@@ -161,7 +151,7 @@ class CollectionStore extends BaseStore {
     }
 
     onDownload(link, cb) {
-        this.post('/download', link).done((textFile) => {
+        this.blob('/download', link).done((textFile) => {
             cb(textFile);
         }).fail((error, message) => {
             ErrorActions.setToastError(`${error.statusText}: ${message}`);

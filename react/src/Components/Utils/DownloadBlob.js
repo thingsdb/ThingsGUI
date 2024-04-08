@@ -40,7 +40,7 @@ const DownloadBlob = ({val, isImg}) => {
     }, [val]); // eslint-disable-line
 
     return (
-        <Button target="_blank" href={link} download="blob" type="application/octet-stream" color="primary">
+        <Button target="_blank" href={link} download="ThingsGUI Blob" type="application/octet-stream" color="primary">
             {isImg ? (
                 <Img src={link} />
             ) : (

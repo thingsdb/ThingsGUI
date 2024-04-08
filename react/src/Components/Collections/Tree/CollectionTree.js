@@ -25,8 +25,8 @@ const CollectionTree = ({collection}) => {
     const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {
-        return CollectionActions.cleanupThings();
-    }, [collection.collection_id]);
+        return CollectionActions.resetCollectionStore();
+    }, [collection.name]);
 
     const handleOpen = () => {
         setOpen(!open);
@@ -37,7 +37,7 @@ const CollectionTree = ({collection}) => {
     };
 
     const handleCleanup = () => {
-        CollectionActions.cleanupThings(collection.collection_id);
+        CollectionActions.resetCollectionStore();
     };
 
     return(

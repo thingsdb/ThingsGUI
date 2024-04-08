@@ -64,7 +64,7 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
     const handleOpenClose = (open) => {
         if(thing && thing[THING_KEY]) {
             if(open) {
-                CollectionActions.getThings(collection.collection_id, collection.name, thing[THING_KEY]);
+                CollectionActions.getThings(collection.name, thing[THING_KEY]);
             } else {
                 CollectionActions.removeThing(thing[THING_KEY]);
             }

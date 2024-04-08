@@ -78,12 +78,12 @@ func handlerSession(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	bytes := make([]byte, 32) //generate a random 32 byte key for AES-256
+	bytes := make([]byte, 32) // generate a random 32 byte key for AES-256
 	if _, err := rand.Read(bytes); err != nil {
 		panic(err.Error())
 	}
 
-	key := hex.EncodeToString(bytes) //encode key in bytes to string and keep as secret, put in a vault
+	key := hex.EncodeToString(bytes) // encode key in bytes to string and keep as secret, put in a vault
 	cookie := &http.Cookie{
 		Name:   cookieName,
 		Value:  key,

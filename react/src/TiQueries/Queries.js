@@ -15,6 +15,7 @@ export const WSE_FORMAT_QUERY = (run) => `wse(${run})`; // don't place a `;`
 export const ERROR_FORMAT_QUERY = (code, msg) => `err(${code}${msg ? `, '${msg}'` : ''})`; // don't place a `;`
 
 export const EXPORT_QUERY = 'export();';
+export const EXPORT_DUMP_QUERY = 'export({dump: true});';
 
 // Types
 export const DEL_TYPE_QUERY = 'del_type(name);';

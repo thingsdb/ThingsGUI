@@ -190,7 +190,7 @@ class BaseStore extends Vlow.Store {
         return new _SocketRequest(name, data);
     }
 
-    post(url, data) {
+    blob(url, data) {
         return new _BlobRequest('POST', url, data);
     }
 

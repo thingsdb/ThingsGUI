@@ -1,6 +1,4 @@
-import { amber } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
@@ -12,7 +10,7 @@ import { Copy, DownloadTextFile, ErrorMsg, SimpleModal } from '../../Utils';
 import { CollectionActions } from '../../../Stores';
 import { COLLECTION_SCOPE } from '../../../Constants/Scopes';
 import { ExportCollectionTAG } from '../../../Constants/Tags';
-import { EXPORT_QUERY } from '../../../TiQueries/Queries';
+import { EXPORT_QUERY, EXPORT_DUMP_QUERY } from '../../../TiQueries/Queries';
 
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
@@ -59,10 +57,10 @@ const Export = ({collection}) => {
         <SimpleModal
             button={
                 <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                    {'View setup script'}
+                    {'Export'}
                 </Button>
             }
-            title={name ? `View the setup script of '${name}'.` : ''}
+            title={name ? `View export of '${name}'.` : ''}
             open={show}
             onClose={handleClickClose}
             maxWidth="md"
@@ -81,14 +79,7 @@ const Export = ({collection}) => {
                 <Grid item xs={12}>
                     <ErrorMsg tag={tag} />
                     <Typography variant="body2">
-                        {'This setup script includes all enums, types and procedures.'}
-                    </Typography>
-                    <Typography variant="subtitle2" component="span" sx={{color: amber[700]}}>
-                        {'Note: '}
-                        <Box component="span" sx={{ fontStyle: 'italic' }}>
-                            {'export() '}
-                        </Box>
-                        {'is an experimental function and may change in the future.'}
+                        {'This export script includes all enums, types and procedures.'}
                     </Typography>
                 </Grid>
                 <StyledGrid container item xs={12}>

@@ -1,16 +1,16 @@
 import { withVlow } from 'vlow';
+import LinearProgress from '@mui/material/LinearProgress';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@mui/material/Typography';
 
-import { ThingActions } from '../TreeActions';
+import { COLLECTION_SCOPE } from '../../../../Constants/Scopes';
 import { CollectionStore, CollectionActions } from '../../../../Stores';
 import { THING } from '../../../../Constants/ThingTypes';
-import { COLLECTION_SCOPE } from '../../../../Constants/Scopes';
-import ThingRestrict from './ThingRestrict';
+import { ThingActions } from '../TreeActions';
 import Thing from './Thing';
+import ThingRestrict from './ThingRestrict';
 
 const withStores = withVlow([{
     store: CollectionStore,
@@ -19,11 +19,12 @@ const withStores = withVlow([{
 
 
 const ThingRoot = ({things, collection}) => {
-    const fetched = things.hasOwnProperty(collection.collection_id);
+    const [rootId, setRootId] = React.useState(null);
+    const rootThing = things[rootId];
 
     React.useEffect(() => {
-        CollectionActions.getThings(collection.collection_id, collection.name);
-    }, [collection.collection_id, collection.name]);
+        CollectionActions.getThings(collection.name, null, setRootId);
+    }, [collection.name, rootId]);
 
     const onChildren = React.useCallback((k, v) => (
         <Thing
@@ -33,7 +34,7 @@ const ThingRoot = ({things, collection}) => {
             things={things}
             collection={collection}
             parent={{
-                id: collection.collection_id,
+                id: rootId,
                 name: 'root',
                 type: THING,
                 isTuple: false,
@@ -45,23 +46,23 @@ const ThingRoot = ({things, collection}) => {
                 pname: k,
             }}
         />
-    ), [collection, things]);
+    ), [collection, rootId, things]);
 
     return (
-        fetched ? (
+        rootThing ? (
             <List
                 component="nav"
                 dense
                 disablePadding
             >
                 <ThingRestrict
-                    thing={things[collection.collection_id]}
+                    thing={rootThing}
                     onChildren={onChildren}
                 />
                 <ListItem disableGutters sx={{marginTop: '16px'}}>
                     <ThingActions
                         child={{
-                            id: collection.collection_id,
+                            id: rootId,
                             index: null,
                             name: 'root',
                             type: THING,
@@ -74,15 +75,13 @@ const ThingRoot = ({things, collection}) => {
                             isTuple: false,
                         }}
                         scope={`${COLLECTION_SCOPE}:${collection.name}`}
-                        thing={things[collection.collection_id]}
+                        thing={rootThing}
                         isRoot
                     />
                 </ListItem>
             </List>
         ) : (
-            <Typography variant="caption">
-                {'Cannot fetch data.'}
-            </Typography>
+            <LinearProgress />
         )
     );
 };

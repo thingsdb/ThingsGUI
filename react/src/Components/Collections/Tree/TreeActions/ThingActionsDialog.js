@@ -60,6 +60,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         // it would also be nice if we could check for potential custom type childern in an array type. To define the datatype of the edit component.
         let query = '';
         let jsonArgs = null;
+
         if (parent.id==null) {
             query = TYPE_INFO_ROOT_THING_QUERY;
             jsonArgs = ID_ARGS(child.id);
