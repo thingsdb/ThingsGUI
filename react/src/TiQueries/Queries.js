@@ -110,7 +110,7 @@ export const TASK_SET_CLOSURE_QUERY = 'task(id).set_closure(closure(closure));';
 export const TASK_SET_OWNER_QUERY = 'task(id).set_owner(owner);';
 
 export const GET_TASK_QUERY = 't = task(id); [t.id(), t.at(), t.owner(), t.closure(), t.err(), t.args()];';
-export const LIGHT_TASKS_QUERY = 'tasks = tasks(); return tasks.map(|t| {id: t.id(), at: t.at(), err: t.err()});';
+export const LIGHT_TASKS_QUERY = 'tasks().map(|t| {id: t.id(), at: t.at(), err: t.err()});';
 export const TASK_ARGS_QUERY = 'task(id).args();';
 export const TASK_CANCEL_QUERY = 'task(id).cancel();';
 export const TASK_DEL_QUERY = 'task(id).del();';
