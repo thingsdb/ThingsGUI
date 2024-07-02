@@ -8,7 +8,11 @@ import {EditActions, useEdit} from '../Context';
 import {AddFile, DownloadBlob} from '../..';
 
 
-const AddBlob = ({identifier, init, parent}) => {
+const AddBlob = ({
+    identifier = null,
+    init = null,
+    parent
+}) => {
     const [fileName, setFileName] = React.useState('');
 
     const [editState, dispatch] = useEdit();
@@ -46,11 +50,6 @@ const AddBlob = ({identifier, init, parent}) => {
         </Grid>
     );
 };
-
-AddBlob.defaultProps = {
-    identifier: null,
-    init: null
-},
 
 AddBlob.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

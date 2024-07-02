@@ -13,7 +13,12 @@ import TextField from '@mui/material/TextField';
 
 const BATCH = 50;
 
-const AutoSelect = ({onChange, label, dropdownItems, input}) => {
+const AutoSelect = ({
+    onChange,
+    label,
+    dropdownItems,
+    input = '',
+}) => {
     const textRef = React.useRef(null);
     const [end, setEnd] = React.useState(BATCH);
     const [text, setText] = React.useState(input);
@@ -123,10 +128,6 @@ const AutoSelect = ({onChange, label, dropdownItems, input}) => {
             </Grid>
         </ClickAwayListener>
     );
-};
-
-AutoSelect.defaultProps = {
-    input: '',
 };
 
 AutoSelect.propTypes = {

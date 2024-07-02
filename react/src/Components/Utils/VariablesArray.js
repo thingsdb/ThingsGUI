@@ -9,7 +9,10 @@ import TextField from '@mui/material/TextField';
 import useStateCallback from './useStateCallback';
 
 
-const VariablesArray = ({input, onChange}) => {
+const VariablesArray = ({
+    input = [],
+    onChange
+}) => {
     const [item, setItem] = React.useState('');
 
     const [myItems, setMyItems] = useStateCallback([]);
@@ -85,10 +88,6 @@ const VariablesArray = ({input, onChange}) => {
             />
         </div>
     );
-};
-
-VariablesArray.defaultProps = {
-    input: [],
 };
 
 VariablesArray.propTypes = {

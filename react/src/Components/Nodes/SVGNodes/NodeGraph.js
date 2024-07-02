@@ -3,7 +3,13 @@ import React from 'react';
 
 import { Arrow, Node} from './Utils';
 
-const NodeGraph = ({width, height, radius, data, streamInfo}) => {
+const NodeGraph = ({
+    width = 900,
+    height = 600,
+    radius = 250,
+    data,
+    streamInfo = {},
+}) => {
 
     const x = (a) => (width/2)+Math.cos(a*2*Math.PI)*radius;
     const y = (a) => (height/2)+Math.sin(a*2*Math.PI)*radius;
@@ -21,14 +27,6 @@ const NodeGraph = ({width, height, radius, data, streamInfo}) => {
             {data.map((n, i) => <Node key={i} x={d[n.node_id][0]} y={d[n.node_id][1]} data={n} color={n.status=='OFFLINE'? '#1b1c1d': n.status=='SHUTTING_DOWN' ? '#1b1c1d' : 'rgba(0, 55, 123, 0.5)'} />)}
         </svg>
     );
-};
-
-
-NodeGraph.defaultProps = {
-    height: 600,
-    radius: 250,
-    streamInfo: {},
-    width: 900,
 };
 
 NodeGraph.propTypes = {

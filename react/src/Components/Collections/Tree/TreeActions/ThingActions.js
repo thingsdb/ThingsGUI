@@ -5,7 +5,13 @@ import Button from '@mui/material/Button';
 import { EditProvider } from '../../../Utils';
 import ThingActionsDialog from './ThingActionsDialog';
 
-const ThingActions = ({child, parent, thing, scope, isRoot}) => {
+const ThingActions = ({
+    child,
+    parent,
+    thing = null,
+    scope,
+    isRoot = false
+}) => {
     const [show, setShow] = React.useState(false);
     const handleClickOpen = () => {
         setShow(true);
@@ -35,11 +41,6 @@ const ThingActions = ({child, parent, thing, scope, isRoot}) => {
             ) : null}
         </React.Fragment>
     );
-};
-
-ThingActions.defaultProps = {
-    isRoot: false,
-    thing: null,
 };
 
 ThingActions.propTypes = {

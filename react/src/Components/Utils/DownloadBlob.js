@@ -17,7 +17,10 @@ const Img = styled('img')(() => ({
     }
 }));
 
-const DownloadBlob = ({val, isImg}) => {
+const DownloadBlob = ({
+    val,
+    isImg = false,
+}) => {
     const [link, setLink] = React.useState('');
     const isComponentUnmounted = React.useRef(false);
 
@@ -48,10 +51,6 @@ const DownloadBlob = ({val, isImg}) => {
             )}
         </Button>
     );
-};
-
-DownloadBlob.defaultProps = {
-    isImg: false,
 };
 
 DownloadBlob.propTypes = {

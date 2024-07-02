@@ -8,7 +8,13 @@ import { CancelTaskTAG } from '../../../Constants/Tags';
 
 const tag = CancelTaskTAG;
 
-const CancelTaskDialog = ({button, open, onClose, scope, task}) => {
+const CancelTaskDialog = ({
+    button = null,
+    open,
+    onClose,
+    scope,
+    task = {},
+}) => {
     const [name, setName] = React.useState('');
 
     React.useEffect(() => {
@@ -37,11 +43,6 @@ const CancelTaskDialog = ({button, open, onClose, scope, task}) => {
             <ErrorMsg tag={tag} />
         </SimpleModal>
     );
-};
-
-CancelTaskDialog.defaultProps = {
-    button: null,
-    task: {},
 };
 
 CancelTaskDialog.propTypes = {

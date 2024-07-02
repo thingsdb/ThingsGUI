@@ -10,7 +10,14 @@ import { ThingActionsDialog } from '../TreeActions';
 import ThingRestrict from './ThingRestrict';
 
 
-const Thing = ({child, collection, parent, thing, things, inset}) => {
+const Thing = ({
+    child,
+    collection,
+    parent,
+    thing = null,
+    things,
+    inset = false,
+}) => {
     const [show, setShow] = React.useState(false);
 
     // thing info
@@ -105,12 +112,6 @@ const Thing = ({child, collection, parent, thing, things, inset}) => {
         </React.Fragment>
     );
 };
-
-Thing.defaultProps = {
-    inset: false,
-    thing: null,
-};
-
 
 Thing.propTypes = {
     child: PropTypes.shape({

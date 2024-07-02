@@ -12,7 +12,11 @@ import { ERROR_OUPUT_QUERY, ERROR_FORMAT_QUERY } from '../../../../TiQueries/Que
 import { ThingActionsDialogTAG } from '../../../../Constants/Tags';
 
 
-const AddError = ({identifier, init, parent}) => {
+const AddError = ({
+    identifier = null,
+    init = '',
+    parent
+}) => {
     const [state, setState] = React.useState({
         errCode:'',
         errMsg:'',
@@ -126,11 +130,6 @@ const AddError = ({identifier, init, parent}) => {
         </Grid>
     );
 };
-
-AddError.defaultProps = {
-    identifier: null,
-    init: '',
-},
 
 AddError.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

@@ -48,7 +48,21 @@ const initShow = {
     callback: false,
 };
 
-const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChangeItem, onClose, open, onRename, queries, rows, scope}) => {
+const EditDialog = ({
+    dataTypes = [],
+    category,
+    getInfo,
+    headers,
+    item = {},
+    link,
+    onChangeItem = () => null,
+    onClose,
+    open = false,
+    onRename,
+    queries,
+    rows,
+    scope,
+}) => {
     const [state, setState] = React.useState(initState);
     const {queryObj, property} = state;
     const [action, setAction] = React.useState('');
@@ -384,13 +398,6 @@ const EditDialog = ({dataTypes, category, getInfo, headers, item, link, onChange
             </Grid>
         </SimpleModal>
     );
-};
-
-EditDialog.defaultProps = {
-    dataTypes: [],
-    item: {},
-    onChangeItem: ()=>null,
-    open: false,
 };
 
 EditDialog.propTypes = {

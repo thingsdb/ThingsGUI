@@ -131,7 +131,17 @@ const Menu = styled(Drawer, {shouldForwardProp: (prop) => prop !== 'menuWidth'})
 
 const menuWidth = 280;
 
-const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toast, drawerTitle, drawerContent}) => {
+const DrawerLayout = ({
+    open,
+    onClose,
+    topbar,
+    mainContent = null,
+    menuOpen,
+    menus,
+    toast,
+    drawerTitle,
+    drawerContent,
+}) => {
     const [isResizing, setIsResizing] = React.useState(false);
     const [newWidth, setNewWidth] = React.useState(650);
 
@@ -211,10 +221,6 @@ const DrawerLayout = ({open, onClose, topbar, mainContent, menuOpen, menus, toas
             </Flex>
         </div>
     );
-};
-
-DrawerLayout.defaultProps = {
-    mainContent: null,
 };
 
 DrawerLayout.propTypes = {

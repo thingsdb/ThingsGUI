@@ -12,7 +12,13 @@ import { EditProcedure } from '../Content';
 
 
 const tag = EditProcedureDialogTAG;
-const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
+const EditProcedureDialog = ({
+    button = null,
+    open,
+    onClose,
+    procedure = {},
+    scope,
+}) => {
     const handleRename = (oldName, newName) => {
         ProcedureActions.renameProcedure(oldName, newName, scope, tag, onClose);
     };
@@ -46,11 +52,6 @@ const EditProcedureDialog = ({button, open, onClose, procedure, scope}) => {
             </Grid>
         </SimpleModal>
     );
-};
-
-EditProcedureDialog.defaultProps = {
-    button: null,
-    procedure: {},
 };
 
 EditProcedureDialog.propTypes = {

@@ -9,7 +9,10 @@ import ThingsBounds from './ThingsBounds';
 
 const visibleNumber = 100;
 
-const ThingRestrict = ({thing, onChildren}) => {
+const ThingRestrict = ({
+    thing = null,
+    onChildren
+}) => {
     const isArray = Array.isArray(thing);
     const [more, setMore] = React.useState({});
     const [bounds, setBounds] = React.useState({from:0, till:99});
@@ -59,11 +62,6 @@ const ThingRestrict = ({thing, onChildren}) => {
         </React.Fragment>
     );
 };
-
-ThingRestrict.defaultProps = {
-    thing: null,
-};
-
 
 ThingRestrict.propTypes = {
     thing: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number, PropTypes.bool, PropTypes.string]),

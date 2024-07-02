@@ -7,7 +7,14 @@ import ViewEditTaskDialog from './ViewEditTaskDialog';
 import ViewTaskDialog from './ViewTaskDialog';
 
 
-const TaskDialogs = ({dialogsView, id, tasks, scope, open, onClose}) => {
+const TaskDialogs = ({
+    dialogsView,
+    id = null,
+    tasks,
+    scope,
+    open,
+    onClose,
+}) => {
     const {add, cancel, edit, view} = open;
     const handleCloseEdit = () => {
         onClose({edit: false});
@@ -35,10 +42,6 @@ const TaskDialogs = ({dialogsView, id, tasks, scope, open, onClose}) => {
             {dialogsView.cancel && <CancelTaskDialog open={cancel} onClose={handleCloseCancel} task={selectedTask||{}} scope={scope} />}
         </React.Fragment>
     );
-};
-
-TaskDialogs.defaultProps = {
-    id: null,
 };
 
 TaskDialogs.propTypes = {

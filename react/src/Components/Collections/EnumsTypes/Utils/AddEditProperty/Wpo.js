@@ -6,7 +6,11 @@ import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
 
-const Wpo = ({onChange, input, disabled}) => {
+const Wpo = ({
+    onChange = () => null,
+    input = false,
+    disabled = false,
+}) => {
     const [switchWpo, setSwitchWpo] = React.useState(input);
 
     React.useEffect(()=>{
@@ -51,12 +55,6 @@ const Wpo = ({onChange, input, disabled}) => {
             </Grid>
         </Typography>
     );
-};
-
-Wpo.defaultProps = {
-    disabled: false,
-    input: false,
-    onChange: ()=>null,
 };
 
 Wpo.propTypes = {

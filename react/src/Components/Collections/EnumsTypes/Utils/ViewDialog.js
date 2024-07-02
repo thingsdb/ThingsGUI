@@ -13,7 +13,17 @@ import { SimpleModal } from '../../../Utils';
 import Overview from './Overview';
 
 
-const ViewDialog = ({category, headers, item, link, onChangeItem, onClose, open, rows, scope}) => {
+const ViewDialog = ({
+    category,
+    headers,
+    item = {},
+    link,
+    onChangeItem = () => null,
+    onClose,
+    open = false,
+    rows,
+    scope,
+}) => {
     const [openView, setOpenView] = React.useState(false);
     const [viewItem, setViewItem] = React.useState(null);
 
@@ -114,12 +124,6 @@ const ViewDialog = ({category, headers, item, link, onChangeItem, onClose, open,
         </SimpleModal>
 
     );
-};
-
-ViewDialog.defaultProps = {
-    item: {},
-    onChangeItem: ()=>null,
-    open: false,
 };
 
 ViewDialog.propTypes = {

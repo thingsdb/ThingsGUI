@@ -14,7 +14,10 @@ import { ViewTaskDialogTAG } from '../../../Constants/Tags';
 
 const tag = ViewTaskDialogTAG;
 
-const ViewTask = ({scope, task}) => {
+const ViewTask = ({
+    scope,
+    task = {},
+}) => {
     const customizedErr = useThingsError(task.err || '')[1];
     const [args, setArgs] = React.useState([]);
 
@@ -102,10 +105,6 @@ const ViewTask = ({scope, task}) => {
             </ListItem>
         </List>
     );
-};
-
-ViewTask.defaultProps = {
-    task: {},
 };
 
 ViewTask.propTypes = {

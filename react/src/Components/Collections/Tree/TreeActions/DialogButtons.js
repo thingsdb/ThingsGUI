@@ -18,7 +18,18 @@ import RoomJoin from './RoomJoin';
 import RemoveThing from './RemoveThing';
 
 
-const DialogButtons = ({child, customTypes, onClose, parent, realChildType, realParentType, scope, tag, thing, isRoot}) => {
+const DialogButtons = ({
+    child,
+    customTypes,
+    onClose,
+    parent,
+    realChildType,
+    realParentType,
+    scope,
+    tag,
+    thing = null,
+    isRoot = false,
+}) => {
     let navigate = useNavigate();
     let location = useLocation();
 
@@ -70,12 +81,6 @@ const DialogButtons = ({child, customTypes, onClose, parent, realChildType, real
         </React.Fragment>
     );
 };
-
-DialogButtons.defaultProps = {
-    isRoot: false,
-    thing: null,
-};
-
 
 DialogButtons.propTypes = {
     child: PropTypes.shape({

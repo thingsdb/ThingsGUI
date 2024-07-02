@@ -8,7 +8,10 @@ import { BOOL, FLOAT, INT, LIST, NIL, STR, THING, VARIABLE } from '../../../Cons
 
 const dataTypes = [BOOL, FLOAT, INT, LIST, NIL, STR, THING]; // Supported types
 
-const SetArguments = ({closure, onChange}) => {
+const SetArguments = ({
+    closure = '',
+    onChange,
+}) => {
     const editState = useEdit()[0];
     const {blob, obj} = editState;
 
@@ -30,10 +33,6 @@ const SetArguments = ({closure, onChange}) => {
             </Typography>
         )
     );
-};
-
-SetArguments.defaultProps = {
-    closure: '',
 };
 
 SetArguments.propTypes = {

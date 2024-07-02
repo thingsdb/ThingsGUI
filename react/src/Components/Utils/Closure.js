@@ -9,7 +9,10 @@ import { CLOSURE_FORMAT_QUERY } from '../../TiQueries/Queries';
 import VariablesArray from './VariablesArray';
 
 
-const Closure = ({input, onChange}) => {
+const Closure = ({
+    input = null,
+    onChange,
+}) => {
     const [state, setState] = React.useState({
         variables: [],
         body: '',
@@ -103,10 +106,6 @@ const Closure = ({input, onChange}) => {
         </Grid>
     );
 };
-
-Closure.defaultProps = {
-    input: null,
-},
 
 Closure.propTypes = {
     onChange: PropTypes.func.isRequired,

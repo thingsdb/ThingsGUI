@@ -17,7 +17,15 @@ import Typography from '@mui/material/Typography';
 import {StartStopPolling} from '../Utils';
 
 
-const Tabel = ({buttons, canExtend, header, rows, rowExtend, connectedNode, onRefresh}) => {
+const Tabel = ({
+    buttons = null,
+    canExtend = () => true,
+    header,
+    rows,
+    rowExtend,
+    connectedNode,
+    onRefresh = null,
+}) => {
     const [selected, setSelected] = React.useState(null);
 
     const handleClickRow = (ri) => () => {
@@ -101,12 +109,6 @@ const Tabel = ({buttons, canExtend, header, rows, rowExtend, connectedNode, onRe
             </TableBody>
         </Table>
     );
-};
-
-Tabel.defaultProps = {
-    buttons: null,
-    canExtend: () => true,
-    onRefresh: null,
 };
 
 Tabel.propTypes = {

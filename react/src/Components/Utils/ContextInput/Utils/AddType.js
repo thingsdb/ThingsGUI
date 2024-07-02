@@ -6,7 +6,14 @@ import {EditActions, useEdit} from '../Context';
 import AddCode from './AddCode';
 
 
-const AddType = ({identifier, label, link, numLines, parent, type}) => {
+const AddType = ({
+    identifier = null,
+    label,
+    link,
+    numLines,
+    parent,
+    type = '',
+}) => {
     const [, dispatch] = useEdit();
 
     React.useEffect(()=>{
@@ -19,11 +26,6 @@ const AddType = ({identifier, label, link, numLines, parent, type}) => {
         <AddCode identifier={identifier} label={label} link={link} numLines={numLines} parent={parent} />
     );
 };
-
-AddType.defaultProps = {
-    identifier: null,
-    type: '',
-},
 
 AddType.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

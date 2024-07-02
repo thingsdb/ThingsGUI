@@ -96,7 +96,11 @@ const header = [
 
 const tag = EditTaskDialogTAG;
 
-const EditTask = ({taskId, task, scope}) => {
+const EditTask = ({
+    taskId = null,
+    task,
+    scope,
+}) => {
     const [queryString, setQueryString] = React.useState({args: '', closure: '', owner: ''});
     const [jsonArgs, setJsonArgs] = React.useState({args: '', closure: '', owner: ''});
     const [blob, setBlob] = React.useState({});
@@ -157,10 +161,6 @@ const EditTask = ({taskId, task, scope}) => {
             ))}
         </React.Fragment>
     );
-};
-
-EditTask.defaultProps = {
-    taskId: null,
 };
 
 EditTask.propTypes = {

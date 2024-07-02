@@ -13,7 +13,15 @@ const groupSigning = {
     '(' : ['(', ')'],
 };
 
-const ListHeader = ({children, canCollapse, groupSign, isOpen, name, onAdd, unmountOnExit}) => {
+const ListHeader = ({
+    children,
+    canCollapse = true,
+    groupSign,
+    isOpen = false,
+    name = '',
+    onAdd,
+    unmountOnExit = false,
+}) => {
     const [open, setOpen] = React.useState(isOpen);
 
     const handleOpen = () => {
@@ -55,13 +63,6 @@ const ListHeader = ({children, canCollapse, groupSign, isOpen, name, onAdd, unmo
             </Grid>
         </Grid>
     );
-};
-
-ListHeader.defaultProps = {
-    canCollapse: true,
-    isOpen: false,
-    name: '',
-    unmountOnExit: false,
 };
 
 ListHeader.propTypes = {

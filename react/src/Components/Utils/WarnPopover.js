@@ -5,7 +5,12 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 
-const WarnPopover = ({anchorEl, onClose, onOk, description}) => {
+const WarnPopover = ({
+    anchorEl = {},
+    onClose,
+    onOk = null,
+    description,
+}) => {
     const openPopOver = Boolean(anchorEl);
 
     return (
@@ -41,11 +46,6 @@ const WarnPopover = ({anchorEl, onClose, onOk, description}) => {
             )}
         </Popover>
     );
-};
-
-WarnPopover.defaultProps = {
-    anchorEl: {},
-    onOk: null,
 };
 
 WarnPopover.propTypes = {

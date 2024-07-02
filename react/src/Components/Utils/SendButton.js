@@ -6,7 +6,13 @@ import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
 
-const SendButton = ({disabled, label, loading, onClickSend, variant}) => {
+const SendButton = ({
+    disabled = false,
+    label,
+    loading,
+    onClickSend,
+    variant = 'outlined',
+}) => {
     const [openTooltip, setOpenTooltip] = React.useState(false);
 
     const handleSubmit = () => {
@@ -45,11 +51,6 @@ const SendButton = ({disabled, label, loading, onClickSend, variant}) => {
             </div>
         </ClickAwayListener>
     );
-};
-
-SendButton.defaultProps = {
-    disabled: false,
-    variant: 'outlined'
 };
 
 SendButton.propTypes = {

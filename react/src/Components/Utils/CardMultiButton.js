@@ -61,7 +61,11 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 
-const CardMultiButton = ({buttons, label, warn}) => {
+const CardMultiButton = ({
+    buttons,
+    label,
+    warn = false
+}) => {
     return(
         <SCard warn={warn}>
             <Text>
@@ -77,10 +81,6 @@ const CardMultiButton = ({buttons, label, warn}) => {
 
         </SCard>
     );
-};
-
-CardMultiButton.defaultProps = {
-    warn: false,
 };
 
 CardMultiButton.propTypes = {

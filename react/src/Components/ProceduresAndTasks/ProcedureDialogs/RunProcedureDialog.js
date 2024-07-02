@@ -15,7 +15,13 @@ import { BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL, VARIA
 const tag = RunProcedureDialogTAG;
 const dataTypes = [BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIMEVAL]; // Supported types
 
-const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
+const RunProcedureDialog = ({
+    button = null,
+    open,
+    onClose,
+    procedure = {},
+    scope,
+}) => {
     const [output, setOutput] = React.useState('');
     const [tabIndex, setTabIndex] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
@@ -120,12 +126,6 @@ const RunProcedureDialog = ({button, open, onClose, procedure, scope}) => {
         </SimpleModal>
     );
 };
-
-RunProcedureDialog.defaultProps = {
-    button: null,
-    procedure: {},
-};
-
 
 RunProcedureDialog.propTypes = {
     button: PropTypes.object,

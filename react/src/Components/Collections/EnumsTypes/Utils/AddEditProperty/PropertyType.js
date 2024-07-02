@@ -4,7 +4,11 @@ import React from 'react';
 import {AutoSelect} from '../../../../Utils';
 
 
-const PropertyType = ({onChange, dropdownItems, input}) => {
+const PropertyType = ({
+    onChange,
+    dropdownItems = [],
+    input
+}) => {
     const handlePropertyType = (t) => {
         onChange({propertyType:t});
     };
@@ -12,10 +16,6 @@ const PropertyType = ({onChange, dropdownItems, input}) => {
     return (
         <AutoSelect onChange={handlePropertyType} dropdownItems={dropdownItems} input={input} label="Definition" />
     );
-};
-
-PropertyType.defaultProps = {
-    dropdownItems: [],
 };
 
 PropertyType.propTypes = {

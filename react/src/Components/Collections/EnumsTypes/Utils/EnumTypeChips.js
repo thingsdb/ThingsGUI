@@ -284,7 +284,22 @@ const tableInfo = {
     },
 };
 
-const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, onClose, onDelete, onInfo, onMakeInstanceInit, onRename, onSetQueryInput, scope, tag, view}) => {
+const EnumTypeChips = ({
+    buttonsView,
+    categoryInit,
+    datatypes = [],
+    items = [],
+    onChange = () => null,
+    onClose = () => null,
+    onDelete = () => null,
+    onInfo = () => null,
+    onMakeInstanceInit = () => null,
+    onRename = () => null,
+    onSetQueryInput = () => null,
+    scope,
+    tag,
+    view
+}) => {
     React.useEffect(() => {
         onInfo(scope, tag);
     }, [onInfo, scope, tag]);
@@ -409,18 +424,6 @@ const EnumTypeChips = ({buttonsView, categoryInit, datatypes, items, onChange, o
             )}
         </Grid>
     );
-};
-
-EnumTypeChips.defaultProps = {
-    datatypes: [],
-    items: [],
-    onChange: ()=>null,
-    onClose: ()=>null,
-    onDelete: ()=>null,
-    onInfo: ()=>null,
-    onMakeInstanceInit: ()=>null,
-    onRename: ()=>null,
-    onSetQueryInput: ()=>null,
 };
 
 EnumTypeChips.propTypes = {

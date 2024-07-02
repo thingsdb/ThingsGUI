@@ -5,7 +5,10 @@ import React from 'react';
 
 import {Info, SimpleModal} from '../../Utils';
 
-const BackupInfo = ({header, item}) => {
+const BackupInfo = ({
+    header,
+    item = {},
+}) => {
     const [show, setShow] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -36,10 +39,6 @@ const BackupInfo = ({header, item}) => {
             />
         </SimpleModal>
     );
-};
-
-BackupInfo.defaultProps = {
-    item: {},
 };
 
 BackupInfo.propTypes = {

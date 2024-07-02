@@ -77,7 +77,9 @@ const reducer = (state, action) => {
     return { ...state, ...update };
 };
 
-const EditProvider = ({ children }) => {
+const EditProvider = ({
+    children = null
+}) => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
     const memoValue = React.useMemo(() => ({state, dispatch}), [state, dispatch]);
 
@@ -90,10 +92,6 @@ const EditProvider = ({ children }) => {
 
 EditProvider.propTypes = {
     children: PropTypes.node,
-};
-
-EditProvider.defaultProps = {
-    children: null,
 };
 
 export {EditActions, EditProvider, useEdit};

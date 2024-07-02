@@ -5,7 +5,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 
-const FixedList = ({dense, items}) => (
+const FixedList = ({
+    dense = false,
+    items = [],
+}) => (
     <List
         dense={dense}
         disablePadding={dense}
@@ -25,11 +28,6 @@ const FixedList = ({dense, items}) => (
         ))}
     </List>
 );
-
-FixedList.defaultProps = {
-    dense: false,
-    items: [],
-};
 
 FixedList.propTypes = {
     dense: PropTypes.bool,

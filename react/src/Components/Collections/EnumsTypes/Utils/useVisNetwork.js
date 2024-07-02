@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { Network } from 'vis-network/standalone/esm/vis-network';
 
 
-const useVisNetwork = ({edges, nodes, options}) => {
+const useVisNetwork = ({
+    edges = [],
+    nodes = [],
+    options = {},
+}) => {
     const [network, setNetwork] = React.useState(null);
     const ref = React.useRef(null);
 
@@ -19,12 +23,6 @@ const useVisNetwork = ({edges, nodes, options}) => {
         network,
         ref
     };
-};
-
-useVisNetwork.defaultProps = {
-    edges: [],
-    nodes: [],
-    options: {},
 };
 
 useVisNetwork.propTypes = {

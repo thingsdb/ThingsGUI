@@ -12,7 +12,17 @@ import { CardMultiButton, ErrorMsg, HarmonicCardContent, orderByName, RemoveModa
 
 const step = 20;
 
-const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, title, warnExpression}) => {
+const ChipsCard = ({
+    buttons,
+    itemKey = 'name',
+    items = [],
+    moreButtons = null,
+    onAdd,
+    onDelete,
+    tag,
+    title,
+    warnExpression = () => false,
+}) => {
     const [deleteItem, setDeleteItem] = React.useState('');
     const [searchString, setSearchString] = React.useState('');
     const [maxAmount, setMaxAmount] = React.useState(step);
@@ -113,13 +123,6 @@ const ChipsCard = ({buttons, itemKey, items, moreButtons, onAdd, onDelete, tag, 
         </React.Fragment>
     );
 };
-
-ChipsCard.defaultProps = {
-    itemKey: 'name',
-    items: [],
-    moreButtons: null,
-    warnExpression: ()=>false,
-},
 
 ChipsCard.propTypes = {
     itemKey: PropTypes.string,

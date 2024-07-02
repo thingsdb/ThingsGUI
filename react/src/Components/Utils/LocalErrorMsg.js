@@ -7,17 +7,15 @@ import LocalMsg from './LocalMsg';
 import { useThingsError } from './useThingsError';
 
 
-const LocalErrorMsg = ({msg, onClose, useAsPopUp}) => {
+const LocalErrorMsg = ({
+    msg = '',
+    onClose = null,
+    useAsPopUp = false,
+}) => {
     const [title, body] = useThingsError(msg);
     return (
         <LocalMsg icon={<WarningIcon sx={{color: amber[700]}} />} title={title} body={body} onClose={onClose} useAsPopUp={useAsPopUp} />
     );
-};
-
-LocalErrorMsg.defaultProps = {
-    msg: '',
-    onClose: null,
-    useAsPopUp: false,
 };
 
 LocalErrorMsg.propTypes = {

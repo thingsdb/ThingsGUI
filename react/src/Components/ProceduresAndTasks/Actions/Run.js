@@ -21,7 +21,10 @@ const dataTypes = [BOOL, CODE, DATETIME, FLOAT, INT, LIST, NIL, STR, THING, TIME
 const tag = RunProcedureTAG;
 const scope = THINGSDB_SCOPE;
 
-const Run = ({item, type}) => {
+const Run = ({
+    item = {},
+    type,
+}) => {
     const [output, setOutput] = React.useState('');
     const [tabIndex, setTabIndex] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
@@ -96,10 +99,6 @@ const Run = ({item, type}) => {
             </Card>
         </Grid>
     );
-};
-
-Run.defaultProps = {
-    item: {},
 };
 
 Run.propTypes = {

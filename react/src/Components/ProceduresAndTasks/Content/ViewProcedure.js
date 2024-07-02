@@ -9,7 +9,9 @@ import TextField from '@mui/material/TextField';
 import { DATE_TIME_MIN_STR } from '../../../Constants/DateStrings';
 
 
-const ViewProcedure = ({procedure}) => (
+const ViewProcedure = ({
+    procedure = {},
+}) => (
     <List disablePadding dense>
         <ListItem>
             <ListItemText
@@ -61,10 +63,6 @@ const ViewProcedure = ({procedure}) => (
         </ListItem>
     </List>
 );
-
-ViewProcedure.defaultProps = {
-    procedure: {},
-};
 
 ViewProcedure.propTypes = {
     procedure: PropTypes.object,

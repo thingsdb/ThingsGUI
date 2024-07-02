@@ -6,7 +6,11 @@ import React from 'react';
 import {EditActions, useEdit} from '../Context';
 import {NIL} from '../../../../Constants/ThingTypes';
 
-const AddNil = ({identifier, parent}) => {
+
+const AddNil = ({
+    identifier = null,
+    parent
+}) => {
     const dispatch = useEdit()[1];
 
     React.useEffect(()=>{
@@ -16,10 +20,6 @@ const AddNil = ({identifier, parent}) => {
 
     return  null;
 };
-
-AddNil.defaultProps = {
-    identifier: null,
-},
 
 AddNil.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

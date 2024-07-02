@@ -6,7 +6,11 @@ import {Closure} from '../..';
 import {EditActions, useEdit} from '../Context';
 
 
-const AddClosure = ({identifier, init, parent}) => {
+const AddClosure = ({
+    identifier = null,
+    init = '',
+    parent
+}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
@@ -26,11 +30,6 @@ const AddClosure = ({identifier, init, parent}) => {
         <Closure input={v} onChange={handleUpdateVal} />
     );
 };
-
-AddClosure.defaultProps = {
-    identifier: null,
-    init: '',
-},
 
 AddClosure.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

@@ -14,7 +14,13 @@ const withStores = withVlow([{
     keys: ['customTypes']
 }]);
 
-const AddLink = ({customTypes, enums, name, onChange, scope}) => {
+const AddLink = ({
+    customTypes,
+    enums,
+    name = '',
+    onChange,
+    scope,
+}) => {
     const enumItems=[...(enums[scope]||[]).map(c=>(c.name))];
     const typeItems=[...(customTypes[scope]||[]).map(c=>c.name)];
     let stripped = revealCustomType(name);
@@ -40,10 +46,6 @@ const AddLink = ({customTypes, enums, name, onChange, scope}) => {
             {name.length-stripped.length>2?name.slice(stripped.length-name.length+1):name.length-stripped.length>0?name.slice(-1):null}
         </React.Fragment>
     ): (name));
-};
-
-AddLink.defaultProps = {
-    name: '',
 };
 
 AddLink.propTypes = {

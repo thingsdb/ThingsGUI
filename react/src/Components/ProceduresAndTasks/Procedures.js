@@ -16,7 +16,13 @@ const withStores = withVlow([{
 
 const tag = ProceduresTAG;
 
-const Procedures = ({buttonsView, dialogsView, onCallback, procedures, scope}) => {
+const Procedures = ({
+    buttonsView,
+    dialogsView,
+    onCallback = () => null,
+    procedures,
+    scope,
+}) => {
     const [identifier, setIdentifier] = React.useState(null);
     const [open, setOpen] = React.useState({
         add: false,
@@ -72,10 +78,6 @@ const Procedures = ({buttonsView, dialogsView, onCallback, procedures, scope}) =
             <ProcedureDialogs dialogsView={dialogsView} name={identifier} open={open} onClose={handleClose} procedures={procedures[scope]||[]} scope={scope} />
         </HarmonicCardHeader >
     );
-};
-
-Procedures.defaultProps = {
-    onCallback: () => null,
 };
 
 Procedures.propTypes = {

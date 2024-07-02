@@ -7,7 +7,13 @@ import Typography from '@mui/material/Typography';
 import { SimpleModal } from '../../Utils';
 import { EditTask } from '../Content';
 
-const ViewEditTaskDialog = ({button, open, onClose, task, scope}) => (
+const ViewEditTaskDialog = ({
+    button = null,
+    open,
+    onClose,
+    task = {},
+    scope,
+}) => (
     <SimpleModal
         button={button}
         open={open}
@@ -31,11 +37,6 @@ const ViewEditTaskDialog = ({button, open, onClose, task, scope}) => (
         </Grid>
     </SimpleModal>
 );
-
-ViewEditTaskDialog.defaultProps = {
-    button: null,
-    task: {},
-};
 
 ViewEditTaskDialog.propTypes = {
     button: PropTypes.object,

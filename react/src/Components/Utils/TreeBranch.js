@@ -45,7 +45,17 @@ const StyledList = styled(List, {shouldForwardProp: (prop) => prop !== 'inset'})
     })
 );
 
-const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildren, type, val, inset}) => {
+const TreeBranch = ({
+    canToggle,
+    name = null,
+    onAction = null,
+    onClick = null,
+    onOpen = () => null,
+    onRenderChildren,
+    type,
+    val,
+    inset = false,
+}) => {
     const [show, setShow] = React.useState(false);
     const [focus, setFocus] = React.useState(false);
 
@@ -121,14 +131,6 @@ const TreeBranch = ({canToggle, name, onAction, onClick, onOpen, onRenderChildre
             </Collapse>}
         </React.Fragment>
     );
-};
-
-TreeBranch.defaultProps = {
-    inset: false,
-    name: null,
-    onAction: null,
-    onClick: null,
-    onOpen: () => null,
 };
 
 TreeBranch.propTypes = {

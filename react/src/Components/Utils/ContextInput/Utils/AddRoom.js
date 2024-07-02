@@ -10,7 +10,11 @@ import { ROOM_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 
 const onlyInts = (str) => str.length == str.replace(/[^0-9]/g, '').length;
 
-const AddRoom = ({identifier, init, parent}) => {
+const AddRoom = ({
+    identifier = null,
+    init = '',
+    parent
+}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
     const [roomId, setRoomId] = React.useState('');
@@ -84,11 +88,6 @@ const AddRoom = ({identifier, init, parent}) => {
         </Grid>
     );
 };
-
-AddRoom.defaultProps = {
-    identifier: null,
-    init: '',
-},
 
 AddRoom.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

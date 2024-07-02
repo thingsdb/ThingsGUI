@@ -8,7 +8,13 @@ import React from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 
-const RefreshContainer = ({actionButtons, buttons, content, noPadding, onRefresh}) => (
+const RefreshContainer = ({
+    actionButtons = null,
+    buttons = null,
+    content,
+    noPadding = false,
+    onRefresh = null,
+}) => (
     <Card>
         <CardHeader
             action={
@@ -34,13 +40,6 @@ const RefreshContainer = ({actionButtons, buttons, content, noPadding, onRefresh
         ) : null}
     </Card>
 );
-
-RefreshContainer.defaultProps = {
-    actionButtons: null,
-    buttons: null,
-    noPadding: false,
-    onRefresh: null,
-},
 
 RefreshContainer.propTypes = {
     actionButtons: PropTypes.object,

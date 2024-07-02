@@ -13,7 +13,16 @@ import { SET_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 import InputField from '../InputField';
 
 
-const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier, parent, parentDispatch}) => {
+const AddArray = ({
+    childTypes = [],
+    customTypes,
+    dataTypes,
+    enums,
+    isSet = false,
+    identifier = null,
+    parent,
+    parentDispatch,
+}) => {
     const [dataType, setDataType] = React.useState([childTypes.length ? childTypes[0] : STR]);
     const [editState, dispatch] = useEdit();
     const {blob, obj, val} = editState;
@@ -116,12 +125,6 @@ const AddArray = ({childTypes, customTypes, dataTypes, enums, isSet, identifier,
             </ListHeader>
         </Grid>
     );
-};
-
-AddArray.defaultProps = {
-    childTypes: [],
-    identifier: null,
-    isSet: false,
 };
 
 AddArray.propTypes = {

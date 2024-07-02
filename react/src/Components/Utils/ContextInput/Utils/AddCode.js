@@ -8,7 +8,14 @@ import TextField from '@mui/material/TextField';
 import {EditActions, useEdit} from '../Context';
 
 
-const AddCode = ({identifier, init, label, link, numLines, parent}) => {
+const AddCode = ({
+    identifier = null,
+    init = '',
+    label,
+    link,
+    numLines,
+    parent,
+}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
@@ -47,11 +54,6 @@ const AddCode = ({identifier, init, label, link, numLines, parent}) => {
         />
     );
 };
-
-AddCode.defaultProps = {
-    identifier: null,
-    init: '',
-},
 
 AddCode.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

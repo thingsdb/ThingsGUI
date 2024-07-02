@@ -40,7 +40,10 @@ const Container = styled('div', {shouldForwardProp: (prop) => prop !== 'isFocuse
 );
 
 
-const AddFile = ({init, onChange}) => {
+const AddFile = ({
+    init = null,
+    onChange,
+}) => {
     const [fileName, setFileName] = React.useState(init);
 
     const handleDropzone = React.useCallback((acceptedFiles) => {
@@ -89,10 +92,6 @@ const AddFile = ({init, onChange}) => {
         </Grid>
     );
 };
-
-AddFile.defaultProps = {
-    init: null
-},
 
 AddFile.propTypes = {
     init: PropTypes.string,

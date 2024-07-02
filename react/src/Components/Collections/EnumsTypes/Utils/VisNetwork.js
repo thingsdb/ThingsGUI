@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import useVisNetwork from './useVisNetwork';
 
 
-const VisNetwork = ({ edges, nodeId, nodes, options }) => {
+const VisNetwork = ({
+    edges = [],
+    nodeId = '',
+    nodes = [],
+    options = {},
+}) => {
     const { ref, network } = useVisNetwork({
         edges,
         nodes,
@@ -31,13 +36,6 @@ const VisNetwork = ({ edges, nodeId, nodes, options }) => {
             }}
         />
     );
-};
-
-VisNetwork.defaultProps = {
-    edges: [],
-    nodeId: '',
-    nodes: [],
-    options: {},
 };
 
 VisNetwork.propTypes = {

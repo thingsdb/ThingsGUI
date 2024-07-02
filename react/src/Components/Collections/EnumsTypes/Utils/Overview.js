@@ -8,7 +8,17 @@ import {Tabs, TableExtra} from '../../../Utils';
 import  UsedByType from './UsedByType';
 
 
-const Overview = ({badgeButton, buttons, headers, item, link, onAdd, onChangeItem, rows, scope}) => {
+const Overview = ({
+    badgeButton = null,
+    buttons = null,
+    headers,
+    item = {},
+    link,
+    onAdd = null,
+    onChangeItem = () => null,
+    rows,
+    scope,
+}) => {
 
     const handleAdd = (kys) => () => {
         onAdd(kys);
@@ -37,14 +47,6 @@ const Overview = ({badgeButton, buttons, headers, item, link, onAdd, onChangeIte
             <UsedByType name={item.name} onChangeItem={onChangeItem} scope={scope} />
         </React.Fragment>
     );
-};
-
-Overview.defaultProps = {
-    badgeButton: null,
-    buttons: null,
-    item: {},
-    onAdd: null,
-    onChangeItem: ()=>null,
 };
 
 Overview.propTypes = {

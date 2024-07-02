@@ -10,7 +10,16 @@ import React from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 
-const HarmonicCardHeader = ({actionButtons, children, expand, onCleanup, onExpand, onRefresh, title, unmountOnExit}) => {
+const HarmonicCardHeader = ({
+    actionButtons = null,
+    children,
+    expand = false,
+    onCleanup = () => null,
+    onExpand = () => null,
+    onRefresh = () => null,
+    title,
+    unmountOnExit = false,
+}) => {
     const [expanded, setExpanded] = React.useState(expand);
 
     React.useEffect(() => {
@@ -67,15 +76,6 @@ const HarmonicCardHeader = ({actionButtons, children, expand, onCleanup, onExpan
         </Card>
     );
 };
-
-HarmonicCardHeader.defaultProps = {
-    actionButtons: null,
-    expand: false,
-    onCleanup: () => null,
-    onExpand: () => null,
-    onRefresh: () => null,
-    unmountOnExit: false,
-},
 
 HarmonicCardHeader.propTypes = {
     actionButtons: PropTypes.object,

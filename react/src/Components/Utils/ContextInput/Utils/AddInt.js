@@ -9,7 +9,12 @@ import { toNum } from '../../../Utils';
 
 const onlyInts = (str) => str.length == str.replace(/[^-0-9]/g, '').length;
 
-const AddInt = ({identifier, init, parent, ...props}) => {
+const AddInt = ({
+    identifier = null,
+    init = '',
+    parent,
+    ...props
+}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
     const [error, setError] = React.useState('');
@@ -49,11 +54,6 @@ const AddInt = ({identifier, init, parent, ...props}) => {
         />
     );
 };
-
-AddInt.defaultProps = {
-    identifier: null,
-    init:'',
-},
 
 AddInt.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
