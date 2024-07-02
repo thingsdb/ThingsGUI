@@ -198,6 +198,7 @@ export default {
         'is_inf': 'This function determines whether the provided value is a positive or negative infinity.',
         'is_int': 'This function determines whether the value passed to this function is an integer or not.',
         'is_list': 'This function determines whether the value passed to this function is a mutable array or not.',
+        'is_module': 'This function determines whether the provided value is a module value or not.',
         'is_nan': 'This function determines whether the value passed to this function is a number. Returns true is the given value is not a number, else false.',
         'is_nil': 'This function determines whether the value passed to this function is nil.',
         'is_raw': 'This function determines whether the value passed to this function is of type raw.',
