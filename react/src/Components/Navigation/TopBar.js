@@ -29,7 +29,13 @@ const withStores = withVlow([{
     keys: ['user']
 }]);
 
-const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
+const TopBar = ({
+    additionals = null,
+    menuIcon = null,
+    pageIcon,
+    user,
+    title = null,
+}) => {
     let navigate = useNavigate();
     let location = useLocation();
     const handleClickLogout = () => {
@@ -115,12 +121,6 @@ const TopBar = ({additionals, menuIcon, pageIcon, user, title}) => {
             </Toolbar>
         </AppBar>
     );
-};
-
-TopBar.defaultProps = {
-    additionals: null,
-    menuIcon: null,
-    title: null,
 };
 
 TopBar.propTypes = {

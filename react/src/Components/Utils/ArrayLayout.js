@@ -6,7 +6,12 @@ import React from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 
-const ArrayLayout = ({child, onAdd, onRemove, fullWidth}) => {
+const ArrayLayout = ({
+    child,
+    onAdd = () => null,
+    onRemove,
+    fullWidth = false,
+}) => {
     const [count, setCount] = React.useState(1);
 
     const handleAdd = () => {
@@ -49,10 +54,6 @@ const ArrayLayout = ({child, onAdd, onRemove, fullWidth}) => {
         </Grid>
 
     );
-};
-ArrayLayout.defaultProps = {
-    fullWidth: false,
-    onAdd: () => null
 };
 
 ArrayLayout.propTypes = {

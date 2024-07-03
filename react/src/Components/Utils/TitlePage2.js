@@ -5,7 +5,12 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 
 
-const TitlePage2 = ({preTitle, title, sideContent, content}) => (
+const TitlePage2 = ({
+    preTitle,
+    title,
+    sideContent = null,
+    content,
+}) => (
     <Grid direction="row" container spacing={1} alignItems="flex-start" sx={{marginBottom: '48px'}}>
         <Grid container spacing={1} item lg={8} md={12}>
             <Grid item xs={12} sx={{display: { lg: 'none', xs: 'block'}}}>
@@ -55,10 +60,6 @@ const TitlePage2 = ({preTitle, title, sideContent, content}) => (
         </Grid>
     </Grid>
 );
-
-TitlePage2.defaultProps = {
-    sideContent: null,
-};
 
 TitlePage2.propTypes = {
     preTitle: PropTypes.string.isRequired,

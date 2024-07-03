@@ -6,7 +6,11 @@ import React from 'react';
 import Switch from '@mui/material/Switch';
 
 
-const SwitchOpen = ({children, label, onChange}) => {
+const SwitchOpen = ({
+    children,
+    label,
+    onChange = () => null
+}) => {
     const [open, setOpen] = React.useState(false);
 
     const handleSwitch = ({target}) => {
@@ -37,10 +41,6 @@ const SwitchOpen = ({children, label, onChange}) => {
             </Collapse>
         </Grid>
     );
-};
-
-SwitchOpen.defaultProps = {
-    onChange: ()=>null,
 };
 
 SwitchOpen.propTypes = {

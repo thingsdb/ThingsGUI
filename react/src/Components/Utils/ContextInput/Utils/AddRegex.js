@@ -9,7 +9,11 @@ import { EditActions, useEdit } from '../Context';
 import { REGEX_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 
 
-const AddRegex = ({identifier, init, parent}) => {
+const AddRegex = ({
+    identifier = null,
+    init = '',
+    parent
+}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
@@ -62,11 +66,6 @@ const AddRegex = ({identifier, init, parent}) => {
         </Grid>
     );
 };
-
-AddRegex.defaultProps = {
-    identifier: null,
-    init: '',
-},
 
 AddRegex.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

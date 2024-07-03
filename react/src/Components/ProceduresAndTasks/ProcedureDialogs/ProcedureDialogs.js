@@ -8,7 +8,14 @@ import ViewProcedureDialog from './ViewProcedureDialog';
 import { EditProvider } from '../../Utils';
 
 
-const ProcedureDialogs = ({dialogsView, name, procedures, scope, open, onClose}) => {
+const ProcedureDialogs = ({
+    dialogsView,
+    name = '',
+    procedures,
+    scope,
+    open,
+    onClose,
+}) => {
     const {add, edit, run, view} = open;
     const handleCloseEdit = () => {
         onClose({edit: false});
@@ -39,10 +46,6 @@ const ProcedureDialogs = ({dialogsView, name, procedures, scope, open, onClose})
                 </EditProvider>}
         </React.Fragment>
     );
-};
-
-ProcedureDialogs.defaultProps = {
-    name: '',
 };
 
 ProcedureDialogs.propTypes = {

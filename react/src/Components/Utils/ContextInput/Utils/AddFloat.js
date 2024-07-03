@@ -9,7 +9,12 @@ import { toNum } from '../../../Utils';
 
 const onlyFloats = (str) => str.length == str.replace(/[^-0-9.]/g, '').length && str.includes('.');
 
-const AddFloat = ({identifier, init, parent, ...props}) => {
+const AddFloat = ({
+    identifier = null,
+    init = '',
+    parent,
+    ...props
+}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
     const [error, setError] = React.useState('');
@@ -48,11 +53,6 @@ const AddFloat = ({identifier, init, parent, ...props}) => {
         />
     );
 };
-
-AddFloat.defaultProps = {
-    identifier: null,
-    init: '',
-},
 
 AddFloat.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

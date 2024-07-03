@@ -10,19 +10,20 @@ import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
 const SimpleModal = ({
-    actionButtons,
-    button,
+    actionButtons = null,
+    button = null,
     children,
-    disableOk,
-    fullWidth,
-    maxWidth,
-    onClose,
-    onKeyPress,
-    onOk,
+    disableOk = false,
+    fullWidth = true,
+    maxWidth = null,
+    onClose = null,
+    onKeyPress = () => null,
+    onOk = null,
     open,
-    title,
-    tooltipMsgOk,
-    ...props}) => {
+    title = null,
+    tooltipMsgOk = '',
+    ...props
+}) => {
 
     const handleClose = () => {
         onClose && onClose();
@@ -74,19 +75,6 @@ const SimpleModal = ({
     );
 };
 
-SimpleModal.defaultProps = {
-    actionButtons: null,
-    button: null,
-    disableOk: false,
-    fullWidth: true,
-    maxWidth: null,
-    onClose: null,
-    onKeyPress: ()=>null,
-    onOk: null,
-    title: null,
-    tooltipMsgOk: '',
-},
-
 SimpleModal.propTypes = {
     actionButtons: PropTypes.object,
     button: PropTypes.object,
@@ -98,6 +86,7 @@ SimpleModal.propTypes = {
     onKeyPress: PropTypes.func,
     onOk: PropTypes.func,
     open: PropTypes.bool.isRequired,
+    props: PropTypes.object,
     title: PropTypes.string,
     tooltipMsgOk: PropTypes.string,
 };

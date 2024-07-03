@@ -105,7 +105,7 @@ class ApplicationStore extends BaseStore {
     }
 
     onStoreSession() {
-        this.post('/session').done(() => {
+        this.blob('/session').done(() => {
             this.emit('cookie', document.cookie);
         }).fail((error, message) => {
             ErrorActions.setToastError(`${error.statusText}: ${message}`);

@@ -11,7 +11,12 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
 
-const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
+const TableWithBadges = ({
+    header,
+    rows,
+    badgeButton = null,
+    buttons = null,
+}) => {
     const [index, setIndex] = React.useState(null);
 
     const mouseEnter = (i) => () => {
@@ -74,10 +79,6 @@ const TableWithBadges = ({header, rows, badgeButton, buttons}) => {
             </Table>
         </TableContainer>
     );
-};
-TableWithBadges.defaultProps = {
-    badgeButton: null,
-    buttons: null,
 };
 
 TableWithBadges.propTypes = {

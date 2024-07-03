@@ -12,7 +12,12 @@ import Popover from '@mui/material/Popover';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const Err = ({icon, title, body, onClose}) => (
+const Err = ({
+    icon = null,
+    title = '',
+    body = '',
+    onClose = null
+}) => (
     <List>
         <ListItem>
             <ListItemAvatar>
@@ -39,13 +44,6 @@ const Err = ({icon, title, body, onClose}) => (
     </List>
 );
 
-Err.defaultProps = {
-    body: '',
-    icon: null,
-    onClose: null,
-    title: '',
-};
-
 Err.propTypes = {
     body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     icon: PropTypes.object,
@@ -53,7 +51,13 @@ Err.propTypes = {
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
-const LocalMsg = ({icon, title, body, onClose, useAsPopUp}) => {
+const LocalMsg = ({
+    icon = null,
+    title = '',
+    body = '',
+    onClose = null,
+    useAsPopUp = false,
+}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handlePopoverOpen = (event) => {
@@ -96,14 +100,6 @@ const LocalMsg = ({icon, title, body, onClose, useAsPopUp}) => {
             <Err icon={icon} title={title} body={body} onClose={onClose} />
         </Collapse>
     ));
-};
-
-LocalMsg.defaultProps = {
-    body: '',
-    icon: null,
-    onClose: null,
-    title: '',
-    useAsPopUp: false,
 };
 
 LocalMsg.propTypes = {

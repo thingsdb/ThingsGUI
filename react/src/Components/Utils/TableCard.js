@@ -12,7 +12,16 @@ import { ErrorMsg, HarmonicCardContent, orderByName, RemoveModal, SearchInput, T
 
 const step = 5;
 
-const TableCard = ({buttons, header, itemKey, items, moreButtons, onAdd, onDelete, tag}) => {
+const TableCard = ({
+    buttons,
+    header,
+    itemKey = 'name',
+    items = [],
+    moreButtons = null,
+    onAdd,
+    onDelete,
+    tag,
+}) => {
     const [deleteItem, setDeleteItem] = React.useState('');
     const [searchString, setSearchString] = React.useState('');
     const [maxAmount, setMaxAmount] = React.useState(step);
@@ -111,12 +120,6 @@ const TableCard = ({buttons, header, itemKey, items, moreButtons, onAdd, onDelet
         </React.Fragment>
     );
 };
-
-TableCard.defaultProps = {
-    itemKey: 'name',
-    items: [],
-    moreButtons: null,
-},
 
 TableCard.propTypes = {
     header: PropTypes.arrayOf(PropTypes.object).isRequired,

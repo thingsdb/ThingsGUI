@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Node = ({x, y, data, color}) => {
+const Node = ({
+    x,
+    y,
+    data = {},
+    color
+}) => {
     return (
         <React.Fragment>
             <defs>
@@ -20,10 +25,6 @@ const Node = ({x, y, data, color}) => {
             </text>
         </React.Fragment>
     );
-};
-
-Node.defaultProps = {
-    data: {},
 };
 
 Node.propTypes = {

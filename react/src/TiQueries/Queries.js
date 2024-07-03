@@ -15,6 +15,7 @@ export const WSE_FORMAT_QUERY = (run) => `wse(${run})`; // don't place a `;`
 export const ERROR_FORMAT_QUERY = (code, msg) => `err(${code}${msg ? `, '${msg}'` : ''})`; // don't place a `;`
 
 export const EXPORT_QUERY = 'export();';
+export const EXPORT_DUMP_QUERY = 'export({dump: true});';
 
 // Types
 export const DEL_TYPE_QUERY = 'del_type(name);';
@@ -109,7 +110,7 @@ export const TASK_SET_CLOSURE_QUERY = 'task(id).set_closure(closure(closure));';
 export const TASK_SET_OWNER_QUERY = 'task(id).set_owner(owner);';
 
 export const GET_TASK_QUERY = 't = task(id); [t.id(), t.at(), t.owner(), t.closure(), t.err(), t.args()];';
-export const LIGHT_TASKS_QUERY = 'tasks = tasks(); return tasks.map(|t| {id: t.id(), at: t.at(), err: t.err()});';
+export const LIGHT_TASKS_QUERY = 'tasks().map(|t| {id: t.id(), at: t.at(), err: t.err()});';
 export const TASK_ARGS_QUERY = 'task(id).args();';
 export const TASK_CANCEL_QUERY = 'task(id).cancel();';
 export const TASK_DEL_QUERY = 'task(id).del();';
@@ -126,7 +127,7 @@ export const DEL_MODULE_QUERY = 'del_module(name);';
 export const DEL_NODE_QUERY = 'del_node(id);';
 export const MODULE_INFO_QUERY = 'module_info(name);';
 export const MODULES_INFO_QUERY = 'modules_info();';
-export const NEW_BACKUP_QUERY = (time, repeat, maxFiles) => `new_backup(file${time ? ', datetime(time)' : ', now()'}${repeat ? `, repeat${maxFiles ? ', maxFiles' : ''}` : ''});`;
+export const NEW_BACKUP_QUERY = (time, repeat, maxFiles) => `new_backup(file${time ? ', datetime(time)' : ', timeval()'}${repeat ? `, repeat${maxFiles ? ', maxFiles' : ''}` : ''});`;
 export const NEW_MODULE_QUERY = (configuration) => configuration ? 'new_module(name, source, configuration);' : 'new_module(name, source);';
 export const NEW_NODE_QUERY = (port) => port ? 'new_node(secret, name, port);' : 'new_node(secret, name);';
 export const NODE_COUNTERS_INFO_QUERY = '[node_info(), counters()];';

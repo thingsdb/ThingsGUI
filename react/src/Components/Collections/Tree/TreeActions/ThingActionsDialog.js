@@ -42,7 +42,14 @@ const initialState = {
     realParentType: '',
 };
 
-const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
+const ThingActionsDialog = ({
+    onClose,
+    child,
+    parent,
+    thing = null,
+    scope,
+    isRoot = false,
+}) => {
     const [state, setState] = React.useState(initialState);
     const {loaded, realChildType, realParentType, customTypes} = state;
     const [enums, setEnums] = React.useState([]);
@@ -60,6 +67,7 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         // it would also be nice if we could check for potential custom type childern in an array type. To define the datatype of the edit component.
         let query = '';
         let jsonArgs = null;
+
         if (parent.id==null) {
             query = TYPE_INFO_ROOT_THING_QUERY;
             jsonArgs = ID_ARGS(child.id);
@@ -197,12 +205,6 @@ const ThingActionsDialog = ({onClose, child, parent, thing, scope, isRoot}) => {
         </SimpleModal>
     );
 };
-
-ThingActionsDialog.defaultProps = {
-    isRoot: false,
-    thing: null,
-};
-
 
 ThingActionsDialog.propTypes = {
     child: PropTypes.shape({

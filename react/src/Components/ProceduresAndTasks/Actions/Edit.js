@@ -11,7 +11,10 @@ import { Cancel, Remove } from '../Actions';
 
 const scope = THINGSDB_SCOPE;
 
-const Edit = ({item, type}) => {
+const Edit = ({
+    item = {},
+    type
+}) => {
     const buttons = {
         task: <Cancel item={item} scope={scope} />
     };
@@ -35,10 +38,6 @@ const Edit = ({item, type}) => {
             </Card>
         </Grid>
     );
-};
-
-Edit.defaultProps = {
-    item: {},
 };
 
 Edit.propTypes = {

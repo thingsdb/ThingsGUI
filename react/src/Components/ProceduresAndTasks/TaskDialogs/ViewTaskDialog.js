@@ -7,7 +7,13 @@ import { SimpleModal } from '../../Utils';
 import { ViewTask } from '../Content';
 
 
-const ViewTaskDialog = ({button, open, onClose, scope, task}) => (
+const ViewTaskDialog = ({
+    button = null,
+    open,
+    onClose,
+    scope,
+    task = {},
+}) => (
     <SimpleModal
         button={button}
         open={open}
@@ -31,11 +37,6 @@ const ViewTaskDialog = ({button, open, onClose, scope, task}) => (
         </Grid>
     </SimpleModal>
 );
-
-ViewTaskDialog.defaultProps = {
-    button: null,
-    task: {},
-};
 
 ViewTaskDialog.propTypes = {
     button: PropTypes.object,

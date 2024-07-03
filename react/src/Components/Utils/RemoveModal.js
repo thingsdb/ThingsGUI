@@ -7,7 +7,16 @@ import Switch from '@mui/material/Switch';
 import { ErrorMsg, SimpleModal } from '.';
 
 
-const RemoveModal = ({buttonComponent, buttonLabel, buttonProps, onClose, onSubmit, open, tag, title}) => {
+const RemoveModal = ({
+    buttonComponent = null,
+    buttonLabel = '',
+    buttonProps = null,
+    onClose = null,
+    onSubmit,
+    open = false,
+    tag,
+    title,
+}) => {
     const [show, setShow] = React.useState(false);
     const [switchDel, setSwitchDel] = React.useState(false);
 
@@ -70,14 +79,6 @@ const RemoveModal = ({buttonComponent, buttonLabel, buttonProps, onClose, onSubm
             </React.Fragment>
         </SimpleModal>
     );
-};
-
-RemoveModal.defaultProps = {
-    buttonComponent: null,
-    buttonLabel: '',
-    buttonProps: null,
-    onClose: null,
-    open: false
 };
 
 RemoveModal.propTypes = {

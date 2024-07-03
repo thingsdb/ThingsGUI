@@ -14,7 +14,13 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 
-const Edit = ({credentials, form, security, onChange, editField}) => {
+const Edit = ({
+    credentials,
+    form,
+    security,
+    onChange,
+    editField = 'all'
+}) => {
     const [show, setShow] = React.useState(false);
     const [loginWith, setLoginWith] = React.useState(credentials.isToken? 'token':'pass');
     const [clickAwayActive, setClickAwayActive] = React.useState(false);
@@ -209,10 +215,6 @@ const Edit = ({credentials, form, security, onChange, editField}) => {
             </Collapse>
         </React.Fragment>
     );
-};
-
-Edit.defaultProps = {
-    editField: 'all',
 };
 
 Edit.propTypes = {

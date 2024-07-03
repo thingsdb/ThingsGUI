@@ -9,7 +9,12 @@ import { SimpleModal } from '../../Utils';
 import { ViewProcedure } from '../Content';
 
 
-const ViewProcedureDialog = ({button, open, onClose, procedure}) => (
+const ViewProcedureDialog = ({
+    button = null,
+    open,
+    onClose,
+    procedure = {},
+}) => (
     <SimpleModal
         button={button}
         open={open}
@@ -40,11 +45,6 @@ const ViewProcedureDialog = ({button, open, onClose, procedure}) => (
         </Grid>
     </SimpleModal>
 );
-
-ViewProcedureDialog.defaultProps = {
-    button: null,
-    procedure: {},
-};
 
 ViewProcedureDialog.propTypes = {
     button: PropTypes.object,

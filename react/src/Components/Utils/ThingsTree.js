@@ -16,7 +16,14 @@ const Nested = styled('div')(({theme}) => ({
 
 const visibleNumber = 100;
 
-const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
+const ThingsTree = ({
+    child,
+    customTypes = [],
+    item = null,
+    root,
+    tree = null,
+    onAction = null,
+}) => {
     const [more, setMore] = React.useState({});
 
     // is root if item is still null
@@ -82,13 +89,6 @@ const ThingsTree = ({child, customTypes, item, root, tree, onAction}) => {
     return (
         <TreeBranch name={child.name} type={type} val={val} canToggle={canToggle} onOpen={handleOpenClose} onRenderChildren={renderChildren} onAction={onAction} />
     );
-};
-
-ThingsTree.defaultProps = {
-    customTypes: [],
-    item: null,
-    onAction: null,
-    tree: null,
 };
 
 ThingsTree.propTypes = {

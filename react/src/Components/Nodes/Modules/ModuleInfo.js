@@ -96,7 +96,11 @@ const header = [
 
 const tag = ModuleInfoTAG;
 
-const ModuleInfo = ({item, nodeId, _module}) => {
+const ModuleInfo = ({
+    item = {},
+    nodeId,
+    _module
+}) => {
     const [show, setShow] = React.useState(false);
     const [edit, setEdit] = React.useState({});
     const [form, setForm] = React.useState({});
@@ -247,10 +251,6 @@ const ModuleInfo = ({item, nodeId, _module}) => {
             </Grid>
         </SimpleModal>
     );
-};
-
-ModuleInfo.defaultProps = {
-    item: {},
 };
 
 ModuleInfo.propTypes = {

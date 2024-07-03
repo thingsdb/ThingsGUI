@@ -67,7 +67,10 @@ const header = [
 
 const tag = EditProcedureDialogTAG;
 
-const EditProcedure = ({procedure, scope}) => {
+const EditProcedure = ({
+    procedure = {},
+    scope
+}) => {
     const [queryString, setQueryString] = React.useState({definition: ''});
     const [jsonArgs, setJsonArgs] = React.useState('');
 
@@ -110,10 +113,6 @@ const EditProcedure = ({procedure, scope}) => {
             ))}
         </React.Fragment>
     );
-};
-
-EditProcedure.defaultProps = {
-    procedure: {},
 };
 
 EditProcedure.propTypes = {

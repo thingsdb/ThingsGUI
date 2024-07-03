@@ -6,7 +6,17 @@ import React from 'react';
 import {HarmonicCardHeader} from '.';
 
 
-const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onCleanup, onRefresh, title, unmountOnExit}) => (
+const HarmonicCard = ({
+    actionButtons = null,
+    buttons = null,
+    content,
+    expand = false,
+    noPadding = false,
+    onCleanup = () => null,
+    onRefresh = () => null,
+    title,
+    unmountOnExit = false,
+}) => (
     <HarmonicCardHeader
         actionButtons={actionButtons}
         expand={expand}
@@ -28,16 +38,6 @@ const HarmonicCard = ({actionButtons, buttons, content, expand, noPadding, onCle
     </HarmonicCardHeader>
 
 );
-
-HarmonicCard.defaultProps = {
-    actionButtons: null,
-    buttons: null,
-    expand: false,
-    noPadding: false,
-    onCleanup: () => null,
-    onRefresh: () => null,
-    unmountOnExit: false,
-},
 
 HarmonicCard.propTypes = {
     actionButtons: PropTypes.object,

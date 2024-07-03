@@ -4,7 +4,12 @@ import React from 'react';
 import AddLink from './AddLink';
 
 
-const Relation = ({onChange, relation, scope, view}) => {
+const Relation = ({
+    onChange,
+    relation = null,
+    scope,
+    view
+}) => {
 
     return(relation ? (
         <React.Fragment>
@@ -14,10 +19,6 @@ const Relation = ({onChange, relation, scope, view}) => {
             <AddLink name={relation.definition} scope={scope} onChange={onChange(view)} />
         </React.Fragment>
     ) : 'no relation');
-};
-
-Relation.defaultProps = {
-    relation: null,
 };
 
 Relation.propTypes = {

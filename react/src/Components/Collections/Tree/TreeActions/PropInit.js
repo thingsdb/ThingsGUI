@@ -2,7 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-const PropInit = ({onChange, input, thing}) => {
+const PropInit = ({
+    onChange,
+    input,
+    thing = null
+}) => {
     const [error, setError] = React.useState('');
 
     const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
@@ -31,10 +35,6 @@ const PropInit = ({onChange, input, thing}) => {
         />
     );
 };
-
-PropInit.defaultProps = {
-    thing: null,
-},
 
 PropInit.propTypes = {
     onChange: PropTypes.func.isRequired,

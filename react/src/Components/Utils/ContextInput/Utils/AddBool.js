@@ -7,7 +7,11 @@ import {EditActions, useEdit} from '../Context';
 
 const isTrue = (str) => str === 'true';
 
-const AddBool = ({identifier, init, parent}) => {
+const AddBool = ({
+    identifier = null,
+    init = '',
+    parent
+}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
@@ -29,11 +33,6 @@ const AddBool = ({identifier, init, parent}) => {
         <BoolInput input={`${v}`} onChange={handleOnChange} />
     );
 };
-
-AddBool.defaultProps = {
-    identifier: null,
-    init: '',
-},
 
 AddBool.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

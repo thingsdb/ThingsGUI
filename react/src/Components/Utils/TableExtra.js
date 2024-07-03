@@ -10,7 +10,15 @@ import TableWithBadges from './TableWithBadges';
 import {DATE_TIME_SEC_STR} from '../../Constants/DateStrings';
 
 
-const TableExtra = ({badgeButton, buttons, createdAt, header, modifiedAt, onAdd, rows}) => (
+const TableExtra = ({
+    badgeButton = null,
+    buttons = null,
+    createdAt = null,
+    header,
+    modifiedAt = null,
+    onAdd = null,
+    rows,
+}) => (
     <Grid container>
         <Grid item xs={12}>
             <TableWithBadges
@@ -36,15 +44,6 @@ const TableExtra = ({badgeButton, buttons, createdAt, header, modifiedAt, onAdd,
         </Grid>
     </Grid>
 );
-
-
-TableExtra.defaultProps = {
-    badgeButton: null,
-    buttons: null,
-    createdAt: null,
-    modifiedAt: null,
-    onAdd: null,
-};
 
 TableExtra.propTypes = {
     badgeButton: PropTypes.func,

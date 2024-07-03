@@ -7,7 +7,12 @@ import TextField from '@mui/material/TextField';
 import { EditActions, useEdit } from '../Context';
 import { STRING_FORMAT_QUERY } from '../../../../TiQueries/Queries';
 
-const AddStr = ({identifier, init, parent, ...props}) => {
+const AddStr = ({
+    identifier = null,
+    init = '',
+    parent,
+    ...props
+}) => {
     const [editState, dispatch] = useEdit();
     const {val} = editState;
 
@@ -39,11 +44,6 @@ const AddStr = ({identifier, init, parent, ...props}) => {
         />
     );
 };
-
-AddStr.defaultProps = {
-    identifier: null,
-    init:'',
-},
 
 AddStr.propTypes = {
     identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

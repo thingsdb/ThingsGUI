@@ -10,7 +10,13 @@ import React from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 
 
-const ViewEditFields = ({canEdit, editComponent, label, onSave, viewComponent}) => {
+const ViewEditFields = ({
+    canEdit,
+    editComponent = null,
+    label,
+    onSave = () => null,
+    viewComponent,
+}) => {
     const [edit, setEdit] = React.useState(false);
 
     const handleEdit = () => {
@@ -61,11 +67,6 @@ const ViewEditFields = ({canEdit, editComponent, label, onSave, viewComponent}) 
             </Collapse>
         </List>
     );
-};
-
-ViewEditFields.defaultProps = {
-    editComponent: null,
-    onSave: () => null,
 };
 
 ViewEditFields.propTypes = {

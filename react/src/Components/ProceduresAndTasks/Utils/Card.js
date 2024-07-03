@@ -8,7 +8,16 @@ import ViewIcon from '@mui/icons-material/Visibility';
 import {ChipsCard, TableCard} from '../../Utils';
 
 
-const Card = ({buttonsView, header, itemKey, list, onAdd, onClick, onDelete, tag}) => {
+const Card = ({
+    buttonsView,
+    header = [],
+    itemKey,
+    list,
+    onAdd,
+    onClick,
+    onDelete,
+    tag,
+}) => {
     const buttons = (bv) => (ident) => {
         let b = [];
         if (bv.view) {
@@ -61,10 +70,6 @@ const Card = ({buttonsView, header, itemKey, list, onAdd, onClick, onDelete, tag
             tag={tag}
         />
     ));
-};
-
-Card.defaultProps = {
-    header: [],
 };
 
 Card.propTypes = {

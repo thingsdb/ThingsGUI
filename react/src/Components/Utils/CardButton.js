@@ -6,7 +6,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography';
 
 
-const CardButton = ({onClick, title, ...other}) => (
+const CardButton = ({onClick, title, ...props}) => (
     <Card
         sx={{
             width: 150,
@@ -16,7 +16,7 @@ const CardButton = ({onClick, title, ...other}) => (
             margin: '8px'
         }}
         raised
-        {...other}
+        {...props}
     >
         <CardActionArea
             focusRipple
@@ -28,7 +28,7 @@ const CardButton = ({onClick, title, ...other}) => (
                 padding: '16px'
             }}
             onClick={onClick}
-            {...other}
+            {...props}
         >
             <Typography variant="overline" color="primary" >
                 {title}
@@ -37,14 +37,10 @@ const CardButton = ({onClick, title, ...other}) => (
     </Card>
 );
 
-CardButton.defaultProps = {
-    other: {},
-};
-
 CardButton.propTypes = {
     onClick: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
-    other: PropTypes.object,
+    props: PropTypes.object,
 };
 
 export default CardButton;

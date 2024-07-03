@@ -12,7 +12,13 @@ import { THING_KEY } from '../../../../Constants/CharacterKeys';
 import { THINGDB_CACHE } from '../../../../Constants/Files';
 
 
-const AddEnum = ({enumName, enums, identifier, init, parent}) => {
+const AddEnum = ({
+    enumName,
+    enums,
+    identifier = null,
+    init = '',
+    parent
+}) => {
     const [enumMem, setEnumMem] = React.useState('');
     const [editState, dispatch] = useEdit();
     const {val} = editState;
@@ -83,10 +89,6 @@ const AddEnum = ({enumName, enums, identifier, init, parent}) => {
     ) :null);
 };
 
-AddEnum.defaultProps = {
-    identifier: null,
-    init: '',
-};
 AddEnum.propTypes = {
     enumName: PropTypes.string.isRequired,
     enums: PropTypes.arrayOf(PropTypes.object).isRequired,

@@ -17,7 +17,10 @@ const Img = styled('img')(() => ({
     }
 }));
 
-const DownloadBlob = ({val, isImg}) => {
+const DownloadBlob = ({
+    val,
+    isImg = false,
+}) => {
     const [link, setLink] = React.useState('');
     const isComponentUnmounted = React.useRef(false);
 
@@ -40,7 +43,7 @@ const DownloadBlob = ({val, isImg}) => {
     }, [val]); // eslint-disable-line
 
     return (
-        <Button target="_blank" href={link} download="blob" type="application/octet-stream" color="primary">
+        <Button target="_blank" href={link} download="ThingsGUI Blob" type="application/octet-stream" color="primary">
             {isImg ? (
                 <Img src={link} />
             ) : (
@@ -48,10 +51,6 @@ const DownloadBlob = ({val, isImg}) => {
             )}
         </Button>
     );
-};
-
-DownloadBlob.defaultProps = {
-    isImg: false,
 };
 
 DownloadBlob.propTypes = {

@@ -22,7 +22,13 @@ const header = [
 
 const tag = TasksTAG;
 
-const Tasks = ({buttonsView, dialogsView, onCallback, tasks, scope}) => {
+const Tasks = ({
+    buttonsView,
+    dialogsView,
+    onCallback = () => null,
+    tasks,
+    scope,
+}) => {
     const [identifier, setIdentifier] = React.useState(null);
     const [open, setOpen] = React.useState({
         add: false,
@@ -79,10 +85,6 @@ const Tasks = ({buttonsView, dialogsView, onCallback, tasks, scope}) => {
             <TaskDialogs dialogsView={dialogsView} id={identifier} open={open} onClose={handleClose} tasks={tasks[scope]||[]} scope={scope} />
         </HarmonicCardHeader>
     );
-};
-
-Tasks.defaultProps = {
-    onCallback: () => null,
 };
 
 Tasks.propTypes = {

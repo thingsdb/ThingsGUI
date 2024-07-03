@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 
-const HarmonicCardContent = ({buttons, content, noPadding}) => (
+const HarmonicCardContent = ({
+    buttons = null,
+    content,
+    noPadding = false,
+}) => (
     <React.Fragment>
         {noPadding ? content : (
             <CardContent>
@@ -18,11 +22,6 @@ const HarmonicCardContent = ({buttons, content, noPadding}) => (
         ) : null}
     </React.Fragment>
 );
-
-HarmonicCardContent.defaultProps = {
-    buttons: null,
-    noPadding: false,
-},
 
 HarmonicCardContent.propTypes = {
     buttons: PropTypes.object,

@@ -13,7 +13,14 @@ import { ListHeader, useDebounce } from '../..';
 import InputField from '../InputField';
 
 
-const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDispatch}) => {
+const AddThing = ({
+    customTypes,
+    dataTypes,
+    enums,
+    identifier = null,
+    parent,
+    parentDispatch,
+}) => {
     const [dataType, setDataType] = React.useState([STR]);
     const [property, setProperty] = React.useState(['']);
     const [editState, dispatch] = useEdit();
@@ -151,11 +158,6 @@ const AddThing = ({customTypes, dataTypes, enums, identifier, parent, parentDisp
         </Grid>
     );
 };
-
-AddThing.defaultProps = {
-    identifier: null,
-};
-
 
 AddThing.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,

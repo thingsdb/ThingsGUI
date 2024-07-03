@@ -5,7 +5,11 @@ import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
 
-const DownloadTextFile = ({extension, name, text}) => {
+const DownloadTextFile = ({
+    extension = '',
+    name = '',
+    text
+}) => {
     const [href, setHref] = React.useState(null);
 
     React.useEffect(() => {
@@ -19,11 +23,6 @@ const DownloadTextFile = ({extension, name, text}) => {
             </Button>
         </Tooltip>
     );
-};
-
-DownloadTextFile.defaultProps = {
-    extension: '',
-    name: '',
 };
 
 DownloadTextFile.propTypes = {

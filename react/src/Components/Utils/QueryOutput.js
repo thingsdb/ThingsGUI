@@ -13,7 +13,13 @@ import { EditorTab } from '../../Constants/Enums';
 import Copy from './Copy';
 
 
-const QueryOutput = ({output, onArgs, onChangeTab, showLogs, tabIndex}) => {
+const QueryOutput = ({
+    output = null,
+    onArgs = null,
+    onChangeTab,
+    showLogs = false,
+    tabIndex,
+}) => {
 
     const handleChangeTab = (_event, newValue) => {
         onChangeTab(newValue);
@@ -77,12 +83,6 @@ const QueryOutput = ({output, onArgs, onChangeTab, showLogs, tabIndex}) => {
             )}
         </Paper>
     );
-};
-
-QueryOutput.defaultProps = {
-    onArgs: null,
-    output: null,
-    showLogs: false,
 };
 
 QueryOutput.propTypes = {

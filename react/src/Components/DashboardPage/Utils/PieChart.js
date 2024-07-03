@@ -13,7 +13,17 @@ const minFrac = 0.05;
 let charWidth = 11;
 let legendLineHeight = 25;
 
-const PieChart = ({data, hole, offset, radius, showLabels, showPercent, stroke, strokeWidth, title}) => {
+const PieChart = ({
+    data,
+    hole = 50,
+    offset = {x: 0, y: 50},
+    radius = 145,
+    showLabels = true,
+    showPercent = false,
+    stroke,
+    strokeWidth = 5,
+    title,
+}) => {
     let colorsLength = colors.length;
     let total = data.reduce((res, item) => { res += item.number  ; return res;}, 0);
     let start = 0;
@@ -72,16 +82,6 @@ const PieChart = ({data, hole, offset, radius, showLabels, showPercent, stroke, 
             })}
         </svg>
     );
-};
-
-
-PieChart.defaultProps = {
-    hole: 50,
-    offset: {x:0, y: 50},
-    radius: 145,
-    showLabels: true,
-    showPercent: false,
-    strokeWidth: 5,
 };
 
 PieChart.propTypes = {

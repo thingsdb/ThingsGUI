@@ -8,7 +8,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
-const TableWithButtons = ({header, rows, buttons}) => (
+
+const TableWithButtons = ({
+    header,
+    rows,
+    buttons = null,
+}) => (
     <Table padding="none">
         <TableHead>
             <TableRow>
@@ -44,10 +49,6 @@ const TableWithButtons = ({header, rows, buttons}) => (
         </TableBody>
     </Table>
 );
-
-TableWithButtons.defaultProps = {
-    buttons: null,
-};
 
 TableWithButtons.propTypes = {
     header: PropTypes.arrayOf(PropTypes.object).isRequired,

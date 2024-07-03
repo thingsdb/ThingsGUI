@@ -11,7 +11,15 @@ import InputField from '../InputField';
 import useDebounce from '../../useDebounce';
 
 
-const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, parent, parentDispatch}) => {
+const AddVariable = ({
+    variables,
+    customTypes,
+    dataTypes,
+    enums,
+    identifier = null,
+    parent,
+    parentDispatch
+}) => {
     const [dataType, setDataType] = React.useState({});
     const [editState, dispatch] = useEdit();
     const {blob, obj, val} = editState;
@@ -89,11 +97,6 @@ const AddVariable = ({variables, customTypes, dataTypes, enums, identifier, pare
         )
     );
 };
-
-AddVariable.defaultProps = {
-    identifier: null,
-};
-
 
 AddVariable.propTypes = {
     variables: PropTypes.arrayOf(PropTypes.string).isRequired,

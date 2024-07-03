@@ -23,7 +23,16 @@ const initState = {
     properties: [{propertyBlob: null, propertyName: '', propertyType: '', propertyVal: '', definition: ''}],
 };
 
-const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, scope}) => {
+const AddDialog = ({
+    dataTypes = [],
+    category,
+    getInfo,
+    link,
+    onClose,
+    open = false,
+    queries,
+    scope,
+}) => {
     const [state, setState] = React.useState(initState);
     const {queryObj, name, error, properties} = state;
 
@@ -204,13 +213,6 @@ const AddDialog = ({dataTypes, category, getInfo, link, onClose, open, queries, 
         </SimpleModal>
     );
 };
-
-
-AddDialog.defaultProps = {
-    dataTypes: [],
-    open: false,
-};
-
 
 AddDialog.propTypes = {
     dataTypes: PropTypes.arrayOf(PropTypes.string),

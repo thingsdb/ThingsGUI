@@ -1,3 +1,4 @@
+import AddFile from './AddFile';
 import Arguments from './Arguments';
 import ArrayLayout from './ArrayLayout';
 import AutoSelect from './AutoSelect';
@@ -317,6 +318,7 @@ const toNum = v => +v || v;
 
 export {
     allDataTypes,
+    AddFile,
     Arguments,
     ArrayLayout,
     AutoSelect,

@@ -30,7 +30,7 @@ const header = [
     {ky: 'file_template', label: 'File template'},
     {ky: 'files', label: 'Files'},
     {ky: 'max_files', label: 'Max files'},
-    {ky: 'next_run', label: 'Next run at (UTC)', fn: (t) => t.slice(-1) === 'Z' ? t.slice(0, -1) : t},
+    {ky: 'next_run', label: 'Next run at (UTC)', fn: (t) => t?.slice(-1) === 'Z' ? t?.slice(0, -1) : t},
     {ky: 'repeat', label: 'Repeat after (sec)'},
     {ky: 'created_at', label: 'Created on', fn: (t) => moment(t * 1000).format(DATE_TIME_SEC_STR)},
 ];

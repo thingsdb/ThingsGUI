@@ -12,7 +12,15 @@ import PropInit from './PropInit';
 import TypeInit from './TypeInit';
 
 
-const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
+const Edit = ({
+    child,
+    customTypes,
+    dataTypes,
+    enums,
+    parent,
+    scope,
+    thing = null,
+}) => {
     const [newProperty, setNewProperty] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type == LIST || child.type == THING ? dataTypes[0] : child.type == SET ? THING : child.type);
 
@@ -92,10 +100,6 @@ const Edit = ({child, customTypes, dataTypes, enums, parent, scope, thing}) => {
         </List>
     );
 };
-
-Edit.defaultProps = {
-    thing: null,
-},
 
 Edit.propTypes = {
     customTypes: PropTypes.arrayOf(PropTypes.object).isRequired,

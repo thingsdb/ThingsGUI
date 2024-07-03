@@ -8,7 +8,10 @@ import TextField from '@mui/material/TextField';
 import {Copy, DownloadTextFile, SimpleModal} from '.';
 
 
-const StringDialog = ({name, text}) => {
+const StringDialog = ({
+    name = '',
+    text
+}) => {
     const [open, setOpen] = React.useState(false);
 
     const handleOpen= () => {
@@ -75,10 +78,6 @@ const StringDialog = ({name, text}) => {
         </SimpleModal>
 
     );
-};
-
-StringDialog.defaultProps = {
-    name: '',
 };
 
 StringDialog.propTypes = {

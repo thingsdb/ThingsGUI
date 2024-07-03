@@ -18,7 +18,15 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import Tooltip from '@mui/material/Tooltip';
 
 
-const Menu = ({onAdd, homeRoute, icon, itemKey, items, onRefresh, title}) => {
+const Menu = ({
+    onAdd,
+    homeRoute,
+    icon,
+    itemKey,
+    items,
+    onRefresh = null,
+    title,
+}) => {
     let [searchParams] = useSearchParams();
     const [open, setOpen] = React.useState(false);
 
@@ -96,10 +104,6 @@ const Menu = ({onAdd, homeRoute, icon, itemKey, items, onRefresh, title}) => {
             </Collapse>
         </List>
     );
-};
-
-Menu.defaultProps = {
-    onRefresh: null,
 };
 
 Menu.propTypes = {
