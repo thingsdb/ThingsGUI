@@ -57,7 +57,7 @@
     "terser-webpack-plugin": "5.3.10",
     "vis-network": "9.1.9",
     "vlow": "1.1.17",
-    "webpack": "5.92.1",
+    "webpack": "5.95.0",
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-cli": "5.1.4"
   },
