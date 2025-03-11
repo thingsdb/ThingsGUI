@@ -121,7 +121,7 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
             ))}
             {isObjectEmpty(cachedConnections) &&
                 <ListItem>
-                    <ListItemText secondary="No saved connections" secondaryTypographyProps={{variant: 'caption'}} />
+                    <ListItemText secondary="No saved connections" slotProps={{secondary: {variant: 'caption'}}} />
                 </ListItem>
             }
             <ListItem>

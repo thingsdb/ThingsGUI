@@ -35,9 +35,9 @@ const TimePicker = ({onChange}) => {
                     onChange={handleChangeDate}
                     type="date"
                     variant="standard"
-                    InputLabelProps={{
+                    slotProps={{inputLabel: {
                         shrink: true,
-                    }}
+                    }}}
                 />
             </Grid>
             <Grid item>
@@ -48,9 +48,9 @@ const TimePicker = ({onChange}) => {
                     onChange={handleChangeTime}
                     type="time"
                     variant="standard"
-                    InputLabelProps={{
+                    slotProps={{inputLabel: {
                         shrink: true,
-                    }}
+                    }}}
                 />
             </Grid>
         </Grid>

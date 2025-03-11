@@ -91,7 +91,7 @@ const AddArray = ({
                                     name="dataType"
                                     onChange={handleChangeType(index)}
                                     select
-                                    SelectProps={{native: true}}
+                                    slotProps={{select: {native: true}}}
                                     type="text"
                                     value={d}
                                     variant="standard"
@@ -139,5 +139,3 @@ AddArray.propTypes = {
 };
 
 export default AddArray;
-
-

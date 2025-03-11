@@ -106,7 +106,7 @@ const RunProcedureDialog = ({
                             {procedure.arguments&&procedure.arguments.length!==0 && (
                                 <React.Fragment>
                                     <ListItem>
-                                        <ListItemText primary="Arguments:" primaryTypographyProps={{variant: 'body1'}} />
+                                        <ListItemText primary="Arguments:" slotProps={{primary: {variant: 'body1'}}} />
                                     </ListItem>
                                     <ListItem>
                                         <InputField dataType={VARIABLE} dataTypes={dataTypes} variables={procedure.arguments} />
@@ -114,7 +114,7 @@ const RunProcedureDialog = ({
                                 </React.Fragment>
                             )}
                             <ListItem>
-                                <ListItemText primary="Output:" primaryTypographyProps={{variant: 'body1'}} />
+                                <ListItemText primary="Output:" slotProps={{primary: {variant: 'body1'}}} />
                             </ListItem>
                             <div id="output">
                                 <QueryOutput output={output} tabIndex={tabIndex} onChangeTab={handleChangeTab} />

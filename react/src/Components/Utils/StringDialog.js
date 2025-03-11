@@ -57,18 +57,19 @@ const StringDialog = ({
                     type="text"
                     value={text}
                     variant="standard"
-                    InputProps={{
-                        readOnly: true,
-                        disableUnderline: true,
-                    }}
-                    inputProps={{
-                        style: {
-                            fontFamily: 'monospace',
-                            fontSize: 'body1.fontSize'
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                            disableUnderline: true,
                         },
-                    }}
-                    InputLabelProps={{
-                        shrink: true,
+                        htmlInput: {
+                            style: {
+                                fontFamily: 'monospace',
+                            },
+                        },
+                        inputLabel: {
+                            shrink: true,
+                        }
                     }}
                     multiline
                     maxRows="40"

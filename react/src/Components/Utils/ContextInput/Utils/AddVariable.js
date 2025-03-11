@@ -68,7 +68,7 @@ const AddVariable = ({
                                 name="dataType"
                                 onChange={handleChangeType(v)}
                                 select
-                                SelectProps={{native: true}}
+                                slotProps={{select: {native: true}}}
                                 type="text"
                                 value={dataType[v]||dataTypes[0]}
                                 variant="standard"
@@ -109,5 +109,3 @@ AddVariable.propTypes = {
 };
 
 export default AddVariable;
-
-

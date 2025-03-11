@@ -1,4 +1,4 @@
-import { Link as RouterLink, createSearchParams, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, createSearchParams, useSearchParams } from 'react-router';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,7 +10,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -37,29 +36,29 @@ const Menu = ({
 
     return (
         <List dense>
-            <ListItem disableGutters>
+            <ListItem
+                disableGutters
+                secondaryAction={onRefresh && open ? (
+                    <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title.toLowerCase()} info`}>
+                        <Button color="primary" onClick={onRefresh}>
+                            <RefreshIcon color="primary" />
+                        </Button>
+                    </Tooltip>
+                ) : undefined}
+            >
                 <ListItemButton onClick={handleClickOpen}>
                     <ListItemIcon>
                         {open ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" />}
                     </ListItemIcon>
                     <ListItemText
                         primary={title}
-                        primaryTypographyProps={{
+                        slotProps={{primary: {
                             display: 'block',
                             noWrap: true,
                             variant: 'button'
-                        }}
+                        }}}
                     />
                 </ListItemButton>
-                {onRefresh && open && (
-                    <ListItemSecondaryAction>
-                        <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title.toLowerCase()} info`}>
-                            <Button color="primary" onClick={onRefresh}>
-                                <RefreshIcon color="primary" />
-                            </Button>
-                        </Tooltip>
-                    </ListItemSecondaryAction>
-                )}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List dense>
@@ -78,10 +77,10 @@ const Menu = ({
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={item[itemKey]}
-                                    primaryTypographyProps={{
+                                    slotProps={{primary: {
                                         display: 'block',
                                         noWrap: true,
-                                    }}
+                                    }}}
                                 />
                             </ListItemButton>
                         </ListItem>

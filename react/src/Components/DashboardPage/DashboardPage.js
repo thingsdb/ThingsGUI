@@ -1,6 +1,6 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 /*eslint-disable react/no-multi-comp*/
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';

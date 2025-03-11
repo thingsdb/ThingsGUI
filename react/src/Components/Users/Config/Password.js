@@ -133,7 +133,7 @@ const Password = ({user}) => {
                     type={showPassword?'text':'password'}
                     value={form.password}
                     variant="standard"
-                    InputProps={{
+                    slotProps={{input: {
                         endAdornment: (
                             <InputAdornment position="end">
                                 <Button color="primary" onClick={handleClickShowPassword}>
@@ -141,7 +141,7 @@ const Password = ({user}) => {
                                 </Button>
                             </InputAdornment>
                         ),
-                    }}
+                    }}}
                 />
             ) : null}
         </React.Fragment>

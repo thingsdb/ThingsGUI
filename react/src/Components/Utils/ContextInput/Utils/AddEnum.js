@@ -61,7 +61,7 @@ const AddEnum = ({
                     name="enum"
                     onChange={handleChangeEnum}
                     select
-                    SelectProps={{native: true}}
+                    slotProps={{select: {native: true}}}
                     type="text"
                     value={enumMem}
                     variant="standard"

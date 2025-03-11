@@ -51,7 +51,7 @@ const TimePeriodPicker = ({onChange}) => {
                     autoFocus
                     fullWidth
                     id="number"
-                    inputProps={{min: '1'}}
+                    slotProps={{htmlInput: {min: '1'}}}
                     margin="dense"
                     onChange={handleOnChange}
                     spellCheck={false}
@@ -67,7 +67,7 @@ const TimePeriodPicker = ({onChange}) => {
                     margin="dense"
                     onChange={handleOnChange}
                     select
-                    SelectProps={{native: true}}
+                    slotProps={{select: {native: true}}}
                     value={state.unit}
                     variant="standard"
                 >

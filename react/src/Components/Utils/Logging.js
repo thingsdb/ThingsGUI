@@ -52,7 +52,7 @@ const Logging = ({logging}) => (
             </ListItem>
         ))}
         {logging.length === 0 &&
-            <ListItem xs={12}>
+            <ListItem>
                 <Typography variant="subtitle2">
                     {'No logging available'}
                 </Typography>
@@ -75,4 +75,3 @@ Logging.propTypes = {
 };
 
 export default withStores(Logging);
-

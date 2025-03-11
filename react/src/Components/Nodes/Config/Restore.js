@@ -116,12 +116,12 @@ const Restore = ({nodes}) => {
                     type="text"
                     value={fileName}
                     variant="standard"
-                    FormHelperTextProps={{
+                    slotProps={{formHelperText: {
                         style: {
                             marginBottom: '16px',
                             color: amber[700]
                         }
-                    }}
+                    }}}
                 />
                 <Typography component="div" variant="caption">
                     <FormLabel component="label">

@@ -183,9 +183,9 @@ const DrawerLayout = ({
                     anchor="left"
                     open={menuOpen}
                     menuWidth={menuWidth}
-                    PaperProps={{
+                    slotProps={{paper: {
                         square: false
-                    }}
+                    }}}
                 >
                     <MenuContainer>
                         {menus.map((item, index) => (

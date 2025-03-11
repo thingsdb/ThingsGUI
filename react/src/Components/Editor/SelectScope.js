@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { withVlow } from 'vlow';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import NativeSelect from '@mui/material/NativeSelect';

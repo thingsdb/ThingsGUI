@@ -98,7 +98,7 @@ const Quotas = ({collection}) => {
                 margin="dense"
                 onChange={handleOnChangeType}
                 select
-                SelectProps={{native: true}}
+                slotProps={{select: {native: true}}}
                 value={form.quotaType}
                 variant="standard"
             >
@@ -112,7 +112,7 @@ const Quotas = ({collection}) => {
                 autoFocus
                 fullWidth
                 id="quota"
-                inputProps={{min: '1'}}
+                slotProps={{htmlInput: {min: '1'}}}
                 label="Quota"
                 margin="dense"
                 onChange={handleOnChange}

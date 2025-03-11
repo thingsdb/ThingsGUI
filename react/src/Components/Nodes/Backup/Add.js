@@ -140,7 +140,7 @@ const Add = ({nodeId}) => {
                                         autoFocus
                                         fullWidth
                                         id="maxFiles"
-                                        inputProps={{min: '1'}}
+                                        slotProps={{htmlInput: {min: '1'}}}
                                         margin="dense"
                                         onChange={handleOnChange}
                                         spellCheck={false}
@@ -149,9 +149,9 @@ const Add = ({nodeId}) => {
                                         variant="standard"
                                     />
                                 }
-                                secondaryTypographyProps={{
+                                slotProps={{secondary: {
                                     component: 'div'
-                                }}
+                                }}}
                             />
                         </SwitchOpen>
                     </SwitchOpen>

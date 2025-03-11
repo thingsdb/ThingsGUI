@@ -18,12 +18,12 @@ const TitlePage2 = ({
                     <CardHeader
                         action={title}
                         title={preTitle}
-                        titleTypographyProps={{
+                        slotProps={{title: {
                             variant: 'body2',
                             display: 'inline',
                             noWrap: true,
                             component: 'span',
-                        }}
+                        }}}
                         sx={{
                             paddingTop: '10px',
                             paddingBottom: '8px',
@@ -41,12 +41,12 @@ const TitlePage2 = ({
                     <CardHeader
                         action={title}
                         title={preTitle}
-                        titleTypographyProps={{
+                        slotProps={{title: {
                             variant: 'body2',
                             display: 'inline',
                             noWrap: true,
                             component: 'span',
-                        }}
+                        }}}
                         sx={{
                             paddingTop: '10px',
                             paddingBottom: '8px',

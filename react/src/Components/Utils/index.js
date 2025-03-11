@@ -61,7 +61,7 @@ import { parseError, useThingsError } from './useThingsError';
 import VariablesArray from './VariablesArray';
 import ViewEditFields from './ViewEditFields';
 import WarnPopover from './WarnPopover';
-import { createSearchParams } from 'react-router-dom';
+import { createSearchParams } from 'react-router';
 
 import { SET_KEY, THING_KEY, WRAP_KEY } from '../../Constants/CharacterKeys';
 import {

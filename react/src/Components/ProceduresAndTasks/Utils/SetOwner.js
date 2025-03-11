@@ -39,7 +39,7 @@ const SetOwner = ({init, onChange, user, users}) => {
             name="owner"
             onChange={handleChangeOwner}
             select
-            SelectProps={{native: true}}
+            slotProps={{select: {native: true}}}
             value={owner}
             variant="standard"
         >

@@ -22,7 +22,7 @@ const TypeInit = ({type, customTypes, dataTypes, onChange, input}) => {
             name="dataType"
             onChange={handleOnChangeType}
             select
-            SelectProps={{native: true}}
+            slotProps={{select: {native: true}}}
             value={input}
             variant="standard"
         >

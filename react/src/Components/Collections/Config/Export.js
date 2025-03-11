@@ -91,19 +91,21 @@ const Export = ({collection}) => {
                         type="script"
                         value={script}
                         variant="standard"
-                        InputProps={{
-                            readOnly: true,
-                            disableUnderline: true,
-                        }}
-                        inputProps={{
-                            style: {
-                                fontFamily: 'monospace',
-                                fontSize: 'caption.fontSize',
-                                tabSize: 4,
+                        slotProps={{
+                            input: {
+                                readOnly: true,
+                                disableUnderline: true,
                             },
-                        }}
-                        InputLabelProps={{
-                            shrink: true,
+                            htmlInput: {
+                                style: {
+                                    fontFamily: 'monospace',
+                                    fontSize: 'caption.fontSize',
+                                    tabSize: 4,
+                                },
+                            },
+                            inputLabel: {
+                                shrink: true,
+                            }
                         }}
                         multiline
                         maxRows="40"

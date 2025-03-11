@@ -123,7 +123,7 @@ const AddThing = ({
                                 name="dataType"
                                 onChange={handleChangeType(index)}
                                 select
-                                SelectProps={{native: true}}
+                                slotProps={{select: {native: true}}}
                                 type="text"
                                 value={dataType[index] || STR}
                                 variant="standard"
@@ -169,5 +169,3 @@ AddThing.propTypes = {
 };
 
 export default AddThing;
-
-

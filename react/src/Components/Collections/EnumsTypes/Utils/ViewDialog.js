@@ -102,17 +102,19 @@ const ViewDialog = ({
                                             type="text"
                                             value={viewItem.definition||''}
                                             variant="standard"
-                                            InputProps={{
-                                                readOnly: true,
-                                                disableUnderline: true,
-                                            }}
-                                            inputProps={{
-                                                style: {
-                                                    fontFamily: 'monospace',
+                                            slotProps={{
+                                                input: {
+                                                    readOnly: true,
+                                                    disableUnderline: true,
                                                 },
-                                            }}
-                                            InputLabelProps={{
-                                                shrink: true,
+                                                htmlInput: {
+                                                    style: {
+                                                        fontFamily: 'monospace',
+                                                    },
+                                                },
+                                                inputLabel: {
+                                                    shrink: true,
+                                                }
                                             }}
                                         />
                                     </ListItem>

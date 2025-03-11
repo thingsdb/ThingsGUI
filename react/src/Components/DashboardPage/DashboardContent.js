@@ -136,11 +136,13 @@ const DashboardContent = ({allNodeInfo, collections, users, nodes}) => {
                                 action={n.logo}
                                 title={n.data}
                                 subheader={n.title}
-                                subheaderTypographyProps={{
-                                    variant:'button'
-                                }}
-                                titleTypographyProps={{
-                                    variant:'h4'
+                                slotProps={{
+                                    subheader: {
+                                        variant:'button'
+                                    },
+                                    title: {
+                                        variant:'h4'
+                                    }
                                 }}
                             />
                         </StyledCard>

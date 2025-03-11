@@ -1,4 +1,4 @@
-import { HashRouter as Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router';
 import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
 import { withVlow } from 'vlow';
 import CssBaseline from '@mui/material/CssBaseline';
