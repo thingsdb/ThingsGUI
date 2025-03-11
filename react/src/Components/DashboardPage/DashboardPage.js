@@ -54,7 +54,7 @@ const DashboardPage = () => {
                     height={35}
                 />
             </Button>
-            <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+            <Dialog fullScreen open={open} onClose={handleClose} slots={{transition: Transition}}>
                 <DashboardContent />
                 <div style={{position:'fixed', width: '100%', bottom: -8, zIndex: 2}}>
                     <TopBar
