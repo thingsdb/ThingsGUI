@@ -1,5 +1,5 @@
 import { Route, Routes, useLocation, useSearchParams } from 'react-router';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
@@ -86,7 +86,7 @@ const App = () => {
                 }
                 mainContent={
                     <Grid container alignItems="flex-start">
-                        <Grid container item xs={12} sx={{padding: '0px 8px 8px 8px'}}>
+                        <Grid container xs={12} sx={{padding: '0px 8px 8px 8px'}}>
                             <Routes>
                                 <Route path="/" element={<Welcome />} />
                                 <Route path={`/${COLLECTION_ROUTE}/${collectionName}`} element={<Collection />} />

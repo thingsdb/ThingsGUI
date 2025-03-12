@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
@@ -54,16 +54,16 @@ const AddRoom = ({
     const hasError = Boolean(error);
 
     return(
-        <Grid container item xs={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
-            <Grid item xs={2} container alignItems="center" justifyContent="center">
-                <Grid item>
+        <Grid container xs={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
+            <Grid size={2} container alignItems="center" justifyContent="center">
+                <Grid>
                     <Typography variant="h5" color="primary">
                         {'room('}
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid item xs={9} container>
-                <Grid item xs={12}>
+            <Grid size={9} container>
+                <Grid size={12}>
                     <TextField
                         name="roomId"
                         label="Room ID"
@@ -78,8 +78,8 @@ const AddRoom = ({
                     />
                 </Grid>
             </Grid>
-            <Grid item xs={1} container alignItems="center" justifyContent="center">
-                <Grid item>
+            <Grid size={1} container alignItems="center" justifyContent="center">
+                <Grid>
                     <Typography variant="h5" color="primary">
                         {')'}
                     </Typography>

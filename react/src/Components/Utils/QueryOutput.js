@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import PropTypes from 'prop-types';
@@ -57,10 +57,10 @@ const QueryOutput = ({
             </Collapse>
             <Collapse in={tabIndex === EditorTab.JSON}>
                 <Grid container>
-                    <Grid container item xs={12} justifyContent="flex-end">
+                    <Grid container xs={12} justifyContent="flex-end">
                         <Copy text={jsonOutput || ''} />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <Box sx={{overflow: 'auto'}}>
                             <pre>
                                 {jsonOutput}

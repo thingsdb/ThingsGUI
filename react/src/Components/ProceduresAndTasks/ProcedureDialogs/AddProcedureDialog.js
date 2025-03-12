@@ -1,5 +1,5 @@
 import Collapse from '@mui/material/Collapse';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -71,8 +71,8 @@ const AddProcedureDialog = ({open, onClose, scope}) => {
             disableOk={Boolean(error)}
         >
             <Grid container spacing={1}>
-                <Grid container spacing={1} item xs={12}>
-                    <Grid item xs={8}>
+                <Grid container spacing={1} size={12}>
+                    <Grid size={8}>
                         <Typography variant="body1" >
                             {'Customizing ThingDB procedure:'}
                         </Typography>
@@ -81,10 +81,10 @@ const AddProcedureDialog = ({open, onClose, scope}) => {
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <ErrorMsg tag={tag} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <List disablePadding dense>
                         <Collapse in={Boolean(queryString)} timeout="auto">
                             <ListItem>

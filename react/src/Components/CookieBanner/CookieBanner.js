@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
@@ -48,12 +48,12 @@ function CookieBanner() {
     if (cookiesAccepted == null) {
         return (
             <RootGrid container alignItems="center" justifyContent="center" spacing={2}>
-                <Grid item>
+                <Grid>
                     <Typography>
                         {'This site uses only necessary cookies to remember the last login. Do you consent to the use of these cookies?'}
                     </Typography>
                 </Grid>
-                <Grid item>
+                <Grid>
                     <Button
                         color="primary"
                         variant="outlined"
@@ -62,7 +62,7 @@ function CookieBanner() {
                         {'Accept Cookies'}
                     </Button>
                 </Grid>
-                <Grid item>
+                <Grid>
                     <Button
                         color="inherit"
                         variant="text"

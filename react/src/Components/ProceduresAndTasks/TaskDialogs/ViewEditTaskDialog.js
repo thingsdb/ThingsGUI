@@ -1,5 +1,5 @@
 /*eslint-disable react/no-multi-comp*/
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
@@ -21,8 +21,8 @@ const ViewEditTaskDialog = ({
         maxWidth="md"
     >
         <Grid container spacing={1}>
-            <Grid container spacing={1} item xs={12}>
-                <Grid item xs={8}>
+            <Grid container spacing={1} size={12}>
+                <Grid size={8}>
                     <Typography variant="body1" >
                         {'Customizing ThingDB task:'}
                     </Typography>
@@ -31,7 +31,7 @@ const ViewEditTaskDialog = ({
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <EditTask scope={scope} taskId={task.id} />
             </Grid>
         </Grid>

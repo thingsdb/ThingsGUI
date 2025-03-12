@@ -1,6 +1,6 @@
 import {useLocation} from 'react-router';
 import {withVlow} from 'vlow';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import React from 'react';
 
 import {UserAccess} from './Config';
@@ -38,10 +38,10 @@ const User = ({user, users, collections}) => {
                     title={selectedUser.name}
                     content={
                         <React.Fragment>
-                            <Grid item md={12} xs={12}>
+                            <Grid size={{xs: 12, md: 12}}>
                                 <UserAccess user={selectedUser} collections={collections} />
                             </Grid>
-                            <Grid item md={12} xs={12}>
+                            <Grid size={{xs: 12, md: 12}}>
                                 <Tokens user={selectedUser} />
                             </Grid>
                         </React.Fragment>

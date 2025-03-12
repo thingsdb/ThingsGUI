@@ -1,5 +1,5 @@
 import  {withVlow } from 'vlow';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -105,7 +105,7 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
     return (
         <React.Fragment>
             <WarnPopover anchorEl={anchorEl} onClose={handleCloseWarn} description={warnDescription} />
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <HarmonicCardHeader expand={viewType.expand} onExpand={handleExpand('type')} title="TYPES" onRefresh={handleRefreshTypes} unmountOnExit>
                     <EnumTypeChips
                         buttonsView={{add: false, cancel: false, edit: false, run: true, view: true}}
@@ -123,7 +123,7 @@ const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
                     />
                 </HarmonicCardHeader>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <HarmonicCardHeader expand={viewEnum.expand} onExpand={handleExpand('enums')} title="ENUMS" onRefresh={handleRefreshEnums} unmountOnExit>
                     <EnumTypeChips
                         buttonsView={{add: false, cancel: false, edit: false, run: true, view: true}}

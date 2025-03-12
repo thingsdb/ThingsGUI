@@ -1,4 +1,4 @@
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
@@ -61,9 +61,9 @@ const Edit = ({
                 />
             </ListItem>
             <ListItem>
-                <Grid container item xs={12} spacing={1} justifyContent="flex-start">
+                <Grid container xs={12} spacing={1} justifyContent="flex-start">
                     {addNewProperty && (
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <PropInit
                                 onChange={handleOnChangeName}
                                 input={newProperty}
@@ -72,7 +72,7 @@ const Edit = ({
                         </Grid>
                     )}
                     {canChangeType && (
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <TypeInit
                                 onChange={handleOnChangeType}
                                 type={child.type}

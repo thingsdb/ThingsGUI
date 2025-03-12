@@ -1,4 +1,4 @@
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -12,10 +12,10 @@ const EditorSideContent = ({scope, onSetQueryInput}) => (
     <React.Fragment>
         {scope.includes(NODE_SCOPE) ? null : (
             <React.Fragment>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <Procedures onSetQueryInput={onSetQueryInput} scope={scope} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <Tasks onSetQueryInput={onSetQueryInput} scope={scope} />
                 </Grid>
             </React.Fragment>

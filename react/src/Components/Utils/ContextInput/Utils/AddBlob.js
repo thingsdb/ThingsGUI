@@ -1,5 +1,5 @@
 /*eslint-disable react/jsx-props-no-spreading*/
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
@@ -36,11 +36,11 @@ const AddBlob = ({
         <Grid container>
             <AddFile init={fileName} onChange={handleUpdate} />
             {init &&
-                <Grid container item xs={4} spacing={1} justifyContent="flex-end">
-                    <Grid container item xs={12} justifyContent="flex-end">
+                <Grid container size={4} spacing={1} justifyContent="flex-end">
+                    <Grid container xs={12} justifyContent="flex-end">
                         <DownloadBlob val={init} isImg />
                     </Grid>
-                    <Grid container item xs={12} justifyContent="flex-end">
+                    <Grid container xs={12} justifyContent="flex-end">
                         <Typography variant="caption">
                             {'Download blob that is currently stored.'}
                         </Typography>

@@ -5,7 +5,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import PeopleIcon from '@mui/icons-material/People';
 import React from 'react';
@@ -106,12 +106,12 @@ const DashboardContent = ({allNodeInfo, collections, users, nodes}) => {
 
     return(
         <Grid container sx={{marginBottom: '48px'}} alignItems="center" >
-            <Grid container item xs={12}>
-                <Grid item xs={12}>
+            <Grid container size={12}>
+                <Grid size={12}>
                     <StyledCard>
                         <CardContent>
                             <Grid container>
-                                <Grid item xs={11}>
+                                <Grid size={11}>
                                     <Typography variant="body1" >
                                         {'Dashboard of'}
                                     </Typography>
@@ -119,7 +119,7 @@ const DashboardContent = ({allNodeInfo, collections, users, nodes}) => {
                                         {'ThingsDB'}
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={1}>
+                                <Grid size={1}>
                                     <Button color="primary" onClick={handleRefresh} size="medium">
                                         <RefreshIcon color="primary" style={{ fontSize: 50 }}  />
                                     </Button>
@@ -129,7 +129,7 @@ const DashboardContent = ({allNodeInfo, collections, users, nodes}) => {
                     </StyledCard>
                 </Grid>
                 {numbers.map((n, i)=> (
-                    <Grid key={i} item xs={6} sm={3}>
+                    <Grid key={i} size={{xs: 6, sm: 3}}>
                         <StyledCard>
                             <Divider sx={{border: '1px solid #89afe0'}} />
                             <CardHeader
@@ -149,9 +149,9 @@ const DashboardContent = ({allNodeInfo, collections, users, nodes}) => {
                     </Grid>
                 ))}
             </Grid>
-            <Grid container item xs={12}>
+            <Grid container size={12}>
                 {piecharts.map((p,i)=>(
-                    <Grid key={i} item sm={12} md={4}>
+                    <Grid key={i} size={{sm: 12, md: 4}}>
                         <StyledCard>
                             <Grid container justifyContent="center">
                                 {p.data&&p.data.length ? (
@@ -166,9 +166,9 @@ const DashboardContent = ({allNodeInfo, collections, users, nodes}) => {
                     </Grid>
                 ))}
             </Grid>
-            <Grid container item xs={12}>
+            <Grid container size={12}>
                 {tables.map((p,i)=>(
-                    <Grid key={i} item sm={12} md={4}>
+                    <Grid key={i} size={{sm: 12, md: 4}}>
                         <StyledCard>
                             <Grid container justifyContent="center">
                                 <StickyHeadTable columns={p.columns} rows={p.rows} size="small" />

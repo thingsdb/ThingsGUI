@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import CircularProgress from '@mui/material/CircularProgress';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Tab from '@mui/material/Tab';
@@ -129,8 +129,8 @@ const ThingActionsDialog = ({
 
     const content = (
         <Grid container spacing={1}>
-            <Grid container spacing={1} item xs={12}>
-                <Grid item xs={8}>
+            <Grid container spacing={1} size={12}>
+                <Grid size={8}>
                     <Typography variant="body1" >
                         {'Detail view of:'}
                     </Typography>
@@ -141,7 +141,7 @@ const ThingActionsDialog = ({
                         {`- ${realChildType||child.type}`}
                     </Typography>
                 </Grid>
-                <Grid container spacing={1} item xs={4} justifyContent="flex-end">
+                <Grid container spacing={1} size={4} justifyContent="flex-end">
                     <DialogButtons child={child} customTypes={customTypes} onClose={onClose} parent={parent} realChildType={realChildType} realParentType={realParentType} scope={scope} tag={tag} thing={thing} isRoot={isRoot} />
                 </Grid>
             </Grid>
@@ -153,10 +153,10 @@ const ThingActionsDialog = ({
             )}
             {tabIndex === 0 && canEdit && (
                 <React.Fragment>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <ErrorMsg tag={tag} />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <Edit
                             customTypes={customTypes}
                             dataTypes={dataTypes}
@@ -170,7 +170,7 @@ const ThingActionsDialog = ({
                 </React.Fragment>
             )}
             {tabIndex === 1 && showRoomEvents &&
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <RoomEvent room={thing} />
                 </Grid>}
         </Grid>
@@ -192,12 +192,12 @@ const ThingActionsDialog = ({
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <Grid item xs={6}>
+                    <Grid size={6}>
                         <Typography variant="h6" color="textSecondary">
                             {'Loading...'}
                         </Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={6}>
                         <CircularProgress size={50} />
                     </Grid>
                 </Grid>

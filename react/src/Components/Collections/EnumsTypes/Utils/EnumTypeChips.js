@@ -1,6 +1,6 @@
 import CheckIcon from '@mui/icons-material/Check';
 import EditIcon from '@mui/icons-material/Edit';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RunIcon from '@mui/icons-material/DirectionsRun';
@@ -370,7 +370,7 @@ const EnumTypeChips = ({
     const [item, rows] = React.useMemo(() => tableInfo[categoryInit](onChange, items, scope, view), [categoryInit, onChange, items, scope, view]);
 
     return (
-        <Grid item xs={12} sx={{paddingBottom: '8px'}}>
+        <Grid xs={12} sx={{paddingBottom: '8px'}}>
             <ChipsCard
                 buttons={buttons(buttonsView)}
                 items={items}

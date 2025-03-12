@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 
 const timeUnit = [
@@ -45,8 +45,8 @@ const TimePeriodPicker = ({onChange}) => {
     };
 
     return (
-        <Grid item container xs={12} spacing={1} >
-            <Grid item>
+        <Grid container xs={12} spacing={1} >
+            <Grid>
                 <TextField
                     autoFocus
                     fullWidth
@@ -60,7 +60,7 @@ const TimePeriodPicker = ({onChange}) => {
                     variant="standard"
                 />
             </Grid>
-            <Grid item>
+            <Grid>
                 <TextField
                     fullWidth
                     id="unit"

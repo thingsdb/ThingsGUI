@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
@@ -88,7 +88,7 @@ const AutoSelect = ({
 
     return (
         <ClickAwayListener onClickAway={handleClose}>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <TextField
                     autoComplete="off"
                     fullWidth

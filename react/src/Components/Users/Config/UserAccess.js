@@ -4,7 +4,7 @@ import React from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 
 import Password from './Password';
@@ -143,16 +143,16 @@ const UserAccess = ({user, collections}) => {
 
     return (
         <Grid container >
-            <Grid item lg={6} md={12} >
+            <Grid size={{md: 12, lg: 6}}>
                 <Card>
                     <CardContent>
-                        <Grid container item xs={12} spacing={2}>
-                            <Grid item xs={12}>
+                        <Grid container xs={12} spacing={2}>
+                            <Grid size={12}>
                                 <Typography variant="body2" >
                                     {'ACCESS RULES'}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid size={12}>
                                 <ErrorMsg tag={tag} />
                             </Grid>
                         </Grid>
@@ -161,13 +161,13 @@ const UserAccess = ({user, collections}) => {
                             direction="row"
                             spacing={3}
                         >
-                            <Grid container item spacing={1}>
-                                <Grid item container xs={12} spacing={2} >
-                                    <Grid item xs={3} />
-                                    <Grid item container xs={9} >
-                                        <Grid item container xs={12} >
+                            <Grid container spacing={1}>
+                                <Grid container xs={12} spacing={2} >
+                                    <Grid size={3} />
+                                    <Grid container size={9} >
+                                        <Grid container xs={12} >
                                             {privileges.map(({ky, label}) => (
-                                                <Grid item xs={2} key={ky} container justifyContent="center" >
+                                                <Grid size={2} key={ky} container justifyContent="center" >
                                                     <Typography variant="overline" align="center" component="span" noWrap>
                                                         {label}
                                                     </Typography>
@@ -177,16 +177,16 @@ const UserAccess = ({user, collections}) => {
                                     </Grid>
                                 </Grid>
                                 {switchesKeys.map((key, i) => (
-                                    <Grid key={i} item container xs={12} spacing={2}>
-                                        <Grid item xs={3} container alignItems="center">
+                                    <Grid key={i} container xs={12} spacing={2}>
+                                        <Grid size={3} container alignItems="center">
                                             <Typography component="span" noWrap>
                                                 {key}
                                             </Typography>
                                         </Grid>
-                                        <Grid item container xs={9} >
-                                            <Grid item container xs={12} >
+                                        <Grid container size={9} >
+                                            <Grid container xs={12} >
                                                 {privileges.map(({ky, value}) => (
-                                                    <Grid item xs={2} key={ky} container justifyContent="center">
+                                                    <Grid size={2} key={ky} container justifyContent="center">
                                                         <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={value} color="primary" />
                                                     </Grid>
                                                 ))}
@@ -199,7 +199,7 @@ const UserAccess = ({user, collections}) => {
                     </CardContent>
                 </Card>
             </Grid>
-            <Grid container item lg={6} md={12} spacing={1} direction="row" justifyContent="center" alignItems="center" >
+            <Grid container size={{md: 12, lg: 6}} spacing={1} direction="row" justifyContent="center" alignItems="center" >
                 {buttons.map(button => (
                     <Grid key={button.name} item>
                         {button.component}

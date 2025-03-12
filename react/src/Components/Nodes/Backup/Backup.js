@@ -1,6 +1,6 @@
 import { withVlow } from 'vlow';
 import FailedIcon from '@mui/icons-material/Clear';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -83,7 +83,7 @@ const Backup = ({nodeId, offline, backups}) => {
             container
             spacing={3}
         >
-            <Grid item xs={12} sx={{marginTop: '16px', overflowY: 'auto', overflowX: 'auto', maxHeight: '400px'}}>
+            <Grid xs={12} sx={{marginTop: '16px', overflowY: 'auto', overflowX: 'auto', maxHeight: '400px'}}>
                 {backups.length ? (
                     <TableWithButtons header={headerTable} rows={rows} buttons={handleButtons} />
                 ) : (

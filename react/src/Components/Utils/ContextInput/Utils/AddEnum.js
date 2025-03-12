@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
@@ -54,7 +54,7 @@ const AddEnum = ({
 
     return(_enum&&_enum.members?(
         <Grid container>
-            <Grid item xs={3}>
+            <Grid size={3}>
                 <TextField
                     fullWidth
                     label="Enum"
@@ -74,11 +74,11 @@ const AddEnum = ({
                 </TextField>
             </Grid>
             {isBlob&&
-                <Grid container item xs={9}>
-                    <Grid container item xs={12} justifyContent="flex-end">
+                <Grid container size={9}>
+                    <Grid container xs={12} justifyContent="flex-end">
                         <DownloadBlob val={init} isImg />
                     </Grid>
-                    <Grid container item xs={12} justifyContent="flex-end">
+                    <Grid container xs={12} justifyContent="flex-end">
                         <Typography variant="caption">
                             {'Click to download the blob that is currently stored.'}
                         </Typography>

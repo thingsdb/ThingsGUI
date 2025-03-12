@@ -2,7 +2,7 @@
 import { styled } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
 import Dropzone from 'react-dropzone';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
@@ -61,8 +61,8 @@ const AddFile = ({
     }, [onChange]);
 
     return(
-        <Grid item xs={8}>
-            <Grid item xs={12}>
+        <Grid size={8}>
+            <Grid size={12}>
                 <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
                     {({
                         getRootProps,
@@ -82,7 +82,7 @@ const AddFile = ({
                     )}
                 </Dropzone>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Collapse in={Boolean(fileName)} timeout="auto" unmountOnExit>
                     <Typography variant="button" color="primary">
                         {fileName}

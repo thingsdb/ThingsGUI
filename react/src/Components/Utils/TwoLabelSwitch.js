@@ -1,4 +1,4 @@
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Switch from '@mui/material/Switch';
@@ -7,16 +7,16 @@ import Switch from '@mui/material/Switch';
 const TwoLabelSwitch = ({input, labelOne, labelTwo, onChange}) => (
     <Grid>
         <Grid component="label" container alignItems="center" spacing={1}>
-            <Grid item>
+            <Grid>
                 {labelOne}
             </Grid>
-            <Grid item>
+            <Grid>
                 <Switch
                     checked={input}
                     onChange={onChange}
                 />
             </Grid>
-            <Grid item>
+            <Grid>
                 {labelTwo}
             </Grid>
         </Grid>
@@ -31,4 +31,3 @@ TwoLabelSwitch.propTypes = {
 };
 
 export default TwoLabelSwitch;
-

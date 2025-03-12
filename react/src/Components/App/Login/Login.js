@@ -5,7 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import React from 'react';
 
 import { ErrorMsg, isObjectEmpty, SimpleModal } from '../../Utils';
@@ -148,21 +148,21 @@ const Login = ({cachedConnections}) => {
                 <Collapse in={showNewConn} timeout="auto" unmountOnExit>
                     <DialogActions>
                         <Grid container>
-                            <Grid item xs={6} container justifyContent="flex-start" >
+                            <Grid size={6} container justifyContent="flex-start" >
                                 <Collapse in={Boolean(cachedConnections&&Object.keys(cachedConnections).length)} timeout="auto" unmountOnExit>
-                                    <Grid item xs={3}>
+                                    <Grid size={3}>
                                         <Button onClick={handleClickBack} color="primary">
                                             {'Connections'}
                                         </Button>
                                     </Grid>
                                 </Collapse>
-                                <Grid item xs={3}>
+                                <Grid size={3}>
                                     <Button onClick={handleClickOpenSaveConn} color="primary">
                                         {'Save'}
                                     </Button>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={6} container justifyContent="flex-end">
+                            <Grid size={6} container justifyContent="flex-end">
                                 <Button onClick={handleClickOk} color="primary">
                                     {'Connect'}
                                 </Button>

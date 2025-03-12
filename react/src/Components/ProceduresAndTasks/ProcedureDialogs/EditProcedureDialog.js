@@ -1,5 +1,5 @@
 import { amber } from '@mui/material/colors';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import ListItem from '@mui/material/ListItem';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -38,15 +38,15 @@ const EditProcedureDialog = ({
             ):null}
         >
             <Grid container spacing={1}>
-                <Grid container spacing={1} item xs={12}>
-                    <Grid item xs={8}>
+                <Grid container spacing={1} size={12}>
+                    <Grid size={8}>
                         <Typography variant="body1" >
                             {'Customizing ThingDB procedure:'}
                         </Typography>
                         <EditName name={procedure.name||''} fn={handleRename} />
                     </Grid>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <EditProcedure procedure={procedure} scope={scope} />
                 </Grid>
             </Grid>

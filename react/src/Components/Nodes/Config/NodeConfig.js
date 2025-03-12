@@ -1,5 +1,5 @@
 import { withVlow } from 'vlow';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment';
@@ -83,7 +83,7 @@ const NodeConfig = ({nodeId, offline, node}) => {
             container
             spacing={3}
         >
-            <Grid item xs={12} sx={{marginTop: '16px', overflowY: 'auto', maxHeight: '400px'}}>
+            <Grid xs={12} sx={{marginTop: '16px', overflowY: 'auto', maxHeight: '400px'}}>
                 <Info header={header} content={node} />
             </Grid>
             {offline ? null : (

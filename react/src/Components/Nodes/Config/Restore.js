@@ -2,7 +2,7 @@ import { amber } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
@@ -154,12 +154,12 @@ const Restore = ({nodes}) => {
                 open={showRedirectModal}
             >
                 <Grid container spacing={2}>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <Typography variant="body2">
                             {'ThingsDB has been successfully restored. You need to login again. After you clicked "OK" you are redirected to the login screen.'}
                         </Typography>
                     </Grid>
-                    <Grid container justifyContent="center" item xs={12}>
+                    <Grid container justifyContent="center" size={12}>
                         <Button variant="outlined" color="primary" onClick={handleClickRedirect}>
                             {'OK'}
                         </Button>

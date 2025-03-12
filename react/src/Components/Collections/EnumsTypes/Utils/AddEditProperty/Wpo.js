@@ -1,5 +1,5 @@
 import { amber } from '@mui/material/colors';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Switch from '@mui/material/Switch';
@@ -28,10 +28,10 @@ const Wpo = ({
     return (
         <Typography component="div" variant="caption">
             <Grid component="label" container alignItems="center" spacing={1}>
-                <Grid item>
+                <Grid>
                     {'Disabled'}
                 </Grid>
-                <Grid item>
+                <Grid>
                     <Switch
                         checked={switchWpo}
                         onChange={handleSetWpo}
@@ -49,7 +49,7 @@ const Wpo = ({
                         }}
                     />
                 </Grid>
-                <Grid item>
+                <Grid>
                     {'Enabled'}
                 </Grid>
             </Grid>
@@ -64,5 +64,3 @@ Wpo.propTypes = {
 };
 
 export default Wpo;
-
-

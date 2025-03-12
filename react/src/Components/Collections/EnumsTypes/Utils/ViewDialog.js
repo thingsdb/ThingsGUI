@@ -1,5 +1,5 @@
 import ButtonBase from '@mui/material/ButtonBase';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -53,8 +53,8 @@ const ViewDialog = ({
             maxWidth="md"
         >
             <Grid container spacing={1}>
-                <Grid container spacing={1} item xs={12}>
-                    <Grid item xs={8}>
+                <Grid container spacing={1} size={12}>
+                    <Grid size={8}>
                         <Typography variant="body1" >
                             {`View ThingDB ${category}:`}
                         </Typography>
@@ -63,7 +63,7 @@ const ViewDialog = ({
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <List disablePadding dense>
                         {item.wrap_only!==undefined ? (
                             <ListItem>
@@ -83,8 +83,8 @@ const ViewDialog = ({
                         maxWidth="md"
                     >
                         <Grid container spacing={1}>
-                            <Grid container spacing={1} item xs={12}>
-                                <Grid item xs={8}>
+                            <Grid container spacing={1} size={12}>
+                                <Grid size={8}>
                                     <Typography variant="body1" >
                                         {'View definition:'}
                                     </Typography>
@@ -93,7 +93,7 @@ const ViewDialog = ({
                                     </Typography>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid size={12}>
                                 <List disablePadding dense>
                                     <ListItem>
                                         <TextField

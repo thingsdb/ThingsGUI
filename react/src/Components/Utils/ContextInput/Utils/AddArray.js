@@ -1,5 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Clear';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -77,12 +77,12 @@ const AddArray = ({
     };
 
     return (
-        <Grid item xs={12}>
+        <Grid size={12}>
             <ListHeader canCollapse onAdd={handleAdd} groupSign="[">
                 {( dataType.map((d, index) => (
-                    <Grid key={index} container item xs={12} alignItems="center" sx={{paddingLeft: '32px'}}>
+                    <Grid key={index} container xs={12} alignItems="center" sx={{paddingLeft: '32px'}}>
                         {
-                            <Grid item xs={4} sx={{paddingRight: '8px'}}>
+                            <Grid size={4} sx={{paddingRight: '8px'}}>
                                 <TextField
                                     fullWidth
                                     id="dataType"
@@ -104,7 +104,7 @@ const AddArray = ({
                                 </TextField>
                             </Grid>
                         }
-                        <Grid container item xs={8} justifyContent="flex-end">
+                        <Grid container size={8} justifyContent="flex-end">
                             <IconButton color="primary" onClick={handleDelete(index)}>
                                 <DeleteIcon />
                             </IconButton>

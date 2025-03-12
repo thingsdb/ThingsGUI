@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
@@ -88,7 +88,7 @@ const Closure = ({
                 </Typography>
                 <VariablesArray onChange={handleVarArray} input={variables} />
             </Grid>
-            <Grid item xs={12} container justifyContent="center">
+            <Grid xs={12} container justifyContent="center">
                 <TextField
                     name="body"
                     label="Body"

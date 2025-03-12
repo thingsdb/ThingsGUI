@@ -1,6 +1,6 @@
 import Collapse from '@mui/material/Collapse';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Switch from '@mui/material/Switch';
@@ -26,7 +26,7 @@ const PropertyCallback = ({onChange}) => {
 
     return (
         <React.Fragment>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <FormControlLabel
                     control={(
                         <Switch
@@ -54,5 +54,3 @@ PropertyCallback.propTypes = {
 };
 
 export default PropertyCallback;
-
-

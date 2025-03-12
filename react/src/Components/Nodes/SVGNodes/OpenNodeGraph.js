@@ -1,7 +1,7 @@
 import { withVlow } from 'vlow';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -75,7 +75,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             maxWidth="md"
         >
             <Grid container justifyContent="center" alignItems="center" sx={{backgroundColor: '#000', height: 600}}>
-                <Grid item>
+                <Grid>
                     {loading ? <CircularProgress />
                         : (
                             <NodeGraph data={nodes} streamInfo={streamInfo} />

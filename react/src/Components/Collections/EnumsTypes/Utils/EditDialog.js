@@ -3,7 +3,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Collapse from '@mui/material/Collapse';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -276,18 +276,18 @@ const EditDialog = ({
             ):null}
         >
             <Grid container spacing={1}>
-                <Grid container spacing={1} item xs={12}>
-                    <Grid item xs={8}>
+                <Grid container spacing={1} size={12}>
+                    <Grid size={8}>
                         <Typography variant="body1" >
                             {`Customizing ThingDB ${category}:`}
                         </Typography>
                         <EditName name={item.name||`Add new ${category}`} fn={handleRename} />
                     </Grid>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <ErrorMsg tag={tag} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <List disablePadding dense>
                         <Collapse in={showQuery} timeout="auto">
                             <ListItem>
@@ -319,33 +319,33 @@ const EditDialog = ({
                         <Collapse in={showTextFields} timeout="auto" unmountOnExit>
                             <ListItem>
                                 <EditProvider>
-                                    <Grid container item xs={12} spacing={1} alignItems="center" >
+                                    <Grid container xs={12} spacing={1} alignItems="center" >
                                         {show.name ? (
-                                            <Grid item xs={12}>
+                                            <Grid size={12}>
                                                 <PropertyName onChange={ren?handleQueryRen:handleQuery} input={property.propertyName||''} />
                                             </Grid>
                                         ) : null}
                                         {show.type? (
-                                            <Grid item xs={12}>
+                                            <Grid size={12}>
                                                 <PropertyType onChange={handleQuery} dropdownItems={dataTypes} input={property.propertyType||''} />
                                             </Grid>
                                         ) : null}
                                         {show.method ? (
-                                            <Grid item xs={12}>
+                                            <Grid size={12}>
                                                 <PropertyMethod onChange={handleQuery} input={property.definition||''} />
                                             </Grid>
                                         ) : null}
                                         {show.val? (
-                                            <Grid item xs={12}>
+                                            <Grid size={12}>
                                                 <PropertyVal category={category} onChange={handleQuery} scope={scope} />
                                             </Grid>
                                         ) : show.valInit ? (
-                                            <Grid item xs={12}>
+                                            <Grid size={12}>
                                                 <PropertyInitVal category={category} onChange={handleQuery} scope={scope} />
                                             </Grid>
                                         ) : null}
                                         {show.callback ? (
-                                            <Grid item xs={12}>
+                                            <Grid size={12}>
                                                 <PropertyCallback onChange={handleQuery} />
                                             </Grid>
                                         ) : null}

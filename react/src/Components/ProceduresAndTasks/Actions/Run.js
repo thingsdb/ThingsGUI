@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -60,7 +60,7 @@ const Run = ({
     };
 
     return (
-        <Grid item xs={12}>
+        <Grid size={12}>
             <Card>
                 {type === 'procedure' && item.arguments.length !== 0 && (
                     <CardContent>

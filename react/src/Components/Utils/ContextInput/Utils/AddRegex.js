@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React from 'react';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
@@ -31,16 +31,16 @@ const AddRegex = ({
 
     return(
         <Grid container spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
-            <Grid container item xs={12}>
-                <Grid item xs={1} container alignItems="center" justifyContent="center">
-                    <Grid item>
+            <Grid container size={12}>
+                <Grid size={1} container alignItems="center" justifyContent="center">
+                    <Grid>
                         <Typography variant="h5" color="primary">
                             {'/'}
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={10} container alignItems="center" justifyContent="center">
-                    <Grid item xs={12}>
+                <Grid size={10} container alignItems="center" justifyContent="center">
+                    <Grid size={12}>
                         <TextField
                             name="regex"
                             label="Regex"
@@ -55,8 +55,8 @@ const AddRegex = ({
                         />
                     </Grid>
                 </Grid>
-                <Grid item xs={1} container alignItems="center" justifyContent="center">
-                    <Grid item>
+                <Grid size={1} container alignItems="center" justifyContent="center">
+                    <Grid>
                         <Typography variant="h5" color="primary">
                             {'/'}
                         </Typography>

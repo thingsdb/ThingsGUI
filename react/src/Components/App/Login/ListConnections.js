@@ -6,7 +6,7 @@ import Collapse from '@mui/material/Collapse';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -99,7 +99,7 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
                     <Collapse in={openDetail[v.name]} timeout="auto">
                         <Grid container>
                             {rows.map((r,i)=>(
-                                <Grid key={i} item xs={6}>
+                                <Grid key={i} size={6}>
                                     <StyledCard>
                                         <StyledCardActionArea
                                             focusRipple

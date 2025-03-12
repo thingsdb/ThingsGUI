@@ -1,5 +1,5 @@
 import Collapse from '@mui/material/Collapse';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -103,12 +103,12 @@ const AddDialog = ({
 
     const child = React.useCallback((i) => (
         <EditProvider>
-            <Grid container item xs={12} spacing={1} alignItems="center" >
-                <Grid item xs={category === 'type' ? 12 : 6}>
+            <Grid container xs={12} spacing={1} alignItems="center" >
+                <Grid xs={category === 'type' ? 12 : 6}>
                     <PropertyName onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} autoFocus={Boolean(i)} />
                 </Grid>
                 {category === 'type' ? (
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <Switching
                             one={
                                 <PropertyType onChange={handleChangeProperty(i)} dropdownItems={dataTypes} input={properties[i]&&properties[i].propertyType||''} />
@@ -136,8 +136,8 @@ const AddDialog = ({
             disableOk={Boolean(error)}
         >
             <Grid container spacing={1}>
-                <Grid container spacing={1} item xs={12}>
-                    <Grid item xs={8}>
+                <Grid container spacing={1} size={12}>
+                    <Grid size={8}>
                         <Typography variant="body1" >
                             {`Customizing ThingDB ${category}:`}
                         </Typography>
@@ -146,10 +146,10 @@ const AddDialog = ({
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <ErrorMsg tag={tag} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <List disablePadding dense>
                         <Collapse in={Boolean(queryObj?.queryString)} timeout="auto">
                             <ListItem>

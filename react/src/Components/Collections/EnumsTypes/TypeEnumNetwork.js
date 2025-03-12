@@ -1,7 +1,7 @@
 import { amber, red } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 import { withVlow } from 'vlow';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -146,20 +146,20 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
     const nodeId = findNodeId(_customTypes, search, 'type_id', 't') || findNodeId(_enums, search, 'enum_id', 'e') || '';
 
     return ((_customTypes.length > 0 || _enums.length > 0) && (
-        <Grid item xs={12} sx={{paddingBottom: '8px'}}>
+        <Grid xs={12} sx={{paddingBottom: '8px'}}>
             <HarmonicCard
                 title="TYPE AND ENUM NETWORK"
                 content={
                     <Grid container spacing={1}>
-                        <Grid container spacing={1} item xs={12}>
-                            <Grid item>
+                        <Grid container spacing={1} size={12}>
+                            <Grid>
                                 <SearchInput
                                     onChange={({target}) => setSearch(target.value)}
                                     value={search}
                                 />
                             </Grid>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <VisNetwork edges={edges} nodes={nodes} options={options} nodeId={nodeId} />
                         </Grid>
                     </Grid>
@@ -181,4 +181,3 @@ TypeEnumNetwork.propTypes = {
 };
 
 export default withStores(TypeEnumNetwork);
-

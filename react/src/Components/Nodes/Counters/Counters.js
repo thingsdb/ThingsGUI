@@ -1,6 +1,6 @@
 import { withVlow } from 'vlow';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -64,10 +64,10 @@ const Counters = ({nodeId, offline, counters}) => {
             container
             spacing={3}
         >
-            <Grid item xs={12} sx={{marginTop: '16px', overflowY: 'auto', maxHeight: '400px'}}>
+            <Grid xs={12} sx={{marginTop: '16px', overflowY: 'auto', maxHeight: '400px'}}>
                 <Info header={header} content={counters} />
             </Grid>
-            <Grid container item xs={12} justifyContent="flex-end">
+            <Grid container xs={12} justifyContent="flex-end">
                 <Box sx={{fontSize: 10, fontStyle: 'italic', m: 1}}>
                     {`Last reset at: ${moment(counters.started_at*1000).format(DATE_TIME_SEC_STR)}`}
                 </Box>

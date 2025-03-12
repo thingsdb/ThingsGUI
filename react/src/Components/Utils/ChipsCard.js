@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RemoveIcon from '@mui/icons-material/Delete';
@@ -66,13 +66,13 @@ const ChipsCard = ({
             <HarmonicCardContent
                 content={
                     <Grid container spacing={2}>
-                        <Grid container item xs={12}>
-                            <Grid item>
+                        <Grid container size={12}>
+                            <Grid>
                                 <SearchInput onChange={handleSearchString} value={searchString} />
                             </Grid>
                             <ErrorMsg tag={tag} />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             {
                                 searchList && searchList.length ? searchList.slice(0, maxAmount).map((listitem, index) => (
                                     <React.Fragment key={index}>
@@ -90,8 +90,8 @@ const ChipsCard = ({
                             }
                         </Grid>
                         {searchList && (searchList.length > maxAmount) &&
-                            <Grid container justifyContent="center" alignItems="center" item xs={12}>
-                                <Grid item>
+                            <Grid container justifyContent="center" alignItems="center" size={12}>
+                                <Grid>
                                     <Button color="primary" onClick={handleClickLoadMore}>
                                         {'Load more'}
                                     </Button>

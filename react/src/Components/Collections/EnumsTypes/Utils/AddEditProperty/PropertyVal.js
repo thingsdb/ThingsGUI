@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {withVlow} from 'vlow';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -36,7 +36,7 @@ const PropertyVal = ({category, onChange, customTypes, enums, scope}) => {
 
     return (
         <React.Fragment>
-            <Grid item xs={6}>
+            <Grid size={6}>
                 <TypeInit
                     onChange={handleOnChangeType}
                     type={''}
@@ -45,7 +45,7 @@ const PropertyVal = ({category, onChange, customTypes, enums, scope}) => {
                     input={dataType}
                 />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <InputField
                     dataType={dataType}
                     enums={enums[scope]||[]}
@@ -73,5 +73,3 @@ PropertyVal.propTypes = {
 };
 
 export default withStores(PropertyVal);
-
-

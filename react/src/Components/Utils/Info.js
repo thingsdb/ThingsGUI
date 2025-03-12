@@ -1,5 +1,5 @@
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
@@ -10,7 +10,7 @@ const Info = ({header, content}) => (
         {header.map(h => (
             <React.Fragment key={h.ky}>
                 {h.title ? (
-                    <Grid item xs={12} sx={{marginTop: '8px', marginBottom: '8px'}}>
+                    <Grid xs={12} sx={{marginTop: '8px', marginBottom: '8px'}}>
                         <Typography variant="subtitle2">
                             {h.title + ':'}
                         </Typography>
@@ -18,13 +18,13 @@ const Info = ({header, content}) => (
                     </Grid>
                 ) : null}
                 {h.labels.map(l => (
-                    <Grid key={l.ky} container item xs={12}>
-                        <Grid item xs={6}>
+                    <Grid key={l.ky} container size={12}>
+                        <Grid size={6}>
                             <Typography variant="caption">
                                 {l.label + ':'}
                             </Typography>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid size={6}>
                             <Typography variant="subtitle2">
                                 {l.fn ? l.fn(content[l.ky]) : content[l.ky]}
                             </Typography>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import CodeIcon from '@mui/icons-material/Code';
 import Fab from '@mui/material/Fab';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 
 import { EDITOR_ROUTE } from '../../../../Constants/Routes';
 import { historyNavigate } from '../../../Utils';
@@ -45,7 +45,7 @@ const DialogButtons = ({
     return (
         <React.Fragment>
             {canRemove &&
-                <Grid item>
+                <Grid>
                     <RemoveThing
                         onClose={onClose}
                         scope={scope}
@@ -64,13 +64,13 @@ const DialogButtons = ({
                     />
                 </Grid>
             }
-            <Grid item>
+            <Grid>
                 <Fab color="primary" onClick={handleClickOpenEditor} sx={{color: '#000'}}>
                     <CodeIcon fontSize="large" />
                 </Fab>
             </Grid>
             {isRoom &&
-                <Grid item>
+                <Grid>
                     <RoomJoin
                         scope={scope}
                         room={child.val}

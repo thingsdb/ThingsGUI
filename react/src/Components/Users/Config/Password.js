@@ -3,7 +3,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import FormLabel from '@mui/material/FormLabel';
 import Switch from '@mui/material/Switch';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
@@ -104,17 +104,17 @@ const Password = ({user}) => {
                     </FormLabel>
                 ) : null}
                 <Grid component="label" container alignItems="center" spacing={1}>
-                    <Grid item>
+                    <Grid>
                         {'no'}
                     </Grid>
-                    <Grid item>
+                    <Grid>
                         <Switch
                             checked={form.set}
                             color="primary"
                             onChange={handleSetPassword}
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid>
                         {'yes'}
                     </Grid>
                 </Grid>

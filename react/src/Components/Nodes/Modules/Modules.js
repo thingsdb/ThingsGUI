@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import { withVlow } from 'vlow';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -49,7 +49,7 @@ const Modules = ({nodeId, offline, modules}) => {
             container
             spacing={3}
         >
-            <Grid item xs={12} sx={{marginTop: '16px', overflowY: 'auto', overflowX: 'auto', maxHeight: '400px'}}>
+            <Grid xs={12} sx={{marginTop: '16px', overflowY: 'auto', overflowX: 'auto', maxHeight: '400px'}}>
                 {modules.length ? (
                     <TableWithButtons header={header} rows={modules} buttons={handleButtons} />
                 ) : (

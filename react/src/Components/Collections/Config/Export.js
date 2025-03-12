@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
@@ -76,13 +76,13 @@ const Export = ({collection}) => {
             }
         >
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <ErrorMsg tag={tag} />
                     <Typography variant="body2">
                         {'This export script includes all enums, types and procedures.'}
                     </Typography>
                 </Grid>
-                <StyledGrid container item xs={12}>
+                <StyledGrid container size={12}>
                     <Label variant="caption">
                         {'script'}
                     </Label>

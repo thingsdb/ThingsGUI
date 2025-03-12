@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -51,8 +51,8 @@ const ThingsTree = ({
                 </Nested>
                 {more[count] && renderChildren(count+1)}
                 {(count+1)%visibleNumber == 0 && !more[count] ? (
-                    <Grid container alignItems="center" justifyContent="center" item xs={12}>
-                        <Grid item>
+                    <Grid container alignItems="center" justifyContent="center" size={12}>
+                        <Grid>
                             <Button color="primary" onClick={handleMore(count)}>
                                 {'LOAD MORE'}
                                 <ExpandMoreIcon color="primary" />

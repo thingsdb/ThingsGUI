@@ -1,5 +1,5 @@
 import { amber } from '@mui/material/colors';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -87,8 +87,8 @@ const RunProcedureDialog = ({
             maxWidth="md"
         >
             <Grid container spacing={1}>
-                <Grid container spacing={1} item xs={12}>
-                    <Grid item xs={8}>
+                <Grid container spacing={1} size={12}>
+                    <Grid size={8}>
                         <Typography variant="body1" >
                             {'Run ThingDB procedure:'}
                         </Typography>
@@ -97,10 +97,10 @@ const RunProcedureDialog = ({
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <ErrorMsg tag={tag} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <List disablePadding dense>
                         <React.Fragment>
                             {procedure.arguments&&procedure.arguments.length!==0 && (

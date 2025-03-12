@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -28,7 +28,7 @@ const ArrayLayout = ({
         const children = [];
         for (let i = 0; i < count; i++) {
             children.push(
-                <Grid key={i} item xs={fullWidth?9:6}>
+                <Grid key={i} xs={fullWidth?9:6}>
                     {child(i)}
                 </Grid>
             );
@@ -39,13 +39,13 @@ const ArrayLayout = ({
     return(
         <Grid container spacing={2}>
             {renderChildren()}
-            <Grid container item spacing={1} xs={fullWidth?3:6} justifyContent="center" alignItems="center">
-                <Grid item>
+            <Grid container spacing={1} xs={fullWidth?3:6} justifyContent="center" alignItems="center">
+                <Grid>
                     <Fab color="primary" onClick={handleAdd} size="small" sx={{color: '#000'}}>
                         <AddIcon fontSize="small" />
                     </Fab>
                 </Grid>
-                <Grid item>
+                <Grid>
                     <Fab color="primary" onClick={handleRemove} disabled={count==1} size="small" sx={{color: '#000'}}>
                         <RemoveIcon fontSize="small" />
                     </Fab>

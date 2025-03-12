@@ -1,5 +1,5 @@
 import { withVlow } from 'vlow';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import React from 'react';
 
 import { NodesActions, NodesStore } from '../../Stores';
@@ -46,18 +46,18 @@ const Nodes = ({nodes, connectedNode}) => {
     const handleCanExtend = (node) => node.status !== 'OFFLINE';
     return(
         <Grid container spacing={1}>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <TableWithRowExtend buttons={handleButtons} canExtend={handleCanExtend} header={header} rows={rows} rowExtend={rowExtend} connectedNode={connectedNode} onRefresh={handleRefresh} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Grid container spacing={1} sx={{marginLeft: '8px'}}>
-                    <Grid item>
+                    <Grid>
                         <Add />
                     </Grid>
-                    <Grid item>
+                    <Grid>
                         <OpenNodeGraph nodes={nodes} />
                     </Grid>
-                    <Grid item>
+                    <Grid>
                         <Restore nodes={nodes} />
                     </Grid>
                 </Grid>

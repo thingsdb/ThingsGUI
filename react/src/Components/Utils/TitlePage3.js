@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 
 
 const TitlePage3 = ({preTitle, title, content}) => (
     <Grid container spacing={1} sx={{marginBottom: '48px'}}>
-        <Grid item xs={12}>
+        <Grid size={12}>
             <Card>
                 <CardContent>
                     <Typography variant="h6" >
@@ -20,7 +20,7 @@ const TitlePage3 = ({preTitle, title, content}) => (
                 </CardContent>
             </Card>
         </Grid>
-        <Grid container item spacing={1} direction="row">
+        <Grid container spacing={1} direction="row">
             {content}
         </Grid>
     </Grid>

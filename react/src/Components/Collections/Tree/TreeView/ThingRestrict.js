@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -32,8 +32,8 @@ const ThingRestrict = ({
                 {onChildren(k, v, i, isArray)}
                 {more[count] && renderChildren(count+1)}
                 {!more[count] && (count+1)%visibleNumber == 0 ? (
-                    <Grid container alignItems="center" justifyContent="center" item xs={12}>
-                        <Grid item>
+                    <Grid container alignItems="center" justifyContent="center" size={12}>
+                        <Grid>
                             <Button color="primary" onClick={handleMore(count)}>
                                 {'LOAD MORE'}
                                 <ExpandMoreIcon color="primary" />

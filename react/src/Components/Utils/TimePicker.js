@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 
 const TimePicker = ({onChange}) => {
     const [date, setDate] = React.useState(new Date().toISOString().slice(0, 10));
@@ -26,8 +26,8 @@ const TimePicker = ({onChange}) => {
     };
 
     return (
-        <Grid container item xs={12} spacing={1}>
-            <Grid item>
+        <Grid container xs={12} spacing={1}>
+            <Grid>
                 <TextField
                     defaultValue={date}
                     id="data"
@@ -40,7 +40,7 @@ const TimePicker = ({onChange}) => {
                     }}}
                 />
             </Grid>
-            <Grid item>
+            <Grid>
                 <TextField
                     defaultValue={time}
                     id="time"

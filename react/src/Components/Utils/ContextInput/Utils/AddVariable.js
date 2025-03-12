@@ -1,4 +1,4 @@
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
@@ -51,15 +51,15 @@ const AddVariable = ({
 
     return (
         variables&&(
-            <Grid item xs={12}>
+            <Grid size={12}>
                 {( variables.map(v => (
-                    <Grid key={v} container item xs={12} alignItems="center" sx={{paddingBottom: '8px'}}>
-                        <Grid item xs={12}>
+                    <Grid key={v} container xs={12} alignItems="center" sx={{paddingBottom: '8px'}}>
+                        <Grid size={12}>
                             <Typography color="primary" variant="body1" >
                                 {v}
                             </Typography>
                         </Grid>
-                        <Grid item xs={3} sx={{paddingRight: '8px'}}>
+                        <Grid size={3} sx={{paddingRight: '8px'}}>
                             <TextField
                                 fullWidth
                                 id="dataType"

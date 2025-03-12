@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import InfoIcon from '@mui/icons-material/Info';
 import Link from '@mui/material/Link';
 import moment from 'moment';
@@ -172,21 +172,21 @@ const ModuleInfo = ({
                 </Button>}
         >
             <Grid container spacing={1}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <ErrorMsg tag={tag} />
                     <LocalMsg icon={<InfoIcon sx={{color: 'text.primary'}} />} body={msg} onClose={handleCloseMsg} />
                 </Grid>
                 {header.map(h => (
-                    <Grid key={h.ky} container item xs={12}>
-                        <Grid container item xs={4} alignContent="center">
+                    <Grid key={h.ky} container size={12}>
+                        <Grid container size={4} alignContent="center">
                             <Typography variant="caption">
                                 {h.label + ':'}
                             </Typography>
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid size={8}>
                             {h.canEdit && edit[h.ky] ? (
                                 <Grid container>
-                                    <Grid item xs={10}>
+                                    <Grid size={10}>
                                         {h.ky === 'conf' ? (
                                             <EditProvider>
                                                 <Arguments onChange={handleOnChangeConf} />
@@ -213,7 +213,7 @@ const ModuleInfo = ({
                                             />
                                         )}
                                     </Grid>
-                                    <Grid container item xs={2} justifyContent="flex-end" alignContent="center">
+                                    <Grid container size={2} justifyContent="flex-end" alignContent="center">
                                         <ButtonBase onClick={handleSave(h)}>
                                             <SaveIcon color="primary" />
                                         </ButtonBase>
