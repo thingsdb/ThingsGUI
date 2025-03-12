@@ -201,7 +201,7 @@ const UserAccess = ({user, collections}) => {
             </Grid>
             <Grid container size={{md: 12, lg: 6}} spacing={1} direction="row" justifyContent="center" alignItems="center" >
                 {buttons.map(button => (
-                    <Grid key={button.name} item>
+                    <Grid key={button.name}>
                         {button.component}
                     </Grid>
                 ))}

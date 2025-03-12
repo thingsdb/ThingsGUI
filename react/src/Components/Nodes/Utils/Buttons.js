@@ -12,7 +12,7 @@ const Buttons = ({extraButtons, link, onRefresh, title}) => (
     <Grid container size={12}>
         <Grid container size={6} spacing={1}>
             {extraButtons.map((b, i) => (
-                <Grid key={`button_${i}`} item>
+                <Grid key={`button_${i}`}>
                     {b}
                 </Grid>
             ))}
