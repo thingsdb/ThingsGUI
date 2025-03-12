@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "module": "es6",
+    "target": "es2015",
+    "jsx": "react",
+    "allowJs": true,  // load js files as well
+    "checkJs": true,  // typescript checking for js files as well
+    "moduleResolution": "node",
+    "noImplicitAny": false,  // 7000 rules
+    "skipLibCheck": true,  // ignore node_modules
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src/Components/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "test"
+  ]
+}
