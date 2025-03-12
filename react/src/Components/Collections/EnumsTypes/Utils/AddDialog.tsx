@@ -16,7 +16,7 @@ import { PropertyMethod, PropertyName, PropertyType, PropertyVal } from './AddEd
 
 const tag = AddDialogTAG;
 
-const initState = {
+const initState: State = {
     queryObj: {},
     name: '',
     error: '',
@@ -233,10 +233,10 @@ export default AddDialog;
 interface Props {
     dataTypes: string[];
     category: string;
-    getInfo: any;
-    onClose: any;
+    getInfo: (scope: string, tag: string) => void;
+    onClose: () => void;
     open: boolean;
-    queries: any;
+    queries: object;
     scope: string;
     link: string;
 }

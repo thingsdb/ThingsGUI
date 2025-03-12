@@ -98,7 +98,7 @@ export {EditActions, EditProvider, useEdit};
 
 
 interface Props {
-    [index: string]: any;
+    children: React.ReactNode;
 }
 
 interface State {

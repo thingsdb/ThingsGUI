@@ -94,9 +94,9 @@ interface Props {
     actionButtons: any;
     children: any;
     expand?: boolean;
-    onCleanup: any;
-    onExpand: any;
-    onRefresh: any;
+    onCleanup?: () => void;
+    onExpand?: (expanded: boolean) => void;
+    onRefresh?: () => void;
     title: any;
     unmountOnExit: boolean;
 }

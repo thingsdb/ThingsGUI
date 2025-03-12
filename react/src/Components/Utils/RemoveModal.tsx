@@ -98,7 +98,7 @@ interface Props {
     buttonComponent: any;
     buttonLabel: any;
     buttonProps: any;
-    onClose: any;
+    onClose?: () => void;
     onSubmit: any;
     open?: boolean;
     tag: string;

@@ -68,6 +68,6 @@ interface Props {
     disabled?: boolean;
     label: string;
     loading: boolean;
-    onClickSend: any;
+    onClickSend: () => void;
     variant: any;
 }

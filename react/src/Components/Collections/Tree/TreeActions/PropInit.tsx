@@ -45,7 +45,7 @@ PropInit.propTypes = {
 export default PropInit;
 
 interface Props {
-    onChange: any;
+    onChange: (value: string) => void;
     input: string;
-    thing: any;
+    thing: object;
 }

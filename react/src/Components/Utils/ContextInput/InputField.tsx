@@ -83,5 +83,13 @@ export default InputField;
 
 
 interface Props {
-    [index: string]: any;
+    childTypes?: string[];
+    customTypes?: any[];
+    dataType: string;
+    dataTypes: string[];
+    enums?: object[];
+    identifier?: string | number;
+    init: any;
+    parent?: string;
+    variables?: string[];
 }

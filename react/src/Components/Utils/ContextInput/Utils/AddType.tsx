@@ -39,5 +39,10 @@ AddType.propTypes = {
 export default AddType;
 
 interface Props {
-    [index: string]: any;
+    identifier: string | number;
+    type: string;
+    label: string;
+    link: string;
+    numLines: string;
+    parent: string;
 }

@@ -83,6 +83,6 @@ interface Props {
     canEdit: boolean;
     editComponent?: React.ReactElement;
     label: string;
-    onSave?: any;
-    viewComponent: any;
+    onSave?: () => void;
+    viewComponent: React.ReactElement;
 }

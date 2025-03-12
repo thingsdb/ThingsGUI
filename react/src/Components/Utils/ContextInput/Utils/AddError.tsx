@@ -140,5 +140,7 @@ AddError.propTypes = {
 export default AddError;
 
 interface Props {
-    [index: string]: any;
+    identifier: string | number;
+    init: any;
+    parent: string;
 }

@@ -112,5 +112,11 @@ export default AddVariable;
 
 
 interface Props {
-    [index: string]: any;
+    variables: string[];
+    customTypes: object[];
+    dataTypes: string[];
+    enums: object[];
+    identifier: string | number;
+    parent: string;
+    parentDispatch: any;
 }

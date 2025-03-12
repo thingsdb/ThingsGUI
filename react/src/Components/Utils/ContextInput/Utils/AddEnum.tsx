@@ -100,5 +100,9 @@ AddEnum.propTypes = {
 export default AddEnum;
 
 interface Props {
-    [index: string]: any;
+    enumName: string;
+    enums: any[];
+    identifier: string | number;
+    init: string | number | object;
+    parent: string;
 }

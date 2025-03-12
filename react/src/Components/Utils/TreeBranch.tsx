@@ -150,7 +150,15 @@ TreeBranch.propTypes = {
 export default TreeBranch;
 
 interface Props {
-    [index: string]: any;
+    canToggle: boolean;
+    inset?: boolean;
+    name: string;
+    onAction?: any;  // (name: string, type: string, val: string) => void;
+    onClick?: React.MouseEventHandler;
+    onOpen: (show: boolean) => void;
+    onRenderChildren: any;
+    type: string;
+    val: string;
 }
 interface StyledListItemProps extends ListItemProps {
     inset: boolean;

@@ -103,5 +103,5 @@ export default AddFile;
 
 interface Props {
     init: string;
-    onChange: any;
+    onChange: (filename: string, blob: string) => void;
 }

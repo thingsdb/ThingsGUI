@@ -140,7 +140,7 @@ AutoSelect.propTypes = {
 export default AutoSelect;
 
 interface Props {
-    onChange: any;
+    onChange: (d: string) => void;
     dropdownItems: string[];
     input: string;
     label: string;

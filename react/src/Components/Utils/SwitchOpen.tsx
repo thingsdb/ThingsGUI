@@ -54,5 +54,5 @@ export default SwitchOpen;
 interface Props {
     children: any;
     label: string;
-    onChange: any;
+    onChange: (d: boolean) => void;
 }

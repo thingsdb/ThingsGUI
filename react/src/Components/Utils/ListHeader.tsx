@@ -81,8 +81,8 @@ interface Props {
     children: any;
     canCollapse: boolean;
     groupSign: string;
-    isOpen: boolean;
-    name: string;
-    onAdd: any;
-    unmountOnExit: boolean;
+    isOpen?: boolean;
+    name?: string;
+    onAdd: React.MouseEventHandler;
+    unmountOnExit?: boolean;
 }

@@ -101,9 +101,9 @@ export default withStores(Tasks);
 
 
 interface Props {
-    buttonsView: any;
-    dialogsView: any;
-    onCallback: any;
+    buttonsView: object;
+    dialogsView: object;
+    onCallback: (type: string, task: object) => void;
     scope: string;
 
     // TODOT stores

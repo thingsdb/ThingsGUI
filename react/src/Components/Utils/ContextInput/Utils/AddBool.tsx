@@ -43,5 +43,7 @@ AddBool.propTypes = {
 export default AddBool;
 
 interface Props {
-    [index: string]: any;
+    identifier: string | number;
+    init: boolean | string;
+    parent: string;
 }

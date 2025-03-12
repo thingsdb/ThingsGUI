@@ -113,7 +113,7 @@ export default LocalMsg;
 interface Props {
     body: any;
     icon: any;
-    onClose: any;
+    onClose: () => void;
     title: any;
     useAsPopUp?: boolean;
 }

@@ -49,6 +49,6 @@ BackupInfo.propTypes = {
 export default BackupInfo;
 
 interface Props {
-    header: any[];
-    item: any;
+    header: object[];
+    item: object;
 }

@@ -91,5 +91,8 @@ TableWithBadges.propTypes = {
 export default TableWithBadges;
 
 interface Props {
-    [index: string]: any;
+    badgeButton: any;
+    buttons: any;
+    header: any[];
+    rows: object[];
 }

@@ -64,7 +64,7 @@ export default withStores(AddLink);
 
 interface Props {
     name: string;
-    onChange: any;
+    onChange: (name: string, category: 'type' | 'enum') => void;
     scope: string;
 
     // TODOT stores

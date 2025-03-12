@@ -68,5 +68,10 @@ AddCode.propTypes = {
 export default AddCode;
 
 interface Props {
-    [index: string]: any;
+    identifier: string | number;
+    init: any;
+    label: string;
+    link: string;
+    numLines: string;
+    parent: string;
 }

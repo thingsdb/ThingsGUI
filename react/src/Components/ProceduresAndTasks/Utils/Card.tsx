@@ -87,11 +87,11 @@ export default Card;
 
 
 interface Props {
-    buttonsView: any;
-    header?: any[];
+    buttonsView: object;
+    header?: object[];
     itemKey: string;
-    list: any[];
-    onAdd: any;
+    list: object[];
+    onAdd: () => void;
     onClick: any;
     onDelete: any;
     tag: string;

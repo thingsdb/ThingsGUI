@@ -40,5 +40,7 @@ AddClosure.propTypes = {
 export default AddClosure;
 
 interface Props {
-    [index: string]: any;
+    identifier: string | number;
+    init: object | string;
+    parent: string;
 }

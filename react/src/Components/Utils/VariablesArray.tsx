@@ -101,5 +101,6 @@ export default VariablesArray;
 
 
 interface Props {
-    [index: string]: any;
+    onChange: (d: any[]) => void;
+    input: any[];
 }

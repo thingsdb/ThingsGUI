@@ -56,8 +56,8 @@ ViewProcedureDialog.propTypes = {
 export default ViewProcedureDialog;
 
 interface Props {
-    button: any;
+    button?: object;
     open: boolean;
-    onClose: any;
+    onClose: () => void;
     procedure: any;
 }

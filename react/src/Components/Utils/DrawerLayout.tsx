@@ -239,7 +239,7 @@ export default DrawerLayout;
 
 interface Props {
     open: boolean;
-    onClose: any;
+    onClose: () => void;
     menuOpen: boolean;
     menus: any[];
     topbar: any;

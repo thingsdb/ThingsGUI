@@ -68,6 +68,6 @@ export default ArrayLayout;
 interface Props {
     child: any;
     fullWidth: boolean;
-    onAdd: any;
-    onRemove: any;
+    onAdd: (index: number) => void;
+    onRemove: (index: number) => void;
 }

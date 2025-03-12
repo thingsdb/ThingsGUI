@@ -135,5 +135,12 @@ TableCard.propTypes = {
 export default TableCard;
 
 interface Props {
-    [index: string]: any;
+    header: object[];
+    itemKey: string;
+    items: object[];
+    moreButtons: any;
+    onAdd: () => void;
+    onDelete: any;
+    buttons: any;
+    tag: string;
 }

@@ -114,6 +114,6 @@ Closure.propTypes = {
 export default Closure;
 
 interface Props {
-    onChange: any;
+    onChange: (d: string) => void;
     input?: string;
 }

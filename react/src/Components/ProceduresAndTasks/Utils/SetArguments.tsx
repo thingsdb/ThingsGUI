@@ -45,5 +45,5 @@ export default SetArguments;
 
 interface Props {
     closure: string;
-    onChange: any;
+    onChange: (values: unknown[], blob: string) => void;
 }

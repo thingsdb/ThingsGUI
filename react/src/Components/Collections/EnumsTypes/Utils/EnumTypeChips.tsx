@@ -452,7 +452,7 @@ interface Props {
     onChange?: (...args: unknown[]) => (...args: unknown[]) => void;
     onClose?: (...args: unknown[]) => void;
     onDelete?: (...args: unknown[]) => void;
-    onInfo?: (...args: unknown[]) => void;
+    onInfo?: (scope: string, tag: string) => void;
     onMakeInstanceInit?: (...args: unknown[]) => void;
     onRename?: (...args: unknown[]) => void;
     onSetQueryInput?: (...args: unknown[]) => void;

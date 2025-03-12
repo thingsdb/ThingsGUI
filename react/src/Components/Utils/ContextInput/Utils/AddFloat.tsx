@@ -63,5 +63,7 @@ AddFloat.propTypes = {
 export default AddFloat;
 
 interface Props {
-    [index: string]: any;
+    identifier: string | number;
+    init: string | number;
+    parent: string;
 }

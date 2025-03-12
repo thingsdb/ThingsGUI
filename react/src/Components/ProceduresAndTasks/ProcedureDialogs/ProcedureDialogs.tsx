@@ -68,7 +68,7 @@ export default ProcedureDialogs;
 interface Props {
     dialogsView: any;
     name: string;
-    onClose: any;
+    onClose: (d: object) => void;
     open: {
         add: boolean;
         edit: boolean;

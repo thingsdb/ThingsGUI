@@ -61,5 +61,7 @@ AddBlob.propTypes = {
 export default AddBlob;
 
 interface Props {
-    [index: string]: any;
+    identifier: string | number;
+    init: string;
+    parent: string;
 }

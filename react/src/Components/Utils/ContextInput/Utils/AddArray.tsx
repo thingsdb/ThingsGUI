@@ -142,5 +142,12 @@ export default AddArray;
 
 
 interface Props {
-    [index: string]: any;
+    childTypes: string[];
+    customTypes: object[];
+    dataTypes: string[];
+    enums: object[];
+    identifier: string | number;
+    isSet?: boolean;
+    parent: string;
+    parentDispatch: any;
 }

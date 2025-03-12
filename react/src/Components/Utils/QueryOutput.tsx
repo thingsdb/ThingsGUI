@@ -96,8 +96,8 @@ export default QueryOutput;
 
 
 interface Props {
-    onArgs: any;
-    onChangeTab: any;
+    onArgs?: (args: any) => void;
+    onChangeTab: (newValue: number) => void;
     output: any;
     showLogs?: boolean;
     tabIndex: number;

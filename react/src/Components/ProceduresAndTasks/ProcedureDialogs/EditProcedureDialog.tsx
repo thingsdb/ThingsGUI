@@ -68,7 +68,7 @@ export default EditProcedureDialog;
 interface Props {
     button?: object;
     open: boolean;
-    onClose: any;
+    onClose: () => void;
     procedure: any;
     scope: string;
 }

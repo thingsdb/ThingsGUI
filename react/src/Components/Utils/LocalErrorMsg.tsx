@@ -28,6 +28,6 @@ export default LocalErrorMsg;
 
 interface Props {
     msg: string;
-    onClose: any;
+    onClose?: () => void;
     useAsPopUp?: boolean;
 }

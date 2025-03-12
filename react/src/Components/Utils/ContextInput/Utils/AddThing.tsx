@@ -172,5 +172,10 @@ export default AddThing;
 
 
 interface Props {
-    [index: string]: any;
+    customTypes: object[];
+    dataTypes: string[];
+    enums: object[];
+    identifier: string | number;
+    parent: string;
+    parentDispatch: any;
 }

@@ -94,9 +94,9 @@ export default withStores(Procedures);
 
 
 interface Props {
-    buttonsView: any;
-    dialogsView: any;
-    onCallback: any;
+    buttonsView: object;
+    dialogsView: object;
+    onCallback: (type: string, procedure: object) => void;
     scope: string;
 
     // TODOT stores

@@ -69,5 +69,5 @@ export default Wpo;
 interface Props {
     disabled?: boolean;
     input?: boolean;
-    onChange?: any;
+    onChange?: (d: object) => void;
 }

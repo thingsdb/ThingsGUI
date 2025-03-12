@@ -102,7 +102,7 @@ export default PieChart;
 
 
 interface Props {
-    data: any;
+    data: any[];
     hole?: number;
     offset?: any;
     radius?: number;

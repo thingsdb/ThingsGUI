@@ -231,6 +231,6 @@ interface Props {
     credentials: any;
     form: any;
     security: any;
-    onChange: any;
+    onChange: (ky: string, obj: object) => void;
     editField?: string;
 }

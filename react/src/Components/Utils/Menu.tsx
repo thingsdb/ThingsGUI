@@ -119,11 +119,11 @@ export default Menu;
 
 
 interface Props {
-    onAdd: any;
-    homeRoute: any;
+    onAdd: React.MouseEventHandler;
+    homeRoute: string;
     icon: React.ReactElement;
-    itemKey: any;
-    items: any;
-    onRefresh?: any;
-    title: any;
+    itemKey: string;
+    items: object[];
+    onRefresh?: () => void;
+    title: string;
 }

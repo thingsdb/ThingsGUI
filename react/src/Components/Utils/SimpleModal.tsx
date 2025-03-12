@@ -94,5 +94,17 @@ SimpleModal.propTypes = {
 export default SimpleModal;
 
 interface Props {
-    [index: string]: any;
+    actionButtons: any;
+    button: any;
+    children: any;
+    disableOk?: boolean;
+    fullWidth?: boolean;
+    maxWidth?: string;
+    onClose?: () => void;
+    onKeyPress?: React.KeyboardEventHandler;
+    onOk?: () => void;
+    open: boolean;
+    props: any;
+    title?: string;
+    tooltipMsgOk?: string;
 }

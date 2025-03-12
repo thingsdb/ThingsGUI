@@ -428,7 +428,7 @@ interface Props {
     item?: any;
     link: string;
     onChangeItem?: (...args: unknown[]) => void;
-    onClose: (...args: unknown[]) => void;
+    onClose: () => void;
     open?: boolean;
     onRename: (...args: unknown[]) => void;  // EnumActions.renameEnum | TypeActions.renameType
     queries: any;

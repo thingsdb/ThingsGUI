@@ -59,5 +59,8 @@ export default WarnPopover;
 
 
 interface Props {
-    [index: string]: any;
+    anchorEl: any;
+    onClose: () => void;
+    onOk?: () => void;
+    description: string;
 }

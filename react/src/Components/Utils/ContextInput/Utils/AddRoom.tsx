@@ -98,5 +98,7 @@ AddRoom.propTypes = {
 export default AddRoom;
 
 interface Props {
-    [index: string]: any;
+    identifier: string | number;
+    init: any;
+    parent: string;
 }

@@ -35,7 +35,7 @@ export default useVisNetwork;
 
 
 interface Props {
-    edges: any[];
-    nodes: any[];
-    options: any;
+    edges: object[];
+    nodes: object[];
+    options: object;
 }

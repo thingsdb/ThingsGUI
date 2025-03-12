@@ -65,7 +65,7 @@ export default TaskDialogs;
 interface Props {
     dialogsView: any;
     id: string;
-    onClose: any;
+    onClose: (d: object) => void;
     open: {
         add: boolean;
         cancel: boolean;

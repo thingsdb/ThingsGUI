@@ -29,5 +29,6 @@ AddNil.propTypes = {
 export default AddNil;
 
 interface Props {
-    [index: string]: any;
+    identifier: string | number;
+    parent: string;
 }

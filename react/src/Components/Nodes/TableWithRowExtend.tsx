@@ -130,5 +130,5 @@ interface Props {
     rows: any[];
     rowExtend: any;
     connectedNode: any;
-    onRefresh: any;
+    onRefresh: () => void;
 }

@@ -107,5 +107,13 @@ export default ThingsTree;
 
 
 interface Props {
-    [index: string]: any;
+    item: any;
+    tree: any;
+    child: {
+        name: string;
+        index: number;
+    };
+    onAction?: any;  // (name: string, type: string, val: string) => void;
+    root: boolean;
+    customTypes?: object[];
 }

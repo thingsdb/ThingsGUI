@@ -64,7 +64,7 @@ export default withStores(UsedByType);
 
 interface Props {
     name: string;
-    onChangeItem: any;
+    onChangeItem: (name: string, category: 'type') => void;
     scope: string;
 
     // TODOT stores

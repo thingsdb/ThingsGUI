@@ -70,7 +70,7 @@ interface Props {
     headers: object;
     item?: any;
     link: string;
-    onAdd?: (...args: unknown[]) => void;
+    onAdd?: (keys: string[]) => void;
     onChangeItem?: (...args: unknown[]) => void;
     rows: object;
     scope: string;

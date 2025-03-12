@@ -48,8 +48,8 @@ VisNetwork.propTypes = {
 export default VisNetwork;
 
 interface Props {
-    edges: any[];
+    edges: object[];
     nodeId: string;
-    nodes: any[];
-    options: any;
+    nodes: object[];
+    options: object;
 }

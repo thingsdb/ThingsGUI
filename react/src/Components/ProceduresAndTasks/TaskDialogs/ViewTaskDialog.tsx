@@ -51,7 +51,7 @@ export default ViewTaskDialog;
 interface Props {
     button?: object;
     open: boolean;
-    onClose: any;
+    onClose: () => void;
     task: any;
     scope: string;
 }

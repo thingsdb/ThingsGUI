@@ -56,8 +56,8 @@ CancelTaskDialog.propTypes = {
 export default CancelTaskDialog;
 
 interface Props {
-    button: any;
-    onClose: any;
+    button?: object;
+    onClose: () => void;
     open: boolean;
     scope: string;
     task: any;
