@@ -32,7 +32,6 @@ const Quotas = ({collection}) => {
     const handleClickOpen = () => {
         setState({
             show: true,
-            errors: {},
             form: {
                 quotaType: 'things',
                 quota: _getQuota('things'),

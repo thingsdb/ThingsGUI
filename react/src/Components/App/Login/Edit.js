@@ -99,7 +99,7 @@ const Edit = ({
                 />
             </Collapse>
             <Collapse in={showAll||showAddress} timeout="auto" unmountOnExit>
-                <ClickAwayListener onClickAway={handleClickAwayCheck} touchEvent={clickAwayActive && 'onTouchEnd'} mouseEvent={clickAwayActive && 'onClick'}>
+                <ClickAwayListener onClickAway={handleClickAwayCheck} touchEvent={clickAwayActive ? 'onTouchEnd' : false} mouseEvent={clickAwayActive ? 'onClick' : false}>
                     <TextField
                         autoFocus
                         fullWidth
