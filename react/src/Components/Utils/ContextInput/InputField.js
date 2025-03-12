@@ -33,7 +33,7 @@ const InputField = ({
     case BOOL: return <AddBool identifier={identifier} init={init} parent={parent} {...props} />;
     case CLOSURE: return <AddClosure identifier={identifier} init={init} parent={parent} {...props} />;
     case REGEX: return <AddRegex identifier={identifier} init={init} parent={parent} {...props} />;
-    case ROOM: return <AddRoom dentifier={identifier} init={init} parent={parent} {...props} />;
+    case ROOM: return <AddRoom identifier={identifier} init={init} parent={parent} {...props} />;
     case ERROR: return <AddError identifier={identifier} init={init} parent={parent} {...props} />;
     case BYTES: return <AddBlob identifier={identifier} init={init} parent={parent} {...props} />;
     case DATETIME: return <AddCode identifier={identifier} init={init} parent={parent} label="Fill in a datetime" link={THINGS_DOC_DATETIME} numLines="1" />;
