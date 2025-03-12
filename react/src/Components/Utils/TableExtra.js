@@ -36,7 +36,7 @@ const TableExtra = ({
                     </Button>
                 </Grid>
             )}
-            <Grid container xs={onAdd?10:12} justifyContent="flex-end">
+            <Grid container size={onAdd?10:12} justifyContent="flex-end">
                 <Box sx={{fontSize: 10, fontStyle: 'italic', m: 1}}>
                     {createdAt&&`Created on: ${moment(createdAt*1000).format(DATE_TIME_SEC_STR)}${modifiedAt?`, last modified on: ${moment(modifiedAt*1000).format(DATE_TIME_SEC_STR)}`:''}`}
                 </Box>

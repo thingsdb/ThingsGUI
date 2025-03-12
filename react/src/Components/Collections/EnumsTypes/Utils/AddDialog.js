@@ -104,7 +104,7 @@ const AddDialog = ({
     const child = React.useCallback((i) => (
         <EditProvider>
             <Grid container size={12} spacing={1} alignItems="center" >
-                <Grid xs={category === 'type' ? 12 : 6}>
+                <Grid size={category === 'type' ? 12 : 6}>
                     <PropertyName onChange={handleChangeProperty(i)} input={properties[i]&&properties[i].propertyName||''} autoFocus={Boolean(i)} />
                 </Grid>
                 {category === 'type' ? (

@@ -43,7 +43,7 @@ const ListHeader = ({
                     {groupSigning[groupSign][0]}
                 </Typography>
             </Grid>
-            <Grid xs={open?12:1} container justifyContent="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>
+            <Grid size={open?12:1} container justifyContent="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>
                 <Collapse sx={{width: '100%'}} in={open} timeout="auto" unmountOnExit={unmountOnExit}>
                     {children}
                 </Collapse>

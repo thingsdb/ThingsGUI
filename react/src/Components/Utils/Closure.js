@@ -58,7 +58,6 @@ const Closure = ({
         <Grid container sx={{paddingTop: '8px', marginTop: '8px'}}>
             <Grid
                 container
-                item
                 size={12}
                 sx={{
                     padding: '16px',

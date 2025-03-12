@@ -42,7 +42,6 @@ const StringDialog = ({
         >
             <Grid
                 container
-                item
                 size={12}
                 sx={{
                     padding: '16px',

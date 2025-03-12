@@ -28,7 +28,7 @@ const ArrayLayout = ({
         const children = [];
         for (let i = 0; i < count; i++) {
             children.push(
-                <Grid key={i} xs={fullWidth?9:6}>
+                <Grid key={i} size={fullWidth?9:6}>
                     {child(i)}
                 </Grid>
             );
@@ -39,7 +39,7 @@ const ArrayLayout = ({
     return(
         <Grid container spacing={2}>
             {renderChildren()}
-            <Grid container spacing={1} xs={fullWidth?3:6} justifyContent="center" alignItems="center">
+            <Grid container spacing={1} size={fullWidth?3:6} justifyContent="center" alignItems="center">
                 <Grid>
                     <Fab color="primary" onClick={handleAdd} size="small" sx={{color: '#000'}}>
                         <AddIcon fontSize="small" />
