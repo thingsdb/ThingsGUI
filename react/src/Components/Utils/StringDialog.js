@@ -43,7 +43,7 @@ const StringDialog = ({
             <Grid
                 container
                 item
-                xs={12}
+                size={12}
                 sx={{
                     padding: '16px',
                     border: '1px solid #525557',

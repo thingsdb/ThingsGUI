@@ -100,7 +100,7 @@ const AddThing = ({
         <Grid size={12}>
             <ListHeader canCollapse onAdd={handleAdd} groupSign="{">
                 {( property.map((p, index) => (
-                    <Grid key={index} container xs={12} alignItems="center" sx={{paddingLeft: '32px'}} >
+                    <Grid key={index} container size={12} alignItems="center" sx={{paddingLeft: '32px'}} >
                         <Grid size={3} sx={{paddingRight: '8px'}}>
                             <TextField
                                 fullWidth

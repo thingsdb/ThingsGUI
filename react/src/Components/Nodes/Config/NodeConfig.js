@@ -83,7 +83,7 @@ const NodeConfig = ({nodeId, offline, node}) => {
             container
             spacing={3}
         >
-            <Grid xs={12} sx={{marginTop: '16px', overflowY: 'auto', maxHeight: '400px'}}>
+            <Grid size={12} sx={{marginTop: '16px', overflowY: 'auto', maxHeight: '400px'}}>
                 <Info header={header} content={node} />
             </Grid>
             {offline ? null : (

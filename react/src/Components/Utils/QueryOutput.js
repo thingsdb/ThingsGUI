@@ -57,7 +57,7 @@ const QueryOutput = ({
             </Collapse>
             <Collapse in={tabIndex === EditorTab.JSON}>
                 <Grid container>
-                    <Grid container xs={12} justifyContent="flex-end">
+                    <Grid container size={12} justifyContent="flex-end">
                         <Copy text={jsonOutput || ''} />
                     </Grid>
                     <Grid size={12}>

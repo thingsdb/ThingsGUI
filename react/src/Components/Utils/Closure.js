@@ -59,7 +59,7 @@ const Closure = ({
             <Grid
                 container
                 item
-                xs={12}
+                size={12}
                 sx={{
                     padding: '16px',
                     marginBottom: '8px',
@@ -88,7 +88,7 @@ const Closure = ({
                 </Typography>
                 <VariablesArray onChange={handleVarArray} input={variables} />
             </Grid>
-            <Grid xs={12} container justifyContent="center">
+            <Grid size={12} container justifyContent="center">
                 <TextField
                     name="body"
                     label="Body"

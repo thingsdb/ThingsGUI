@@ -75,7 +75,7 @@ const AddError = ({
     };
 
     return(
-        <Grid container xs={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
+        <Grid container size={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
             <Grid size={1} container alignItems="center" justifyContent="flex-start">
                 <Grid>
                     <Typography variant="h5" color="primary">

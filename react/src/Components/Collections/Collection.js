@@ -36,7 +36,7 @@ const Collection = ({collections}) => {
                 content={
                     <React.Fragment>
                         <Grid container size={{xs: 12, md: 7}}>
-                            <Grid xs={12} sx={{paddingBottom: '8px'}}>
+                            <Grid size={12} sx={{paddingBottom: '8px'}}>
                                 <HarmonicCardHeader title="INFO" unmountOnExit>
                                     <CollectionConfig collection={selectedCollection} />
                                 </HarmonicCardHeader>
@@ -47,14 +47,14 @@ const Collection = ({collections}) => {
                             </Grid>
                         </Grid>
                         <Grid container size={{xs: 12, md: 7}}>
-                            <Grid xs={12} sx={{paddingBottom: '8px'}}>
+                            <Grid size={12} sx={{paddingBottom: '8px'}}>
                                 <Procedures
                                     buttonsView={{add: true, cancel: false, edit: true, run: true, view: false}}
                                     dialogsView={{add: true, cancel: false, edit: true, run: true, view: false}}
                                     scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}
                                 />
                             </Grid>
-                            <Grid xs={12} sx={{paddingBottom: '8px'}}>
+                            <Grid size={12} sx={{paddingBottom: '8px'}}>
                                 <Tasks
                                     buttonsView={{add: true, cancel: true, edit: true, run: false, view: false}}
                                     dialogsView={{add: true, cancel: true, edit: true, run: false, view: false}}

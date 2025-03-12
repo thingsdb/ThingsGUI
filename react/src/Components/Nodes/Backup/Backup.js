@@ -83,7 +83,7 @@ const Backup = ({nodeId, offline, backups}) => {
             container
             spacing={3}
         >
-            <Grid xs={12} sx={{marginTop: '16px', overflowY: 'auto', overflowX: 'auto', maxHeight: '400px'}}>
+            <Grid size={12} sx={{marginTop: '16px', overflowY: 'auto', overflowX: 'auto', maxHeight: '400px'}}>
                 {backups.length ? (
                     <TableWithButtons header={headerTable} rows={rows} buttons={handleButtons} />
                 ) : (

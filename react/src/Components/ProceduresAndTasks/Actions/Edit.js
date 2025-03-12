@@ -26,7 +26,7 @@ const Edit = ({
                     {type === 'procedure' ? <EditProcedure procedure={item} scope={scope} /> : <EditTask scope={scope} taskId={item.id} />}
                 </CardContent>
                 <CardActions>
-                    <Grid container xs={12} spacing={1} >
+                    <Grid container size={12} spacing={1} >
                         <Grid>
                             {buttons[type]}
                         </Grid>

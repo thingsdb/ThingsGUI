@@ -10,7 +10,7 @@ const Info = ({header, content}) => (
         {header.map(h => (
             <React.Fragment key={h.ky}>
                 {h.title ? (
-                    <Grid xs={12} sx={{marginTop: '8px', marginBottom: '8px'}}>
+                    <Grid size={12} sx={{marginTop: '8px', marginBottom: '8px'}}>
                         <Typography variant="subtitle2">
                             {h.title + ':'}
                         </Typography>

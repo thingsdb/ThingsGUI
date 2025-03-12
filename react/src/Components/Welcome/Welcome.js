@@ -50,7 +50,7 @@ const Welcome = ({collections, procedures, tasks, user, users}) => {
                         <Grid>
                             <Paper sx={{padding: '16px', width: '100%', height: '100%'}}>
                                 <Grid container spacing={2}>
-                                    <Grid xs={12} key={'collections_intro'}>
+                                    <Grid size={12} key={'collections_intro'}>
                                         <Typography gutterBottom variant="button" component="h2" color="textSecondary">
                                             {'Your collections:'}
                                         </Typography>
@@ -68,7 +68,7 @@ const Welcome = ({collections, procedures, tasks, user, users}) => {
                         <Grid>
                             <Paper sx={{padding: '16px', width: '100%', height: '100%'}}>
                                 <Grid container spacing={2}>
-                                    <Grid xs={12} key={'users_intro'}>
+                                    <Grid size={12} key={'users_intro'}>
                                         <Typography gutterBottom variant="button" component="h2" color="textSecondary">
                                             {'Users:'}
                                         </Typography>
@@ -86,7 +86,7 @@ const Welcome = ({collections, procedures, tasks, user, users}) => {
                         <Grid>
                             <Paper sx={{padding: '16px', width: '100%', height: '100%'}}>
                                 <Grid container spacing={2}>
-                                    <Grid xs={12} key={'procedures_intro'}>
+                                    <Grid size={12} key={'procedures_intro'}>
                                         <Typography gutterBottom variant="button" component="h2" color="textSecondary">
                                             {'Procedures:'}
                                         </Typography>
@@ -104,7 +104,7 @@ const Welcome = ({collections, procedures, tasks, user, users}) => {
                         <Grid>
                             <Paper sx={{padding: '16px', width: '100%', height: '100%'}}>
                                 <Grid container spacing={2}>
-                                    <Grid xs={12} key={'tasks_intro'}>
+                                    <Grid size={12} key={'tasks_intro'}>
                                         <Typography gutterBottom variant="button" component="h2" color="textSecondary">
                                             {'Tasks:'}
                                         </Typography>

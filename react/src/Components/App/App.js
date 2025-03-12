@@ -86,7 +86,7 @@ const App = () => {
                 }
                 mainContent={
                     <Grid container alignItems="flex-start">
-                        <Grid container xs={12} sx={{padding: '0px 8px 8px 8px'}}>
+                        <Grid container size={12} sx={{padding: '0px 8px 8px 8px'}}>
                             <Routes>
                                 <Route path="/" element={<Welcome />} />
                                 <Route path={`/${COLLECTION_ROUTE}/${collectionName}`} element={<Collection />} />

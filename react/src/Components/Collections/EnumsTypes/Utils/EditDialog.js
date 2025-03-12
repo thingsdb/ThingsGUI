@@ -319,7 +319,7 @@ const EditDialog = ({
                         <Collapse in={showTextFields} timeout="auto" unmountOnExit>
                             <ListItem>
                                 <EditProvider>
-                                    <Grid container xs={12} spacing={1} alignItems="center" >
+                                    <Grid container size={12} spacing={1} alignItems="center" >
                                         {show.name ? (
                                             <Grid size={12}>
                                                 <PropertyName onChange={ren?handleQueryRen:handleQuery} input={property.propertyName||''} />

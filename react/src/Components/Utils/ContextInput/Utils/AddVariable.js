@@ -53,7 +53,7 @@ const AddVariable = ({
         variables&&(
             <Grid size={12}>
                 {( variables.map(v => (
-                    <Grid key={v} container xs={12} alignItems="center" sx={{paddingBottom: '8px'}}>
+                    <Grid key={v} container size={12} alignItems="center" sx={{paddingBottom: '8px'}}>
                         <Grid size={12}>
                             <Typography color="primary" variant="body1" >
                                 {v}

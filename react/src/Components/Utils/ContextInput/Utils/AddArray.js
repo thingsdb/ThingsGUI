@@ -80,7 +80,7 @@ const AddArray = ({
         <Grid size={12}>
             <ListHeader canCollapse onAdd={handleAdd} groupSign="[">
                 {( dataType.map((d, index) => (
-                    <Grid key={index} container xs={12} alignItems="center" sx={{paddingLeft: '32px'}}>
+                    <Grid key={index} container size={12} alignItems="center" sx={{paddingLeft: '32px'}}>
                         {
                             <Grid size={4} sx={{paddingRight: '8px'}}>
                                 <TextField

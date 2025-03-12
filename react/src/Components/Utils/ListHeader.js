@@ -32,7 +32,7 @@ const ListHeader = ({
     };
 
     return(
-        <Grid container xs={12} sx={{marginTop: '8px', marginBottom: '8px', paddingTop: '8px', paddingBottom: '8px'}}>
+        <Grid container size={12} sx={{marginTop: '8px', marginBottom: '8px', paddingTop: '8px', paddingBottom: '8px'}}>
             <Grid size={7} container justifyContent="flex-start" alignItems="center">
                 {name&&(
                     <Typography variant="h5" color="primary" >

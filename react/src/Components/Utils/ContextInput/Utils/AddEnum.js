@@ -75,10 +75,10 @@ const AddEnum = ({
             </Grid>
             {isBlob&&
                 <Grid container size={9}>
-                    <Grid container xs={12} justifyContent="flex-end">
+                    <Grid container size={12} justifyContent="flex-end">
                         <DownloadBlob val={init} isImg />
                     </Grid>
-                    <Grid container xs={12} justifyContent="flex-end">
+                    <Grid container size={12} justifyContent="flex-end">
                         <Typography variant="caption">
                             {'Click to download the blob that is currently stored.'}
                         </Typography>

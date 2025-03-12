@@ -37,10 +37,10 @@ const AddBlob = ({
             <AddFile init={fileName} onChange={handleUpdate} />
             {init &&
                 <Grid container size={4} spacing={1} justifyContent="flex-end">
-                    <Grid container xs={12} justifyContent="flex-end">
+                    <Grid container size={12} justifyContent="flex-end">
                         <DownloadBlob val={init} isImg />
                     </Grid>
-                    <Grid container xs={12} justifyContent="flex-end">
+                    <Grid container size={12} justifyContent="flex-end">
                         <Typography variant="caption">
                             {'Download blob that is currently stored.'}
                         </Typography>

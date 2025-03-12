@@ -61,7 +61,7 @@ const Edit = ({
                 />
             </ListItem>
             <ListItem>
-                <Grid container xs={12} spacing={1} justifyContent="flex-start">
+                <Grid container size={12} spacing={1} justifyContent="flex-start">
                     {addNewProperty && (
                         <Grid size={3}>
                             <PropInit

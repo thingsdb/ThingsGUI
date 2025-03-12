@@ -146,7 +146,7 @@ const UserAccess = ({user, collections}) => {
             <Grid size={{md: 12, lg: 6}}>
                 <Card>
                     <CardContent>
-                        <Grid container xs={12} spacing={2}>
+                        <Grid container size={12} spacing={2}>
                             <Grid size={12}>
                                 <Typography variant="body2" >
                                     {'ACCESS RULES'}
@@ -162,10 +162,10 @@ const UserAccess = ({user, collections}) => {
                             spacing={3}
                         >
                             <Grid container spacing={1}>
-                                <Grid container xs={12} spacing={2} >
+                                <Grid container size={12} spacing={2} >
                                     <Grid size={3} />
                                     <Grid container size={9} >
-                                        <Grid container xs={12} >
+                                        <Grid container size={12} >
                                             {privileges.map(({ky, label}) => (
                                                 <Grid size={2} key={ky} container justifyContent="center" >
                                                     <Typography variant="overline" align="center" component="span" noWrap>
@@ -177,14 +177,14 @@ const UserAccess = ({user, collections}) => {
                                     </Grid>
                                 </Grid>
                                 {switchesKeys.map((key, i) => (
-                                    <Grid key={i} container xs={12} spacing={2}>
+                                    <Grid key={i} container size={12} spacing={2}>
                                         <Grid size={3} container alignItems="center">
                                             <Typography component="span" noWrap>
                                                 {key}
                                             </Typography>
                                         </Grid>
                                         <Grid container size={9} >
-                                            <Grid container xs={12} >
+                                            <Grid container size={12} >
                                                 {privileges.map(({ky, value}) => (
                                                     <Grid size={2} key={ky} container justifyContent="center">
                                                         <Checkbox checked={switches[key][ky]} onChange={handleOnChangeSwitch(key)} value={value} color="primary" />

@@ -146,7 +146,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
     const nodeId = findNodeId(_customTypes, search, 'type_id', 't') || findNodeId(_enums, search, 'enum_id', 'e') || '';
 
     return ((_customTypes.length > 0 || _enums.length > 0) && (
-        <Grid xs={12} sx={{paddingBottom: '8px'}}>
+        <Grid size={12} sx={{paddingBottom: '8px'}}>
             <HarmonicCard
                 title="TYPE AND ENUM NETWORK"
                 content={

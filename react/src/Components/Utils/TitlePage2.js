@@ -13,7 +13,7 @@ const TitlePage2 = ({
 }) => (
     <Grid direction="row" container spacing={1} alignItems="flex-start" sx={{marginBottom: '48px'}}>
         <Grid container spacing={1} size={{md: 12, lg: 8}}>
-            <Grid xs={12} sx={{display: { lg: 'none', xs: 'block'}}}>
+            <Grid size={12} sx={{display: { lg: 'none', xs: 'block'}}}>
                 <Card>
                     <CardHeader
                         action={title}
@@ -36,7 +36,7 @@ const TitlePage2 = ({
             {content}
         </Grid>
         <Grid container spacing={1} size={{md: 12, lg: 4}}>
-            <Grid xs={12} sx={{display: { xs: 'none', md: 'block' }}}>
+            <Grid size={12} sx={{display: { xs: 'none', md: 'block' }}}>
                 <Card>
                     <CardHeader
                         action={title}

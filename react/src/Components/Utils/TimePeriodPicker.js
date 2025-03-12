@@ -45,7 +45,7 @@ const TimePeriodPicker = ({onChange}) => {
     };
 
     return (
-        <Grid container xs={12} spacing={1} >
+        <Grid container size={12} spacing={1} >
             <Grid>
                 <TextField
                     autoFocus

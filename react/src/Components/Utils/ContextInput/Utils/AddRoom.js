@@ -54,7 +54,7 @@ const AddRoom = ({
     const hasError = Boolean(error);
 
     return(
-        <Grid container xs={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
+        <Grid container size={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
             <Grid size={2} container alignItems="center" justifyContent="center">
                 <Grid>
                     <Typography variant="h5" color="primary">
