@@ -4,7 +4,7 @@ import React from 'react';
 import Switch from '@mui/material/Switch';
 
 
-const TwoLabelSwitch = ({input, labelOne, labelTwo, onChange}) => (
+const TwoLabelSwitch = ({input, labelOne, labelTwo, onChange}: Props) => (
     <Grid>
         <Grid component="label" container alignItems="center" spacing={1}>
             <Grid>
@@ -31,3 +31,10 @@ TwoLabelSwitch.propTypes = {
 };
 
 export default TwoLabelSwitch;
+
+interface Props {
+    input: boolean;
+    labelOne: string;
+    labelTwo: string;
+    onChange: React.ChangeEventHandler<any>;
+}

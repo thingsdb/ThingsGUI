@@ -19,7 +19,7 @@ const withStores = withVlow([{
     keys: ['logging']
 }]);
 
-const Logging = ({logging}) => (
+const Logging = ({logging}: IEventStore) => (
     <List dense disablePadding>
         <Collapse in={Array.isArray(logging) && logging.length > 1}>
             <ListItem sx={{ justifyContent: 'flex-end' }}>

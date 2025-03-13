@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 
 
-const TitlePage3 = ({preTitle, title, content}) => (
+const TitlePage3 = ({preTitle, title, content}: Props) => (
     <Grid container spacing={1} sx={{marginBottom: '48px'}}>
         <Grid size={12}>
             <Card>
@@ -34,3 +34,9 @@ TitlePage3.propTypes = {
 
 
 export default TitlePage3;
+
+interface Props {
+    preTitle: string;
+    title: string;
+    content: React.ReactNode;
+}

@@ -34,5 +34,5 @@ export default HarmonicCardContent;
 interface Props {
     buttons: any;
     content: any;
-    noPadding: boolean;
+    noPadding?: boolean;
 }

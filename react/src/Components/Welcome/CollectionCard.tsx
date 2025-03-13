@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { COLLECTION_ROUTE } from '../../Constants/Routes';
 
 
-const CollectionCard = ({collection}) => (
+const CollectionCard = ({collection}: Props) => (
     <Card sx={{backgroundColor: 'background.default'}}>
         <CardActionArea
             component={RouterLink}
@@ -57,3 +57,7 @@ CollectionCard.propTypes = {
 };
 
 export default CollectionCard;
+
+interface Props {
+    collection: any;
+}

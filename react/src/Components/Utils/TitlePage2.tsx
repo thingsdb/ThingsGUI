@@ -10,7 +10,7 @@ const TitlePage2 = ({
     title,
     sideContent = null,
     content,
-}) => (
+}: Props) => (
     <Grid direction="row" container spacing={1} alignItems="flex-start" sx={{marginBottom: '48px'}}>
         <Grid container spacing={1} size={{md: 12, lg: 8}}>
             <Grid size={12} sx={{display: { lg: 'none', xs: 'block'}}}>
@@ -70,3 +70,10 @@ TitlePage2.propTypes = {
 
 
 export default TitlePage2;
+
+interface Props {
+    preTitle: string;
+    title: React.ReactNode;
+    sideContent: React.ReactNode;
+    content: React.ReactNode;
+}

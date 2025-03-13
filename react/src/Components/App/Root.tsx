@@ -69,7 +69,7 @@ const withStores = withVlow([{
     keys: ['authOnly', 'loaded', 'connected', 'seekConnection', 'useCookies']
 }]);
 
-const Root = ({authOnly, loaded, connected, seekConnection, useCookies}) => {
+const Root = ({authOnly, loaded, connected, seekConnection, useCookies}: IApplicationStore) => {
     React.useEffect(() => {
         // @ts-ignore TODOT window.location ok?
         const key = (new URL(window.location)).searchParams.get('key');

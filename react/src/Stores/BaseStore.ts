@@ -368,5 +368,6 @@ declare global {
             [index: string]: IEvent[];
         };
         ids: number[];
+        logging: any[];
     }
 }

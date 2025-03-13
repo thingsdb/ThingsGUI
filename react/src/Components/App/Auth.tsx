@@ -26,7 +26,7 @@ const withStores = withVlow([{
 
 const tag = AuthTAG;
 
-const Auth = ({authMethod}) => {
+const Auth = ({authMethod}: IApplicationStore) => {
     const [show, setShow] = React.useState(false);
     const [loginWith, setLoginWith] = React.useState(authMethod||'pass');
     const [form, setForm] = React.useState({

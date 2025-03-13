@@ -13,7 +13,7 @@ const TableWithButtons = ({
     header,
     rows,
     buttons = null,
-}) => (
+}: Props) => (
     <Table padding="none">
         <TableHead>
             <TableRow>
@@ -57,3 +57,9 @@ TableWithButtons.propTypes = {
 };
 
 export default TableWithButtons;
+
+interface Props {
+    header: any[];
+    rows: object[];
+    buttons: any;
+}

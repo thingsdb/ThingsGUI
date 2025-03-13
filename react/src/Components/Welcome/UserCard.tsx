@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { USER_ROUTE } from '../../Constants/Routes';
 
 
-const UserCard = ({user}) => (
+const UserCard = ({user}: Props) => (
     <Card sx={{backgroundColor: 'background.default'}}>
         <CardActionArea
             component={RouterLink}
@@ -40,3 +40,7 @@ UserCard.propTypes = {
 };
 
 export default UserCard;
+
+interface Props {
+    user: any;
+}

@@ -133,6 +133,8 @@ export {ProcedureActions, ProcedureStore};
 declare global {
     interface IProcedureStore {
         procedure: any;
-        procedures: any[];
+        procedures: {
+            [index: string]: any[];
+        };
     }
 }

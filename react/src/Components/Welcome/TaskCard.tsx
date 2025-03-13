@@ -12,7 +12,7 @@ import { nextRunFn } from '../Utils';
 import { TASK_ROUTE } from '../../Constants/Routes';
 
 
-const TaskCard = ({task}) => (
+const TaskCard = ({task}: Props) => (
     <Card sx={{backgroundColor: 'background.default'}}>
         <CardActionArea
             component={RouterLink}
@@ -43,3 +43,7 @@ TaskCard.propTypes = {
 };
 
 export default TaskCard;
+
+interface Props {
+    task: any;
+}

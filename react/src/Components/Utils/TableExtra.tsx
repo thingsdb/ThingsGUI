@@ -18,7 +18,7 @@ const TableExtra = ({
     modifiedAt = null,
     onAdd = null,
     rows,
-}) => (
+}: Props) => (
     <Grid container>
         <Grid size={12}>
             <TableWithBadges
@@ -56,3 +56,13 @@ TableExtra.propTypes = {
 };
 
 export default TableExtra;
+
+interface Props {
+    badgeButton: any;
+    buttons: any;
+    createdAt: number;
+    header: object[];
+    modifiedAt: number;
+    onAdd: any;
+    rows: object[];
+}

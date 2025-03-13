@@ -14,7 +14,7 @@ const RefreshContainer = ({
     content,
     noPadding = false,
     onRefresh = null,
-}) => (
+}: Props) => (
     <Card>
         <CardHeader
             action={
@@ -50,3 +50,11 @@ RefreshContainer.propTypes = {
 };
 
 export default RefreshContainer;
+
+interface Props {
+    actionButtons: React.ReactElement;
+    buttons: React.ReactElement;
+    content: React.ReactElement;
+    noPadding: boolean;
+    onRefresh: React.MouseEventHandler;
+}

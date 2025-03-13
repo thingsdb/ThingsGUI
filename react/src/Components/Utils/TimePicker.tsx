@@ -4,7 +4,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid2';
 
-const TimePicker = ({onChange}) => {
+const TimePicker = ({onChange}: Props) => {
     const [date, setDate] = React.useState(new Date().toISOString().slice(0, 10));
     const [time, setTime] = React.useState(new Date().toISOString().slice(11, 16));
 
@@ -62,3 +62,7 @@ TimePicker.propTypes = {
 };
 
 export default TimePicker;
+
+interface Props {
+    onChange: (d: number) => void;
+}

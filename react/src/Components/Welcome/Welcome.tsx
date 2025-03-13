@@ -28,7 +28,7 @@ const withStores = withVlow([{
 
 const scope = THINGSDB_SCOPE;
 
-const Welcome = ({collections, procedures, tasks, user, users}) => {
+const Welcome = ({collections, procedures, tasks, user, users}: IThingsdbStore & IProcedureStore & ITaskStore) => {
 
     React.useEffect(() => {
         ThingsdbActions.getCollections();

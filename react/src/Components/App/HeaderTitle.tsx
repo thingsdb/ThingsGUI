@@ -9,7 +9,7 @@ const withStores = withVlow([{
     keys: ['connectedNode']
 }]);
 
-const HeaderTitle = ({connectedNode}) => {
+const HeaderTitle = ({connectedNode}: INodesStore) => {
     React.useEffect(() => {
         NodesActions.getConnectedNode();
     },

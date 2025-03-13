@@ -5,7 +5,7 @@ import Popover from '@mui/material/Popover';
 import Tooltip from '@mui/material/Tooltip';
 
 
-const TopBarMenu = ({ children, menuIcon, menuTooltip}) => {
+const TopBarMenu = ({ children, menuIcon, menuTooltip}: Props) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleMenuClose = React.useCallback(() => setAnchorEl(null), [setAnchorEl]);
@@ -68,3 +68,9 @@ TopBarMenu.propTypes = {
 };
 
 export default TopBarMenu;
+
+interface Props {
+    children: React.ReactNode;
+    menuIcon: React.ReactElement;
+    menuTooltip: string;
+}

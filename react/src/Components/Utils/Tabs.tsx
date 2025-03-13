@@ -7,7 +7,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 
-const TabPanel = ({ children, value, index }) => (
+const TabPanel = ({ children, value, index }: TabPanelProps) => (
     <div
         role="tabpanel"
         hidden={value !== index}
@@ -41,7 +41,7 @@ const StyledTabs = styled(Tabs)(({theme}) => ({
 }));
 
 
-const VerticalTabs = ({headers, panels}) => {
+const VerticalTabs = ({headers, panels}: Props) => {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (_event, newValue) => {
@@ -78,3 +78,13 @@ VerticalTabs.propTypes = {
 
 
 export default VerticalTabs;
+
+interface Props {
+    headers: string[];
+    panels: object[];
+}
+interface TabPanelProps {
+    children: React.ReactNode;
+    index: number;
+    value: number;
+}

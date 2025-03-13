@@ -5,7 +5,7 @@ import React from 'react';
 import Switch from '@mui/material/Switch';
 
 
-const Switching = ({one, two, onChange}) => {
+const Switching = ({one, two, onChange}: Props) => {
     const [switchOI, setSwitchOI] = React.useState(false);
 
     const handleSwitch = ({target}) => {
@@ -52,3 +52,9 @@ Switching.propTypes = {
 };
 
 export default Switching;
+
+interface Props {
+    onChange: (d: boolean) => void;
+    one: any;
+    two: any;
+}

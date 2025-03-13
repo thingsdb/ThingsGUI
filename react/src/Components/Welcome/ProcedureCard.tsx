@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { PROCEDURE_ROUTE } from '../../Constants/Routes';
 
 
-const ProcedureCard = ({procedure}) => (
+const ProcedureCard = ({procedure}: Props) => (
     <Card sx={{backgroundColor: 'background.default'}}>
         <CardActionArea
             component={RouterLink}
@@ -43,3 +43,7 @@ ProcedureCard.propTypes = {
 };
 
 export default ProcedureCard;
+
+interface Props {
+    procedure: any;
+}

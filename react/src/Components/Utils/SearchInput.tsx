@@ -47,7 +47,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-const SearchInput = ({value, onChange}) => (
+const SearchInput = ({value, onChange}: Props) => (
     <Search>
         <SearchIconWrapper>
             <SearchIcon />
@@ -67,3 +67,8 @@ SearchInput.propTypes = {
 };
 
 export default SearchInput;
+
+interface Props {
+    onChange: React.ChangeEventHandler<any>;
+    value: string;
+}

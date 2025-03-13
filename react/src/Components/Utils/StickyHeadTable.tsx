@@ -36,7 +36,7 @@ const stableSort = (array, comparator) => {
     return stabilizedThis.map((el) => el[0]);
 };
 
-const StickyHeadTable = ({columns, rows, size}) => {
+const StickyHeadTable = ({columns, rows, size}: Props) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(4);
     const [order, setOrder] = React.useState<'desc' | 'asc'>('asc');
@@ -121,3 +121,9 @@ StickyHeadTable.propTypes = {
 };
 
 export default StickyHeadTable;
+
+interface Props {
+    columns: any[];
+    rows: object[];
+    size: 'small' | 'medium';
+}

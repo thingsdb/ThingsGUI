@@ -27,7 +27,7 @@ const timeUnit = [
     },
 ];
 
-const TimePeriodPicker = ({onChange}) => {
+const TimePeriodPicker = ({onChange}: Props) => {
     const [state, setState] = React.useState({
         number: '1',
         unit: timeUnit[0].value,
@@ -87,3 +87,7 @@ TimePeriodPicker.propTypes = {
 };
 
 export default TimePeriodPicker;
+
+interface Props {
+    onChange: (d: number) => void;
+}

@@ -57,10 +57,10 @@ interface Props {
     actionButtons: any;
     buttons: any;
     content: any;
-    expand: boolean;
-    noPadding: boolean;
+    expand?: boolean;
+    noPadding?: boolean;
     onCleanup: any;
     onRefresh: any;
     title: any;
-    unmountOnExit: boolean;
+    unmountOnExit?: boolean;
 }

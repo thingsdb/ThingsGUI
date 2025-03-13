@@ -5,7 +5,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 
-const Info = ({header, content}) => (
+const Info = ({header, content}: Props) => (
     <Grid container spacing={1}>
         {header.map(h => (
             <React.Fragment key={h.ky}>
@@ -42,3 +42,8 @@ Info.propTypes = {
 };
 
 export default Info;
+
+interface Props {
+    header: any[];
+    content: object;
+}

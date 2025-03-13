@@ -143,6 +143,8 @@ export {TaskActions, TaskStore};
 declare global {
     interface ITaskStore {
         task: any;
-        tasks: any[];
+        tasks: {
+            [index: string]: any[];
+        };
     }
 }
