@@ -1,3 +1,4 @@
+//@ts-nocheck
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
@@ -35,3 +36,9 @@ class EditorStore extends Vlow.Store {
 }
 
 export {EditorActions, EditorStore};
+
+declare global {
+    interface IEditorStore {
+        history: any[];
+    }
+}

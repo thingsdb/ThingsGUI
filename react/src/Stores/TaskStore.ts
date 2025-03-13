@@ -1,3 +1,4 @@
+//@ts-nocheck
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
@@ -138,3 +139,10 @@ class TaskStore extends BaseStore {
 }
 
 export {TaskActions, TaskStore};
+
+declare global {
+    interface ITaskStore {
+        task: any;
+        tasks: any[];
+    }
+}

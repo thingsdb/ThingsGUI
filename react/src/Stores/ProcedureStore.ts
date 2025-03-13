@@ -1,3 +1,4 @@
+//@ts-nocheck
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
@@ -128,3 +129,10 @@ class ProcedureStore extends BaseStore {
 }
 
 export {ProcedureActions, ProcedureStore};
+
+declare global {
+    interface IProcedureStore {
+        procedure: any;
+        procedures: any[];
+    }
+}

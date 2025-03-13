@@ -35,13 +35,13 @@ function CookieBanner() {
 
     const AcceptCookies = () => {
         // Store Cookies consent
-        localStorage.setItem('thingsgui.cookiesAllowed', true);
+        localStorage.setItem('thingsgui.cookiesAllowed', true as any);
         setCookiesAccepted(true);
     };
 
     const DeclineCookies = () => {
         // Store Cookies consent
-        localStorage.setItem('thingsgui.cookiesAllowed', false);
+        localStorage.setItem('thingsgui.cookiesAllowed', false as any);
         setCookiesAccepted(false);
     };
 

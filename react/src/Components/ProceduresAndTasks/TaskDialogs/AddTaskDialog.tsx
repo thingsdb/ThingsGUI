@@ -65,6 +65,7 @@ const AddTaskDialog = ({open, onClose, scope}: Props) => {
 
     const handleSwitchArgs = (open) => {
         if(!open) {
+            // @ts-ignore TODOT blob=undefined ok?
             handleChangeArgs([]);
         }
     };

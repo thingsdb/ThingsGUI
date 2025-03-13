@@ -1,13 +1,13 @@
 export const ANGLE_BRACKETS_FORMAT_QUERY = (content='') => `<${content}>`; // don't place a `;`
 export const CLOSURE_FORMAT_QUERY = (args, body) => `|${args}|${body}`; // don't place a `;`
-export const CURLY_BRACKETS_FORMAT_QUERY = (content='') => `{${content}}`; // don't place a `;`
+export const CURLY_BRACKETS_FORMAT_QUERY = (content: any='') => `{${content}}`; // don't place a `;`
 export const CUSTOM_TYPE_FORMAT_QUERY = (type, content='') => `${type}{${content}}`; // don't place a `;`
 export const DATETIME_FORMAT_QUERY = (thing) => `datetime('${thing}')`; // don't place a `;`
 export const REGEX_FORMAT_QUERY = (content) => `/${content}/`; // don't place a `;`
 export const ROOM_FORMAT_QUERY = (id) => `room(${id})`; // don't place a `;`
 export const RUN_FORMAT_QUERY = (name, args) => `run('${name}',${args})`; // don't place a `;`
 export const SET_FORMAT_QUERY = (list) => `set(${list})`; // don't place a `;`
-export const SQUARE_BRACKETS_FORMAT_QUERY = (content='') => `[${content}]`; // don't place a `;`
+export const SQUARE_BRACKETS_FORMAT_QUERY = (content: any='') => `[${content}]`; // don't place a `;`
 export const STRING_FORMAT_QUERY = (content='') => `'${content}'`; // don't place a `;`
 export const THING_FORMAT_QUERY = (id) => `thing(${id ? id : '.id()'})`; // don't place a `;`
 export const TIMEVAL_FORMAT_QUERY = (thing) => `timeval(${thing})`; // don't place a `;`

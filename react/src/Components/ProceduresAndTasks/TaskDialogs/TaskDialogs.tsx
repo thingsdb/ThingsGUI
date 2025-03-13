@@ -70,7 +70,7 @@ interface Props {
         add: boolean;
         cancel: boolean;
         edit: boolean;
-        run: boolean;
+        run?: boolean;  // TODOT unused?
         view: boolean;
     };
     tasks: any[];

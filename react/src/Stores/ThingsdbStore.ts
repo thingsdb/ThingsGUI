@@ -1,3 +1,4 @@
+//@ts-nocheck
 
 import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
@@ -413,3 +414,25 @@ class ThingsdbStore extends BaseStore {
 }
 
 export {ThingsdbActions, ThingsdbStore};
+
+declare global {
+    interface ICollection {
+        collection_id: number;
+        name: string;
+        things: any;
+    }
+
+    interface IUser {
+        name: string;
+        access: any[];
+        tokens: any[];
+        has_password: boolean;
+    }
+
+    interface IThingsdbStore {
+        collections: ICollection[];
+        collection: ICollection;
+        users: IUser[];
+        user: IUser;
+    }
+}

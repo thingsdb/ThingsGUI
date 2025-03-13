@@ -34,7 +34,7 @@ const TimePeriodPicker = ({onChange}) => {
     });
 
     React.useEffect(() => {
-        onChange(Number(state.number * state.unit));
+        onChange(Number(state.number) * state.unit);
     },
     [state.number, state.unit],
     );

@@ -35,7 +35,7 @@ const RemoveThing = ({child, onClose, parent, scope}: Props) => {
     });
 
     React.useEffect(() => {
-        let qs, q, a = '';
+        let qs, q, a = '' as any;
         if (parent.type === THING) {
             qs = THING_PROP_DEL_FORMAT_QUERY(parent.id, child.name);
             q = THING_PROP_DEL_QUERY;

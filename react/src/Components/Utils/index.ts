@@ -98,7 +98,7 @@ const checkType = (t) => {
     if (t === null) {
         return(NIL);
     }
-    let type = typeof(t);
+    let type = typeof(t) as any;  // TODOT use thingtype enum
     if (type === 'string') {
         type = STR;
     } else if (type === 'boolean') {
@@ -250,7 +250,7 @@ const getNameFromPath = (pathname, key) => {
 };
 
 const historyNavigate = (navigate, location, pathname, searchParams=null, state=null) => {
-    let params = {};
+    let params = {} as any;  // TODOT use react-router To | Partial<Path>
 
     if (pathname) {
         params.pathname = pathname;

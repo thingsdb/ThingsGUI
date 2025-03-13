@@ -1,3 +1,4 @@
+//@ts-nocheck
 /*eslint-disable no-unused-vars */
 
 import PropTypes from 'prop-types';
@@ -174,3 +175,10 @@ class CollectionStore extends BaseStore {
 }
 
 export {CollectionActions, CollectionStore};
+
+declare global {
+    interface ICollectionStore {
+        canSubmit: boolean;
+        things: any;
+    }
+}

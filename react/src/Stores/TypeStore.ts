@@ -1,3 +1,4 @@
+//@ts-nocheck
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
@@ -103,3 +104,22 @@ class TypeStore extends BaseStore {
 }
 
 export {TypeActions, TypeStore};
+
+declare global {
+    interface IType {
+        type_id: number;
+        name: string;
+        wrap_only: boolean;
+        fields: any[];
+        relations: {
+            [index: string]: any;
+        };
+        [index: string]: any;
+    }
+
+    interface ITypeStore {
+        customTypes: {
+            [index: string]: IType[];
+        }
+    }
+}

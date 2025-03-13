@@ -1,3 +1,4 @@
+//@ts-nocheck
 /*eslint-disable no-unused-vars */
 
 import deepEqual from 'deep-equal';
@@ -494,3 +495,24 @@ class NodesStore extends BaseStore {
 }
 
 export {NodesActions, NodesStore};
+
+declare global {
+    interface INode {
+        node_id: number;
+        node_name: string;
+        log_level: string;
+        port: number;
+        status: string;
+    }
+    interface INodesStore {
+        allNodeInfo: any[];
+        backups: any[];
+        connectedNode: any;
+        counters: any;
+        _module: any;
+        modules: any[];
+        node: any;
+        nodes: any[];
+        streamInfo: any;
+    }
+}

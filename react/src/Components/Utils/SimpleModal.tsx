@@ -99,7 +99,7 @@ interface Props {
     children: any;
     disableOk?: boolean;
     fullWidth?: boolean;
-    maxWidth?: string;
+    maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' ;
     onClose?: () => void;
     onKeyPress?: React.KeyboardEventHandler;
     onOk?: () => void;

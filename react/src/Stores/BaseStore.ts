@@ -1,3 +1,4 @@
+//@ts-nocheck
 import io from 'socket.io-client';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -356,3 +357,16 @@ class EventStore extends BaseStore {
 }
 
 export {BaseStore, EventActions, EventStore};
+
+declare global {
+    interface IEvent {
+        [index: string]: any;
+    }
+
+    interface IEventStore {
+        events: {
+            [index: string]: IEvent[];
+        };
+        ids: number[];
+    }
+}

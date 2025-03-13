@@ -48,10 +48,11 @@ const AddFile = ({
 
     const handleDropzone = React.useCallback((acceptedFiles) => {
         const reader = new FileReader();
-        reader.onabort = () => window.log('file reading was aborted');
-        reader.onerror = () => window.log('file reading has failed');
+        reader.onabort = () => window.console.log('file reading was aborted');
+        reader.onerror = () => window.console.log('file reading has failed');
         reader.onload = () => {
             const binaryStr = reader.result;
+            // @ts-ignore  FileReader result can be either ArrayBuffer or string
             var encodedData = btoa(binaryStr);
             const filename = acceptedFiles[0].name;
             setFileName(filename);

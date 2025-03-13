@@ -85,6 +85,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}: IEnumStore & ITypeSto
             arrows: 'to',
             color: red[700],
             from: createTypeId(t.type_id),
+            // @ts-ignore TODOT type IType
             title: Object.entries(rt.relations).map(([k, v]) => `relation ${k}<->${`${v.property} on ${v.type} as ${v.definition}`}`).join(',\n'),
             to: createTypeId(rt.type_id),
             smooth: {
@@ -138,6 +139,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}: IEnumStore & ITypeSto
             },
             enum: {
                 shape: 'box',
+                // @ts-ignore PaletteOptions
                 color: theme.palette.primary.green,
             },
         },

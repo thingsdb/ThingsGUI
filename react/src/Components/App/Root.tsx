@@ -19,6 +19,7 @@ const theme = createTheme({
         mode: 'dark',
         primary: {
             main: '#3a5985',
+            // @ts-ignore type PaletteOptions
             yellow: '#ecda45',
             green: '#4ca024',
             warning: '#5a0c18d9'
@@ -70,6 +71,7 @@ const withStores = withVlow([{
 
 const Root = ({authOnly, loaded, connected, seekConnection, useCookies}) => {
     React.useEffect(() => {
+        // @ts-ignore TODOT window.location ok?
         const key = (new URL(window.location)).searchParams.get('key');
         ApplicationActions.isAuthOnly();
         ApplicationActions.getCachedConn(LoginTAG); // errmsg shown at Login dialog

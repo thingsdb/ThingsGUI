@@ -1,3 +1,4 @@
+//@ts-nocheck
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
@@ -85,3 +86,20 @@ class EnumStore extends BaseStore {
 }
 
 export {EnumActions, EnumStore};
+
+declare global {
+    interface IEnum {
+        enum_id: number;
+        name: string;
+        relations: {
+            [index: string]: any;
+        };
+        [index: string]: any;
+    }
+
+    interface IEnumStore {
+        enums: {
+            [index: string]: IEnum[];
+        };
+    }
+}

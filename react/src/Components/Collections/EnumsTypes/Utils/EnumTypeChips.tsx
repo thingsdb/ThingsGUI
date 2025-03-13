@@ -271,6 +271,7 @@ const tableInfo = {
         const item = view.name && items && items.find(i => i.name == view.name) || {};
         const rows = {
             fields: fmrows(callback, 'fields', true, item, scope, view),
+            // @ts-ignore TODOT type Item
             methods: Object.entries(item.methods||{}).reduce((res, k) => {res.push({propertyName: k[0], definition: k[1].definition}); return res;},[]),
         };
         return [item, rows];

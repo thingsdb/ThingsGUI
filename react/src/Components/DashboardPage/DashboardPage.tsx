@@ -31,7 +31,7 @@ const DashboardPage = () => {
 
     const handleOpen = () => {
         const current = Object.fromEntries(searchParams);
-        setSearchParams({ ...current, dashboard: true });
+        setSearchParams({ ...current, dashboard: true as any });
         setOpen(true);
     };
 
