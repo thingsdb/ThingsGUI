@@ -6,7 +6,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography';
 
 
-const CardButton = ({onClick, title, ...props}) => (
+const CardButton = ({onClick, title, ...props}: Props) => (
     <Card
         sx={{
             width: 150,
@@ -44,3 +44,9 @@ CardButton.propTypes = {
 };
 
 export default CardButton;
+
+interface Props {
+    onClick: React.MouseEventHandler;
+    title: string;
+    props?: object;  // TODOT
+}

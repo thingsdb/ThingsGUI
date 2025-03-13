@@ -17,7 +17,7 @@ import { ErrorActions } from '../../Stores';
 import { useThingsError } from '.';
 
 
-const ErrorToastCard = ({index, thingsError}) => {
+const ErrorToastCard = ({index, thingsError}: Props) => {
     const [title, body] = useThingsError(thingsError);
 
     const handleCloseError = () => {
@@ -58,3 +58,7 @@ ErrorToastCard.propTypes = {
 
 export default ErrorToastCard;
 
+interface Props {
+    index: number;
+    thingsError: string;
+}

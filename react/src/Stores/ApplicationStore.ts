@@ -240,3 +240,17 @@ class ApplicationStore extends BaseStore {
 }
 
 export {ApplicationActions, ApplicationStore};
+
+declare global {
+    interface IApplicationStore {
+        authOnly: boolean;
+        authMethod: string;
+        loaded: boolean;
+        connected: boolean;
+        seekConnection: boolean;
+        openEditor: boolean;
+        input: string;
+        cachedConnections: object;
+        useCookies: boolean;
+    }
+}

@@ -76,3 +76,10 @@ class ErrorStore extends Vlow.Store {
 }
 
 export {ErrorActions, ErrorStore};
+
+declare global {
+    interface IErrorStore {
+        toastErrors: string[];
+        msgError: object;
+    }
+}

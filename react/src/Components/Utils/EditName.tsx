@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 
-const EditName = ({name, fn}) => {
+const EditName = ({name, fn}: Props) => {
     const [newName, setNewName] = React.useState('');
     const [show, setShow] = React.useState(false);
 
@@ -82,3 +82,8 @@ EditName.propTypes = {
 };
 
 export default EditName;
+
+interface Props {
+    name: string;
+    fn: (name: string, newName: string) => void;
+}

@@ -16,7 +16,7 @@ const HarmonicCard = ({
     onRefresh = () => null,
     title,
     unmountOnExit = false,
-}) => (
+}: Props) => (
     <HarmonicCardHeader
         actionButtons={actionButtons}
         expand={expand}
@@ -52,3 +52,15 @@ HarmonicCard.propTypes = {
 };
 
 export default HarmonicCard;
+
+interface Props {
+    actionButtons: any;
+    buttons: any;
+    content: any;
+    expand: boolean;
+    noPadding: boolean;
+    onCleanup: any;
+    onRefresh: any;
+    title: any;
+    unmountOnExit: boolean;
+}

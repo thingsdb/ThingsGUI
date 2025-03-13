@@ -11,7 +11,7 @@ const withStores = withVlow([{
     keys: ['msgError']
 }]);
 
-const ErrorMsg = ({tag, msgError}) => {
+const ErrorMsg = ({tag, msgError}: IErrorStore & Props) => {
 
     // TODO: strange bug in placement of useCallback function to useEffect.
     // When placing the Callback underneath the useEffect, it becomes stale, no changes in the Callback are detected.
@@ -40,3 +40,7 @@ ErrorMsg.propTypes = {
 };
 
 export default withStores(ErrorMsg);
+
+interface Props {
+    tag: string;
+}

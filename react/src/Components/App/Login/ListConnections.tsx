@@ -38,7 +38,7 @@ const StyledCardActionArea = styled(CardActionArea)(({ theme }) => ({
 
 const tag = LoginTAG;
 
-const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
+const ListConnections = ({onClickNewConn, onEdit, cachedConnections}: IApplicationStore & Props) => {
     const [openDetail, setOpenDetail] = React.useState({});
 
     const handleOpenDetail = (k) => () => {
@@ -140,3 +140,8 @@ ListConnections.propTypes = {
 };
 
 export default withStores(ListConnections);
+
+interface Props {
+    onClickNewConn: React.MouseEventHandler;
+    onEdit: (ky: string, val: any) => void;
+}

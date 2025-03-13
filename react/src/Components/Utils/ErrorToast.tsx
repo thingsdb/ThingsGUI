@@ -19,7 +19,7 @@ const withStores = withVlow([{
 }]);
 
 
-const ErrorToast = ({toastErrors}) => (
+const ErrorToast = ({toastErrors}: IErrorStore) => (
     <Portal>
         <ul>
             {[...toastErrors].map((err, i) => <ErrorToastCard key={`error_toast_card_${i}`} index={i} thingsError={err} />)}
@@ -32,4 +32,3 @@ ErrorToast.propTypes = {
 };
 
 export default withStores(ErrorToast);
-

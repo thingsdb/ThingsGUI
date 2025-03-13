@@ -9,7 +9,7 @@ import { isObjectEmpty } from '../Utils';
 
 const dataTypes = [BOOL, FLOAT, INT, LIST, NIL, STR, THING]; // Supported types
 
-const Arguments = ({onChange}) => {
+const Arguments = ({onChange}: Props) => {
     const editState = useEdit()[0];
     const { obj } = editState;
 
@@ -29,6 +29,6 @@ Arguments.propTypes = {
 
 export default Arguments;
 
-
-
-
+interface Props {
+    onChange: (d: any) => void;
+}

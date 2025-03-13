@@ -29,7 +29,7 @@ const WrapperGrid = styled(Grid)(() => ({
 }));
 
 
-const AppLoader = ({connect}) => {
+const AppLoader = ({connect}: Props) => {
     React.useEffect(() => {
         if (connect) {
             ApplicationActions.connected();
@@ -76,3 +76,7 @@ AppLoader.propTypes = {
 };
 
 export default AppLoader;
+
+interface Props {
+    connect: boolean;
+}

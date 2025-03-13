@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const Buttons = ({children}) => {
+const Buttons = ({children}: Props) => {
     const [isMouseInside, setIsMouseInside] = React.useState(false);
 
     const mouseEnter = () => {
@@ -35,3 +35,7 @@ Buttons.propTypes = {
 
 
 export default Buttons;
+
+interface Props {
+    children: React.ReactNode;
+}

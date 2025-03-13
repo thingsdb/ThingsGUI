@@ -11,7 +11,7 @@ import {LoginTAG} from '../../../Constants/Tags';
 
 const tag = LoginTAG;
 
-const Memo = ({connection}) => {
+const Memo = ({connection}: Props) => {
     const [memo, setMemo] = React.useState(connection.memo);
     const [open, setOpen] = React.useState(false);
 
@@ -64,3 +64,7 @@ Memo.propTypes = {
 };
 
 export default Memo;
+
+interface Props {
+    connection: any;
+}

@@ -8,7 +8,7 @@ import React from 'react';
 const FixedList = ({
     dense = false,
     items = [],
-}) => (
+}: Props) => (
     <List
         dense={dense}
         disablePadding={dense}
@@ -35,3 +35,8 @@ FixedList.propTypes = {
 };
 
 export default FixedList;
+
+interface Props {
+    dense: boolean;
+    items: (string | number)[];
+}

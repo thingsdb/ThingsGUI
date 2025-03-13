@@ -5,7 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const DragdownCard = ({children}) => {
+const DragdownCard = ({children}: Props) => {
     const [isResizing, setIsResizing] = React.useState(false);
     const [newHeight, setNewHeight] = React.useState(500);
 
@@ -51,3 +51,7 @@ DragdownCard.propTypes = {
 };
 
 export default DragdownCard;
+
+interface Props {
+    children: (height: number) => React.ReactNode;
+}

@@ -5,7 +5,7 @@ import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
 
-const Copy = ({text}) => {
+const Copy = ({text}: Props) => {
 
     const setClipboard = () => {
         navigator.clipboard.writeText(text);
@@ -25,3 +25,7 @@ Copy.propTypes = {
 };
 
 export default Copy;
+
+interface Props {
+    text: string;
+}

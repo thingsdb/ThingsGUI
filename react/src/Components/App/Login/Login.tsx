@@ -21,7 +21,7 @@ const withStores = withVlow([{
 
 const tag = LoginTAG;
 
-const Login = ({cachedConnections}) => {
+const Login = ({cachedConnections}: IApplicationStore) => {
     const initialState = {
         form: {
             address: 'localhost:9200',

@@ -5,7 +5,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 
-const BoolInput = ({input, onChange}) => {
+const BoolInput = ({input, onChange}: Props) => {
     const handleOnChange = ({target}) => {
         const {value} = target;
         onChange(value);
@@ -35,3 +35,8 @@ BoolInput.propTypes = {
 };
 
 export default BoolInput;
+
+interface Props {
+    onChange: (d: string) => void;
+    input: string;
+}

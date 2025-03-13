@@ -8,7 +8,7 @@ const HarmonicCardContent = ({
     buttons = null,
     content,
     noPadding = false,
-}) => (
+}: Props) => (
     <React.Fragment>
         {noPadding ? content : (
             <CardContent>
@@ -30,3 +30,9 @@ HarmonicCardContent.propTypes = {
 };
 
 export default HarmonicCardContent;
+
+interface Props {
+    buttons: any;
+    content: any;
+    noPadding: boolean;
+}
