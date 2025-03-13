@@ -17,7 +17,7 @@ const withStores = withVlow([{
 const scope = THINGSDB_SCOPE;
 const itemKey = 'name';
 
-const Procedure = ({procedures}) => {
+const Procedure = ({procedures}: IProcedureStore) => {
     let location = useLocation();
     const procedureName = getNameFromPath(location.pathname, PROCEDURE_ROUTE);
     const selectedProcedure = (procedures[scope] || []).find(c => c[itemKey] === procedureName);

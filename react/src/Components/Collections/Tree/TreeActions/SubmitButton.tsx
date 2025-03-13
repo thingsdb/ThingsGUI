@@ -12,7 +12,7 @@ const withStores = withVlow([{
 }]);
 
 
-const SubmitButton = ({canSubmit, onClickSubmit}) => {
+const SubmitButton = ({canSubmit, onClickSubmit}: ICollectionStore & Props) => {
     const editState = useEdit()[0];
     const {query, blob, error} = editState;
 
@@ -36,3 +36,6 @@ SubmitButton.propTypes = {
 
 export default withStores(SubmitButton);
 
+interface Props {
+    onClickSubmit: (blob: string, query: string) => void;
+}

@@ -11,7 +11,7 @@ const withStores = withVlow([{
     keys: ['canSubmit']
 }]);
 
-const SubmitButton = ({canSubmit, loading, onClickSubmit}) => (
+const SubmitButton = ({canSubmit, loading, onClickSubmit}: ICollectionStore & Props) => (
     <SendButton
         disabled={!canSubmit}
         label="Submit"
@@ -30,3 +30,8 @@ SubmitButton.propTypes = {
 
 export default withStores(SubmitButton);
 
+
+interface Props {
+    loading: boolean;
+    onClickSubmit: () => void;
+}

@@ -5,7 +5,7 @@ import React from 'react';
 import { CancelTaskDialog } from '../TaskDialogs';
 
 
-const Cancel = ({item, scope}) => {
+const Cancel = ({item, scope}: Props) => {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -37,3 +37,8 @@ Cancel.propTypes = {
 };
 
 export default Cancel;
+
+interface Props {
+    item: any;
+    scope: string;
+}

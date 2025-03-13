@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import {Closure} from '../../../../Utils';
 
 
-const PropertyCallback = ({onChange}) => {
+const PropertyCallback = ({onChange}: Props) => {
     const [switchCallback, setSwitchCallback] = React.useState(false);
 
     const handleSwitch = ({target}) => {
@@ -54,3 +54,7 @@ PropertyCallback.propTypes = {
 };
 
 export default PropertyCallback;
+
+interface Props {
+    onChange: any;
+}

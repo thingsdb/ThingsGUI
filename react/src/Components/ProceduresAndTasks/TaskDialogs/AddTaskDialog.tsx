@@ -36,7 +36,7 @@ const initState: State = {
 
 const query = NEW_TASK_QUERY;
 
-const AddTaskDialog = ({open, onClose, scope}) => {
+const AddTaskDialog = ({open, onClose, scope}: Props) => {
     const [state, setState] = React.useState(initState);
     const {args, blob, closure, error, jsonArgs, queryString, start} = state;
 
@@ -225,6 +225,11 @@ AddTaskDialog.propTypes = {
 
 export default AddTaskDialog;
 
+interface Props {
+    open: boolean;
+    onClose: () => void;
+    scope: string;
+}
 interface State {
     args: any[];
     blob: any;

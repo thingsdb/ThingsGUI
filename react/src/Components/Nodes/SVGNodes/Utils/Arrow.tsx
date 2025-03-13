@@ -4,7 +4,7 @@ import React from 'react';
 import './Arrow.css';
 
 
-const Arrow = ({startPointX, startPointY, endPointX, endPointY}) => {
+const Arrow = ({startPointX, startPointY, endPointX, endPointY}: Props) => {
 
     return(
         <React.Fragment>
@@ -25,3 +25,10 @@ Arrow.propTypes = {
 };
 
 export default Arrow;
+
+interface Props {
+    startPointX: number;
+    startPointY: number;
+    endPointX: number;
+    endPointY: number;
+}

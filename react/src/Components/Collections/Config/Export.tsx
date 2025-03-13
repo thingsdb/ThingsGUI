@@ -37,7 +37,7 @@ const Label = styled(Typography)(({ theme }) => ({
 
 const tag = ExportCollectionTAG;
 
-const Export = ({collection}) => {
+const Export = ({collection}: Props) => {
     const [show, setShow] = React.useState(false);
     const [script, setScript] = React.useState('');
     const name = collection.name;
@@ -123,3 +123,7 @@ Export.propTypes = {
 };
 
 export default Export;
+
+interface Props {
+    collection: ICollection;
+}

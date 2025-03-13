@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 
 import {Closure} from '../../../../Utils';
 
-const PropertyMethod = ({onChange, input}) => {
+const PropertyMethod = ({onChange, input}: Props) => {
 
     const handleClosure = (c) => {
         onChange({definition:c});
@@ -28,3 +28,8 @@ PropertyMethod.propTypes = {
 export default PropertyMethod;
 
 
+
+interface Props {
+    onChange: any;
+    input: string;
+}

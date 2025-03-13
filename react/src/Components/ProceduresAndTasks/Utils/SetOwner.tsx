@@ -10,7 +10,7 @@ const withStores = withVlow([{
     keys: ['user', 'users']
 }]);
 
-const SetOwner = ({init, onChange, user, users}) => {
+const SetOwner = ({init, onChange, user, users}: IThingsdbStore & Props) => {
     const [owner, setOwner] = React.useState(user.name);
     let userList = users.length ? users : [user];
 
@@ -62,3 +62,8 @@ SetOwner.propTypes = {
 };
 
 export default withStores(SetOwner);
+
+interface Props {
+    init: string;
+    onChange: (d: string) => void;
+}

@@ -20,7 +20,7 @@ const AddLink = ({
     name = '',
     onChange,
     scope,
-}: Props) => {
+}: IEnumStore & ITypeStore & Props) => {
     const enumItems=[...(enums[scope]||[]).map(c=>(c.name))];
     const typeItems=[...(customTypes[scope]||[]).map(c=>c.name)];
     let stripped = revealCustomType(name);
@@ -66,8 +66,4 @@ interface Props {
     name: string;
     onChange: (name: string, category: 'type' | 'enum') => void;
     scope: string;
-
-    // TODOT stores
-    customTypes: any[];
-    enums: any[];
 }

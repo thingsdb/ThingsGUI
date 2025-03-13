@@ -18,7 +18,7 @@ const withStores = withVlow([{
 }]);
 
 
-const ThingRoot = ({things, collection}) => {
+const ThingRoot = ({things, collection}: ICollectionStore & Props) => {
     const [rootId, setRootId] = React.useState(null);
     const rootThing = things[rootId];
 
@@ -96,3 +96,7 @@ ThingRoot.propTypes = {
 
 
 export default withStores(ThingRoot);
+
+interface Props {
+    collection: ICollection;
+}

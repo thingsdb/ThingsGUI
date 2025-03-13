@@ -17,7 +17,7 @@ const withStores = withVlow([{
 const scope = THINGSDB_SCOPE;
 const itemKey = 'id';
 
-const Task = ({tasks}) => {
+const Task = ({tasks}: ITaskStore) => {
     let location = useLocation();
 
     const taskId = getNameFromPath(location.pathname, TASK_ROUTE);

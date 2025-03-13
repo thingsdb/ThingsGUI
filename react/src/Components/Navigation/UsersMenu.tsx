@@ -14,7 +14,7 @@ const withStores = withVlow([{
 }]);
 
 
-const UsersMenu = ({user, users}) => {
+const UsersMenu = ({user, users}: IThingsdbStore) => {
     const [open, setOpen] = React.useState(false);
 
     const handleRefresh = () => {

@@ -15,7 +15,7 @@ const withStores = withVlow([{
 }]);
 
 
-const Nodes = ({nodes, connectedNode}) => {
+const Nodes = ({nodes, connectedNode}: INodesStore) => {
 
     const handleRefresh = React.useCallback(() => {
         NodesActions.getNodes();

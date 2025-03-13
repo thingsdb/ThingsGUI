@@ -9,7 +9,7 @@ import { RemoveModuleTAG } from '../../../Constants/Tags';
 
 const tag = RemoveModuleTAG;
 
-const Remove = ({nodeId, item}) => {
+const Remove = ({nodeId, item}: Props) => {
     const handleClickOk = (callback) => {
         NodesActions.delModule(
             nodeId,
@@ -36,3 +36,8 @@ Remove.propTypes = {
 };
 
 export default Remove;
+
+interface Props {
+    nodeId: number;
+    item: any;
+}

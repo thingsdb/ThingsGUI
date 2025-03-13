@@ -25,7 +25,7 @@ const validation = (name, users) => {
 
 const tag = AddUserTAG;
 
-const Add = ({open, onClose, users}) => {
+const Add = ({open, onClose, users}: IThingsdbStore & Props) => {
     const [name, setName] = React.useState('');
     const [err, setErr] = React.useState('');
 
@@ -93,3 +93,8 @@ Add.propTypes = {
 };
 
 export default withStores(Add);
+
+interface Props {
+    open: boolean;
+    onClose: () => void;
+}

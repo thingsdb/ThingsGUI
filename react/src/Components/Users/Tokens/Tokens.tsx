@@ -18,7 +18,7 @@ import RemoveExpired from './RemoveExpired';
 
 const tag = TokensTAG;
 
-const Tokens = ({user}) => {
+const Tokens = ({user}: Props) => {
     const rows = user.tokens;
     const header = [{
         ky: 'created_on',
@@ -113,3 +113,7 @@ Tokens.propTypes = {
 };
 
 export default Tokens;
+
+interface Props {
+    user: IUser;
+}

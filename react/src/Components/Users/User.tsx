@@ -14,7 +14,7 @@ const withStores = withVlow([{
     keys: ['collections', 'user', 'users']
 }]);
 
-const User = ({user, users, collections}) => {
+const User = ({user, users, collections}: IThingsdbStore) => {
     let location = useLocation();
 
     React.useEffect(() => {

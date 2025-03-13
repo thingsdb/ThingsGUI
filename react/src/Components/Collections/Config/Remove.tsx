@@ -10,7 +10,7 @@ import { RemoveCollectionTAG } from '../../../Constants/Tags';
 
 const tag = RemoveCollectionTAG;
 
-const Remove = ({collection}) => {
+const Remove = ({collection}: Props) => {
     let navigate = useNavigate();
     let location = useLocation();
     const name = collection.name;
@@ -42,3 +42,7 @@ Remove.propTypes = {
 };
 
 export default Remove;
+
+interface Props {
+    collection: ICollection;
+}

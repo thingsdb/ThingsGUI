@@ -33,7 +33,7 @@ const tag = TypeEnumNetworkTag;
 const createEnumId = (id) => 'e' + id;
 const createTypeId = (id) => 't' + id;
 
-const TypeEnumNetwork = ({collection, customTypes, enums}: Props) => {
+const TypeEnumNetwork = ({collection, customTypes, enums}: IEnumStore & ITypeStore & Props) => {
     const theme = useTheme();
     const [search, setSearch] = React.useState('');
     const scope = `${COLLECTION_SCOPE}:${collection.name}`;
@@ -183,9 +183,5 @@ TypeEnumNetwork.propTypes = {
 export default withStores(TypeEnumNetwork);
 
 interface Props {
-    collection: any;
-
-    // TODOT stores
-    customTypes: any[];
-    enums: any[];
+    collection: ICollection;
 };

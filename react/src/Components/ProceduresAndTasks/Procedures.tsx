@@ -22,7 +22,7 @@ const Procedures = ({
     onCallback = () => null,
     procedures,
     scope,
-}: Props) => {
+}: IProcedureStore & Props) => {
     const [identifier, setIdentifier] = React.useState(null);
     const [open, setOpen] = React.useState({
         add: false,
@@ -98,7 +98,4 @@ interface Props {
     dialogsView: object;
     onCallback: (type: string, procedure: object) => void;
     scope: string;
-
-    // TODOT stores
-    procedures: any[];
 }

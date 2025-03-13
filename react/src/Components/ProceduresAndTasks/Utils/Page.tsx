@@ -6,7 +6,7 @@ import { EditProvider, TitlePage } from '../../Utils';
 import { Edit, Run } from '../Actions';
 
 
-const Page = ({item, itemKey, scope, type}) => (
+const Page = ({item, itemKey, scope, type}: Props) => (
     <TitlePage
         preTitle={`Customizing ThingDB ${type}:`}
         title={item[itemKey] || ''}
@@ -31,3 +31,10 @@ Page.propTypes = {
 };
 
 export default Page;
+
+interface Props {
+    item: any;
+    itemKey: string;
+    scope: string;
+    type: string;
+}

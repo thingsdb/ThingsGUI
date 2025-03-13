@@ -31,7 +31,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
     margin: theme.spacing(0.5),
 }));
 
-const DashboardContent = ({allNodeInfo, collections, users, nodes}) => {
+const DashboardContent = ({allNodeInfo, collections, users, nodes}: IThingsdbStore & INodesStore) => {
     const handleRefresh = () => {
         NodesActions.getNodes(()=>NodesActions.getDashboardInfo());
         ThingsdbActions.getCollections();

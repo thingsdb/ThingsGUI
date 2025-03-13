@@ -9,7 +9,7 @@ import { RemoveNodeTAG } from '../../../Constants/Tags';
 
 const tag = RemoveNodeTAG;
 
-const Remove = ({node}) => {
+const Remove = ({node}: Props) => {
     const name = `${node.node_name}:${node.port}`;
 
     const handleClickOk = (callback) => {
@@ -37,3 +37,7 @@ Remove.propTypes = {
 };
 
 export default Remove;
+
+interface Props {
+    node: INode;
+}

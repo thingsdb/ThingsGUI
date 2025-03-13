@@ -11,7 +11,7 @@ import {RemoveBackupTAG} from '../../../Constants/Tags';
 
 const tag = RemoveBackupTAG;
 
-const Remove = ({nodeId, backup}) => {
+const Remove = ({nodeId, backup}: Props) => {
     const [show, setShow] = React.useState(false);
     const [deleteFile, setDeleteFile] = React.useState(false);
 
@@ -69,3 +69,8 @@ Remove.propTypes = {
 };
 
 export default Remove;
+
+interface Props {
+    nodeId: number;
+    backup: any;
+}

@@ -8,7 +8,7 @@ import Switch from '@mui/material/Switch';
 import PropertyVal from './PropertyVal';
 
 
-const PropertyInitVal = ({category, onChange, scope}) => {
+const PropertyInitVal = ({category, onChange, scope}: Props) => {
     const [switchInit, setSwitchInit] = React.useState(false);
 
     const handleSwitch = ({target}) => {
@@ -52,3 +52,9 @@ PropertyInitVal.propTypes = {
 };
 
 export default PropertyInitVal;
+
+interface Props {
+    category: string;
+    onChange: any;
+    scope: string;
+}

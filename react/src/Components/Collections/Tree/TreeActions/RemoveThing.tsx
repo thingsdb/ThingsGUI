@@ -26,7 +26,7 @@ import {
 } from '../../../../TiQueries/Queries';
 
 const tag = RemoveThingTAG;
-const RemoveThing = ({child, onClose, parent, scope}) => {
+const RemoveThing = ({child, onClose, parent, scope}: Props) => {
     const [show, setShow] = React.useState(false);
     const [state, setState] = React.useState({
         jsonArgs: '',
@@ -165,3 +165,7 @@ RemoveThing.propTypes = {
 };
 
 export default RemoveThing;
+
+interface Props {
+    [index: string]: any;
+}

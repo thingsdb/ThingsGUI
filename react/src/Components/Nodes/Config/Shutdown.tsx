@@ -9,7 +9,7 @@ import { ShutdownTAG } from '../../../Constants/Tags';
 
 const tag = ShutdownTAG;
 
-const Shutdown = ({node}) => {
+const Shutdown = ({node}: Props) => {
 
     const handleClickOk = (callback) => {
         NodesActions.shutdown(
@@ -35,3 +35,7 @@ Shutdown.propTypes = {
 };
 
 export default Shutdown;
+
+interface Props {
+    node: INode;
+}

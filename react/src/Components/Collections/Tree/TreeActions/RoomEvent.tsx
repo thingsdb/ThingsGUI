@@ -25,7 +25,7 @@ const withStores = withVlow([{
 }]);
 
 
-const RoomEvent = ({room, events}) => {
+const RoomEvent = ({room, events}: IEventStore & Props) => {
     const [checked, setChecked] = React.useState({});
 
     const handleChange = (index) => () => {
@@ -117,3 +117,7 @@ RoomEvent.propTypes = {
 };
 
 export default withStores(RoomEvent);
+
+interface Props {
+    room: string;
+}

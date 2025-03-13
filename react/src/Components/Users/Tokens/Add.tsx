@@ -24,7 +24,7 @@ const initialState: State = {
 
 const tag = AddTokenTAG;
 
-const Add = ({user}) => {
+const Add = ({user}: Props) => {
     const [state, setState] = React.useState(initialState);
     const {show, form, switches} = state;
 
@@ -168,6 +168,9 @@ Add.propTypes = {
 
 export default Add;
 
+interface Props {
+    user: IUser;
+}
 interface State {
     show: boolean;
     form: any;

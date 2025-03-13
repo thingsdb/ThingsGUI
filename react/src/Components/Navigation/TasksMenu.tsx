@@ -15,7 +15,7 @@ const withStores = withVlow([{
 
 
 const scope = THINGSDB_SCOPE;
-const TasksMenu = ({tasks}) => {
+const TasksMenu = ({tasks}: ITaskStore) => {
     const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {

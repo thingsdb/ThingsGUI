@@ -29,7 +29,7 @@ const initialState = {
 
 const tag = AddBackupTAG;
 
-const Add = ({nodeId}) => {
+const Add = ({nodeId}: Props) => {
     const [state, setState] = React.useState(initialState);
     const {show, form, switches} = state;
 
@@ -166,3 +166,7 @@ Add.propTypes = {
 };
 
 export default Add;
+
+interface Props {
+    nodeId: number;
+}

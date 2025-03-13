@@ -5,7 +5,7 @@ import React from 'react';
 import {ThingsdbActions} from '../../../Stores/ThingsdbStore';
 import {WarnPopover} from '../../Utils';
 
-const RemoveExpired = ({tag}) => {
+const RemoveExpired = ({tag}: Props) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
 
@@ -37,3 +37,7 @@ RemoveExpired.propTypes = {
 };
 
 export default RemoveExpired;
+
+interface Props {
+    tag: string;
+}

@@ -43,7 +43,7 @@ const headerTable = [
 
 const link = THINGS_DOC_BACKUP_INFO;
 
-const Backup = ({nodeId, offline, backups}) => {
+const Backup = ({nodeId, offline, backups}: INodesStore & Props) => {
     const handleRefresh = () => {
         NodesActions.getBackups(nodeId); // update of the selected node; to get the latest info
     };
@@ -113,3 +113,8 @@ Backup.propTypes = {
 };
 
 export default withStores(Backup);
+
+interface Props {
+    nodeId: number;
+    offline: boolean;
+}

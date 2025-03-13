@@ -8,7 +8,7 @@ import {ThingsdbActions} from '../../../Stores';
 import {WarnPopover} from '../../Utils';
 
 
-const Remove = ({token, tag}) => {
+const Remove = ({token, tag}: Props) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClickOk = () => {
@@ -43,3 +43,8 @@ Remove.propTypes = {
 };
 
 export default Remove;
+
+interface Props {
+    token: any;
+    tag: string;
+}

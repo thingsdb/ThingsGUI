@@ -30,7 +30,7 @@ const nodeNotReady = (nodes) => {
     return false;
 };
 
-const Restore = ({nodes}) => {
+const Restore = ({nodes}: Props) => {
     const [state, setState] = React.useState(initialState);
     const {show, fileName, takeAccess, restoreTasks, showRedirectModal} = state;
 
@@ -175,3 +175,7 @@ Restore.propTypes = {
 };
 
 export default Restore;
+
+interface Props {
+    nodes: INode[];
+}

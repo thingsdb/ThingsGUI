@@ -13,7 +13,7 @@ const withStores = withVlow([{
     keys: ['collections']
 }]);
 
-const CollectionsMenu = ({collections}) => {
+const CollectionsMenu = ({collections}: IThingsdbStore) => {
     const [open, setOpen] = React.useState(false);
 
     const handleRefresh = () => {

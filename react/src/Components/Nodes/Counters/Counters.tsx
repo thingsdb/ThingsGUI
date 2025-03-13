@@ -53,7 +53,7 @@ const header = [
 
 const link = THINGS_DOC_COUNTERS;
 
-const Counters = ({nodeId, offline, counters}) => {
+const Counters = ({nodeId, offline, counters}: INodesStore & Props) => {
 
     const handleRefresh = () => {
         NodesActions.getCounters(nodeId); // update of the selected node; to get the latest info
@@ -94,3 +94,8 @@ Counters.propTypes = {
 };
 
 export default withStores(Counters);
+
+interface Props {
+    nodeId: number;
+    offline: boolean;
+}

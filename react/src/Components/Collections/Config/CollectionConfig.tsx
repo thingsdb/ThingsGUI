@@ -8,7 +8,7 @@ import ExportCollection from './Export';
 import RemoveCollection from './Remove';
 import RenameCollection from './Rename';
 
-const CollectionConfig = ({collection}) => {
+const CollectionConfig = ({collection}: Props) => {
 
     const buttons = [
         {
@@ -46,3 +46,7 @@ CollectionConfig.propTypes = {
 };
 
 export default CollectionConfig;
+
+interface Props {
+    collection: ICollection;
+}

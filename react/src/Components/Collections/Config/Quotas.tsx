@@ -22,7 +22,7 @@ const initialState: State = {
 
 const tag = QuotasTAG;
 
-const Quotas = ({collection}) => {
+const Quotas = ({collection}: Props) => {
     const [state, setState] = React.useState(initialState);
     const {show, form} = state;
 
@@ -153,6 +153,9 @@ Quotas.propTypes = {
 
 export default Quotas;
 
+interface Props {
+    collection: ICollection;
+}
 interface State {
     show: boolean;
     form: any;

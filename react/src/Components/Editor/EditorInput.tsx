@@ -17,7 +17,7 @@ const withStores = withVlow([{
 
 
 const tag = EditorTAG;
-const Editor = ({height, history, input, loading, onQuery}) => {
+const Editor = ({height, history, input, loading, onQuery}: IEditorStore & Props) => {
     let [searchParams] = useSearchParams();
 
     const [query, setQuery] = React.useState(() => {
@@ -124,3 +124,10 @@ Editor.propTypes = {
 };
 
 export default withStores(Editor);
+
+interface Props {
+    height: number;
+    input: string;
+    loading: boolean;
+    onQuery: (d: string) => void;
+}

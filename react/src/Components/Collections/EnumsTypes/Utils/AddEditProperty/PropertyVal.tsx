@@ -18,7 +18,7 @@ const withStores = withVlow([{
 }]);
 
 
-const PropertyVal = ({category, onChange, customTypes, enums, scope}) => {
+const PropertyVal = ({category, onChange, customTypes, enums, scope}: IEnumStore & ITypeStore & Props) => {
     const editState = useEdit()[0];
     const {val, blob} = editState;
     const [dataType, setDataType] = React.useState(STR);
@@ -73,3 +73,9 @@ PropertyVal.propTypes = {
 };
 
 export default withStores(PropertyVal);
+
+interface Props {
+    category: string;
+    onChange: any;
+    scope: string;
+}

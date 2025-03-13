@@ -28,7 +28,7 @@ const Tasks = ({
     onCallback = () => null,
     tasks,
     scope,
-}: Props) => {
+}: ITaskStore & Props) => {
     const [identifier, setIdentifier] = React.useState(null);
     const [open, setOpen] = React.useState({
         add: false,
@@ -105,7 +105,4 @@ interface Props {
     dialogsView: object;
     onCallback: (type: string, task: object) => void;
     scope: string;
-
-    // TODOT stores
-    tasks: any[];
 }

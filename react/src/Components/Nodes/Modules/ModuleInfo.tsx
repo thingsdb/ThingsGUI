@@ -100,7 +100,7 @@ const ModuleInfo = ({
     item = {},
     nodeId,
     _module
-}: Props) => {
+}: INodesStore & Props) => {
     const [show, setShow] = React.useState(false);
     const [edit, setEdit] = React.useState({});
     const [form, setForm] = React.useState({});
@@ -266,7 +266,4 @@ export default withStores(ModuleInfo);
 interface Props {
     item: any;
     nodeId: number;
-
-    // TODOT stores
-    _module: any;
 }

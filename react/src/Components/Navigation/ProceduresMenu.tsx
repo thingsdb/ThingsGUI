@@ -14,7 +14,7 @@ const withStores = withVlow([{
 }]);
 
 const scope = THINGSDB_SCOPE;
-const ProceduresMenu = ({procedures}) => {
+const ProceduresMenu = ({procedures}: IProcedureStore) => {
     const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {

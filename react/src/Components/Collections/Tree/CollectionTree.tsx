@@ -21,7 +21,7 @@ const Transition = React.forwardRef((props, ref) => {
 });
 
 
-const CollectionTree = ({collection}) => {
+const CollectionTree = ({collection}: Props) => {
     const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {
@@ -79,3 +79,7 @@ CollectionTree.propTypes = {
 };
 
 export default CollectionTree;
+
+interface Props {
+    collection: ICollection;
+}

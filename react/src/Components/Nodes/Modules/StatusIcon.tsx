@@ -5,7 +5,7 @@ import SuccessIcon from '@mui/icons-material/Check';
 import Tooltip from '@mui/material/Tooltip';
 
 
-const StatusIcon = ({status}) => (
+const StatusIcon = ({status}: Props) => (
     status === 'running' ? (
         <Tooltip disableFocusListener disableTouchListener title={status}>
             <SuccessIcon sx={{color: 'primary.green'}} />
@@ -22,3 +22,7 @@ StatusIcon.propTypes = {
 };
 
 export default StatusIcon;
+
+interface Props {
+    status: string;
+}

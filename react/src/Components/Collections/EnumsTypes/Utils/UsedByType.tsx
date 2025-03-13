@@ -18,7 +18,7 @@ const UsedByType = ({
     name = '',
     onChangeItem,
     scope,
-}: Props) => {
+}: ITypeStore & Props) => {
     const pattern = '\\b' + name + '\\b';
     const re= new RegExp(pattern);
     const u = customTypes[scope] && name ? customTypes[scope].filter(i => re.test(`${i.fields}`)) : [];
@@ -66,7 +66,4 @@ interface Props {
     name: string;
     onChangeItem: (name: string, category: 'type') => void;
     scope: string;
-
-    // TODOT stores
-    customTypes: any[];
 }

@@ -31,7 +31,7 @@ const header = [
 
 const link = THINGS_DOC_MODULE_INFO;
 
-const Modules = ({nodeId, offline, modules}) => {
+const Modules = ({nodeId, offline, modules}: INodesStore & Props) => {
 
     const handleRefresh = () => {
         NodesActions.getModules(nodeId); // update of the selected node; to get the latest info
@@ -79,3 +79,8 @@ Modules.propTypes = {
 };
 
 export default withStores(Modules);
+
+interface Props {
+    nodeId: number;
+    offline: boolean;
+}

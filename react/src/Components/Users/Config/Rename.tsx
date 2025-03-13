@@ -34,7 +34,7 @@ const validation = {
 
 const tag = RenameUserTAG;
 
-const Rename = ({user, users}) => {
+const Rename = ({user, users}: IThingsdbStore & Props) => {
     let navigate = useNavigate();
     let location = useLocation();
 
@@ -126,6 +126,9 @@ Rename.propTypes = {
 
 export default withStores(Rename);
 
+interface Props {
+    user: IUser;
+}
 interface State {
     show: boolean;
     errors: any;

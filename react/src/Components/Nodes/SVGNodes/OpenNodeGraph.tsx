@@ -18,7 +18,7 @@ const withStores = withVlow([{
 }]);
 
 
-const OpenNodeGraph = ({nodes, streamInfo}) => {
+const OpenNodeGraph = ({nodes, streamInfo}: INodesStore & Props) => {
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const hasStreamInfo = nodes.length > 1;
@@ -95,3 +95,7 @@ OpenNodeGraph.propTypes = {
 };
 
 export default withStores(OpenNodeGraph);
+
+interface Props {
+    nodes: INode[];  // TODOT
+}

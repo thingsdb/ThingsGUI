@@ -9,7 +9,7 @@ import { RemoveUserTAG } from '../../../Constants/Tags';
 
 const tag = RemoveUserTAG;
 
-const Remove = ({user}) => {
+const Remove = ({user}: Props) => {
     let navigate = useNavigate();
     let location = useLocation();
     const name = user.name;
@@ -38,3 +38,7 @@ Remove.propTypes = {
 };
 
 export default Remove;
+
+interface Props {
+    user: IUser;
+}

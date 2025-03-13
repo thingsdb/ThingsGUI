@@ -42,7 +42,7 @@ const initialState = {
 
 const tag = LoglevelTAG;
 
-const Loglevel = ({node}) => {
+const Loglevel = ({node}: Props) => {
     const [state, setState] = React.useState(initialState);
     const {show, logLevel} = state;
 
@@ -123,3 +123,7 @@ Loglevel.propTypes = {
 };
 
 export default Loglevel;
+
+interface Props {
+    node: INode;
+}

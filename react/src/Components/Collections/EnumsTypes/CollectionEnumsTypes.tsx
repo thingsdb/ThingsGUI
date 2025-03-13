@@ -20,7 +20,7 @@ const withStores = withVlow([{
 }]);
 
 
-const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
+const CollectionEnumsTypes = ({scope, customTypes, enums}: IEnumStore & ITypeStore & Props) => {
     const types = [
         ANY,
         BOOL,
@@ -178,3 +178,7 @@ CollectionEnumsTypes.propTypes = {
 };
 
 export default withStores(CollectionEnumsTypes);
+
+interface Props {
+    scope: string;
+}

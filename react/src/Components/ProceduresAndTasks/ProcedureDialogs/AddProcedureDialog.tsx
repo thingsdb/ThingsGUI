@@ -28,7 +28,7 @@ const initState: State = {
 
 const query = NEW_PROCEDURE_QUERY;
 
-const AddProcedureDialog = ({open, onClose, scope}) => {
+const AddProcedureDialog = ({open, onClose, scope}: Props) => {
     const [state, setState] = React.useState(initState);
     const {closure, error, jsonArgs, procedureName, queryString} = state;
 
@@ -160,6 +160,11 @@ AddProcedureDialog.propTypes = {
 
 export default AddProcedureDialog;
 
+interface Props {
+    open: boolean;
+    onClose: () => void;
+    scope: string;
+}
 interface State {
     closure: string;
     error: string;

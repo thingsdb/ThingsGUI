@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-const PropertyName = ({onChange, input, ...props}) => {
+const PropertyName = ({onChange, input, ...props}: Props) => {
     const [propertyName, setPropertyName] = React.useState(input);
 
     const handlePropertyName = ({target}) => {
@@ -34,3 +34,8 @@ PropertyName.propTypes = {
 export default PropertyName;
 
 
+
+interface Props {
+    onChange: any;
+    input: string;
+}

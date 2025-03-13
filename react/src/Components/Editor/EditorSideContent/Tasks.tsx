@@ -5,7 +5,7 @@ import { Tasks } from '../../ProceduresAndTasks';
 import { NEW_TASK_EMPTY_QUERY, TASK_FORMAT_QUERY } from '../../../TiQueries/Queries';
 
 
-const TasksEditor = ({onSetQueryInput, scope}) => {
+const TasksEditor = ({onSetQueryInput, scope}: Props) => {
 
     const handleCallback = (type, task) => {
         switch(type){
@@ -38,3 +38,8 @@ TasksEditor.propTypes = {
 };
 
 export default TasksEditor;
+
+interface Props {
+    onSetQueryInput: (d: string) => void;
+    scope: string;
+}

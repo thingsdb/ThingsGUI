@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 
 import {AutoSelect} from '../../../../Utils';
 
-const PropertyRelation = ({dropdownItems, onChange, input}) => {
+const PropertyRelation = ({dropdownItems, onChange, input}: Props) => {
     const [relation, setRelation] = React.useState(input);
 
     const handleProperty = (value) => {
@@ -47,3 +47,9 @@ PropertyRelation.propTypes = {
 };
 
 export default PropertyRelation;
+
+interface Props {
+    dropdownItems: string[];
+    onChange: any;
+    input: any;
+}

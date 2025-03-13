@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { StartStopPolling } from '../../Utils';
 
-const Buttons = ({extraButtons, link, onRefresh, title}) => (
+const Buttons = ({extraButtons, link, onRefresh, title}: Props) => (
     <Grid container size={12}>
         <Grid container size={6} spacing={1}>
             {extraButtons.map((b, i) => (
@@ -47,3 +47,10 @@ Buttons.propTypes = {
 };
 
 export default Buttons;
+
+interface Props {
+    extraButtons: any[];
+    link: string;
+    onRefresh: () => void;
+    title: string;
+}

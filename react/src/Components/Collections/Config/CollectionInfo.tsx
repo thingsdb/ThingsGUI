@@ -6,7 +6,7 @@ import React from 'react';
 import {DATE_TIME_SEC_STR} from '../../../Constants/DateStrings';
 
 
-const CollectionInfo = ({collection}) => {
+const CollectionInfo = ({collection}: Props) => {
     const header = [
         {ky: 'title1', title: 'GENERAL', labels: [
             {ky: 'collection_id', label: 'Collection ID'},
@@ -28,3 +28,7 @@ CollectionInfo.propTypes = {
 };
 
 export default CollectionInfo;
+
+interface Props {
+    collection: ICollection;
+}

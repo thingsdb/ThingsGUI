@@ -10,7 +10,7 @@ import {Modules} from './Modules';
 import {NodesActions} from '../../Stores';
 
 
-const Node = ({selectedNode}) => {
+const Node = ({selectedNode}: Props) => {
     const [tabIndex, setTabIndex] = React.useState(0);
 
     React.useEffect(() => {
@@ -70,3 +70,7 @@ Node.propTypes = {
 };
 
 export default Node;
+
+interface Props {
+    selectedNode: INode;
+}

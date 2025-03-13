@@ -102,7 +102,7 @@ const EditTask = ({
     taskId = null,
     task,
     scope,
-}: Props) => {
+}: ITaskStore & Props) => {
     const [queryString, setQueryString] = React.useState({args: '', closure: '', owner: ''});
     const [jsonArgs, setJsonArgs] = React.useState<any>({args: '', closure: '', owner: ''});
     const [blob, setBlob] = React.useState({});
@@ -178,7 +178,4 @@ export default withStores(EditTask);
 interface Props {
     taskId: number;
     scope: string;
-
-    // TODOT stores
-    task: any;
 }

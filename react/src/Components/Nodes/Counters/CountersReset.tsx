@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import {NodesActions} from '../../../Stores';
 
 
-const CountersReset = ({nodeId}) => {
+const CountersReset = ({nodeId}: Props) => {
 
     const handleClickOk = () => {
         NodesActions.resetCounters(nodeId);
@@ -22,3 +22,7 @@ CountersReset.propTypes = {
 };
 
 export default CountersReset;
+
+interface Props {
+    nodeId: number;
+}

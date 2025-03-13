@@ -10,7 +10,7 @@ import { RemoveProcedureTAG } from '../../../Constants/Tags';
 
 const tag = RemoveProcedureTAG;
 
-const Remove = ({item, scope, type}) => {
+const Remove = ({item, scope, type}: Props) => {
     let navigate = useNavigate();
     let location = useLocation();
     const name = type === 'procedure' ? item.name : item.id;
@@ -39,3 +39,9 @@ Remove.propTypes = {
 };
 
 export default Remove;
+
+interface Props {
+    item: any;
+    scope: string;
+    type: string;
+}

@@ -19,7 +19,7 @@ const withStores = withVlow([{
 }]);
 
 
-const SelectScope = ({onChangeScope, collections, nodes}) => {
+const SelectScope = ({onChangeScope, collections, nodes}: IThingsdbStore & INodesStore & Props) => {
     let [searchParams, setSearchParams] = useSearchParams();
 
     const [name, setName] = React.useState(() => {
@@ -87,3 +87,7 @@ SelectScope.propTypes = {
 };
 
 export default withStores(SelectScope);
+
+interface Props {
+    onChangeScope: (d: string) => void;
+}

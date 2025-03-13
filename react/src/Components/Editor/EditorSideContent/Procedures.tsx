@@ -4,7 +4,7 @@ import React from 'react';
 import { Procedures } from '../../ProceduresAndTasks';
 import { NEW_PROCEDURE_EMPTY_QUERY, RUN_FORMAT_QUERY, WSE_FORMAT_QUERY } from '../../../TiQueries/Queries';
 
-const ProceduresEditor = ({onSetQueryInput, scope}) => {
+const ProceduresEditor = ({onSetQueryInput, scope}: Props) => {
 
     const handleCallback = (type, procedure) => {
         switch(type){
@@ -37,3 +37,8 @@ ProceduresEditor.propTypes = {
 };
 
 export default ProceduresEditor;
+
+interface Props {
+    onSetQueryInput: (d: string) => void;
+    scope: string;
+}

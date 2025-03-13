@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import {EditActions, useEdit} from '../../../Utils';
 import {SET, THING} from '../../../../Constants/ThingTypes';
 
-const TypeInit = ({type, customTypes, dataTypes, onChange, input}) => {
+const TypeInit = ({type, customTypes, dataTypes, onChange, input}: Props) => {
     const dispatch = useEdit()[1];
 
     const handleOnChangeType = ({target}) => {
@@ -45,3 +45,11 @@ TypeInit.propTypes = {
 };
 
 export default TypeInit;
+
+interface Props {
+    onChange: any;
+    customTypes: IType[];
+    type: string;
+    dataTypes: string[];  // TODOT enum
+    input: string;
+}

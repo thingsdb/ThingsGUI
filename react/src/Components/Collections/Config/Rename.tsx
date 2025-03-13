@@ -35,7 +35,7 @@ const validation = {
 
 const tag = RenameCollectionTAG;
 
-const Rename = ({collection, collections}) => {
+const Rename = ({collection, collections}: IThingsdbStore & Props) => {
     const [state, setState] = React.useState(initialState);
     let navigate = useNavigate();
     let location = useLocation();
@@ -132,6 +132,9 @@ Rename.propTypes = {
 
 export default withStores(Rename);
 
+interface Props {
+    collection: ICollection;
+}
 interface State {
     show: boolean;
     errors: any;

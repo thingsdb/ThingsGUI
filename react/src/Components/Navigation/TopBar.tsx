@@ -35,7 +35,7 @@ const TopBar = ({
     pageIcon,
     user,
     title = null,
-}: Props) => {
+}: IThingsdbStore & Props) => {
     let navigate = useNavigate();
     let location = useLocation();
     const handleClickLogout = () => {
@@ -140,7 +140,4 @@ interface Props {
     menuIcon: any;
     pageIcon: any;
     title: any;
-
-    // TODOT stores
-    user: any;
 }

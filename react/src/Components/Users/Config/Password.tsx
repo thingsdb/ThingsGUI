@@ -33,7 +33,7 @@ const validation = {
 
 const tag = PasswordTAG;
 
-const Password = ({user}) => {
+const Password = ({user}: Props) => {
     const [state, setState] = React.useState(initialState);
     const {show, showPassword, errors, form} = state;
 
@@ -169,6 +169,9 @@ Password.propTypes = {
 
 export default Password;
 
+interface Props {
+    user: IUser;
+}
 interface State {
     show: boolean;
     showPassword: boolean;

@@ -17,7 +17,7 @@ const withStores = withVlow([{
     keys: ['customTypes']
 }]);
 
-const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}) => {
+const EnumsTypes = ({customTypes, enums, onSetQueryInput, scope}: IEnumStore & ITypeStore & Props) => {
     const [viewEnum, setViewEnum] = React.useState({
         open: false,
         name: '',
@@ -157,3 +157,8 @@ EnumsTypes.propTypes = {
 };
 
 export default withStores(EnumsTypes);
+
+interface Props {
+    onSetQueryInput: (d: string) => void;
+    scope: string;
+}

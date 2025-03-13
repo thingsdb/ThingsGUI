@@ -13,7 +13,7 @@ const withStores = withVlow([{
 
 const reNumbers = /[0-9]+/g;
 
-const RoomJoin = ({scope, tag, room, ids}) => {
+const RoomJoin = ({scope, tag, room, ids}: IEventStore & Props) => {
     const roomId = room.includes('room:') ? room.match(reNumbers)[0] : null;
     const hasJoined = Boolean(roomId !== null && ids[roomId]);
 
@@ -51,3 +51,9 @@ RoomJoin.propTypes = {
 };
 
 export default withStores(RoomJoin);
+
+interface Props {
+    scope: string;
+    tag: string;
+    room: string;
+}

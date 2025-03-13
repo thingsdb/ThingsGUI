@@ -8,7 +8,7 @@ import Procedures from './Procedures';
 import Tasks from './Tasks';
 
 
-const EditorSideContent = ({scope, onSetQueryInput}) => (
+const EditorSideContent = ({scope, onSetQueryInput}: Props) => (
     <React.Fragment>
         {scope.includes(NODE_SCOPE) ? null : (
             <React.Fragment>
@@ -32,3 +32,8 @@ EditorSideContent.propTypes = {
 };
 
 export default EditorSideContent;
+
+interface Props {
+    scope: string;
+    onSetQueryInput: (d: string) => void;
+}

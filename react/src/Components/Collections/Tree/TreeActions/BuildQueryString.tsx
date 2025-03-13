@@ -11,7 +11,7 @@ import {
     THING_SET_ADD_FORMAT_QUERY,
 } from '../../../../TiQueries/Queries';
 
-const BuildQueryString = ({child, customTypes, enums, parent}) => {
+const BuildQueryString = ({child, customTypes, enums, parent}: Props) => {
     const [editState, dispatch] = useEdit();
     const {val, query} = editState;
 
@@ -74,3 +74,10 @@ BuildQueryString.propTypes = {
 };
 
 export default BuildQueryString;
+
+interface Props {
+    child: any;
+    customTypes: IType[];
+    enums: IEnum[];
+    parent: any;
+}

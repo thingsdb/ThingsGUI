@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 
-const ThingsBounds = ({ onChange, total }) => {
+const ThingsBounds = ({ onChange, total }: Props) => {
     const [from, setFrom] = React.useState('0');
     const [till, setTill] = React.useState('99');
 
@@ -76,3 +76,8 @@ ThingsBounds.propTypes = {
 };
 
 export default ThingsBounds;
+
+interface Props {
+    onChange: any;
+    total: number;
+}
