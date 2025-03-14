@@ -47,5 +47,5 @@ export default PropInit;
 interface Props {
     onChange: (value: string) => void;
     input: string;
-    thing: object;
+    thing: any;
 }

@@ -81,7 +81,7 @@ export default VerticalTabs;
 
 interface Props {
     headers: string[];
-    panels: object[];
+    panels: any[];
 }
 interface TabPanelProps {
     children: React.ReactNode;

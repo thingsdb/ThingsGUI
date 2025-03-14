@@ -76,6 +76,6 @@ export default withStores(PropertyVal);
 
 interface Props {
     category: string;
-    onChange: any;
+    onChange: (d: object) => void;
     scope: string;
 }

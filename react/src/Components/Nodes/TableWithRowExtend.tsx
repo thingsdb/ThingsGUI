@@ -125,7 +125,7 @@ export default Tabel;
 
 interface Props {
     buttons: any;
-    canExtend: any;
+    canExtend: (row: any) => boolean;
     header: any[];
     rows: any[];
     rowExtend: any;

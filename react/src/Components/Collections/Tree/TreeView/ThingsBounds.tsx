@@ -78,6 +78,6 @@ ThingsBounds.propTypes = {
 export default ThingsBounds;
 
 interface Props {
-    onChange: any;
+    onChange: (d: object) => void;
     total: number;
 }

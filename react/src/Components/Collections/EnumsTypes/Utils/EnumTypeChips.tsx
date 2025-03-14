@@ -450,12 +450,12 @@ interface Props {
     categoryInit: string;
     datatypes?: string[];
     items?: any[];
-    onChange?: (...args: unknown[]) => (...args: unknown[]) => void;
-    onClose?: (...args: unknown[]) => void;
-    onDelete?: (...args: unknown[]) => void;
+    onChange?: (a: string) => (n: string, c: string) => void;
+    onClose?: (a: string, c: string) => void;
+    onDelete?: (...args: unknown[]) => void;  // EnumActions.deleteEnum | TypeActions.deleteType
     onInfo?: (scope: string, tag: string) => void;
     onMakeInstanceInit?: (...args: unknown[]) => void;
-    onRename?: (...args: unknown[]) => void;
+    onRename?: (...args: unknown[]) => void;  // EnumActions.renameEnum | TypeActions.renameType
     onSetQueryInput?: (...args: unknown[]) => void;
     scope: string;
     tag: string;

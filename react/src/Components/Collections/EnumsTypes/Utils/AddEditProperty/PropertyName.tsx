@@ -36,6 +36,9 @@ export default PropertyName;
 
 
 interface Props {
-    onChange: any;
+    onChange: (d: object) => void;
     input: string;
+
+    // TextFieldProps
+    autoFocus?: boolean;
 }

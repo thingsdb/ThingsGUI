@@ -141,10 +141,14 @@ class TaskStore extends BaseStore {
 export {TaskActions, TaskStore};
 
 declare global {
+    interface ITask {
+        name: string;
+        [index: string]: unkown;
+    }
     interface ITaskStore {
-        task: any;
+        task: ITask;
         tasks: {
-            [index: string]: any[];
+            [index: string]: ITask[];
         };
     }
 }

@@ -236,7 +236,7 @@ interface Props {
     getInfo: (scope: string, tag: string) => void;
     onClose: () => void;
     open: boolean;
-    queries: object;
+    queries: any;
     scope: string;
     link: string;
 }

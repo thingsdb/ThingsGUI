@@ -46,6 +46,6 @@ interface Props {
     data: any[];
     height?: number;
     radius?: number;
-    streamInfo?: object;
+    streamInfo?: any;
     width?: number;
 }

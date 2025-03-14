@@ -147,7 +147,7 @@ interface Props {
     headers: object;
     item?: any;
     link: string;
-    onChangeItem?: (...args: unknown[]) => void;
+    onChangeItem?: (name: string, category: string) => void;
     onClose: () => void;
     open?: boolean;
     rows: object;

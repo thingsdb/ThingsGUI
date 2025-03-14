@@ -31,7 +31,7 @@ Relation.propTypes = {
 export default Relation;
 
 interface Props {
-    onChange: any;
+    onChange: (a: string) => (n: string, c: string) => void;
     relation: any;
     scope: string;
     view: string;

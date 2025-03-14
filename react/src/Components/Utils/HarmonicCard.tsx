@@ -59,8 +59,8 @@ interface Props {
     content: any;
     expand?: boolean;
     noPadding?: boolean;
-    onCleanup: any;
-    onRefresh: any;
+    onCleanup?: () => void;
+    onRefresh?: () => void;
     title: any;
     unmountOnExit?: boolean;
 }

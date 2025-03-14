@@ -99,7 +99,7 @@ interface Props {
     buttonLabel: any;
     buttonProps: any;
     onClose?: () => void;
-    onSubmit: any;
+    onSubmit: (cb: () => void) => void;
     open?: boolean;
     tag: string;
     title: string;

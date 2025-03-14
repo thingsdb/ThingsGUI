@@ -45,5 +45,5 @@ export default Info;
 
 interface Props {
     header: any[];
-    content: object;
+    content: any;
 }

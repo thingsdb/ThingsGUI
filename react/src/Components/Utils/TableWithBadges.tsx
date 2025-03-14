@@ -94,5 +94,5 @@ interface Props {
     badgeButton: any;
     buttons: any;
     header: any[];
-    rows: object[];
+    rows: any[];
 }

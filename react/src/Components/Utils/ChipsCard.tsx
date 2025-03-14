@@ -140,10 +140,10 @@ export default ChipsCard;
 
 interface Props {
     itemKey?: string;
-    items: object[];
+    items: any[];
     moreButtons: any;
     onAdd: () => void;
-    onDelete: any;
+    onDelete: (id: string, cb: () => void, tag: string) => void;
     buttons: any;
     tag: string;
     title: string;

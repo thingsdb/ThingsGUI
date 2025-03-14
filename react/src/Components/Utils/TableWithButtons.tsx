@@ -60,6 +60,6 @@ export default TableWithButtons;
 
 interface Props {
     header: any[];
-    rows: object[];
+    rows: any[];
     buttons: any;
 }

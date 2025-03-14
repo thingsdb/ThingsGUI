@@ -92,4 +92,11 @@ interface Props {
     init: any;
     parent?: string;
     variables?: string[];
+
+    // spreaded props
+    fullWidth?: boolean;
+    label?: string;
+    name?: string;
+    margin?: string;
+    variant?: string;
 }

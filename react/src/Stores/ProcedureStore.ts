@@ -131,10 +131,14 @@ class ProcedureStore extends BaseStore {
 export {ProcedureActions, ProcedureStore};
 
 declare global {
+    interface IProcedure {
+        name: string;
+        [index: string]: unkown;
+    }
     interface IProcedureStore {
-        procedure: any;
+        procedure: IProcedure;
         procedures: {
-            [index: string]: any[];
+            [index: string]: IProcedure[];
         };
     }
 }

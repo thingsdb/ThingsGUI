@@ -67,11 +67,11 @@ export default Overview;
 interface Props {
     badgeButton?: (...args: unknown[]) => void;
     buttons?: (...args: unknown[]) => void;
-    headers: object;
+    headers: any;
     item?: any;
     link: string;
     onAdd?: (keys: string[]) => void;
-    onChangeItem?: (...args: unknown[]) => void;
-    rows: object;
+    onChangeItem?: (name: string, category: string) => void;
+    rows: any;
     scope: string;
 }

@@ -63,6 +63,6 @@ interface Props {
     createdAt: number;
     header: object[];
     modifiedAt: number;
-    onAdd: any;
+    onAdd: () => void;
     rows: object[];
 }

@@ -47,7 +47,7 @@ TypeInit.propTypes = {
 export default TypeInit;
 
 interface Props {
-    onChange: any;
+    onChange: (d: string) => void;
     customTypes: IType[];
     type: string;
     dataTypes: string[];  // TODOT enum

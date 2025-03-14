@@ -80,6 +80,6 @@ export {ErrorActions, ErrorStore};
 declare global {
     interface IErrorStore {
         toastErrors: string[];
-        msgError: object;
+        msgError: any;
     }
 }

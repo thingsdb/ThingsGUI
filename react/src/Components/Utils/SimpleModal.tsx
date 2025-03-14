@@ -107,4 +107,7 @@ interface Props {
     props: any;
     title?: string;
     tooltipMsgOk?: string;
+
+    // spreaded props
+    sx?: any;
 }

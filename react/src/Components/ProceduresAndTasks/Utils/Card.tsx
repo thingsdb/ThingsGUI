@@ -92,7 +92,7 @@ interface Props {
     itemKey: string;
     list: object[];
     onAdd: () => void;
-    onClick: any;
-    onDelete: any;
+    onClick: (type: string, ident: number) => () => void;
+    onDelete: (id: string, cb: () => void, tag: string) => void;
     tag: string;
 }
