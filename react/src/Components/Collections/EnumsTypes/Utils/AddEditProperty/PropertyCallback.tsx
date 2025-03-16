@@ -56,5 +56,5 @@ PropertyCallback.propTypes = {
 export default PropertyCallback;
 
 interface Props {
-    onChange: any;
+    onChange: (d: object) => void;
 }

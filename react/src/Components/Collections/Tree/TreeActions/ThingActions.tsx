@@ -66,5 +66,20 @@ export default ThingActions;
 
 
 interface Props {
-    [index: string]: any;
+    child: {
+        id: number;
+        index: number;
+        name: string;
+        type: string;
+    };
+    isRoot: boolean;
+    parent: {
+        id: number;
+        index: number;
+        name: string;
+        type: string;
+        isTuple: boolean;
+    };
+    scope: string;
+    thing: any;
 }

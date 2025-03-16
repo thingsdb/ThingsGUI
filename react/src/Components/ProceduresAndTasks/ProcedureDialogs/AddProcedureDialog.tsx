@@ -168,7 +168,7 @@ interface Props {
 interface State {
     closure: string;
     error: string;
-    jsonArgs: any;
+    jsonArgs: object | '';
     procedureName: string;
     queryString: string;
 }

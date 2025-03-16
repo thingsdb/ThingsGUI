@@ -33,7 +33,7 @@ Page.propTypes = {
 export default Page;
 
 interface Props {
-    item: any;
+    item: IProcedure | ITask;
     itemKey: string;
     scope: string;
     type: string;

@@ -49,7 +49,7 @@ Buttons.propTypes = {
 export default Buttons;
 
 interface Props {
-    extraButtons: any[];
+    extraButtons: React.ReactElement[];
     link: string;
     onRefresh: () => void;
     title: string;

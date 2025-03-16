@@ -100,8 +100,10 @@ const EditDialog = ({
         setAction('');
     }, [open]);
 
-    const handleQuery = (p, a) => {
+    // TODOT second arg is never passed
+    const handleQuery = (p, a=null) => {
         const act = a || action;
+        // @ts-expect-error TODOT queryObj no string
         setState(prev=>{
             const update = {...prev.property, ...p};
             return({
@@ -424,15 +426,26 @@ interface Props {
     dataTypes?: string[];
     category: string;
     getInfo: (scope: string, tag: string) => void;
-    headers: object[];
-    item?: any;
+    headers: {
+        [index: string]: {
+            ky: string;
+            label: string;
+        }[];
+    };
+    item: Partial<IEnum> | Partial<IType>;
     link: string;
     onChangeItem?: (name: string, category: string) => void;
     onClose: () => void;
     open?: boolean;
     onRename: (...args: unknown[]) => void;  // EnumActions.renameEnum | TypeActions.renameType
-    queries: any;
-    rows: object;
+    queries: {
+        [index: string]: {
+            [index: string]: (name: string, value: unknown) => object;
+        };
+    };
+    rows: {
+        [index: string]: object[];
+    };
     scope: string;
 }
 
@@ -450,7 +463,12 @@ interface State {
             property: string;
             propertyToo: string;
         },
-        propertyRelation: null,
+        propertyRelation: null;
     },
-    queryObj: any,
+    queryObj: Partial<{
+        queryString: string;
+        query: string;
+        blob: string;
+        jsonArgs: object;
+    }>;
 }

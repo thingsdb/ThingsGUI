@@ -55,6 +55,6 @@ export default PropertyInitVal;
 
 interface Props {
     category: string;
-    onChange: any;
+    onChange: (d: object) => void;
     scope: string;
 }

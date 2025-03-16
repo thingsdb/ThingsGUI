@@ -32,7 +32,11 @@ export default Relation;
 
 interface Props {
     onChange: (a: string) => (n: string, c: string) => void;
-    relation: any;
+    relation: {
+        property: string;
+        type: string;
+        definition: string;
+    };
     scope: string;
     view: string;
 }

@@ -103,7 +103,7 @@ const EditTask = ({
     task,
     scope,
 }: ITaskStore & Props) => {
-    const [queryString, setQueryString] = React.useState({args: '', closure: '', owner: ''});
+    const [queryString, setQueryString] = React.useState<any>({args: '', closure: '', owner: ''});
     const [jsonArgs, setJsonArgs] = React.useState<any>({args: '', closure: '', owner: ''});
     const [blob, setBlob] = React.useState({});
 

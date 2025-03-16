@@ -49,6 +49,8 @@ export default Edit;
 
 
 interface Props {
-    item: any;
+    item: Partial<IProcedure> | Partial<ITask>;
     type: string;
+
+    scope: string;  // TODOT unused, remove from ../Utils/Page.js
 }

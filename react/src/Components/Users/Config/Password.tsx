@@ -175,6 +175,10 @@ interface Props {
 interface State {
     show: boolean;
     showPassword: boolean;
-    errors: any;
-    form: any;
+    errors: Partial<Record<keyof IForm, string>>;
+    form: Partial<IForm>;
+}
+interface IForm {
+    set: boolean;
+    password: string;
 }

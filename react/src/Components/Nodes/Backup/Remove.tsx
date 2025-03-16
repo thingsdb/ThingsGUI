@@ -72,5 +72,5 @@ export default Remove;
 
 interface Props {
     nodeId: number;
-    backup: any;
+    backup: IBackup;
 }

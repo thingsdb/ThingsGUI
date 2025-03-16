@@ -66,7 +66,12 @@ export default ProcedureDialogs;
 
 
 interface Props {
-    dialogsView: any;
+    dialogsView: Partial<{
+        add: boolean;
+        edit: boolean;
+        run: boolean;
+        view: boolean;
+    }>;
     name: string;
     onClose: (d: object) => void;
     open: {
@@ -75,6 +80,6 @@ interface Props {
         run: boolean;
         view: boolean;
     };
-    procedures: any[];
+    procedures: IProcedure[];
     scope: string;
 }

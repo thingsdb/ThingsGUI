@@ -124,11 +124,15 @@ Tabel.propTypes = {
 export default Tabel;
 
 interface Props {
-    buttons: any;
-    canExtend: (row: any) => boolean;
-    header: any[];
-    rows: any[];
-    rowExtend: any;
-    connectedNode: any;
+    buttons: (row: INode) => React.ReactElement[];
+    canExtend: (row: INode) => boolean;
+    header: {
+        ky: string;
+        label: string;
+        color: (s: string) => string;
+    }[];
+    rows: INode[];
+    rowExtend: (row: INode) => React.ReactElement;
+    connectedNode: INode;
     onRefresh: () => void;
 }

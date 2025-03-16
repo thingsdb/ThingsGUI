@@ -65,13 +65,20 @@ export default Overview;
 
 
 interface Props {
-    badgeButton?: (...args: unknown[]) => void;
-    buttons?: (...args: unknown[]) => void;
-    headers: any;
-    item?: any;
+    badgeButton: (header: object, row: object) => React.ReactElement;
+    buttons?: (row: object) => React.ReactElement;
+    headers: {
+        [index: string]: {
+            ky: string;
+            label: string;
+        }[];
+    };
+    item: Partial<IEnum> | Partial<ITask>;
     link: string;
     onAdd?: (keys: string[]) => void;
     onChangeItem?: (name: string, category: string) => void;
-    rows: any;
+    rows: {
+        [index: string]: object[];
+    };
     scope: string;
 }

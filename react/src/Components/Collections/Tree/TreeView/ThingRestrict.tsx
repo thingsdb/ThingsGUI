@@ -14,7 +14,7 @@ const ThingRestrict = ({
     onChildren
 }: Props) => {
     const isArray = Array.isArray(thing);
-    const [more, setMore] = React.useState({});
+    const [more, setMore] = React.useState<any>({});
     const [bounds, setBounds] = React.useState({from:0, till:99});
     const {from, till} = bounds;
 
@@ -73,5 +73,5 @@ export default ThingRestrict;
 
 interface Props {
     thing: any;
-    onChildren: any;
+    onChildren: (k: string, v: object, i: number, isArray: boolean) => React.ReactNode;
 }

@@ -73,7 +73,7 @@ const EditProcedure = ({
     procedure = {},
     scope
 }: Props) => {
-    const [queryString, setQueryString] = React.useState({definition: ''});
+    const [queryString, setQueryString] = React.useState<any>({definition: ''});
     const [jsonArgs, setJsonArgs] = React.useState<any>('');
 
     const handleChangeDefinition = React.useCallback((c) => {
@@ -125,6 +125,6 @@ EditProcedure.propTypes = {
 export default EditProcedure;
 
 interface Props {
-    procedure: any;
+    procedure: Partial<IProcedure>;
     scope: string;
 }

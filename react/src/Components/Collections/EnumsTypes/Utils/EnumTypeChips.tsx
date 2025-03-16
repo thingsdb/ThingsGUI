@@ -261,6 +261,7 @@ const fmrows = (callback, fields, isType, item, scope, view ) => item[fields] ? 
         propertyType: isType ? v : '',
         propertyVal: isType ? '' : v,
         propertyObject: obj,
+        // @ts-expect-error TODOT
         propertyRelation: <Relation onChange={callback} relation={relation} scope={scope} view={view.view ? 'view' : 'edit'} />,
         wpo: item.wpo
     });
@@ -446,10 +447,16 @@ EnumTypeChips.propTypes = {
 
 export default EnumTypeChips;
 interface Props {
-    buttonsView: any;
-    categoryInit: string;
+    buttonsView: {
+        add: boolean;
+        edit: boolean;
+        view: boolean;
+        cancel: boolean;
+        run: boolean;
+    };
+    categoryInit: 'enum' | 'type';
     datatypes?: string[];
-    items?: any[];
+    items?: IEnum[] | IType[];
     onChange?: (a: string) => (n: string, c: string) => void;
     onClose?: (a: string, c: string) => void;
     onDelete?: (...args: unknown[]) => void;  // EnumActions.deleteEnum | TypeActions.deleteType
@@ -459,5 +466,10 @@ interface Props {
     onSetQueryInput?: (...args: unknown[]) => void;
     scope: string;
     tag: string;
-    view: any;
+    view: {
+        name: string;
+        add?: boolean;
+        edit?: boolean;
+        view: boolean;
+    };
 }

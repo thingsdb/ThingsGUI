@@ -233,5 +233,26 @@ export default ThingActionsDialog;
 
 
 interface Props {
-    [index: string]: any;
+    child: {
+        id: number;
+        index: number;
+        pname?: string;
+        name: string;
+        type: string;
+        val?: number | string;
+    };
+    isRoot?: boolean;
+    onClose: () => void;
+    parent: {
+        id: number;
+        index: number;
+        isTuple: boolean;
+        name: string;
+        pname?: string;
+        type: string;
+    };
+    scope: string;
+    thing: any;
+
+    open: boolean;  // TODOT ununsed
 }

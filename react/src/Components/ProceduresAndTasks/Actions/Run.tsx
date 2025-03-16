@@ -112,6 +112,6 @@ export default Run;
 
 
 interface Props {
-    item: any;
+    item: Partial<IProcedure> | Partial<ITask>;
     type: string;
 }

@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Slide from '@mui/material/Slide';
+import Slide, { SlideProps } from '@mui/material/Slide';
 
 import {CollectionActions} from '../../../Stores';
 import {HarmonicCard} from '../../Utils';
@@ -16,7 +16,7 @@ import {TopBar} from '../../Navigation';
 import Things from './TreeView';
 
 
-const Transition = React.forwardRef((props, ref) => {
+const Transition = React.forwardRef<unknown, SlideProps>((props, ref) => {
     return <Slide direction="up" ref={ref} {...props} mountOnEnter unmountOnExit />;
 });
 

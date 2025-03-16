@@ -111,5 +111,26 @@ export default DialogButtons;
 
 
 interface Props {
-    [index: string]: any;
+    child: {
+        id: number;
+        index: number;
+        name: string;
+        type: string;
+        val?: number | string;
+    };
+    customTypes: IType[];
+    isRoot: boolean;
+    onClose: () => void;
+    parent: {
+        id: number;
+        index: number;
+        name: string;
+        type: string;
+        isTuple: boolean;
+    };
+    realChildType: string;
+    realParentType: string;
+    scope: string;
+    tag: string;
+    thing: any;
 }

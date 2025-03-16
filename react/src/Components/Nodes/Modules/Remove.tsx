@@ -39,5 +39,5 @@ export default Remove;
 
 interface Props {
     nodeId: number;
-    item: any;
+    item: IModule;
 }

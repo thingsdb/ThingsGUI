@@ -131,6 +131,6 @@ interface Props {
 }
 interface State {
     show: boolean;
-    errors: any;
-    form: any;
+    errors: Partial<Record<keyof IUser, string>>;
+    form: Partial<IUser>;
 }

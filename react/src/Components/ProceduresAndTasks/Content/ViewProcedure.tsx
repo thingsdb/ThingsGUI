@@ -73,5 +73,5 @@ ViewProcedure.propTypes = {
 export default ViewProcedure;
 
 interface Props {
-    procedure: any;
+    procedure: Partial<IProcedure>;
 }

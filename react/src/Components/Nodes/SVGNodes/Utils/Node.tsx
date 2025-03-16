@@ -39,6 +39,6 @@ export default Node;
 interface Props {
     x: number;
     y: number;
-    data?: any;
+    data?: Partial<INode>;
     color: string;
 }

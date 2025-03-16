@@ -158,5 +158,8 @@ interface Props {
 }
 interface State {
     show: boolean;
-    form: any;
+    form: Partial<{
+        quotaType: (typeof quotaTypes)[number];
+        quota: number;
+    }>;
 }

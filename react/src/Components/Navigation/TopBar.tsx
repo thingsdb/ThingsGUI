@@ -136,8 +136,8 @@ TopBar.propTypes = {
 export default withStores(TopBar);
 
 interface Props {
-    additionals: any;
-    menuIcon: any;
-    pageIcon: any;
-    title: any;
+    additionals: React.ReactNode;
+    menuIcon: React.ReactNode;
+    pageIcon: React.ReactNode;
+    title: React.ReactNode;
 }

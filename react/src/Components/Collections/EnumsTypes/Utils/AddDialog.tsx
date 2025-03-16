@@ -236,13 +236,20 @@ interface Props {
     getInfo: (scope: string, tag: string) => void;
     onClose: () => void;
     open: boolean;
-    queries: any;
+    queries: {
+        [index: string]: (name: string, value: unknown) => object;
+    };
     scope: string;
     link: string;
 }
 
 interface State {
-    queryObj: any;
+    queryObj: Partial<{
+        queryString: string;
+        query: string;
+        blob: string;
+        jsonArgs: object;
+    }>;
     name: string;
     error: string;
     properties: any[];

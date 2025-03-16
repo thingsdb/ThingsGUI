@@ -43,9 +43,9 @@ export default NodeGraph;
 
 
 interface Props {
-    data: any[];
+    data: INode[];
     height?: number;
     radius?: number;
-    streamInfo?: any;
+    streamInfo?: object;
     width?: number;
 }

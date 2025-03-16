@@ -173,7 +173,10 @@ interface Props {
 }
 interface State {
     show: boolean;
-    form: any;
+    form: Partial<{
+        description: string;
+        expirationTime: boolean;
+    }>;
     switches: {
         description: boolean;
         expirationTime: boolean;

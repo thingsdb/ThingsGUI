@@ -49,6 +49,9 @@ BackupInfo.propTypes = {
 export default BackupInfo;
 
 interface Props {
-    header: object[];
+    header: {
+        ky: string;
+        label: string;
+    }[];  // React.ComponentProps<typeof Info>['header'][number]['labels'];
     item: object;
 }

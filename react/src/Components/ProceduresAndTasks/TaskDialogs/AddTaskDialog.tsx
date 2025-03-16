@@ -232,11 +232,11 @@ interface Props {
     scope: string;
 }
 interface State {
-    args: any[];
-    blob: any;
+    args: string[];
+    blob: object;  // TODOT string?
     closure: string;
     error: string;
-    jsonArgs: any;
+    jsonArgs: object | '';
     queryString: string;
     start: string | null;
 }

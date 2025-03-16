@@ -228,9 +228,20 @@ Edit.propTypes = {
 export default Edit;
 
 interface Props {
-    credentials: any;
-    form: any;
-    security: any;
+    credentials: {
+        user: string;
+        password: string;
+        token: string;
+        isToken: boolean;
+    };
+    form: {
+        address: string;
+        name: string;
+    };
+    security: {
+        secureConnection: boolean;
+        insecureSkipVerify: boolean;
+    };
     onChange: (ky: string, obj: object) => void;
     editField?: string;
 }

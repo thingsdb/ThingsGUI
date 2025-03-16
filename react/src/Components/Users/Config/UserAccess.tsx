@@ -45,7 +45,7 @@ const privileges = [
 const tag = UserAccessTAG;
 
 const UserAccess = ({user, collections}: Props) => {
-    const [switches, setSwitches] = React.useState({});
+    const [switches, setSwitches] = React.useState<any>({});
 
     const getSwitches = (scope, privileges) => {
         let s = {
@@ -220,5 +220,5 @@ export default UserAccess;
 
 interface Props {
     user: IUser;
-    collections: any[];
+    collections: ICollection[];
 }

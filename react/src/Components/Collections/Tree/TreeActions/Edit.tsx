@@ -125,5 +125,22 @@ Edit.propTypes = {
 export default Edit;
 
 interface Props {
-    [index: string]: any;
+    customTypes: IType[];
+    enums: IEnum[];
+    parent: {
+        id: number;
+        index: number;
+        name: string;
+        type: string;
+        isTuple: boolean;
+    };
+    child: {
+        id: number;
+        index: number;
+        name: string;
+        type: string;
+    };
+    dataTypes: string[];
+    scope: string;
+    thing: any;
 }

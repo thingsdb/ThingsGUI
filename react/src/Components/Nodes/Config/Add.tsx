@@ -167,7 +167,12 @@ export default Add;
 
 interface State {
     show: boolean;
-    errors: any;
-    form: any;
+    errors: Partial<Record<keyof IForm, string>>;
+    form: Partial<IForm>;
     portSwitch: boolean;
+}
+interface IForm {
+    secret: string;
+    nName: string;
+    port: string;
 }

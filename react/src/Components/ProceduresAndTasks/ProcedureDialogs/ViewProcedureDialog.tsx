@@ -56,8 +56,8 @@ ViewProcedureDialog.propTypes = {
 export default ViewProcedureDialog;
 
 interface Props {
-    button?: object;
+    button?: React.ReactElement;
     open: boolean;
     onClose: () => void;
-    procedure: any;
+    procedure: Partial<IProcedure>;
 }

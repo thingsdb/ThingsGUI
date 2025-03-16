@@ -137,5 +137,23 @@ export default Thing;
 
 
 interface Props {
-    [index: string]: any;
+    child: {
+        index: number;
+        name: string;
+        pname: string;
+    };
+    collection: ICollection;
+    inset?: boolean;
+    parent: {
+        id: number;
+        index: number;
+        isTuple: boolean;
+        name: string;
+        pname?: string;
+        type: string;
+    };
+    thing: any;
+    things: any;
+
+    id?: number;  // TODOT unused
 }

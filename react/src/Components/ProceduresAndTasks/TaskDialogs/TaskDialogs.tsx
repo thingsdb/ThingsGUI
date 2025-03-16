@@ -63,7 +63,12 @@ export default TaskDialogs;
 
 
 interface Props {
-    dialogsView: any;
+    dialogsView: Partial<{
+        add: boolean;
+        cancel: boolean;
+        edit: boolean;
+        view: boolean;
+    }>;
     id: string;
     onClose: (d: object) => void;
     open: {
@@ -73,6 +78,6 @@ interface Props {
         run?: boolean;  // TODOT unused?
         view: boolean;
     };
-    tasks: any[];
+    tasks: ITask[];
     scope: string;
 }

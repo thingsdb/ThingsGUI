@@ -41,7 +41,7 @@ Remove.propTypes = {
 export default Remove;
 
 interface Props {
-    item: any;
+    item: Partial<IProcedure> | Partial<ITask>;
     scope: string;
     type: string;
 }

@@ -30,6 +30,6 @@ export default PropertyMethod;
 
 
 interface Props {
-    onChange: any;
+    onChange: (d: object) => void;
     input: string;
 }

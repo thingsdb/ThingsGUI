@@ -39,6 +39,6 @@ Cancel.propTypes = {
 export default Cancel;
 
 interface Props {
-    item: any;
+    item: Partial<ITask>;
     scope: string;
 }

@@ -144,12 +144,19 @@ export default ViewDialog;
 
 interface Props {
     category: string;
-    headers: object;
-    item?: any;
+    headers: {
+        [index: string]: {
+            ky: string;
+            label: string;
+        }[];
+    };
+    item: Partial<IEnum> | Partial<IType>;
     link: string;
     onChangeItem?: (name: string, category: string) => void;
     onClose: () => void;
     open?: boolean;
-    rows: object;
+    rows: {
+        [index: string]: object[];
+    };
     scope: string;
 }

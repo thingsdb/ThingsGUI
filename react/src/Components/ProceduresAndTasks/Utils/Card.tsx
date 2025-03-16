@@ -88,7 +88,11 @@ export default Card;
 
 interface Props {
     buttonsView: object;
-    header?: object[];
+    header?: {
+        ky: string;
+        label: string;
+        fn?: (d: unknown) => React.ReactNode;
+    }[];
     itemKey: string;
     list: object[];
     onAdd: () => void;

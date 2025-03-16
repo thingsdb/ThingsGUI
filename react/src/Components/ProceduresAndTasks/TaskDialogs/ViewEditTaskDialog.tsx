@@ -49,9 +49,9 @@ ViewEditTaskDialog.propTypes = {
 export default ViewEditTaskDialog;
 
 interface Props {
-    button?: object;
+    button?: React.ReactElement;
     open: boolean;
     onClose: () => void;
-    task: any;
+    task: Partial<ITask>;
     scope: string;
 }

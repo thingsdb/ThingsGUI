@@ -102,8 +102,8 @@ const ModuleInfo = ({
     _module
 }: INodesStore & Props) => {
     const [show, setShow] = React.useState(false);
-    const [edit, setEdit] = React.useState({});
-    const [form, setForm] = React.useState({});
+    const [edit, setEdit] = React.useState<any>({});
+    const [form, setForm] = React.useState<any>({});
     const [msg, setMsg] = React.useState('');
 
     const handleClickOpen = () => {
@@ -264,6 +264,6 @@ ModuleInfo.propTypes = {
 export default withStores(ModuleInfo);
 
 interface Props {
-    item: any;
+    item: Partial<IModule>;
     nodeId: number;
 }

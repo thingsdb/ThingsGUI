@@ -30,7 +30,7 @@ export default PropertyType;
 
 
 interface Props {
-    onChange: any;
+    onChange: (d: object) => void;
     dropdownItems: string[];
     input: string;
 }

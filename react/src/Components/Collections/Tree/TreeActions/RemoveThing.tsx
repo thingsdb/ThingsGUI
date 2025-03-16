@@ -139,7 +139,7 @@ const RemoveThing = ({child, onClose, parent, scope}: Props) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
-            onKeyDown={handleKeyPress}
+            onKeyPress={handleKeyPress}
         >
             {Content}
         </SimpleModal>
@@ -167,5 +167,21 @@ RemoveThing.propTypes = {
 export default RemoveThing;
 
 interface Props {
-    [index: string]: any;
+    onClose: () => void;
+    scope: string;
+    parent: {
+        id: number;
+        // index: number;
+        name: string;
+        type: string;
+        // isTuple: boolean;
+    };
+    child: {
+        id: number;
+        index: number;
+        name: string;
+        type: string;
+
+        val: null; // TODOT unused
+    };
 }

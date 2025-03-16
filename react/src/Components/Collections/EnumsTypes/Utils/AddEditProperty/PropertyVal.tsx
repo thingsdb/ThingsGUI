@@ -72,7 +72,7 @@ PropertyVal.propTypes = {
     enums: EnumStore.types.enums.isRequired,
 };
 
-export default withStores(PropertyVal);
+export default withStores(PropertyVal) as React.FC<Props>;
 
 interface Props {
     category: string;

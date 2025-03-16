@@ -76,8 +76,17 @@ BuildQueryString.propTypes = {
 export default BuildQueryString;
 
 interface Props {
-    child: any;
+    child: {
+        id: number;
+        index: number;
+        name: string;
+        type: string;
+    };
     customTypes: IType[];
     enums: IEnum[];
-    parent: any;
+    parent: {
+        id: number;
+        name: string;
+        type: string;
+    };
 }

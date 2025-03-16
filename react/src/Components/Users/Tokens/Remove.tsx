@@ -45,6 +45,6 @@ Remove.propTypes = {
 export default Remove;
 
 interface Props {
-    token: any;
+    token: IToken;
     tag: string;
 }

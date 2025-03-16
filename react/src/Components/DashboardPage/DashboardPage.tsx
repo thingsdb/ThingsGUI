@@ -6,7 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import IconButton from '@mui/material/IconButton';
 import React from 'react';
-import Slide from '@mui/material/Slide';
+import Slide, { SlideProps } from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
 // import {version} from '../../package.json';
 
@@ -15,7 +15,7 @@ import DashboardContent from './DashboardContent';
 
 const version='version: 1.3.3';
 
-const Transition = React.forwardRef((props, ref) => {
+const Transition = React.forwardRef<unknown, SlideProps>((props, ref) => {
     return <Slide direction="down" ref={ref} {...props} mountOnEnter unmountOnExit />;
 });
 

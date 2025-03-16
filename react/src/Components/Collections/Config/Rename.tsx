@@ -137,6 +137,6 @@ interface Props {
 }
 interface State {
     show: boolean;
-    errors: any;
-    form: any;
+    errors: Partial<Record<keyof ICollection, string>>;
+    form: Partial<ICollection>;
 }

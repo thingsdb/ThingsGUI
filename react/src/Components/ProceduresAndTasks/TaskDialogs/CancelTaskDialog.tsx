@@ -56,9 +56,9 @@ CancelTaskDialog.propTypes = {
 export default CancelTaskDialog;
 
 interface Props {
-    button?: object;
+    button?: React.ReactElement;
     onClose: () => void;
     open: boolean;
     scope: string;
-    task: any;
+    task: Partial<ITask>;
 }

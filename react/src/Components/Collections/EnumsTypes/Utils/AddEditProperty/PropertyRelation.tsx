@@ -50,6 +50,9 @@ export default PropertyRelation;
 
 interface Props {
     dropdownItems: string[];
-    onChange: any;
-    input: any;
+    onChange: (d: object) => void;
+    input: {
+        property: string;
+        propertyToo: string;
+    };
 }

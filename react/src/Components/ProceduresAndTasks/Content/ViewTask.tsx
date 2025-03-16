@@ -119,5 +119,5 @@ export default ViewTask;
 
 interface Props {
     scope: string;
-    task: any;
+    task: Partial<ITask>;
 }

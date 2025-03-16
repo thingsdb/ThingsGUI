@@ -26,7 +26,7 @@ const withStores = withVlow([{
 
 
 const RoomEvent = ({room, events}: IEventStore & Props) => {
-    const [checked, setChecked] = React.useState({});
+    const [checked, setChecked] = React.useState<any>({});
 
     const handleChange = (index) => () => {
         setChecked((prev) => {
@@ -48,6 +48,7 @@ const RoomEvent = ({room, events}: IEventStore & Props) => {
     const lastIndex = roomEvents.length - 1;
 
     return (
+        // @ts-expect-error TODOT
         <Timeline align="left">
             {lastIndex !== -1 ? roomEvents.map((e, index) => (
                 <TimelineItem key={`room_event_${index}`}>
