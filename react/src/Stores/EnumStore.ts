@@ -91,10 +91,17 @@ declare global {
     interface IEnum {
         enum_id: number;
         name: string;
-        relations: {
-            [index: string]: any;
-        };
-        [index: string]: any;
+        default: string | IThing;
+        created_at: number;
+        modified_at: number;
+        members: [string, number | IThing][];
+        // methods: {};  // same as IType.methods?
+
+        // TODOT narrow in EnumTypeChips
+        type_id?: number;
+        wrap_only?: boolean;
+        fields?: any[];
+        relations?: any[];
     }
 
     interface IEnumStore {

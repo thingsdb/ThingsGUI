@@ -44,6 +44,14 @@ Info.propTypes = {
 export default Info;
 
 interface Props {
-    header: any[];
-    content: any;
+    header: {
+        ky: string;
+        title: string;
+        labels: {
+            ky: string;
+            label: string;
+            fn?: (d: unknown) => React.ReactNode;
+        }[];
+    }[];
+    content: object;
 }

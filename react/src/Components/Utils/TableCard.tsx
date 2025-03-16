@@ -135,12 +135,16 @@ TableCard.propTypes = {
 export default TableCard;
 
 interface Props {
-    header: object[];
+    header: {
+        ky: string;
+        label: string;
+        fn?: (d: unknown) => React.ReactNode;
+    }[];
     itemKey: string;
-    items: any[];
-    moreButtons: any;
+    items: object[];
+    moreButtons?: React.ReactElement;
     onAdd: () => void;
     onDelete: (id: string, cb: () => void, tag: string) => void;
-    buttons: any;
+    buttons: (name: string) => any[];
     tag: string;
 }

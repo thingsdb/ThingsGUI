@@ -69,7 +69,7 @@ export default AddCode;
 
 interface Props {
     identifier: string | number;
-    init: any;
+    init?: string;
     label: string;
     link: string;
     numLines: string;

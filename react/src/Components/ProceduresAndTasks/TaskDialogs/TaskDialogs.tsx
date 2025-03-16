@@ -69,7 +69,7 @@ interface Props {
         edit: boolean;
         view: boolean;
     }>;
-    id: string;
+    id: number;
     onClose: (d: object) => void;
     open: {
         add: boolean;

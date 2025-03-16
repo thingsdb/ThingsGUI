@@ -81,7 +81,7 @@ const EditProvider = ({
     children = null
 }: Props) => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
-    const memoValue = React.useMemo(() => ({state, dispatch}), [state, dispatch]);
+    const memoValue = React.useMemo<any>(() => ({state, dispatch}), [state, dispatch]);
 
     return (
         <StoreContext.Provider value={memoValue}>
@@ -102,9 +102,9 @@ interface Props {
 }
 
 interface State {
-    blob: any;
+    blob: object;  // TODOT string
     error: string;
-    obj: any;
+    obj: object;
     query: string;
     val: string;
 }

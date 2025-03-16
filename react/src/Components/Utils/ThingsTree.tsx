@@ -24,7 +24,7 @@ const ThingsTree = ({
     tree = null,
     onAction = null,
 }: Props) => {
-    const [more, setMore] = React.useState({});
+    const [more, setMore] = React.useState<any>({});
 
     // is root if item is still null
     const thing = root ? tree : item;
@@ -115,5 +115,5 @@ interface Props {
     };
     onAction?: any;  // (name: string, type: string, val: string) => void;
     root: boolean;
-    customTypes?: object[];
+    customTypes?: IType[];
 }

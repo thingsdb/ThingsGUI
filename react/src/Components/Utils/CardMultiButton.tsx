@@ -92,7 +92,10 @@ CardMultiButton.propTypes = {
 export default CardMultiButton;
 
 interface Props {
-    buttons: any[];
+    buttons: {
+        icon: React.ReactElement;
+        onClick: () => void;
+    }[];
     label: string;
     warn: boolean;
 }

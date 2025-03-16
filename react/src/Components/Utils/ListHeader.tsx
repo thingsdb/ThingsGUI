@@ -78,9 +78,9 @@ ListHeader.propTypes = {
 export default ListHeader;
 
 interface Props {
-    children: any;
+    children: React.ReactNode;
     canCollapse: boolean;
-    groupSign: string;
+    groupSign: '{' | '[' | '(';
     isOpen?: boolean;
     name?: string;
     onAdd: React.MouseEventHandler;

@@ -69,5 +69,5 @@ interface Props {
     label: string;
     loading: boolean;
     onClickSend: () => void;
-    variant: any;
+    variant?: 'text' | 'outlined' | 'contained';
 }

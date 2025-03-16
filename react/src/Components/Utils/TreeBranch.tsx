@@ -156,7 +156,7 @@ interface Props {
     onAction?: any;  // (name: string, type: string, val: string) => void;
     onClick?: React.MouseEventHandler;
     onOpen: (show: boolean) => void;
-    onRenderChildren: any;
+    onRenderChildren: () => any;
     type: string;
     val: string;
 }

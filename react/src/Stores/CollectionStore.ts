@@ -177,6 +177,9 @@ class CollectionStore extends BaseStore {
 export {CollectionActions, CollectionStore};
 
 declare global {
+    interface IThing {
+        ['#']: number;
+    }
     interface ICollectionStore {
         canSubmit: boolean;
         things: any;

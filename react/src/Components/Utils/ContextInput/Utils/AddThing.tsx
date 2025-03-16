@@ -172,10 +172,10 @@ export default AddThing;
 
 
 interface Props {
-    customTypes: object[];
+    customTypes: IType[];
     dataTypes: string[];
-    enums: object[];
+    enums: IEnum[];
     identifier: string | number;
     parent: string;
-    parentDispatch: any;
+    parentDispatch: Function;
 }

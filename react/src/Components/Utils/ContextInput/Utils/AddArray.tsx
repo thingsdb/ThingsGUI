@@ -143,11 +143,11 @@ export default AddArray;
 
 interface Props {
     childTypes: string[];
-    customTypes: object[];
+    customTypes: IType[];
     dataTypes: string[];
-    enums: object[];
+    enums: IEnum[];
     identifier: string | number;
     isSet?: boolean;
     parent: string;
-    parentDispatch: any;
+    parentDispatch: Function;
 }

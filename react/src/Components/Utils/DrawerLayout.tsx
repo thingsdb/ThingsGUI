@@ -241,12 +241,12 @@ interface Props {
     open: boolean;
     onClose: () => void;
     menuOpen: boolean;
-    menus: any[];
-    topbar: any;
-    mainContent: any;
-    toast: any;
+    menus: React.ReactElement[];
+    topbar: React.ReactElement;
+    mainContent: React.ReactElement;
+    toast: React.ReactElement;
     drawerTitle: string;
-    drawerContent: any;
+    drawerContent: React.ReactElement;
 }
 interface StyledDrawerProps extends CardProps {
     open: boolean;

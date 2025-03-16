@@ -15,7 +15,7 @@ const CancelTaskDialog = ({
     scope,
     task = {},
 }: Props) => {
-    const [name, setName] = React.useState('');
+    const [name, setName] = React.useState<any>('');
 
     React.useEffect(() => {
         setName(task.id);

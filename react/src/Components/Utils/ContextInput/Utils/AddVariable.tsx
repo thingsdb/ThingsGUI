@@ -20,7 +20,7 @@ const AddVariable = ({
     parent,
     parentDispatch
 }: Props) => {
-    const [dataType, setDataType] = React.useState({});
+    const [dataType, setDataType] = React.useState<any>({});
     const [editState, dispatch] = useEdit();
     const {blob, obj, val} = editState;
 
@@ -113,10 +113,10 @@ export default AddVariable;
 
 interface Props {
     variables: string[];
-    customTypes: object[];
+    customTypes: IType[];
     dataTypes: string[];
-    enums: object[];
+    enums: IEnum[];
     identifier: string | number;
     parent: string;
-    parentDispatch: any;
+    parentDispatch: Function;
 }

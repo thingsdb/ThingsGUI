@@ -34,6 +34,7 @@ const parseErrorMsg = (errMsg) => {
         prevLastIndex = reLink.lastIndex;
     }
 
+    // @ts-expect-error TODOT
     errObj.errLeftover= errObj.errLinks.slice(-1).postLink = errMsg.slice(prevLastIndex);
 
     return errObj;

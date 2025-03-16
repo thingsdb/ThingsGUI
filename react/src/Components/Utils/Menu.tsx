@@ -123,7 +123,7 @@ interface Props {
     homeRoute: string;
     icon: React.ReactElement;
     itemKey: string;
-    items: any[];
+    items: object[];
     onRefresh?: () => void;
     title: string;
 }

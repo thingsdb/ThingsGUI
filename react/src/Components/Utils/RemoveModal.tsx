@@ -95,9 +95,9 @@ RemoveModal.propTypes = {
 export default RemoveModal;
 
 interface Props {
-    buttonComponent: any;
-    buttonLabel: any;
-    buttonProps: any;
+    buttonComponent?: React.FunctionComponent<any>;
+    buttonLabel?: React.ReactNode;
+    buttonProps?: object;
     onClose?: () => void;
     onSubmit: (cb: () => void) => void;
     open?: boolean;

@@ -66,7 +66,7 @@ ArrayLayout.propTypes = {
 export default ArrayLayout;
 
 interface Props {
-    child: any;
+    child: (index: number) => React.ReactNode;
     fullWidth: boolean;
     onAdd: (index: number) => void;
     onRemove: (index: number) => void;

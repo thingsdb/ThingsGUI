@@ -59,7 +59,11 @@ TableWithButtons.propTypes = {
 export default TableWithButtons;
 
 interface Props {
-    header: any[];
-    rows: any[];
-    buttons: any;
+    header: {
+        ky: string;
+        label: string;
+        fn?: (d: unknown) => React.ReactNode;
+    }[];
+    rows: object[];
+    buttons: (row: any) => React.ReactNode;
 }

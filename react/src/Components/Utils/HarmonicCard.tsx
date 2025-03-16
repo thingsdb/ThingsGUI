@@ -54,13 +54,13 @@ HarmonicCard.propTypes = {
 export default HarmonicCard;
 
 interface Props {
-    actionButtons: any;
-    buttons: any;
-    content: any;
+    actionButtons?: React.ReactElement;
+    buttons?: React.ReactElement;
+    content: React.ReactElement;
     expand?: boolean;
     noPadding?: boolean;
     onCleanup?: () => void;
     onRefresh?: () => void;
-    title: any;
+    title: React.ReactNode;
     unmountOnExit?: boolean;
 }

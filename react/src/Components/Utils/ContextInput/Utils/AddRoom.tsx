@@ -99,6 +99,6 @@ export default AddRoom;
 
 interface Props {
     identifier: string | number;
-    init: any;
+    init: string;
     parent: string;
 }

@@ -42,5 +42,5 @@ UserCard.propTypes = {
 export default UserCard;
 
 interface Props {
-    user: any;
+    user: IUser;
 }

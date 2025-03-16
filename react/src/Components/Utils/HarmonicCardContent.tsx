@@ -32,7 +32,7 @@ HarmonicCardContent.propTypes = {
 export default HarmonicCardContent;
 
 interface Props {
-    buttons: any;
-    content: any;
+    buttons: React.ReactElement;
+    content: React.ReactElement;
     noPadding?: boolean;
 }

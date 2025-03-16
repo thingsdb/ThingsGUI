@@ -110,11 +110,28 @@ declare global {
         type_id: number;
         name: string;
         wrap_only: boolean;
-        fields: any[];
-        relations: {
-            [index: string]: any;
+        hide_id: boolean;
+        created_at: number;
+        modified_at: number;
+        fields: [string, string][];
+        methods: {
+            [index: string]: {
+                _doc: string;
+                definition: string;
+                with_side_effects: boolean;
+                arguments: string[];
+            }
         };
-        [index: string]: any;
+        relations: {
+            [index: string]: {
+                type: string;
+                property: string;
+                definition: string;
+            };
+        };
+
+        // TODOT narrow in EnumsTypes
+        enum_id?: number;
     }
 
     interface ITypeStore {

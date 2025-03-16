@@ -45,5 +45,5 @@ ProcedureCard.propTypes = {
 export default ProcedureCard;
 
 interface Props {
-    procedure: any;
+    procedure: IProcedure;
 }

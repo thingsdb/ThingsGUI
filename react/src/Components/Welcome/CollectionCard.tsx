@@ -59,5 +59,5 @@ CollectionCard.propTypes = {
 export default CollectionCard;
 
 interface Props {
-    collection: any;
+    collection: ICollection;
 }

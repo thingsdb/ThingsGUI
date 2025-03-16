@@ -45,5 +45,5 @@ TaskCard.propTypes = {
 export default TaskCard;
 
 interface Props {
-    task: any;
+    task: ITask;
 }

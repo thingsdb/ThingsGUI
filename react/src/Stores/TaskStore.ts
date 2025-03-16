@@ -142,8 +142,22 @@ export {TaskActions, TaskStore};
 
 declare global {
     interface ITask {
-        name: string;
-        [index: string]: unkown;
+        id: number;
+        at: string;
+        err: string;
+        owner: string;
+        closure: string;
+        args: string[]
+
+        // TODOT narrow in ProceduresAndTasks
+        name?: string;
+        with_side_effects?: boolean;
+        arguments?: any[];
+    }
+    interface ITaskLight {
+        id: number;
+        at: string;
+        err: string;
     }
     interface ITaskStore {
         task: ITask;

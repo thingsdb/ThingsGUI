@@ -58,10 +58,13 @@ TableExtra.propTypes = {
 export default TableExtra;
 
 interface Props {
-    badgeButton: any;
-    buttons: any;
+    badgeButton: (header: object, row: object) => React.ReactElement;
+    buttons: (row: any) => React.ReactElement;
     createdAt: number;
-    header: object[];
+    header: {
+        ky: string;
+        label: string;
+    }[];
     modifiedAt: number;
     onAdd: () => void;
     rows: object[];

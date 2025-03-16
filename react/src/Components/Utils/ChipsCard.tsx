@@ -140,12 +140,12 @@ export default ChipsCard;
 
 interface Props {
     itemKey?: string;
-    items: any[];
-    moreButtons: any;
+    items: object[];
+    moreButtons?: React.ReactNode;
     onAdd: () => void;
     onDelete: (id: string, cb: () => void, tag: string) => void;
-    buttons: any;
+    buttons: (n: string) => any[];
     tag: string;
     title: string;
-    warnExpression: any;
+    warnExpression: (i: any) => boolean;
 }

@@ -55,6 +55,6 @@ export default Switching;
 
 interface Props {
     onChange: (d: boolean) => void;
-    one: any;
-    two: any;
+    one: React.ReactElement;
+    two: React.ReactElement;
 }

@@ -73,7 +73,7 @@ interface Props {
             label: string;
         }[];
     };
-    item: Partial<IEnum> | Partial<ITask>;
+    item: Partial<IEnum> | Partial<IType>;
     link: string;
     onAdd?: (keys: string[]) => void;
     onChangeItem?: (name: string, category: string) => void;

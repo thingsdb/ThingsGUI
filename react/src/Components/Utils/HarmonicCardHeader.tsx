@@ -91,12 +91,12 @@ HarmonicCardHeader.propTypes = {
 export default HarmonicCardHeader;
 
 interface Props {
-    actionButtons: any;
-    children: any;
+    actionButtons?: React.ReactElement;
+    children: React.ReactNode;
     expand?: boolean;
     onCleanup?: () => void;
     onExpand?: (expanded: boolean) => void;
     onRefresh?: () => void;
-    title: any;
+    title: React.ReactNode;
     unmountOnExit: boolean;
 }

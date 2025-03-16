@@ -101,8 +101,8 @@ export default AddEnum;
 
 interface Props {
     enumName: string;
-    enums: any[];
+    enums: IEnum[];
     identifier: string | number;
-    init: string | number | object;
+    init: any;  // TODOT string | number | IThing | {['#']: number};
     parent: string;
 }

@@ -91,8 +91,11 @@ TableWithBadges.propTypes = {
 export default TableWithBadges;
 
 interface Props {
-    badgeButton: any;
-    buttons: any;
-    header: any[];
-    rows: any[];
+    badgeButton: (header: object, row: object, i: number) => React.ReactElement;
+    buttons: (row: any) => React.ReactElement;
+    header: {
+        ky: string;
+        label: string;
+    }[];
+    rows: object[];
 }

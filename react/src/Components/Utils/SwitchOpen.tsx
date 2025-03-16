@@ -52,7 +52,7 @@ SwitchOpen.propTypes = {
 export default SwitchOpen;
 
 interface Props {
-    children: any;
+    children: React.ReactNode;
     label: string;
     onChange: (d: boolean) => void;
 }

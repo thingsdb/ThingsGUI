@@ -132,8 +132,15 @@ export {ProcedureActions, ProcedureStore};
 
 declare global {
     interface IProcedure {
+        doc: string;
         name: string;
-        [index: string]: unkown;
+        created_at: number;
+        definition: string;
+        with_side_effects: boolean;
+        arguments: string[];
+
+        // TODOT narrow in ProceduresAndTasks
+        id?: number;
     }
     interface IProcedureStore {
         procedure: IProcedure;

@@ -16,7 +16,7 @@ const Err = ({
     title = '',
     body = '',
     onClose = null
-}) => (
+}: ErrProps) => (
     <List>
         <ListItem
             secondaryAction={onClose ? (
@@ -111,9 +111,15 @@ LocalMsg.propTypes = {
 export default LocalMsg;
 
 interface Props {
-    body: any;
-    icon: any;
+    body: React.ReactNode;
+    icon: React.ReactElement;
     onClose: () => void;
-    title: any;
+    title?: React.ReactNode;
     useAsPopUp?: boolean;
+}
+interface ErrProps {
+    body: React.ReactNode;
+    icon: React.ReactElement;
+    onClose: () => void;
+    title?: React.ReactNode;
 }
