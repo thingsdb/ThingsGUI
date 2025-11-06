@@ -1,6 +1,6 @@
 import { withVlow } from 'vlow';
 import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';

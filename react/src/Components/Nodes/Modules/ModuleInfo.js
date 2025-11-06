@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import InfoIcon from '@mui/icons-material/Info';
 import Link from '@mui/material/Link';
 import moment from 'moment';

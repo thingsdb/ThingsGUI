@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 

@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';

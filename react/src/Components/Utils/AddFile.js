@@ -2,7 +2,7 @@
 import { styled } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
 import Dropzone from 'react-dropzone';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';

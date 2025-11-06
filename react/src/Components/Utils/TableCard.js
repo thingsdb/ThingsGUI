@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import React from 'react';

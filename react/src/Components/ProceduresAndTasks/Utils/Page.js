@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import { EditProvider, TitlePage } from '../../Utils';

@@ -1,6 +1,6 @@
 import Collapse from '@mui/material/Collapse';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Switch from '@mui/material/Switch';

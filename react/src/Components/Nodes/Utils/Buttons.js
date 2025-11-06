@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import HelpIcon from '@mui/icons-material/HelpOutline';
 import PropTypes from 'prop-types';
 import React from 'react';

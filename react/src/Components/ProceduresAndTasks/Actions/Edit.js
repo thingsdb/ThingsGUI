@@ -1,7 +1,7 @@
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 
