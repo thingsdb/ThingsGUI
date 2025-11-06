@@ -1,5 +1,5 @@
 import { withVlow } from 'vlow';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import React from 'react';

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';

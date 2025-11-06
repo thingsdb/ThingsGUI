@@ -1,6 +1,6 @@
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import React from 'react';
 
 import { CollectionActions, ErrorActions, NodesActions, ThingsdbActions } from '../../Stores';

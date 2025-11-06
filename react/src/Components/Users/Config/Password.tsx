@@ -3,7 +3,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import FormLabel from '@mui/material/FormLabel';
 import Switch from '@mui/material/Switch';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';

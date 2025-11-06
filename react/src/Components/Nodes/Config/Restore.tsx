@@ -2,7 +2,7 @@ import { amber } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@mui/material/TextField';

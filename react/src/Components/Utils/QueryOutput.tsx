@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import PropTypes from 'prop-types';

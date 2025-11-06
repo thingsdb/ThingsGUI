@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import { withVlow } from 'vlow';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';

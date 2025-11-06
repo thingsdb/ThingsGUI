@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import CircularProgress from '@mui/material/CircularProgress';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Tab from '@mui/material/Tab';

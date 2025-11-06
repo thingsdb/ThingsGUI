@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import CodeIcon from '@mui/icons-material/Code';
 import Fab from '@mui/material/Fab';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 import { EDITOR_ROUTE } from '../../../../Constants/Routes';
 import { historyNavigate } from '../../../Utils';

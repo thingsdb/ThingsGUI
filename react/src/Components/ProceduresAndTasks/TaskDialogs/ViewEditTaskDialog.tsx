@@ -1,5 +1,5 @@
 /*eslint-disable react/no-multi-comp*/
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@mui/material/Typography';
