@@ -12,7 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "./node_modules/.bin/eslint './**/*.js' --color",
     "analyze": "NODE_ENV='analyze' ./node_modules/.bin/webpack -p --progress --profile --color",
-    "build:dev": "cross-env ./node_modules/.bin/webpack --progress --profile --color --watch --devtool eval-cheap-source-map",
+    "build:dev": "./node_modules/.bin/webpack --progress --profile --color --watch --devtool eval-cheap-source-map",
     "build:prod": "NODE_ENV='production' ./node_modules/.bin/webpack"
   },
   "author": "",
