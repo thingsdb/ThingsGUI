@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"time"
 
-	socketio "github.com/googollee/go-socket.io"
-	"github.com/googollee/go-socket.io/engineio"
+	// "time"
+
+	socketio "github.com/doquangtan/socketio/v4"
 	"github.com/joho/godotenv"
 )
 
@@ -93,10 +93,12 @@ func main() {
 	readEnvVariables()
 	newSessions()
 
-	options := &engineio.Options{
-		PingTimeout: time.Duration(timeout+120) * time.Second,
-	}
-	app.server = socketio.NewServer(options)
+	// TODO
+	// options := &engineio.Options{
+	// 	PingTimeout: time.Duration(timeout+120) * time.Second,
+	// }
+	// app.server = socketio.NewServer(options)
+	app.server = socketio.New()
 
 	// on interrup clean up
 	c := make(chan os.Signal, 1)

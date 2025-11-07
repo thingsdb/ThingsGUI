@@ -1,11 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 
-	socketio "github.com/googollee/go-socket.io"
+	socketio "github.com/doquangtan/socketio/v4"
 )
 
 var connFile = ".config/ThingsGUI/thingsgui.connections"
@@ -14,7 +15,7 @@ var sessionFile = ".config/ThingsGUI/thingsgui.session"
 // app type
 type app struct {
 	clients map[string]*client
-	server  *socketio.Server
+	server  *socketio.Io
 }
 
 // authResp type
@@ -25,151 +26,228 @@ type authResp struct {
 
 // SocketRouter socketio
 func (app *app) socketRouter() {
-	app.server.OnConnect("/", func(s socketio.Conn) error {
-		s.SetContext("")
-		app.clients[s.ID()] = &client{
+	app.server.OnConnection(func(s *socketio.Socket) {
+
+		// s.SetContext("")
+		app.clients[s.Id] = &client{
 			connectionsPath: getHomePath(connFile),
 			logCh:           make(chan string),
 			roomStore:       newRoomStore(),
 			sessionPath:     getHomePath(sessionFile),
-			socketConn:      &s,
+			socketConn:      s.Conn,
 			tmpFiles:        newTmpFiles(),
 		}
 
-		lCh := app.clients[s.ID()].logCh
+		lCh := app.clients[s.Id].logCh
 		go func() {
 			for p := range lCh {
 				s.Emit("onLogging", p)
 			}
 		}()
 
-		lCh <- fmt.Sprintf("connected: %s", s.ID())
-		return nil
-	})
+		lCh <- fmt.Sprintf("connected: %s", s.Id)
 
-	app.server.OnEvent("/", "authKey", func(s socketio.Conn, data map[string]string) (int, interface{}, message) {
-		return app.clients[s.ID()].authKey(data)
-	})
+		s.On("authKey", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				status, data, message := app.clients[s.Id].authKey(e.Data[0].(map[string]string))
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "authOnly", func(s socketio.Conn) (int, authResp, message) {
-		message := successMsg()
-		var auth authResp
-		if thingsguiAddress != "" {
-			auth.AuthOnly = true
-			auth.AuthMethod = thingsguiAuthMethod
-		}
-		return message.Status, auth, message
-	})
+		s.On("authOnly", func(e *socketio.EventPayload) {
+			message := successMsg()
+			var auth authResp
+			if thingsguiAddress != "" {
+				auth.AuthOnly = true
+				auth.AuthMethod = thingsguiAuthMethod
+			}
+			e.Ack(message.Status, auth, message)
+		})
 
-	app.server.OnEvent("/", "authToken", func(s socketio.Conn, data map[string]string) (int, interface{}, message) {
-		return app.clients[s.ID()].authToken(data)
-	})
+		s.On("authToken", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				status, data, message := app.clients[s.Id].authToken(e.Data[0].(map[string]string))
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "authPass", func(s socketio.Conn, data map[string]string) (int, interface{}, message) {
-		return app.clients[s.ID()].authPass(data)
-	})
+		s.On("authPass", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				status, data, message := app.clients[s.Id].authPass(e.Data[0].(map[string]string))
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "cookie", func(s socketio.Conn, cookies string) int {
-		client := app.clients[s.ID()]
-		if useCookieSession && client.cookie == nil {
-			header := s.RemoteHeader()
-			header.Set("Cookie", cookies)
-			req := http.Request{Header: header}
-			cookie, _ := req.Cookie(cookieName)
-			client.cookie = cookie
-		}
-		return http.StatusNoContent
-	})
+		s.On("cookie", func(e *socketio.EventPayload) {
+			//	client := app.clients[s.Id]
+			//	if useCookieSession && client.cookie == nil {
+			// 		header := s.RemoteHeader()
+			// 		header.Set("Cookie", cookies)
+			// 		req := http.Request{Header: header}
+			// 		cookie, _ := req.Cookie(cookieName)
+			// 		client.cookie = cookie
+			// 	}
+			e.Ack(http.StatusNoContent)
+		})
 
-	app.server.OnEvent("/", "connected", func(s socketio.Conn) (int, connResp, message) {
-		client := app.clients[s.ID()]
-		if client.cookie == nil {
-			req := http.Request{Header: s.RemoteHeader()}
-			cookie, _ := req.Cookie(cookieName)
-			client.cookie = cookie
-		}
-		return client.connected()
-	})
+		s.On("connected", func(e *socketio.EventPayload) {
+			// client := app.clients[s.Id]
+			// if client.cookie == nil {
+			// 	req := http.Request{Header: s.RemoteHeader()}
+			// 	cookie, _ := req.Cookie(cookieName)
+			// 	client.cookie = cookie
+			// }
+			status, data, message := app.clients[s.Id].connected()
+			e.Ack(status, data, message)
+		})
 
-	app.server.OnEvent("/", "connToNew", func(s socketio.Conn, data loginData) (int, connResp, message) {
-		return app.clients[s.ID()].connectToNew(data)
-	})
+		s.On("connToNew", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				var r loginData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &r)
+				status, data, message := app.clients[s.Id].connectToNew(r)
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "connViaCache", func(s socketio.Conn, data loginData) (int, connResp, message) {
-		return app.clients[s.ID()].handlerConnectViaCache(data)
-	})
+		s.On("connViaCache", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				var r loginData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &r)
+				status, data, message := app.clients[s.Id].handlerConnectViaCache(r)
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "reconn", func(s socketio.Conn) (int, connResp, message) {
-		return app.clients[s.ID()].reconnect()
-	})
+		s.On("reconn", func(e *socketio.EventPayload) {
+			status, data, message := app.clients[s.Id].reconnect()
+			e.Ack(status, data, message)
+		})
 
-	app.server.OnEvent("/", "disconn", func(s socketio.Conn) (int, connResp, message) {
-		return app.clients[s.ID()].disconnect()
-	})
+		s.On("disconn", func(e *socketio.EventPayload) {
+			status, data, message := app.clients[s.Id].disconnect()
+			e.Ack(status, data, message)
+		})
 
-	app.server.OnEvent("/", "getCachedConn", func(s socketio.Conn) (int, interface{}, message) {
-		return app.clients[s.ID()].getCachedConnections()
-	})
+		s.On("getCachedConn", func(e *socketio.EventPayload) {
+			status, data, message := app.clients[s.Id].getCachedConnections()
+			e.Ack(status, data, message)
+		})
 
-	app.server.OnEvent("/", "newCachedConn", func(s socketio.Conn, data lData) (int, interface{}, message) {
-		return app.clients[s.ID()].newCachedConnection(data)
-	})
+		s.On("newCachedConn", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				var r lData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &r)
+				status, data, message := app.clients[s.Id].newCachedConnection(r)
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "editCachedConn", func(s socketio.Conn, data lData) (int, interface{}, message) {
-		return app.clients[s.ID()].editCachedConnection(data)
-	})
+		s.On("editCachedConn", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				var r lData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &r)
+				status, data, message := app.clients[s.Id].editCachedConnection(r)
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "renameCachedConn", func(s socketio.Conn, data lData) (int, interface{}, message) {
-		return app.clients[s.ID()].renameCachedConnection(data)
-	})
+		s.On("renameCachedConn", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				var r lData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &r)
+				status, data, message := app.clients[s.Id].renameCachedConnection(r)
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "delCachedConn", func(s socketio.Conn, data loginData) (int, interface{}, message) {
-		return app.clients[s.ID()].delCachedConnection(data)
-	})
+		s.On("delCachedConn", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				var r loginData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &r)
+				status, data, message := app.clients[s.Id].delCachedConnection(r)
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "query", func(s socketio.Conn, data dataReq) (int, interface{}, message) {
-		return app.clients[s.ID()].query(data)
-	})
+		s.On("query", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				var r dataReq
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &r)
+				status, data, message := app.clients[s.Id].query(r)
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "cleanupTmp", func(s socketio.Conn) (int, bool, message) {
-		resp := true
-		err := app.clients[s.ID()].tmpFiles.cleanupTmp()
-		message := msg(err)
-		if err != nil {
-			resp = false
-		}
-		return message.Status, resp, message
-	})
+		s.On("cleanupTmp", func(e *socketio.EventPayload) {
+			resp := true
+			err := app.clients[s.Id].tmpFiles.cleanupTmp()
+			message := msg(err)
+			if err != nil {
+				resp = false
+			}
+			e.Ack(message.Status, resp, message)
+		})
 
-	app.server.OnEvent("/", "join", func(s socketio.Conn, data dataReq) (int, interface{}, message) {
-		return app.clients[s.ID()].join(s, data)
-	})
+		s.On("join", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				var r dataReq
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &r)
 
-	app.server.OnEvent("/", "leave", func(s socketio.Conn, data dataReq) (int, interface{}, message) {
-		return app.clients[s.ID()].leave(data)
-	})
+				status, data, message := app.clients[s.Id].join(*s.Conn, r)
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnEvent("/", "run", func(s socketio.Conn, data dataReq) (int, interface{}, message) {
-		return app.clients[s.ID()].run(data)
-	})
+		s.On("leave", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				var r dataReq
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &r)
 
-	app.server.OnError("/", func(s socketio.Conn, e error) {
-		fmt.Printf("meet error: %s\n", e.Error())
-	})
+				status, data, message := app.clients[s.Id].leave(r)
+				e.Ack(status, data, message)
+			}
+		})
 
-	app.server.OnDisconnect("/", func(s socketio.Conn, msg string) {
-		app.clients[s.ID()].logCh <- fmt.Sprintf("closed: %s", msg)
-		app.clients[s.ID()].tmpFiles.cleanupTmp()
+		s.On("run", func(e *socketio.EventPayload) {
+			if len(e.Data) > 0 {
+				var r dataReq
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &r)
 
-		app.clients[s.ID()].closeSingleConn()
-		delete(app.clients, s.ID())
+				status, data, message := app.clients[s.Id].run(r)
+				e.Ack(status, data, message)
+			}
+		})
+
+		s.On("error", func(e *socketio.EventPayload) {
+			fmt.Printf("meet error: %s\n", e.Data[0])
+		})
+
+		s.On("disconnect", func(e *socketio.EventPayload) {
+			app.clients[s.Id].logCh <- fmt.Sprintf("closed: %s", e.Data[0])
+			app.clients[s.Id].tmpFiles.cleanupTmp()
+
+			app.clients[s.Id].closeSingleConn()
+			delete(app.clients, s.Id)
+		})
 	})
 }
 
 // Start app
 func (app *app) start() {
-	go app.server.Serve()
-	defer app.server.Close()
+	// TODO
+	// go app.server.ServeHTTP()
+	// defer app.server.Close()
 	app.socketRouter()
 
 	//HTTP handlers

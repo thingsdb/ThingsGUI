@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	socketio "github.com/googollee/go-socket.io"
+	socketio "github.com/doquangtan/socketio/v4"
 	things "github.com/thingsdb/go-thingsdb"
 )
 
@@ -123,13 +123,14 @@ func (client *client) connect(data loginData) (connResp, error) {
 	client.connection.LogLevel = things.LogDebug
 	client.connection.ReconnectionAttempts = 7
 
-	s := *client.socketConn
-	client.connection.OnNodeStatus = func(ns *things.NodeStatus) {
-		s.Emit("OnNodeStatus", *ns)
-	}
-	client.connection.OnWarning = func(we *things.WarnEvent) {
-		s.Emit("OnWarning", *we)
-	}
+	// TODO
+	// s := *client.socketConn
+	// client.connection.OnNodeStatus = func(ns *things.NodeStatus) {
+	// 	s.Emit("OnNodeStatus", *ns)
+	// }
+	// client.connection.OnWarning = func(we *things.WarnEvent) {
+	// 	s.Emit("OnWarning", *we)
+	// }
 
 	client.user = ""
 	client.pass = ""
@@ -582,24 +583,25 @@ func (client *client) join(socket socketio.Conn, data dataReq) (int, interface{}
 	room := things.NewRoomFromId(scope, idInt)
 	client.roomStore.store[room.Id()] = room
 
-	room.OnInit = func(room *things.Room) {
-		socket.Emit("onInit", room.Id())
-	}
+	// TOOD
+	// room.OnInit = func(room *things.Room) {
+	// 	socket.Emit("onInit", room.Id())
+	// }
 
-	room.OnJoin = func(room *things.Room) {
-		socket.Emit("onJoin", room.Id())
-	}
-	room.OnLeave = func(room *things.Room) {
-		socket.Emit("onLeave", room.Id())
-		delete(client.roomStore.store, room.Id())
-	}
-	room.OnDelete = func(room *things.Room) {
-		socket.Emit("onDelete", room.Id())
-		delete(client.roomStore.store, room.Id())
-	}
-	room.OnEmit = func(room *things.Room, event string, args []interface{}) {
-		socket.Emit("onEmit", room.Id(), id, event, args)
-	}
+	// room.OnJoin = func(room *things.Room) {
+	// 	socket.Emit("onJoin", room.Id())
+	// }
+	// room.OnLeave = func(room *things.Room) {
+	// 	socket.Emit("onLeave", room.Id())
+	// 	delete(client.roomStore.store, room.Id())
+	// }
+	// room.OnDelete = func(room *things.Room) {
+	// 	socket.Emit("onDelete", room.Id())
+	// 	delete(client.roomStore.store, room.Id())
+	// }
+	// room.OnEmit = func(room *things.Room, event string, args []interface{}) {
+	// 	socket.Emit("onEmit", room.Id(), id, event, args)
+	// }
 
 	err := room.Join(client.connection, wait)
 	message := msg(err)
