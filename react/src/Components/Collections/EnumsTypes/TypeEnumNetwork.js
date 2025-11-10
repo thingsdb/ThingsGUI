@@ -72,7 +72,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
             arrows: 'from',
             color: theme.palette.text.primary,
             from: t.type_id != undefined ? createTypeId(t.type_id) : createEnumId(t.enum_id),
-            title: ft.fields.filter(([, v]) => v.includes(t.name)).map(([k, v]) => `property ${k} on ${ft.name} as ${v}`).join(',\n'),
+            title: ft.fields.filter(([, v]) => typeof v === 'string' && v.includes(t.name)).map(([k, v]) => `property ${k} on ${ft.name} as ${v}`).join(',\n'),
             to: ft.type_id != undefined ? createTypeId(ft.type_id) : createEnumId(ft.enum_id),
         }));
 
