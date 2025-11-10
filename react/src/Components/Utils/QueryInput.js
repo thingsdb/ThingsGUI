@@ -105,7 +105,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             { include: '@whitespace' },
 
             // regular expression: ensure it is terminated before beginning (otherwise it is an opeator)
-            [/\/(?=([^\\\/]|\\.)+\/([ims]*)(\s*)(\.|;|\/|,|\)|\]|\}|$))/, { token: 'regexp', bracket: '@open', next: '@regexp' }],
+            [/\/(?=([^\\\/]|\\.)+\/([gims]*)(\s*)(\.|;|\/|,|\)|\]|\}|$))/, { token: 'regexp', bracket: '@open', next: '@regexp' }],
 
             // delimiters and operators
             [/[()\[\]]/, '@brackets'],
@@ -243,6 +243,7 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
                 ...Object.entries(Language.types.enum),
                 ...Object.entries(Language.types.error),
                 ...Object.entries(Language.types.future),
+                ...Object.entries(Language.types.int),
                 ...Object.entries(Language.types.list),
                 ...Object.entries(Language.types.mpdata),
                 ...Object.entries(Language.types.room),
