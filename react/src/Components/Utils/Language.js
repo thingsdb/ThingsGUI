@@ -166,7 +166,7 @@ export default {
     },
     collection: {
         'alt_raise': 'This function will try a statement. If the statement is successful it will just return the result but in case of an error, it will re-raise the error using a given error code.',
-        'ano': '',  // TODO description
+        'ano': 'Creates an anomymous type.',
         'assert': 'Raises ASSERTION_ERROR if the specified statement evaluates to false.',
         'base64_decode': 'Decode a Base64 encoded string.',
         'base64_encode': 'Encode a str or bytes value using Base64.',
@@ -345,7 +345,7 @@ export default {
         'set_time_zone': 'By default each collection will be created with time zone UTC. This function can be used to change the time zone for a collection. If changed, the functions datetime(..) and timeval(..) will use the collections time zone unless specified otherwise.',
         'user_info': 'Returns information about a user. If no argument is given, this method will return information about the current logged in user.',
         'users_info': 'Returns user information for all users withing ThingsDB. This function requires GRANT privileges on the .thingsdb scope since it exposes user access and token information.',
-        'whitelist_add': '',  // TODO description
+        'whitelist_add': 'Add a new rule to the whitelist',
         'whitelist_del': 'Deletes an existing rule from a whitelist or removes all rules, effectively disabling the whitelist.',
     },
     procedures: {
