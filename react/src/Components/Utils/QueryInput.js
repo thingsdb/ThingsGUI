@@ -156,7 +156,7 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
             [/[^\\\/]/, 'regexp'],
             [/@regexpesc/, 'regexp.escape'],
             [/\\\./, 'regexp.invalid'],
-            [/(\/)([ims]*)/, [{ token: 'regexp', bracket: '@close', next: '@pop' }, 'keyword.other']],
+            [/(\/)([gims]*)/, [{ token: 'regexp', bracket: '@close', next: '@pop' }, 'keyword.other']],
         ],
 
         regexrange: [
