@@ -55,7 +55,7 @@
     "style-loader": "4.0.0",
     "terser": "5.44.1",
     "terser-webpack-plugin": "5.3.14",
-    "vis-network": "9.1.9",
+    "vis-network": "10.0.2",
     "vlow": "1.1.27",
     "webpack": "5.102.1",
     "webpack-bundle-analyzer": "4.10.2",
