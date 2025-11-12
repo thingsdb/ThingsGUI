@@ -9,6 +9,7 @@ const VisNetwork = ({
     nodeId = '',
     nodes = [],
     options = {},
+    fullScreen = false,
 }) => {
     const { ref, network } = useVisNetwork({
         edges,
@@ -32,7 +33,7 @@ const VisNetwork = ({
         <div
             ref={ref}
             style={{
-                height: '700px'
+                height: fullScreen ? '100%' : '700px'
             }}
         />
     );
@@ -43,6 +44,7 @@ VisNetwork.propTypes = {
     nodeId: PropTypes.string,
     nodes: PropTypes.arrayOf(PropTypes.object),
     options: PropTypes.object,
+    fullScreen: PropTypes.bool,
 };
 
 export default VisNetwork;

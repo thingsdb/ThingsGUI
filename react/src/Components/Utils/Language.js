@@ -30,6 +30,9 @@ export default {
             'then': 'Function then accepts a closure as argument which will be executed only when the future is successful. The code inside the closure will only generate a change then the closure code is executed. The return value of the closure will be used as the new future value.',
             'else': 'Function else accepts a closure as argument which will be executed only when the future is using a module which has failed with some error. The code inside the closure will only generate a change when the closure code is executed. The return value of the closure will be used as the new future value.',
         },
+        int: {
+            'bit_count': 'Return the number of ones in the binary representation of the absolute value of the integer.',
+        },
         list: {
             'choice': 'This function returns a pseudo-random item from the list. The list must contain at least one item, otherwise a lookup_err() is raised.',
             'clear': 'Removes all items from a list.',
@@ -74,9 +77,11 @@ export default {
         },
         room: {
             'emit': 'Emit an event to all clients which have joined this room. The event is a string value which you are free to choose. It is possible, but not required, to send extra arguments with the event.',
-            'id': 'Returns the id of a room or nil if the room is not stored.'
+            'id': 'Returns the id of a room or nil if the room is not stored.',
+            'set_name': 'Set the name of a room.',
         },
         regex: {
+            'match': '',
             'test': 'Test if a string matches a given regular expression and return true or false.',
         },
         set: {
@@ -161,11 +166,13 @@ export default {
     },
     collection: {
         'alt_raise': 'This function will try a statement. If the statement is successful it will just return the result but in case of an error, it will re-raise the error using a given error code.',
+        'ano': 'Creates an anomymous type.',
         'assert': 'Raises ASSERTION_ERROR if the specified statement evaluates to false.',
         'base64_decode': 'Decode a Base64 encoded string.',
         'base64_encode': 'Encode a str or bytes value using Base64.',
         'bool': 'Returns an bool from a specified value. If no value is given, false is returned.',
         'bytes': 'Convert a value to a byte sequence. If no value is given, an empty byte sequence is returned.',
+        'commit': 'Saves a commit for the current query.',
         'datetime': 'Returns a datetime depending on some optional values.',
         'deep': 'Returns the current deep value. The deep value might change when a function with a return(..) is called which has changed the deep value for this query.',
         'del_enum': 'Delete an enumerator.',
@@ -247,6 +254,7 @@ export default {
         'timeval': 'Returns a timeval depending on some optional values.',
         'try': 'Try a statement and if the statement fails with an error, then the error is returned. It is also possible to catch only specific errors.',
         'type': 'Returns the type name of a value.',
+        'type_all': 'Returns a set with all instances of a given Type within a collection.',
         'type_assert': 'Raises a type_err() if the specified expression evaluates to false.',
         'type_count': 'Returns the number of instances of a given Type within a collection.',
         'type_info': 'Returns information about a given Type.',
@@ -303,6 +311,7 @@ export default {
         'collections_info': 'Returns collection information for all collections in ThingsDB.',
         'del_collection': 'Delete a collection.',
         'del_expired': 'Delete all expired tokens. Extends to all users.',
+        'del_history': 'Delete commit records from history based on a given filter.',
         'del_module': 'Delete a module. A SIGTERM signal will be send to the process for the module which might cancel running futures.',
         'del_node': 'Delete a node from ThingsDB.',
         'del_token': 'Delete a token.',
@@ -314,6 +323,7 @@ export default {
         'has_node': 'Determines if a node exists in ThingsDB',
         'has_token': 'Determines if a token exists in ThingsDB.',
         'has_user': 'Determines if a user exists in ThingsDB.',
+        'history': 'List commit records from history based on a given filter.',
         'module_info': 'Returns information about a specific module.',
         'modules_info': 'Returns module information about all modules in ThingsDB.',
         'new_collection': 'Create a new collection.',
@@ -328,12 +338,15 @@ export default {
         'restore': 'Restore from a backup file created with the new_backup function.',
         'revoke': 'Revoke collection or general privileges from a user. See grant for more information on how access privileges can be set for a user.',
         'set_default_deep': 'The deep value determines how many levels of data are returned by a query. Only things count towards this value.',
+        'set_history': 'Enables “commit history” for a given scope. Commit history can be enabled for collections scopes and the @thingsdb scope.',
         'set_module_conf': 'Change the module configuration. This will (re-send) the module configuration to the module. If the module was not started, ThingsDB will also auto-load the module and send the configuration. Any Value is accepted as config but value nil will not be considered as a configuration and thus will not be send to the module.',
         'set_module_scope': 'Modules can be restricted for usage in a single scope. This can be a @collection:.. scope, but also a @node or @thingsdb scope. This function can be used to change the module scope. When the scope is set to nil, the module can be used in any scope.',
         'set_password': 'Change a users password. This function can also be used to remove an existing password by using nil as the new password. Passwords must contain 1 to 128 printable characters.',
         'set_time_zone': 'By default each collection will be created with time zone UTC. This function can be used to change the time zone for a collection. If changed, the functions datetime(..) and timeval(..) will use the collections time zone unless specified otherwise.',
         'user_info': 'Returns information about a user. If no argument is given, this method will return information about the current logged in user.',
         'users_info': 'Returns user information for all users withing ThingsDB. This function requires GRANT privileges on the .thingsdb scope since it exposes user access and token information.',
+        'whitelist_add': 'Add a new rule to the whitelist',
+        'whitelist_del': 'Deletes an existing rule from a whitelist or removes all rules, effectively disabling the whitelist.',
     },
     procedures: {
         'del_procedure': 'Delete a procedure.',

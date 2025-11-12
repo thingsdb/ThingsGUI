@@ -1,4 +1,5 @@
 import {withVlow} from 'vlow';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
@@ -8,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
 import React from 'react';
 
-import { ErrorMsg, isObjectEmpty, SimpleModal } from '../../Utils';
+import { ErrorMsg, isObjectEmpty, SimpleModal, SearchInput } from '../../Utils';
 import {ApplicationStore, ApplicationActions} from '../../../Stores';
 import {LoginTAG, LoginEditTAG} from '../../../Constants/Tags';
 import Edit from './Edit';
@@ -43,6 +44,7 @@ const Login = ({cachedConnections}) => {
         openSaveConn: false,
         editField: 'all',
     };
+    const [search, setSearch] = React.useState('');
     const [state, setState] = React.useState(initialState);
     const {credentials, editField, form, security, oldName, openSaveConn, showNewConn} = state;
 
@@ -133,13 +135,19 @@ const Login = ({cachedConnections}) => {
                 fullWidth
                 maxWidth="sm"
             >
-                <DialogTitle id="form-dialog-title">
-                    {'Login'}
+                <DialogTitle id="form-dialog-title" sx={{display: 'flex'}}>
+                    <Box flexGrow={1}>
+                        {'Login'}
+                    </Box>
+                    <SearchInput
+                        onChange={({target}) => setSearch(target.value)}
+                        value={search}
+                    />
                 </DialogTitle>
                 <DialogContent>
                     <ErrorMsg tag={tag} />
                     <Collapse in={!showNewConn} timeout="auto" unmountOnExit>
-                        <ListConnections onClickNewConn={handleNewConn} onEdit={handleEditConn} />
+                        <ListConnections onClickNewConn={handleNewConn} onEdit={handleEditConn} search={search} />
                     </Collapse>
                     <Collapse in={showNewConn} timeout="auto" unmountOnExit>
                         <Edit form={form} credentials={credentials} security={security} onChange={handleOnChange} />

@@ -38,7 +38,7 @@ const StyledCardActionArea = styled(CardActionArea)(({ theme }) => ({
 
 const tag = LoginTAG;
 
-const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
+const ListConnections = ({onClickNewConn, onEdit, search, cachedConnections}) => {
     const [openDetail, setOpenDetail] = React.useState({});
 
     const handleOpenDetail = (k) => () => {
@@ -65,7 +65,7 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
         {title: 'Secure connection', key: 'security', keyList: 'secureConnection', default: false},
     ];
 
-    const sortedConns = orderByName(Object.values(cachedConnections));
+    const sortedConns = orderByName(Object.values(cachedConnections).filter(c => Object.values(c).some(v => String(v).includes(search))));
     return (
         <List>
             {sortedConns.map((v, i) => (
@@ -136,6 +136,7 @@ const ListConnections = ({onClickNewConn, onEdit, cachedConnections}) => {
 ListConnections.propTypes = {
     onClickNewConn: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired,
+    search: PropTypes.string,
     cachedConnections: ApplicationStore.types.cachedConnections.isRequired,
 };
 
