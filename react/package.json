@@ -12,7 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "./node_modules/.bin/eslint './**/*.js' --color",
     "analyze": "NODE_ENV='analyze' ./node_modules/.bin/webpack -p --progress --profile --color",
-    "build:dev": "./node_modules/.bin/webpack --progress --profile --color --watch --devtool eval-cheap-source-map",
+    "build:dev": "cross-env ./node_modules/.bin/webpack --progress --profile --color --watch --devtool eval-cheap-source-map",
     "build:prod": "NODE_ENV='production' ./node_modules/.bin/webpack"
   },
   "author": "",
@@ -63,6 +63,8 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.28.5",
+    "cross-env": "10.1.0",
+    "globals": "16.3.0",
     "eslint": "9.39.1",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.0.1",
