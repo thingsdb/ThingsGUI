@@ -1,3 +1,5 @@
+/*eslint-disable react/no-multi-comp*/
+/*eslint-disable react/jsx-props-no-spreading*/
 import { amber, red } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 import { withVlow } from 'vlow';
@@ -124,7 +126,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
         return res;
     }, []);
 
-    const edges = [...relationEdges, ...moreEdges.filter(d => !relationEdges.some(e => e.from === d.from && e.to === d.to || e.from === d.to && e.to === d.from))]
+    const edges = [...relationEdges, ...moreEdges.filter(d => !relationEdges.some(e => e.from === d.from && e.to === d.to || e.from === d.to && e.to === d.from))];
 
     const options = {
         edges: {
