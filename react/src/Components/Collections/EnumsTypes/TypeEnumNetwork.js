@@ -201,7 +201,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
                     </Button>
                 }
             />
-            <Dialog fullScreen open={open} onClose={handleOpen} slots={{transition: Transition}} unmountOnExit>
+            <Dialog fullScreen open={open} onClose={handleOpen} slots={{transition: Transition}}>
                 <div>
                     <TopBar
                         pageIcon={
@@ -212,7 +212,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}) => {
                     />
                 </div>
                 <DialogContent>
-                    <VisNetwork edges={edges} nodes={nodes} options={options} nodeId={nodeId} />
+                    <VisNetwork fullScreen edges={edges} nodes={nodes} options={options} nodeId={nodeId} />
                 </DialogContent>
             </Dialog>
         </Grid>
