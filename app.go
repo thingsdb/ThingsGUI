@@ -27,7 +27,6 @@ type authResp struct {
 func (app *app) socketRouter() {
 	app.server.OnConnection(func(s *socketio.Socket) {
 
-		// s.SetContext("")
 		app.clients[s.Id] = &client{
 			connectionsPath: getHomePath(connFile),
 			logCh:           make(chan string),
@@ -77,25 +76,7 @@ func (app *app) socketRouter() {
 			}
 		})
 
-		s.On("cookie", func(e *socketio.EventPayload) {
-			//	client := app.clients[s.Id]
-			//	if useCookieSession && client.cookie == nil {
-			// 		header := s.RemoteHeader()
-			// 		header.Set("Cookie", cookies)
-			// 		req := http.Request{Header: header}
-			// 		cookie, _ := req.Cookie(cookieName)
-			// 		client.cookie = cookie
-			// 	}
-			e.Ack(http.StatusNoContent)
-		})
-
 		s.On("connected", func(e *socketio.EventPayload) {
-			// client := app.clients[s.Id]
-			// if client.cookie == nil {
-			// 	req := http.Request{Header: s.RemoteHeader()}
-			// 	cookie, _ := req.Cookie(cookieName)
-			// 	client.cookie = cookie
-			// }
 			status, resp, message := app.clients[s.Id].connected()
 			e.Ack(status, resp, message)
 		})
@@ -241,10 +222,12 @@ func (app *app) socketRouter() {
 
 // Start app
 func (app *app) start() {
-	// TODO
-	// go app.server.ServeHTTP()
-	// defer app.server.Close()
+	// app.server is started by now
+
+	//SocketIO handlers
 	app.socketRouter()
+
+	defer app.server.Close()
 
 	//HTTP handlers
 	http.HandleFunc("/", handlerMain) // homepage

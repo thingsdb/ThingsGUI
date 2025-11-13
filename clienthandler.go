@@ -38,8 +38,7 @@ type client struct {
 
 // connResp type
 type connResp struct {
-	Connected  bool
-	UseCookies bool
+	Connected bool
 }
 
 // loginData type
@@ -87,15 +86,13 @@ type dataReq struct {
 
 func connectedResp() connResp {
 	return connResp{
-		Connected:  true,
-		UseCookies: useCookieSession,
+		Connected: true,
 	}
 }
 
 func disconnectedResp() connResp {
 	return connResp{
-		Connected:  false,
-		UseCookies: useCookieSession,
+		Connected: false,
 	}
 }
 
