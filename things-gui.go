@@ -93,11 +93,6 @@ func main() {
 	readEnvVariables()
 	newSessions()
 
-	// TODO
-	// options := &engineio.Options{
-	// 	PingTimeout: time.Duration(timeout+120) * time.Second,
-	// }
-	// app.server = socketio.NewServer(options)
 	app.server = socketio.New()
 
 	// on interrup clean up
