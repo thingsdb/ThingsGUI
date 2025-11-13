@@ -29,7 +29,7 @@ type client struct {
 	port            uint16
 	roomStore       *roomStore
 	sessionPath     string
-	socketConn      *socketio.Conn
+	socketConn      *socketio.Socket
 	ssl             *tls.Config
 	tmpFiles        *tmpFiles
 	token           string
@@ -120,14 +120,13 @@ func (client *client) connect(data loginData) (connResp, error) {
 	client.connection.LogLevel = things.LogDebug
 	client.connection.ReconnectionAttempts = 7
 
-	// TODO
-	// s := *client.socketConn
-	// client.connection.OnNodeStatus = func(ns *things.NodeStatus) {
-	// 	s.Emit("OnNodeStatus", *ns)
-	// }
-	// client.connection.OnWarning = func(we *things.WarnEvent) {
-	// 	s.Emit("OnWarning", *we)
-	// }
+	s := client.socketConn
+	client.connection.OnNodeStatus = func(ns *things.NodeStatus) {
+		s.Emit("OnNodeStatus", *ns)
+	}
+	client.connection.OnWarning = func(we *things.WarnEvent) {
+		s.Emit("OnWarning", *we)
+	}
 
 	client.user = ""
 	client.pass = ""
@@ -568,7 +567,7 @@ func (client *client) query(data dataReq) (int, interface{}, message) {
 }
 
 // Join a room
-func (client *client) join(socket socketio.Conn, data dataReq) (int, interface{}, message) {
+func (client *client) join(socket *socketio.Socket, data dataReq) (int, interface{}, message) {
 	client.roomStore.mux.Lock()
 	defer client.roomStore.mux.Unlock()
 
@@ -580,25 +579,24 @@ func (client *client) join(socket socketio.Conn, data dataReq) (int, interface{}
 	room := things.NewRoomFromId(scope, idInt)
 	client.roomStore.store[room.Id()] = room
 
-	// TOOD
-	// room.OnInit = func(room *things.Room) {
-	// 	socket.Emit("onInit", room.Id())
-	// }
+	room.OnInit = func(room *things.Room) {
+		socket.Emit("onInit", room.Id())
+	}
 
-	// room.OnJoin = func(room *things.Room) {
-	// 	socket.Emit("onJoin", room.Id())
-	// }
-	// room.OnLeave = func(room *things.Room) {
-	// 	socket.Emit("onLeave", room.Id())
-	// 	delete(client.roomStore.store, room.Id())
-	// }
-	// room.OnDelete = func(room *things.Room) {
-	// 	socket.Emit("onDelete", room.Id())
-	// 	delete(client.roomStore.store, room.Id())
-	// }
-	// room.OnEmit = func(room *things.Room, event string, args []interface{}) {
-	// 	socket.Emit("onEmit", room.Id(), id, event, args)
-	// }
+	room.OnJoin = func(room *things.Room) {
+		socket.Emit("onJoin", room.Id())
+	}
+	room.OnLeave = func(room *things.Room) {
+		socket.Emit("onLeave", room.Id())
+		delete(client.roomStore.store, room.Id())
+	}
+	room.OnDelete = func(room *things.Room) {
+		socket.Emit("onDelete", room.Id())
+		delete(client.roomStore.store, room.Id())
+	}
+	room.OnEmit = func(room *things.Room, event string, args []interface{}) {
+		socket.Emit("onEmit", room.Id(), id, event, args)
+	}
 
 	err := room.Join(client.connection, wait)
 	message := msg(err)

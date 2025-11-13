@@ -32,7 +32,7 @@ func (app *app) socketRouter() {
 			logCh:           make(chan string),
 			roomStore:       newRoomStore(),
 			sessionPath:     getHomePath(sessionFile),
-			socketConn:      s.Conn,
+			socketConn:      s,
 			tmpFiles:        newTmpFiles(),
 		}
 
@@ -180,7 +180,7 @@ func (app *app) socketRouter() {
 			if len(e.Data) > 0 {
 				data, ok := e.Data[0].(dataReq)
 				if ok {
-					status, resp, message := app.clients[s.Id].join(*s.Conn, data)
+					status, resp, message := app.clients[s.Id].join(s, data)
 					e.Ack(status, resp, message)
 				}
 			}
