@@ -48,7 +48,12 @@ func (app *app) socketRouter() {
 
 		s.On("authKey", func(e *socketio.EventPayload) {
 			if len(e.Data) > 0 {
-				status, resp, message := app.clients[s.Id].authKey(e.Data[0].(map[string]string))
+				// TODO
+				var data map[string]string
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &data)
+
+				status, resp, message := app.clients[s.Id].authKey(data)
 				e.Ack(status, resp, message)
 			}
 		})
@@ -65,14 +70,24 @@ func (app *app) socketRouter() {
 
 		s.On("authToken", func(e *socketio.EventPayload) {
 			if len(e.Data) > 0 {
-				status, resp, message := app.clients[s.Id].authToken(e.Data[0].(map[string]string))
+				// TODO
+				var data map[string]string
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &data)
+
+				status, resp, message := app.clients[s.Id].authToken(data)
 				e.Ack(status, resp, message)
 			}
 		})
 
 		s.On("authPass", func(e *socketio.EventPayload) {
 			if len(e.Data) > 0 {
-				status, resp, message := app.clients[s.Id].authPass(e.Data[0].(map[string]string))
+				// TODO
+				var data map[string]string
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &data)
+
+				status, resp, message := app.clients[s.Id].authPass(data)
 				e.Ack(status, resp, message)
 			}
 		})
