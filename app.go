@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -83,21 +84,25 @@ func (app *app) socketRouter() {
 
 		s.On("connToNew", func(e *socketio.EventPayload) {
 			if len(e.Data) > 0 {
-				data, ok := e.Data[0].(loginData)
-				if ok {
-					status, resp, message := app.clients[s.Id].connectToNew(data)
-					e.Ack(status, resp, message)
-				}
+				// TODO
+				var data loginData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &data)
+
+				status, resp, message := app.clients[s.Id].connectToNew(data)
+				e.Ack(status, resp, message)
 			}
 		})
 
 		s.On("connViaCache", func(e *socketio.EventPayload) {
 			if len(e.Data) > 0 {
-				data, ok := e.Data[0].(loginData)
-				if ok {
-					status, resp, message := app.clients[s.Id].handlerConnectViaCache(data)
-					e.Ack(status, resp, message)
-				}
+				// TODO
+				var data loginData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &data)
+
+				status, resp, message := app.clients[s.Id].handlerConnectViaCache(data)
+				e.Ack(status, resp, message)
 			}
 		})
 
@@ -148,21 +153,25 @@ func (app *app) socketRouter() {
 
 		s.On("delCachedConn", func(e *socketio.EventPayload) {
 			if len(e.Data) > 0 {
-				data, ok := e.Data[0].(loginData)
-				if ok {
-					status, resp, message := app.clients[s.Id].delCachedConnection(data)
-					e.Ack(status, resp, message)
-				}
+				// TODO
+				var data loginData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &data)
+
+				status, resp, message := app.clients[s.Id].delCachedConnection(data)
+				e.Ack(status, resp, message)
 			}
 		})
 
 		s.On("query", func(e *socketio.EventPayload) {
 			if len(e.Data) > 0 {
-				data, ok := e.Data[0].(dataReq)
-				if ok {
-					status, resp, message := app.clients[s.Id].query(data)
-					e.Ack(status, resp, message)
-				}
+				// TODO
+				var data dataReq
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &data)
+
+				status, resp, message := app.clients[s.Id].query(data)
+				e.Ack(status, resp, message)
 			}
 		})
 
