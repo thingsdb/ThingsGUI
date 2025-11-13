@@ -235,7 +235,7 @@ func (app *app) socketRouter() {
 		})
 
 		s.On("disconnect", func(e *socketio.EventPayload) {
-			app.clients[s.Id].logCh <- fmt.Sprintf("closed: %s", e.Data[0])
+			app.clients[s.Id].logCh <- fmt.Sprintf("closed: %s", s.Id)
 			app.clients[s.Id].tmpFiles.cleanupTmp()
 
 			app.clients[s.Id].closeSingleConn()
