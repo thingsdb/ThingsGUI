@@ -14,14 +14,14 @@ import {
     TASK_OWNER_QUERY,
 } from '../TiQueries/Queries';
 
-const TaskActions = Vlow.createActions([
+const TaskActions = Vlow.factoryActions<TaskStore>()([
     'cancelTask',
     'deleteTask',
     'getArgs',
     'getLightTasks',
     'getOwner',
     'getTask',
-]);
+] as const);
 
 class TaskStore extends BaseStore {
 

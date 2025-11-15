@@ -2,9 +2,9 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
-const EditorActions = Vlow.createActions([
+const EditorActions = Vlow.factoryActions<EditorStore>()([
     'setHistory',
-]);
+] as const);
 
 
 class EditorStore extends Vlow.Store {

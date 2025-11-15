@@ -9,7 +9,7 @@ import {ErrorActions} from './ErrorStore';
 import {NodesActions} from './NodesStore';
 import {ThingsdbActions} from './ThingsdbStore';
 
-const ApplicationActions = Vlow.createActions([
+const ApplicationActions = Vlow.factoryActions<ApplicationStore>()([
     'isAuthOnly',
     'authKey',
     'authToken',
@@ -27,7 +27,7 @@ const ApplicationActions = Vlow.createActions([
     'reconnect',
     'renameCachedConn',
     'storeSession'
-]);
+] as const);
 
 
 class ApplicationStore extends BaseStore {

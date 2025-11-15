@@ -17,7 +17,7 @@ import {
 } from '../TiQueries/Queries';
 
 
-const CollectionActions = Vlow.createActions([
+const CollectionActions = Vlow.factoryActions<CollectionStore>()([
     'cleanupTmp',
     'decCounter',
     'disableSubmit',
@@ -29,7 +29,7 @@ const CollectionActions = Vlow.createActions([
     'refreshThings',
     'removeThing',
     'resetCollectionStore',
-]);
+] as const);
 
 
 class CollectionStore extends BaseStore {

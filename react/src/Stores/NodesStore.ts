@@ -46,7 +46,7 @@ import {
 } from '../TiQueries/Queries';
 import { THINGSDB_SCOPE, NODE_SCOPE } from '../Constants/Scopes';
 
-const NodesActions = Vlow.createActions([
+const NodesActions = Vlow.factoryActions<NodesStore>()([
     'addBackup',
     'addModule',
     'addNode',
@@ -71,7 +71,7 @@ const NodesActions = Vlow.createActions([
     'setModuleConf',
     'setModuleScope',
     'shutdown',
-]);
+] as const);
 
 
 class NodesStore extends BaseStore {

@@ -11,12 +11,12 @@ import {
     TYPES_INFO_QUERY,
 } from '../TiQueries/Queries';
 
-const TypeActions = Vlow.createActions([
+const TypeActions = Vlow.factoryActions<TypeStore>()([
     'getType',
     'getTypes',
     'deleteType',
     'renameType'
-]);
+] as const);
 
 
 class TypeStore extends BaseStore {

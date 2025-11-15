@@ -200,14 +200,14 @@ class BaseStore extends Vlow.Store {
     }
 }
 
-const EventActions = Vlow.createActions([
+const EventActions = Vlow.factoryActions<EventStore>()([
     'clearLogEntry',
     'clearLogging',
     'join',
     'leave',
     'rejoin',
     'reset',
-]);
+] as const);
 
 class EventStore extends BaseStore {
 

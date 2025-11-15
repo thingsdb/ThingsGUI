@@ -15,13 +15,13 @@ import {
     RENAME_PROCEDURE_QUERY,
 } from '../TiQueries/Queries';
 
-const ProcedureActions = Vlow.createActions([
+const ProcedureActions = Vlow.factoryActions<ProcedureStore>()([
     'getProcedure',
     'getProcedures',
     'deleteProcedure',
     'renameProcedure',
     'runProcedure'
-]);
+] as const);
 
 
 class ProcedureStore extends BaseStore {

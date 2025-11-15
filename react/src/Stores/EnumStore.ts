@@ -7,11 +7,11 @@ import { NAME_ARGS, RENAME_ARGS } from '../TiQueries/Arguments';
 import { DEL_ENUM_QUERY, ENUMS_INFO_QUERY, RENAME_ENUM_QUERY } from '../TiQueries/Queries';
 import { ErrorActions } from './ErrorStore';
 
-const EnumActions = Vlow.createActions([
+const EnumActions = Vlow.factoryActions<EnumStore>()([
     'getEnums',
     'deleteEnum',
     'renameEnum'
-]);
+] as const);
 
 
 class EnumStore extends BaseStore {

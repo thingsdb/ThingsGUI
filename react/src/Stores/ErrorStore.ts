@@ -2,14 +2,14 @@
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
-const ErrorActions = Vlow.createActions([
+const ErrorActions = Vlow.factoryActions<ErrorStore>()([
     'setToastError',
     'removeToastError',
     'removeToastErrorMsg',
     'resetToastError',
     'setMsgError',
     'removeMsgError',
-]);
+] as const);
 
 
 

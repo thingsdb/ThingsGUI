@@ -41,7 +41,7 @@ import {
 
 const scope = THINGSDB_SCOPE;
 
-const ThingsdbActions = Vlow.createActions([
+const ThingsdbActions = Vlow.factoryActions<ThingsdbStore>()([
     'resetThingsStore',
 
     //COLLECTIONS ACTIONS
@@ -64,7 +64,7 @@ const ThingsdbActions = Vlow.createActions([
     'newToken',
     'delToken',
     'delExpired',
-]);
+] as const);
 
 
 class ThingsdbStore extends BaseStore {
