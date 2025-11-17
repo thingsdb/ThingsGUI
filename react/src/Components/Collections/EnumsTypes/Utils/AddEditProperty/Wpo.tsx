@@ -17,7 +17,7 @@ const Wpo = ({
         setSwitchWpo(input);
     },[input]);
 
-    const handleSetWpo = ({target}) => {
+    const handleSetWpo = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         if(!disabled) {
             setSwitchWpo(checked);

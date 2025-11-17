@@ -26,7 +26,7 @@ const ThingRoot = ({things, collection}: ICollectionStore & Props) => {
         CollectionActions.getThings(collection.name, null, setRootId);
     }, [collection.name, rootId]);
 
-    const onChildren = React.useCallback((k, v) => (
+    const onChildren = React.useCallback((k: string, v: object) => (
         <Thing
             key={k}
             id={collection.collection_id}

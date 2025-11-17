@@ -10,7 +10,7 @@ import { RemoveModuleTAG } from '../../../Constants/Tags';
 const tag = RemoveModuleTAG;
 
 const Remove = ({nodeId, item}: Props) => {
-    const handleClickOk = (callback) => {
+    const handleClickOk = (callback: () => void) => {
         NodesActions.delModule(
             nodeId,
             item.name,

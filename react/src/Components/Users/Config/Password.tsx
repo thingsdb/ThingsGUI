@@ -22,8 +22,8 @@ const initialState: State = {
     form: {},
 };
 
-const validation = {
-    password: (f) => {
+const validation: Record<string, any> = {
+    password: (f: any) => {
         if (f.password.length==0) {
             return 'is required';
         }
@@ -45,7 +45,7 @@ const Password = ({user}: Props) => {
         setState(state => ({...state, show: false}));
     };
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {id, value} = target;
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value});
@@ -54,7 +54,7 @@ const Password = ({user}: Props) => {
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form);  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form);  return d; }, {} as Record<string, string>);
         setState({...state, errors: err});
         if (form.set) {
             if (!Object.values(err).some(d => Boolean(d))) {
@@ -74,14 +74,14 @@ const Password = ({user}: Props) => {
         }
     };
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             handleClickOk();
         }
     };
 
-    const handleSetPassword = ({target}) => {
+    const handleSetPassword = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {set: checked});

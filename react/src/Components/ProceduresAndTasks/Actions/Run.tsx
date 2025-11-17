@@ -31,7 +31,7 @@ const Run = ({
     const editState = useEdit()[0];
     const {obj} = editState;
 
-    const handleResult = (data) => {
+    const handleResult = (data: any) => {
         setOutput(data);
         setTimeout(()=> {
             setLoading(false);
@@ -55,7 +55,7 @@ const Run = ({
         }
     };
 
-    const handleChangeTab = (newValue) => {
+    const handleChangeTab = (newValue: number) => {
         setTabIndex(newValue);
     };
 

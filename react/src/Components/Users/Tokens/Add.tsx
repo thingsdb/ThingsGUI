@@ -46,7 +46,7 @@ const Add = ({user}: Props) => {
         setState({...state, show: false});
     };
 
-    const handleSwitch = ({target}) => {
+    const handleSwitch = ({target}: React.ChangeEvent<any>) => {
         const {id, checked} = target;
         setState(prevState => {
             const updatedSwitches = Object.assign({}, prevState.switches, {[id]: checked});
@@ -54,7 +54,7 @@ const Add = ({user}: Props) => {
         });
     };
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {id, value} = target;
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value});
@@ -62,7 +62,7 @@ const Add = ({user}: Props) => {
         });
     };
 
-    const handleExpirationTime = (expirationTime) => {
+    const handleExpirationTime = (expirationTime: number) => {
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {expirationTime: expirationTime});
             return {...prevState, form: updatedForm, errors: {}};
@@ -81,7 +81,7 @@ const Add = ({user}: Props) => {
         );
     };
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             handleClickOk();

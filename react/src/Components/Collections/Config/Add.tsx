@@ -12,7 +12,7 @@ const withStores = withVlow([{
     keys: ['collections']
 }]);
 
-const validation =  (name, collections) => {
+const validation =  (name: string, collections: ICollection[]) => {
     if (name.length === 0) {
         return 'is required';
     }
@@ -35,7 +35,7 @@ const Add = ({open, onClose, collections}: IThingsdbStore & Props) => {
         }
     }, [open]);
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setName(value);
         setErr('');
@@ -49,7 +49,7 @@ const Add = ({open, onClose, collections}: IThingsdbStore & Props) => {
         }
     };
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             handleClickOk();

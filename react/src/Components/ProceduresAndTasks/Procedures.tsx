@@ -39,7 +39,8 @@ const Procedures = ({
         handleRefreshProcedures();
     }, [handleRefreshProcedures]);
 
-    const handleClick = (type, ident) => () => {
+    const handleClick = (type: string, ident: string) => () => {
+        // TODOT use ident arg in onCallback
         setIdentifier(ident);
         setOpen({...open, [type]: true});
         onCallback(type, (procedures[scope] || []).find(i=>i.name == identifier));
@@ -51,7 +52,7 @@ const Procedures = ({
         onCallback('add', null);
     };
 
-    const handleClickDelete = (n, cb, tag) => {
+    const handleClickDelete = (n: string, cb: () => void, tag: string) => {
         ProcedureActions.deleteProcedure(
             scope,
             n,
@@ -60,7 +61,7 @@ const Procedures = ({
         );
     };
 
-    const handleClose = (c) => {
+    const handleClose = (c: object) => {
         setOpen({...open, ...c});
     };
 

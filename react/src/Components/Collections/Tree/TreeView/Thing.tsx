@@ -39,7 +39,7 @@ const Thing = ({
         setShow(false);
     };
 
-    const onChildren = React.useCallback((k, v, i, isArray) => (
+    const onChildren = React.useCallback((k: string, v: object, i: number, isArray: boolean) => (
         <Thing
             inset
             collection={collection}
@@ -68,7 +68,7 @@ const Thing = ({
         />
     );
 
-    const handleOpenClose = (open) => {
+    const handleOpenClose = (open: boolean) => {
         if(thing && thing[THING_KEY]) {
             if(open) {
                 CollectionActions.getThings(collection.name, thing[THING_KEY]);

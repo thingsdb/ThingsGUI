@@ -23,7 +23,7 @@ const UsedByType = ({
     const re= new RegExp(pattern);
     const u = customTypes[scope] && name ? customTypes[scope].filter(i => re.test(`${i.fields}`)) : [];
 
-    const handleChange = (name, category) => () => {
+    const handleChange = (name: string, category: 'type') => () => {
         onChangeItem(name, category);
     };
 

@@ -56,7 +56,7 @@ const ThingActionsDialog = ({
     const dataTypes = allDataTypes([...customTypes, ...enums]);
 
     const [tabIndex, setTabIndex] = React.useState(0);
-    const handleChangeTab = (_event, newValue) => {
+    const handleChangeTab = (_event: unknown, newValue: number) => {
         setTabIndex(newValue);
     };
 
@@ -90,19 +90,19 @@ const ThingActionsDialog = ({
 
     }, []);
 
-    const setType = (t) => {
+    const setType = (t: [string, string, any]) => {
         const [realChildType, realParentType, customTypes] = t;
         setState({...state, realChildType, realParentType, customTypes, loaded: true});
     };
 
-    const handleClickOk = (blob, query) => {
+    const handleClickOk = (blob: any, query: string) => {
         const keys = Object.keys(blob || {});
         const b = keys ? keys.reduce((res, k) => {
             if(query.includes(k)){
                 res[k]=blob[k];
             }
             return res;
-        },{}) : null;
+        },{} as Record<string, string>) : null;
 
         const isChildEnum = Boolean(enums.find(c=>c.name==realChildType));
         const useParent = isChildEnum&&child.id;

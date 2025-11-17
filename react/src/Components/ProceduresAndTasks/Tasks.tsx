@@ -17,7 +17,7 @@ const withStores = withVlow([{
 const header = [
     {ky: 'id', label: 'ID'},
     {ky: 'at', label: 'At', fn: nextRunFn},
-    {ky: 'err', label: 'Error', fn: (e) => !e ? '-' : e === 'success' ? e : <LocalErrorMsg msg={e} useAsPopUp />},
+    {ky: 'err', label: 'Error', fn: (e: string) => !e ? '-' : e === 'success' ? e : <LocalErrorMsg msg={e} useAsPopUp />},
 ];
 
 const tag = TasksTAG;
@@ -45,7 +45,7 @@ const Tasks = ({
         handleRefreshTasks();
     }, [handleRefreshTasks]);
 
-    const handleClick = (type, ident) => () => {
+    const handleClick = (type: string, ident: number) => () => {
         setIdentifier(ident);
         setOpen({...open, [type]: true});
         onCallback(type, (tasks[scope] || []).find(i=>i.id == identifier));
@@ -57,7 +57,7 @@ const Tasks = ({
         onCallback('add', null);
     };
 
-    const handleClickDelete = (id, cb, tag) => {
+    const handleClickDelete = (id: number, cb: () => void, tag: string) => {
         TaskActions.deleteTask(
             scope,
             id,
@@ -66,7 +66,7 @@ const Tasks = ({
         );
     };
 
-    const handleClose = (c) => {
+    const handleClose = (c: object) => {
         setOpen({...open, ...c});
     };
 

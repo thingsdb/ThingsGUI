@@ -44,7 +44,7 @@ const PieChart = ({
     let height = diameter+85;
 
 
-    const legendy = (y, lineNumber) => y + offset.y+lineNumber/2*legendLineHeight;
+    const legendy = (y: number, lineNumber: number) => y + offset.y+lineNumber/2*legendLineHeight;
 
 
     return(

@@ -24,7 +24,7 @@ const header = [
         {ky: 'log_level', label: 'Log level'},
         {ky: 'ip_support', label: 'IP support'},
         {ky: 'storage_path', label: 'Storage path'},
-        {ky: 'uptime', label: 'Uptime', fn: (d) =>  moment.duration(d , 'second').humanize()},
+        {ky: 'uptime', label: 'Uptime', fn: (d: number) =>  moment.duration(d , 'second').humanize()},
         {ky: 'zone', label: 'Zone'},
         {ky: 'scheduled_backups', label: 'Scheduled backups'},
         {ky: 'connected_clients', label: 'Connected clients'},
@@ -65,7 +65,7 @@ const header = [
         {ky: 'result_size_limit', label: 'Result size limit', fn: scaleToBinBytes},
         {ky: 'cached_queries', label: 'Cached queries'},
         {ky: 'threshold_query_cache', label: 'Threshold query cache'},
-        {ky: 'cache_expiration_time', label: 'Cache expiration time', fn: (d) =>  moment.duration(d , 'second').humanize()},
+        {ky: 'cache_expiration_time', label: 'Cache expiration time', fn: (d: number) =>  moment.duration(d , 'second').humanize()},
     ]},
 
 ];

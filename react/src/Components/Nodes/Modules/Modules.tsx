@@ -23,10 +23,10 @@ const withStores = withVlow([{
 
 
 const header = [
-    {ky: 'created_at', label: 'Created at', fn: (t) => moment(t*1000).format(DATE_TIME_SEC_STR)},
+    {ky: 'created_at', label: 'Created at', fn: (t: number) => moment(t*1000).format(DATE_TIME_SEC_STR)},
     {ky: 'name', label: 'Name'},
-    {ky: 'scope', label: 'Scope', fn: (s) => s ? s : 'All scopes'},
-    {ky: 'status', label: 'Status', fn: (s) => <StatusIcon status={s} />},
+    {ky: 'scope', label: 'Scope', fn: (s: string) => s ? s : 'All scopes'},
+    {ky: 'status', label: 'Status', fn: (s: string) => <StatusIcon status={s} />},
 ];
 
 const link = THINGS_DOC_MODULE_INFO;
@@ -37,7 +37,7 @@ const Modules = ({nodeId, offline, modules}: INodesStore & Props) => {
         NodesActions.getModules(nodeId); // update of the selected node; to get the latest info
     };
 
-    const handleButtons = (_module) => (
+    const handleButtons = (_module: object) => (
         <React.Fragment>
             <Remove nodeId={nodeId} item={_module} />
             <ModuleInfo nodeId={nodeId} item={_module} />

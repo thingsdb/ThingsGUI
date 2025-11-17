@@ -10,7 +10,7 @@ import { DATE_TIME_MIN_STR } from '../../../Constants/DateStrings';
 
 
 const ViewProcedure = ({
-    procedure = {}
+    procedure = {},
 }: Props) => (
     <List disablePadding dense>
         <ListItem>

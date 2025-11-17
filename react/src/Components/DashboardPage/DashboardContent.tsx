@@ -79,14 +79,14 @@ const DashboardContent = ({allNodeInfo, collections, users, nodes}: IThingsdbSto
     ];
 
 
-    const columns = (ltitle, lnumber) => ([
+    const columns = (ltitle: string, lnumber: string) => ([
         { id: 'title', label: ltitle, minWidth: 170 },
         {
             id: 'number',
             label: lnumber,
             minWidth: 170,
             align: 'right',
-            format: (value) => value.toFixed(0),
+            format: (value: number) => value.toFixed(0),
         },
     ]);
 

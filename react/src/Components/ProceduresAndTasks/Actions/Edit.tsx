@@ -28,7 +28,7 @@ const Edit = ({
                 <CardActions>
                     <Grid container size={12} spacing={1} >
                         <Grid>
-                            {buttons[type]}
+                            {type === 'task' && buttons[type]}
                         </Grid>
                         <Grid>
                             <Remove item={item} scope={scope} type={type} />
@@ -50,7 +50,7 @@ export default Edit;
 
 interface Props {
     item: Partial<IProcedure> | Partial<ITask>;
-    type: string;
+    type: 'procedure' | 'task';
 
     scope: string;  // TODOT unused, remove from ../Utils/Page.js
 }

@@ -87,7 +87,7 @@ const headers = {
 
 const queries = {
     add: {
-        type: (name, list) => {
+        type: (name: string, list: any[]) => {
             const obj = list.reduce((res, v) => {
                 // the set_type_ prefix is there to guarantee that the key in the argument object is unique.
                 const uniqueKey = `set_type_${v.propertyName}`;
@@ -109,7 +109,7 @@ const queries = {
                 queryString: SET_TYPE_FORMAT_QUERY(name, value)
             });
         },
-        enum: (name, list) => {
+        enum: (name: string, list: any[]) => {
             let hasBlob = false;
             const obj = list.reduce((res, v) => {
                 let blob = v.propertyBlob;
@@ -141,12 +141,12 @@ const queries = {
     },
     mod: {
         addField: {
-            type: (name, update) => ({
+            type: (name: string, update: any) => ({
                 jsonArgs: MOD_TYPE_ADD_FIELD_ARGS(name, update.propertyName, update.propertyType, update.propertyVal),
                 query: MOD_TYPE_ADD_FIELD_QUERY(update.propertyVal),
                 queryString: MOD_TYPE_ADD_FIELD_FORMAT_QUERY(name, update.propertyName, update.propertyType, update.propertyVal),
             }),
-            enum: (name, update) => {
+            enum: (name: string, update: any) => {
                 let blob = update.propertyBlob;
                 let hasBlob = blob && Object.keys(blob).length > 0;
                 return ({
@@ -158,19 +158,19 @@ const queries = {
             }
         },
         addMethod: {
-            type: (name, update) => ({
+            type: (name: string, update: any) => ({
                 jsonArgs: MOD_TYPE_ADD_METHOD_ARGS(name, update.propertyName, update.definition),
                 query: MOD_TYPE_ADD_METHOD_QUERY,
                 queryString: MOD_TYPE_ADD_METHOD_FORMAT_QUERY(name, update.propertyName, update.definition),
             }),
         },
         mod: {
-            type: (name, update) => ({
+            type: (name: string, update: any) => ({
                 jsonArgs: MOD_TYPE_MOD_FIELD_ARGS(name, update.propertyName, update.propertyType, update.callback),
                 query: MOD_TYPE_MOD_FIELD_QUERY(update.callback),
                 queryString: MOD_TYPE_MOD_FIELD_FORMAT_QUERY(name, update.propertyName, update.propertyType, update.callback),
             }),
-            enum: (name, update) => {
+            enum: (name: string, update: any) => {
                 let blob = update.propertyBlob;
                 let hasBlob = blob && Object.keys(blob).length > 0;
                 return ({
@@ -182,59 +182,59 @@ const queries = {
             }
         },
         ren: {
-            type: (name, update) => ({
+            type: (name: string, update: any) => ({
                 jsonArgs: MOD_TYPE_REL_ADD_REN_ARGS(name, update.oldname, update.newname),
                 query: MOD_TYPE_REN_QUERY,
                 queryString: MOD_TYPE_REN_FORMAT_QUERY(name, update.oldname, update.newname),
             }),
-            enum: (name, update) => ({
+            enum: (name: string, update: any) => ({
                 jsonArgs: MOD_ENUM_REN_ARGS(name, update.oldname, update.newname),
                 query: MOD_ENUM_REN_QUERY,
                 queryString: MOD_ENUM_REN_FORMAT_QUERY(name, update.oldname, update.newname)
             }),
         },
         rel: {
-            type: (name, update) => ({
+            type: (name: string, update: any) => ({
                 jsonArgs:  MOD_TYPE_REL_ADD_REN_ARGS(name, update.relation.property, update.relation.propertyToo),
                 query: MOD_TYPE_REL_ADD_QUERY,
                 queryString: MOD_TYPE_REL_ADD_FORMAT_QUERY(name, update.relation.property, update.relation.propertyToo),
             }),
         },
         delRel: {
-            type: (name, update) => ({
+            type: (name: string, update: any) => ({
                 jsonArgs: MOD_TYPE_REL_DEL_ARGS(name, update.propertyName),
                 query: MOD_TYPE_REL_DEL_QUERY,
                 queryString: MOD_TYPE_REL_DEL_FORMAT_QUERY(name, update.propertyName)
             }),
         },
         def: {
-            enum: (name, update) => ({
+            enum: (name: string, update: any) => ({
                 jsonArgs: MOD_ENUM_ARGS(name, update.propertyName),
                 query: MOD_ENUM_DEF_QUERY,
                 queryString: MOD_ENUM_DEF_FORMAT_QUERY(name, update.propertyName)
             }),
         },
         del: {
-            type: (name, update) => ({
+            type: (name: string, update: any) => ({
                 jsonArgs: MOD_TYPE_DEL_ARGS(name, update.propertyName),
                 query: MOD_TYPE_DEL_QUERY,
                 queryString: MOD_TYPE_DEL_FORMAT_QUERY(name, update.propertyName),
             }),
-            enum: (name, update) => ({
+            enum: (name: string, update: any) => ({
                 jsonArgs: MOD_ENUM_ARGS(name, update.propertyName),
                 query: MOD_ENUM_DEL_QUERY,
                 queryString: MOD_ENUM_DEL_FORMAT_QUERY(name, update.propertyName),
             }),
         },
         wpo: {
-            type: (name, update) => ({
+            type: (name: string, update: any) => ({
                 jsonArgs: MOD_TYPE_WPO_ARGS(name, update.wpo),
                 query: MOD_TYPE_WPO_QUERY,
                 queryString: MOD_TYPE_WPO_FORMAT_QUERY(name, update.wpo),
             }),
         },
         met: {
-            type: (name, update) => ({
+            type: (name: string, update: any) => ({
                 jsonArgs: MOD_TYPE_MOD_ARGS(name, update.propertyName, update.definition, update.callback),
                 query: MOD_TYPE_MOD_QUERY(update.callback),
                 queryString: MOD_TYPE_MOD_FORMAT_QUERY(name, update.propertyName, update.definition, update.callback)
@@ -243,8 +243,8 @@ const queries = {
     }
 };
 
-const fmrows = (callback, fields, isType, item, scope, view ) => item[fields] ? item[fields].map(([n,v])=> {
-    const isBlob = v.constructor === String && v.includes(THINGDB_CACHE);
+const fmrows = (callback: any, fields: 'fields' | 'members', isType: boolean, item: IEnum | IType, scope: string, view: any ) => item[fields] ? item[fields].map(([n,v])=> {
+    const isBlob = typeof v === 'string' && v.includes(THINGDB_CACHE);
     let obj;
     if(isBlob) {
         obj = <DownloadBlob val={v} />;
@@ -268,7 +268,7 @@ const fmrows = (callback, fields, isType, item, scope, view ) => item[fields] ? 
 }):[];
 
 const tableInfo = {
-    type: (callback, items, scope, view) => {
+    type: (callback: any, items: any[], scope: string, view: any) => {
         const item = view.name && items && items.find(i => i.name == view.name) || {};
         const rows = {
             fields: fmrows(callback, 'fields', true, item, scope, view),
@@ -277,7 +277,7 @@ const tableInfo = {
         };
         return [item, rows];
     },
-    enum: (callback, items, scope, view) => {
+    enum: (callback: any, items: any[], scope: string, view: any) => {
         const item = view.name && items && items.find(i => i.name == view.name) || {};
         const rows = {
             members: fmrows(callback, 'members', false, item, scope, view),
@@ -306,9 +306,9 @@ const EnumTypeChips = ({
         onInfo(scope, tag);
     }, [onInfo, scope, tag]);
 
-    const handleCallback = (s, t) => onInfo(s, t);
+    const handleCallback = (s: string, t: string) => onInfo(s, t);
 
-    const handleClickDelete = (n, cb, tag) => {
+    const handleClickDelete = (n: string, cb: any, tag: string) => {
         onDelete(
             scope,
             n,
@@ -319,7 +319,7 @@ const EnumTypeChips = ({
         );
     };
 
-    const handleClickRun = (n) => ({target}) => {
+    const handleClickRun = (n: string) => ({target}: React.ChangeEvent<any>) => {
         const circularRefFlag = {};
         const names = [...items.map(c=>c.name)];
         const i = onMakeInstanceInit(n, names, items, circularRefFlag, target);
@@ -341,11 +341,11 @@ const EnumTypeChips = ({
         onClose('edit', categoryInit);
     };
 
-    const handleChangeViaButton = (a, n) => () => {
+    const handleChangeViaButton = (a: string, n: any) => () => {
         onChange(a)(n, categoryInit);
     };
 
-    const buttons = (bv) => (n) => {
+    const buttons = (bv: any) => (n: any) => {
         let b = [];
         if (bv.view) {
             b.push({

@@ -8,12 +8,12 @@ import {AutoSelect} from '../../../../Utils';
 const PropertyRelation = ({dropdownItems, onChange, input}: Props) => {
     const [relation, setRelation] = React.useState(input);
 
-    const handleProperty = (value) => {
+    const handleProperty = (value: string) => {
         setRelation({...relation, property: value});
         onChange({relation: {...relation, property: value}});
     };
 
-    const handlePropertyToo = ({target}) => {
+    const handlePropertyToo = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setRelation({...relation, propertyToo: value});
         onChange({relation: {...relation, propertyToo: value}});

@@ -51,31 +51,31 @@ const AddTaskDialog = ({open, onClose, scope}: Props) => {
         }
     }, [open]);
 
-    const handleChangeStart = (s) => {
+    const handleChangeStart = (s: number) => {
         setState({...state, start: s, queryString: NEW_TASK_FORMAT_QUERY(s, closure, args), jsonArgs: NEW_TASK_ARGS(s, closure, args)});
     };
 
-    const handleChangeClosure = (c) => {
+    const handleChangeClosure = (c: string) => {
         setState({...state, closure: c, queryString: NEW_TASK_FORMAT_QUERY(start, c, args), jsonArgs: NEW_TASK_ARGS(start, c, args)});
     };
 
-    const handleChangeArgs = React.useCallback((args, blob) => {
+    const handleChangeArgs = React.useCallback((args: string[], blob: object) => {
         setState(state => ({...state, args: args, blob: blob, queryString: NEW_TASK_FORMAT_QUERY(start, closure, JSON.stringify(args)), jsonArgs: NEW_TASK_ARGS(start, closure, args)}));
     }, [closure, start]);
 
-    const handleSwitchArgs = (open) => {
+    const handleSwitchArgs = (open: boolean) => {
         if(!open) {
             // @ts-ignore TODOT blob=undefined ok?
             handleChangeArgs([]);
         }
     };
 
-    const handleChangeStartType = ({target}) => {
+    const handleChangeStartType = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setStartType(value);
     };
 
-    const handleChangeTimestamp = ({target}) => {
+    const handleChangeTimestamp = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         handleChangeStart(value);
     };
@@ -238,5 +238,5 @@ interface State {
     error: string;
     jsonArgs: object | '';
     queryString: string;
-    start: string | null;
+    start: number | null;
 }

@@ -31,7 +31,7 @@ const header = [
     {
         ky: 'created_at',
         label: 'Created at',
-        fnView: (t) => moment(t*1000).format(DATE_TIME_SEC_STR),
+        fnView: (t: number) => moment(t*1000).format(DATE_TIME_SEC_STR),
         canEdit: false
     },
     {
@@ -49,7 +49,7 @@ const header = [
     {
         ky: 'scope',
         label: 'Scope',
-        fnView: (s) => s ? s : 'All scopes',
+        fnView: (s: string) => s ? s : 'All scopes',
         canEdit: true,
         editMethod: NodesActions.setModuleScope,
         helperText: THINGS_DOC_SET_MODULE_SCOPE,
@@ -62,7 +62,7 @@ const header = [
     {
         ky: 'conf',
         label: 'Configuration',
-        fnView: (c) => {
+        fnView: (c: object) => {
             if(c){
                 const json = JSON.stringify(c);
                 let unquoted = json.replace(/"([^"]+)":/g, '$1:');
@@ -70,7 +70,7 @@ const header = [
             }
             return 'No configuration';
         },
-        fnEdit: (c) => {
+        fnEdit: (c: object) => {
             if(c){
                 const json = JSON.stringify(c);
                 let unquoted = json.replace(/"([^"]+)":/g, '$1:');
@@ -118,28 +118,28 @@ const ModuleInfo = ({
         setMsg('');
     };
 
-    const handleEdit = (h) => () => {
+    const handleEdit = (h: any) => () => {
         setEdit({...edit, [h.ky]: true});
         setForm({...form, [h.ky]: _module[h.ky] ? (h.fnEdit ? h.fnEdit(_module[h.ky]) : _module[h.ky]) : ''});
     };
 
-    const handleChange = (ky) => ({target}) => {
+    const handleChange = (ky: string) => ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setForm({...form, [ky]: value});
     };
 
-    const handleOnChangeConf = (conf) => {
+    const handleOnChangeConf = (conf: object) => {
         setForm({...form, conf});
     };
 
-    const handleSave = (h) => () => {
+    const handleSave = (h: any) => () => {
         h.editMethod(nodeId, _module.name, form[h.ky], tag, () => {
             setEdit({...edit, [h.ky]: false});
             setForm({...form, [h.ky]: ''});
         });
     };
 
-    const handleClose = (ky) => () => {
+    const handleClose = (ky: string) => () => {
         setEdit({...edit, [ky]: false});
         setForm({...form, [ky]: ''});
     };

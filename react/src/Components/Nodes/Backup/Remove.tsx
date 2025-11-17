@@ -24,7 +24,7 @@ const Remove = ({nodeId, backup}: Props) => {
         setDeleteFile(false);
     };
 
-    const handleDeleteFile = ({target}) => {
+    const handleDeleteFile = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         setDeleteFile(checked);
     };

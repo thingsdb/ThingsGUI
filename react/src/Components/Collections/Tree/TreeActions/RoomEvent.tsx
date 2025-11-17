@@ -26,9 +26,9 @@ const withStores = withVlow([{
 
 
 const RoomEvent = ({room, events}: IEventStore & Props) => {
-    const [checked, setChecked] = React.useState<any>({});
+    const [checked, setChecked] = React.useState<Record<number, boolean>>({});
 
-    const handleChange = (index) => () => {
+    const handleChange = (index: number) => () => {
         setChecked((prev) => {
             if(prev[index] === undefined) {
                 prev[index] = true;

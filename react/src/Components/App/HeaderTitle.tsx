@@ -1,6 +1,5 @@
 import React from 'react';
 import {withVlow} from 'vlow';
-import { Helmet } from 'react-helmet';
 
 import {NodesActions, NodesStore} from '../../Stores';
 
@@ -17,11 +16,11 @@ const HeaderTitle = ({connectedNode}: INodesStore) => {
     );
 
     return(
-        <Helmet>
+        <>
             <title>
                 {`ThingsGUI ${connectedNode&&connectedNode.node_name ? `  -  ${connectedNode.node_name}:${connectedNode.client_port}`: ''}`}
             </title>
-        </Helmet>
+        </>
     );
 };
 

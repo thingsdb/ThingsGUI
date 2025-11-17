@@ -27,7 +27,7 @@ const Quotas = ({collection}: Props) => {
     const {show, form} = state;
 
 
-    const _getQuota = (quotaType) => collection[`quota_${quotaType}`]||'';
+    const _getQuota = (quotaType: string) => collection[`quota_${quotaType}`]||'';
 
     const handleClickOpen = () => {
         setState({
@@ -43,7 +43,7 @@ const Quotas = ({collection}: Props) => {
         setState({...state, show: false});
     };
 
-    const handleOnChangeType = ({target}) => {
+    const handleOnChangeType = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {quotaType: value, quota: _getQuota(value)});
@@ -51,7 +51,7 @@ const Quotas = ({collection}: Props) => {
         });
     };
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {id, value} = target;
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value});
@@ -79,7 +79,7 @@ const Quotas = ({collection}: Props) => {
         );
     };
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             handleClickOk();

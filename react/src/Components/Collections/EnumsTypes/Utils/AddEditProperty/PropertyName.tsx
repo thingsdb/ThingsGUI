@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 const PropertyName = ({onChange, input, ...props}: Props) => {
     const [propertyName, setPropertyName] = React.useState(input);
 
-    const handlePropertyName = ({target}) => {
+    const handlePropertyName = ({target}: React.ChangeEvent<any>) => {
         const { value} = target;
         setPropertyName(value);
         onChange({propertyName:value});

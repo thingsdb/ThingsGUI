@@ -25,7 +25,7 @@ const AddLink = ({
     const typeItems=[...(customTypes[scope]||[]).map(c=>c.name)];
     let stripped = revealCustomType(name);
 
-    const handleChange = (name, category) => () => {
+    const handleChange = (name: string, category: 'type' | 'enum') => () => {
         onChange(name, category);
     };
 

@@ -41,20 +41,20 @@ const tag = LoginTAG;
 const ListConnections = ({onClickNewConn, onEdit, search, cachedConnections}: IApplicationStore & Props) => {
     const [openDetail, setOpenDetail] = React.useState<any>({});
 
-    const handleOpenDetail = (k) => () => {
+    const handleOpenDetail = (k: string) => () => {
         const key = openDetail[k];
         setOpenDetail({...openDetail, [k]: key?!key:true});
     };
 
-    const handleConnectToo = (name) => () => {
+    const handleConnectToo = (name: string) => () => {
         ApplicationActions.connectViaCache({name: name}, tag);
     };
 
-    const handleClick = (ky, val) => () => {
+    const handleClick = (ky: string, val: object) => () => {
         onEdit(ky, val);
     };
 
-    const handleDeleteConn = (name) => () => {
+    const handleDeleteConn = (name: string) => () => {
         ApplicationActions.delCachedConn({name: name}, tag);
     };
 
@@ -109,7 +109,7 @@ const ListConnections = ({onClickNewConn, onEdit, search, cachedConnections}: IA
                                                 {r.title}
                                             </Typography>
                                             <Typography variant="caption" component="div" color="primary" >
-                                                {`${v[r.keyList]||r.default}`}
+                                                {`${v[r.keyList as keyof ICachedConnection]||r.default}`}
                                             </Typography>
                                         </StyledCardActionArea>
                                     </StyledCard>
@@ -144,6 +144,6 @@ export default withStores(ListConnections);
 
 interface Props {
     onClickNewConn: React.MouseEventHandler;
-    onEdit: (ky: string, val: unknown) => void;
+    onEdit: (ky: string, val: object) => void;
     search: string;
 }

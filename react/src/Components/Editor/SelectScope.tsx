@@ -38,7 +38,7 @@ const SelectScope = ({onChangeScope, collections, nodes}: IThingsdbStore & INode
         onChangeScope(name);
     }, [name]);
 
-    const handleOnChangeScope = ({target}) => {
+    const handleOnChangeScope = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setName(value);
 

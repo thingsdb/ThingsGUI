@@ -22,53 +22,53 @@ const header = [
         ky: 'id',
         label: 'ID',
         canEdit: false,
-        viewComponent: (id) => id,
+        viewComponent: (id: number) => id,
     },
     {
         ky: 'at',
         label: 'At',
         canEdit: false,
-        viewComponent: (at) => nextRunFn(at),
+        viewComponent: (at: number) => nextRunFn(at),
     },
     {
         ky: 'err',
         label: 'Error',
         canEdit: false,
-        viewComponent: (err) => err ? parseError(err)[1] : '-',
+        viewComponent: (err: string) => err ? parseError(err)[1] : '-',
     },
     {
         ky: 'owner',
         label: 'Owner',
         canEdit: true,
         eky: 'owner',
-        editComponent: (owner, onChange) => (
+        editComponent: (owner: number, onChange: (_owner: number) => void) => (
             <SetOwner init={owner} onChange={onChange} />
         ),
-        viewComponent: (c) => c,
+        viewComponent: (c: number) => c,
     },
     {
         ky: 'args',
         label: 'Arguments',
         canEdit: true,
         eky: 'closure',
-        editComponent: (closure, onChange) => (
+        editComponent: (closure: string, onChange: (d: string[]) => void) => (
             <EditProvider>
                 <SetArguments closure={closure || ''} onChange={onChange} />
             </EditProvider>
         ),
-        viewComponent: (args) => JSON.stringify(args, replacer, 4),
+        viewComponent: (args: string[]) => JSON.stringify(args, replacer, 4),
     },
     {
         ky: 'closure',
         label: 'Closure',
         canEdit: true,
         eky: 'closure',
-        editComponent: (closure, onChange) => (
+        editComponent: (closure: string, onChange: (d: string) => void) => (
             <EditProvider>
                 <Closure input={closure} onChange={onChange} />
             </EditProvider>
         ),
-        viewComponent: (closure) => (
+        viewComponent: (closure: string) => (
             closure ?
                 <TextField
                     fullWidth
@@ -103,38 +103,38 @@ const EditTask = ({
     task,
     scope,
 }: ITaskStore & Props) => {
-    const [queryString, setQueryString] = React.useState<any>({args: '', closure: '', owner: ''});
-    const [jsonArgs, setJsonArgs] = React.useState<any>({args: '', closure: '', owner: ''});
+    const [queryString, setQueryString] = React.useState({args: '', closure: '', owner: ''});
+    const [jsonArgs, setJsonArgs] = React.useState({args: '', closure: '', owner: ''});
     const [blob, setBlob] = React.useState({});
 
     React.useEffect(() => {
         TaskActions.getTask(scope, taskId, tag);
     }, [scope, taskId]);
 
-    const handleChangeArgs = React.useCallback((args, blob) => {
+    const handleChangeArgs = React.useCallback((args: string, blob: object) => {
         setBlob(blob);
         setQueryString(query => ({...query, args: TASK_SET_ARGS_QUERY}));
         setJsonArgs(jsonArgs => ({...jsonArgs, args: TASK_SET_ARGS_ARGS(taskId, args)}));
     },[taskId]);
 
-    const handleChangeClosure = React.useCallback((c) => {
+    const handleChangeClosure = React.useCallback((c: string) => {
         setQueryString(query => ({...query, closure: TASK_SET_CLOSURE_QUERY}));
         setJsonArgs(jsonArgs => ({...jsonArgs, closure:TASK_SET_CLOSURE_ARGS(taskId, c)}));
     }, [taskId]);
 
-    const handleChangeOwner = React.useCallback((o) => {
+    const handleChangeOwner = React.useCallback((o: number) => {
         setQueryString(query => ({...query, owner: TASK_SET_OWNER_QUERY}));
         setJsonArgs(jsonArgs => ({...jsonArgs, owner: TASK_SET_OWNER_ARGS(taskId, o)}));
     }, [taskId]);
 
-    const handleChange = (ky) => (
+    const handleChange = (ky: string) => (
         ky === 'args' ? handleChangeArgs
             : ky === 'closure' ? handleChangeClosure
                 : ky === 'owner' ? handleChangeOwner
-                    : () => null
+                    : () => {}
     );
 
-    const handleSave = (ky) => () => {
+    const handleSave = (ky: string) => () => {
         CollectionActions.query(
             scope,
             queryString[ky],

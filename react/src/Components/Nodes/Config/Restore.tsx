@@ -23,7 +23,7 @@ const initialState = {
 
 const tag = RestoreNodeTAG;
 
-const nodeNotReady = (nodes) => {
+const nodeNotReady = (nodes: INode[]) => {
     if(nodes.length>1){
         return Boolean(nodes.find((n)=>n.status!=='READY'&&n.committed_event_id!==n.stored_event_id));
     }
@@ -35,7 +35,7 @@ const Restore = ({nodes}: Props) => {
     const {show, fileName, takeAccess, restoreTasks, showRedirectModal} = state;
 
     React.useEffect(()=>{
-        let id;
+        let id: ReturnType<typeof setInterval> | null = null;
         if(show){
             id = setInterval(() => NodesActions.getNodes(), 2000);
         }
@@ -55,17 +55,17 @@ const Restore = ({nodes}: Props) => {
     };
 
 
-    const handleFileName = ({target}) => {
+    const handleFileName = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setState({...state, fileName: value});
     };
 
-    const handleTakeAccess = ({target}) => {
+    const handleTakeAccess = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         setState({...state, takeAccess: checked});
     };
 
-    const handleRestoreTasks = ({target}) => {
+    const handleRestoreTasks = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         setState({...state, restoreTasks: checked});
     };

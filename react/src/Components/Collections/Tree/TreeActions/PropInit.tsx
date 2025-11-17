@@ -9,9 +9,9 @@ const PropInit = ({
 }: Props) => {
     const [error, setError] = React.useState('');
 
-    const errorTxt = (property) => thing[property] ? 'property name already in use' : '';
+    const errorTxt = (property: string) => thing[property] ? 'property name already in use' : '';
 
-    const handleOnChangeName = ({target}) => {
+    const handleOnChangeName = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         const err = errorTxt(value);
         setError(err);

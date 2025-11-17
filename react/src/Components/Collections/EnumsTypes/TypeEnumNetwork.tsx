@@ -30,18 +30,18 @@ const withStores = withVlow([{
 }]);
 
 
-const changeChosenEdgeWidth = (values) => {
+const changeChosenEdgeWidth = (values: any) => {
     values.width = 3;
 };
 
-const findNodeId = (arr, search, key, prefix) => {
+const findNodeId = (arr: any[], search: string, key: string, prefix: string) => {
     let obj = arr.find((el) => el.name.toLowerCase() === search.toLowerCase());
     return obj ? prefix + obj[key] : '';
 };
 
 const tag = TypeEnumNetworkTag;
-const createEnumId = (id) => 'e' + id;
-const createTypeId = (id) => 't' + id;
+const createEnumId = (id: number) => 'e' + id;
+const createTypeId = (id: number) => 't' + id;
 
 const Transition = React.forwardRef<unknown, SlideProps>((props, ref) => {
     return <Slide direction="up" ref={ref} {...props} mountOnEnter unmountOnExit />;
@@ -84,8 +84,8 @@ const TypeEnumNetwork = ({collection, customTypes, enums}: IEnumStore & ITypeSto
 
     const nodes = [...typeNodes, ...enumNodes];
 
-    const relationEdges = [];
-    const tlk = _customTypes.reduce((res, t) => ({...res, [t.name]: t}), {});
+    const relationEdges: any[] = [];
+    const tlk = _customTypes.reduce((res, t) => ({...res, [t.name]: t}), {} as Record<string, IType>);
     _customTypes.forEach(t => {
         const from = createTypeId(t.type_id);
         const grouped = Object.entries(t.relations || {}).reduce((res, [k, v]) => {
@@ -93,7 +93,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}: IEnumStore & ITypeSto
             res[typeId] = res[typeId] || [];
             res[typeId].push([k, v]);
             return res;
-        }, {});
+        }, {} as Record<string, any>);
         Object.entries(grouped).forEach(([to, relations]) => {
             if (!relationEdges.some(e => e.from === from && e.to === to || e.from === to && e.to === from)) {
                 relationEdges.push({
@@ -124,7 +124,7 @@ const TypeEnumNetwork = ({collection, customTypes, enums}: IEnumStore & ITypeSto
 
         res.push(...fieldEdges);
         return res;
-    }, []);
+    }, [] as any[]);
 
     const edges = [...relationEdges, ...moreEdges.filter(d => !relationEdges.some(e => e.from === d.from && e.to === d.to || e.from === d.to && e.to === d.from))];
 

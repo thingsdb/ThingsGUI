@@ -16,7 +16,7 @@ const Remove = ({token, tag}: Props) => {
         setAnchorEl(null);
     };
 
-    const handleClick = (e) => {
+    const handleClick = (e: React.MouseEvent<any>) => {
         setAnchorEl(e.currentTarget);
     };
 

@@ -55,7 +55,7 @@ const Loglevel = ({node}: Props) => {
         setState({...state, show: false});
     };
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setState(prevState => ({...prevState, logLevel: value}));
     };
@@ -69,7 +69,7 @@ const Loglevel = ({node}: Props) => {
         );
     };
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             handleClickOk();

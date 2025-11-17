@@ -24,11 +24,11 @@ const Edit = ({
     const [newProperty, setNewProperty] = React.useState('');
     const [dataType, setDataType] = React.useState(child.type == LIST || child.type == THING ? dataTypes[0] : child.type == SET ? THING : child.type);
 
-    const handleOnChangeName = (p) => {
+    const handleOnChangeName = (p: string) => {
         setNewProperty(p);
     };
 
-    const handleOnChangeType = (t) => {
+    const handleOnChangeType = (t: string) => {
         setDataType(t);
     };
 

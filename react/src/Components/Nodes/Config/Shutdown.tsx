@@ -11,7 +11,7 @@ const tag = ShutdownTAG;
 
 const Shutdown = ({node}: Props) => {
 
-    const handleClickOk = (callback) => {
+    const handleClickOk = (callback: () => void) => {
         NodesActions.shutdown(
             node.node_id,
             tag,

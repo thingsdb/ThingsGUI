@@ -44,21 +44,21 @@ const Add = ({nodeId}: Props) => {
         setState({...state, show: false});
     };
 
-    const handleSwitch = (ky) => (checked) => {
+    const handleSwitch = (ky: string) => (checked: boolean) => {
         setState(prevState => {
             const updatedSwitches = Object.assign({}, prevState.switches, {[ky]: checked});
             return {...prevState, switches: updatedSwitches};
         });
     };
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {id, value} = target;
         setState(prevState => {
             return {...prevState, form: {...prevState.form, [id]: value}};
         });
     };
 
-    const handleChange = (ky) => (value) => {
+    const handleChange = (ky: string) => (value: unknown) => {
         setState(prevState => {
             return {...prevState, form: {...prevState.form, [ky]: value}};
         });
@@ -78,7 +78,7 @@ const Add = ({nodeId}: Props) => {
         );
     };
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             handleClickOk();

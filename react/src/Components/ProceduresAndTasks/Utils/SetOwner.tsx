@@ -24,7 +24,7 @@ const SetOwner = ({init, onChange, user, users}: IThingsdbStore & Props) => {
         }
     }, [init, onChange, user.name]);
 
-    const handleChangeOwner = ({target}) => {
+    const handleChangeOwner = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setOwner(value);
         onChange(value);

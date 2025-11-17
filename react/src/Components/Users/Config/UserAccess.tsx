@@ -45,9 +45,9 @@ const privileges = [
 const tag = UserAccessTAG;
 
 const UserAccess = ({user, collections}: Props) => {
-    const [switches, setSwitches] = React.useState<any>({});
+    const [switches, setSwitches] = React.useState<Record<string, Record<string, boolean>>>({});
 
-    const getSwitches = (scope, privileges) => {
+    const getSwitches = (scope: string, privileges: string) => {
         let s = {
             full: false,
             user: false,
@@ -98,7 +98,7 @@ const UserAccess = ({user, collections}: Props) => {
     );
 
 
-    const handleOnChangeSwitch = (key) => ({target}) => {
+    const handleOnChangeSwitch = (key: string) => ({target}: React.ChangeEvent<any>) => {
         const {value, checked} = target;
         setSwitches(switches => {
             let newswitches = JSON.parse(JSON.stringify(switches)); //copy

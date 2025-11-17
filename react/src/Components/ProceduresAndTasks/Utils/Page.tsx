@@ -36,5 +36,5 @@ interface Props {
     item: IProcedure | ITask;
     itemKey: string;
     scope: string;
-    type: string;
+    type: 'procedure' | 'task';
 }

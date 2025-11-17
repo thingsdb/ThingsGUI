@@ -55,7 +55,7 @@ const Login = ({cachedConnections}: IApplicationStore) => {
         });
     };
 
-    const handleOnChange = (ky, obj) => {
+    const handleOnChange = (ky: 'form' | 'credentials' | 'security', obj: object) => {
         setState(prevState => {
             const update = {...prevState[ky], ...obj};
             return {...prevState, [ky]: update};
@@ -96,7 +96,7 @@ const Login = ({cachedConnections}: IApplicationStore) => {
         ApplicationActions.connectToNew({...form, ...credentials, ...security}, tag);
     };
 
-    const handleEditConn = (ky, val) => {
+    const handleEditConn = (ky: string, val: any) => {
         setState(prevState => {
             const updatedCred = {
                 password: '',

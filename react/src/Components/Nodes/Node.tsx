@@ -20,7 +20,7 @@ const Node = ({selectedNode}: Props) => {
         NodesActions.getModules(selectedNode.node_id);
     }, [selectedNode.node_id]);
 
-    const handleChangeTab = (_event, newValue) => {
+    const handleChangeTab = (_event: unknown, newValue: number) => {
         setTabIndex(newValue);
 
         switch(newValue){

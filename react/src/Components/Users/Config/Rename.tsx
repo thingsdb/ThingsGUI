@@ -20,8 +20,8 @@ const initialState: State = {
     form: {},
 };
 
-const validation = {
-    name: (f, users) => {
+const validation: Record<string, any> = {
+    name: (f: any, users: IUser[]) => {
         if (f.name.length==0) {
             return 'is required';
         }
@@ -49,7 +49,7 @@ const Rename = ({user, users}: IThingsdbStore & Props) => {
         setState(state => ({...state, show: false}));
     };
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {id, value} = target;
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value});
@@ -58,7 +58,7 @@ const Rename = ({user, users}: IThingsdbStore & Props) => {
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, users);  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form, users);  return d; }, {} as Record<string, string>);
         setState(state => ({...state, errors: err}));
         if (!Object.values(err).some(d => Boolean(d))) {
             ThingsdbActions.renameUser(
@@ -73,7 +73,7 @@ const Rename = ({user, users}: IThingsdbStore & Props) => {
         }
     };
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             handleClickOk();

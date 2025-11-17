@@ -36,7 +36,7 @@ interface Props {
         property: string;
         type: string;
         definition: string;
-    };
+    } | null;
     scope: string;
     view: string;
 }

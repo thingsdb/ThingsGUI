@@ -12,7 +12,7 @@ import {Closure} from '../../../../Utils';
 const PropertyCallback = ({onChange}: Props) => {
     const [switchCallback, setSwitchCallback] = React.useState(false);
 
-    const handleSwitch = ({target}) => {
+    const handleSwitch = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         setSwitchCallback(checked);
         if (!checked) {
@@ -20,7 +20,7 @@ const PropertyCallback = ({onChange}: Props) => {
         }
     };
 
-    const handleClosure = (c) => {
+    const handleClosure = (c: string) => {
         onChange({callback: c});
     };
 

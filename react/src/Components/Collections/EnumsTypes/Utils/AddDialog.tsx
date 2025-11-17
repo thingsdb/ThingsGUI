@@ -42,13 +42,13 @@ const AddDialog = ({
     [open],
     );
 
-    const handleChange = ({target}) => {
+    const handleChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         const qry = queries[category](value, properties);
         setState({...state, name: value, queryObj: qry});
     };
 
-    const handleChangeProperty = React.useCallback((index) => (property) => {
+    const handleChangeProperty = React.useCallback((index: number) => (property: object) => {
         setState(prevState => {
             let update = [...prevState.properties];
             update.splice(index, 1, {...prevState.properties[index], ...property});
@@ -57,7 +57,7 @@ const AddDialog = ({
         });
     }, [category, queries]);
 
-    const handleAdd = (index) => {
+    const handleAdd = (index: number) => {
         setState(prevState => {
             let update = [...prevState.properties];
             update.splice(index, 1, {propertyBlob: null, propertyName: '', propertyType: '', propertyVal: '', definition: ''});
@@ -66,7 +66,7 @@ const AddDialog = ({
         });
     };
 
-    const handleRemove = (index) => {
+    const handleRemove = (index: number) => {
         setState(prevState => {
             let update = [...prevState.properties];
             update.splice(index, 1);
@@ -75,7 +75,7 @@ const AddDialog = ({
         });
     };
 
-    const handleSwitching = React.useCallback((index) => (check) => {
+    const handleSwitching = React.useCallback((index: number) => (check: boolean) => {
         setState(prevState => {
             const prop = check ? {propertyType: ''} : {definition: ''};
             let update = [...prevState.properties]; // keep the useEffect to prevent infinite render. Combi of map function and fast changes causes mix up of previous and current state updates. Something with not being a deep copy.
@@ -101,7 +101,7 @@ const AddDialog = ({
         );
     };
 
-    const child = React.useCallback((i) => (
+    const child = React.useCallback((i: number) => (
         <EditProvider>
             <Grid container size={12} spacing={1} alignItems="center" >
                 <Grid size={category === 'type' ? 12 : 6}>

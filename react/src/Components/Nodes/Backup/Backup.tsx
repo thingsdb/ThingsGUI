@@ -30,9 +30,9 @@ const header = [
     {ky: 'file_template', label: 'File template'},
     {ky: 'files', label: 'Files'},
     {ky: 'max_files', label: 'Max files'},
-    {ky: 'next_run', label: 'Next run at (UTC)', fn: (t) => t?.slice(-1) === 'Z' ? t?.slice(0, -1) : t},
+    {ky: 'next_run', label: 'Next run at (UTC)', fn: (t: string | null) => t?.slice(-1) === 'Z' ? t?.slice(0, -1) : t},
     {ky: 'repeat', label: 'Repeat after (sec)'},
-    {ky: 'created_at', label: 'Created on', fn: (t) => moment(t * 1000).format(DATE_TIME_SEC_STR)},
+    {ky: 'created_at', label: 'Created on', fn: (t: number) => moment(t * 1000).format(DATE_TIME_SEC_STR)},
 ];
 
 const headerTable = [
@@ -48,14 +48,14 @@ const Backup = ({nodeId, offline, backups}: INodesStore & Props) => {
         NodesActions.getBackups(nodeId); // update of the selected node; to get the latest info
     };
 
-    const handleButtons = (backup) => (
+    const handleButtons = (backup: IBackup) => (
         <React.Fragment>
             <Remove nodeId={nodeId} backup={backup} />
             <BackupInfo header={header} item={backup} />
         </React.Fragment>
     );
 
-    const rows = JSON.parse(JSON.stringify(backups)); // copy
+    const rows = JSON.parse(JSON.stringify(backups)) as any[]; // copy
 
     rows.forEach(b=> {
         b.next_run = b.next_run == 'pending' ? (

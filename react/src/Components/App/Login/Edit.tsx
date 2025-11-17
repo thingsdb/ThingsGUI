@@ -33,17 +33,17 @@ const Edit = ({
     const showToken = loginWith=='token';
     const showUserPass = loginWith=='pass';
 
-    const handleOnChangeCredentials = ({target}) => {
+    const handleOnChangeCredentials = ({target}: React.ChangeEvent<any>) => {
         const {id, value} = target;
         onChange('credentials', {[id]: value});
     };
 
-    const handleOnChangeName = ({target}) => {
+    const handleOnChangeName = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         onChange('form', {name: value});
     };
 
-    const handleOnChangeAddress = ({target}) => {
+    const handleOnChangeAddress = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setClickAwayActive(true);
         onChange('form', {address: value});
@@ -61,7 +61,7 @@ const Edit = ({
         setShow(!show);
     };
 
-    const handleLoginWith = ({target}) => {
+    const handleLoginWith = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         if (value=='pass') {
             onChange('credentials', {user: '', password: '', isToken: false});
@@ -71,12 +71,12 @@ const Edit = ({
         setLoginWith(value);
     };
 
-    const handleSwitchSSL = ({target}) => {
+    const handleSwitchSSL = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         onChange('security', {secureConnection: checked, insecureSkipVerify: false});
     };
 
-    const handleSwitchISV = ({target}) => {
+    const handleSwitchISV = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         onChange('security', {insecureSkipVerify: checked});
     };
@@ -242,6 +242,6 @@ interface Props {
         secureConnection: boolean;
         insecureSkipVerify: boolean;
     };
-    onChange: (ky: string, obj: object) => void;
+    onChange: (ky: 'form' | 'credentials' | 'security', obj: object) => void;
     editField?: string;
 }

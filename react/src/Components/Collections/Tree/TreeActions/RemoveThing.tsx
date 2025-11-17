@@ -80,7 +80,7 @@ const RemoveThing = ({child, onClose, parent, scope}: Props) => {
         onClose();
     };
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             handleClickOk();

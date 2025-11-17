@@ -17,14 +17,14 @@ const initialState: State = {
     portSwitch: false,
 };
 
-const validation = {
-    secret: (f) => {
+const validation: Record<string, any> = {
+    secret: (f: any) => {
         if (f.secret.length==0) {
             return 'is required';
         }
         return '';
     },
-    nName: (f) => {
+    nName: (f: any) => {
         if (f.nName.length==0) {
             return 'is required';
         }
@@ -53,7 +53,7 @@ const Add = () => {
     };
 
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {id, value} = target;
         setState(prevState => {
             const updatedForm = Object.assign({}, prevState.form, {[id]: value});
@@ -62,7 +62,7 @@ const Add = () => {
     };
 
     const handleClickOk = () => {
-        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form);  return d; }, {});
+        const err = Object.keys(validation).reduce((d, ky) => { d[ky] = validation[ky](form);  return d; }, {} as Record<string, string>);
         setState({...state, errors: err});
         if (!Object.values(err).some(d => Boolean(d))) {
             NodesActions.addNode(
@@ -73,14 +73,14 @@ const Add = () => {
         }
     };
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             handleClickOk();
         }
     };
 
-    const handleSwitch = ({target}) => {
+    const handleSwitch = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         setState({...state, portSwitch: checked});
     };

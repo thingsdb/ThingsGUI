@@ -30,7 +30,7 @@ const PropertyVal = ({category, onChange, customTypes, enums, scope}: IEnumStore
         onChange({propertyVal: [INT, FLOAT].includes(dataType) ? Number(val) : val, propertyBlob: blob});
     }, [val, blob]);
 
-    const handleOnChangeType = (t) => {
+    const handleOnChangeType = (t: string) => {
         setDataType(t);
     };
 

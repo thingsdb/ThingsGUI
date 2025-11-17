@@ -11,7 +11,7 @@ import PropertyVal from './PropertyVal';
 const PropertyInitVal = ({category, onChange, scope}: Props) => {
     const [switchInit, setSwitchInit] = React.useState(false);
 
-    const handleSwitch = ({target}) => {
+    const handleSwitch = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         setSwitchInit(checked);
         if (!checked) {
@@ -19,7 +19,7 @@ const PropertyInitVal = ({category, onChange, scope}: Props) => {
         }
     };
 
-    const handleVal = (v) => {
+    const handleVal = (v: object) => {
         onChange(v);
     };
 

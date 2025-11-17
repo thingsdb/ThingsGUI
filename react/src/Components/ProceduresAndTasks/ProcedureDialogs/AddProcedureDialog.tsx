@@ -36,12 +36,12 @@ const AddProcedureDialog = ({open, onClose, scope}: Props) => {
         setState(initState);
     }, [open]);
 
-    const handleChange = ({target}) => {
+    const handleChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setState({...state, procedureName: value, jsonArgs: NEW_EDIT_PROCEDURE_ARGS(value, closure), queryString: NEW_PROCEDURE_FORMAT_QUERY(value, closure)});
     };
 
-    const handleClosure = (c) => {
+    const handleClosure = (c: string) => {
         setState({...state, closure: c, jsonArgs: NEW_EDIT_PROCEDURE_ARGS(procedureName, c), queryString: NEW_PROCEDURE_FORMAT_QUERY(procedureName, c)});
     };
 

@@ -27,7 +27,7 @@ const ViewDialog = ({
     const [openView, setOpenView] = React.useState(false);
     const [viewItem, setViewItem] = React.useState(null);
 
-    const handleOpenView = (ky, row) => () => {
+    const handleOpenView = (ky: string, row: object) => () => {
         setOpenView(true);
         setViewItem(row);
     };
@@ -37,7 +37,7 @@ const ViewDialog = ({
         setViewItem(null);
     };
 
-    const badgeButton = (h, row) => (
+    const badgeButton = (h: any, row: object) => (
         h.ky === 'definition' ? (
             <ButtonBase onClick={handleOpenView(h.ky, row)}>
                 <ViewIcon color="primary" style={{fontSize: 20}} />

@@ -16,12 +16,12 @@ const ThingsBounds = ({ onChange, total }: Props) => {
     }, [from, onChange, till]);
 
 
-    const handleOnChangeFrom = ({target}) => {
+    const handleOnChangeFrom = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setFrom(value);
     };
 
-    const handleOnChangeTill = ({target}) => {
+    const handleOnChangeTill = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setTill(value);
     };

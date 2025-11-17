@@ -20,7 +20,7 @@ const Overview = ({
     scope,
 }: Props) => {
 
-    const handleAdd = (kys) => () => {
+    const handleAdd = (kys: object[]) => () => {
         onAdd(kys);
     };
 
@@ -75,7 +75,7 @@ interface Props {
     };
     item: Partial<IEnum> | Partial<IType>;
     link: string;
-    onAdd?: (keys: string[]) => void;
+    onAdd?: (keys: object[]) => void;
     onChangeItem?: (name: string, category: string) => void;
     rows: {
         [index: string]: object[];

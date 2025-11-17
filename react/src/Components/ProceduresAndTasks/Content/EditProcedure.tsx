@@ -16,30 +16,30 @@ const header = [
         ky: 'created_at',
         label: 'Created at',
         canEdit: false,
-        viewComponent: (at) => moment(at * 1000).format(DATE_TIME_MIN_STR),
+        viewComponent: (at: number) => moment(at * 1000).format(DATE_TIME_MIN_STR),
     },
     {
         ky: 'doc',
         label: 'Documentation',
         canEdit: false,
-        viewComponent: (doc) => doc,
+        viewComponent: (doc: string) => doc,
     },
     {
         ky: 'arguments',
         label: 'Arguments',
         canEdit: false,
-        viewComponent: (args) => `[${args}]`,
+        viewComponent: (args: string[]) => `[${args}]`,
     },
     {
         ky: 'definition',
         label: 'Definition',
         canEdit: true,
-        editComponent: (definition, onChange) => (
+        editComponent: (definition: string, onChange: (d: string) => void) => (
             <EditProvider>
                 <Closure input={definition} onChange={onChange} />
             </EditProvider>
         ),
-        viewComponent: (definition) => (
+        viewComponent: (definition: string) => (
             definition ?
                 <TextField
                     fullWidth
@@ -73,17 +73,17 @@ const EditProcedure = ({
     procedure = {},
     scope
 }: Props) => {
-    const [queryString, setQueryString] = React.useState<any>({definition: ''});
-    const [jsonArgs, setJsonArgs] = React.useState<any>('');
+    const [queryString, setQueryString] = React.useState({definition: ''});
+    const [jsonArgs, setJsonArgs] = React.useState('');
 
     const handleChangeDefinition = React.useCallback((c) => {
         setQueryString(query => ({...query, definition: EDIT_PROCEDURE_QUERY}));
         setJsonArgs(NEW_EDIT_PROCEDURE_ARGS(procedure.name, c));
     }, [procedure.name]);
 
-    const handleChange = (ky) => (
+    const handleChange = (ky: string) => (
         ky === 'definition' ? handleChangeDefinition
-            : () => null
+            : () => {}
     );
 
     const handleSave = (ky) => () => {

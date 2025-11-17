@@ -100,8 +100,7 @@ const EditDialog = ({
         setAction('');
     }, [open]);
 
-    // TODOT second arg is never passed
-    const handleQuery = (p, a=null) => {
+    const handleQuery = (p: object, a?: string) => {
         const act = a || action;
         // @ts-expect-error TODOT queryObj no string
         setState(prev=>{
@@ -113,7 +112,7 @@ const EditDialog = ({
         });
     };
 
-    const handleQueryRen = (p, n=null) => {
+    const handleQueryRen = (p: any, n: string | null=null) => {
         const name = n===null ? oldname : n;
         setState(prev=>{
             const update = {oldname: name, newname: p.propertyName};
@@ -124,19 +123,19 @@ const EditDialog = ({
         });
     };
 
-    const handleQueryWpo = (p) => {
+    const handleQueryWpo = (p: object) => {
         setAction('wpo');
         handleQuery(p, 'wpo');
     };
 
-    const handleDelRel = (p) => (e) => {
+    const handleDelRel = (p: any) => (e: any) => {
         handleQuery(p, 'delRel');
         setAnchorEl(e.currentTarget);
         setWarnDescription(`Are you sure you want to remove the relation of '${p.propertyName?p.propertyName:''}'`);
         setAction('del');
     };
 
-    const handleAdd = (kys) => {
+    const handleAdd = (kys: any[]) => {
         kys.forEach((i) => {
             switch(i.ky){
             case 'propertyObject':
@@ -161,7 +160,7 @@ const EditDialog = ({
         });
     };
 
-    const handleMod = (ky, p) => () => {
+    const handleMod = (ky: string, p: any) => () => {
         setOldname(p.propertyName);
         switch(ky){
         case 'propertyName':
@@ -197,7 +196,7 @@ const EditDialog = ({
     };
 
 
-    const handleDel = (p) => (e) => {
+    const handleDel = (p: any) => (e: any) => {
         handleQuery(p, 'del');
         setAnchorEl(e.currentTarget);
         setWarnDescription(`Are you sure you want to remove '${p.propertyName?p.propertyName:''}'`);
@@ -237,7 +236,7 @@ const EditDialog = ({
         ErrorActions.removeMsgError(tag);
     };
 
-    const buttons = (row) => (
+    const buttons = (row: object) => (
         <React.Fragment>
             <Button color="primary" onClick={handleDel(row)} >
                 <DeleteIcon color="primary" />
@@ -246,7 +245,7 @@ const EditDialog = ({
         </React.Fragment>
     );
 
-    const badgeButton = (h, row) => (
+    const badgeButton = (h: any, row: any) => (
         <React.Fragment>
             {!(row.default !== null && h.ky === 'default') ? (
                 <ButtonBase onClick={handleMod(h.ky, row)}>
@@ -261,7 +260,7 @@ const EditDialog = ({
         </React.Fragment>
     );
 
-    const handleRename = (oldName, newName) => {
+    const handleRename = (oldName: string, newName: string) => {
         onRename(oldName, newName, scope, tag, onClose);
     };
 
@@ -432,7 +431,7 @@ interface Props {
             label: string;
         }[];
     };
-    item: Partial<IEnum> | Partial<IType>;
+    item: IEnum | IType;
     link: string;
     onChangeItem?: (name: string, category: string) => void;
     onClose: () => void;

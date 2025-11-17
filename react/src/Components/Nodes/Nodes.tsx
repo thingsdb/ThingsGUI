@@ -37,13 +37,13 @@ const Nodes = ({nodes, connectedNode}: INodesStore) => {
     }, {
         ky: 'status',
         label: 'Status',
-        color: (s) => s === 'OFFLINE' ? 'error' : 'inherit'
+        color: (s: string) => s === 'OFFLINE' ? 'error' : 'inherit'
     }];
-    const rowExtend = (node) => <Node selectedNode={node} />;
-    const handleButtons = (node) => ([
+    const rowExtend = (node: INode) => <Node selectedNode={node} />;
+    const handleButtons = (node: INode) => ([
         <Remove key={0} node={node} />,
     ]);
-    const handleCanExtend = (node) => node.status !== 'OFFLINE';
+    const handleCanExtend = (node: INode) => node.status !== 'OFFLINE';
     return(
         <Grid container spacing={1}>
             <Grid size={12}>

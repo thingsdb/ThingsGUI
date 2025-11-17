@@ -9,7 +9,7 @@ const PropertyType = ({
     dropdownItems = [],
     input
 }: Props) => {
-    const handlePropertyType = (t) => {
+    const handlePropertyType = (t: string) => {
         onChange({propertyType:t});
     };
 

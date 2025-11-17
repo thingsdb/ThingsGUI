@@ -98,7 +98,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}: IEnumStore & ITypeSto
         handleRefreshTypes();
     },[handleRefreshEnums, handleRefreshTypes]);
 
-    const handleChange = React.useCallback((a) => (n, c) => {
+    const handleChange = React.useCallback((a: string) => (n: string, c: string) => {
         if (c=='type') {
             setViewEnum(viewEnum => ({...viewEnum, [a]: false, name: ''}));
             setViewType(viewType => ({...viewType, [a]: true, expand: true, name: n}));
@@ -108,7 +108,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}: IEnumStore & ITypeSto
         }
     }, []);
 
-    const handleClose = (a, c) => {
+    const handleClose = (a: string, c: string) => {
         if (c=='type') {
             setViewType({...viewType, [a]: false, name: ''});
         } else {
@@ -116,7 +116,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}: IEnumStore & ITypeSto
         }
     };
 
-    const handleExpand = (ky) => (check) => {
+    const handleExpand = (ky: string) => (check: boolean) => {
         switch(ky){
         case 'type':
             setViewType({...viewType, expand: check});

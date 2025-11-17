@@ -35,7 +35,7 @@ const Auth = ({authMethod}: IApplicationStore) => {
         pass: ''
     });
 
-    const handleChangeForm = ({target}) => {
+    const handleChangeForm = ({target}: React.ChangeEvent<any>) => {
         const {id, value} = target;
         setForm(form => ({...form, [id]: value}));
     };
@@ -44,7 +44,7 @@ const Auth = ({authMethod}: IApplicationStore) => {
         setShow(!show);
     };
 
-    const handleLoginWith = ({target}) => {
+    const handleLoginWith = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setLoginWith(value);
     };
@@ -57,7 +57,7 @@ const Auth = ({authMethod}: IApplicationStore) => {
         }
     };
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             handleClickOk();

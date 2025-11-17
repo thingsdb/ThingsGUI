@@ -15,7 +15,7 @@ const Memo = ({connection}: Props) => {
     const [memo, setMemo] = React.useState(connection.memo);
     const [open, setOpen] = React.useState(false);
 
-    const handleChange = ({target}) => {
+    const handleChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setMemo(value);
     };

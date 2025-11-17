@@ -15,7 +15,7 @@ const BuildQueryString = ({child, customTypes, enums, parent}: Props) => {
     const [editState, dispatch] = useEdit();
     const {val, query} = editState;
 
-    const handleBuildQuery = React.useCallback((childType, childIndex, childName, parentId, parentName, parentType) => {
+    const handleBuildQuery = React.useCallback((childType: string, childIndex: number, childName: string, parentId: number, parentName: string, parentType: string) => {
         let v;
         let q = '';
         v = input(val, childType);
@@ -32,7 +32,7 @@ const BuildQueryString = ({child, customTypes, enums, parent}: Props) => {
         handleBuildQuery(child.type, child.index, child.name, parent.id, parent.name, parent.type);
     }, [handleBuildQuery, val, child.type, child.index, child.name, parent.id, parent.name, parent.type]); // note: call handleBuildQuery when one of the items in the dependency array update. Not when handleBuildQuery updates. handleBuildQuery will be latest version when one of the items update. Unlike useCallback or useMemo; useCallback will return a memoized version of the callback that only changes if one of the dependencies has changed.
 
-    const input = (childVal, childType) => {
+    const input = (childVal: string, childType: string) => {
         return childType == STR ? (childVal[0]=='\''? `${childVal}`:`'${childVal}'`)
             : childType == NIL ? NIL
                 : `${childVal}`;

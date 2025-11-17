@@ -6,7 +6,7 @@ import {Closure} from '../../../../Utils';
 
 const PropertyMethod = ({onChange, input}: Props) => {
 
-    const handleClosure = (c) => {
+    const handleClosure = (c: string) => {
         onChange({definition:c});
     };
 

@@ -32,7 +32,7 @@ const RunProcedureDialog = ({
         setOutput('');
     },[open]);
 
-    const handleResult = (data) => {
+    const handleResult = (data: any) => {
         setOutput(data);
         const elmnt = document.getElementById('output');
         elmnt.scrollIntoView();
@@ -57,7 +57,7 @@ const RunProcedureDialog = ({
         );
     };
 
-    const handleChangeTab = (newValue) => {
+    const handleChangeTab = (newValue: number) => {
         setTabIndex(newValue);
     };
 

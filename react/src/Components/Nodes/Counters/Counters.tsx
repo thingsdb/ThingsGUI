@@ -20,13 +20,13 @@ const withStores = withVlow([{
 
 const header = [
     {ky: 'title1', title: 'GENERAL', labels: [
-        {ky: 'started_at', label: 'Counters started at', fn: (t) => moment(t*1000).format(DATE_TIME_SEC_STR)},
+        {ky: 'started_at', label: 'Counters started at', fn: (t: number) => moment(t*1000).format(DATE_TIME_SEC_STR)},
     ]},
     {ky: 'title2', title: 'QUERIES', labels: [
         {ky: 'queries_success', label: 'Successful queries'},
         {ky: 'queries_with_error', label: 'Queries with error'},
-        {ky: 'average_query_duration', label: 'Average query duration', fn: (d) => d && d.toFixed(3) + ' s'},
-        {ky: 'longest_query_duration', label: 'Longest query duration', fn: (d) => d && d.toFixed(3) + ' s'},
+        {ky: 'average_query_duration', label: 'Average query duration', fn: (d: number) => d && d.toFixed(3) + ' s'},
+        {ky: 'longest_query_duration', label: 'Longest query duration', fn: (d: number) => d && d.toFixed(3) + ' s'},
         {ky: 'largest_result_size', label: 'Largest result size', fn: scaleToBinBytes},
         {ky: 'queries_from_cache', label: 'Queries from cache'},
         {ky: 'wasted_cache', label: 'Wasted cache'},
@@ -42,8 +42,8 @@ const header = [
         {ky: 'changes_committed', label: 'Changes committed'},
         {ky: 'quorum_lost', label: 'Changes quorum lost'},
         {ky: 'changes_unaligned', label: 'Changes unaligned'},
-        {ky: 'longest_change_duration', label: 'Longest change duration', fn: (d) => d && d.toFixed(3) + ' s'},
-        {ky: 'average_change_duration', label: 'Average change duration', fn: (d) => d && d.toFixed(3) + ' s'},
+        {ky: 'longest_change_duration', label: 'Longest change duration', fn: (d: number) => d && d.toFixed(3) + ' s'},
+        {ky: 'average_change_duration', label: 'Average change duration', fn: (d: number) => d && d.toFixed(3) + ' s'},
     ]},
     {ky: 'title5', title: 'TASKS', labels: [
         {ky: 'tasks_success', label: 'Successful tasks'},

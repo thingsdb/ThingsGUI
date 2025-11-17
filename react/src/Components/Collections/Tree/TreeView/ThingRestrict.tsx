@@ -18,15 +18,15 @@ const ThingRestrict = ({
     const [bounds, setBounds] = React.useState({from:0, till:99});
     const {from, till} = bounds;
 
-    const handleMore = (c) => () => {
+    const handleMore = (c: number) => () => {
         setMore({...more, [c]: true});
     };
 
-    const handleBounds = React.useCallback((bounds) => {
+    const handleBounds = React.useCallback((bounds: any) => {
         setBounds(bounds);
     }, []);
 
-    const renderThing = ([k, v, i=null], count) => {
+    const renderThing = ([k, v, i=null]: any, count: number) => {
         return(
             <React.Fragment key={i ? i : k}>
                 {onChildren(k, v, i, isArray)}

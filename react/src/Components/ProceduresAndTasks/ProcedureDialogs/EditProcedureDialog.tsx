@@ -19,7 +19,7 @@ const EditProcedureDialog = ({
     procedure = {},
     scope,
 }: Props) => {
-    const handleRename = (oldName, newName) => {
+    const handleRename = (oldName: string, newName: string) => {
         ProcedureActions.renameProcedure(oldName, newName, scope, tag, onClose);
     };
 

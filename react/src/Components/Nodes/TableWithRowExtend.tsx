@@ -28,7 +28,7 @@ const Tabel = ({
 }: Props) => {
     const [selected, setSelected] = React.useState(null);
 
-    const handleClickRow = (ri) => () => {
+    const handleClickRow = (ri: number) => () => {
         setSelected(ri!==selected?ri:null);
     };
 

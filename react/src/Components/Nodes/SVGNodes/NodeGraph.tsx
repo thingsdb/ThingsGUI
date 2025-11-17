@@ -11,9 +11,9 @@ const NodeGraph = ({
     streamInfo = {},
 }: Props) => {
 
-    const x = (a) => (width/2)+Math.cos(a*2*Math.PI)*radius;
-    const y = (a) => (height/2)+Math.sin(a*2*Math.PI)*radius;
-    const d = data.reduce((res, item, i) => { res[item.node_id] = [x(i/data.length),y(i/data.length)] ; return res;}, {});
+    const x = (a: number) => (width/2)+Math.cos(a*2*Math.PI)*radius;
+    const y = (a: number) => (height/2)+Math.sin(a*2*Math.PI)*radius;
+    const d = data.reduce((res, item, i) => { res[item.node_id] = [x(i/data.length),y(i/data.length)] ; return res;}, {} as Record<number, [number, number]>);
 
     return(
         <svg width={width} height={height}>
@@ -46,6 +46,6 @@ interface Props {
     data: INode[];
     height?: number;
     radius?: number;
-    streamInfo?: object;
+    streamInfo?: Record<number, number[]>;
     width?: number;
 }

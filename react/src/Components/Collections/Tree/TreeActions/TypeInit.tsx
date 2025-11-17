@@ -8,7 +8,7 @@ import {SET, THING} from '../../../../Constants/ThingTypes';
 const TypeInit = ({type, customTypes, dataTypes, onChange, input}: Props) => {
     const dispatch = useEdit()[1];
 
-    const handleOnChangeType = ({target}) => {
+    const handleOnChangeType = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         onChange(value);
         EditActions.resetState(dispatch);
