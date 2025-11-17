@@ -23,12 +23,12 @@ const VariablesArray = ({
         }
     }, [input]);
 
-    const handleChange = ({target}) => {
+    const handleChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setItem(value);
     };
 
-    const handleKeypress = (event) => {
+    const handleKeypress = (event: React.KeyboardEvent<any>) => {
         const {key} = event;
         if (key == 'Enter') {
             let currentcontent = item.trim();
@@ -44,7 +44,7 @@ const VariablesArray = ({
         }
     };
 
-    const handleClick = (index) => () => {
+    const handleClick = (index: number) => () => {
         setMyItems(
             prevItems => {
                 const newArray = [...prevItems];

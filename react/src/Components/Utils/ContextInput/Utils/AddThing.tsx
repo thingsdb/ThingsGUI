@@ -42,7 +42,7 @@ const AddThing = ({
         updateContextDebounced();
     }, [updateContextDebounced]);
 
-    const handleChangeProperty = (index) => ({target}) => {
+    const handleChangeProperty = (index) => ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setProperty(prev => {
             let copy = [...prev];
@@ -51,7 +51,7 @@ const AddThing = ({
         });
     };
 
-    const handleChangeType = (index) => ({target}) => {
+    const handleChangeType = (index) => ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setDataType(prev => {
             let copy = [...prev];

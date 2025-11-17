@@ -41,7 +41,7 @@ const AddArray = ({
         updateContextDebounced();
     }, [updateContextDebounced]);
 
-    const handleChangeType = (index) => ({target}) => {
+    const handleChangeType = (index: number) => ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setDataType(prev => {
             let copy = [...prev];
@@ -63,7 +63,7 @@ const AddArray = ({
         });
     };
 
-    const handleDelete = (index) => () => {
+    const handleDelete = (index: number) => () => {
         setDataType(prev => {
             let copy = [...prev];
             copy.splice(index, 1);

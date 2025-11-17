@@ -53,22 +53,22 @@ const AddError = ({
         }
     }, []);
 
-    const handleErr = (data) => {
+    const handleErr = (data: [string, string]) => {
         const [code, msg] = data;
         saveErr(code, msg);
     };
 
-    const handleOnChangeCode = ({target}) => {
+    const handleOnChangeCode = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         saveErr(value, errMsg);
     };
 
-    const handleOnChangeMsg = ({target}) => {
+    const handleOnChangeMsg = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         saveErr(errCode, value);
     };
 
-    const saveErr = (code, msg) => {
+    const saveErr = (code: string, msg: string) => {
         const c = ERROR_FORMAT_QUERY(code, msg);
         EditActions.update(dispatch, 'val', c, identifier, parent);
         setState({errCode: code, errMsg: msg});

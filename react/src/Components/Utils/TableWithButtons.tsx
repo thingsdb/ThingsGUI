@@ -64,6 +64,6 @@ interface Props {
         label: string;
         fn?: (d: unknown) => React.ReactNode;
     }[];
-    rows: object[];
+    rows: any[];
     buttons: (row: any) => React.ReactNode;
 }

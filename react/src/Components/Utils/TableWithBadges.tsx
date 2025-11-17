@@ -19,7 +19,7 @@ const TableWithBadges = ({
 }: Props) => {
     const [index, setIndex] = React.useState(null);
 
-    const mouseEnter = (i) => () => {
+    const mouseEnter = (i: number) => () => {
         setIndex(i);
     };
     const mouseLeave = () => {
@@ -97,5 +97,5 @@ interface Props {
         ky: string;
         label: string;
     }[];
-    rows: object[];
+    rows: any[];
 }

@@ -39,7 +39,7 @@ const RemoveModal = ({
         }
     };
 
-    const handleSwitch = ({target}) => {
+    const handleSwitch = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         setSwitchDel(checked);
     };

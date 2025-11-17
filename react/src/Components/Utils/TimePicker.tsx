@@ -15,12 +15,12 @@ const TimePicker = ({onChange}: Props) => {
     [time, date],
     );
 
-    const handleChangeDate = ({target}) => {
+    const handleChangeDate = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setDate(value);
     };
 
-    const handleChangeTime = ({target}) => {
+    const handleChangeTime = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setTime(value);
     };

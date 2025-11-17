@@ -94,7 +94,7 @@ SimpleModal.propTypes = {
 export default SimpleModal;
 
 interface Props {
-    actionButtons?: React.ReactElement;
+    actionButtons?: React.ReactElement | null;
     button?: React.ReactElement;
     children: React.ReactNode;
     disableOk?: boolean;
@@ -102,7 +102,7 @@ interface Props {
     maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' ;
     onClose?: () => void;
     onKeyPress?: React.KeyboardEventHandler;
-    onOk?: () => void;
+    onOk?: (() => void) | null;
     open: boolean;
     props?: object;  // DialogProps
     title?: string;

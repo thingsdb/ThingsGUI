@@ -29,11 +29,11 @@ const ThingsTree = ({
     // is root if item is still null
     const thing = root ? tree : item;
 
-    const handleMore = (c) => () => {
+    const handleMore = (c: number) => () => {
         setMore({...more, [c]: true});
     };
 
-    const renderThing = ([k, v, i=null], count) => {
+    const renderThing = ([k, v, i=null]: any, count: number) => {
         return k === THING_KEY ? null : (
             <React.Fragment key={i ? i : k}>
                 <Nested>
@@ -75,7 +75,7 @@ const ThingsTree = ({
             Object.entries(t || {}).slice(start, end).map(([k, v], i) => renderThing([k, v], start+i));
     };
 
-    const handleOpenClose = (open) => {
+    const handleOpenClose = (open: boolean) => {
         !open&&setMore({});
     };
 

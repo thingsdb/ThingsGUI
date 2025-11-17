@@ -53,5 +53,5 @@ interface Props {
             fn?: (d: unknown) => React.ReactNode;
         }[];
     }[];
-    content: object;
+    content: any;
 }

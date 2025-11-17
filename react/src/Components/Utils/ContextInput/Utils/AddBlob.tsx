@@ -22,7 +22,7 @@ const AddBlob = ({
         setFileName(!val ? '' : identifier === null ? val : val[identifier] || '');
     }, [identifier, val]);
 
-    const handleUpdate = React.useCallback((f, b) =>  {
+    const handleUpdate = React.useCallback((f: string, b: string) =>  {
         f = f.replaceAll('.', '_');
         f = f.replaceAll('-', '_');
         f = f.replaceAll(/\s/g, '_');

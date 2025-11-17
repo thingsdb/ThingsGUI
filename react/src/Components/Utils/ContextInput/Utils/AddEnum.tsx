@@ -24,7 +24,7 @@ const AddEnum = ({
     const {val} = editState;
 
     const _enum = (enums || []).find(e => e.name === enumName);
-    const isBlob = init.constructor === String && init.includes(THINGDB_CACHE);
+    const isBlob = typeof init === 'string' && init.includes(THINGDB_CACHE);
 
     React.useEffect(()=>{
         if (val) {
@@ -46,7 +46,7 @@ const AddEnum = ({
         }
     }, [_enum]);
 
-    const handleChangeEnum = ({target}) => {
+    const handleChangeEnum = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setEnumMem(value);
         EditActions.update(dispatch, 'val', CUSTOM_TYPE_FORMAT_QUERY(enumName, value), identifier, parent);

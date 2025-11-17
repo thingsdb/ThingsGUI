@@ -42,13 +42,13 @@ const Closure = ({
     [input],
     );
 
-    const handleBody = ({target}) => {
+    const handleBody = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setState({...state, body: value});
         onChange(CLOSURE_FORMAT_QUERY(variables, value));
     };
 
-    const handleVarArray = (items) => {
+    const handleVarArray = (items: any[]) => {
         setState({...state, variables: items});
         onChange(CLOSURE_FORMAT_QUERY(items, body));
     };

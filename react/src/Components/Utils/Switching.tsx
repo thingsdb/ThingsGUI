@@ -8,7 +8,7 @@ import Switch from '@mui/material/Switch';
 const Switching = ({one, two, onChange}: Props) => {
     const [switchOI, setSwitchOI] = React.useState(false);
 
-    const handleSwitch = ({target}) => {
+    const handleSwitch = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         setSwitchOI(checked);
         onChange(checked);

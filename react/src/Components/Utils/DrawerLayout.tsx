@@ -145,7 +145,7 @@ const DrawerLayout = ({
     const [isResizing, setIsResizing] = React.useState(false);
     const [newWidth, setNewWidth] = React.useState(650);
 
-    const handleMousemove = React.useCallback((event) => {
+    const handleMousemove = React.useCallback((event: MouseEvent) => {
         let offsetRight =
             document.body.offsetWidth - (event.clientX - document.body.offsetLeft);
 

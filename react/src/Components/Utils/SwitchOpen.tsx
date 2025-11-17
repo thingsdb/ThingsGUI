@@ -13,7 +13,7 @@ const SwitchOpen = ({
 }: Props) => {
     const [open, setOpen] = React.useState(false);
 
-    const handleSwitch = ({target}) => {
+    const handleSwitch = ({target}: React.ChangeEvent<any>) => {
         const {checked} = target;
         setOpen(checked);
         onChange(checked);

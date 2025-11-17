@@ -22,7 +22,7 @@ const EditName = ({name, fn}: Props) => {
         setNewName('');
     };
 
-    const handleChange = ({target}) => {
+    const handleChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setNewName(value);
     };

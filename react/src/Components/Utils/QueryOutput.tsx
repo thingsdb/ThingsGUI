@@ -21,11 +21,11 @@ const QueryOutput = ({
     tabIndex,
 }: Props) => {
 
-    const handleChangeTab = (_event, newValue) => {
+    const handleChangeTab = (_event: unknown, newValue: number) => {
         onChangeTab(newValue);
     };
 
-    const handleArgs = (args) => {
+    const handleArgs = (args: any) => {
         onArgs(args);
     };
 

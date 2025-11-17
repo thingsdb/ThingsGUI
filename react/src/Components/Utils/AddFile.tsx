@@ -1,5 +1,5 @@
 /*eslint-disable react/jsx-props-no-spreading*/
-import { styled } from '@mui/material/styles';
+import { styled, Theme } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
 import Dropzone from 'react-dropzone';
 import Grid from '@mui/material/Grid';
@@ -8,7 +8,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 
-const getColor = (theme, isFocused, isDragAccept, isDragReject) => {
+const getColor = (theme: Theme, isFocused: boolean, isDragAccept: boolean, isDragReject: boolean) => {
     if (isDragAccept) {
         return theme.palette.primary.main;
     }
@@ -46,7 +46,7 @@ const AddFile = ({
 }: Props) => {
     const [fileName, setFileName] = React.useState(init);
 
-    const handleDropzone = React.useCallback((acceptedFiles) => {
+    const handleDropzone = React.useCallback((acceptedFiles: any[]) => {
         const reader = new FileReader();
         reader.onabort = () => window.console.log('file reading was aborted');
         reader.onerror = () => window.console.log('file reading has failed');

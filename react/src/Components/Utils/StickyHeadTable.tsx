@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 
 
-const descendingComparator = (a, b, orderBy) => {
+const descendingComparator = (a: any, b: any, orderBy: string) => {
     if (b[orderBy] < a[orderBy]) {
         return -1;
     }
@@ -20,13 +20,13 @@ const descendingComparator = (a, b, orderBy) => {
     return 0;
 };
 
-const getComparator = (order, orderBy) => {
+const getComparator = (order: 'desc' | 'asc', orderBy: string) => {
     return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
+        ? (a: any, b: any) => descendingComparator(a, b, orderBy)
+        : (a: any, b: any) => -descendingComparator(a, b, orderBy);
 };
 
-const stableSort = (array, comparator) => {
+const stableSort = (array: any[], comparator: Function) => {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
@@ -42,17 +42,17 @@ const StickyHeadTable = ({columns, rows, size}: Props) => {
     const [order, setOrder] = React.useState<'desc' | 'asc'>('asc');
     const [orderBy, setOrderBy] = React.useState(columns[0]?columns[0].id:'');
 
-    const handleChangePage = (_e, newPage) => {
+    const handleChangePage = (_e: unknown, newPage: number) => {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = ({target}) => {
+    const handleChangeRowsPerPage = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setRowsPerPage(+value);
         setPage(0);
     };
 
-    const handleRequestSort = (property) => () => {
+    const handleRequestSort = (property: string) => () => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);

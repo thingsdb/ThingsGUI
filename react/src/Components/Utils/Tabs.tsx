@@ -44,7 +44,7 @@ const StyledTabs = styled(Tabs)(({theme}) => ({
 const VerticalTabs = ({headers, panels}: Props) => {
     const [value, setValue] = React.useState(0);
 
-    const handleChange = (_event, newValue) => {
+    const handleChange = (_event: unknown, newValue: number) => {
         setValue(newValue);
     };
 

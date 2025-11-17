@@ -23,7 +23,7 @@ const AddStr = ({
         }
     }, []);
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         EditActions.update(dispatch, 'val', STRING_FORMAT_QUERY(value), identifier, parent);
         EditActions.update(dispatch, 'obj', value, identifier, parent);

@@ -51,7 +51,7 @@ const AutoSelect = ({
         }
     };
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<any>) => {
         const {value} = e.target;
         handleText(value);
 
@@ -60,12 +60,12 @@ const AutoSelect = ({
         setList(filt);
     };
 
-    const handleClick = (i) => () => {
+    const handleClick = (i: string) => () => {
         handleText(i);
         handleClose();
     };
 
-    const handleOpen = ({currentTarget}) => {
+    const handleOpen = ({currentTarget}: React.MouseEvent<any>) => {
         setAnchorEl(currentTarget);
     };
 
@@ -74,12 +74,12 @@ const AutoSelect = ({
         setEnd(BATCH);
     };
 
-    const handleText = (v) => {
+    const handleText = (v: string) => {
         setText(v);
         onChange(v);
     };
 
-    const handleScroll = (e) => {
+    const handleScroll = (e: any) => {
         const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
         if (bottom && (list.slice(0, end).length % BATCH === 0)) {
             setEnd(end => end + BATCH);

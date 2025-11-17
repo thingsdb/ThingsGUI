@@ -39,7 +39,7 @@ const AddVariable = ({
         updateContextDebounced();
     }, [updateContextDebounced]);
 
-    const handleChangeType = (v) => ({target}) => {
+    const handleChangeType = (v: string) => ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setDataType({...dataType, [v]: value});
         dispatch(prev => {

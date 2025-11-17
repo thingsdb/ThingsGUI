@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import { EditActions, useEdit } from '../Context';
 import { toNum } from '../../../Utils';
 
-const onlyInts = (str) => str.length == str.replace(/[^-0-9]/g, '').length;
+const onlyInts = (str: string) => str.length == str.replace(/[^-0-9]/g, '').length;
 
 const AddInt = ({
     identifier = null,
@@ -26,13 +26,13 @@ const AddInt = ({
         }
     }, []);
 
-    const errorTxt = (value) => {
+    const errorTxt = (value: string) => {
         const err = onlyInts(value) ? '' : 'only integers';
         setError(err);
         dispatch(() => ({ error: err }));
     };
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         errorTxt(value);
         EditActions.update(dispatch, 'val', value, identifier, parent);

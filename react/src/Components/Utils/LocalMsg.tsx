@@ -58,7 +58,7 @@ const LocalMsg = ({
 }: Props) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
-    const handlePopoverOpen = (event) => {
+    const handlePopoverOpen = (event: React.MouseEvent<any>) => {
         setAnchorEl(event.currentTarget);
     };
 

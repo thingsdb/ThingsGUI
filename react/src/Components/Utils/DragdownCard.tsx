@@ -9,7 +9,7 @@ const DragdownCard = ({children}: Props) => {
     const [isResizing, setIsResizing] = React.useState(false);
     const [newHeight, setNewHeight] = React.useState(500);
 
-    const handleMousemove = React.useCallback((event) => {
+    const handleMousemove = React.useCallback((event: MouseEvent) => {
         let el = document.getElementById('editor');
         let height = event.clientY - el.offsetTop;
         if (height > 100) {

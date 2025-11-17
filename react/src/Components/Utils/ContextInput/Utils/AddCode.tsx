@@ -25,7 +25,7 @@ const AddCode = ({
         }
     }, []);
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         EditActions.update(dispatch, 'val', value, identifier, parent);
     };

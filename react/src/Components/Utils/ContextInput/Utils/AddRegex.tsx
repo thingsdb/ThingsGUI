@@ -23,7 +23,7 @@ const AddRegex = ({
         }
     }, []);
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         EditActions.update(dispatch, 'val', REGEX_FORMAT_QUERY(value), identifier, parent);
     };

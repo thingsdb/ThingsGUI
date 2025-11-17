@@ -5,7 +5,7 @@ import React from 'react';
 import {BoolInput} from '../..';
 import {EditActions, useEdit} from '../Context';
 
-const isTrue = (str) => str === 'true';
+const isTrue = (str: string) => str === 'true';
 
 const AddBool = ({
     identifier = null,
@@ -22,7 +22,7 @@ const AddBool = ({
         }
     }, []);
 
-    const handleOnChange = (b) => {
+    const handleOnChange = (b: string) => {
         EditActions.update(dispatch, 'val', b, identifier, parent);
         EditActions.update(dispatch, 'obj', isTrue(b), identifier, parent);
     };
@@ -44,6 +44,6 @@ export default AddBool;
 
 interface Props {
     identifier: string | number;
-    init: boolean | string;
+    init: string;
     parent: string;
 }

@@ -35,7 +35,7 @@ const TableCard = ({
         onAdd();
     };
 
-    const handleOpenDelete = (name) => () => {
+    const handleOpenDelete = (name: string) => () => {
         setDeleteItem(name);
     };
 
@@ -43,13 +43,13 @@ const TableCard = ({
         setDeleteItem('');
     };
 
-    const handleSearchString = ({target}) => {
+    const handleSearchString = ({target}: React.ChangeEvent<any>) => {
         const {value} = target;
         setSearchString(value);
         setMaxAmount(step);
     };
 
-    const remove = (name)=>(
+    const remove = (name: string)=>(
         {
             icon: <RemoveIcon fontSize="small" />,
             onClick: handleOpenDelete(name),
@@ -141,7 +141,7 @@ interface Props {
         fn?: (d: unknown) => React.ReactNode;
     }[];
     itemKey: string;
-    items: object[];
+    items: any[];
     moreButtons?: React.ReactElement;
     onAdd: () => void;
     onDelete: (id: string, cb: () => void, tag: string) => void;

@@ -20,7 +20,7 @@ const AddClosure = ({
         }
     }, []);
 
-    const handleUpdateVal = (c) => {
+    const handleUpdateVal = (c: string) => {
         EditActions.update(dispatch, 'val', c, identifier, parent);
     };
 

@@ -19,7 +19,7 @@ const TopBarMenu = ({ children, menuIcon, menuTooltip}: Props) => {
         };
     }, [handleMenuClose]);
 
-    const handleMenuOpen = ({currentTarget}) => {
+    const handleMenuOpen = ({currentTarget}: React.MouseEvent<any>) => {
         setAnchorEl(currentTarget);
     };
 
