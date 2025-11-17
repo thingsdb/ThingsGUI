@@ -35,11 +35,9 @@ const TimePeriodPicker = ({onChange}: Props) => {
 
     React.useEffect(() => {
         onChange(Number(state.number) * state.unit);
-    },
-    [state.number, state.unit],
-    );
+    }, [state.number, state.unit]);
 
-    const handleOnChange = ({target}) => {
+    const handleOnChange = ({target}: React.ChangeEvent<any>) => {
         const {id, value} = target;
         setState({...state, [id]: value});
     };

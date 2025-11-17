@@ -11,16 +11,14 @@ const withStores = withVlow([{
 const HeaderTitle = ({connectedNode}: INodesStore) => {
     React.useEffect(() => {
         NodesActions.getConnectedNode();
-    },
-    [],
-    );
+    }, []);
 
     return(
-        <>
-            <title>
-                {`ThingsGUI ${connectedNode&&connectedNode.node_name ? `  -  ${connectedNode.node_name}:${connectedNode.client_port}`: ''}`}
-            </title>
-        </>
+        // (https://react.dev/reference/react-dom/components/title)
+        // React will always place the corresponding DOM element in the document head.
+        <title>
+            {`ThingsGUI ${connectedNode&&connectedNode.node_name ? `  -  ${connectedNode.node_name}:${connectedNode.client_port}`: ''}`}
+        </title>
     );
 };
 
