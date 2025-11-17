@@ -1,4 +1,3 @@
-//@ts-nocheck
 /*eslint-disable no-unused-vars */
 
 import PropTypes from 'prop-types';
@@ -32,7 +31,7 @@ const CollectionActions = Vlow.factoryActions<CollectionStore>()([
 ] as const);
 
 
-class CollectionStore extends BaseStore {
+class CollectionStore extends BaseStore<ICollectionStore> {
 
     static types = {
         things: PropTypes.object,
@@ -40,7 +39,7 @@ class CollectionStore extends BaseStore {
         canSubmit: PropTypes.bool,
     };
 
-    static defaults = {
+    static defaults: ICollectionStore = {
         things: {},
         thingCounters: {},
         canSubmit: true,
@@ -58,14 +57,14 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onIncCounter(thingId) {
+    onIncCounter(thingId: number) {
         this.setState(prevState => {
             let counter = (prevState.thingCounters[thingId] || 0) + 1;
             return {thingCounters: {...prevState.thingCounters, [thingId]: counter}};
         });
     }
 
-    onDecCounter(thingId) {
+    onDecCounter(thingId: number) {
         this.setState(prevState => {
             let update = {...prevState.thingCounters};
             let counter = update[thingId];
@@ -79,7 +78,7 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onGetThings(collectionName, thingId=null, onCb=() => null) {
+    onGetThings(collectionName: string, thingId: number | null=null, onCb=(_id: number) => {}) {
         const scope = `${COLLECTION_SCOPE}:${collectionName}`;
         let query = THING_CURRENT_QUERY;
         let jsonArgs = null;
@@ -103,7 +102,7 @@ class CollectionStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRefreshThings(collectionName) {
+    onRefreshThings(collectionName: string) {
         const {things} = this.state;
         const ids = Object.keys(things);
 
@@ -113,13 +112,13 @@ class CollectionStore extends BaseStore {
             this.emit('query', {
                 query,
                 scope
-            }).done((data) => {
-                this.setState({things: data.reduce((res, d) => {res[d[THING_KEY]] = d ;return res;}, {})});
+            }).done((data: IThing[]) => {
+                this.setState({things: data.reduce((res, d) => {res[d[THING_KEY]] = d ;return res;}, {} as Record<number, IThing>)});
             }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
         }
     }
 
-    onRemoveThing(thingId) {
+    onRemoveThing(thingId: number) {
         const {thingCounters} = this.state;
         if(thingCounters[thingId] < 2) {
             this.setState(prevState => {
@@ -131,7 +130,7 @@ class CollectionStore extends BaseStore {
         this.onDecCounter(thingId);
     }
 
-    onQuery(scope, query, tag, cb, thingId=null, blob=null, jsonArgs=null, onFail=()=>null) {
+    onQuery(scope: string, query: string, tag: string, cb: (d: any) => void, thingId: number | null=null, blob: object | null=null, jsonArgs: object | null=null, onFail=()=>{}) {
         this.emit('query', {
             query,
             scope,
@@ -151,7 +150,7 @@ class CollectionStore extends BaseStore {
         });
     }
 
-    onDownload(link, cb) {
+    onDownload(link: string, cb: (d: string) => void) {
         this.blob('/download', link).done((textFile) => {
             cb(textFile);
         }).fail((error, message) => {
@@ -182,6 +181,7 @@ declare global {
     }
     interface ICollectionStore {
         canSubmit: boolean;
-        things: any;
+        things: Record<number, IThing>;
+        thingCounters: Record<number, number>;
     }
 }

@@ -7,7 +7,7 @@ import { NEW_TASK_EMPTY_QUERY, TASK_FORMAT_QUERY } from '../../../TiQueries/Quer
 
 const TasksEditor = ({onSetQueryInput, scope}: Props) => {
 
-    const handleCallback = (type, task) => {
+    const handleCallback = (type: 'add' | 'run', task: ITask) => {
         switch(type){
         case 'add':
             onSetQueryInput(NEW_TASK_EMPTY_QUERY('<start>, <closure>, <args>)'));

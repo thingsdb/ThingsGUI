@@ -1,4 +1,3 @@
-//@ts-nocheck
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
@@ -14,13 +13,13 @@ const EnumActions = Vlow.factoryActions<EnumStore>()([
 ] as const);
 
 
-class EnumStore extends BaseStore {
+class EnumStore extends BaseStore<IEnumStore> {
 
     static types = {
         enums: PropTypes.object,
     };
 
-    static defaults = {
+    static defaults: IEnumStore = {
         enums: {},
     };
 
@@ -29,7 +28,7 @@ class EnumStore extends BaseStore {
         this.state = EnumStore.defaults;
     }
 
-    onGetEnums(scope, tag, cb=()=>null) {
+    onGetEnums(scope: string, tag: string, cb=(_d: any)=>{}) {
         const query = ENUMS_INFO_QUERY;
         this.emit('query', {
             query,
@@ -46,7 +45,7 @@ class EnumStore extends BaseStore {
         });
     }
 
-    onDeleteEnum(scope, name, tag, cb=()=>null) {
+    onDeleteEnum(scope: string, name: string, tag: string, cb=(_d: any)=>{}) {
         const query = DEL_ENUM_QUERY + ' ' + ENUMS_INFO_QUERY;
         const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
@@ -65,7 +64,7 @@ class EnumStore extends BaseStore {
         });
     }
 
-    onRenameEnum(current, newName, scope, tag, cb=()=>null) {
+    onRenameEnum(current: string, newName: string, scope: string, tag: string, cb=()=>{}) {
         const query = RENAME_ENUM_QUERY + ENUMS_INFO_QUERY;
         const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
@@ -100,8 +99,23 @@ declare global {
         // TODOT narrow in EnumTypeChips
         type_id?: number;
         wrap_only?: boolean;
-        fields?: any[];
-        relations?: any[];
+        wpo?: boolean;  // TODO which one? wpo / wrap_only
+        fields?: [string, string][];
+        methods?: {
+            [index: string]: {
+                _doc: string;
+                definition: string;
+                with_side_effects: boolean;
+                arguments: string[];
+            }
+        };
+        relations?: {
+            [index: string]: {
+                type: string;
+                property: string;
+                definition: string;
+            };
+        };
     }
 
     interface IEnumStore {

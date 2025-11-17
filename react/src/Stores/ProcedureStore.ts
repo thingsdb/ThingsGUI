@@ -1,4 +1,3 @@
-//@ts-nocheck
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
@@ -24,14 +23,15 @@ const ProcedureActions = Vlow.factoryActions<ProcedureStore>()([
 ] as const);
 
 
-class ProcedureStore extends BaseStore {
+class ProcedureStore extends BaseStore<IProcedureStore> {
 
     static types = {
         procedure: PropTypes.object,
         procedures: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
     };
 
-    static defaults = {
+    static defaults: IProcedureStore = {
+        // @ts-expect-error
         procedure: {},
         procedures: {},
     };
@@ -41,7 +41,7 @@ class ProcedureStore extends BaseStore {
         this.state = ProcedureStore.defaults;
     }
 
-    onGetProcedure(scope, tag=null, cb=()=>null) {
+    onGetProcedure(scope: string, tag: string | null=null, cb=(_d: any)=>{}) {
         const query = PROCEDURE_INFO_QUERY;
         this.emit('query', {
             query,
@@ -57,7 +57,7 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onGetProcedures(scope, tag,  cb=()=>null) {
+    onGetProcedures(scope?: string, tag?: string,  cb=(_d: any)=>{}) {
         const query = PROCEDURES_INFO_QUERY;
         this.emit('query', {
             query,
@@ -74,7 +74,7 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onDeleteProcedure(scope, name, tag,  cb=()=>null) {
+    onDeleteProcedure(scope: string, name: string, tag: string,  cb=(_d: any)=>{}) {
         const query = DEL_PROCEDURE_QUERY + ' ' + PROCEDURES_INFO_QUERY;
         const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
@@ -93,7 +93,7 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onRunProcedure(scope, name, args, tag,  cb=()=>null, failCb=()=>null) {
+    onRunProcedure(scope: string, name: string, args: string, tag: string,  cb=(_d: any)=>{}, failCb=()=>{}) {
         this.emit('run', {
             scope,
             procedure: {
@@ -108,7 +108,7 @@ class ProcedureStore extends BaseStore {
         });
     }
 
-    onRenameProcedure(current, newName, scope, tag, cb=()=>null) {
+    onRenameProcedure(current: string, newName: string, scope: string, tag: string, cb=()=>{}) {
         const query = RENAME_PROCEDURE_QUERY + ' ' + PROCEDURES_INFO_QUERY;
         const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {

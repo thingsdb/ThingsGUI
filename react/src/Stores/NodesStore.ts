@@ -1,4 +1,3 @@
-//@ts-nocheck
 /*eslint-disable no-unused-vars */
 
 import deepEqual from 'deep-equal';
@@ -74,7 +73,7 @@ const NodesActions = Vlow.factoryActions<NodesStore>()([
 ] as const);
 
 
-class NodesStore extends BaseStore {
+class NodesStore extends BaseStore<INodesStore> {
 
     static types = {
         allNodeInfo: PropTypes.arrayOf(PropTypes.object),
@@ -88,7 +87,7 @@ class NodesStore extends BaseStore {
         streamInfo: PropTypes.object,
     };
 
-    static defaults = {
+    static defaults: INodesStore = {
         allNodeInfo: [],
         backups: [],
         connectedNode: {},
@@ -120,7 +119,7 @@ class NodesStore extends BaseStore {
         });
     }
 
-    onGetNodes(cb=()=>null){
+    onGetNodes(cb=()=>{}){
         const {node, nodes} = this.state;
         const query = NODES_NODE_INFO_QUERY;
         this.emit('query', {
@@ -160,16 +159,16 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onGetStreamInfo(callback=()=>null){
+    onGetStreamInfo(callback=()=>{}){
         const {nodes, streamInfo} = this.state;
         const query = NODES_INFO_QUERY;
-        const obj = {};
+        const obj = {} as any;
         const length = nodes.length;
         nodes.slice(0, -1).forEach((n,i) => // need all nodes -1
             this.emit('query', {
                 scope: `${NODE_SCOPE}:${n.node_id}`,
                 query
-            }).done((data) => {
+            }).done((data: any[]) => {
                 data.slice(i).forEach(s=>{
                     if(s.stream&&s.stream.includes('node-out')){
                         obj[s.node_id] = obj[s.node_id]?[...obj[s.node_id], n.node_id]:[n.node_id];
@@ -192,11 +191,11 @@ class NodesStore extends BaseStore {
         );
     }
 
-    onGetDashboardInfo(cb=()=>null){
+    onGetDashboardInfo(cb=(_d: any[])=>{}){
         const {nodes, allNodeInfo} = this.state;
         const query = NODE_COUNTERS_INFO_QUERY;
         const length = nodes.length;
-        const arr = [];
+        const arr = [] as any[];
         nodes.forEach((n,i) =>
             this.emit('query', {
                 scope: `${NODE_SCOPE}:${n.node_id}`,
@@ -221,7 +220,7 @@ class NodesStore extends BaseStore {
         );
     }
 
-    onGetNode(nodeId) {
+    onGetNode(nodeId: number) {
         const {node} = this.state;
         const query = NODE_INFO_QUERY;
         this.emit('query', {
@@ -236,7 +235,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onGetCounters(nodeId) {
+    onGetCounters(nodeId: number) {
         const {counters} = this.state;
         const query = COUNTERS_QUERY;
         this.emit('query', {
@@ -251,7 +250,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onSetLoglevel(nodeId, level, tag, cb) {
+    onSetLoglevel(nodeId: number, level: number, tag: string, cb: () => void) {
         const query = SET_LOG_LEVEL_QUERY + ' ' + NODE_INFO_QUERY ;
         const jsonArgs = SET_LOG_LEVEL_ARGS(level);
         this.emit('query', {
@@ -268,7 +267,7 @@ class NodesStore extends BaseStore {
 
         });
     }
-    onResetCounters(nodeId) {
+    onResetCounters(nodeId: number) {
         const query = RESET_COUNTERS_QUERY + ' ' + COUNTERS_QUERY;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
@@ -280,7 +279,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRestore(fileName, takeAccess, restoreTasks, tag, cb) {
+    onRestore(fileName: string, takeAccess: boolean, restoreTasks: boolean, tag: string, cb: () => void) {
         const query = RESTORE_QUERY(takeAccess, restoreTasks);
         const jsonArgs = RESTORE_ARGS(fileName, takeAccess, restoreTasks);
         this.emit('query', {
@@ -294,7 +293,7 @@ class NodesStore extends BaseStore {
         });
     }
 
-    onShutdown(nodeId, tag, cb) {
+    onShutdown(nodeId: number, tag: string, cb: () => void) {
         const query = SHUTDOWN_QUERY + ' ' + NODES_INFO_QUERY;
         this.emit('query', {
             scope: `${NODE_SCOPE}:${nodeId}`,
@@ -309,7 +308,7 @@ class NodesStore extends BaseStore {
         });
     }
 
-    onAddNode(config, tag, cb) { // secret , nodename [, port]
+    onAddNode(config: any, tag: string, cb: () => void) { // secret , nodename [, port]
         const query = NEW_NODE_QUERY(config.port);
         const jsonArgs = NEW_NODE_ARGS(config.secret, config.nName, Number(config.port));
         this.emit('query', {
@@ -324,7 +323,7 @@ class NodesStore extends BaseStore {
         });
     }
 
-    onDelNode(nodeId, tag, cb) {
+    onDelNode(nodeId: number, tag: string, cb: () => void) {
         const query = DEL_NODE_QUERY;
         const jsonArgs = ID_ARGS(nodeId);
         this.emit('query', {
@@ -339,7 +338,7 @@ class NodesStore extends BaseStore {
         });
     }
 
-    onGetBackups(nodeId) {
+    onGetBackups(nodeId: number) {
         const {backups} = this.state;
         const query = BACKUPS_INFO_QUERY;
         this.emit('query', {
@@ -354,7 +353,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onAddBackup(nodeId, config, tag, cb) {
+    onAddBackup(nodeId: number, config: any, tag: string, cb: () => void) {
         const query = NEW_BACKUP_QUERY(config.time, config.repeat, config.maxFiles);
         const jsonArgs = NEW_BACKUP_ARGS(config.file, config.time, config.repeat, config.maxFiles);
         this.emit('query', {
@@ -367,7 +366,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 
-    onDelBackup(nodeId, backupId, cb, deleteFiles=false) {
+    onDelBackup(nodeId: number, backupId: number, cb: () => void, deleteFiles=false) {
         const query = DEL_BACKUP_QUERY;
         const jsonArgs = DEL_BACKUP_ARGS(backupId, deleteFiles);
         this.emit('query', {
@@ -380,7 +379,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onGetModules(nodeId) {
+    onGetModules(nodeId: number) {
         const {modules} = this.state;
         const query = MODULES_INFO_QUERY;
         this.emit('query', {
@@ -395,7 +394,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onGetModule(nodeId, name) {
+    onGetModule(nodeId: number, name: string) {
         const {_module} = this.state;
         const query = MODULE_INFO_QUERY;
         const jsonArgs = NAME_ARGS(name);
@@ -412,7 +411,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onAddModule(nodeId, config, tag, cb) {
+    onAddModule(nodeId: number, config: any, tag: string, cb: () => void) {
         const query = NEW_MODULE_QUERY(config.configuration);
         const jsonArgs = NEW_MODULE_ARGS(config.name, config.source, config.configuration);
         this.emit('query', {
@@ -425,7 +424,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 
-    onDelModule(nodeId, name, cb) {
+    onDelModule(nodeId: number, name: string, cb: () => void) {
         const query = DEL_MODULE_QUERY;
         const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
@@ -438,7 +437,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onRenameModule(nodeId, current, newName, tag, cb) {
+    onRenameModule(nodeId: number, current: string, newName: string, tag: string, cb: () => void) {
         const query = RENAME_MODULE_QUERY;
         const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
@@ -452,7 +451,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 
-    onRestartModule(nodeId, name, cb) {
+    onRestartModule(nodeId: number, name: string, cb: () => void) {
         const query = RESTART_MODULE_QUERY;
         const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
@@ -465,7 +464,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onSetModuleConf(nodeId, name, configuration, tag, cb) {
+    onSetModuleConf(nodeId: number, name: string, configuration: string, tag: string, cb: () => void) {
         const query = SET_MODULE_CONF_QUERY;
         const jsonArgs = SET_MODULE_CONF_ARGS(name, configuration);
 
@@ -479,7 +478,7 @@ class NodesStore extends BaseStore {
         }).fail((event, status, message) => ErrorActions.setMsgError(tag, message.Log));
     }
 
-    onSetModuleScope(nodeId, name, scope, tag, cb) {
+    onSetModuleScope(nodeId: number, name: string, scope: string, tag: string, cb: () => void) {
         const query = SET_MODULE_SCOPE_QUERY;
         const jsonArgs = SET_MODULE_SCOPE_ARGS(name, scope);
         this.emit('query', {
@@ -503,6 +502,8 @@ declare global {
         log_level: string;
         port: number;
         status: string;
+        committed_event_id: number;
+        stored_event_id: number;
     }
     interface INodesStore {
         allNodeInfo: any[];

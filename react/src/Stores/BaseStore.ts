@@ -49,17 +49,17 @@ class _SocketRequest {
         });
     }
 
-    done(doneCb) {
+    done(doneCb: (_data: any) => void) {
         this._doneCb = doneCb;
         return this;
     }
 
-    fail(failCb) {
+    fail(failCb: (_event: string, _status: number, _message: any) => void) {
         this._failCb = failCb;
         return this;
     }
 
-    always(alwaysCb) {
+    always(alwaysCb: (_status: number, _data: any) => void) {
         this._alwaysCb = alwaysCb;
         return this;
     }
@@ -100,7 +100,7 @@ class _BlobRequest {
 
                     // This fires after the blob has been read/loaded.
                     reader.addEventListener('loadend', (e) => {
-                        rsp = e.srcElement.result;
+                        rsp = e.target.result;
                         this.failCb(xhr, rsp);
                     });
 
@@ -116,12 +116,12 @@ class _BlobRequest {
         xhr.send((!data) ? null : JSON.stringify(data));
     }
 
-    done(doneCb) {
+    done(doneCb: (data: any) => void) {
         this.doneCb = doneCb;
         return this;
     }
 
-    fail(failCb) {
+    fail(failCb: (xhr: XMLHttpRequest, data: any) => void) {
         this.failCb = failCb;
         return this;
     }
@@ -168,30 +168,30 @@ class _JsonRequest {
             data : JSON.stringify(data));
     }
 
-    done(doneCb) {
+    done(doneCb: (data: any) => void) {
         this.doneCb = doneCb;
         return this;
     }
 
-    fail(failCb) {
+    fail(failCb: (xhr: XMLHttpRequest, data: any) => void) {
         this.failCb = failCb;
         return this;
     }
 
-    always(alwaysCb) {
+    always(alwaysCb: (xhr: XMLHttpRequest, data: any) => void) {
         this.alwaysCb = alwaysCb;
         return this;
     }
 }
 
 
-class BaseStore extends Vlow.Store {
+class BaseStore<T, > extends Vlow.Store<T> {
 
-    emit(name, data) {
+    emit(name, data?) {
         return new _SocketRequest(name, data);
     }
 
-    blob(url, data) {
+    blob(url, data?) {
         return new _BlobRequest('POST', url, data);
     }
 

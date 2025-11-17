@@ -1,4 +1,3 @@
-//@ts-nocheck
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
@@ -19,13 +18,13 @@ const TypeActions = Vlow.factoryActions<TypeStore>()([
 ] as const);
 
 
-class TypeStore extends BaseStore {
+class TypeStore extends BaseStore<ITypeStore> {
 
     static types = {
         customTypes: PropTypes.object,
     };
 
-    static defaults = {
+    static defaults: ITypeStore = {
         customTypes: {},
     };
 
@@ -34,7 +33,7 @@ class TypeStore extends BaseStore {
         this.state = TypeStore.defaults;
     }
 
-    onGetType(query, scope, args, tag, cb) {
+    onGetType(query: string, scope: string, args: object, tag: string, cb: (_d: any) => void) {
         this.emit('query', {
             query,
             scope,
@@ -47,7 +46,7 @@ class TypeStore extends BaseStore {
         });
     }
 
-    onGetTypes(scope, tag, cb=()=>null) {
+    onGetTypes(scope: string, tag: string, cb=(_d: any)=>{}) {
         const query = TYPES_INFO_QUERY;
         this.emit('query', {
             query,
@@ -64,7 +63,7 @@ class TypeStore extends BaseStore {
         });
     }
 
-    onDeleteType(scope, name, tag, cb=()=>null) {
+    onDeleteType(scope: string, name: string, tag: string, cb=(_d: any)=>{}) {
         const query = DEL_TYPE_QUERY + ' ' + TYPES_INFO_QUERY;
         const jsonArgs = NAME_ARGS(name);
         this.emit('query', {
@@ -83,7 +82,7 @@ class TypeStore extends BaseStore {
         });
     }
 
-    onRenameType(current, newName, scope, tag, cb=()=>null) {
+    onRenameType(current: string, newName: string, scope: string, tag: string, cb=()=>{}) {
         const query = RENAME_TYPE_QUERY + ' ' + TYPES_INFO_QUERY;
         const jsonArgs = RENAME_ARGS(current, newName);
         this.emit('query', {
@@ -129,9 +128,12 @@ declare global {
                 definition: string;
             };
         };
+        wpo: boolean;
 
         // TODOT narrow in EnumsTypes
         enum_id?: number;
+        members?: [string, number | IThing][];
+        default?: string | IThing;
     }
 
     interface ITypeStore {

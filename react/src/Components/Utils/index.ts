@@ -61,7 +61,7 @@ import { parseError, useThingsError } from './useThingsError';
 import VariablesArray from './VariablesArray';
 import ViewEditFields from './ViewEditFields';
 import WarnPopover from './WarnPopover';
-import { createSearchParams } from 'react-router';
+import { createSearchParams, NavigateFunction, Location, URLSearchParamsInit } from 'react-router';
 
 import { SET_KEY, THING_KEY, WRAP_KEY } from '../../Constants/CharacterKeys';
 import {
@@ -94,7 +94,7 @@ import {
     SQUARE_BRACKETS_FORMAT_QUERY,
 } from '../../TiQueries/Queries';
 
-const checkType = (t) => {
+const checkType = (t: any) => {
     if (t === null) {
         return(NIL);
     }
@@ -120,7 +120,7 @@ const checkType = (t) => {
     return(type);
 };
 
-const thingValue = (type, thing, customTypes=[]) => {
+const thingValue = (type: string, thing: any, customTypes: IType[]=[]) => {
     return type === ARRAY ? SQUARE_BRACKETS_FORMAT_QUERY(thing.length)
         : type === THING ? Object.keys(thing)[0] == THING_KEY ? CURLY_BRACKETS_FORMAT_QUERY(`${Object.keys(thing)[0]}${thing[THING_KEY]}`) : CURLY_BRACKETS_FORMAT_QUERY()
             : type === 'object' ? SQUARE_BRACKETS_FORMAT_QUERY(Object.keys(thing).length)
@@ -131,9 +131,9 @@ const thingValue = (type, thing, customTypes=[]) => {
                                 : '';
 };
 
-const isObjectEmpty = (obj) => !(typeof obj === 'object' && Object.entries(obj).length > 0);
-const findItem = (index, target) => target.length ? (index+1 > target.length ? {}: target[index]) : {}; //findItem(index-1, target) : target[index]) : {};
-const orderByName = (arr, key='name') => arr.sort((a, b) => {
+const isObjectEmpty = (obj: object | undefined): obj is undefined => !(typeof obj === 'object' && Object.entries(obj).length > 0);
+const findItem = <T, >(index: number, target: T[]) => target.length ? (index+1 > target.length ? {}: target[index]) : {}; //findItem(index-1, target) : target[index]) : {};
+const orderByName = <T, >(arr: T[], key: keyof T='name') => arr.sort((a, b) => {
     let nameA,
         nameB;
     if(typeof a[key] === 'string') {
@@ -155,7 +155,7 @@ const orderByName = (arr, key='name') => arr.sort((a, b) => {
     return 0;
 });
 
-const getScopes = (collections) => [
+const getScopes = (collections: ICollection[]) => [
     [
         {name: 'ThingsDB', value: THINGSDB_SCOPE, collectionId: null},
         {name: 'Node', value: NODE_SCOPE, collectionId: null},
@@ -166,13 +166,13 @@ const getScopes = (collections) => [
     ]
 ];
 
-const getScopes2 = (collections, nodes) => [
+const getScopes2 = (collections: ICollection[], nodes: INode[]) => [
     THINGSDB_SCOPE, ...nodes.map((n) => (`${NODE_SCOPE}:${n.node_id}`)), ...collections.map(c => `${COLLECTION_SCOPE}:${c.name}`)
 ];
 
-const fancyName = (n, ci) => ci !== null ? n + `[${ci}]` : n;
+const fancyName = (n: string, ci: string) => ci !== null ? n + `[${ci}]` : n;
 
-const allDataTypes = (types) => {
+const allDataTypes = (types: IType[]) => {
     const dataTypes = [
         BOOL,
         BYTES,
@@ -196,7 +196,7 @@ const allDataTypes = (types) => {
     return(dataTypes);
 };
 
-const duration = (n) => {
+const duration = (n: number) => {
     let [time, unit] =  n<60 ? [n, 'second'] :
         n < 3600 ? [n/60, 'minute'] :
             n < 86400 ? [n/3600, 'hour'] :
@@ -205,7 +205,7 @@ const duration = (n) => {
     return `${time} ${unit}${time>1?'s':''}`;
 };
 
-const revealCustomType = (i) => { // TODO query
+const revealCustomType = (i: string) => { // TODO query
     let arr = 0;
     let opt = 0;
     if(i[0] == '[' || i[0] == '{') {
@@ -217,14 +217,14 @@ const revealCustomType = (i) => { // TODO query
     return i.slice(arr, i.length-(arr+opt));
 };
 
-const swap = (items, index) => {
+const swap = <T, >(items: T[], index: number) => {
     const i = items[0];
     items[0] = items[index];
     items[index] = i;
     return items;
 };
 
-const scaleToBinBytes = (bytes) => {
+const scaleToBinBytes = (bytes: number) => {
     if(bytes === 0) {
         return '0 bytes';
     }
@@ -236,9 +236,9 @@ const scaleToBinBytes = (bytes) => {
     return `${rounded === number ? '' : '~'}${rounded} ${metricLabel[i]}`;
 };
 
-const nextRunFn = (t) => (t ? moment(t).format(DATE_TIME_SEC_STR) : NIL);
+const nextRunFn = (t: number) => (t ? moment(t).format(DATE_TIME_SEC_STR) : NIL);
 
-const getNameFromPath = (pathname, key) => {
+const getNameFromPath = (pathname: string, key: string) => {
     const splitPath = pathname.split('/');
     const index = splitPath.indexOf(key);
     if (index !== -1) {
@@ -249,7 +249,7 @@ const getNameFromPath = (pathname, key) => {
     }
 };
 
-const historyNavigate = (navigate, location, pathname, searchParams=null, state=null) => {
+const historyNavigate = (navigate: NavigateFunction, location: Location<any>, pathname: string, searchParams: URLSearchParamsInit=null, state: object=null) => {
     let params = {} as any;  // TODOT use react-router To | Partial<Path>
 
     if (pathname) {
@@ -266,7 +266,7 @@ const historyNavigate = (navigate, location, pathname, searchParams=null, state=
     navigate(params, { state: state });
 };
 
-const getGreetingTime = (m) => {
+const getGreetingTime = (m: moment.Moment) => {
     let g = null; //return g
 
     if(!m || !m.isValid()) {
@@ -288,7 +288,7 @@ const getGreetingTime = (m) => {
     return g;
 };
 
-const desc = (a, b, orderBy) => {
+const desc = <T, >(a: T, b: T, orderBy: keyof T) => {
     if (b[orderBy] < a[orderBy] || (b[orderBy] !== a[orderBy] && b[orderBy] === null)) {
         return -1;
     }
@@ -298,7 +298,7 @@ const desc = (a, b, orderBy) => {
     return 0;
 };
 
-const stableSort = (array, cmp) => {
+const stableSort = <T, >(array: T[], cmp: Function) => {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = cmp(a[0], b[0]);
@@ -308,13 +308,13 @@ const stableSort = (array, cmp) => {
     return stabilizedThis.map(el => el[0]);
 };
 
-const getSorting = (order, orderBy) => {
-    return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
+const getSorting = <T, >(order: 'desc' | 'asc', orderBy: keyof T) => {
+    return order === 'desc' ? (a: T, b: T) => desc(a, b, orderBy) : (a: T, b: T) => -desc(a, b, orderBy);
 };
 
-const replacer = (_key, value) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
+const replacer = (_key: unknown, value: any) => typeof value === 'string' && value.includes('download/tmp/thingsdb-cache-') ? '<blob data>' : value;
 
-const toNum = v => +v || v;
+const toNum = (v: unknown) => +v || v;
 
 export {
     allDataTypes,

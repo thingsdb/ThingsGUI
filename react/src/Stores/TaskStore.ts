@@ -1,4 +1,3 @@
-//@ts-nocheck
 import PropTypes from 'prop-types';
 import Vlow from 'vlow';
 
@@ -23,14 +22,15 @@ const TaskActions = Vlow.factoryActions<TaskStore>()([
     'getTask',
 ] as const);
 
-class TaskStore extends BaseStore {
+class TaskStore extends BaseStore<ITaskStore> {
 
     static types = {
         task: PropTypes.object,
         tasks: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
     };
 
-    static defaults = {
+    static defaults: ITaskStore = {
+        // @ts-expect-error
         task: {},
         tasks: {},
     };
@@ -40,7 +40,7 @@ class TaskStore extends BaseStore {
         this.state = TaskStore.defaults;
     }
 
-    onGetLightTasks(scope, tag,  cb=()=>null) {
+    onGetLightTasks(scope?: string, tag?: string,  cb=(_d: any)=>{}) {
         this.emit('query', {
             query: LIGHT_TASKS_QUERY,
             scope
@@ -56,7 +56,7 @@ class TaskStore extends BaseStore {
         });
     }
 
-    onGetTask(scope, taskId, tag) {
+    onGetTask(scope: string, taskId: number, tag: string) {
         const query = GET_TASK_QUERY;
         const jsonArgs = ID_ARGS(taskId);
         this.emit('query', {
@@ -72,7 +72,7 @@ class TaskStore extends BaseStore {
         });
     }
 
-    onDeleteTask(scope, taskId, tag,  cb=()=>null) {
+    onDeleteTask(scope: string, taskId: number, tag: string,  cb=(_d: any)=>{}) {
         const query = TASK_DEL_QUERY + ' ' + LIGHT_TASKS_QUERY;
         const jsonArgs = ID_ARGS(taskId);
         this.emit('query', {
@@ -91,7 +91,7 @@ class TaskStore extends BaseStore {
         });
     }
 
-    onCancelTask(scope, taskId, tag,  cb=()=>null) {
+    onCancelTask(scope: string, taskId: number, tag: string,  cb=(_d: any)=>{}) {
         const query =  TASK_CANCEL_QUERY + ' ' + LIGHT_TASKS_QUERY;
         const jsonArgs = ID_ARGS(taskId);
         this.emit('query', {
@@ -109,7 +109,7 @@ class TaskStore extends BaseStore {
         });
     }
 
-    onGetArgs(scope, taskId, tag,  cb=()=>null) {
+    onGetArgs(scope: string, taskId: number, tag: string,  cb=(_d: any)=>{}) {
         const query = TASK_ARGS_QUERY;
         const jsonArgs = ID_ARGS(taskId);
         this.emit('query', {
@@ -123,7 +123,7 @@ class TaskStore extends BaseStore {
         });
     }
 
-    onGetOwner(scope, taskId, tag,  cb=()=>null) {
+    onGetOwner(scope: string, taskId: number, tag: string,  cb=(_d: any)=>{}) {
         const query = TASK_OWNER_QUERY;
         const jsonArgs = ID_ARGS(taskId);
         this.emit('query', {

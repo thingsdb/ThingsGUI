@@ -1,4 +1,3 @@
-//@ts-nocheck
 /*eslint-disable no-unused-vars */
 
 import PropTypes from 'prop-types';
@@ -30,7 +29,7 @@ const ApplicationActions = Vlow.factoryActions<ApplicationStore>()([
 ] as const);
 
 
-class ApplicationStore extends BaseStore {
+class ApplicationStore extends BaseStore<IApplicationStore> {
 
     static types = {
         authOnly: PropTypes.bool,
@@ -44,7 +43,7 @@ class ApplicationStore extends BaseStore {
         useCookies: PropTypes.bool
     };
 
-    static defaults = {
+    static defaults: IApplicationStore = {
         authOnly: false,
         authMethod: '',
         loaded: false,
@@ -61,7 +60,7 @@ class ApplicationStore extends BaseStore {
         this.state = ApplicationStore.defaults;
     }
 
-    connect(api, config, tag) {
+    connect(api: 'connToNew' | 'connViaCache' | 'authKey' | 'authToken' | 'authPass', config: any, tag: string) {
         this.setState({
             loaded: false,
             seekConnection: false,
@@ -113,11 +112,11 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onConnectToNew(config, tag) {
+    onConnectToNew(config: any, tag: string) {
         this.connect('connToNew', config, tag);
     }
 
-    onConnectViaCache(config, tag) {
+    onConnectViaCache(config: any, tag: string) {
         this.connect('connViaCache', config, tag);
     }
 
@@ -130,15 +129,15 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onAuthKey(key, tag) {
+    onAuthKey(key: string, tag: string) {
         this.connect('authKey', {key: key}, tag);
     }
 
-    onAuthToken(token, tag) {
+    onAuthToken(token: string, tag: string) {
         this.connect('authToken', {token: token}, tag);
     }
 
-    onAuthPass(user, pass, tag) {
+    onAuthPass(user: string, pass: string, tag: string) {
         this.connect('authPass', {user: user, pass: pass}, tag);
     }
 
@@ -154,7 +153,7 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onDisconnect(cb=() => null) {
+    onDisconnect(cb=() => {}) {
         EventActions.reset();
         this.emit('disconn').done((data) => {
             CollectionActions.resetCollectionStore();
@@ -163,13 +162,12 @@ class ApplicationStore extends BaseStore {
             NodesActions.resetNodesStore();
             this.setState({
                 connected: data.Connected,
-                match: {},
             });
             cb();
         }).fail((event, status, message) => ErrorActions.setToastError(message.Log));
     }
 
-    onEditCachedConn(config, tag, cb) {
+    onEditCachedConn(config: any, tag: string, cb: () => void) {
         this.emit('editCachedConn', config).done((_data) => {
             this.setState(prevState => {
                 const savedConn = {... prevState.cachedConnections, [config.name]: {...prevState.cachedConnections[config.name], ...config}};
@@ -182,7 +180,7 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onGetCachedConn(tag) {
+    onGetCachedConn(tag: string) {
         this.emit('getCachedConn').done((data) => {
             this.setState({cachedConnections: data||{}});
         }).fail((event, status, message) => {
@@ -190,7 +188,7 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onNewCachedConn(config, tag, cb) {
+    onNewCachedConn(config: any, tag: string, cb: () => void) {
         this.emit('newCachedConn', config).done((_data) => {
             this.setState(prevState => {
                 const savedConn = {... prevState.cachedConnections, [config.name]: config};
@@ -203,7 +201,7 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onRenameCachedConn(config, oldName, tag, cb) {
+    onRenameCachedConn(config: any, oldName: string, tag: string, cb: () => void) {
         this.emit('renameCachedConn', {newName: config.name, oldName: oldName}).done((_data) => {
             this.setState(prevState => {
                 let copy = JSON.parse(JSON.stringify(prevState.cachedConnections)); // copy
@@ -218,7 +216,7 @@ class ApplicationStore extends BaseStore {
         });
     }
 
-    onDelCachedConn(config, tag) {
+    onDelCachedConn(config: any, tag: string) {
         this.emit('delCachedConn', config).done((_data) => {
             this.setState(prevState => {
                 let copy = JSON.parse(JSON.stringify(prevState.cachedConnections)); // copy
@@ -250,7 +248,7 @@ declare global {
         seekConnection: boolean;
         openEditor: boolean;
         input: string;
-        cachedConnections: object;
+        cachedConnections: {[index: string]: any[]};
         useCookies: boolean;
     }
 }
