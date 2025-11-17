@@ -139,7 +139,7 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
-            onKeyDown={handleKeyPress}
+            onKeyPress={handleKeyPress}
         >
             {Content}
         </SimpleModal>
