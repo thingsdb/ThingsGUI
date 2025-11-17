@@ -48,8 +48,8 @@ const AddFile = ({
 
     const handleDropzone = React.useCallback((acceptedFiles) => {
         const reader = new FileReader();
-        reader.onabort = () => window.log('file reading was aborted');
-        reader.onerror = () => window.log('file reading has failed');
+        reader.onabort = () => window.console.log('file reading was aborted');
+        reader.onerror = () => window.console.log('file reading has failed');
         reader.onload = () => {
             const binaryStr = reader.result;
             var encodedData = btoa(binaryStr);
