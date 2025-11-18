@@ -109,16 +109,30 @@ react/node_modules/
 react/static/js/*.html
 react/static/js/*-bundle-*.js
 react/static/js/*-bundle-*.min.js
-react/static/js/*-bundle-*.min.js.LICENSE.txt
+react/static/js/*.LICENSE.txt
 react/static/js/*.worker.js
 react/static/js/*.ttf
 react/static/font/
+
+# Go files
+/fileapphtml.go
+/filecesbitlogo.go
+/fileeditorworkerjs.go
+/filefaviconico.go
+/filemainbundleminjs.go
+/filemonacofontttf.go
+/filethingsdbgif.go
+/filethingsdblogo.go
+/filethingsguilogo.go
+/filevendorsbundleminjs.go
+/filevieweditlogo.go
 
 # NPM
 react/npm-debug.log
 
 # BIN files
 /bin/
+/*.bin
 
 #vscode
 .vscode
