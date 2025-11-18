@@ -5,15 +5,13 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"time"
 
-	socketio "github.com/googollee/go-socket.io"
-	"github.com/googollee/go-socket.io/engineio"
+	socketio "github.com/doquangtan/socketio/v4"
 	"github.com/joho/godotenv"
 )
 
 // AppVersion exposes version information
-const AppVersion = "1.3.3"
+const AppVersion = "1.3.4"
 
 var cookieName = "uid"
 var cookieMaxAge = 6048000 // (seconds) 10 weeks
@@ -93,10 +91,7 @@ func main() {
 	readEnvVariables()
 	newSessions()
 
-	options := &engineio.Options{
-		PingTimeout: time.Duration(timeout+120) * time.Second,
-	}
-	app.server = socketio.NewServer(options)
+	app.server = socketio.New()
 
 	// on interrup clean up
 	c := make(chan os.Signal, 1)

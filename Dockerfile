@@ -1,4 +1,4 @@
-FROM node:14.14.0 as build-node
+FROM node:25 AS build-node
 ADD ./react /react
 WORKDIR /react
 RUN rm -rf /react/node_modules && \
@@ -10,8 +10,8 @@ RUN rm -rf /react/node_modules && \
     npm run build:prod
 
 
-FROM golang:alpine as build-go
-ENV GOPATH ""
+FROM golang:alpine AS build-go
+ENV GOPATH=""
 RUN go env -w GOPROXY=direct
 RUN apk add git python3
 

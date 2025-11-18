@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	socketio "github.com/googollee/go-socket.io"
+	socketio "github.com/doquangtan/socketio/v4"
 	things "github.com/thingsdb/go-thingsdb"
 )
 
@@ -29,7 +29,7 @@ type client struct {
 	port            uint16
 	roomStore       *roomStore
 	sessionPath     string
-	socketConn      *socketio.Conn
+	socketConn      *socketio.Socket
 	ssl             *tls.Config
 	tmpFiles        *tmpFiles
 	token           string
@@ -38,8 +38,7 @@ type client struct {
 
 // connResp type
 type connResp struct {
-	Connected  bool
-	UseCookies bool
+	Connected bool
 }
 
 // loginData type
@@ -87,15 +86,13 @@ type dataReq struct {
 
 func connectedResp() connResp {
 	return connResp{
-		Connected:  true,
-		UseCookies: useCookieSession,
+		Connected: true,
 	}
 }
 
 func disconnectedResp() connResp {
 	return connResp{
-		Connected:  false,
-		UseCookies: useCookieSession,
+		Connected: false,
 	}
 }
 
@@ -123,7 +120,7 @@ func (client *client) connect(data loginData) (connResp, error) {
 	client.connection.LogLevel = things.LogDebug
 	client.connection.ReconnectionAttempts = 7
 
-	s := *client.socketConn
+	s := client.socketConn
 	client.connection.OnNodeStatus = func(ns *things.NodeStatus) {
 		s.Emit("OnNodeStatus", *ns)
 	}
@@ -226,7 +223,7 @@ func (client *client) handlerConnectViaCache(data loginData) (int, connResp, mes
 func (client *client) connectViaCache(path string, name string) (connResp, error) {
 	fileNotExist := fileNotExist(path)
 	if fileNotExist {
-		return disconnectedResp(), fmt.Errorf("File does not exist")
+		return disconnectedResp(), fmt.Errorf("file does not exist")
 	}
 
 	var mapping = make(map[string]loginData)
@@ -250,7 +247,7 @@ func (client *client) authKey(data map[string]string) (int, interface{}, message
 	}
 
 	if response.StatusCode < 200 || response.StatusCode > 299 {
-		return internalError(fmt.Errorf("Invalid key"))
+		return internalError(fmt.Errorf("invalid key"))
 	}
 
 	type Resp struct {
@@ -305,7 +302,7 @@ func (client *client) authPass(data map[string]string) (int, interface{}, messag
 
 func (client *client) seekConnection() bool {
 	if client.connection.IsConnected() {
-		client.logCh <- fmt.Sprintf("Node is still closing.")
+		client.logCh <- "Node is still closing."
 		return false
 	}
 	err := client.connection.Connect()
@@ -352,7 +349,7 @@ func (client *client) reconnect() (int, connResp, message) {
 	}
 
 	resp := disconnectedResp()
-	message := failedMsg(fmt.Errorf("Reconnecting has stopped. Timeout reached."))
+	message := failedMsg(fmt.Errorf("reconnecting has stopped, timeout reached"))
 	return message.Status, resp, message
 }
 
@@ -426,7 +423,7 @@ func (client *client) newCachedConnection(data lData) (int, interface{}, message
 	fn := func(mapping lMapping) error {
 		name := data["name"].(string)
 		if _, ok := mapping[name]; ok {
-			return fmt.Errorf("\"%s\" does already exist.", name)
+			return fmt.Errorf("\"%s\" does already exist", name)
 		}
 
 		mapping[name] = data
@@ -469,7 +466,7 @@ func (client *client) renameCachedConnection(data lData) (int, interface{}, mess
 		oldName := data["oldName"].(string)
 
 		if _, ok := mapping[newName]; ok {
-			return fmt.Errorf("\"%s\" does already exist.", newName)
+			return fmt.Errorf("\"%s\" does already exist", newName)
 		}
 
 		mapping[newName] = mapping[oldName]
@@ -493,7 +490,7 @@ func (client *client) delCachedConnection(data loginData) (int, interface{}, mes
 
 	fileNotExist := fileNotExist(client.connectionsPath)
 	if fileNotExist {
-		return internalError(fmt.Errorf("File does not exist"))
+		return internalError(fmt.Errorf("file does not exist"))
 	}
 
 	var mapping = make(map[string]loginData)
@@ -570,7 +567,7 @@ func (client *client) query(data dataReq) (int, interface{}, message) {
 }
 
 // Join a room
-func (client *client) join(socket socketio.Conn, data dataReq) (int, interface{}, message) {
+func (client *client) join(socket *socketio.Socket, data dataReq) (int, interface{}, message) {
 	client.roomStore.mux.Lock()
 	defer client.roomStore.mux.Unlock()
 

@@ -9,7 +9,6 @@ import { AuthTAG, LoginTAG } from '../../Constants/Tags';
 import App from './App';
 import AppLoader from './AppLoader';
 import Auth from './Auth';
-import CookieBanner from '../CookieBanner';
 import InitStores from './InitStores';
 import Login from './Login';
 
@@ -66,10 +65,10 @@ const theme = createTheme({
 
 const withStores = withVlow([{
     store: ApplicationStore,
-    keys: ['authOnly', 'loaded', 'connected', 'seekConnection', 'useCookies']
+    keys: ['authOnly', 'loaded', 'connected', 'seekConnection']
 }]);
 
-const Root = ({authOnly, loaded, connected, seekConnection, useCookies}: IApplicationStore) => {
+const Root = ({authOnly, loaded, connected, seekConnection}: IApplicationStore) => {
     React.useEffect(() => {
         // @ts-ignore TODOT window.location ok?
         const key = (new URL(window.location)).searchParams.get('key');
@@ -91,7 +90,6 @@ const Root = ({authOnly, loaded, connected, seekConnection, useCookies}: IApplic
                             : authOnly ? <Auth /> : <Login />
                     ) : <AppLoader connect={seekConnection} />}
                 </Router>
-                {useCookies && <CookieBanner />}
             </ThemeProvider>
         </StyledEngineProvider>
     );
@@ -102,7 +100,6 @@ Root.propTypes = {
     loaded: ApplicationStore.types.loaded.isRequired,
     connected: ApplicationStore.types.connected.isRequired,
     seekConnection: ApplicationStore.types.seekConnection.isRequired,
-    useCookies: ApplicationStore.types.useCookies.isRequired,
 };
 
 export default withStores(Root);
