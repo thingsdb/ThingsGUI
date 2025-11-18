@@ -223,7 +223,7 @@ func (client *client) handlerConnectViaCache(data loginData) (int, connResp, mes
 func (client *client) connectViaCache(path string, name string) (connResp, error) {
 	fileNotExist := fileNotExist(path)
 	if fileNotExist {
-		return disconnectedResp(), fmt.Errorf("File does not exist")
+		return disconnectedResp(), fmt.Errorf("file does not exist")
 	}
 
 	var mapping = make(map[string]loginData)
@@ -247,7 +247,7 @@ func (client *client) authKey(data map[string]string) (int, interface{}, message
 	}
 
 	if response.StatusCode < 200 || response.StatusCode > 299 {
-		return internalError(fmt.Errorf("Invalid key"))
+		return internalError(fmt.Errorf("invalid key"))
 	}
 
 	type Resp struct {
@@ -302,7 +302,7 @@ func (client *client) authPass(data map[string]string) (int, interface{}, messag
 
 func (client *client) seekConnection() bool {
 	if client.connection.IsConnected() {
-		client.logCh <- fmt.Sprintf("Node is still closing.")
+		client.logCh <- "Node is still closing."
 		return false
 	}
 	err := client.connection.Connect()
@@ -349,7 +349,7 @@ func (client *client) reconnect() (int, connResp, message) {
 	}
 
 	resp := disconnectedResp()
-	message := failedMsg(fmt.Errorf("Reconnecting has stopped. Timeout reached."))
+	message := failedMsg(fmt.Errorf("reconnecting has stopped, timeout reached"))
 	return message.Status, resp, message
 }
 
@@ -423,7 +423,7 @@ func (client *client) newCachedConnection(data lData) (int, interface{}, message
 	fn := func(mapping lMapping) error {
 		name := data["name"].(string)
 		if _, ok := mapping[name]; ok {
-			return fmt.Errorf("\"%s\" does already exist.", name)
+			return fmt.Errorf("\"%s\" does already exist", name)
 		}
 
 		mapping[name] = data
@@ -466,7 +466,7 @@ func (client *client) renameCachedConnection(data lData) (int, interface{}, mess
 		oldName := data["oldName"].(string)
 
 		if _, ok := mapping[newName]; ok {
-			return fmt.Errorf("\"%s\" does already exist.", newName)
+			return fmt.Errorf("\"%s\" does already exist", newName)
 		}
 
 		mapping[newName] = mapping[oldName]
@@ -490,7 +490,7 @@ func (client *client) delCachedConnection(data loginData) (int, interface{}, mes
 
 	fileNotExist := fileNotExist(client.connectionsPath)
 	if fileNotExist {
-		return internalError(fmt.Errorf("File does not exist"))
+		return internalError(fmt.Errorf("file does not exist"))
 	}
 
 	var mapping = make(map[string]loginData)

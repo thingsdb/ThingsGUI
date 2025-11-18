@@ -27,7 +27,6 @@ type authResp struct {
 // SocketRouter socketio
 func (app *app) socketRouter() {
 	app.server.OnConnection(func(s *socketio.Socket) {
-
 		app.clients[s.Id] = &client{
 			connectionsPath: getHomePath(connFile),
 			logCh:           make(chan string),
