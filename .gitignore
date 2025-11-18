@@ -132,6 +132,7 @@ react/npm-debug.log
 
 # BIN files
 /bin/
+/*.bin
 
 #vscode
 .vscode
