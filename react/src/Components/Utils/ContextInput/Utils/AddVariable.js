@@ -51,15 +51,15 @@ const AddVariable = ({
 
     return (
         variables&&(
-            <Grid item xs={12}>
+            <Grid size={12}>
                 {( variables.map(v => (
-                    <Grid key={v} container item xs={12} alignItems="center" sx={{paddingBottom: '8px'}}>
-                        <Grid item xs={12}>
+                    <Grid key={v} container size={12} alignItems="center" sx={{paddingBottom: '8px'}}>
+                        <Grid size={12}>
                             <Typography color="primary" variant="body1" >
                                 {v}
                             </Typography>
                         </Grid>
-                        <Grid item xs={3} sx={{paddingRight: '8px'}}>
+                        <Grid size={3} sx={{paddingRight: '8px'}}>
                             <TextField
                                 fullWidth
                                 id="dataType"
@@ -68,7 +68,7 @@ const AddVariable = ({
                                 name="dataType"
                                 onChange={handleChangeType(v)}
                                 select
-                                SelectProps={{native: true}}
+                                slotProps={{select: {native: true}}}
                                 type="text"
                                 value={dataType[v]||dataTypes[0]}
                                 variant="standard"
@@ -109,5 +109,3 @@ AddVariable.propTypes = {
 };
 
 export default AddVariable;
-
-

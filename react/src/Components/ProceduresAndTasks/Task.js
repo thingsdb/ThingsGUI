@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { withVlow } from 'vlow';
 import React from 'react';
 

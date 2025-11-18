@@ -68,15 +68,17 @@ const RoomEvent = ({room, events}) => {
                                         {e.event}
                                     </Box>
                                 }
-                                titleTypographyProps={{
-                                    variant: 'body2',
-                                    component: 'div',
-                                    sx: {display: 'flex'}
+                                slotProps={{
+                                    title: {
+                                        variant: 'body2',
+                                        component: 'div',
+                                        sx: {display: 'flex'}
+                                    },
+                                    subheader: {
+                                        variant: 'caption'
+                                    }
                                 }}
                                 subheader="Arguments: "
-                                subheaderTypographyProps={{
-                                    variant: 'caption'
-                                }}
                                 action={
                                     <FormControlLabel
                                         control={<Switch checked={Boolean(checked[index])} onChange={handleChange(index)} />}

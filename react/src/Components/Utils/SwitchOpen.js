@@ -21,7 +21,7 @@ const SwitchOpen = ({
 
     return (
         <Grid container>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <FormControlLabel
                     control={(
                         <Switch
@@ -35,7 +35,7 @@ const SwitchOpen = ({
                 />
             </Grid>
             <Collapse in={open} timeout="auto" unmountOnExit sx={{width: '100%'}}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     {children}
                 </Grid>
             </Collapse>

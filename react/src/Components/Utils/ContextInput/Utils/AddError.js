@@ -75,16 +75,16 @@ const AddError = ({
     };
 
     return(
-        <Grid container item xs={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
-            <Grid item xs={1} container alignItems="center" justifyContent="flex-start">
-                <Grid item>
+        <Grid container size={12} spacing={1} sx={{paddingTop: '8px', marginTop: '8px'}}>
+            <Grid size={1} container alignItems="center" justifyContent="flex-start">
+                <Grid>
                     <Typography variant="h5" color="primary">
                         {'err('}
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid item xs={4} container alignItems="center" justifyContent="flex-start">
-                <Grid item xs={12}>
+            <Grid size={4} container alignItems="center" justifyContent="flex-start">
+                <Grid size={12}>
                     <TextField
                         fullWidth
                         helperText="between -127 and -50"
@@ -98,15 +98,15 @@ const AddError = ({
                     />
                 </Grid>
             </Grid>
-            <Grid item xs={1} container alignItems="center" justifyContent="flex-start">
-                <Grid item>
+            <Grid size={1} container alignItems="center" justifyContent="flex-start">
+                <Grid>
                     <Typography variant="h5" color="primary">
                         {','}
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid item xs={4} container alignItems="center" justifyContent="flex-start">
-                <Grid item xs={12}>
+            <Grid size={4} container alignItems="center" justifyContent="flex-start">
+                <Grid size={12}>
                     <TextField
                         fullWidth
                         helperText="optional"
@@ -120,8 +120,8 @@ const AddError = ({
                     />
                 </Grid>
             </Grid>
-            <Grid item xs={2} container alignItems="center" justifyContent="flex-start">
-                <Grid item>
+            <Grid size={2} container alignItems="center" justifyContent="flex-start">
+                <Grid>
                     <Typography variant="h5" color="primary">
                         {')'}
                     </Typography>

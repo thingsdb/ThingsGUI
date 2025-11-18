@@ -32,8 +32,8 @@ const ListHeader = ({
     };
 
     return(
-        <Grid container item xs={12} sx={{marginTop: '8px', marginBottom: '8px', paddingTop: '8px', paddingBottom: '8px'}}>
-            <Grid item xs={7} container justifyContent="flex-start" alignItems="center">
+        <Grid container size={12} sx={{marginTop: '8px', marginBottom: '8px', paddingTop: '8px', paddingBottom: '8px'}}>
+            <Grid size={7} container justifyContent="flex-start" alignItems="center">
                 {name&&(
                     <Typography variant="h5" color="primary" >
                         {`${name}`}
@@ -43,12 +43,12 @@ const ListHeader = ({
                     {groupSigning[groupSign][0]}
                 </Typography>
             </Grid>
-            <Grid item xs={open?12:1} container justifyContent="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>
+            <Grid size={open?12:1} container justifyContent="flex-start" alignItems="center" style={{visibility: open?'visible':'hidden'}}>
                 <Collapse sx={{width: '100%'}} in={open} timeout="auto" unmountOnExit={unmountOnExit}>
                     {children}
                 </Collapse>
             </Grid>
-            <Grid item xs={4} container justifyContent="flex-start" alignItems="center">
+            <Grid size={4} container justifyContent="flex-start" alignItems="center">
                 <Typography variant="h5" color="primary" sx={{paddingLeft: '8px', paddingRight: '8px'}}>
                     {groupSigning[groupSign][1]}
                 </Typography>

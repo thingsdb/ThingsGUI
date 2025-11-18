@@ -66,13 +66,13 @@ const TableCard = ({
             <HarmonicCardContent
                 content={
                     <Grid container spacing={2}>
-                        <Grid container item xs={12}>
-                            <Grid item>
+                        <Grid container size={12}>
+                            <Grid>
                                 <SearchInput onChange={handleSearchString} value={searchString} />
                             </Grid>
                             <ErrorMsg tag={tag} />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid size={12}>
 
                             <TableWithButtons
                                 header={header}
@@ -87,8 +87,8 @@ const TableCard = ({
                             />
                         </Grid>
                         {searchList && (searchList.length > maxAmount) &&
-                            <Grid container justifyContent="center" alignItems="center" item xs={12}>
-                                <Grid item>
+                            <Grid container justifyContent="center" alignItems="center" size={12}>
+                                <Grid>
                                     <Button color="primary" onClick={handleClickLoadMore}>
                                         {'Load more'}
                                     </Button>

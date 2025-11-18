@@ -12,18 +12,18 @@ const TitlePage2 = ({
     content,
 }) => (
     <Grid direction="row" container spacing={1} alignItems="flex-start" sx={{marginBottom: '48px'}}>
-        <Grid container spacing={1} item lg={8} md={12}>
-            <Grid item xs={12} sx={{display: { lg: 'none', xs: 'block'}}}>
+        <Grid container spacing={1} size={{md: 12, lg: 8}}>
+            <Grid size={12} sx={{display: { lg: 'none', xs: 'block'}}}>
                 <Card>
                     <CardHeader
                         action={title}
                         title={preTitle}
-                        titleTypographyProps={{
+                        slotProps={{title: {
                             variant: 'body2',
                             display: 'inline',
                             noWrap: true,
                             component: 'span',
-                        }}
+                        }}}
                         sx={{
                             paddingTop: '10px',
                             paddingBottom: '8px',
@@ -35,18 +35,18 @@ const TitlePage2 = ({
             </Grid>
             {content}
         </Grid>
-        <Grid container spacing={1} item lg={4} md={12}>
-            <Grid item xs={12} sx={{display: { xs: 'none', md: 'block' }}}>
+        <Grid container spacing={1} size={{md: 12, lg: 4}}>
+            <Grid size={12} sx={{display: { xs: 'none', md: 'block' }}}>
                 <Card>
                     <CardHeader
                         action={title}
                         title={preTitle}
-                        titleTypographyProps={{
+                        slotProps={{title: {
                             variant: 'body2',
                             display: 'inline',
                             noWrap: true,
                             component: 'span',
-                        }}
+                        }}}
                         sx={{
                             paddingTop: '10px',
                             paddingBottom: '8px',

@@ -8,7 +8,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -79,7 +78,27 @@ const TreeBranch = ({
 
     return (
         <React.Fragment>
-            <StyledListItem inset={inset} ContainerProps={{onMouseEnter: handleOnMouseEnter, onMouseLeave: handleOnMouseLeave}}>
+            <StyledListItem
+                inset={inset}
+                slotProps={{root: {onMouseEnter: handleOnMouseEnter, onMouseLeave: handleOnMouseLeave}}}
+                secondaryAction={
+                    <Collapse component="span" in={focus} timeout={1}>
+                        {onClick && (
+                            <IconButton color="primary" size="small" onClick={onClick} >
+                                <BuildIcon color="primary" />
+                            </IconButton>
+                        )}
+                        {onAction && onAction(name, type, val)}
+                        {!onClick ? (
+                            type === BYTES ? (
+                                <DownloadBlob val={val} />
+                            ) : type === STR ? (
+                                <StringDialog name={name} text={val} />
+                            ) : null
+                        ):null}
+                    </Collapse>
+                }
+            >
                 <ListItemButton onClick={handleClick} disableTouchRipple={!canToggle}>
                     <ListItemIcon>
                         {canToggle ? show ? <ExpandMore color="primary" /> : <ChevronRightIcon color="primary" /> : null}
@@ -99,29 +118,12 @@ const TreeBranch = ({
                                 {type === BYTES ?  '      Blob' : `     ${val}`}
                             </React.Fragment>
                         }
-                        primaryTypographyProps={{
+                        slotProps={{primary: {
                             display: 'block',
                             noWrap: true,
-                        }}
+                        }}}
                     />
                 </ListItemButton>
-                <ListItemSecondaryAction>
-                    <Collapse component="span" in={focus} timeout={1}>
-                        {onClick && (
-                            <IconButton color="primary" size="small" onClick={onClick} >
-                                <BuildIcon color="primary" />
-                            </IconButton>
-                        )}
-                        {onAction && onAction(name, type, val)}
-                        {!onClick ? (
-                            type === BYTES ? (
-                                <DownloadBlob val={val} />
-                            ) : type === STR ? (
-                                <StringDialog name={name} text={val} />
-                            ) : null
-                        ):null}
-                    </Collapse>
-                </ListItemSecondaryAction>
             </StyledListItem>
             {canToggle &&
             <Collapse in={show} timeout="auto" unmountOnExit>

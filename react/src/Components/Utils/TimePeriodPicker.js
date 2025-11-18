@@ -34,10 +34,8 @@ const TimePeriodPicker = ({onChange}) => {
     });
 
     React.useEffect(() => {
-        onChange(Number(state.number * state.unit));
-    },
-    [state.number, state.unit],
-    );
+        onChange(Number(state.number) * state.unit);
+    }, [state.number, state.unit]);
 
     const handleOnChange = ({target}) => {
         const {id, value} = target;
@@ -45,13 +43,13 @@ const TimePeriodPicker = ({onChange}) => {
     };
 
     return (
-        <Grid item container xs={12} spacing={1} >
-            <Grid item>
+        <Grid container size={12} spacing={1} >
+            <Grid>
                 <TextField
                     autoFocus
                     fullWidth
                     id="number"
-                    inputProps={{min: '1'}}
+                    slotProps={{htmlInput: {min: '1'}}}
                     margin="dense"
                     onChange={handleOnChange}
                     spellCheck={false}
@@ -60,14 +58,14 @@ const TimePeriodPicker = ({onChange}) => {
                     variant="standard"
                 />
             </Grid>
-            <Grid item>
+            <Grid>
                 <TextField
                     fullWidth
                     id="unit"
                     margin="dense"
                     onChange={handleOnChange}
                     select
-                    SelectProps={{native: true}}
+                    slotProps={{select: {native: true}}}
                     value={state.unit}
                     variant="standard"
                 >

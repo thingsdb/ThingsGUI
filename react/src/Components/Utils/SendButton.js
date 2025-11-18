@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import LoadingButton from '@mui/lab/LoadingButton';
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
@@ -28,9 +28,9 @@ const SendButton = ({
         <ClickAwayListener onClickAway={handleCloseTooltip}>
             <div>
                 <Tooltip
-                    PopperProps={{
+                    slotProps={{popper: {
                         disablePortal: true,
-                    }}
+                    }}}
                     disableFocusListener
                     disableHoverListener
                     disableTouchListener
@@ -38,7 +38,7 @@ const SendButton = ({
                     onClose={handleCloseTooltip}
                     open={openTooltip}
                 >
-                    <LoadingButton
+                    <Button
                         color="primary"
                         disabled={disabled}
                         onClick={handleSubmit}
@@ -46,7 +46,7 @@ const SendButton = ({
                         variant={variant}
                     >
                         {label}
-                    </LoadingButton>
+                    </Button>
                 </Tooltip>
             </div>
         </ClickAwayListener>
@@ -62,4 +62,3 @@ SendButton.propTypes = {
 };
 
 export default SendButton;
-

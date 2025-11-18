@@ -25,7 +25,6 @@ const ApplicationActions = Vlow.createActions([
     'openEditor',
     'reconnect',
     'renameCachedConn',
-    'storeSession'
 ]);
 
 
@@ -40,7 +39,6 @@ class ApplicationStore extends BaseStore {
         openEditor: PropTypes.bool,
         input: PropTypes.string,
         cachedConnections: PropTypes.object,
-        useCookies: PropTypes.bool
     };
 
     static defaults = {
@@ -52,7 +50,6 @@ class ApplicationStore extends BaseStore {
         openEditor: false,
         input: '',
         cachedConnections: {},
-        useCookies: false
     };
 
     constructor() {
@@ -70,12 +67,11 @@ class ApplicationStore extends BaseStore {
                 ()=>{
                     this.setState({
                         connected: data.Connected,
-                        useCookies: data.UseCookies,
                         loaded: true,
                         seekConnection:true,
                     });
                 },
-                ()=>this.setState({loaded: true, useCookies: data.UseCookies, seekConnection: false}));
+                ()=>this.setState({loaded: true, seekConnection: false}));
         }).fail((event, status, message) => {
             ErrorActions.setMsgError(tag, message.Log);
             this.setState({loaded: true, seekConnection: true});
@@ -87,7 +83,6 @@ class ApplicationStore extends BaseStore {
         this.emit('connected').done((data) => {
             this.setState({
                 connected: data.Connected,
-                useCookies: data.UseCookies,
                 seekConnection: true,
             });
             setTimeout(() => {
@@ -101,14 +96,6 @@ class ApplicationStore extends BaseStore {
         }).fail((event, status, message) => {
             ErrorActions.setToastError(message.Log);
             this.setState({connected: false, loaded: true, seekConnection: false});
-        });
-    }
-
-    onStoreSession() {
-        this.blob('/session').done(() => {
-            this.emit('cookie', document.cookie);
-        }).fail((error, message) => {
-            ErrorActions.setToastError(`${error.statusText}: ${message}`);
         });
     }
 

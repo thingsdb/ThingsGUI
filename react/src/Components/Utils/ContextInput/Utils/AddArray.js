@@ -77,12 +77,12 @@ const AddArray = ({
     };
 
     return (
-        <Grid item xs={12}>
+        <Grid size={12}>
             <ListHeader canCollapse onAdd={handleAdd} groupSign="[">
                 {( dataType.map((d, index) => (
-                    <Grid key={index} container item xs={12} alignItems="center" sx={{paddingLeft: '32px'}}>
+                    <Grid key={index} container size={12} alignItems="center" sx={{paddingLeft: '32px'}}>
                         {
-                            <Grid item xs={4} sx={{paddingRight: '8px'}}>
+                            <Grid size={4} sx={{paddingRight: '8px'}}>
                                 <TextField
                                     fullWidth
                                     id="dataType"
@@ -91,7 +91,7 @@ const AddArray = ({
                                     name="dataType"
                                     onChange={handleChangeType(index)}
                                     select
-                                    SelectProps={{native: true}}
+                                    slotProps={{select: {native: true}}}
                                     type="text"
                                     value={d}
                                     variant="standard"
@@ -104,7 +104,7 @@ const AddArray = ({
                                 </TextField>
                             </Grid>
                         }
-                        <Grid container item xs={8} justifyContent="flex-end">
+                        <Grid container size={8} justifyContent="flex-end">
                             <IconButton color="primary" onClick={handleDelete(index)}>
                                 <DeleteIcon />
                             </IconButton>
@@ -139,5 +139,3 @@ AddArray.propTypes = {
 };
 
 export default AddArray;
-
-

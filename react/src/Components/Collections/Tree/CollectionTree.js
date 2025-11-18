@@ -56,7 +56,7 @@ const CollectionTree = ({collection}) => {
                     </Button>
                 }
             />
-            <Dialog fullScreen open={open} onClose={handleOpen} TransitionComponent={Transition}>
+            <Dialog fullScreen open={open} onClose={handleOpen} slots={{transition: Transition}}>
                 <div>
                     <TopBar
                         pageIcon={

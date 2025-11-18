@@ -42,23 +42,25 @@ const ViewProcedure = ({
                         type="text"
                         value={procedure.definition || '-'}
                         variant="standard"
-                        InputProps={{
-                            readOnly: true,
-                            disableUnderline: true,
-                        }}
-                        inputProps={{
-                            style: {
-                                fontFamily: 'monospace',
+                        slotProps={{
+                            input: {
+                                readOnly: true,
+                                disableUnderline: true,
                             },
-                        }}
-                        InputLabelProps={{
-                            shrink: true,
+                            htmlInput: {
+                                style: {
+                                    fontFamily: 'monospace',
+                                },
+                            },
+                            inputLabel: {
+                                shrink: true,
+                            }
                         }}
                     />
                     : '-'}
-                secondaryTypographyProps={{
+                slotProps={{secondary: {
                     component: 'div'
-                }}
+                }}}
             />
         </ListItem>
     </List>

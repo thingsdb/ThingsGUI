@@ -1,7 +1,7 @@
-import {Link as RouterLink} from 'react-router-dom';
+import {Link as RouterLink} from 'react-router';
 import HomeIcon from '@mui/icons-material/Home';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
@@ -9,8 +9,7 @@ import React from 'react';
 
 const OverviewMenu = () => (
     <List dense>
-        <ListItem
-            button
+        <ListItemButton
             component={RouterLink}
             to="/"
         >
@@ -18,7 +17,7 @@ const OverviewMenu = () => (
                 <HomeIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary="OVERVIEW" />
-        </ListItem>
+        </ListItemButton>
     </List>
 );
 

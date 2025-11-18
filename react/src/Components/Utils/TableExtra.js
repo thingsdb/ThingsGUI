@@ -20,7 +20,7 @@ const TableExtra = ({
     rows,
 }) => (
     <Grid container>
-        <Grid item xs={12}>
+        <Grid size={12}>
             <TableWithBadges
                 header={header}
                 rows={rows}
@@ -28,15 +28,15 @@ const TableExtra = ({
                 buttons={buttons}
             />
         </Grid>
-        <Grid container item xs={12}>
+        <Grid container size={12}>
             {onAdd && (
-                <Grid item xs={2}>
+                <Grid size={2}>
                     <Button color="primary" onClick={onAdd} >
                         <AddIcon color="primary" />
                     </Button>
                 </Grid>
             )}
-            <Grid container item xs={onAdd?10:12} justifyContent="flex-end">
+            <Grid container size={onAdd?10:12} justifyContent="flex-end">
                 <Box sx={{fontSize: 10, fontStyle: 'italic', m: 1}}>
                     {createdAt&&`Created on: ${moment(createdAt*1000).format(DATE_TIME_SEC_STR)}${modifiedAt?`, last modified on: ${moment(modifiedAt*1000).format(DATE_TIME_SEC_STR)}`:''}`}
                 </Box>

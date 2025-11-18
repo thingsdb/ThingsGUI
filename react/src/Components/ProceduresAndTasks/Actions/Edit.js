@@ -20,17 +20,17 @@ const Edit = ({
     };
 
     return (
-        <Grid item xs={12}>
+        <Grid size={12}>
             <Card>
                 <CardContent>
                     {type === 'procedure' ? <EditProcedure procedure={item} scope={scope} /> : <EditTask scope={scope} taskId={item.id} />}
                 </CardContent>
                 <CardActions>
-                    <Grid container item xs={12} spacing={1} >
-                        <Grid item>
+                    <Grid container size={12} spacing={1} >
+                        <Grid>
                             {buttons[type]}
                         </Grid>
-                        <Grid item>
+                        <Grid>
                             <Remove item={item} scope={scope} type={type} />
                         </Grid>
                     </Grid>

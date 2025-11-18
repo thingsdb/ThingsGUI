@@ -118,7 +118,7 @@ const Auth = ({authMethod}) => {
                         type={show?'text':'password'}
                         value={form.pass}
                         variant="standard"
-                        InputProps={{
+                        slotProps={{input: {
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <Button color="primary" onClick={handleClickShow}>
@@ -126,7 +126,7 @@ const Auth = ({authMethod}) => {
                                     </Button>
                                 </InputAdornment>
                             ),
-                        }}
+                        }}}
                     />
                 </Collapse>
                 <Collapse in={loginWith === 'token'} timeout="auto" unmountOnExit>
@@ -140,7 +140,7 @@ const Auth = ({authMethod}) => {
                         type={show?'text':'password'}
                         value={form.token}
                         variant="standard"
-                        InputProps={{
+                        slotProps={{input: {
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <Button color="primary" onClick={handleClickShow}>
@@ -148,7 +148,7 @@ const Auth = ({authMethod}) => {
                                     </Button>
                                 </InputAdornment>
                             ),
-                        }}
+                        }}}
                     />
                 </Collapse>
             </DialogContent>

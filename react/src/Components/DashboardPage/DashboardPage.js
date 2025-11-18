@@ -1,6 +1,6 @@
 /*eslint-disable react/jsx-props-no-spreading*/
 /*eslint-disable react/no-multi-comp*/
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import {TopBar} from '../Navigation';
 import DashboardContent from './DashboardContent';
 
-const version='version: 1.3.3';
+const version='version: 1.3.4';
 
 const Transition = React.forwardRef((props, ref) => {
     return <Slide direction="down" ref={ref} {...props} mountOnEnter unmountOnExit />;
@@ -54,7 +54,7 @@ const DashboardPage = () => {
                     height={35}
                 />
             </Button>
-            <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+            <Dialog fullScreen open={open} onClose={handleClose} slots={{transition: Transition}}>
                 <DashboardContent />
                 <div style={{position:'fixed', width: '100%', bottom: -8, zIndex: 2}}>
                     <TopBar

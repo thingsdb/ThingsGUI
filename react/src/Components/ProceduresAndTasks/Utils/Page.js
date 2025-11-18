@@ -11,7 +11,7 @@ const Page = ({item, itemKey, scope, type}) => (
         preTitle={`Customizing ThingDB ${type}:`}
         title={item[itemKey] || ''}
         content={
-            <Grid container spacing={1} item xs={12}>
+            <Grid container spacing={1} size={12}>
                 <Edit item={item} scope={scope} type={type} />
                 {type === 'procedure' && (
                     <EditProvider>

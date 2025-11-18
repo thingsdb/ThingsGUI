@@ -88,7 +88,7 @@ const AutoSelect = ({
 
     return (
         <ClickAwayListener onClickAway={handleClose}>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <TextField
                     autoComplete="off"
                     fullWidth
@@ -104,7 +104,6 @@ const AutoSelect = ({
                 />
                 <Popper
                     anchorEl={anchorEl}
-                    onClose={handleClose}
                     open={Boolean(anchorEl) && Boolean(list.length)}
                     placement="bottom"
                     style={{zIndex: 1300}}

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Network } from 'vis-network/standalone/esm/vis-network';
+import { Network } from 'vis-network/standalone';
 
 
 const useVisNetwork = ({

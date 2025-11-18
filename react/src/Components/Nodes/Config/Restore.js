@@ -116,12 +116,12 @@ const Restore = ({nodes}) => {
                     type="text"
                     value={fileName}
                     variant="standard"
-                    FormHelperTextProps={{
+                    slotProps={{formHelperText: {
                         style: {
                             marginBottom: '16px',
                             color: amber[700]
                         }
-                    }}
+                    }}}
                 />
                 <Typography component="div" variant="caption">
                     <FormLabel component="label">
@@ -154,12 +154,12 @@ const Restore = ({nodes}) => {
                 open={showRedirectModal}
             >
                 <Grid container spacing={2}>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <Typography variant="body2">
                             {'ThingsDB has been successfully restored. You need to login again. After you clicked "OK" you are redirected to the login screen.'}
                         </Typography>
                     </Grid>
-                    <Grid container justifyContent="center" item xs={12}>
+                    <Grid container justifyContent="center" size={12}>
                         <Button variant="outlined" color="primary" onClick={handleClickRedirect}>
                             {'OK'}
                         </Button>

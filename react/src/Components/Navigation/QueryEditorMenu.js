@@ -1,7 +1,7 @@
-import { Link as RouterLink, createSearchParams, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, createSearchParams, useSearchParams } from 'react-router';
 import CodeIcon from '@mui/icons-material/Code';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
@@ -15,8 +15,7 @@ const QueryEditorMenu = () => {
     let current = Object.fromEntries(searchParams);
     return(
         <List dense>
-            <ListItem
-                button
+            <ListItemButton
                 component={RouterLink}
                 to={{pathname: `/${EDITOR_ROUTE}`, search: createSearchParams({
                     ...current,
@@ -27,7 +26,7 @@ const QueryEditorMenu = () => {
                     <CodeIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText primary="EDITOR" />
-            </ListItem>
+            </ListItemButton>
         </List>
     );
 };

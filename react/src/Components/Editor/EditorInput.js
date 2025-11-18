@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { withVlow } from 'vlow';
 import CardActions from '@mui/material/CardActions';
 import PropTypes from 'prop-types';

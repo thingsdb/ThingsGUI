@@ -370,7 +370,7 @@ const EnumTypeChips = ({
     const [item, rows] = React.useMemo(() => tableInfo[categoryInit](onChange, items, scope, view), [categoryInit, onChange, items, scope, view]);
 
     return (
-        <Grid item xs={12} sx={{paddingBottom: '8px'}}>
+        <Grid size={12} sx={{paddingBottom: '8px'}}>
             <ChipsCard
                 buttons={buttons(buttonsView)}
                 items={items}

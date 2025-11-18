@@ -104,17 +104,17 @@ const Password = ({user}) => {
                     </FormLabel>
                 ) : null}
                 <Grid component="label" container alignItems="center" spacing={1}>
-                    <Grid item>
+                    <Grid>
                         {'no'}
                     </Grid>
-                    <Grid item>
+                    <Grid>
                         <Switch
                             checked={form.set}
                             color="primary"
                             onChange={handleSetPassword}
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid>
                         {'yes'}
                     </Grid>
                 </Grid>
@@ -133,7 +133,7 @@ const Password = ({user}) => {
                     type={showPassword?'text':'password'}
                     value={form.password}
                     variant="standard"
-                    InputProps={{
+                    slotProps={{input: {
                         endAdornment: (
                             <InputAdornment position="end">
                                 <Button color="primary" onClick={handleClickShowPassword}>
@@ -141,7 +141,7 @@ const Password = ({user}) => {
                                 </Button>
                             </InputAdornment>
                         ),
-                    }}
+                    }}}
                 />
             ) : null}
         </React.Fragment>

@@ -76,13 +76,13 @@ const Export = ({collection}) => {
             }
         >
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <ErrorMsg tag={tag} />
                     <Typography variant="body2">
                         {'This export script includes all enums, types and procedures.'}
                     </Typography>
                 </Grid>
-                <StyledGrid container item xs={12}>
+                <StyledGrid container size={12}>
                     <Label variant="caption">
                         {'script'}
                     </Label>
@@ -91,19 +91,21 @@ const Export = ({collection}) => {
                         type="script"
                         value={script}
                         variant="standard"
-                        InputProps={{
-                            readOnly: true,
-                            disableUnderline: true,
-                        }}
-                        inputProps={{
-                            style: {
-                                fontFamily: 'monospace',
-                                fontSize: 'caption.fontSize',
-                                tabSize: 4,
+                        slotProps={{
+                            input: {
+                                readOnly: true,
+                                disableUnderline: true,
                             },
-                        }}
-                        InputLabelProps={{
-                            shrink: true,
+                            htmlInput: {
+                                style: {
+                                    fontFamily: 'monospace',
+                                    fontSize: 'caption.fontSize',
+                                    tabSize: 4,
+                                },
+                            },
+                            inputLabel: {
+                                shrink: true,
+                            }
                         }}
                         multiline
                         maxRows="40"

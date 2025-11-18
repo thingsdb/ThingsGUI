@@ -29,8 +29,8 @@ const ViewProcedureDialog = ({
         ):null}
     >
         <Grid container spacing={1}>
-            <Grid container spacing={1} item xs={12}>
-                <Grid item xs={8}>
+            <Grid container spacing={1} size={12}>
+                <Grid size={8}>
                     <Typography variant="body1" >
                         {'View ThingDB procedure:'}
                     </Typography>
@@ -39,7 +39,7 @@ const ViewProcedureDialog = ({
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <ViewProcedure procedure={procedure} />
             </Grid>
         </Grid>

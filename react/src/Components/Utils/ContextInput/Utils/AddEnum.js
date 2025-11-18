@@ -54,14 +54,14 @@ const AddEnum = ({
 
     return(_enum&&_enum.members?(
         <Grid container>
-            <Grid item xs={3}>
+            <Grid size={3}>
                 <TextField
                     fullWidth
                     label="Enum"
                     name="enum"
                     onChange={handleChangeEnum}
                     select
-                    SelectProps={{native: true}}
+                    slotProps={{select: {native: true}}}
                     type="text"
                     value={enumMem}
                     variant="standard"
@@ -74,11 +74,11 @@ const AddEnum = ({
                 </TextField>
             </Grid>
             {isBlob&&
-                <Grid container item xs={9}>
-                    <Grid container item xs={12} justifyContent="flex-end">
+                <Grid container size={9}>
+                    <Grid container size={12} justifyContent="flex-end">
                         <DownloadBlob val={init} isImg />
                     </Grid>
-                    <Grid container item xs={12} justifyContent="flex-end">
+                    <Grid container size={12} justifyContent="flex-end">
                         <Typography variant="caption">
                             {'Click to download the blob that is currently stored.'}
                         </Typography>

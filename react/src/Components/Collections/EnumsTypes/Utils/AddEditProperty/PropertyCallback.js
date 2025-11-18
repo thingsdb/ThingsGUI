@@ -26,7 +26,7 @@ const PropertyCallback = ({onChange}) => {
 
     return (
         <React.Fragment>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <FormControlLabel
                     control={(
                         <Switch
@@ -54,5 +54,3 @@ PropertyCallback.propTypes = {
 };
 
 export default PropertyCallback;
-
-

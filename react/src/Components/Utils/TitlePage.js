@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 const TitlePage = ({preTitle, title, content}) => (
     <Grid container spacing={1} sx={{marginBottom: '48px'}}>
-        <Grid item xs={12}>
+        <Grid size={12}>
             <Card>
                 <CardContent>
                     <Typography variant="body1" >
@@ -20,7 +20,7 @@ const TitlePage = ({preTitle, title, content}) => (
                 </CardContent>
             </Card>
         </Grid>
-        <Grid container item spacing={1} alignItems="flex-start">
+        <Grid container spacing={1} alignItems="flex-start">
             {content}
         </Grid>
     </Grid>

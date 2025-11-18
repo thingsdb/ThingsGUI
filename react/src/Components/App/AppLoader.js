@@ -48,16 +48,16 @@ const AppLoader = ({connect}) => {
             <Grid
                 alignItems="center"
                 container
-                direction="column"
+                direction="column"  // TODO https://mui.com/material-ui/migration/upgrade-to-grid-v2/
                 spacing={3}
                 justifyContent="center"
             >
-                <WrapperGrid item xs={12}>
+                <WrapperGrid size={12}>
                     <Typography variant='h5'>
                         {'Loading...'}
                     </Typography>
                 </WrapperGrid>
-                <WrapperGrid item xs={12}>
+                <WrapperGrid size={12}>
                     <StyledImg
                         src="/img/thingsdb.gif"
                         alt="loading..."

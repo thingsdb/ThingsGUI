@@ -75,7 +75,7 @@ const OpenNodeGraph = ({nodes, streamInfo}) => {
             maxWidth="md"
         >
             <Grid container justifyContent="center" alignItems="center" sx={{backgroundColor: '#000', height: 600}}>
-                <Grid item>
+                <Grid>
                     {loading ? <CircularProgress />
                         : (
                             <NodeGraph data={nodes} streamInfo={streamInfo} />

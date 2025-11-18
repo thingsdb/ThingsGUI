@@ -72,7 +72,7 @@ const Editor = () => {
             title={<SelectScope onChangeScope={handleOnChangeScope} />}
             content={
                 <React.Fragment>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <Card>
                             <CardActions disableSpacing sx={{padding: 0}}>
                                 <ErrorMsg tag={tag} />
@@ -84,7 +84,7 @@ const Editor = () => {
                             )}
                         </DragdownCard>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <QueryOutput output={output} onArgs={handleArgs} showLogs tabIndex={tabIndex} onChangeTab={handleChangeTab} />
                     </Grid>
                 </React.Fragment>

@@ -97,11 +97,11 @@ const AddThing = ({
     };
 
     return (
-        <Grid item xs={12}>
+        <Grid size={12}>
             <ListHeader canCollapse onAdd={handleAdd} groupSign="{">
                 {( property.map((p, index) => (
-                    <Grid key={index} container item xs={12} alignItems="center" sx={{paddingLeft: '32px'}} >
-                        <Grid item xs={3} sx={{paddingRight: '8px'}}>
+                    <Grid key={index} container size={12} alignItems="center" sx={{paddingLeft: '32px'}} >
+                        <Grid size={3} sx={{paddingRight: '8px'}}>
                             <TextField
                                 fullWidth
                                 id="property"
@@ -114,7 +114,7 @@ const AddThing = ({
                                 variant="standard"
                             />
                         </Grid>
-                        <Grid item xs={3} sx={{paddingRight: '8px'}}>
+                        <Grid size={3} sx={{paddingRight: '8px'}}>
                             <TextField
                                 fullWidth
                                 id="dataType"
@@ -123,7 +123,7 @@ const AddThing = ({
                                 name="dataType"
                                 onChange={handleChangeType(index)}
                                 select
-                                SelectProps={{native: true}}
+                                slotProps={{select: {native: true}}}
                                 type="text"
                                 value={dataType[index] || STR}
                                 variant="standard"
@@ -135,7 +135,7 @@ const AddThing = ({
                                 ))}
                             </TextField>
                         </Grid>
-                        <Grid container item xs={6} justifyContent="flex-end">
+                        <Grid container size={6} justifyContent="flex-end">
                             <IconButton color="primary" onClick={handleDelete(index)}>
                                 <DeleteIcon />
                             </IconButton>
@@ -169,5 +169,3 @@ AddThing.propTypes = {
 };
 
 export default AddThing;
-
-

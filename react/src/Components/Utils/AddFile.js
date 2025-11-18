@@ -48,8 +48,8 @@ const AddFile = ({
 
     const handleDropzone = React.useCallback((acceptedFiles) => {
         const reader = new FileReader();
-        reader.onabort = () => window.log('file reading was aborted');
-        reader.onerror = () => window.log('file reading has failed');
+        reader.onabort = () => window.console.log('file reading was aborted');
+        reader.onerror = () => window.console.log('file reading has failed');
         reader.onload = () => {
             const binaryStr = reader.result;
             var encodedData = btoa(binaryStr);
@@ -61,8 +61,8 @@ const AddFile = ({
     }, [onChange]);
 
     return(
-        <Grid item xs={8}>
-            <Grid item xs={12}>
+        <Grid size={8}>
+            <Grid size={12}>
                 <Dropzone onDrop={acceptedFiles => handleDropzone(acceptedFiles)}>
                     {({
                         getRootProps,
@@ -82,7 +82,7 @@ const AddFile = ({
                     )}
                 </Dropzone>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Collapse in={Boolean(fileName)} timeout="auto" unmountOnExit>
                     <Typography variant="button" color="primary">
                         {fileName}

@@ -99,7 +99,7 @@ const Edit = ({
                 />
             </Collapse>
             <Collapse in={showAll||showAddress} timeout="auto" unmountOnExit>
-                <ClickAwayListener onClickAway={handleClickAwayCheck} touchEvent={clickAwayActive && 'onTouchEnd'} mouseEvent={clickAwayActive && 'onClick'}>
+                <ClickAwayListener onClickAway={handleClickAwayCheck} touchEvent={clickAwayActive ? 'onTouchEnd' : false} mouseEvent={clickAwayActive ? 'onClick' : false}>
                     <TextField
                         autoFocus
                         fullWidth
@@ -153,7 +153,7 @@ const Edit = ({
                         type={show?'text':'password'}
                         value={credentials.password}
                         variant="standard"
-                        InputProps={{
+                        slotProps={{input: {
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <Button color="primary" onClick={handleClickShow}>
@@ -161,7 +161,7 @@ const Edit = ({
                                     </Button>
                                 </InputAdornment>
                             ),
-                        }}
+                        }}}
                     />
                 </Collapse>
                 <Collapse in={showToken} timeout="auto" unmountOnExit>
@@ -175,7 +175,7 @@ const Edit = ({
                         type={show?'text':'password'}
                         value={credentials.token}
                         variant="standard"
-                        InputProps={{
+                        slotProps={{input: {
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <Button color="primary" onClick={handleClickShow}>
@@ -183,7 +183,7 @@ const Edit = ({
                                     </Button>
                                 </InputAdornment>
                             ),
-                        }}
+                        }}}
                     />
                 </Collapse>
             </Collapse>

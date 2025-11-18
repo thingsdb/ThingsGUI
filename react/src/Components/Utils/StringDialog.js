@@ -42,8 +42,7 @@ const StringDialog = ({
         >
             <Grid
                 container
-                item
-                xs={12}
+                size={12}
                 sx={{
                     padding: '16px',
                     border: '1px solid #525557',
@@ -57,18 +56,19 @@ const StringDialog = ({
                     type="text"
                     value={text}
                     variant="standard"
-                    InputProps={{
-                        readOnly: true,
-                        disableUnderline: true,
-                    }}
-                    inputProps={{
-                        style: {
-                            fontFamily: 'monospace',
-                            fontSize: 'body1.fontSize'
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                            disableUnderline: true,
                         },
-                    }}
-                    InputLabelProps={{
-                        shrink: true,
+                        htmlInput: {
+                            style: {
+                                fontFamily: 'monospace',
+                            },
+                        },
+                        inputLabel: {
+                            shrink: true,
+                        }
                     }}
                     multiline
                     maxRows="40"

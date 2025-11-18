@@ -9,30 +9,30 @@ import Tooltip from '@mui/material/Tooltip';
 import { StartStopPolling } from '../../Utils';
 
 const Buttons = ({extraButtons, link, onRefresh, title}) => (
-    <Grid item container xs={12}>
-        <Grid container item xs={6} spacing={1}>
+    <Grid container size={12}>
+        <Grid container size={6} spacing={1}>
             {extraButtons.map((b, i) => (
-                <Grid key={`button_${i}`} item>
+                <Grid key={`button_${i}`}>
                     {b}
                 </Grid>
             ))}
         </Grid>
-        <Grid container item xs={6} justifyContent="flex-end" spacing={1}>
-            <Grid item>
+        <Grid container size={6} justifyContent="flex-end" spacing={1}>
+            <Grid>
                 <Tooltip disableFocusListener disableTouchListener title="Go to ThingsDocs">
                     <Button color="primary" target="_blank" href={link}>
                         <HelpIcon />
                     </Button>
                 </Tooltip>
             </Grid>
-            <Grid item>
+            <Grid>
                 <Tooltip disableFocusListener disableTouchListener title={`Refresh ${title}`}>
                     <Button variant="text" color="primary" onClick={onRefresh} >
                         <RefreshIcon color="primary" />
                     </Button>
                 </Tooltip>
             </Grid>
-            <Grid item>
+            <Grid>
                 <StartStopPolling onPoll={onRefresh} title={title} variant="text" />
             </Grid>
         </Grid>

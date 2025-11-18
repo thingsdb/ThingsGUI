@@ -87,8 +87,8 @@ const RunProcedureDialog = ({
             maxWidth="md"
         >
             <Grid container spacing={1}>
-                <Grid container spacing={1} item xs={12}>
-                    <Grid item xs={8}>
+                <Grid container spacing={1} size={12}>
+                    <Grid size={8}>
                         <Typography variant="body1" >
                             {'Run ThingDB procedure:'}
                         </Typography>
@@ -97,16 +97,16 @@ const RunProcedureDialog = ({
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <ErrorMsg tag={tag} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <List disablePadding dense>
                         <React.Fragment>
                             {procedure.arguments&&procedure.arguments.length!==0 && (
                                 <React.Fragment>
                                     <ListItem>
-                                        <ListItemText primary="Arguments:" primaryTypographyProps={{variant: 'body1'}} />
+                                        <ListItemText primary="Arguments:" slotProps={{primary: {variant: 'body1'}}} />
                                     </ListItem>
                                     <ListItem>
                                         <InputField dataType={VARIABLE} dataTypes={dataTypes} variables={procedure.arguments} />
@@ -114,7 +114,7 @@ const RunProcedureDialog = ({
                                 </React.Fragment>
                             )}
                             <ListItem>
-                                <ListItemText primary="Output:" primaryTypographyProps={{variant: 'body1'}} />
+                                <ListItemText primary="Output:" slotProps={{primary: {variant: 'body1'}}} />
                             </ListItem>
                             <div id="output">
                                 <QueryOutput output={output} tabIndex={tabIndex} onChangeTab={handleChangeTab} />

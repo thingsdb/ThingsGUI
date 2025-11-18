@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { withVlow } from 'vlow';
 import Grid from '@mui/material/Grid';
 import React from 'react';
@@ -35,26 +35,26 @@ const Collection = ({collections}) => {
                 title={selectedCollection.name}
                 content={
                     <React.Fragment>
-                        <Grid container item md={7} xs={12}>
-                            <Grid item xs={12} sx={{paddingBottom: '8px'}}>
+                        <Grid container size={{xs: 12, md: 7}}>
+                            <Grid size={12} sx={{paddingBottom: '8px'}}>
                                 <HarmonicCardHeader title="INFO" unmountOnExit>
                                     <CollectionConfig collection={selectedCollection} />
                                 </HarmonicCardHeader>
                             </Grid>
                             <TypeEnumNetwork collection={selectedCollection} />
-                            <Grid item xs={12}>
+                            <Grid size={12}>
                                 <CollectionTree collection={selectedCollection} />
                             </Grid>
                         </Grid>
-                        <Grid container item md={5} xs={12}>
-                            <Grid item xs={12} sx={{paddingBottom: '8px'}}>
+                        <Grid container size={{xs: 12, md: 7}}>
+                            <Grid size={12} sx={{paddingBottom: '8px'}}>
                                 <Procedures
                                     buttonsView={{add: true, cancel: false, edit: true, run: true, view: false}}
                                     dialogsView={{add: true, cancel: false, edit: true, run: true, view: false}}
                                     scope={`${COLLECTION_SCOPE}:${selectedCollection.name}`}
                                 />
                             </Grid>
-                            <Grid item xs={12} sx={{paddingBottom: '8px'}}>
+                            <Grid size={12} sx={{paddingBottom: '8px'}}>
                                 <Tasks
                                     buttonsView={{add: true, cancel: true, edit: true, run: false, view: false}}
                                     dialogsView={{add: true, cancel: true, edit: true, run: false, view: false}}

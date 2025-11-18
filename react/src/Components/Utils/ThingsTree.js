@@ -51,8 +51,8 @@ const ThingsTree = ({
                 </Nested>
                 {more[count] && renderChildren(count+1)}
                 {(count+1)%visibleNumber == 0 && !more[count] ? (
-                    <Grid container alignItems="center" justifyContent="center" item xs={12}>
-                        <Grid item>
+                    <Grid container alignItems="center" justifyContent="center" size={12}>
+                        <Grid>
                             <Button color="primary" onClick={handleMore(count)}>
                                 {'LOAD MORE'}
                                 <ExpandMoreIcon color="primary" />

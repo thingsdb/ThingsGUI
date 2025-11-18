@@ -54,12 +54,12 @@ const HarmonicCardHeader = ({
                     </React.Fragment>
                 }
                 title={title}
-                titleTypographyProps={{
+                slotProps={{title: {
                     variant: 'body2',
                     display: 'block',
                     noWrap: true,
                     component: 'span',
-                }}
+                }}}
                 sx={{
                     paddingTop: '8px',
                     paddingBottom: '8px',

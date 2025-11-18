@@ -129,7 +129,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
 
     return (
         <React.Fragment>
-            <Grid item xs={12} sx={{paddingBottom: '8px'}}>
+            <Grid size={12} sx={{paddingBottom: '8px'}}>
                 <HarmonicCardHeader expand={viewType.expand} onExpand={handleExpand('type')} title="TYPES" onRefresh={handleRefreshTypes} unmountOnExit>
                     <EnumTypeChips
                         buttonsView={{add: true, cancel: false, edit: true, run: false, view: false}}
@@ -147,7 +147,7 @@ const CollectionEnumsTypes = ({scope, customTypes, enums}) => {
                     />
                 </HarmonicCardHeader>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <HarmonicCardHeader expand={viewEnum.expand} onExpand={handleExpand('enum')} title="ENUMS" onRefresh={handleRefreshEnums} unmountOnExit>
                     <EnumTypeChips
                         buttonsView={{add: true, cancel: false, edit: true, run: false, view: false}}

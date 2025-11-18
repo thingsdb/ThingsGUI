@@ -25,7 +25,7 @@ const PropertyInitVal = ({category, onChange, scope}) => {
 
     return (
         <React.Fragment>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <FormControlLabel
                     control={(
                         <Switch
@@ -52,5 +52,3 @@ PropertyInitVal.propTypes = {
 };
 
 export default PropertyInitVal;
-
-

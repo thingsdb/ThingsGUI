@@ -32,12 +32,12 @@ const ThingsBounds = ({ onChange, total }) => {
                 style={{width: from.length*9+60}}
                 margin="dense"
                 id="from"
-                inputProps={{
+                slotProps={{htmlInput: {
                     min: '0',
                     style: {
                         color:'#3a6394',
                     },
-                }}
+                }}}
                 type="number"
                 value={from}
                 onChange={handleOnChangeFrom}
@@ -51,12 +51,12 @@ const ThingsBounds = ({ onChange, total }) => {
                 style={{width: till.length*9+60}}
                 margin="dense"
                 id="till"
-                inputProps={{
+                slotProps={{htmlInput: {
                     min: `${from}`,
                     style: {
                         color:'#3a6394',
                     },
-                }}
+                }}}
                 type="number"
                 value={till}
                 onChange={handleOnChangeTill}

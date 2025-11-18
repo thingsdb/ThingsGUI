@@ -99,17 +99,19 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
                     type="text"
                     value={state.queryString}
                     variant="standard"
-                    InputProps={{
-                        readOnly: true,
-                        disableUnderline: true,
-                    }}
-                    inputProps={{
-                        style: {
-                            fontFamily: 'monospace',
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                            disableUnderline: true,
                         },
-                    }}
-                    InputLabelProps={{
-                        shrink: true,
+                        htmlInput: {
+                            style: {
+                                fontFamily: 'monospace',
+                            },
+                        },
+                        inputLabel: {
+                            shrink: true,
+                        }
                     }}
                 />
             </ListItem>
@@ -137,7 +139,7 @@ const RemoveThing = ({child, onClose, parent, scope}) => {
             open={show}
             onOk={handleClickOk}
             onClose={handleClickClose}
-            onKeyDown={handleKeyPress}
+            onKeyPress={handleKeyPress}
         >
             {Content}
         </SimpleModal>

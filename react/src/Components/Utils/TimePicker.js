@@ -26,8 +26,8 @@ const TimePicker = ({onChange}) => {
     };
 
     return (
-        <Grid container item xs={12} spacing={1}>
-            <Grid item>
+        <Grid container size={12} spacing={1}>
+            <Grid>
                 <TextField
                     defaultValue={date}
                     id="data"
@@ -35,12 +35,12 @@ const TimePicker = ({onChange}) => {
                     onChange={handleChangeDate}
                     type="date"
                     variant="standard"
-                    InputLabelProps={{
+                    slotProps={{inputLabel: {
                         shrink: true,
-                    }}
+                    }}}
                 />
             </Grid>
-            <Grid item>
+            <Grid>
                 <TextField
                     defaultValue={time}
                     id="time"
@@ -48,9 +48,9 @@ const TimePicker = ({onChange}) => {
                     onChange={handleChangeTime}
                     type="time"
                     variant="standard"
-                    InputLabelProps={{
+                    slotProps={{inputLabel: {
                         shrink: true,
-                    }}
+                    }}}
                 />
             </Grid>
         </Grid>

@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Popover from '@mui/material/Popover';
 import PropTypes from 'prop-types';
@@ -19,7 +18,13 @@ const Err = ({
     onClose = null
 }) => (
     <List>
-        <ListItem>
+        <ListItem
+            secondaryAction={onClose ? (
+                <IconButton color="primary" onClick={onClose}>
+                    <CloseIcon />
+                </IconButton>
+            ) : undefined}
+        >
             <ListItemAvatar>
                 <Avatar sx={{backgroundColor: 'transparent'}}>
                     {icon}
@@ -28,18 +33,11 @@ const Err = ({
             <ListItemText
                 primary={title}
                 secondary={body}
-                primaryTypographyProps={{
+                slotProps={{primary: {
                     variant: 'caption',
                     color: 'primary'
-                }}
+                }}}
             />
-            {onClose && (
-                <ListItemSecondaryAction>
-                    <IconButton color="primary" onClick={onClose}>
-                        <CloseIcon />
-                    </IconButton>
-                </ListItemSecondaryAction>
-            )}
         </ListItem>
     </List>
 );

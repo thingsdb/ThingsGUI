@@ -47,16 +47,16 @@ const Welcome = ({collections, procedures, tasks, user, users}) => {
             content={
                 <React.Fragment>
                     {collections.length > 0 &&
-                        <Grid item>
+                        <Grid>
                             <Paper sx={{padding: '16px', width: '100%', height: '100%'}}>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} key={'collections_intro'}>
+                                    <Grid size={12} key={'collections_intro'}>
                                         <Typography gutterBottom variant="button" component="h2" color="textSecondary">
                                             {'Your collections:'}
                                         </Typography>
                                     </Grid>
                                     {collections.map((collection, index) => (
-                                        <Grid item key={index}>
+                                        <Grid key={index}>
                                             <CollectionCard collection={collection} />
                                         </Grid>
                                     ))}
@@ -65,16 +65,16 @@ const Welcome = ({collections, procedures, tasks, user, users}) => {
                         </Grid>
                     }
                     {users.length > 0 &&
-                        <Grid item>
+                        <Grid>
                             <Paper sx={{padding: '16px', width: '100%', height: '100%'}}>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} key={'users_intro'}>
+                                    <Grid size={12} key={'users_intro'}>
                                         <Typography gutterBottom variant="button" component="h2" color="textSecondary">
                                             {'Users:'}
                                         </Typography>
                                     </Grid>
                                     {users.map((user, index) => (
-                                        <Grid item key={index}>
+                                        <Grid key={index}>
                                             <UserCard user={user} />
                                         </Grid>
                                     ))}
@@ -83,16 +83,16 @@ const Welcome = ({collections, procedures, tasks, user, users}) => {
                         </Grid>
                     }
                     {procedures[scope] && procedures[scope].length > 0 &&
-                        <Grid item>
+                        <Grid>
                             <Paper sx={{padding: '16px', width: '100%', height: '100%'}}>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} key={'procedures_intro'}>
+                                    <Grid size={12} key={'procedures_intro'}>
                                         <Typography gutterBottom variant="button" component="h2" color="textSecondary">
                                             {'Procedures:'}
                                         </Typography>
                                     </Grid>
                                     {procedures[scope].map((procedure, index) => (
-                                        <Grid item key={index}>
+                                        <Grid key={index}>
                                             <ProcedureCard procedure={procedure} />
                                         </Grid>
                                     ))}
@@ -101,16 +101,16 @@ const Welcome = ({collections, procedures, tasks, user, users}) => {
                         </Grid>
                     }
                     {tasks[scope] && tasks[scope].length > 0 &&
-                        <Grid item>
+                        <Grid>
                             <Paper sx={{padding: '16px', width: '100%', height: '100%'}}>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} key={'tasks_intro'}>
+                                    <Grid size={12} key={'tasks_intro'}>
                                         <Typography gutterBottom variant="button" component="h2" color="textSecondary">
                                             {'Tasks:'}
                                         </Typography>
                                     </Grid>
                                     {tasks[scope].map((task, index) => (
-                                        <Grid item key={index}>
+                                        <Grid key={index}>
                                             <TaskCard task={task} />
                                         </Grid>
                                     ))}

@@ -60,13 +60,13 @@ const Run = ({
     };
 
     return (
-        <Grid item xs={12}>
+        <Grid size={12}>
             <Card>
                 {type === 'procedure' && item.arguments.length !== 0 && (
                     <CardContent>
                         <List disablePadding dense>
                             <ListItem disableGutters>
-                                <ListItemText primary="Arguments" primaryTypographyProps={{variant: 'button'}} />
+                                <ListItemText primary="Arguments" slotProps={{primary: {variant: 'button'}}} />
                             </ListItem>
                             <ListItem>
                                 <InputField dataType={VARIABLE} dataTypes={dataTypes} variables={item.arguments} />
@@ -76,14 +76,16 @@ const Run = ({
                 )}
                 <CardHeader
                     title="Click RUN and view the output below."
-                    titleTypographyProps={{
-                        variant:'subtitle2'
+                    slotProps={{
+                        title: {
+                            variant:'subtitle2'
+                        },
+                        subheader: {
+                            sx: {color: amber[700]},
+                            variant: 'caption'
+                        }
                     }}
                     subheader={item.with_side_effects ? `Note: this ${type} generates an event.` : ''}
-                    subheaderTypographyProps={{
-                        sx: {color: amber[700]},
-                        variant: 'caption'
-                    }}
                     action={
                         <SendButton
                             label="Run"

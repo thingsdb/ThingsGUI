@@ -50,17 +50,19 @@ const EditName = ({name, fn}) => {
                     type="text"
                     value={newName}
                     variant="standard"
-                    inputProps={{
-                        style: {
-                            fontSize: '2.125rem',
-                            fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                            fontWeight: 400,
-                            lineHeight: '1.235',
-                            letterSpacing: '0.00735em'
+                    slotProps={{
+                        htmlInput: {
+                            style: {
+                                fontSize: '2.125rem',
+                                fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                                fontWeight: 400,
+                                lineHeight: '1.235',
+                                letterSpacing: '0.00735em'
+                            }
                         },
-                    }}
-                    InputLabelProps={{
-                        shrink: true,
+                        inputLabel: {
+                            shrink: true,
+                        }
                     }}
                 />
                 <Button color="primary" onClick={handleClickSend}>

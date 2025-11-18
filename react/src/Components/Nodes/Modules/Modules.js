@@ -49,7 +49,7 @@ const Modules = ({nodeId, offline, modules}) => {
             container
             spacing={3}
         >
-            <Grid item xs={12} sx={{marginTop: '16px', overflowY: 'auto', overflowX: 'auto', maxHeight: '400px'}}>
+            <Grid size={12} sx={{marginTop: '16px', overflowY: 'auto', overflowX: 'auto', maxHeight: '400px'}}>
                 {modules.length ? (
                     <TableWithButtons header={header} rows={modules} buttons={handleButtons} />
                 ) : (

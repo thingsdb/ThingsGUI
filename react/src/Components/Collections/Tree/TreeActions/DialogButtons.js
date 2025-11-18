@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
 import React from 'react';
 import CodeIcon from '@mui/icons-material/Code';
@@ -45,7 +45,7 @@ const DialogButtons = ({
     return (
         <React.Fragment>
             {canRemove &&
-                <Grid item>
+                <Grid>
                     <RemoveThing
                         onClose={onClose}
                         scope={scope}
@@ -64,13 +64,13 @@ const DialogButtons = ({
                     />
                 </Grid>
             }
-            <Grid item>
+            <Grid>
                 <Fab color="primary" onClick={handleClickOpenEditor} sx={{color: '#000'}}>
                     <CodeIcon fontSize="large" />
                 </Fab>
             </Grid>
             {isRoom &&
-                <Grid item>
+                <Grid>
                     <RoomJoin
                         scope={scope}
                         room={child.val}

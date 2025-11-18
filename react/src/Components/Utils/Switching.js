@@ -17,27 +17,27 @@ const Switching = ({one, two, onChange}) => {
     return (
         <Grid>
             <Grid component="label" container alignItems="center" spacing={1}>
-                <Grid item>
+                <Grid>
                     {'Field'}
                 </Grid>
-                <Grid item>
+                <Grid>
                     <Switch
                         checked={switchOI}
                         color="primary"
                         onChange={handleSwitch}
                     />
                 </Grid>
-                <Grid item>
+                <Grid>
                     {'Method'}
                 </Grid>
             </Grid>
             <Collapse in={!switchOI} timeout="auto" sx={{width: '100%'}}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     {one}
                 </Grid>
             </Collapse>
             <Collapse in={switchOI} timeout="auto" sx={{width: '100%'}}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     {two}
                 </Grid>
             </Collapse>
@@ -52,4 +52,3 @@ Switching.propTypes = {
 };
 
 export default Switching;
-

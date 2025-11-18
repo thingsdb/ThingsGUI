@@ -21,10 +21,10 @@ const PropertyRelation = ({dropdownItems, onChange, input}) => {
 
     return (
         <Grid container spacing={2}>
-            <Grid item>
+            <Grid>
                 <AutoSelect onChange={handleProperty} dropdownItems={dropdownItems} input={relation.property} label="Property" />
             </Grid>
-            <Grid item>
+            <Grid>
                 <TextField
                     fullWidth
                     label="Related property"
@@ -47,5 +47,3 @@ PropertyRelation.propTypes = {
 };
 
 export default PropertyRelation;
-
-

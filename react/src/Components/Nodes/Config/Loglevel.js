@@ -87,7 +87,7 @@ const Loglevel = ({node}) => {
                 margin="dense"
                 onChange={handleOnChange}
                 select
-                SelectProps={{native: true}}
+                slotProps={{select: {native: true}}}
                 value={logLevel}
                 variant="standard"
             >

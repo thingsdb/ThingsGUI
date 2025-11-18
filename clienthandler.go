@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	socketio "github.com/googollee/go-socket.io"
+	socketio "github.com/doquangtan/socketio/v4"
 	things "github.com/thingsdb/go-thingsdb"
 )
 
@@ -29,7 +29,7 @@ type client struct {
 	port            uint16
 	roomStore       *roomStore
 	sessionPath     string
-	socketConn      *socketio.Conn
+	socketConn      *socketio.Socket
 	ssl             *tls.Config
 	tmpFiles        *tmpFiles
 	token           string
@@ -38,8 +38,7 @@ type client struct {
 
 // connResp type
 type connResp struct {
-	Connected  bool
-	UseCookies bool
+	Connected bool
 }
 
 // loginData type
@@ -87,15 +86,13 @@ type dataReq struct {
 
 func connectedResp() connResp {
 	return connResp{
-		Connected:  true,
-		UseCookies: useCookieSession,
+		Connected: true,
 	}
 }
 
 func disconnectedResp() connResp {
 	return connResp{
-		Connected:  false,
-		UseCookies: useCookieSession,
+		Connected: false,
 	}
 }
 
@@ -123,7 +120,7 @@ func (client *client) connect(data loginData) (connResp, error) {
 	client.connection.LogLevel = things.LogDebug
 	client.connection.ReconnectionAttempts = 7
 
-	s := *client.socketConn
+	s := client.socketConn
 	client.connection.OnNodeStatus = func(ns *things.NodeStatus) {
 		s.Emit("OnNodeStatus", *ns)
 	}
@@ -570,7 +567,7 @@ func (client *client) query(data dataReq) (int, interface{}, message) {
 }
 
 // Join a room
-func (client *client) join(socket socketio.Conn, data dataReq) (int, interface{}, message) {
+func (client *client) join(socket *socketio.Socket, data dataReq) (int, interface{}, message) {
 	client.roomStore.mux.Lock()
 	defer client.roomStore.mux.Unlock()
 

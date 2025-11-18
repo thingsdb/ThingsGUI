@@ -54,9 +54,9 @@ const ViewEditFields = ({
                 <ListItemText
                     primary={label + ':'}
                     secondary={viewComponent}
-                    secondaryTypographyProps={{
+                    slotProps={{secondary: {
                         component: 'div'
-                    }}
+                    }}}
                 />
 
             </ListItem>

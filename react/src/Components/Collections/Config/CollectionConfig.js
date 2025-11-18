@@ -31,7 +31,7 @@ const CollectionConfig = ({collection}) => {
             buttons={
                 <Grid container spacing={1}>
                     {buttons.map(button => (
-                        <Grid key={button.name} item>
+                        <Grid key={button.name}>
                             {button.component}
                         </Grid>
                     ))}
