@@ -85,11 +85,10 @@ git clone https://github.com/thingsdb/ThingsGUI
 Install the go-packages; the socket.io library for golang and the ThingsDB connector::
 
 ```
-go get github.com/googollee/go-socket.io
-go get github.com/thingsdb/go-thingsdb
+go get
 ```
 
-Next go to `./src` folder and install the node modules and build the bundles :
+Next go to `./react` folder and install the node modules and build the bundles :
 
 ```
 npm install
