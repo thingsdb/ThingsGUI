@@ -114,6 +114,19 @@ react/static/js/*.worker.js
 react/static/js/*.ttf
 react/static/font/
 
+# Go files
+/fileapphtml.go
+/filecesbitlogo.go
+/fileeditorworkerjs.go
+/filefaviconico.go
+/filemainbundleminjs.go
+/filemonacofontttf.go
+/filethingsdbgif.go
+/filethingsdblogo.go
+/filethingsguilogo.go
+/filevendorsbundleminjs.go
+/filevieweditlogo.go
+
 # NPM
 react/npm-debug.log
 
