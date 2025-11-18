@@ -142,6 +142,7 @@ const Login = ({cachedConnections}) => {
                     <SearchInput
                         onChange={({target}) => setSearch(target.value)}
                         value={search}
+                        autoFocus
                     />
                 </DialogTitle>
                 <DialogContent>
