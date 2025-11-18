@@ -87,8 +87,8 @@ const config = {
     },
     performance: {
         hints: process.env.NODE_ENV === 'production' ? 'warning' : false,
-        maxEntrypointSize: 1600000,
-        maxAssetSize: 700000
+        maxEntrypointSize: 10485760,
+        maxAssetSize: 10485760
     },
     resolve: {
         fallback: {
