@@ -56,7 +56,7 @@ const InputField = ({
     );
     case VARIABLE: return(
         <EditProvider key={dataType}>
-            <AddVariable identifier={identifier} customTypes={customTypes} enums={enums} childTypes={childTypes||[]} dataTypes={dataTypes} variables={variables} parent={parent} parentDispatch={dispatch} />
+            <AddVariable identifier={identifier} customTypes={customTypes} enums={enums} dataTypes={dataTypes} variables={variables} parent={parent} parentDispatch={dispatch} />
         </EditProvider>
     );
     default: return(

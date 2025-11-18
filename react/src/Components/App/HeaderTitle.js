@@ -1,6 +1,5 @@
 import React from 'react';
 import {withVlow} from 'vlow';
-import { Helmet } from 'react-helmet';
 
 import {NodesActions, NodesStore} from '../../Stores';
 
@@ -12,16 +11,14 @@ const withStores = withVlow([{
 const HeaderTitle = ({connectedNode}) => {
     React.useEffect(() => {
         NodesActions.getConnectedNode();
-    },
-    [],
-    );
+    }, []);
 
     return(
-        <Helmet>
-            <title>
-                {`ThingsGUI ${connectedNode&&connectedNode.node_name ? `  -  ${connectedNode.node_name}:${connectedNode.client_port}`: ''}`}
-            </title>
-        </Helmet>
+        // (https://react.dev/reference/react-dom/components/title)
+        // React will always place the corresponding DOM element in the document head.
+        <title>
+            {`ThingsGUI ${connectedNode&&connectedNode.node_name ? `  -  ${connectedNode.node_name}:${connectedNode.client_port}`: ''}`}
+        </title>
     );
 };
 
