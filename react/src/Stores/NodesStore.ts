@@ -496,6 +496,12 @@ class NodesStore extends BaseStore<INodesStore> {
 export {NodesActions, NodesStore};
 
 declare global {
+    interface IBackup {
+        id: number;
+    }
+    interface IModule {
+        name: string;
+    }
     interface INode {
         node_id: number;
         node_name: string;
@@ -507,10 +513,10 @@ declare global {
     }
     interface INodesStore {
         allNodeInfo: any[];
-        backups: any[];
+        backups: IBackup[];
         connectedNode: any;
         counters: any;
-        _module: any;
+        _module: any;  // TODOT IModule
         modules: any[];
         node: any;
         nodes: any[];

@@ -23,8 +23,11 @@ const AddBlob = ({
     }, [identifier, val]);
 
     const handleUpdate = React.useCallback((f: string, b: string) =>  {
+        // @ts-expect-error TODO es2021?
         f = f.replaceAll('.', '_');
+        // @ts-expect-error
         f = f.replaceAll('-', '_');
+        // @ts-expect-error
         f = f.replaceAll(/\s/g, '_');
         if (f != '' && b != '') {
             EditActions.update(dispatch, 'val', f, identifier, parent);

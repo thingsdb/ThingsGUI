@@ -4,7 +4,7 @@ export const CURLY_BRACKETS_FORMAT_QUERY = (content: any='') => `{${content}}`; 
 export const CUSTOM_TYPE_FORMAT_QUERY = (type: string, content='') => `${type}{${content}}`; // don't place a `;`
 export const DATETIME_FORMAT_QUERY = (thing: string) => `datetime('${thing}')`; // don't place a `;`
 export const REGEX_FORMAT_QUERY = (content: string) => `/${content}/`; // don't place a `;`
-export const ROOM_FORMAT_QUERY = (id: number) => `room(${id})`; // don't place a `;`
+export const ROOM_FORMAT_QUERY = (id: string) => `room(${id})`; // don't place a `;`
 export const RUN_FORMAT_QUERY = (name: string, args: string[]) => `run('${name}',${args})`; // don't place a `;`
 export const SET_FORMAT_QUERY = (list: string) => `set(${list})`; // don't place a `;`
 export const SQUARE_BRACKETS_FORMAT_QUERY = (content: any='') => `[${content}]`; // don't place a `;`

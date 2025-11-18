@@ -18,7 +18,7 @@ const Card = ({
     onDelete,
     tag,
 }: Props) => {
-    const buttons = (bv: any) => (ident: number) => {
+    const buttons = (bv: any) => (ident: string) => {
         let b = [];
         if (bv.view) {
             b.push({
@@ -96,7 +96,7 @@ interface Props {
     itemKey: string;
     list: object[];
     onAdd: () => void;
-    onClick: (type: string, ident: any) => () => void;
+    onClick: (type: string, ident: string) => () => void;
     onDelete: (id: any, cb: () => void, tag: string) => void;
     tag: string;
 }

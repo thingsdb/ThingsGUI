@@ -133,7 +133,7 @@ const thingValue = (type: string, thing: any, customTypes: IType[]=[]) => {
 
 const isObjectEmpty = (obj: object | undefined): obj is undefined => !(typeof obj === 'object' && Object.entries(obj).length > 0);
 const findItem = <T, >(index: number, target: T[]) => target.length ? (index+1 > target.length ? {}: target[index]) : {}; //findItem(index-1, target) : target[index]) : {};
-const orderByName = <T, >(arr: T[], key: keyof T='name') => arr.sort((a, b) => {
+const orderByName = <T, >(arr: T[], key='name') => arr.sort((a, b) => {
     let nameA,
         nameB;
     if(typeof a[key] === 'string') {
@@ -155,7 +155,7 @@ const orderByName = <T, >(arr: T[], key: keyof T='name') => arr.sort((a, b) => {
     return 0;
 });
 
-const getScopes = (collections: ICollection[]) => [
+const getScopes = (collections: ICollection[]): [{name: string; value: string; collectionId: number | null}[], string[]] => [
     [
         {name: 'ThingsDB', value: THINGSDB_SCOPE, collectionId: null},
         {name: 'Node', value: NODE_SCOPE, collectionId: null},
@@ -170,9 +170,9 @@ const getScopes2 = (collections: ICollection[], nodes: INode[]) => [
     THINGSDB_SCOPE, ...nodes.map((n) => (`${NODE_SCOPE}:${n.node_id}`)), ...collections.map(c => `${COLLECTION_SCOPE}:${c.name}`)
 ];
 
-const fancyName = (n: string, ci: string) => ci !== null ? n + `[${ci}]` : n;
+const fancyName = (n: string, ci: number) => ci !== null ? n + `[${ci}]` : n;
 
-const allDataTypes = (types: IType[]) => {
+const allDataTypes = (types: (IEnum | IType)[]) => {
     const dataTypes = [
         BOOL,
         BYTES,
@@ -299,7 +299,7 @@ const desc = <T, >(a: T, b: T, orderBy: keyof T) => {
 };
 
 const stableSort = <T, >(array: T[], cmp: Function) => {
-    const stabilizedThis = array.map((el, index) => [el, index]);
+    const stabilizedThis: [T, number][] = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = cmp(a[0], b[0]);
         if (order !== 0) return order;

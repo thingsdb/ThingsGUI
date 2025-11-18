@@ -37,7 +37,7 @@ const Modules = ({nodeId, offline, modules}: INodesStore & Props) => {
         NodesActions.getModules(nodeId); // update of the selected node; to get the latest info
     };
 
-    const handleButtons = (_module: object) => (
+    const handleButtons = (_module: IModule) => (
         <React.Fragment>
             <Remove nodeId={nodeId} item={_module} />
             <ModuleInfo nodeId={nodeId} item={_module} />

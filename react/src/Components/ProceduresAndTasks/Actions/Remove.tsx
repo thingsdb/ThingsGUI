@@ -17,6 +17,7 @@ const Remove = ({item, scope, type}: Props) => {
 
     const handleClickOk = () => {
         let fn = type === 'procedure' ? ProcedureActions.deleteProcedure : TaskActions.deleteTask;
+        // @ts-expect-error TODOT
         fn(scope, name, tag, () => historyNavigate(navigate, location, '/'));
     };
 

@@ -427,6 +427,10 @@ declare global {
         things: any;
     }
 
+    interface IToken {
+        key: string;
+    }
+
     interface IUser {
         created_at: number;
         name: string;

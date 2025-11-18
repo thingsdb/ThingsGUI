@@ -45,7 +45,7 @@ const AddRoom = ({
         saveRoom(value);
     };
 
-    const saveRoom = (roomId: number) => {
+    const saveRoom = (roomId: string) => {
         const c = ROOM_FORMAT_QUERY(roomId);
         EditActions.update(dispatch, 'val', c, identifier, parent);
         setRoomId(roomId);

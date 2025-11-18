@@ -143,7 +143,7 @@ export {TaskActions, TaskStore};
 declare global {
     interface ITask {
         id: number;
-        at: string;
+        at: number;
         err: string;
         owner: string;
         closure: string;

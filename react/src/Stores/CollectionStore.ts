@@ -130,7 +130,7 @@ class CollectionStore extends BaseStore<ICollectionStore> {
         this.onDecCounter(thingId);
     }
 
-    onQuery(scope: string, query: string, tag: string, cb: (d: any) => void, thingId: number | null=null, blob: object | null=null, jsonArgs: object | null=null, onFail=()=>{}) {
+    onQuery(scope: string, query: string, tag: string, cb: (d: any) => void, thingId: number | null=null, blob: any | null=null, jsonArgs: any | null=null, onFail=()=>{}) {
         this.emit('query', {
             query,
             scope,

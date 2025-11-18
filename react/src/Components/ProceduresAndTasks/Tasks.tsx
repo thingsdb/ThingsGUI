@@ -45,7 +45,8 @@ const Tasks = ({
         handleRefreshTasks();
     }, [handleRefreshTasks]);
 
-    const handleClick = (type: string, ident: number) => () => {
+    const handleClick = (type: string, ident: string) => () => {
+        // TODOT use ident arg in onCallback
         setIdentifier(ident);
         setOpen({...open, [type]: true});
         onCallback(type, (tasks[scope] || []).find(i=>i.id == identifier));

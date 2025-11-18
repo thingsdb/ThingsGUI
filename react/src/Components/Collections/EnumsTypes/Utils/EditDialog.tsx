@@ -53,6 +53,7 @@ const EditDialog = ({
     category,
     getInfo,
     headers,
+    // @ts-expect-error TODOT props
     item = {},
     link,
     onChangeItem = () => null,

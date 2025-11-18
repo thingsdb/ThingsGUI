@@ -227,6 +227,10 @@ class ApplicationStore extends BaseStore<IApplicationStore> {
 export {ApplicationActions, ApplicationStore};
 
 declare global {
+    interface ICachedConnection {
+        name: string;
+        address: string;
+    }
     interface IApplicationStore {
         authOnly: boolean;
         authMethod: string;
@@ -235,6 +239,6 @@ declare global {
         seekConnection: boolean;
         openEditor: boolean;
         input: string;
-        cachedConnections: {[index: string]: any[]};
+        cachedConnections: {[index: string]: ICachedConnection};
     }
 }

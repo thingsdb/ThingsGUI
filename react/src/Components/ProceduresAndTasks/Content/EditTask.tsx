@@ -94,7 +94,7 @@ const header = [
                 />
                 : '-'),
     },
-];
+] as Header[];
 
 const tag = EditTaskDialogTAG;
 
@@ -104,7 +104,7 @@ const EditTask = ({
     scope,
 }: ITaskStore & Props) => {
     const [queryString, setQueryString] = React.useState({args: '', closure: '', owner: ''});
-    const [jsonArgs, setJsonArgs] = React.useState({args: '', closure: '', owner: ''});
+    const [jsonArgs, setJsonArgs] = React.useState<any>({args: '', closure: '', owner: ''});  // TODOT
     const [blob, setBlob] = React.useState({});
 
     React.useEffect(() => {
@@ -178,4 +178,13 @@ export default withStores(EditTask);
 interface Props {
     taskId: number;
     scope: string;
+}
+
+interface Header {
+    ky: string;
+    label: string;
+    viewComponent: (_d: any) => React.ReactElement;
+    editComponent: (_d: any, _e: Function) => React.ReactElement;
+    canEdit: boolean;
+    eky: string;
 }

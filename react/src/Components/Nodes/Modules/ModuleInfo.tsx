@@ -92,7 +92,7 @@ const header = [
         label: 'Number of running tasks',
         canEdit: false
     },
-];
+] as Header[];
 
 const tag = ModuleInfoTAG;
 
@@ -266,4 +266,13 @@ export default withStores(ModuleInfo);
 interface Props {
     item: Partial<IModule>;
     nodeId: number;
+}
+
+interface Header {
+    ky: string;
+    label: string;
+    fnView: (_d: any) => string;
+    canEdit: boolean;
+    editMethod: Function;
+    helperText: string;
 }

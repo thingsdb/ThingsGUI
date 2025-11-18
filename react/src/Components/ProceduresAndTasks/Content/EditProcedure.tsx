@@ -65,7 +65,7 @@ const header = [
                 />
                 : '-'),
     },
-];
+] as Header[];
 
 const tag = EditProcedureDialogTAG;
 
@@ -74,7 +74,7 @@ const EditProcedure = ({
     scope
 }: Props) => {
     const [queryString, setQueryString] = React.useState({definition: ''});
-    const [jsonArgs, setJsonArgs] = React.useState('');
+    const [jsonArgs, setJsonArgs] = React.useState<any>('');  // TODOT
 
     const handleChangeDefinition = React.useCallback((c) => {
         setQueryString(query => ({...query, definition: EDIT_PROCEDURE_QUERY}));
@@ -127,4 +127,12 @@ export default EditProcedure;
 interface Props {
     procedure: Partial<IProcedure>;
     scope: string;
+}
+
+interface Header {
+    ky: string;
+    label: string;
+    viewComponent: (_d: any) => React.ReactElement;
+    editComponent: (_d: any, _e: Function) => React.ReactElement;
+    canEdit: boolean;
 }

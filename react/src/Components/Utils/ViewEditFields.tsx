@@ -84,5 +84,5 @@ interface Props {
     editComponent?: React.ReactElement;
     label: string;
     onSave?: () => void;
-    viewComponent: React.ReactElement;
+    viewComponent: React.ReactElement | string;
 }
