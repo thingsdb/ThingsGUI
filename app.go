@@ -137,31 +137,37 @@ func (app *app) socketRouter() {
 
 		s.On("newCachedConn", func(e *socketio.EventPayload) {
 			if len(e.Data) > 0 {
-				data, ok := e.Data[0].(lData)
-				if ok {
-					status, resp, message := app.clients[s.Id].newCachedConnection(data)
-					e.Ack(status, resp, message)
-				}
+				// TODO
+				var data lData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &data)
+
+				status, resp, message := app.clients[s.Id].newCachedConnection(data)
+				e.Ack(status, resp, message)
 			}
 		})
 
 		s.On("editCachedConn", func(e *socketio.EventPayload) {
 			if len(e.Data) > 0 {
-				data, ok := e.Data[0].(lData)
-				if ok {
-					status, resp, message := app.clients[s.Id].editCachedConnection(data)
-					e.Ack(status, resp, message)
-				}
+				// TODO
+				var data lData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &data)
+
+				status, resp, message := app.clients[s.Id].editCachedConnection(data)
+				e.Ack(status, resp, message)
 			}
 		})
 
 		s.On("renameCachedConn", func(e *socketio.EventPayload) {
 			if len(e.Data) > 0 {
-				data, ok := e.Data[0].(lData)
-				if ok {
-					status, resp, message := app.clients[s.Id].renameCachedConnection(data)
-					e.Ack(status, resp, message)
-				}
+				// TODO
+				var data lData
+				rbytes, _ := json.Marshal(e.Data[0])
+				json.Unmarshal(rbytes, &data)
+
+				status, resp, message := app.clients[s.Id].renameCachedConnection(data)
+				e.Ack(status, resp, message)
 			}
 		})
 

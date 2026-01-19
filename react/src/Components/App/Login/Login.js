@@ -142,6 +142,7 @@ const Login = ({cachedConnections}) => {
                     <SearchInput
                         onChange={({target}) => setSearch(target.value)}
                         value={search}
+                        autoFocus
                     />
                 </DialogTitle>
                 <DialogContent>
@@ -155,7 +156,7 @@ const Login = ({cachedConnections}) => {
                 </DialogContent>
                 <Collapse in={showNewConn} timeout="auto" unmountOnExit>
                     <DialogActions>
-                        <Grid container>
+                        <Grid container sx={{width: '100%'}}>
                             <Grid size={6} container justifyContent="flex-start" >
                                 <Collapse in={Boolean(cachedConnections&&Object.keys(cachedConnections).length)} timeout="auto" unmountOnExit>
                                     <Grid size={3}>

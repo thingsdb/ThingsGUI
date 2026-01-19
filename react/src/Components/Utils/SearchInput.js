@@ -47,7 +47,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-const SearchInput = ({value, onChange}) => (
+const SearchInput = ({value, onChange, autoFocus = false}) => (
     <Search>
         <SearchIconWrapper>
             <SearchIcon />
@@ -57,6 +57,7 @@ const SearchInput = ({value, onChange}) => (
             onChange={onChange}
             placeholder="Search…"
             value={value}
+            autoFocus={autoFocus}
         />
     </Search>
 );
@@ -64,6 +65,7 @@ const SearchInput = ({value, onChange}) => (
 SearchInput.propTypes = {
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
+    autoFocus: PropTypes.bool,
 };
 
 export default SearchInput;

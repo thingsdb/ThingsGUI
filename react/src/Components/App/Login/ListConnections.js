@@ -65,7 +65,8 @@ const ListConnections = ({onClickNewConn, onEdit, search, cachedConnections}) =>
         {title: 'Secure connection', key: 'security', keyList: 'secureConnection', default: false},
     ];
 
-    const sortedConns = orderByName(Object.values(cachedConnections).filter(c => Object.values(c).some(v => String(v).includes(search))));
+    const searchStr = search.toUpperCase();
+    const sortedConns = orderByName(Object.values(cachedConnections).filter(c => Object.values(c).some(v => String(v).toUpperCase().includes(searchStr))));
     return (
         <List>
             {sortedConns.map((v, i) => (
