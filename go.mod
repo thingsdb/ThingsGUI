@@ -1,6 +1,6 @@
 module github.com/thingsdb/ThingsGUI
 
-go 1.22.2
+go 1.24
 
 require (
 	github.com/doquangtan/socketio/v4 v4.1.6
@@ -15,7 +15,7 @@ require (
 	github.com/gofiber/websocket/v2 v2.2.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
-	github.com/klauspost/compress v1.17.9 // indirect
+	github.com/klauspost/compress v1.18.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
